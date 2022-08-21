@@ -8,7 +8,7 @@ augroup filetypedetect
 	autocmd!
 	"*.plt は mimetypeが設定されていないことも有り得る
 	autocmd BufNewFile,BufRead *.plt          set filetype=gnuplot
-	autocmd BufNewFile,BufRead .bash_history,.xprofile set filetype=sh
+	autocmd BufNewFile,BufRead .bash_history,.xprofile,~/dotfiles/.bash/*,~/.bash/* set filetype=sh
 	autocmd BufNewFile,BufRead .textlintrc,.stylelintrc set filetype=json
 	autocmd BufNewFile,BufRead .msmtprc       set filetype=msmtp | source /usr/share/vim/addons/syntax/msmtp.vim
 	autocmd BufNewFile,BufRead tags-??        set filetype=tags
