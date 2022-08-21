@@ -568,3 +568,9 @@ vmap V <Cmd>call set_expand_region#main('(expand_region_shrink)') <bar> delfunct
 
 " Markdown のシンタックス https://github.com/preservim/vim-markdown {{{2
 " vim-precious と相性が悪く、一度コード例内にカーソル移動すると、コード内シンタックスが働かなくなる
+
+" getmail syntax https://github.com/vim-scripts/getmail.vim {{{2
+augroup Gatmail
+	autocmd!
+	autocmd BufRead ~/.getmail/* call set_getmail_vim#main()
+augroup END
