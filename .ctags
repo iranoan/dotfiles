@@ -1,0 +1,96 @@
+--exclude=.git
+--exclude=.cache
+--exclude=/home/hiroyuki/.Private
+--exclude=/home/hiroyuki/.adobe
+--exclude=/home/hiroyuki/.android
+--exclude=/home/hiroyuki/.bsfilter
+--exclude=/home/hiroyuki/.cddb
+--exclude=/home/hiroyuki/.cddbslave
+--exclude=/home/hiroyuki/.clamtk
+--exclude=/home/hiroyuki/.compiz
+--exclude=/home/hiroyuki/.config
+--exclude=/home/hiroyuki/.dbus
+--exclude=/home/hiroyuki/.dropbox
+--exclude=/home/hiroyuki/.dropbox-dist
+--exclude=/home/hiroyuki/.dvdcss
+--exclude=/home/hiroyuki/.ebview
+--exclude=/home/hiroyuki/.fltk
+--exclude=/home/hiroyuki/.gconf
+--exclude=/home/hiroyuki/.gimp-2.8
+--exclude=/home/hiroyuki/.gnome
+--exclude=/home/hiroyuki/.gnome2
+--exclude=/home/hiroyuki/.gnome2_private
+--exclude=/home/hiroyuki/.gnupg
+--exclude=/home/hiroyuki/.gvfs
+--exclude=/home/hiroyuki/.icons
+--exclude=/home/hiroyuki/.java
+--exclude=/home/hiroyuki/.kde
+--exclude=/home/hiroyuki/.lftp
+--exclude=/home/hiroyuki/.local
+--exclude=/home/hiroyuki/.log
+--exclude=/home/hiroyuki/.macromedia
+--exclude=/home/hiroyuki/.mozc
+--exclude=/home/hiroyuki/.mozilla
+--exclude=/home/hiroyuki/.mutt
+--exclude=/home/hiroyuki/.notmuch
+--exclude=/home/hiroyuki/.npm
+--exclude=/home/hiroyuki/.paginaEpubChecker
+--exclude=/home/hiroyuki/.pki
+--exclude=/home/hiroyuki/.presage
+--exclude=/home/hiroyuki/.signature
+--exclude=/home/hiroyuki/.ssh
+--exclude=/home/hiroyuki/.ssr
+--exclude=/home/hiroyuki/.themes
+--exclude=/home/hiroyuki/.tmp
+--exclude=/home/hiroyuki/.w3m
+--exclude=/home/hiroyuki/.xkb
+--exclude=/home/hiroyuki/texmf/tex
+--exclude=/home/hiroyuki/.vim/bundle
+--exclude=/home/hiroyuki/.vim/pack/github
+
+--recurse=yes
+
+--langdef=latex
+--langmap=latex:.tex
+--regex-latex=/^\\part[[:space:]]*(\[[^]]*\])?[[:space:]]*\{(([^}]|\\}|\{([^}]+)\})+)\}/\2/b,part/
+--regex-latex=/^\\part[[:space:]]*\*[[:space:]]*\{(([^}]|\\}|\{([^}]+)\})+)\}/\1/b,part/
+--regex-latex=/^\\chapter[[:space:]]*(\[[^]]*\])?[[:space:]]*\{(([^}]|\\}|\{([^}]+)\})+)\}/\2/c,chapter/
+--regex-latex=/^\\chapter[[:space:]]*\*[[:space:]]*\{(([^}]|\\}|\{([^}]+)\})+)\}/\1/c,chapter/
+--regex-latex=/^\\section[[:space:]]*(\[[^]]*\])?[[:space:]]*\{(([^}]|\\}|\{([^}]+)\})+)\}/\. \2/s,section/
+--regex-latex=/^\\section[[:space:]]*\*[[:space:]]*\{(([^}]|\\}|\{([^}]+)\})+)\}/\. \1/s,section/
+--regex-latex=/^\\subsection[[:space:]]*(\[[^]]*\])?[[:space:]]*\{(([^}]|\\}|\{([^}]+)\})+)\}/\.\. \2/t,subsection/
+--regex-latex=/^\\subsection[[:space:]]*\*[[:space:]]*\{(([^}]|\\}|\{([^}]+)\})+)\}/\.\. \1/t,subsection/
+--regex-latex=/^\\subsubsection[[:space:]]*(\[[^]]*\])?[[:space:]]*\{(([^}]|\\}|\{([^}]+)\})+)\}/\.\.\. \2/u,subsubsection/
+--regex-latex=/^\\subsubsection[[:space:]]*\*[[:space:]]*\{(([^}]|\\}|\{([^}]+)\})+)\}/\.\.\. \1/u,subsubsection/
+--regex-latex=/^\\paragraph[[:space:]]*(\[[^]]*\])?[[:space:]]*\{(([^}]|\\}|\{([^}]+)\})+)\}/\.\.\.\. \2/v,paragraph/
+--regex-latex=/^\\paragraph[[:space:]]*\*[[:space:]]*\{(([^}]|\\}|\{([^}]+)\})+)\}/\.\.\.\. \1/v,paragraph/
+--regex-latex=/^\\subparagraph[[:space:]]*(\[[^]]*\])?[[:space:]]*\{(([^}]|\\}|\{([^}]+)\})+)\}/\.\.\.\.\. \2/w,subparagraph/
+--regex-latex=/^\\subparagraph[[:space:]]*\*[[:space:]]*\{(([^}]|\\}|\{([^}]+)\})+)\}/\.\.\.\.\. \1/w,subparagraph/
+--regex-latex=/^\\includegraphics[[:space:]]*(\[[^]]*\])?[[:space:]]*(\[[^]]*\])?[[:space:]]*\{(([^}]|\\}|\{([^}]+)\})+)\}/\.\.\.\.\.\.\. \3/g,graphic+listing/
+--regex-latex=/^\\lstinputlisting[[:space:]]*(\[[^]]*\])?[[:space:]]*(\[[^]]*\])?[[:space:]]*\{(([^}]|\\}|\{([^}]+)\})+)\}/\.\.\.\.\.\.\. \3/g,graphic+listing/
+--regex-latex=/\\label[[:space:]]*\{([^}]+)\}/\1/l,label/
+--regex-latex=/\\ref[[:space:]]*\{([^}]+)\}/\.\.\.\.\.\.\. \1/r,ref/
+--regex-latex=/\\eqref[[:space:]]*\{([^}]+)\}/\.\.\.\.\.\.\. \1/r,ref/
+--regex-latex=/\\hyperref[[:space:]]*\{([^}]+)\}/\.\.\.\.\.\.\. \1/r,ref/
+--regex-latex=/\\pageref[[:space:]]*\{([^}]+)\}/\.\.\.\.\.\.\. \1/p,pageref/
+
+--regex-make=/^([^:# \t]+)[ \t]*[:]{1,2}/\1/t,targets/
+
+--langdef=bib
+--langmap=bib:.bib
+--regex-bib=/^@[A-Za-z]+\{([^,]*)/\1/b,bib/
+
+--langdef=css
+--langmap=css:.css
+--langmap=css:+.styl
+--langmap=css:+.less
+--regex-css=/^[ \t]*\.([A-Za-z0-9_-]+)/\1/c,class,classes/
+--regex-css=/^[A-Za-z0-9]+\.([A-Za-z0-9_-]+)/\1/c,class,classes/
+--regex-css=/^[ \t]*#([A-Za-z0-9_-]+)/\1/i,id,ids/
+--regex-css=/^[ \t]*(([A-Za-z0-9_-]+[ \t\n,]+)+)\{/\1/t,tag,tags/
+--regex-css=/^[ \t]*@media\s+([A-Za-z0-9_-]+)/\1/m,media,medias/
+
+--regex-html=/id=["']?([A-Za-z0-9_-]+)["']?/\1/i,id,ids/
+--regex-html=/class=["']?([A-Za-z0-9_-]+])["']?/\1/c,class,classes/
+--regex-html=/class=["']([A-Za-z0-9_-]+ \t])["']/\1/c,class,classes/
+--regex-html=/<h[0-9][^>]*>(.+)<\/h[0-9]>/\1/s,section,sections/

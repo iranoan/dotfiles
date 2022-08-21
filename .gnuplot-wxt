@@ -1,0 +1,7 @@
+raise=1
+persist=0
+ctrl=0
+toggle=1
+redraw=0
+rendering=2
+hinting=100

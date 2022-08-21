@@ -1,0 +1,76 @@
+#bashの補完設定
+# complete -cf sudo #sudo でも補完が利くようにする
+# complete コマンドだとターミナルを開いてからだと上手くいくが、シェル起動時だと何故か上手くいかない
+_install_xspec()  # /usr/share/bash-completion/bash_completion
+{
+    local xspec=$1 cmd
+    shift
+    for cmd in "$@"; do
+        _xspecs[$cmd]=$xspec
+    done
+}
+_install_xspec '!*.tex' latexmk tex2page.sh cut-slide-pdf.sh
+_install_xspec '!*.@(plt|gp|gpi)' gnuplot.sh
+_install_xspec '!*.@(plt|gp|gpi)' plot
+_install_xspec '!*.pdf' pdftk pdfnup pdfimages pdftoppm
+_install_xspec '!*.@(synctex\.gz|tex)' zathura_sync.sh
+_install_xspec '!*.@(docx|doc|docm|odt|ppt|pptx|pptm|odp)' office2text.sh
+_install_xspec '*.@([ao]|so|so.!(conf|*/*)|[rs]pm|gif|jp?(e)g|png|mp[34]|mp?(e)g|avi|asf|ogg|class|wmv|flv|mov|mp4|m4a|pdf|dvi|od[tspg]|doc[xm]|xls[xm]|ppt[xm]|doc|xls|ppt|o|opp|gz|bz2|xz|zip|lzh|fdb_latexmk|fls|nav|out|toc|snm)' vi vim gvim rvim view rview rgvim rgview gview gvim.sh g
+# オプションの補完が有るので止める
+# _install_xspec '!*.cpp' g++ clang++
+# _install_xspec '!*.c' gcc clang
+# /usr/share/bash-completion/{completions/*,bash_completion} で既に設定済み
+_install_xspec '!*.@(dvi|pdf)' dvips dviselect dvitype dvipdf advi dvipdfm dvipdfmx
+# _install_xspec '!*.png' optipng
+unset -f _install_xspec
+
+_nkf(){ # nkf completion
+	local cur
+	cur=${COMP_WORDS[COMP_CWORD]}
+	if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -o default -W "-j -s -e -w -J -S -E -W \
+			--help --version --overwrite --jis --euc --sjis \
+			--utf8 --utf16 --mime --base64 --guess -Lu -Lw -Lm \
+			--hiragana --katakana -X -Z" -- "$cur" ) )
+	else
+		local IFS=$'\n'
+		compopt -o filenames
+		COMPREPLY=( $( compgen -f -- "$cur" ) $( compgen -d -- "$cur" ) )
+	fi
+}
+complete -F _nkf nkf
+
+_gnuplot(){ # gnuplot completion
+	local cur
+	cur=${COMP_WORDS[COMP_CWORD]}
+	if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -o default -W "-p -c -d -e -h -V \
+			--help --persist --default" -- "$cur" ) )
+	else
+		local IFS=$'\n'
+		compopt -o filenames
+		COMPREPLY=( $( compgen -o dirnames -f -X '!*.@(plt|gp|gpi)' "$cur" ) )
+	fi
+}
+complete -F _gnuplot gnuplot
+
+_pip(){ # pip completion
+	local cur prev commands command_opts # opts
+	cur="${COMP_WORDS[COMP_CWORD]}"
+	prev="${COMP_WORDS[COMP_CWORD-1]}"
+	first="${COMP_WORDS[0]}"
+	commands=$($first --help  2> /dev/null |
+		awk '/Commands:/,/General Options:/' |
+		grep -E -o "^\s{2}\w+" | tr -d ' ')
+	# opts=$($first --help | \grep -E -o "((-\w{1}|--(\w|-)*=?)){1,2}")
+	if [ "$COMP_CWORD" == 1 ] ; then
+		COMPREPLY=( $(compgen -W "${commands}" -- ${cur}) )
+		return 0
+	fi
+	if [[ ${cur} == -* ]] ; then
+		command_opts=$($first help $prev 2> /dev/null | grep -E -o "((-\w{1}|--(\w|-)*=?)){1,2}")
+		COMPREPLY=( $(compgen -W "${command_opts}" -- ${cur}) )
+		return 0
+	fi
+}
+complete -F _pip pip3

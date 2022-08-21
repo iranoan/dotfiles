@@ -1,0 +1,138 @@
+PATH=/bin:/usr/bin:/usr/sbin:/usr/local/bin
+SHELL=/bin/bash
+MAILDIR=$HOME/Mail/
+DEFAULT=$MAILDIR/.inbox/
+SPAM=$MAILDIR/.Spam/
+LOGFILE=$HOME/.log/procmail.log
+LOCKFILE=$HOME/.lockmail
+#LOGABSTRACT=no
+VERBOSE=on
+#VERBOSE=off
+
+# backup まず振り分けに失敗して消失しないようにコピーを取っておく
+:0 c
+.backup/
+
+# spam SPANはspamフォルダに(取り敢えずSubjectにsex, viagraを含む時) notmuch のタグに任せている
+# :0
+# * ^Subject:.*(sex|viagra)
+# .Spam/
+#Subject日本語マッチ
+:0
+* ^Subject:[ \t]*\/.*
+{
+	:0
+	* ^Subject:.*iso-2022-jp
+	DECODED_SUBJECT=|echo "$MATCH" | nkf -mwZ1 | sed -E -e 's/[[:space:]]//g'
+	:0 E
+	DECODED_SUBJECT=|echo "$MATCH" | nkf -wZ1 | sed -E -e 's/[[:space:]]//g'
+}
+# 添付ファイルの削除←処理ファイルを標準エラー出力に出すようになっているので、それは捨てる
+:0 fw
+* ^From:.*\<(nikkei-news@mx\.nikkei\.com|natureasia@e-alert\.nature\.com)\>
+| $HOME/bin/delete-mail-attach.sh 2> /dev/null
+
+#------------------------------- 以下振り分け設定 ----------------------------------
+#↓振り分け設定のテンプレート
+# xxxx
+#:0
+#* ^From:.*xxx@yyy.com
+#xxx
+#スパムフィルタ
+:0 fw
+| /usr/bin/bsfilter --pipe --insert-flag --insert-probability
+
+# 振り分けは notmuch のタグに任せている
+# :0
+# * ^X-Spam-Flag: .*Yes.*
+# .Spam/
+#無視して良いお知らせは Trash
+:0
+* ^Return-Path: *<?namr@mail\.saisoncard\.co\.jp>?
+#* ^Subject:.*=\?iso-2022-jp\?
+#* ^Subject:\/.*
+#* ? echo "$MATCH" | nkf -mZ1 --utf8  | sed -E -e 's/[ \t]//g' | egrep '【お知らせ】'
+* $DECODED_SUBJECT ?? .*【お知らせ】.*
+.Trash/
+# .Niftyに移動
+:0
+* ^From:.*(opbd@mail\.saisoncard\.co\.jp)
+.Nifty/
+#Chubu.chukyoに移動
+:0
+* ^From:.*([A-Za-z_]+@[A-Za-z_]+\.chukyo-u\.ac\.jp|safety-master@mail\.yahoo\.co\.jp)
+.Chubu.chukyo/
+#otherに移動
+:0
+* ^From:.*(shopping-newsclip-master@mail\.yahoo\.co\.jp|info@inose\.gr\.jp|noreply@natureasia\.com|natureasia@e-alert\.nature\.com|evernote\.com|nisseki@kenketsu\.jp|mag@wowow\.co\.jp|admin_oshiete@goo\.ne\.jp|e_service@mof\.go\.jp|infomaster@mx\.nikkei\.co\.jp|@mx\.nikkei\.com|@rakuten\.co\.jp|inet-billing@portalmail\.kddi\.com|(nifty-support@|info@opt\.)nifty\.com|users@justsystems\.com|mailmag@mag2tegami\.com|montblanc\.com|rp@aqfr\.net|wowow\.co\.jp|@unitedcinemas\.jp|ppfleama-master@mail\.yahoo\.co\.jp|@mail\.yahoo\.co\.jp)
+.Nifty.other/
+:0
+* ^Return-Path:(.*@(.+\.)?(nikkeibp\.co\.jp|research-panel\.jp|vector\.co\.jp|club\.panasonic\.jp|bounces\.amazon\.(co\.jp|com)|atmarkit\.co\.jp|saisoncard\.co\.jp|unitedcinemas\.jp|justsystem\.co\.jp|impress\.co\.jp)|info@opt\.nifty\.com|send@panasonic\.jp|@emagazine\.rakuten\.co\.jp|mag2\.com|(nifty-support@|info@opt\.)nifty\.com|infomaster@mx\.nikkei\.co\.jp)
+.Nifty.other/
+#さだまさしML
+:0
+* ^Return-Path: *<?massan-admin@massan\.gr\.jp>?
+.Nifty.massan-ML/
+#LibreOffice
+:0
+* ^Return-Path: users\+.+@ja\.libreoffice\.org
+.Nifty.LibreOffice/
+:0
+* ^List-Id: *<users\.ja\.libreoffice\.org>
+.Nifty.LibreOffice/
+##Linux
+:0
+* ^Return-Path: *<?(ubuntu-jp-bounces@lists\.ubuntu\.com|debian-users-admin@debian\.or\.jp|debian-announce-admin@debian\.or\.jp|linux-text-bounces@list\.ospn\.jp)>?
+.Nifty.Linux/
+#秀丸エディタML
+:0
+* ^Message-Id: *<hidesoft_2_[0-9x]+_[0-9]+@maruo\.co\.jp>
+.Nifty.Hidemaru/
+#秀丸シリーズ
+:0
+* ^Message-Id: *<(hidesoft_[15]|hidenet_1)_[0-9x]+_[0-9]+@maruo\.co\.jp>
+.Nifty.HideSoft/
+#鶴亀メールML
+:0
+* ^Message-Id: *<hidesoft_8_[0-9x]+_[0-9]+@maruo\.co\.jp>
+.Nifty.TuruKame/
+#秀丸エディタβ
+:0
+* ^Message-Id: *<turukame_3_[0-9x]+_[0-9]+@maruo\.co\.jp>
+.Nifty.Hidemaru.Beta/
+#秀丸マクロ+秀丸メールマクロ
+:0
+* ^Message-Id: *<(hidesoft_4|turukame_[45])_[0-9x]+_[0-9]+@maruo\.co\.jp>
+.Nifty.Hidemaru.Macro/
+#Nifty標準
+:0
+* ^Received: from pop.nifty.com
+.Nifty/
+#びわこ学院大学
+:0
+* ^From: .*@newton\.ac\.jp
+.Chubu.biwako/
+#情報スキル入門/活用
+:0
+* ^From:.*(\<[A-Za-z][A-Za-z][0-9][0-9][0-9][0-9][0-9]-[0-9][0-9][0-9][0-9]@sti\.chubu\.ac\.jp\>|<(hsuzuki|tsuzuki|fujii)@isc\.chubu\.ac\.jp>|<kyoumu_ta@office\.chubu\.ac\.jp>)
+.Chubu.ComputerUser/
+#Chubu.otherに移動
+:0
+* ^From:.*<((miyazima|yukoy|okazaki)@isc|(kyoumu|kyokenc)@office)\.chubu\.ac\.jp>
+.Chubu.other/
+:0
+* ^From: *sasukemiyajima@yahoo.ne.jp
+.Chubu.other/
+#中部大学標準
+:0
+* ^From:.*<[A-Za-z0-2\.+_]+@[A-Za-z\.+_]+\.chubu\.ac\.jp>
+.Chubu/
+:0
+* ^Received: from outlook.*\.office365\.com
+.Chubu/
+:0
+* ^Received: from outlook\.ms-acdc\.office\.com
+.Chubu/
+##-------------------------------- 振り分け設定終了 --------------------------------
+
+# end of file

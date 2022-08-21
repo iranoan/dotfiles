@@ -1,0 +1,21 @@
+# http://pynote.hatenablog.com/entry/clang-format-settings 参考
+BasedOnStyle:                 Google
+AlignConsecutiveAssignments:  true
+# AlignConsecutiveDeclarations: true # 型名と変数の間の空白が消えるケースが有る
+AlignTrailingComments:        true
+BreakBeforeBraces:            Custom
+BraceWrapping: # {} 前後の改行の入れ方 catch, else の前で改行
+  AfterClass:                 false
+  AfterControlStatement:      false
+  AfterExternBlock:           false
+  AfterFunction:              false
+  AfterNamespace:             false
+  AfterStruct:                false
+  AfterUnion:                 false
+  BeforeCatch:                true
+  BeforeElse:                 true
+IndentCaseLabels:             true
+SpacesInAngles:               true
+SpacesInParentheses:          true
+TabWidth:                     2
+UseTab:                       ForIndentation

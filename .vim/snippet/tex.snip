@@ -1,0 +1,401 @@
+snippet frame
+options indent
+    \begin{frame}{${1:TARGET}}
+        \begin{itemize}[<+->]
+            \item	${2:TARGET}
+        \end{itemize}
+    \end{frame}
+
+snippet texttt
+alias  tt
+    \texttt{${0}}
+
+snippet textit
+alias  it
+    \textit{${0}}
+
+snippet textmc
+alias  mc
+    \textmc{${0}}
+
+snippet textrm
+alias  rm
+    \textrm{${0}}
+
+snippet textbf
+alias  bf
+    \textbf{${0}}
+
+snippet textsc
+abbr スモールキャピタル
+alias  sc
+    \text{${0}}
+
+snippet textsf
+abbr スラント
+alias  sf
+    \textsf{${0}}
+
+snippet textup
+abbr 立体
+alias  up
+    \text{${0}}
+
+snippet itd
+options indent
+alias   item[ dd dt id
+    \item[${1}]	${0}
+
+snippet itm
+options indent
+alias   im item li
+    \item	${0}
+
+snippet description
+options indent
+alias   desc dl
+    \begin{description}
+        \item[${1}]	${0}
+    \end{description}
+
+snippet enumerate
+options indent
+alias   enum ol
+    \begin{enumerate}
+        \item	${1:TARGET}
+    \end{enumerate}
+
+snippet itemize
+options indent
+alias   iz ul
+    \begin{itemize}
+        \item	${1:TARGET}
+    \end{itemize}
+
+snippet picture
+options indent
+    \begin{center}
+        \begin{picture}(310,160)(0,0)
+        \thicklines
+        \put(0,0){\includegraphics[${1:width=${2\}}]{${3}}}
+        % \put(10,30){\textcolor{red}{\vector(1,0){30}}}
+        % \put(20,20){\textcolor{red}{\oval[5](100,120)}}
+        % \put(30,30){\textcolor{blue}{\line(0,1){160}}}
+        \linethickness{0.1pt} \multiput(0,0)(10,0){36}{\textcolor{blue}{\line(0,1){260}}} \multiput(0,0)(0,10){27}{\textcolor{blue}{\line(1,0){350}}} \linethickness{0.7pt} \multiput(0,0)(50,0){7}{\line(0,1){260}} \multiput(0,0)(0,50){6}{\line(1,0){350}} \footnotesize \color{red} \put(-12,46){50} \put(-17,96){100} \put(-17,146){150} \put(-17,196){200} \put(-17,246){250} \put(-5,-9){0} \put(43,-9){50} \put(90,-9){100} \put(140,-9){150} \put(190,-9){200} \put(240,-9){250} \put(290,-9){300} % y=0
+        \put(43,96){50} \put(90,96){100} \put(140,96){150} \put(190,96){200} \put(240,96){250} \put(290,96){300} % y=100
+        \put(43,196){50} \put(90,196){100} \put(140,196){150} \put(190,196){200} \put(240,196){250} \put(290,196){300} % y=200
+        \end{picture}
+    \end{center}
+
+snippet ruler
+    \linethickness{0.1pt} \multiput(0,0)(10,0){36}{\textcolor{blue}{\line(0,1){260}}} \multiput(0,0)(0,10){27}{\textcolor{blue}{\line(1,0){350}}} \linethickness{0.7pt} \multiput(0,0)(50,0){7}{\line(0,1){260}} \multiput(0,0)(0,50){6}{\line(1,0){350}} \footnotesize \color{red} \put(-12,46){50} \put(-17,96){100} \put(-17,146){150} \put(-17,196){200} \put(-17,246){250} \put(-5,-9){0} \put(43,-9){50} \put(90,-9){100} \put(140,-9){150} \put(190,-9){200} \put(240,-9){250} \put(290,-9){300} % y=0
+    \put(43,96){50} \put(90,96){100} \put(140,96){150} \put(190,96){200} \put(240,96){250} \put(290,96){300} % y=100
+    \put(43,196){50} \put(90,196){100} \put(140,196){150} \put(190,196){200} \put(240,196){250} \put(290,196){300} % y=200
+
+snippet minipage
+    \begin{minipage}{${1:0.47\\\\textwidth}}
+        ${2:TARGET}
+    \end{minipage}
+
+snippet figure
+options indent
+    \begin{figure}[!htbp]
+        \centering
+        \includegraphics[${1:width=${2\}}]{${3}}
+        \caption{${4}}
+        \label{${5}}
+    \end{figure}
+
+snippet includegraphics
+options indent
+alias   graphics
+     \includegraphics[${1:width=${2\}}]{${3}}
+
+snippet input
+options indent
+    \input{${1:TARGET}}
+
+snippet label
+    \label{${0}}
+
+snippet ref
+    \ref{${0}}
+
+snippet uncover
+alias unc
+    \uncover<${1:+-}>{${2:TARGET}}
+
+snippet alert
+alias ale
+    \alert{${1:TARGET}}
+
+snippet varepsilon
+abbr ε(筆記体)
+alias ep
+    \varepsilon
+
+snippet vartheta
+abbr varθ
+alias th
+    \vartheta
+
+snippet varpi
+abbr varπ
+alias pi
+    \varpi
+
+snippet varrho
+abbr varρ
+alias rh
+    \varrho
+
+snippet varsigma
+abbr varσ
+    \varsigma
+
+snippet varphi
+abbr varφ
+    \varphi
+
+snippet leftarrow
+abbr ←
+alias larrow Arrow
+    \leftarrow
+
+snippet rightarrow
+abbr →
+alias rarrow arroW
+    \rightarrow
+
+snippet Leftarrow
+abbr ⇐
+alias Larrow ArrowBold
+    \Leftarrow
+
+snippet Rightarrow
+abbr ⇒
+alias Rarrow arroWBold
+    \Rightarrow
+
+snippet leftrightarrow
+abbr ←→
+alias lrarrow ArroW
+    \leftrightarrow
+
+snippet Leftrightarrow
+abbr ⇔
+alias LRarrow ArroWBold
+    \Leftrightarrow
+
+snippet mapsto
+abbr |→
+    \mapsto
+
+snippet hookleftarrow
+abbr ↩
+    \hookleftarrow
+
+snippet hookrightarrow
+abbr ↪
+    \hookrightarrow
+
+snippet leftharpoonup
+    \leftharpoonup
+
+snippet rightharpoonup
+    \rightharpoonup
+
+snippet leftharpoondown
+    \leftharpoondown
+
+snippet rightharpoondown
+    \rightharpoondown
+
+snippet rightleftharpoons
+    \rightleftharpoons
+
+snippet longleftrightarrow
+abbr ←-----------→
+alias llrarrow ArroWLong
+    \longleftrightarrow
+
+snippet Longleftrightarrow
+abbr ←-----------→
+alias Llrarrow
+    \Longleftrightarrow
+
+snippet longleftarrow
+abbr ←-------------
+alias llarrow ArrowLong
+    \longleftarrow
+
+snippet longrightarrow
+abbr -------------→
+alias lrarrow arroWLong
+    \longrightarrow
+
+snippet Longleftarrow
+abbr ⇐=====
+alias Llarrow ArrowLongBold
+    \Longleftarrow
+
+snippet Longrightarrow
+abbr =====⇒
+alias Lrarrow arroWLongBold
+    \Longrightarrow
+
+snippet longmapsto
+abbr |---→
+alias lmarrow
+    \longmapsto
+
+snippet nearrow
+abbr ↗右上
+alias ruarrow arrowToTopRight
+    \nearrow
+
+snippet searrow
+abbr ↘右下
+alias rdarrow arrowToBottomRight
+    \searrow
+
+snippet swarrow
+abbr ↙左下
+alias ldarrow arrowToBottomLeft
+    \swarrow
+
+snippet nwarrow
+abbr ↗左上
+alias luarrow arrowToTopRight
+    \nwarrow
+
+snippet dashleftarrow
+abbr ← - -
+alias dlarrow ArrowDash
+    \dashleftarrow
+
+snippet dashrightarrow
+abbr - - →
+alias drarrow arroWDash
+    \dashrightarrow
+
+snippet leftleftarrows
+    \leftleftarrows
+
+snippet leftrightarrows
+    \leftrightarrows
+
+snippet rightrightarrows
+    \rightrightarrows
+
+snippet rightleftarrows
+    \rightleftarrows
+
+snippet upuparrows
+    \upuparrows
+
+snippet downdownarrows
+    \downdownarrows
+
+snippet Lleftarrow
+    \Lleftarrow
+
+snippet Rrightarrow
+    \Rrightarrow
+
+snippet twoheadleftarrow
+    \twoheadleftarrow
+
+snippet twoheadrightarrow
+    \twoheadrightarrow
+
+snippet leftarrowtail
+    \leftarrowtail
+
+snippet rightarrowtail
+    \rightarrowtail
+
+snippet looparrowleft
+    \looparrowleft
+
+snippet looparrowright
+    \looparrowright
+
+snippet leftrightharpoons
+    \leftrightharpoons
+
+snippet curvearrowleft
+    \curvearrowleft
+
+snippet curvearrowright
+    \curvearrowright
+
+snippet circlearrowleft
+abbr ↺
+alias clarrow
+    \circlearrowleft
+
+snippet circlearrowright
+abbr ↻
+alias crarrow
+    \circlearrowright
+
+snippet Lsh
+abbr ↰
+    \Lsh
+
+snippet Rsh
+abbr ↱
+    \Rsh
+
+snippet upharpoonleft
+    \upharpoonleft
+
+snippet upharpoonright
+    \upharpoonright
+
+snippet downharpoonleft
+    \downharpoonleft
+
+snippet downharpoonright
+    \downharpoonright
+
+snippet rightsquigarrow
+    \rightsquigarrow
+
+snippet leftrightsquigarrow
+    \leftrightsquigarrow
+
+snippet centering
+    \centering
+
+snippet textwidth
+    \textwidth
+
+snippet textheight
+    \textheight
+
+snippet dfrac
+	\dfrac{${1}}{${2}}${0}
+
+# 拡大括弧
+
+snippet Bigl
+abbr	Bigr
+    \Bigl${1:(} ${2:TARGET} \Bigr${3:)}${4}
+
+snippet bigl
+abbr	bigr
+    \bigl${1:(} ${2:TARGET} \bigr${3:)}${4}
+
+snippet Biggl
+abbr	Biggr
+    \Biggl${1:(} ${2:TARGET} \Biggr${3:)}${4}
+
+snippet biggl
+abbr	biggr
+    \biggl${1:(} ${2:TARGET} \biggr${3:)}${4}
+
+snippet left
+abbr	right
+    \left${1:(} ${2:TARGET} \right${3:)}${4}

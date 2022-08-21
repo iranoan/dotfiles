@@ -1,0 +1,161 @@
+snippet figure
+    <figure>
+    <img src="${2}" width=${3} height=${4} alt="${5}">
+    <figcaption>${1}</figcaption>
+    </figure>${6}
+snippet table
+    <table>
+    <caption>${1}</caption>
+    <tr><th>${2}</th>${3}</tr>
+    ${4:TARGET}
+    </table>${5}
+snippet tr
+    <tr>${1:TARGET}</tr>
+snippet th
+    <th abbr="${1}">${2:TARGET}</th>${3}
+snippet td
+    <td>${1:TARGET}</td>${2}
+snippet h1
+    <h1>${1:TARGET}</h1>
+    ${2}
+snippet h2
+    <h2>${1:TARGET}</h2>
+    ${2}
+snippet h3
+    <h3>${1:TARGET}</h3>
+    ${2}
+snippet h4
+    <h4>${1:TARGET}</h4>
+    ${2}
+snippet h5
+    <h5>${1:TARGET}</h5>
+    ${2}
+snippet ul
+    <ul>
+        <li>${1:TARGET}
+    </ul>
+    ${2}
+snippet ulsquare
+    <ul style="list-style-type:square">
+        <li>${1:TARGET}
+    </ul>
+    ${2}
+snippet ulcircle
+    <ul style="list-style-type:circle">
+        <li>${1:TARGET}
+    </ul>
+    ${2}
+snippet uldisc
+    <ul style="list-style-type:disc">
+        <li>${1:TARGET}
+    </ul>
+    ${2}
+snippet ol
+    <ol>
+        <li>${1:TARGET}
+    </ol>
+    ${2}
+snippet olA
+    <ol style="list-style-type:upper-alpha">
+        <li>${1:TARGET}
+    </ol>
+    ${2}
+snippet ola
+    <ol style="list-style-type:lower-alpha">
+        <li>${1:TARGET}
+    </ol>
+    ${2}
+snippet ol1
+    <ol style="list-style-type:decimal">
+        <li>${1:TARGET}
+    </ol>
+    ${2}
+snippet olI
+    <ol style="list-style-type:upper-roman">
+        <li>${1:TARGET}
+    </ol>
+    ${2}
+snippet oli
+    <ol style="list-style-type:lower-roman">
+        <li>${1:TARGET}
+    </ol>
+    ${2}
+snippet style
+    <style type="text/css">
+        ${3}
+    </style>
+snippet li
+    <li>
+snippet dl
+    <dl>
+        <dt>${1:TARGET}
+        <dd>${2}
+    </dl>
+    ${3}
+snippet dt
+    <dt>${1:TARGET}
+    <dd>${2}
+snippet dd
+    <dd>${1:TARGET}
+    ${2}
+snippet p
+    <p>
+    ${1:TARGET}
+    </p>
+    ${2}
+snippet pclass
+    <p class="${1}">
+    ${2:TARGET}
+    </p>${3}
+snippet pid
+    <p id="${1}">
+    ${2:TARGET}
+    </p>
+    ${3}
+snippet blockquote
+    <blockquote>
+    ${1:TARGET}
+    </blockquote>
+    ${2}
+snippet br
+    <br>
+snippet ins
+    <ins datetime="`strftime("%Y-%m-%d")`T`strftime("%H:%M:%S")`+09:00">${1:TARGET}</ins>
+    ${2}
+snippet del
+    <del datetime="`strftime("%Y-%m-%d")`T`strftime("%H:%M:%S")`+09:00">${1:TARGET}</del>
+    ${2}
+snippet img
+    <img src="${1}" width=${2} height=${3} alt="${4}">${5}
+snippet copy
+abbr ©
+alias  &copy;
+    &copy;
+snippet reg
+abbr ®
+alias  &reg;
+    &reg;
+snippet deg
+abbr °
+alias  &deg;
+    &deg;
+snippet lsquo
+abbr ‘left single quote
+alias  &lsquo; quote-left-single
+    &lsquo;
+snippet rsquo
+abbr ’right single quote
+alias  &rsquo; quote-right-single
+    &rsquo;
+snippet ldquo
+abbr “left double quote
+alias  &ldquo; quote-left-double
+    &ldquo;
+snippet rdquo
+abbr ”right double quote
+alias  &rdquo; quote-right-double
+    &rdquo;
+snippet span
+    <span ${1:class}="${2}">${3:TARGET}</span>${4}
+snippet ruby
+    <ruby>${1:TARGET}<rp>(</rp><rt>${2}</rt><rp>)</rp></ruby>

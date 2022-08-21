@@ -1,0 +1,22 @@
+# いったん全部含めない
+/*
+
+!/Readme.md
+!/install.sh
+!/.*
+
+# スワップ・ファイルを再度除外
+/.*.sw?
+
+# プラグイン管理下ファイル (いつでもダウンロードできる)+履歴ファイルは無視
+/.vim/.netrwhist
+/.vim/doc/
+/.vim/pack/github/
+/.vim/pack/my-plug/opt/asyncomplete-mail/
+/.vim/pack/my-plug/opt/asyncomplete-spell.vim/
+/.vim/pack/my-plug/opt/notmuch-py-vim/
+/.vim/print/
+/.vim/spell/
+/.vim/viminfo
+# プラグインの設定ファイル
+!/.vim/pack/github/opt/vimspector/configurations/

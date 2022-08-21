@@ -1,0 +1,63 @@
+#標準で用意されているものの明示
+*.sh            diff=bash
+*.c             diff=cpp
+*.h             diff=cpp
+*.cpp           diff=cpp
+*.hpp           diff=cpp
+*.m             diff=objc
+*.java          diff=java
+*.html          diff=html
+*.pl            diff=perl
+*.pm            diff=perl
+*.t             diff=perl
+*.php           diff=php
+*.py            diff=python
+*.rb            diff=ruby
+*.js            diff=java
+*.doc           diff=word
+*.docx          diff=word
+*.odt           diff=odt
+*.xlsx          diff=xlsx
+*.xls           diff=xls
+*.ods           diff=ods
+*.pptx          diff=powerpoint
+*.ppt           diff=powerpoint
+*.odp           diff=odp
+*.db            diff=sqlite3
+*.db-wal        diff=sqlite3
+*.db-shm        diff=sqlite3
+*.sqlite        diff=sqlite3
+*.sqlite-wal    diff=sqlite3
+*.sqlite-shm    diff=sqlite3
+*.json          diff=json
+*.json.override diff=json
+#exif利用
+*.png           diff=exif
+*.PNG           diff=exif
+*.jpg           diff=exif
+*.JPG           diff=exif
+*.gif           diff=exif
+*.GIF           diff=exif
+# 動画差分ではffmpeg を使ってメタデータ等を表示
+*.asf           diff=video
+*.avi           diff=video
+*.flv           diff=video
+*.m3u           diff=video
+*.mkv           diff=video
+*.mov           diff=video
+*.mp4           diff=video
+*.mpg           diff=video
+*.rm            diff=video
+*.swf           diff=video
+*.wmv           diff=video
+#音声
+*.m4a           diff=audio
+*.mp3           diff=audio
+#以下、単純にバイナリ・ファイルとして扱う
+#実行ファイル
+*.a             binary
+*.dll           binary
+*.exe           binary
+*.pbxproj       binary
+# VirtualBox
+*.vdi           binary

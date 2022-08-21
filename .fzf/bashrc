@@ -1,0 +1,20 @@
+# Setup fzf
+# ---------
+if [[ ! "$PATH" == */home/hiroyuki/.vim/pack/github/opt/fzf/bin* ]]; then
+  export PATH="${PATH:+${PATH}:}/home/hiroyuki/.vim/pack/github/opt/fzf/bin"
+fi
+
+# Auto-completion
+# ---------------
+[[ $- == *i* ]] && source ~/.fzf/completion.bash 2> /dev/null
+
+# Key bindings
+# ------------
+source ~/.fzf/key-bindings.bash
+
+# Default option
+export FZF_DEFAULT_COMMAND='find -L . -type d  \( -name ".git" -o -name ".cache" \) -prune -o -type f \( -name ".*" -o -name "*" \) -printf "%P\n"'
+export FZF_DEFAULT_OPTS='--layout=reverse --info=inline --multi --color="border:7" --preview-window=border-left --bind "ctrl-]:change-preview-window(hidden|)"'
+# export FZF_DEFAULT_OPTS='--layout=reverse --info=inline --multi --preview="cat {}"'
+# export MANPATH="$MANPATH":~/.vim/bundle/repos/github.com/junegunn/fzf/man
+export MANPATH="$MANPATH":~/.vim/pack/github/opt/fzf/man

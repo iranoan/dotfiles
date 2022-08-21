@@ -1,0 +1,30 @@
+CmdLine{
+	-wall
+	-n19 # 日本語だけで警告になることが有る
+	-n22 # コメントだけの行で警告になる
+	-n30 # 行頭インデントのための連続する空白やタブ文字でも警告になる
+	-n44 # booktabs パッケージを使って「縦罫線を使わない」という判断は難しい
+	-n46 # 文中数式 $ $ が警告 \( \) 使用推奨
+}
+# HYPHDASH { 1 3 }        # Either a hyphen, or inter-word
+# NUMDASH { 2 }           # Between words
+# WORDDASH { 0 }          # We never use this
+Silent{
+	\alert
+	\pause
+	\raggedleft
+	\raggedright
+	\slash
+	\textbar
+	\textbackslash
+	\textgreater
+	\textless
+	\textvisiblespace
+	\month
+	\year
+	\day
+	\yen
+}
+# UserWarnRegex{
+# 	User Regex: -2:Vertical rules in tables are ugly.
+# }

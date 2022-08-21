@@ -1,0 +1,28 @@
+# bc のユーザー定義関数
+define pi(){
+	return ( a(1)*4 );
+}
+define cos( theta ){
+	return ( c( theta) );
+}
+define sin( theta ){
+	return ( s( theta ) );
+}
+define tan( theta ){
+	return ( s( theta ) / c( theta ) );
+}
+define atan( n ){
+	return ( a( n ) );
+}
+define log( n ){
+	return ( l( n ) );
+}
+define ln( n ){
+	return ( l( n ) );
+}
+define log10( n ){
+	return ( l(n) / l(10) );
+}
+define exp( n ){
+	return ( e( n ) );
+}

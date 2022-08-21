@@ -1,0 +1,460 @@
+{
+	"frame": {
+		"prefix": "frame",
+		"body": [
+			"\\begin{frame}{${1}}",
+			"\t\\begin{itemize}[<+->]",
+			"\t\t\\item\t${2}",
+			"\t\\end{itemize}",
+			"\\end{frame}"
+		]
+	},
+	"texttt": {
+		"prefix": ["texttt", "tt"],
+		"body": "\\texttt{${0}}"
+	},
+	"textit": {
+		"prefix": ["textit", "it"],
+		"body": "\\textit{${0}}"
+	},
+	"textmc": {
+		"prefix": ["textmc", "mc"],
+		"body": "\\textmc{${0}}"
+	},
+	"textrm": {
+		"prefix": ["textrm", "rm"],
+		"body": "\\textrm{${0}}"
+	},
+	"textbf": {
+		"prefix": ["textbf", "bf"],
+		"body": "\\textbf{${0}}"
+	},
+	"textsc": {
+		"prefix": ["textsc", "sc"],
+		"description": "スモールキャピタル",
+		"body": "\\textsc{${0}}"
+	},
+	"textsf": {
+		"prefix": ["textsf", "sf"],
+		"description": "スラント",
+		"body": "\\textsf{${0}}"
+	},
+	"textup": {
+		"prefix": ["textup", "up"],
+		"description": "立体",
+		"body": "\\textup{${0}}"
+	},
+	"itd": {
+		"prefix": ["itd", "item", "item[", "dd", "dt", "id"],
+		"body": "\\item[${1}]\t${0}"
+	},
+	"itm": {
+		"prefix": ["itm", "im", "item", "item", "li"],
+		"body": "\\item\t${0}"
+	},
+	"description": {
+		"prefix": ["description", "desc dl"],
+		"body": [
+			"\\begin{description}",
+			"\t\\item[${1}]\t${0}",
+			"\\end{description}"
+		]
+	},
+	"enumerate": {
+		"prefix": ["enumerate", "enum ol"],
+		"body": [
+			"\\begin{enumerate}",
+			"\t\\item\t${1}",
+			"\\end{enumerate}"
+		]
+	},
+	"itemize": {
+		"prefix": ["itemize", "iz ul"],
+		"body": [
+			"\\begin{itemize}",
+			"\t\\item\t${1}",
+			"\\end{itemize}"
+		]
+	},
+	"picture": {
+		"prefix": "picture",
+		"body": [
+			"\\begin{center}",
+			"\t\\begin{picture}(310,160)(0,0)",
+			"\t\\thicklines",
+			"\t\\put(0,0){\\includegraphics[${1:width=${2}}]{${3}}}",
+			"\t% \\put(10,30){\\textcolor{red}{\\vector(1,0){30}}}",
+			"\t% \\put(20,20){\\textcolor{red}{\\oval[5](100,120)}}",
+			"\t% \\put(30,30){\\textcolor{blue}{\\line(0,1){160}}}",
+			"\t\\linethickness{0.1pt} \\multiput(0,0)(10,0){36}{\\textcolor{blue}{\\line(0,1){260}}} \\multiput(0,0)(0,10){27}{\\textcolor{blue}{\\line(1,0){350}}} \\linethickness{0.7pt} \\multiput(0,0)(50,0){7}{\\line(0,1){260}} \\multiput(0,0)(0,50){6}{\\line(1,0){350}} \\footnotesize \\color{red} \\put(-12,46){50} \\put(-17,96){100} \\put(-17,146){150} \\put(-17,196){200} \\put(-17,246){250} \\put(-5,-9){0} \\put(43,-9){50} \\put(90,-9){100} \\put(140,-9){150} \\put(190,-9){200} \\put(240,-9){250} \\put(290,-9){300} % y=0",
+			"\t\\put(43,96){50} \\put(90,96){100} \\put(140,96){150} \\put(190,96){200} \\put(240,96){250} \\put(290,96){300} % y=100",
+			"\t\\put(43,196){50} \\put(90,196){100} \\put(140,196){150} \\put(190,196){200} \\put(240,196){250} \\put(290,196){300} % y=200",
+			"\t\\end{picture}",
+			"\\end{center}"
+		]
+	},
+	"ruler": {
+		"prefix": "ruler",
+		"body": [
+			"\\linethickness{0.1pt} \\multiput(0,0)(10,0){36}{\\textcolor{blue}{\\line(0,1){260}}} \\multiput(0,0)(0,10){27}{\\textcolor{blue}{\\line(1,0){350}}} \\linethickness{0.7pt} \\multiput(0,0)(50,0){7}{\\line(0,1){260}} \\multiput(0,0)(0,50){6}{\\line(1,0){350}} \\footnotesize \\color{red} \\put(-12,46){50} \\put(-17,96){100} \\put(-17,146){150} \\put(-17,196){200} \\put(-17,246){250} \\put(-5,-9){0} \\put(43,-9){50} \\put(90,-9){100} \\put(140,-9){150} \\put(190,-9){200} \\put(240,-9){250} \\put(290,-9){300} % y=0",
+			"\\put(43,96){50} \\put(90,96){100} \\put(140,96){150} \\put(190,96){200} \\put(240,96){250} \\put(290,96){300} % y=100",
+			"\\put(43,196){50} \\put(90,196){100} \\put(140,196){150} \\put(190,196){200} \\put(240,196){250} \\put(290,196){300} % y=200"
+		]
+	},
+	"minipage": {
+		"prefix": "minipage",
+		"body": [
+			"\\begin{minipage}{${1:0.47\\textwidth}}",
+			"\t${2}",
+			"\\end{minipage}"
+		]
+	},
+	"figure": {
+		"prefix": "figure",
+		"body": [
+			"\\begin{figure}[!htbp]",
+			"\t\\centering",
+			"\t\\includegraphics[${1:width=${2}}]{${3}}",
+			"\t\\caption{${4}}",
+			"\t\\label{${5}}",
+			"\\end{figure}"
+		]
+	},
+	"includegraphics": {
+		"prefix": ["includegraphics", "graphics"],
+		"body": "\\includegraphics[${1:width=${2}}]{${3}}"
+	},
+	"input": {
+		"prefix": "input",
+		"body": "\\input{${1}}"
+	},
+	"label": {
+		"prefix": "label",
+		"body": "\\label{${0}}"
+	},
+	"ref": {
+		"prefix": "ref",
+		"body": "\\ref{${0}}"
+	},
+	"uncover": {
+		"prefix": "uncover",
+		"body": "\\uncover<${1:+-}>{${2}}"
+	},
+	"alert": {
+		"prefix": "alert",
+		"body": "\\alert{${1}}"
+	},
+	"varepsilon": {
+		"prefix": "varepsilon",
+		"description": "ε(筆記体)",
+		"body": "\\varepsilon"
+	},
+	"vartheta": {
+		"prefix": "vartheta",
+		"description": "varθ",
+		"body": "\\vartheta"
+	},
+	"varpi": {
+		"prefix": "varpi",
+		"description": "varπ",
+		"body": "\\varpi"
+	},
+	"varrho": {
+		"prefix": "varrho",
+		"description": "varρ",
+		"body": "\\varrho"
+	},
+	"varsigma": {
+		"prefix": "varsigma",
+		"description": "varσ",
+		"body": "\\varsigma"
+	},
+	"varphi": {
+		"prefix": "varphi",
+		"description": "varφ",
+		"body": "\\varphi"
+	},
+	"leftarrow": {
+		"prefix": ["leftarrow", "larrow Arrow"],
+		"description": "←",
+		"body": "\\leftarrow"
+	},
+	"rightarrow": {
+		"prefix": ["rightarrow", "rarrow arroW"],
+		"description": "→",
+		"body": "\\rightarrow"
+	},
+	"Leftarrow": {
+		"prefix": ["Leftarrow", "Larrow ArrowBold"],
+		"description": "⇐",
+		"body": "\\Leftarrow"
+	},
+	"Rightarrow": {
+		"prefix": ["Rightarrow", "Rarrow arroWBold"],
+		"description": "⇒",
+		"body": "\\Rightarrow"
+	},
+	"leftrightarrow": {
+		"prefix": ["leftrightarrow", "lrarrow ArroW"],
+		"description": "←→",
+		"body": "\\leftrightarrow"
+	},
+	"Leftrightarrow": {
+		"prefix": ["Leftrightarrow", "LRarrow ArroWBold"],
+		"description": "⇔",
+		"body": "\\Leftrightarrow"
+	},
+	"mapsto": {
+		"prefix": ["mapsto", "marrow"],
+		"description": "|→",
+		"body": "\\mapsto"
+	},
+	"hookleftarrow": {
+		"prefix": "hookleftarrow",
+		"description": "↩",
+		"body": "\\hookleftarrow"
+	},
+	"hookrightarrow": {
+		"prefix": "hookrightarrow",
+		"description": "↪",
+		"body": "\\hookrightarrow"
+	},
+	"leftharpoonup": {
+		"prefix": "leftharpoonup",
+		"body": "\\leftharpoonup"
+	},
+	"rightharpoonup": {
+		"prefix": "rightharpoonup",
+		"body": "\\rightharpoonup"
+	},
+	"leftharpoondown": {
+		"prefix": "leftharpoondown",
+		"body": "\\leftharpoondown"
+	},
+	"rightharpoondown": {
+		"prefix": "rightharpoondown",
+		"body": "\\rightharpoondown"
+	},
+	"rightleftharpoons": {
+		"prefix": "rightleftharpoons",
+		"body": "\\rightleftharpoons"
+	},
+	"longleftrightarrow": {
+		"prefix": "longleftrightarrow",
+		"description": "←-----------→",
+		"body": "\\longleftrightarrow"
+	},
+	"Longleftrightarrow": {
+		"prefix": "Longleftrightarrow",
+		"description": "←-----------→",
+		"body": "\\Longleftrightarrow"
+	},
+	"longleftarrow": {
+		"prefix": ["longleftarrow", "llarrow ArrowLong"],
+		"description": "←-------------",
+		"body": "\\longleftarrow"
+	},
+	"longrightarrow": {
+		"prefix": ["longrightarrow", "lrarrow arroWLong"],
+		"description": "-------------→",
+		"body": "\\longrightarrow"
+	},
+	"Longleftarrow": {
+		"prefix": ["Longleftarrow", "Llarrow ArrowLongBold"],
+		"description": "⇐=====",
+		"body": "\\Longleftarrow"
+	},
+	"Longrightarrow": {
+		"prefix": ["Longrightarrow", "Lrarrow arroWLongBold"],
+		"description": "=====⇒",
+		"body": "\\Longrightarrow"
+	},
+	"longmapsto": {
+		"prefix": ["longmapsto", "lmarrow"],
+		"description": "|---→",
+		"body": "\\longmapsto"
+	},
+	"nearrow": {
+		"prefix": ["nearrow", "ruarrow arrowToTopRight"],
+		"description": "↗右上",
+		"body": "\\nearrow"
+	},
+	"searrow": {
+		"prefix": ["searrow", "rdarrow arrowToBottomRight"],
+		"description": "↘右下",
+		"body": "\\searrow"
+	},
+	"swarrow": {
+		"prefix": ["swarrow", "ldarrow arrowToBottomLeft"],
+		"description": "↙左下",
+		"body": "\\swarrow"
+	},
+	"nwarrow": {
+		"prefix": ["nwarrow", "luarrow arrowToTopRight"],
+		"description": "↗左上",
+		"body": "\\nwarrow"
+	},
+	"dashleftarrow": {
+		"prefix": ["dashleftarrow", "dlarrow ArrowDash"],
+		"description": "← - -",
+		"body": "\\dashleftarrow"
+	},
+	"dashrightarrow": {
+		"prefix": ["dashrightarrow", "drarrow arroWDash"],
+		"description": "- - →",
+		"body": "\\dashrightarrow"
+	},
+	"leftleftarrows": {
+		"prefix": "leftleftarrows",
+		"body": "\\leftleftarrows"
+	},
+	"leftrightarrows": {
+		"prefix": "leftrightarrows",
+		"body": "\\leftrightarrows"
+	},
+	"rightrightarrows": {
+		"prefix": "rightrightarrows",
+		"body": "\\rightrightarrows"
+	},
+	"rightleftarrows": {
+		"prefix": "rightleftarrows",
+		"body": "\\rightleftarrows"
+	},
+	"upuparrows": {
+		"prefix": "upuparrows",
+		"body": "\\upuparrows"
+	},
+	"downdownarrows": {
+		"prefix": "downdownarrows",
+		"body": "\\downdownarrows"
+	},
+	"Lleftarrow": {
+		"prefix": "Lleftarrow",
+		"body": "\\Lleftarrow"
+	},
+	"Rrightarrow": {
+		"prefix": "Rrightarrow",
+		"body": "\\Rrightarrow"
+	},
+	"twoheadleftarrow": {
+		"prefix": "twoheadleftarrow",
+		"body": "\\twoheadleftarrow"
+	},
+	"twoheadrightarrow": {
+		"prefix": "twoheadrightarrow",
+		"body": "\\twoheadrightarrow"
+	},
+	"leftarrowtail": {
+		"prefix": "leftarrowtail",
+		"body": "\\leftarrowtail"
+	},
+	"rightarrowtail": {
+		"prefix": "rightarrowtail",
+		"body": "\\rightarrowtail"
+	},
+	"looparrowleft": {
+		"prefix": "looparrowleft",
+		"body": "\\looparrowleft"
+	},
+	"looparrowright": {
+		"prefix": "looparrowright",
+		"body": "\\looparrowright"
+	},
+	"leftrightharpoons": {
+		"prefix": "leftrightharpoons",
+		"body": "\\leftrightharpoons"
+	},
+	"curvearrowleft": {
+		"prefix": "curvearrowleft",
+		"body": "\\curvearrowleft"
+	},
+	"curvearrowright": {
+		"prefix": "curvearrowright",
+		"body": "\\curvearrowright"
+	},
+	"circlearrowleft": {
+		"prefix": ["circlearrowleft", "clarrow"],
+		"description": "↺",
+		"body": "\\circlearrowleft"
+	},
+	"circlearrowright": {
+		"prefix": ["circlearrowright", "crarrow"],
+		"description": "↻",
+		"body": "\\circlearrowright"
+	},
+	"Lsh": {
+		"prefix": "Lsh",
+		"description": "↰",
+		"body": "\\Lsh"
+	},
+	"Rsh": {
+		"prefix": "Rsh",
+		"description": "↱",
+		"body": "\\Rsh"
+	},
+	"upharpoonleft": {
+		"prefix": "upharpoonleft",
+		"body": "\\upharpoonleft"
+	},
+	"upharpoonright": {
+		"prefix": "upharpoonright",
+		"body": "\\upharpoonright"
+	},
+	"downharpoonleft": {
+		"prefix": "downharpoonleft",
+		"body": "\\downharpoonleft"
+	},
+	"downharpoonright": {
+		"prefix": "downharpoonright",
+		"body": "\\downharpoonright"
+	},
+	"rightsquigarrow": {
+		"prefix": "rightsquigarrow",
+		"body": "\\rightsquigarrow"
+	},
+	"leftrightsquigarrow": {
+		"prefix": "leftrightsquigarrow",
+		"body": "\\leftrightsquigarrow"
+	},
+	"centering": {
+		"prefix": "centering",
+		"body": "\\centering"
+	},
+	"textwidth": {
+		"prefix": "textwidth",
+		"body": "\\textwidth"
+	},
+	"textheight": {
+		"prefix": "textheight",
+		"body": "\\textheight"
+	},
+	"dfrac": {
+		"prefix": "dfrac",
+		"body": "\\dfrac{${1}}{${2}}${0}"
+	},
+	"Bigl": {
+		"prefix": "Bigl",
+		"description" : "\\Bigl \\Bigr",
+		"body": "\\Bigl${1:(} ${2} \\Bigr${3:)}${4}"
+	},
+	"bigl": {
+		"prefix": "bigl",
+		"description" : "\\bigl \\bigr",
+		"body": "\\bigl${1:(} ${2} \\bigr${3:)}${4}"
+	},
+	"Biggl": {
+		"prefix": "Biggl",
+		"description" : "\\Biggl \\Biggr",
+		"body": "\\Biggl${1:(} ${2} \\Biggr${3:)}${4}"
+	},
+	"biggl": {
+		"prefix": "biggl",
+		"description" : "\\biggl \\biggr",
+		"body": "\\biggl${1:(} ${2} \\biggr${3:)}${4}"
+	},
+	"left": {
+		"prefix": "left",
+		"description" : "\\left \\right",
+		"body": "\\left${1:(} ${2} \\right${3:)}${4}"
+	}
+}

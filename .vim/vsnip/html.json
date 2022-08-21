@@ -1,0 +1,285 @@
+{
+	"figure": {
+		"prefix": "figure",
+		"body": [
+			"<figure>",
+			"<img src=\"${2}\" width=${3} height=${4} alt=\"${5}\">",
+			"<figcaption>${1}</figcaption>",
+			"</figure>${6}"
+		]
+	},
+	"table": {
+		"prefix": "table",
+		"body": [
+			"<table>",
+			"<caption>${1}</caption>",
+			"<tr><th>${2}</th>${3}</tr>",
+			"${4:TARGET}",
+			"</table>${5}"
+		]
+	},
+	"tr": {
+		"prefix": "tr",
+		"body": "<tr>${1}</tr>"
+	},
+	"th": {
+		"prefix": "th",
+		"body": "<th abbr=\"${1}\">${2:TARGET}</th>${3}"
+	},
+	"td": {
+		"prefix": "td",
+		"body": "<td>${1}</td>${2}"
+	},
+	"h1": {
+		"prefix": "h1",
+		"body": [
+			"<h1>${1}</h1>",
+			"${2}"
+		]
+	},
+	"h2": {
+		"prefix": "h2",
+		"body": [
+			"<h2>${1}</h2>",
+			"${2}"
+		]
+	},
+	"h3": {
+		"prefix": "h3",
+		"body": [
+			"<h3>${1}</h3>",
+			"${2}"
+		]
+	},
+	"h4": {
+		"prefix": "h4",
+		"body": [
+			"<h4>${1}</h4>",
+			"${2}"
+		]
+	},
+	"h5": {
+		"prefix": "h5",
+		"body": [
+			"<h5>${1}</h5>",
+			"${2}"
+		]
+	},
+	"ul": {
+		"prefix": "ul",
+		"body": [
+			"<ul>",
+			"\t<li>${1}",
+			"</ul>",
+			"${2}"
+		]
+	},
+	"ulsquare": {
+		"prefix": "ulsquare",
+		"body": [
+			"<ul style=\"list-style-type:square\">",
+			"\t<li>${1}",
+			"</ul>",
+			"${2}"
+		]
+	},
+	"ulcircle": {
+		"prefix": "ulcircle",
+		"body": [
+			"<ul style=\"list-style-type:circle\">",
+			"\t<li>${1}",
+			"</ul>",
+			"${2}"
+		]
+	},
+	"uldisc": {
+		"prefix": "uldisc",
+		"body": [
+			"<ul style=\"list-style-type:disc\">",
+			"\t<li>${1}",
+			"</ul>",
+			"${2}"
+		]
+	},
+	"ol": {
+		"prefix": "ol",
+		"body": [
+			"<ol>",
+			"\t<li>${1}",
+			"</ol>",
+			"${2}"
+		]
+	},
+	"olA": {
+		"prefix": "olA",
+		"body": [
+			"<ol style=\"list-style-type:upper-alpha\">",
+			"\t<li>${1}",
+			"</ol>",
+			"${2}"
+		]
+	},
+	"ola": {
+		"prefix": "ola",
+		"body": [
+			"<ol style=\"list-style-type:lower-alpha\">",
+			"\t<li>${1}",
+			"</ol>",
+			"${2}"
+		]
+	},
+	"ol1": {
+		"prefix": "ol1",
+		"body": [
+			"<ol style=\"list-style-type:decimal\">",
+			"\t<li>${1}",
+			"</ol>",
+			"${2}"
+		]
+	},
+	"olI": {
+		"prefix": "olI",
+		"body": [
+			"<ol style=\"list-style-type:upper-roman\">",
+			"\t<li>${1}",
+			"</ol>",
+			"${2}"
+		]
+	},
+	"oli": {
+		"prefix": "oli",
+		"body": [
+			"<ol style=\"list-style-type:lower-roman\">",
+			"\t<li>${1}",
+			"</ol>",
+			"${2}"
+		]
+	},
+	"style": {
+		"prefix": "style",
+		"body": [
+			"<style type=\"text/css\">",
+			"\t${3}",
+			"</style>"
+		]
+	},
+	"li": {
+		"prefix": "li",
+		"body": "<li>"
+	},
+	"dl": {
+		"prefix": "dl",
+		"body": [
+			"<dl>",
+			"\t<dt>${1}",
+			"\t<dd>${2}",
+			"</dl>",
+			"${3}"
+		]
+	},
+	"dt": {
+		"prefix": "dt",
+		"body": [
+			"<dt>${1}",
+			"<dd>${2}"
+		]
+	},
+	"dd": {
+		"prefix": "dd",
+		"body": [
+			"<dd>${1}",
+			"${2}"
+		]
+	},
+	"p": {
+		"prefix": "p",
+		"body": [
+			"<p>",
+			"${1}",
+			"</p>",
+			"${2}"
+		]
+	},
+	"pclass": {
+		"prefix": "pclass",
+		"body": [
+			"<p class=\"${1}\">",
+			"${2:TARGET}",
+			"</p>${3}"
+		]
+	},
+	"pid": {
+		"prefix": "pid",
+		"body": [
+			"<p id=\"${1}\">",
+			"${2:TARGET}",
+			"</p>",
+			"${3}"
+		]
+	},
+	"br": {
+		"prefix": "br",
+		"body": "<br>"
+	},
+	"ins": {
+		"prefix": "instime",
+		"body": [
+			"<ins datetime=\"$CURRENT_YEAR/$CURRENT_MONTH/${CURRENT_DATE}T$CURRENT_HOUR:$CURRENT_MINUTE:${CURRENT_SECOND}+09:00\">${1}</ins>",
+			"${2}"
+		]
+	},
+	"del": {
+		"prefix": "deltime",
+		"body": [
+			"<del datetime=\"$CURRENT_YEAR/$CURRENT_MONTH/${CURRENT_DATE}T$CURRENT_HOUR:$CURRENT_MINUTE:${CURRENT_SECOND}+09:00\">${1}</del>",
+			"${2}"
+		]
+	},
+	"img": {
+		"prefix": "img",
+		"body": "<img src=\"${1}\" width=${2} height=${3} alt=\"${4}\">${5}"
+	},
+	"copy": {
+		"prefix": "copy",
+		"description": "¬©",
+		"body": "&copy;"
+	},
+	"reg": {
+		"prefix": "reg",
+		"description": "¬Æ",
+		"body": "&reg;"
+	},
+	"deg": {
+		"prefix": "deg",
+		"description": "¬∞",
+		"body": "&deg;"
+	},
+	"lsquo": {
+		"prefix": ["lsquo", "quote-left-single,"],
+		"description": "Åe left single quote",
+		"body": "&lsquo;"
+	},
+	"rsquo": {
+		"prefix": ["rsquo", "quote-right-single,"],
+		"description": "Åf right single quote",
+		"body": "&rsquo;"
+	},
+	"ldquo": {
+		"prefix": ["ldquo", "quote-left-double,"],
+		"description": "Åg left double quote",
+		"body": "&ldquo;"
+	},
+	"rdquo": {
+		"prefix": ["rdquo", "quote-right-double,"],
+		"description": "Åh right double quote",
+		"body": "&rdquo;"
+	},
+	"span": {
+		"prefix": "span",
+		"body": "<span ${1:class}=\"${2}\">${3:TARGET}</span>${4}"
+	},
+	"ruby": {
+		"prefix": "ruby",
+		"body": "<ruby>${1}<rp>(</rp><rt>${2}</rt><rp>)</rp></ruby>"
+	}
+}

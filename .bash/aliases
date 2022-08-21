@@ -1,0 +1,14 @@
+# bash aliases
+alias info=pinfo
+# alias info='info --vi-keys'
+alias gpgupdate='gpg --keyserver pgp.nic.ad.jp --refresh-keys && gpg --update-trustdb'
+alias 3cal='ncal -3'
+alias bc='bc -l -q ~/.bc | sed -e "s/^\./0./g" -e "s/\(\.[0-9]*[1-9]\)0\+/\1/g"'
+alias diff='colordiff -wu'
+alias fbterm='fbterm -- fbterm.sh'
+alias m='gvim +"Notmuch start"'
+alias plot=gnuplot.sh
+alias g='gvim.sh $@'
+# alias matlab='/usr/bin/octave --gui &'
+alias octave='octave-cli --silent'
+alias gnuplot='PAGER=less gnuplot'

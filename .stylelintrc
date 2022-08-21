@@ -1,0 +1,48 @@
+{
+	"extends": [
+		"stylelint-config-standard",
+		"stylelint-config-recess-order"
+	],
+	"rules": {
+		"_": "CSS Colors Level 4 では rgb(R, G, B) で , 区切りだけでなく空白区切りが追加されたが、, 区切りに限定",
+		"color-function-notation": "legacy",
+		"color-no-invalid-hex": true,
+		"color-hex-case": "upper",
+		"font-weight-notation": "named-where-possible",
+		"indentation": "tab",
+		"selector-list-comma-newline-after": "always-multi-line",
+		"function-calc-no-unspaced-operator": true,
+		"function-linear-gradient-no-nonstandard-direction": true,
+		"string-no-newline": true,
+		"unit-no-unknown": true,
+		"property-no-unknown": true,
+		"keyframe-declaration-no-important": true,
+		"declaration-block-no-duplicate-properties": true,
+		"declaration-block-no-shorthand-property-overrides": true,
+		"block-no-empty": true,
+		"selector-pseudo-class-no-unknown": true,
+		"selector-pseudo-element-no-unknown": true,
+		"selector-type-no-unknown": true,
+		"media-feature-name-no-unknown": true,
+		"at-rule-no-unknown": true,
+		"comment-no-empty": true,
+		"no-descending-specificity": true,
+		"no-duplicate-at-import-rules": true,
+		"no-duplicate-selectors": true,
+		"no-empty-source": true,
+		"no-extra-semicolons": true,
+		"no-invalid-double-slash-comments": true,
+		"shorthand-property-no-redundant-values": true,
+		"declaration-block-no-redundant-longhand-properties": true,
+		"property-no-vendor-prefix": true
+	},
+	"overrides": [
+		{
+			"_": "EPUB では -epub-* などを使わないと縦書きすら出来ない",
+			"files": ["book/epub/*/OEBPS/css/*.css", "bin/kindle/epub.css"],
+			"rules": {
+				"property-no-vendor-prefix": false
+			}
+		}
+	]
+}

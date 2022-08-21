@@ -1,0 +1,29 @@
+# vi モードを標準とする
+set editing-mode vi
+$if mode=vi
+	set keymap vi-command
+	set keymap vi-insert
+$endif
+# [Tab] 補完でカラー表示
+set colored-stats on
+# [Tab] 補完でディレクトリへのシンボリックなら末尾に / を付ける
+set mark-symlinked-directories on
+# 編集モードではvi, emacs どちらのモードでも同じにする為、一部設定がかぶっている
+# 行頭、行末、左右移動
+Control-a: beginning-of-line
+Control-e: end-of-line
+Control-b: backward-char
+Control-h: backward-char
+Control-f: forward-char
+Control-l: forward-char
+# ↑Ctrl-f は vim ではコマンドラインウィンドウへの移行なので、Ctrl-l に割り当てているので、それも追加
+# ↑Ctrl-h の削除は [Muhenkan] を使っている
+# 行頭/行末まで、カーソル前削除
+Control-u: backward-kill-line
+Control-k: kill-line
+Control-d: delete-char
+# 履歴 (vim の補完に合わせている)
+Control-p: history-search-backward
+Control-n: history-search-forward
+# ビープ音は鳴らさず画面点滅
+set bell-style visible

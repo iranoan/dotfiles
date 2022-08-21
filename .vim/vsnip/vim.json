@@ -1,0 +1,138 @@
+{
+	"if": {
+		"prefix": "if",
+		"description": "if endif",
+		"body": "if ${1:condition}\n\t${0}\nendif"
+	},
+	"elseif": {
+		"prefix": "elseif",
+		"body": "elseif ${1:condition}\n\t${0}"
+	},
+	"ifelse": {
+		"prefix": "ifelse",
+		"description": "if else endif",
+		"body": "if ${1:condition}\n\t${2}\nelse\n\t${3}\nendif"
+	},
+	"for": {
+		"prefix": "for",
+		"description": "for in endfor",
+		"body": "for ${1:var} in ${2:list}\n\t${0}\nendfor"
+	},
+	"while": {
+		"prefix": "while",
+		"description": "while endwhile",
+		"body": "while ${1:condition}\n\t${0}\nendwhile"
+	},
+	"function": {
+		"prefix": ["function", "func"],
+		"description": "func endfunc",
+		"body": "function! ${1:func_name}(${2}) abort\n\t${0}\nendfunction"
+	},
+	"try": {
+		"prefix": "try",
+		"description": "try endtry",
+		"body": "try\n\t${1}\ncatch /${2:pattern}/\n\t${3}\nendtry"
+	},
+	"tryfinally": {
+		"prefix": ["tryfinally", "tryf"],
+		"description": "try ... finally ... endtry",
+		"body": "try\n\t${1}\nfinally\n\t${2}\nendtry"
+	},
+	"catch": {
+		"prefix": "catch",
+		"description": "catch /pattern/",
+		"body": "catch ${<1:/${2:pattern: empty, E484, Vim(cmdname):{errmsg}}/>}"
+	},
+	"echomsg": {
+		"prefix": ["echomsg", "log"],
+		"body": "echomsg string(${1})"
+	},
+	"command": {
+		"prefix": "command",
+		"description": "command call function",
+		"body": "command! ${1:command_name} call ${2:func_name}"
+	},
+	"customlist": {
+		"prefix": "customlist",
+		"description": "customlist complete function",
+		"body": "function! ${1:func_name}(arglead, cmdline, cursorpos) abort\n\treturn filter(${2:list}, 'stridx(v:val, a:arglead) == 0')\nendfunction"
+	},
+	"augroup": {
+		"prefix": "augroup",
+		"description": "augroup with autocmds",
+		"body": "augroup ${1:augroup_name}\n\tautocmd!\n\tautocmd ${2:event}\naugroup END"
+	},
+	"redir": {
+		"prefix": "redir",
+		"description": [
+			"redir => var\n",
+			"redir => ${1:var}"
+		],
+		"body": "${2::TARGET}\nredir END"
+	},
+	"bundle_hooks": {
+		"prefix": "bundle_hooks",
+		"description": "neobundle hooks",
+		"body": "let s:hooks = neobundle#get_hooks('${1}')\nfunction! s:hooks.on_source(bundle) abort\n\t${0}\nendfunction\nunlet s:hooks"
+	},
+	"autoload": {
+		"prefix": ["autoload", "afunction afunc"],
+		"description": "autoload func endfunc",
+		"body": "function! `substitute(matchstr(neosnippet#util#expand('%:p:r'), '/autoload/\\zs.*$'), '/', '#', 'g')`#${1:func_name}(${2:args}) abort\n\t${0}\nendfunction"
+	},
+	"g:loaded": {
+		"prefix": ["g:loaded", "loaded"],
+		"description": "if exists('g:loaded_{plugin-name}')",
+		"body": "if exists('g:loaded_${1}')\n\tfinish\nendif\n${0}\nlet g:loaded_$1 = 1"
+	},
+	"modeline": {
+		"prefix": "modeline",
+		"description": "vim: {modeline}",
+		"body": "\" vim: ${<0:foldmethod=marker>}"
+	},
+	"undo_ftplugin": {
+		"prefix": ["undo_ftplugin", "b:undo_ftplugin"],
+		"description": "if !exists('b:undo_ftplugin')",
+		"body": "if !exists('b:undo_ftplugin')\n\tlet b:undo_ftplugin = ''\nendif\n\t${1}\nlet b:undo_ftplugin .= '\n\t\\ | setlocal ${2:option_name1< option_name2<...}\n\t\\'"
+	},
+	"python": {
+		"prefix": ["python", "py"],
+		"description": "python <<EOF | EOF",
+		"body": "python << EOF\n\t${0}\nEOF"
+	},
+	"python3": {
+		"prefix": ["python3", "py3"],
+		"description": "python3 <<EOF | EOF",
+		"body": "python3 << EOF\n\t${0}\nEOF"
+	},
+	"lua": {
+		"prefix": "lua",
+		"description": "lua <<EOF | EOF",
+		"body": "lua << EOF\n\t${0}\nEOF"
+	},
+	"save_pos": {
+		"prefix": "save_pos",
+		"description": "use pos save",
+		"body": "let pos_save = getpos('.')\ntry\n\t${0}\nfinally\n\tcall setpos('.', pos_save)\nendtry"
+	},
+	"save_register": {
+		"prefix": "save_register",
+		"description": "use register save",
+		"body": "let save_reg_$1 = getreg('${1}')\nlet save_regtype_$1 = getregtype('$1')\ntry\n\t${0}\nfinally\n\tcall setreg('$1', save_reg_$1, save_regtype_$1)\nendtry"
+	},
+	"save_option": {
+		"prefix": "save_option",
+		"description": "use option save",
+		"body": "let $1_save = &${1}\nlet &$1 = ${2}\ntry\n\t${0}\nfinally\n\tlet &$1 = $1_save\nendtry"
+	},
+	"p": {
+		"prefix": "p",
+		"description": "debug-echomsg",
+		"body": "echomsg string([${0}])"
+	},
+	"version": {
+		"prefix": "version",
+		"description": "vim-version-check",
+		"body": "v:version > ${1} || (v:version == $1 && has('patch${2}'))"
+	}
+}

@@ -1,0 +1,62 @@
+scriptencoding utf-8
+scriptversion 4
+set antialias             " アンチエイリアス
+set columns=164           " columns width of the display
+set lines=999             " lines number of lines in the display
+if has('unix')            " 使用フォント(優先的に使う)
+	set guifont=RictyDiminished\ Nerd\ Font\ 14,Ricty\ Diminished\ Regular\ 14,Noto\ Mono\ 13,Monospace\ 12
+	" set guifont=HackGenNerd\ Regular\ 13,Ricty\ Diminished\ Regular\ 14,Noto\ Mono\ 13,Monospace\ 12
+else
+	set guifont=MS_Gothic:h13,Monaco:h10
+endif
+set ambiwidth=double     " guifont を指定すると auto にされるらしい
+set guioptions-=T        " ツール・バー表示を OFF
+set guioptions-=m        " メニュー表示を OFF
+augroup GVIMRC
+	autocmd!
+	autocmd GUIEnter * winpos 0 0                "左上に (help に有る通り autocmd を使わないと環境によって gvimrc の記載では無効)
+	" autocmd VimEnter,GUIEnter * if &lines != 48 | set lines=48 | endif | autocmd! GVIMRC
+	" ↑GTK でズレが生じるため再設定 https://github.com/vim-jp/issues/issues/1374
+	" lines=999 としたのでコメントに
+augroup END
+set mousemodel=popup
+set nomousefocus
+nnoremap <ScrollWheelUp>      <S-ScrollWheelUp>
+nnoremap <S-ScrollWheelUp>    <ScrollWheelUp>
+nnoremap <ScrollWheelDown>    <S-ScrollWheelDown>
+nnoremap <S-ScrollWheelDown>  <ScrollWheelDown>
+xnoremap <ScrollWheelUp>      <C-U>
+xnoremap <ScrollWheelDown>    <C-D>
+
+function Toggle_menu() abort
+	if &guioptions =~# 'm'
+		silent set guioptions-=m
+	else
+		silent set guioptions+=m
+	endif
+endfunction
+
+def MakeGUItabline(): string
+	var bufnrlist = tabpagebuflist(v:lnum)
+	# ウィンドウが複数あるときにはその数を追加する
+	var wincount = tabpagewinnr(v:lnum, '$')
+	var label: string
+	if wincount > 1
+		label ..= wincount
+	else
+		label = ''
+	endif
+	# このタブページに変更のあるバッファは '+' を追加する
+	for bufnr in bufnrlist
+		if getbufvar(bufnr, '&modified')
+					\ && !( match(getbufinfo(bufnr)[0]['name'], '!/') == 0 && swapname(bufnr) ==# '' )
+					# 名前が !/bin/bash 等で !/、スワップ・ファイルがなければ :terminal の可能性が高い
+			label ..= '+'
+			break
+		endif
+	endfor
+	if label !=? ''
+		label ..= ' '
+	endif
+	return '%N|' .. label .. ' %t'
+enddef
