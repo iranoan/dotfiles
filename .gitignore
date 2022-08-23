@@ -15,6 +15,7 @@
 /.vim/pack/my-plug/opt/asyncomplete-mail/
 /.vim/pack/my-plug/opt/asyncomplete-spell.vim/
 /.vim/pack/my-plug/opt/notmuch-py-vim/
+/.vim/autoload/set_notmuchpy.vim
 /.vim/print/
 /.vim/spell/
 /.vim/viminfo
