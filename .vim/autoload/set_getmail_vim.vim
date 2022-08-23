@@ -5,6 +5,6 @@ function! set_getmail_vim#main() abort
 		if !is_plugin_installed#main('getmail.vim')
 			packadd getmail.vim
 		endif
-		set syntax=getmailrc
+		set filetype=conf syntax=getmailrc
 	endif
 endfunction
