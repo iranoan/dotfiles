@@ -8,8 +8,11 @@ case $- in
 	*) return;;
 esac
 
-# シェル開始時に tmux 起動 (デタッチされたセッションがあればそちらに繋げる)
-if which tmux > /dev/null 2>&1 ; then
+if [[ $( tty ) =~ /dev/tty.* ]]; then # 仮想コンソールでは、そのままでは日本語が使えないので fbterm 起動
+	if which fbterm > /dev/null 2>&1 ; then
+		fbterm -- "$HOME/bin/fbterm.sh"
+	fi
+elif which tmux > /dev/null 2>&1 ; then # シェル開始時に tmux 起動 (デタッチされたセッションがあればそちらに繋げる)
 	[[ $- != *i* ]] && return
 	export FZF_TMUX=1
 	export FZF_TMUX_OPTS="-p 95%,95% -y 23"
