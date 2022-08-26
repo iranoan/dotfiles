@@ -1,0 +1,4 @@
+! sxiv config
+Sxiv.background: #073643
+Sxiv.foreground: #fdf6e3
+Sxiv.font: Ricty Diminished Regular 14
