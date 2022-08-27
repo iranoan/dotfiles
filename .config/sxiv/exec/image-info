@@ -13,7 +13,8 @@ s="    " # field separator
 exec 2>/dev/null
 
 # filename=$(basename -- "$1")
+filename=$(echo "$1" | sed -E "s:^$HOME:~:g")
 filesize=$(du -Hh -- "$1" | cut -f 1)
 geometry="${2}x${3}"
 
-echo "$1${s}[${geometry}/${filesize}]"
+echo "$filename${s}[${geometry}/${filesize}]"
