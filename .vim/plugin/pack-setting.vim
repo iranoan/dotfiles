@@ -572,5 +572,5 @@ vmap V <Cmd>call set_expand_region#main('(expand_region_shrink)') <bar> delfunct
 " getmail syntax https://github.com/vim-scripts/getmail.vim {{{2
 augroup Gatmail
 	autocmd!
-	autocmd BufRead ~/.getmail/* call set_getmail_vim#main()
+	autocmd BufRead ~/.getmail/*,~/.config/getmail/* call set_getmail_vim#main()
 augroup END
