@@ -8,6 +8,7 @@ function set_eblook#main() abort
 				\ {'mode': 'v', 'key': '<leader>eb', 'cmd': 'EblookSearch'}
 				\ ] )
 	let g:eblookenc = 'utf-8'
+	let eblook_stemming = 1
 	let g:eblook_dictlist1 = [
 				\{
 				\ 'book': '/home/hiroyuki/EPWING/readers/',
