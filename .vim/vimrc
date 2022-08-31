@@ -64,7 +64,7 @@ filetype plugin indent on                      " ファイルタイプ別プラ�
 " 一部のプラグインは読み込まないように
 let g:loaded_getscriptPlugin = 1
 let g:loaded_vimballPlugin = 1
-" let g:loaded_zipPlugin = 1                     " 提出ファイルで使う可能性が有る
+let g:loaded_zipPlugin = 1
 let g:loaded_tarPlugin = 1
 let g:loaded_gzip = 1
 let g:loaded_2html_plugin = 1
@@ -72,6 +72,17 @@ let g:loaded_logiPat = 1
 let g:loaded_rrhelper = 1
 " let g:loaded_matchparen = 1
 let g:loaded_netrwPlugin = 1
+augroup loadArchive
+	autocmd!
+	autocmd BufReadPre *.aar,*.apk,*.celzip,*.crtx,*.docm,*.docx,*.dotm,*.dotx,*.ear,*.epub,*.gcsx,*.glox,*.gqsx,*.ja,*.jar,*.kmz,*.odb,*.odc,*.odf,*.odg,*.odi,*.odm,*.odp,*.ods,*.odt,*.otc,*.otf,*.otg,*.oth,*.oti,*.otp,*.ots,*.ott,*.oxt,*.potm,*.potx,*.ppam,*.ppsm,*.ppsx,*.pptm,*.pptx,*.sldx,*.thmx,*.vdw,*.war,*.wsz,*.xap,*.xlam,*.xlam,*.xlsb,*.xlsm,*.xlsx,*.xltm,*.xltx,*.xpi,*.zip
+				\ unlet g:loaded_zipPlugin | source $VIM/*/plugin/zipPlugin.vim
+	autocmd BufReadPre *.gz,*.bz2,*.Z,*.lzma,*.xz,*.lz,*.zst,*.br,*.lzo,*.tar,*.lrp,*.tbz,*.tgz,*.txz,*.tzs
+				\ unlet g:loaded_tarPlugin | source $VIM/*/plugin/tarPlugin.vim
+				\ | unlet g:loaded_gzip | source $VIM/*/plugin/gzip.vim
+	" \ | edit!
+	" ↑最後のファイル読み込みし直しが効かない
+	" \ |  | autocmd! loadArchive
+augroup END
 packadd! editexisting                          " 既に開いていれば、そちらをアクティブに
 packadd! matchit                               " 対応するカッコ移動%を拡張→ファイルタイプ別設定でb:match_words
 augroup matchit_words
