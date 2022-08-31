@@ -10,7 +10,7 @@ augroup filetypedetect
 	autocmd BufNewFile,BufRead *.plt          set filetype=gnuplot
 	autocmd BufNewFile,BufRead .bash_history,.xprofile,~/dotfiles/.bash/*,~/.bash/* set filetype=sh
 	autocmd BufNewFile,BufRead .textlintrc,.stylelintrc set filetype=json
-	autocmd BufNewFile,BufRead .msmtprc       set filetype=msmtp | source /usr/share/vim/addons/syntax/msmtp.vim
+	autocmd BufNewFile,BufRead .msmtprc       set filetype=msmtp | source $VIM/addons/syntax/msmtp.vim | setlocal commentstring=#%s
 	autocmd BufNewFile,BufRead tags-??        set filetype=tags
 	" autocmd BufNewFile,BufRead *.htm,*.html   setlocal filetype=html
 	autocmd BufNewFile         *.sh           call <SID>insert_templte('sh.sh')
