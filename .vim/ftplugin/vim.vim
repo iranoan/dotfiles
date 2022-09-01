@@ -21,7 +21,7 @@ if !exists('g:vim_plugin')
 					\ iskeyword+=?,:
 	augroup END
 
-	def s:get_comment_string(): void # vim9script/def/function によって適切な commentstring 返す
+	def s:get_comment_string(): void # vim9script/def/function によって適切な commentstring を設定する
 		# function ... | ... | endfunction の様に | で連結した関数が有るとうまく判定できない
 		# function ...  endfunction / def ...  enddef と対応していなくとも OK としている
 		if &filetype !=# 'vim'
