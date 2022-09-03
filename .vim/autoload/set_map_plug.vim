@@ -4,8 +4,8 @@ scriptencoding utf-8
 
 def set_map_plug#main(plug: string, cmd: string, map_ls: list<dict<string>>): void
 	# plug: 読み込むプラグイン名
-	# cmd: 実際に実行するコマンド (先頭の <Plug>は省略)
-	#      <Plug>Commentary<Plug>Commentary のように複数の場合は'Commentary Commentary' の様に空白区切り
+	# cmd: 実際に実行するコマンド (先頭の <Plug> は省略)
+	#      <Plug>Commentary<Plug>Commentary のように複数の場合は 'Commentary<Plug>Commentary' の様に先頭の <Plug> のみ除く
 	# map_ls: マッピングの内容の辞書リスト
 	# {
 	# 	mode: n, x, o などのモード
