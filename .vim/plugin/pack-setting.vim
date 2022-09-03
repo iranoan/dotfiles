@@ -551,12 +551,12 @@ xmap gc  <Cmd>call set_commentary#main('Commentary') <bar> delfunction set_comme
 " カッコだけでなくタグでも括る https://github.com/tpope/vim-surround {{{2
 xmap s   <Cmd>call set_surround#main('VSurround') <bar> delfunction set_surround#main<CR>
 nmap ysS <Cmd>call set_surround#main('YSsurround') <bar> delfunction set_surround#main<CR>
+" ↑行全体を挟む (前後に改行)
 nmap yss <Cmd>call set_surround#main('Yssurround') <bar> delfunction set_surround#main<CR>
 " ↑行全体を挟む
 nmap yS  <Cmd>call set_surround#main('YSurround') <bar> delfunction set_surround#main<CR>
 "↑↓に対して前後に改行
 nmap ys  <Cmd>call set_surround#main('Ysurround') <bar> delfunction set_surround#main<CR>
-" ↑行全体を挟む (前後に改行)
 nmap cS  <Cmd>call set_surround#main('CSurround') <bar> delfunction set_surround#main<CR>
 nmap cs  <Cmd>call set_surround#main('Csurround') <bar> delfunction set_surround#main<CR>
 nmap ds  <Cmd>call set_surround#main('Dsurround') <bar> delfunction set_surround#main<CR>
