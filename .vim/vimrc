@@ -296,11 +296,12 @@ inoremap <silent><expr><C-x>d strftime('%Y/%m/%d')
 " nnoremap <silent><C-o><C-t>     "=strftime("%H:%M:%S")<CR>p
 " ↑Ubuntu の設定によっては、何故か <C-o> が O の動きにななる
 inoremap <silent><expr><C-x>t strftime('%H:%M:%S')
-" nnoremap <space> <PageDown>
+" nnoremap <space> <PageDown> " → ~/.vim/pack/my-plug/opt/page-down
 nnoremap <S-space> <PageUp>
 nnoremap <BS> <PageUp>
 vnoremap <space> <C-D>
 vnoremap <S-space> <C-U>
+vnoremap <BS> <C-U>
 " ターミナル・モード {{{2
 tnoremap <C-W><Esc> <C-W>N
 " tnoremap <C-W><C-[> <C-W>N ←上の記述が有れば必要なし
