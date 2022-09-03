@@ -574,3 +574,10 @@ augroup Gatmail
 	autocmd!
 	autocmd BufRead ~/.getmail/*,~/.config/getmail/* call set_getmail_vim#main()
 augroup END
+
+" ~/.vim/pack/*/{stat,opt}/*/doc に有る tags{,-??} が古ければ再作成 ~/.vim/pack/my-plug/opt/pack-helptags {{{2
+augroup loadPackHelpTags
+	autocmd!
+	autocmd CmdUndefined PackHelpTags packadd pack-helptags | autocmd! loadPackHelpTags
+augroup END
+
