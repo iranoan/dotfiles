@@ -9,7 +9,9 @@ if has('unix')            " 使用フォント(優先的に使う)
 else
 	set guifont=MS_Gothic:h13,Monaco:h10
 endif
-set ambiwidth=double     " guifont を指定すると auto にされるらしい
+if exists('&ambiwidth')  " guifont を指定すると auto にされるらしい
+	set ambiwidth=double
+endif
 set guioptions-=T        " ツール・バー表示を OFF
 set guioptions-=m        " メニュー表示を OFF
 augroup GVIMRC
