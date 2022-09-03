@@ -550,6 +550,8 @@ xmap gc  <Cmd>call set_commentary#main('Commentary') <bar> delfunction set_comme
 
 " カッコだけでなくタグでも括る https://github.com/tpope/vim-surround {{{2
 xmap s   <Cmd>call set_surround#main('VSurround') <bar> delfunction set_surround#main<CR>
+xmap gS  <Cmd>call set_surround#main('VgSurround') <bar> delfunction set_surround#main<CR>
+" ↑s と似ているが前後で改行 v_s は v_c と同じなのでキーマップを潰しても良いが、v_S は同じ意味のキーマップが無いので、gS に割り当てている
 nmap ysS <Cmd>call set_surround#main('YSsurround') <bar> delfunction set_surround#main<CR>
 " ↑行全体を挟む (前後に改行)
 nmap yss <Cmd>call set_surround#main('Yssurround') <bar> delfunction set_surround#main<CR>
@@ -560,7 +562,6 @@ nmap ys  <Cmd>call set_surround#main('Ysurround') <bar> delfunction set_surround
 nmap cS  <Cmd>call set_surround#main('CSurround') <bar> delfunction set_surround#main<CR>
 nmap cs  <Cmd>call set_surround#main('Csurround') <bar> delfunction set_surround#main<CR>
 nmap ds  <Cmd>call set_surround#main('Dsurround') <bar> delfunction set_surround#main<CR>
-xmap gS  <Cmd>call set_surround#main('VgSurround') <bar> delfunction set_surround#main<CR>
 
 " 選択範囲をテキストオブジェクトで広げたり、狭めたり https://github.com/terryma/vim-expand-region {{{2
 vmap v <Cmd>call set_expand_region#main('(expand_region_expand)') <bar> delfunction set_expand_region#main<CR>
