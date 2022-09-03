@@ -32,13 +32,14 @@ def s:mkHelpTags(h: string): void
 		endif
 	endfor
 	for f in glob(docdir .. '/tags{,-??}', 1, 1)
-		execute 'edit ' .. f
+		execute 'split ' .. f
 		sort u | write
 		bwipeout!
 	endfor
 enddef
 
 # ~/.vim/pack/*/{stat,opt}/*/doc に有る tags{,-??} が古ければ再作成
+# コンパイル済みの Python スクリプトにしても大して速度は変わらない
 def pack_helptags#remakehelptags(): void
 	var h = split(&runtimepath, ',')[0]
 	var docdir = h .. '/doc'
@@ -52,8 +53,8 @@ def pack_helptags#remakehelptags(): void
 			max_tags_time = tags_time
 		endif
 	endfor
-	# for f in glob(h .. '/pack/*/{start,opt}/*/doc/*.{txt,??x}', 1, 1)
-	for f in glob(h .. '/pack/github/{start,opt}/*/doc/*.{txt,??x}', 1, 1)
+	for f in glob(h .. '/pack/*/{start,opt}/*/doc/*.{txt,??x}', 1, 1)
+	# for f in glob(h .. '/pack/github/{start,opt}/*/doc/*.{txt,??x}', 1, 1)
 		if fnamemodify(f, ':p:h:h:s?.\+/??') ==# 'vimdoc-ja' # 日本語ヘルプは除外 (tags,tags-ja は作成済み)
 			continue
 		endif
@@ -63,9 +64,3 @@ def pack_helptags#remakehelptags(): void
 		endif
 	endfor
 enddef
-# if has('python3') # コンパイルしておいてもかえって遅くなる (マルチプロセス、マルチスレッドにしても)
-# 	execute 'py3file ' .. expand('<sfile>:p:h') .. '/pack_settin.py'
-# 	py3 remakehelptags(vim.bindeval('expand("<sfile>:p:h:h")'))
-# else
-#	pack_settin#remakehelptags(expand('<sfile>:p:h:h'))
-# endif
