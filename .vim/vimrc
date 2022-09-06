@@ -281,7 +281,9 @@ set path+=~/bin,~/Templates,
 let g:tex_flavor = 'latex'                     " *.tex の新規作成などで plainTeX ではなく LaTeX として扱う
 let g:markdown_folding = 1                     " Markdown で折りたたみ
 set conceallevel=0                             " 個々のファイルタイプごとで、文字を省略したり置き換える機能は使わない
-set tags=./tags;,./TAGS;.tags;,TAGS            " tags ファイルの検索方法 (親フォルダを含める)
+if has('path_extra')                           " tags ファイルは $HOME まで辿る
+	set tags+=tags;$HOME/
+endif
 set belloff=all                                " 音を消す
 " set mouse=a                                  " マウスの設定全てのモードで有効に:デフォルトでそうなっていた
 set delcombine                                 " 結合文字を別々に削除する
@@ -289,13 +291,10 @@ set delcombine                                 " 結合文字を別々に削除�
 set clipboard=exclude:cons\|linux              " クリップボードの扱い
 set viminfo+=n~/.vim/viminfo                   " viminfo の保存先
 " 個人的なキー割り当て keymap キーマップ {{{1
-" 日付と時刻入力 (ノーマルモードでは、入力後にノーマルモードに戻す) {{{2
-" nnoremap <silent><C-o><C-d>     "=strftime("%Y/%m/%d")<CR>p
-" ↑Ubuntu の設定によっては、何故か <C-o> が O の動きにななる
+" 日付と時刻入力 {{{2
 inoremap <silent><expr><C-x>d strftime('%Y/%m/%d')
-" nnoremap <silent><C-o><C-t>     "=strftime("%H:%M:%S")<CR>p
-" ↑Ubuntu の設定によっては、何故か <C-o> が O の動きにななる
 inoremap <silent><expr><C-x>t strftime('%H:%M:%S')
+" スクロール {{{2
 " nnoremap <space> <PageDown> " → ~/.vim/pack/my-plug/opt/page-down
 nnoremap <S-space> <PageUp>
 nnoremap <BS> <PageUp>
