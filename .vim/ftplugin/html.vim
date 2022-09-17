@@ -47,7 +47,7 @@ inoremap <buffer>&&                &amp;
 inoremap <buffer>~~                &sim;
 inoremap <buffer>--                &ndash;
 inoremap <buffer>---               &mdash;
-inoremap <buffer><C-space>         &nbsp;
+imap     <expr><buffer><C-Space>   pumvisible() ? asyncomplete#close_popup() : '&nbsp;'
 inoremap <buffer>&<space>          &nbsp;
 inoremap <buffer>\\                &yen;
 inoremap <buffer>+-                &plusmn;
