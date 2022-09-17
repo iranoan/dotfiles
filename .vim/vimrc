@@ -371,8 +371,9 @@ vnoremap <expr> p 'pgv"' .. v:register .. 'y`>'
 " [Henkan] を <BS> に割り当てているので、<C-h> は他に割り当てる
 inoremap <C-h> <Left>
 cnoremap <C-h> <Left>
-" inoremap <C-j> <Down>
-" ↑<C-j> は <Enter> と同じで区別できない
+inoremap <expr><C-j> pumvisible() ? '<Down>' : '<C-j>'
+snoremap <expr><C-j> pumvisible() ? '<Down>' : '<C-j>'
+xnoremap <expr><C-j> pumvisible() ? '<Down>' : '<C-j>'
 inoremap <C-k> <Up>
 inoremap <C-l> <Right>
 cnoremap <C-l> <Right>
@@ -382,7 +383,10 @@ cnoremap <C-b> <Left>
 " オリジナルの <C-d> (c_CTRL-D) は <Tab> で代用可
 cnoremap <C-d> <Del>
 cnoremap <S-BS> <Del>
-" コマンドモードの <C-N>, <C-k> を <Up>, <Down> に割当 {{{2
+inoremap <expr><C-n> pumvisible() ? '<C-n>' : '<Down>'
+snoremap <expr><C-n> pumvisible() ? '<C-n>' : '<Down>'
+xnoremap <expr><C-n> pumvisible() ? '<C-n>' : '<Down>'
+" コマンドモードの <C-n>, <C-k> を <Up>, <Down> に割当 {{{2
 cnoremap <C-n> <Down>
 cnoremap <C-k> <Up>
 " カーソル下のファイルを開く" gfと<C-w> を入れ替えつ (なお gf はプラグインで :tabe 相当に (開いていれば、そちらをアクティブ)) {{{2

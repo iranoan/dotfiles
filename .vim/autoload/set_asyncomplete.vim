@@ -51,13 +51,6 @@ function set_asyncomplete#main() abort
 		xmap <expr><C-y> pumvisible() ? asyncomplete#close_popup() : neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '<C-y>'
 		nmap <expr><C-y> pumvisible() ? asyncomplete#close_popup() : neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '<C-y>'
 		vmap <expr><C-y> pumvisible() ? asyncomplete#close_popup() : neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '"+y'
-		" ポップアップ表示中のマップ <C-n>, <C-k> は元々希望の動作
-		imap <expr><C-j> pumvisible() ? '\<Down>' : '\<C-j>'
-		smap <expr><C-j> pumvisible() ? '\<Down>' : '\<C-j>'
-		xmap <expr><C-j> pumvisible() ? '\<Down>' : '\<C-j>'
-		nmap <expr><C-j> pumvisible() ? '\<Down>' : '\<C-j>'
-		" inoremap <expr><C-p> pumvisible() ? '\<C-p>' : '<C-r>"'
-		" ↑ insert moode ペーストに割り当てているので ~/.vim/vimrc 側で行っている
 		imap <expr><C-Space> pumvisible() ? asyncomplete#close_popup() : '<C-Space>'
 		" imap <expr><Space> pumvisible() ? asyncomplete#close_popup() : '<Space>'
 		" }}}
