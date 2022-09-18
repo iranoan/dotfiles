@@ -343,6 +343,8 @@ inoremap <silent><S-C-Tab> <C-PageUp>
 " クリップボードのコピー、ペースト、切り取り {{{2
 vnoremap <C-c> "+y
 vnoremap <C-y> "+y
+vnoremap Y "+y
+" ↑元の v_Y ほぼ v_y と同じだが行単位←元々行単位なら V を使う
 vnoremap <C-Insert> "+`y
 vnoremap <Insert> "+gp
 vnoremap <S-Insert> "+gp
@@ -352,6 +354,8 @@ nnoremap <S-Insert> "+gp
 " vnoremap <C-x> "+x                            " デフォルトでカーソル位置の数字減算にマップ (ctrl-aとペア)
 " vnoremap <C-d> "+x                            " デフォルトで下方スクロールにマップ
 vnoremap <S-Del> "+x
+vnoremap X "+x
+" ↑元の v_X ほぼ v_x と同じだが行単位←元々行単位なら V を使う
 inoremap <S-Insert> <C-r>+
 inoremap <Insert> <C-r>+
 " inoremap <S-C-p> <C-r>+                        " 下と重なり無効になる
