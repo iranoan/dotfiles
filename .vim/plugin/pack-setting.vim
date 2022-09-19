@@ -54,7 +54,7 @@ nnoremap m        <Cmd>call signature#utils#Input()<CR>
 " nnoremap m?       <Cmd>call signature#marker#List(v:count, 0)<CR>
 " nnoremap m<BS>    <Cmd>call signature#marker#Purge()<CR>
 " nnoremap dm       <Cmd>call signature#utils#Remove(v:count)<CR>
-" augroup loadSignature " 遅延読み込みだと、開いた時に以前開いた時に付いていたマークが表示されない
+" augroup loadSignature " 遅延読み込みだと、開いた時に以前開いた時に付いていたマークが可視化されない
 " 	autocmd!
 " 	autocmd FuncUndefined signature#mark#Goto,signature#mark#Purge,signature#mark#Toggle,signature#mark#ToggleAtLine,signature#marker#Goto,signature#marker#List,signature#marker#Purge,signature#utils#Input,signature#utils#Remove
 " 				\ call set_signature#main()
