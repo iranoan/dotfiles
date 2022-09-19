@@ -29,13 +29,9 @@ for s in ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'html', 'xhtml', 'css', '
 					augroup END
 endfor
 unlet ext s
-" 2}}}
+
 " まず ~/.vim/pack/*/start 配下で遅延読込しない分 {{{1
 " vim-surround などのプラグインでも . リピートを可能にする https://github.com/tpope/vim-repeat {{{2
-
-" マークを可視化 visial mark https://github.com/kshenoy/vim-signature {{{2
-" デフォルト・キー・マップ
-" help SignatureMappings
 
 ": Tabedit ~/.vim/pack/my-plug/start/tabedit/ {{{2
 nnoremap <silent>gf :TabEdit <C-r><C-p><CR>
@@ -43,8 +39,6 @@ nnoremap <silent>gf :TabEdit <C-r><C-p><CR>
 " ↑opt/ に入れて呼び出すようにすると、最初の使用時に補完が働かない
 
 " https://github.com/t9md/vim-foldtext を ~/.vim/pack/my-plug/start/vim-foldtext/ で書き換え {{{2
-
-" ~/.vim/pack/ で管理している分のヘルプのタグを作成 ~/.vim/pack/my-plug/start/pack-helptags/ {{{2
 
 " shell program を用いてバッファにフィルタを掛ける ~/.vim/pack/my-plug/start/shell-filter/ {{{2
 
@@ -59,9 +53,9 @@ if glob('~/.vim/pack/*/*/vim-colors-solarized/colors/*', 1, 1) != []
 else
 	colorscheme desert
 endif
-" background によって一部の syntax を変える (Solaraized を基本としている) {{{
+" background によって一部の syntax を変える (Solarized を基本としている) {{{
 def s:color_light_dark(): void
-	highlight clear Pmenu # 一部の絵文字が標準設定では見にくいので一旦クリアして ligh/dark で異なる設定にする
+	highlight clear Pmenu # 一部の絵文字が標準設定では見にくいので一旦クリアして light/dark で異なる設定にする
 	if &background ==? 'light'
 		highlight Normal guifg=#111111 guibg=#FDF6E3 ctermfg=black ctermbg=white
 		highlight CursorLineNr gui=bold cterm=bold ctermfg=3 guifg=Brown
@@ -126,10 +120,10 @@ xmap ac <Plug>(textobj-syntax-a)
 
 " テキストオブジェクトで (), {} "", '' を区別せずにカーソル近くで判定して、全て b で扱えるようにする https://github.com/osyo-manga/vim-textobj-multiblock {{{2
 " キーマップしなと ", ' の指定が働かない
-	omap ab <Plug>(textobj-multiblock-a)
-	omap ib <Plug>(textobj-multiblock-i)
-	xmap ab <Plug>(textobj-multiblock-a)
-	xmap ib <Plug>(textobj-multiblock-i)
+omap ab <Plug>(textobj-multiblock-a)
+omap ib <Plug>(textobj-multiblock-i)
+xmap ab <Plug>(textobj-multiblock-a)
+xmap ib <Plug>(textobj-multiblock-i)
 let g:textobj_multiblock_blocks = [
 			\ [ '"', '"', 1 ],
 			\ [ "'", "'", 1 ],
@@ -164,6 +158,7 @@ AlterCommand mak[e] silent\ make
 AlterCommand ter[minal] topleft\ terminal
 AlterCommand man Man
 AlterCommand p[rint] call\ print#main()
+AlterCommand helpt[ags] PackHelpTags
 " ↑:print は使わないので、印刷関数 (~/.vim/autoload/print.vim) に置き換え
 if len(glob(expand('~/.vim/pack/*/*/vim-fugitive/plugin/fugitive.vim'), 1, 1))
 	AlterCommand git Git
@@ -584,3 +579,32 @@ augroup loadPackHelpTags
 	autocmd CmdUndefined PackHelpTags packadd pack-helptags | autocmd! loadPackHelpTags
 augroup END
 
+" マークを可視化 visial mark https://github.com/kshenoy/vim-signature {{{2
+" デフォルト・キー・マップ
+" help SignatureMappings
+nnoremap '[       <Cmd>call signature#mark#Goto("prev", "line", "alpha")<CR>
+nnoremap ']       <Cmd>call signature#mark#Goto("next", "line", "alpha")<CR>
+nnoremap [=       <Cmd>call signature#marker#Goto("prev", "any",  v:count)<CR>
+nnoremap [-       <Cmd>call signature#marker#Goto("prev", "same", v:count)<CR>
+nnoremap [`       <Cmd>call signature#mark#Goto("prev", "spot", "pos")<CR>
+nnoremap ['       <Cmd>call signature#mark#Goto("prev", "line", "pos")<CR>
+nnoremap ]=       <Cmd>call signature#marker#Goto("next", "any",  v:count)<CR>
+nnoremap ]-       <Cmd>call signature#marker#Goto("next", "same", v:count)<CR>
+nnoremap ]`       <Cmd>call signature#mark#Goto("next", "spot", "pos")<CR>
+nnoremap ]'       <Cmd>call signature#mark#Goto("next", "line", "pos")<CR>
+nnoremap `[       <Cmd>call signature#mark#Goto("prev", "spot", "alpha")<CR>
+nnoremap `]       <Cmd>call signature#mark#Goto("next", "spot", "alpha")<CR>
+nnoremap dm       <Cmd>call signature#utils#Remove(v:count)<CR>
+nnoremap m?       <Cmd>call signature#marker#List(v:count, 0)<CR>
+nnoremap m<BS>    <Cmd>call signature#marker#Purge()<CR>
+nnoremap m<Space> <Cmd>call signature#mark#Purge("all")<CR>
+nnoremap m-       <Cmd>call signature#mark#Purge("line")<CR>
+nnoremap m.       <Cmd>call signature#mark#ToggleAtLine()<CR>
+nnoremap m,       <Cmd>call signature#mark#Toggle("next")<CR>
+nnoremap m        <Cmd>call signature#utils#Input()<CR>
+augroup loadSignature
+	autocmd!
+	autocmd FuncUndefined signature#mark#Goto,signature#mark#Purge,signature#mark#Toggle,signature#mark#ToggleAtLine,signature#marker#Goto,signature#marker#List,signature#marker#Purge,signature#utils#Input,signature#utils#Remove
+				\ call set_signature#main()
+				\ | autocmd! loadSignature
+augroup END
