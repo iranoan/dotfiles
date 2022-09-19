@@ -33,6 +33,34 @@ unlet ext s
 " まず ~/.vim/pack/*/start 配下で遅延読込しない分 {{{1
 " vim-surround などのプラグインでも . リピートを可能にする https://github.com/tpope/vim-repeat {{{2
 
+" マークを可視化 visial mark https://github.com/kshenoy/vim-signature {{{2
+nnoremap ']       <Cmd>call signature#mark#Goto("next", "line", "alpha")<CR>
+nnoremap '[       <Cmd>call signature#mark#Goto("prev", "line", "alpha")<CR>
+nnoremap ]'       <Cmd>call signature#mark#Goto("next", "line", "pos")<CR>
+nnoremap ['       <Cmd>call signature#mark#Goto("prev", "line", "pos")<CR>
+nnoremap `]       <Cmd>call signature#mark#Goto("next", "spot", "alpha")<CR>
+nnoremap `[       <Cmd>call signature#mark#Goto("prev", "spot", "alpha")<CR>
+nnoremap ]`       <Cmd>call signature#mark#Goto("next", "spot", "pos")<CR>
+nnoremap [`       <Cmd>call signature#mark#Goto("prev", "spot", "pos")<CR>
+nnoremap m<Space> <Cmd>call signature#mark#Purge("all")<CR>
+nnoremap m-       <Cmd>call signature#mark#Purge("line")<CR>
+nnoremap m,       <Cmd>call signature#mark#Toggle("next")<CR>
+nnoremap m.       <Cmd>call signature#mark#ToggleAtLine()<CR>
+nnoremap m        <Cmd>call signature#utils#Input()<CR>
+" nnoremap ]=       <Cmd>call signature#marker#Goto("next", "any",  v:count)<CR>
+" nnoremap [=       <Cmd>call signature#marker#Goto("prev", "any",  v:count)<CR>
+" nnoremap ]-       <Cmd>call signature#marker#Goto("next", "same", v:count)<CR>
+" nnoremap [-       <Cmd>call signature#marker#Goto("prev", "same", v:count)<CR>
+" nnoremap m?       <Cmd>call signature#marker#List(v:count, 0)<CR>
+" nnoremap m<BS>    <Cmd>call signature#marker#Purge()<CR>
+" nnoremap dm       <Cmd>call signature#utils#Remove(v:count)<CR>
+" augroup loadSignature " 遅延読み込みだと、開いた時に以前開いた時に付いていたマークが表示されない
+" 	autocmd!
+" 	autocmd FuncUndefined signature#mark#Goto,signature#mark#Purge,signature#mark#Toggle,signature#mark#ToggleAtLine,signature#marker#Goto,signature#marker#List,signature#marker#Purge,signature#utils#Input,signature#utils#Remove
+" 				\ call set_signature#main()
+" 				\ | autocmd! loadSignature
+" augroup END
+
 ": Tabedit ~/.vim/pack/my-plug/start/tabedit/ {{{2
 nnoremap <silent>gf :TabEdit <C-r><C-p><CR>
 " nnoremap <silent>gf :TabEdit <cfile><CR> " ← 存在しなくても開く <C-r><C-f> と同じ
@@ -577,34 +605,4 @@ augroup END
 augroup loadPackHelpTags
 	autocmd!
 	autocmd CmdUndefined PackHelpTags packadd pack-helptags | autocmd! loadPackHelpTags
-augroup END
-
-" マークを可視化 visial mark https://github.com/kshenoy/vim-signature {{{2
-" デフォルト・キー・マップ
-" help SignatureMappings
-nnoremap ']       <Cmd>call signature#mark#Goto("next", "line", "alpha")<CR>
-nnoremap '[       <Cmd>call signature#mark#Goto("prev", "line", "alpha")<CR>
-nnoremap ]'       <Cmd>call signature#mark#Goto("next", "line", "pos")<CR>
-nnoremap ['       <Cmd>call signature#mark#Goto("prev", "line", "pos")<CR>
-nnoremap `]       <Cmd>call signature#mark#Goto("next", "spot", "alpha")<CR>
-nnoremap `[       <Cmd>call signature#mark#Goto("prev", "spot", "alpha")<CR>
-nnoremap ]`       <Cmd>call signature#mark#Goto("next", "spot", "pos")<CR>
-nnoremap [`       <Cmd>call signature#mark#Goto("prev", "spot", "pos")<CR>
-nnoremap m<Space> <Cmd>call signature#mark#Purge("all")<CR>
-nnoremap m-       <Cmd>call signature#mark#Purge("line")<CR>
-nnoremap m,       <Cmd>call signature#mark#Toggle("next")<CR>
-nnoremap m.       <Cmd>call signature#mark#ToggleAtLine()<CR>
-nnoremap m        <Cmd>call signature#utils#Input()<CR>
-" nnoremap ]=       <Cmd>call signature#marker#Goto("next", "any",  v:count)<CR>
-" nnoremap [=       <Cmd>call signature#marker#Goto("prev", "any",  v:count)<CR>
-" nnoremap ]-       <Cmd>call signature#marker#Goto("next", "same", v:count)<CR>
-" nnoremap [-       <Cmd>call signature#marker#Goto("prev", "same", v:count)<CR>
-" nnoremap m?       <Cmd>call signature#marker#List(v:count, 0)<CR>
-" nnoremap m<BS>    <Cmd>call signature#marker#Purge()<CR>
-" nnoremap dm       <Cmd>call signature#utils#Remove(v:count)<CR>
-augroup loadSignature
-	autocmd!
-	autocmd FuncUndefined signature#mark#Goto,signature#mark#Purge,signature#mark#Toggle,signature#mark#ToggleAtLine,signature#marker#Goto,signature#marker#List,signature#marker#Purge,signature#utils#Input,signature#utils#Remove
-				\ call set_signature#main()
-				\ | autocmd! loadSignature
 augroup END
