@@ -333,8 +333,8 @@ augroup END
 " | ---     | ---                                |
 " | vipga=  | visual-select inner paragragh ga = |
 " | gaip=   | ga inner paragragh =               |
-vmap <Enter>    <Cmd>call set_easy_align#main()<CR>*
-vmap <leader>ea <Cmd>call set_easy_align#main()<CR>*
+vmap <Enter>    <Cmd>call set_easy_align#main()<CR>
+vmap <leader>ea <Cmd>call set_easy_align#main()<CR>
 nmap <leader>ea <Cmd>call set_easy_align#main()<CR>
 " ↑全て対象を全体 * にしたいが、nmap の <leader>eaip などテキストオブジェクトの場合の方法がわからない
 

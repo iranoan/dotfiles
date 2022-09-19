@@ -6,4 +6,8 @@ function set_easy_align#main() abort
 			\ {'mode': 'v', 'key': '<Enter>',    'cmd': '(EasyAlign)'},
 			\ {'mode': 'v', 'key': '<leader>ea', 'cmd': '(EasyAlign)'}
 			\ ] )
+	let g:easy_align_delimiters = {
+				\ '|': { 'align': 'al*' },
+				\ '&': { 'align': 'al*' }
+				\ }
 endfunction
