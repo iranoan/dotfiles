@@ -326,8 +326,8 @@ nnoremap <silent>[T         :tprevious<CR>
 nnoremap <silent>]T         :tnext<CR>
 nnoremap <silent>[C         :cpfile<CR>
 nnoremap <silent>]C         :cnfile<CR>
-" nnoremap <silent>[m         g;
-" nnoremap <silent>]m         g,
+nnoremap <silent>[e         g;
+nnoremap <silent>]e         g,
 nnoremap <silent>[w         <C-w>W
 nnoremap <silent>]w         <C-w>w
 " ]t,[t は下記のマッピングタブ・モードの切り替えに使っている
