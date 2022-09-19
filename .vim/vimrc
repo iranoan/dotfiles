@@ -378,6 +378,7 @@ cnoremap <C-h> <Left>
 inoremap <expr><C-j> pumvisible() ? '<Down>' : '<C-j>'
 snoremap <expr><C-j> pumvisible() ? '<Down>' : '<C-j>'
 xnoremap <expr><C-j> pumvisible() ? '<Down>' : '<C-j>'
+"↑ insert moode の補完候補の選択にも使っている
 inoremap <C-k> <Up>
 inoremap <C-l> <Right>
 cnoremap <C-l> <Right>
@@ -390,6 +391,7 @@ cnoremap <S-BS> <Del>
 inoremap <expr><C-n> pumvisible() ? '<C-n>' : '<Down>'
 snoremap <expr><C-n> pumvisible() ? '<C-n>' : '<Down>'
 xnoremap <expr><C-n> pumvisible() ? '<C-n>' : '<Down>'
+"↑ insert moode の補完候補の選択にも使っている
 " コマンドモードの <C-n>, <C-k> を <Up>, <Down> に割当 {{{2
 cnoremap <C-n> <Down>
 cnoremap <C-k> <Up>
