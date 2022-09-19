@@ -184,6 +184,7 @@ nmap <C-A>  <Cmd>call set_speeddating#main('SpeedDatingUp') <bar> delfunction se
 nnoremap <silent><Leader>fc :Commands<CR>
 nnoremap <silent><Leader>fr :Files ~<CR>
 nnoremap <silent><Leader>ff :Files<CR>
+nnoremap <silent><Leader>f. :Files ..<CR>
 nnoremap <silent><Leader>fb :Buffers<CR>
 nnoremap <silent><Leader>ft :Tags<CR>
 nnoremap <silent><Leader>fm :Marks<CR>
@@ -193,9 +194,9 @@ nnoremap <silent><Leader>fh :HISTORY<CR>
 nnoremap <silent><Leader>fg :GFiles?<CR>
 nnoremap <silent><Leader>fw :Windows<CR>
 nnoremap <silent><Leader>fs :BLines<CR>
+nnoremap <silent><Leader>fl :BLines<CR>
 nnoremap <silent><Leader>f: :History:<CR>
 nnoremap <silent><Leader>f/ :History/<CR>
-nnoremap <silent><Leader>fl :BLines<CR>
 augroup loadFZF_Vim
 	autocmd!
 	autocmd CmdUndefined Files,Buffers,Tags,Marks,History,HISTORY,GFiles,Windows,Helptags,Commands,BLines
@@ -332,9 +333,10 @@ augroup END
 " | ---     | ---                                |
 " | vipga=  | visual-select inner paragragh ga = |
 " | gaip=   | ga inner paragragh =               |
-vmap <Enter>    <Cmd>call set_easy_align#main()<CR>
-vmap <leader>ea <Cmd>call set_easy_align#main()<CR>
+vmap <Enter>    <Cmd>call set_easy_align#main()<CR>*
+vmap <leader>ea <Cmd>call set_easy_align#main()<CR>*
 nmap <leader>ea <Cmd>call set_easy_align#main()<CR>
+" ↑全て対象を全体 * にしたいが、nmap の <leader>eaip などテキストオブジェクトの場合の方法がわからない
 
 " ctags や LSP を使ったlist https://github.com/liuchengxu/vista.vim {{{2
 augroup loadVista
