@@ -7,7 +7,7 @@ if has('unix')            " 使用フォント(優先的に使う)
 	set guifont=RictyDiminished\ Nerd\ Font\ 14,Ricty\ Diminished\ Regular\ 14,Noto\ Mono\ 13,Monospace\ 12
 	" set guifont=HackGenNerd\ Regular\ 13,Ricty\ Diminished\ Regular\ 14,Noto\ Mono\ 13,Monospace\ 12
 else
-	set guifont=MS_Gothic:h13,Monaco:h10
+	set guifont=RictyDiminished\ Nerd\ Font:h14,Ricty\ Diminished\ Regular:h14,MS_Gothic:h13,Monaco:h10
 endif
 " if exists('&ambiwidth')  " guifont を指定すると auto にされるらしい←勘違い?
 " 	set ambiwidth=double
@@ -21,13 +21,15 @@ augroup GVIMRC
 	" lines=999 としたのでコメントに
 augroup END
 set mousemodel=popup
-set nomousefocus
+" set nomousefocus          " デフォルト
+" ホイール・スクロールは [Shift] 押しながらと逆にする {{{
 nnoremap <ScrollWheelUp>      <S-ScrollWheelUp>
 nnoremap <S-ScrollWheelUp>    <ScrollWheelUp>
 nnoremap <ScrollWheelDown>    <S-ScrollWheelDown>
 nnoremap <S-ScrollWheelDown>  <ScrollWheelDown>
 xnoremap <ScrollWheelUp>      <C-U>
 xnoremap <ScrollWheelDown>    <C-D>
+" }}}
 
 function Toggle_menu() abort
 	if &guioptions =~# 'm'
