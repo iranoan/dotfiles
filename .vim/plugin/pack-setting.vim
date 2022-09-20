@@ -190,7 +190,7 @@ AlterCommand p[rint] call\ print#main()
 AlterCommand helpt[ags] PackHelpTags
 AlterCommand bi[nary] if\ !&binary\ <Bar>\ execute('setlocal\ binary\ <Bar>\ %!xxd')\ <Bar>\ endif
 AlterCommand nob[inary] if\ &binary\ <Bar>\ execute('setlocal\ nobinary\ <Bar>\ %!xxd\ -r')\ <Bar>\ endif
-if len(glob(expand('~/.vim/pack/*/*/vim-fugitive/plugin/fugitive.vim'), 1, 1))
+if glob('~/.vim/pack/*/*/vim-fugitive/plugin/fugitive.vim') !=# ''
 	AlterCommand git Git
 	AlterCommand gs[tatus] Git
 	AlterCommand gl[og] Gllog
