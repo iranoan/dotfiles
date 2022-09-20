@@ -37,7 +37,6 @@ function s:insert_templte(s) abort " ~/Templates/ からテンプレート挿入
 	elseif &filetype ==# 'html'
 		execute ':' .. (line('$') - 2)
 	else
-		let @/ = '^$' | normal! ggn
-		nohlsearch
+		normal! gg}
 	endif
 endfunction
