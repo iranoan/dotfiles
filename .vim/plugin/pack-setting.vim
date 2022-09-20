@@ -186,8 +186,10 @@ AlterCommand mak[e] silent\ make
 AlterCommand ter[minal] topleft\ terminal
 AlterCommand man Man
 AlterCommand p[rint] call\ print#main()
-AlterCommand helpt[ags] PackHelpTags
 " ↑:print は使わないので、印刷関数 (~/.vim/autoload/print.vim) に置き換え
+AlterCommand helpt[ags] PackHelpTags
+AlterCommand bi[nary] if\ !&binary\ <Bar>\ execute('setlocal\ binary\ <Bar>\ %!xxd')\ <Bar>\ endif
+AlterCommand nob[inary] if\ &binary\ <Bar>\ execute('setlocal\ nobinary\ <Bar>\ %!xxd\ -r')\ <Bar>\ endif
 if len(glob(expand('~/.vim/pack/*/*/vim-fugitive/plugin/fugitive.vim'), 1, 1))
 	AlterCommand git Git
 	AlterCommand gs[tatus] Git
