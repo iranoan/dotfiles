@@ -1,106 +1,73 @@
 scriptencoding utf-8
-" 文字コード {{{1
 scriptversion 4
-if &encoding !=# 'utf-8'
-	set encoding=japan
-	set fileencoding=japan
-endif
-if has('iconv')
-	let s:enc_euc = 'euc-jp'
-	let s:enc_jis = 'iso-2022-jp'
-	" iconv が eucJP-ms に対応しているかをチェック
-	if iconv("\x87\x64\x87\x6a", 'cp932', 'eucjp-ms') ==# "\xad\xc5\xad\xcb"
-		let s:enc_euc = 'eucjp-ms'
-		let s:enc_jis = 'iso-2022-jp-3'
-		" iconv が JISX0213 に対応しているかをチェック
-	elseif iconv("\x87\x64\x87\x6a", 'cp932', 'euc-jisx0213') ==# "\xad\xc5\xad\xcb"
-		let s:enc_euc = 'euc-jisx0213'
-		let s:enc_jis = 'iso-2022-jp-3'
-	endif
-	" fileencodings を構築
-	if &encoding ==# 'utf-8'
-		let s:fileencodings_default = &fileencodings
-		let &fileencodings = s:enc_jis .. ',' .. s:enc_euc .. ',cp932'
-		let &fileencodings = &fileencodings .. ',' .. s:fileencodings_default
-		unlet s:fileencodings_default
+" 文字コード {{{1
+set encoding=utf-8
+" ファイル・エンコードの自動判定優先順位 fileencodings を決める {{{
+if has('iconv') " iconv を使って NEC 選定 IBM 拡張文字 (ⅰ) の変換して対応文字コードをチェック
+	if iconv('ⅰ ', 'utf-8', 'eucjp-ms') ==# "\x8F\xF3\xF3 " " eucJP-ms 対応チェック
+		set fileencodings=iso-2022-jp-3,eucjp-ms,cp932,ucs-bom,utf-8,default,latin1
+	elseif iconv('ⅰ ', 'utf-8', 'euc-jisx0213') ==# "\xAC\xB5 " " JISX0213 対応チェック
+		set fileencodings=iso-2022-jp-3,euc-jisx0213,cp932,ucs-bom,utf-8,default,latin1
+	elseif iconv('ⅰ ', 'utf-8', 'iso-2022-jp-3') ==# "\x1B$(O,5\x1B(B " " iso-2022-jp-3 対応チェック
+		set fileencodings=iso-2022-jp-3,euc-jp,cp932,ucs-bom,utf-8,default,latin1
 	else
-		let &fileencodings = &fileencodings .. ',' .. s:enc_jis
-		set fileencodings+=utf-8,ucs-2le,ucs-2
-		if &encoding =~# '^\(euc-jp\|euc-jisx0213\|eucjp-ms\)$'
-			set fileencodings+=cp932
-			set fileencodings-=euc-jp
-			set fileencodings-=euc-jisx0213
-			set fileencodings-=eucjp-ms
-			let &encoding = s:enc_euc
-			let &fileencoding = s:enc_euc
-		else
-			let &fileencodings = &fileencodings .. ',' .. s:enc_euc
-		endif
+		set fileencodings=iso-2022-jp,euc-jp,cp932,ucs-bom,utf-8,default,latin1
 	endif
-	" 定数を処分
-	unlet s:enc_euc
-	unlet s:enc_jis
 else " iconvが無いときはシンプルに
-	set encoding=utf-8                           " 表示エンコード
-	set fileencodings=iso-2022-jp,cp932,sjis,euc-jp,utf-8 " ファイル・エンコードの自動判定優先順位
-	set fileencoding=utf-8                       " ファイル・エンコード
-endif
-" 日本語を含まない場合は fileencoding に encoding を使うようにする
-augroup AU_ReCheck_FENC
-	autocmd!
-	autocmd BufReadPost *
-				\ if &fileencoding =~# 'iso-2022-jp' && search("[^\x01-\x7e]", 'n') == 0 |
-				\ 	let &fileencoding=&encoding |
-				\ endif
-augroup END
+	set fileencodings=iso-2022-jp,cp932,sjis,euc-jp,ucs-bom,utf-8,default,latin1
+endif " }}}
 set fileformats=unix,dos,mac
 set termencoding=utf-8
-set makeencoding=char                          " 外部コマンドの出力を読むときに使用されるエンコーディング
+set makeencoding=char                          " 外部コマンドの出力を読むときに使用されるエンコーディングにシステムロケール使用
 " 初期化 {{{1
 set guioptions+=M                              "メニュー設定を読み込まない GUI だが vimrc で filetpe on, syntax on より前に書く必要がある→:help go-M
 filetype plugin indent on                      " ファイルタイプ別プラグインとインデントを ON
 " 標準プラグイン {{{1
-" 一部のプラグインは読み込まないように
+" 一部のプラグインは読み込まない {{{2
 let g:loaded_getscriptPlugin = 1
 let g:loaded_vimballPlugin = 1
 let g:loaded_zipPlugin = 1
-let g:loaded_tarPlugin = 1
-let g:loaded_gzip = 1
 let g:loaded_2html_plugin = 1
 let g:loaded_logiPat = 1
 let g:loaded_rrhelper = 1
 " let g:loaded_matchparen = 1
-let g:loaded_netrwPlugin = 1
-augroup loadArchive
+let g:loaded_gzip = 1 " {{{
+augroup loadZipArchive
 	autocmd!
 	autocmd BufReadPre *.aar,*.apk,*.celzip,*.crtx,*.docm,*.docx,*.dotm,*.dotx,*.ear,*.epub,*.gcsx,*.glox,*.gqsx,*.ja,*.jar,*.kmz,*.odb,*.odc,*.odf,*.odg,*.odi,*.odm,*.odp,*.ods,*.odt,*.otc,*.otf,*.otg,*.oth,*.oti,*.otp,*.ots,*.ott,*.oxt,*.potm,*.potx,*.ppam,*.ppsm,*.ppsx,*.pptm,*.pptx,*.sldx,*.thmx,*.vdw,*.war,*.wsz,*.xap,*.xlam,*.xlam,*.xlsb,*.xlsm,*.xlsx,*.xltm,*.xltx,*.xpi,*.zip
 				\ unlet g:loaded_zipPlugin | source $VIM/*/plugin/zipPlugin.vim
+				\ | autocmd! loadZipArchive
+	" \ | edit!
+	" ↑最後のファイル読み込みし直しが効かない
+augroup END " }}}
+let g:loaded_tarPlugin = 1 " {{{
+augroup loadTarArchive
+	autocmd!
 	autocmd BufReadPre *.gz,*.bz2,*.Z,*.lzma,*.xz,*.lz,*.zst,*.br,*.lzo,*.tar,*.lrp,*.tbz,*.tgz,*.txz,*.tzs
 				\ unlet g:loaded_tarPlugin | source $VIM/*/plugin/tarPlugin.vim
 				\ | unlet g:loaded_gzip | source $VIM/*/plugin/gzip.vim
+				\ | autocmd! loadTarArchive
 	" \ | edit!
 	" ↑最後のファイル読み込みし直しが効かない
-	" \ |  | autocmd! loadArchive
-augroup END
-packadd! editexisting                          " 既に開いていれば、そちらをアクティブに
-packadd! matchit                               " 対応するカッコ移動%を拡張→ファイルタイプ別設定でb:match_words
-augroup matchit_words
-	autocmd!
-	autocmd BufEnter * if exists('b:match_words') | let b:match_words ..= ',' .. &matchpairs | endif
-augroup END
-" " デバッガ {{{ ← vimspector を使う
-" 	packadd termdebug
-" " }}}
-" " netrw {{{ " 使用自体取りやめ
+augroup END " }}}
+let g:loaded_netrwPlugin = 1 " netrw {{{ ← fern を使う
 " let g:netrw_banner=0                           " バーナー非表示
 " let g:netrw_liststyle = 0                      " ファイル・サイズ/タイム・スタンプも非表示←除外がしにくくなる
-" " let g:netrw_list_hide =  netrw_gitignore#Hide() .. '.*\.swp$' ヘルプに有る関数は遅い
+" " let g:netrw_list_hide = netrw_gitignore#Hide() .. '.*\.swp$' ヘルプに有る関数は遅い
 " let g:netrw_list_hide = '.*\.swp$,\.o$,\.fls$,\.synctex\.gz$,\.fdb_latexmk$,\.toc$,\.out$,\.dvi$,\.aux$,\.nav$,\.snm$,\.git/$' " 隠すファイル
 " " let g:netrw_sizestyle = 'H'                    " 人間が読める形式 (例: 5K, 4M, 3G) 1024 ベース
 " let g:netrw_sort_options = 'i'                 " ソートで大/小文字を区別しない
 " " let g:netrw_timefmt = '%Y/%m/%d(%a) %H:%M:%S'
 " let g:netrw_sort_by = 'time'                   " 日付で逆順ソート
-" let g:netrw_sort_direction = 'reverse'
+" let g:netrw_sort_direction = 'reverse' " }}}
+" 読み込み明示が必要な分 {{{2
+packadd! editexisting                          " 既に開いていれば、そちらをアクティブに
+packadd! matchit                               " 対応するカッコ移動%を拡張→ファイルタイプ別設定でb:match_words {{{
+augroup matchit_words
+	autocmd!
+	autocmd BufEnter * if exists('b:match_words') | let b:match_words ..= ',' .. &matchpairs | endif
+augroup END " }}}
+" packadd termdebug                              " デバッガ ←vimspector を使う
 " 折りたたみ {{{1
 " set foldmethod=manual                          " 標準では手動←改めて設定する必要がない
 set foldlevelstart=99                          " ファイル・オープン時は折りたたみは開いたまま
@@ -111,8 +78,7 @@ set foldcolumn=3                               " 折りたたみ状態を表示�
 " 	set undofile
 " endif
 " IME {{{1
-set iminsert=0                                 " 挿入モード開始時 IME OFF
-set imsearch=-1                                " 検索開始時 IME OFF
+set iminsert=0 imsearch=-1                     " 挿入モード/検索開始時 IME OFF
 set imdisable                                  " Vim による IM 制御を使わない
 augroup IME
 	autocmd!
@@ -128,8 +94,8 @@ augroup IME
 	endif
 augroup END
 " 表示関係 {{{1
-set shortmess+=I                               " 起動時にファイル未指定時に表示される紹介文を表示しない
-set shortmess-=S                               " 検索ヒット件数表示←コマンドラインに検索のヒット位置、総個数を [?/?] で表示し、ファイルの先頭・終端になった時のメッセージが一瞬で消える
+set shortmess+=I shortmess-=S                  " 起動時にファイル未指定時に表示される紹介文を表示しない
+" 検索ヒット件数表示←コマンドラインに検索のヒット位置、総個数を [?/?] で表示し、ファイルの先頭・終端になった時のメッセージが一瞬で消える
 syntax enable                                  " カラー表示 ON (実際の syntax 設定はカラー・スキーム読み込み後)
 set nomore                                     " メッセージが一杯になっても一旦停止せずそのまま続ける
 augroup CoursolLineColumn " 挿入モードでは、カーソール行桁背景色無し、ノーマル・モードでは付ける
@@ -157,25 +123,22 @@ set noexpandtab                                " 通常はタブ文字入力可�
 set number signcolumn=yes                      " 行番号、sign (マーク表示桁) 表示
 set cursorline cursorcolumn                    " 起動時は、カーソール行桁背景色付ける
 " タブ・ページ {{{2
-set showtabline=2                              " 常にタブを表示
-set tabpagemax=500                             " タブページの上限
+set showtabline=2 tabpagemax=500               " 常にタブを表示+上限 500
 if has('gui_running')                          " タブページの書式変更
 	set guitablabel=%!MakeGUItabline()
 else
 	set tabline=%!mk_tabline#main()
 endif
 " インデント {{{2
-set autoindent                                 " オートインデント
-set smartindent                                " 改行時に入力された行の末尾に合わせて次の行のインデントを増減する
+set autoindent smartindent                     " オートインデント+改行時に行末記号に合わせてインデント増減
 " set cindent                                  " 全てで C 言語風のインデントが適用されるので、ローカルで行うべき
-set shiftwidth=2                               " インデントは2文字
-set tabstop=2                                  " タブ文字は2文字分
+set tabstop=2 shiftwidth=2                     " タブ文字は2文字分に合わせてインデントは2文字
 set breakindent                                " 行頭タブの折り返し行で見かけ上インデント
 " コマンド・バー {{{2
 tabdo set cmdheight=1                          " コマンドバー調整
 set wildmenu                                   " 補完が拡張モードで行われる←次の設定にしても最長補完がされない
 set wildmode=list:longest,list:full            " bashライクの補完
-set suffixes+=.aux,.log,.pdf,.synctex.gz,.toc " 補完の優先度を下げる拡張子
+set suffixes+=.aux,.log,.pdf,.synctex.gz,.toc  " 補完の優先度を下げる拡張子
 set wildignore+=*.dvi,*.o,*.opp,*.obj,*.a,*.so,*.fdb_latexmk,*.fls,*.nav,*.out,*.snm " 補完候補から完全に除外
 " ステータス・バー {{{2
 set laststatus=2                               " 表示
@@ -201,28 +164,23 @@ set keymodel=startsel,stopsel                  " シフトキー+矢印キーで
 set whichwrap=b,s,h,l,<,>,[,]                  " カーソルを行頭、行末で止まらないようにする
 set virtualedit=block                          " 矩形選択でカーソル以降も範囲選択可能に
 " 検索 {{{1
-set incsearch                                  " インクリメンタルサーチ
-set hlsearch                                   " 検索ハイライト
-set ignorecase                                 " 大文字小文字を無視して検索
-set smartcase                                  " 大文字を入力すると大文字小文字無視を解除
-set infercase                                  " 補完時に大文字小文字をいい感じに調節してくれる
+set incsearch hlsearch                         " インクリメンタルサーチ+検索ハイライト
+set ignorecase smartcase                       " 小文字のみの検索では大文字/小文字を無視し、大文字が含まれると区別する
+set infercase                                  " 補完時に大文字/小文字をいい感じに調節してくれる
 " ファイルの扱い {{{1
 " 読み込み、保存関係
 " 保存時の末尾空白削除は、autocmd なので別場所
 " set autochdir                                  " カレントディレクトリを現在のファイルとする→autocmd で lcd 変更だけにする
-" let &l:cdpath=
-" 					\ '.,' .. substitute(substitute(substitute(system('find ~/ -type d'), '\n', ',', 'g'),
-" 						\ ',$', '', ''),
-" 						\ '\\','/', 'g')
 set autoread                                   " 外部のエディタで編集中のファイルが変更されたら、自動的に読み直す
 " set autowriteall                              " 自動保存
 set switchbuf=usetab                           " 新しく開く代わりにすでに開いてあるバッファを開く
 set hidden                                     " 未保存ファイルがあってもファイルが開けるようにする
 " set updatetime=500                             " .viminfoの更新時間 (プラグインの機能の更新時間にも使われる)
 set browsedir=buffer                           " ファイルブラウザーの開始時、バッファで開いているファイルのディレクトリ
-" autocmd VIMRC 分類のない autocmd {{{1
+" 分類のない autocmd {{{1
 augroup VIMRC
 	autocmd!
+	autocmd BufReadPost * if search('[^ -~]', 'n') == 0 | set fileencoding=utf-8 | endif " ASCII のみの時も に utf-8 を使う
 	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,vimgrepadd topleft copen " cwindow を使うと、make で使用されるプログラムによってカーソル位置がずれる
 	" autocmd QuickfixCmdPost lmake,lgrep,lgrepadd,lvimgrep,lvimgrepadd topleft lopen
 	autocmd BufEnter,BufFilePost,BufNewFile,BufRead *
@@ -244,7 +202,7 @@ augroup VIMRC
 	" 			\ endif " diff モードでは、最初の差分(先頭が差分のことも有るので、]c[c と二重指定)
 	" 			ウィンドウ切り替えで最初に戻ってしまう
 	" 			↓と上手く両立しない
-	autocmd BufReadPost  *
+	autocmd BufReadPost *
 				\ silent if &filetype !~# 'commit' && line("'\"") > 1 && line("'\"") <= line("$") |
 				\ 	execute "normal! g`\"" |
 				\ endif "前回閉じた時のカーソル位置に移動← $VIMRUNTIME/defaults.vim
@@ -253,8 +211,7 @@ augroup END
 if exists('&ambiwidth')                        " □とか○の文字があってもカーソル位置がずれないようにする
 	set ambiwidth=double
 endif
-set formatoptions+=mMj                         " 日本語の行の連結時には空白を入力しない
-set formatoptions-=tc                          " textwidth を使った自動折返しをしない
+set formatoptions+=mMj formatoptions-=tc       " 日本語の行の連結時には空白を入力しない+textwidth を使った自動折返しをしない
 set display+=lastline                          " 画面最後の行をできる限り表示
 set wrap                                       " 長い行は折り返し表示
 set sidescroll=1                               " 横スクロールでカーソル位置を真ん中にしない
@@ -262,12 +219,10 @@ set linebreak                                  " wrap at 'breakat
 set breakat-=@*-+;:,.                          " break point for linebreak (default " ^I!@*-+;:,./?" )→" ^I!?" になる (日本語は全角文字に空白が余分に表示されてしまう←helpに8bit文字のみとある)
 set helplang=ja,en                             " 日本語ヘルプを優先的に表示
 " スペル・チェック {{{1
-set spelllang+=cjk
-set spell
+set spell spelllang+=cjk
 " gf などでファイルとして扱う文字 {{{1
 set isfname+=:                                 " Maildir では : がフラグの前置文字
-set isfname-=#                                 " HTML では # は id
-set isfname-==                                 " シェルスクリプトなどで = は代入
+set isfname-=# isfname-==                      " HTML では # は id+シェルスクリプトなどで = は代入
 " キー割り当てを除いたその他 {{{1
 " ↓grep でスワップファイルとディレクトリ除外←再帰的に行う -r, --recursive オプションと組わせたときのため (なおこの時のファイル絞り込みは、--include='*.txt' 等と使う)
 set grepprg=grep\ --directories=skip\ --line-number\ $*\ --exclude-dir='.git'\ --exclude='.*.sw?'\ /dev/null
@@ -292,14 +247,14 @@ set clipboard=exclude:cons\|linux              " クリップボードの扱い
 set viminfo+=n~/.vim/viminfo                   " viminfo の保存先
 " 個人的なキー割り当て keymap キーマップ {{{1
 " 日付と時刻入力 {{{2
-inoremap <silent><expr><C-x>d strftime('%Y/%m/%d')
-inoremap <silent><expr><C-x>t strftime('%H:%M:%S')
+inoremap <silent><expr><C-X>d strftime('%Y/%m/%d')
+inoremap <silent><expr><C-X>t strftime('%H:%M:%S')
 " スクロール {{{2
-" nnoremap <space> <PageDown> " → ~/.vim/pack/my-plug/opt/page-down
-nnoremap <S-space> <PageUp>
+" nnoremap <Space> <PageDown> " → ~/.vim/pack/my-plug/opt/page-down
+nnoremap <S-Space> <PageUp>
 nnoremap <BS> <PageUp>
-vnoremap <space> <C-D>
-vnoremap <S-space> <C-U>
+vnoremap <Space> <C-D>
+vnoremap <S-Space> <C-U>
 vnoremap <BS> <C-U>
 " ターミナル・モード {{{2
 tnoremap <C-W><Esc> <C-W>N
@@ -328,103 +283,103 @@ nnoremap <silent>[C         :cpfile<CR>
 nnoremap <silent>]C         :cnfile<CR>
 nnoremap <silent>[e         g;
 nnoremap <silent>]e         g,
-nnoremap <silent>[w         <C-w>W
-nnoremap <silent>]w         <C-w>w
+nnoremap <silent>[w         <C-W>W
+nnoremap <silent>]w         <C-W>w
 " ]t,[t は下記のマッピングタブ・モードの切り替えに使っている
 " タブ・モードのタブ切り替えキー設定 {{{2
 nnoremap <silent>]t        gt
 nnoremap <silent>[t        gT
 noremap  <silent><C-Tab>   gt
-tnoremap <silent><C-Tab>   <C-w>gt
+tnoremap <silent><C-Tab>   <C-W>gt
 inoremap <silent><C-Tab>   <C-PageDown>
 noremap  <silent><S-C-Tab> gT
-tnoremap <silent><S-C-Tab> <C-w>gT
+tnoremap <silent><S-C-Tab> <C-W>gT
 inoremap <silent><S-C-Tab> <C-PageUp>
 " クリップボードのコピー、ペースト、切り取り {{{2
-vnoremap <C-c> "+y
-vnoremap <C-y> "+y
+vnoremap <C-C> "+y
+vnoremap <C-Y> "+y
 vnoremap Y "+y
 " ↑元の v_Y ほぼ v_y と同じだが行単位←元々行単位なら V を使う
 vnoremap <C-Insert> "+`y
 vnoremap <Insert> "+gp
 vnoremap <S-Insert> "+gp
-nnoremap <C-p> "+gp
+nnoremap <C-P> "+gp
 nnoremap <Insert> "+gp
 nnoremap <S-Insert> "+gp
-" vnoremap <C-x> "+x                            " デフォルトでカーソル位置の数字減算にマップ (ctrl-aとペア)
-" vnoremap <C-d> "+x                            " デフォルトで下方スクロールにマップ
+" vnoremap <C-X> "+x                            " デフォルトでカーソル位置の数字減算にマップ (ctrl-aとペア)
+" vnoremap <C-D> "+x                            " デフォルトで下方スクロールにマップ
 vnoremap <S-Del> "+x
 vnoremap X "+x
 " ↑元の v_X ほぼ v_x と同じだが行単位←元々行単位なら V を使う
-inoremap <S-Insert> <C-r>+
-inoremap <Insert> <C-r>+
-" inoremap <S-C-p> <C-r>+                        " 下と重なり無効になる
-" inoremap <C-p> <C-r>"
-inoremap <expr><C-p> pumvisible() ? '<C-p>' : '<C-r>"'
+inoremap <S-Insert> <C-R>+
+inoremap <Insert> <C-R>+
+" inoremap <S-C-P> <C-R>+                        " 下と重なり無効になる
+" inoremap <C-P> <C-R>"
+inoremap <expr><C-P> pumvisible() ? '<C-P>' : '<C-R>"'
 "↑ insert moode の補完候補の選択にも使っている
-" inoremap <S-C-v> <C-r>+                        " 素の Ctrl-V が使えなくなる
-cnoremap <S-Insert> <C-r>+
-cnoremap <Insert> <C-r>+
-" cnoremap <S-C-p> <C-r>+                        " Ctrl-pの割当と重なり無効になる
-cnoremap <C-p> <C-r>"
+" inoremap <S-C-V> <C-R>+                        " 素の Ctrl-V が使えなくなる
+cnoremap <S-Insert> <C-R>+
+cnoremap <Insert> <C-R>+
+" cnoremap <S-C-P> <C-R>+                        " Ctrl-pの割当と重なり無効になる
+cnoremap <C-P> <C-R>"
 " 選択範囲の貼り付けで、直前のレジスタを連続して貼り付け←vimの連続コピペできない問題 https://baqamore.hatenablog.com/entry/2016/07/07/201856
 vnoremap <expr> p 'pgv"' .. v:register .. 'y`>'
 " vnoremap <expr> P 'pgv"' . v:register . 'y`>`'
 " 2つを入れ替えたい時は、書き換わったほうが都合が良いので、大文字側はデフォルトのままにしておく
 " 挿入/コマンドモード時のカーソル移動 {{{2
-" [Henkan] を <BS> に割り当てているので、<C-h> は他に割り当てる
-inoremap <C-h> <Left>
-cnoremap <C-h> <Left>
-inoremap <expr><C-j> pumvisible() ? '<Down>' : '<C-j>'
-snoremap <expr><C-j> pumvisible() ? '<Down>' : '<C-j>'
-xnoremap <expr><C-j> pumvisible() ? '<Down>' : '<C-j>'
+" [Henkan] を <BS> に割り当てているので、<C-H> は他に割り当てる
+inoremap <C-H> <Left>
+cnoremap <C-H> <Left>
+inoremap <expr><C-J> pumvisible() ? '<Down>' : '<C-J>'
+snoremap <expr><C-J> pumvisible() ? '<Down>' : '<C-J>'
+xnoremap <expr><C-J> pumvisible() ? '<Down>' : '<C-J>'
 "↑ insert moode の補完候補の選択にも使っている
-inoremap <C-k> <Up>
-inoremap <C-l> <Right>
-cnoremap <C-l> <Right>
-cnoremap <C-a> <Home>
-cnoremap <C-b> <Left>
+inoremap <C-K> <Up>
+inoremap <C-L> <Right>
+cnoremap <C-L> <Right>
+cnoremap <C-A> <Home>
+cnoremap <C-B> <Left>
 " コマンドモードで <Del> に <S-BS> と <C-D> を割り当て (前者はターミナルで聞かない)
-" オリジナルの <C-d> (c_CTRL-D) は <Tab> で代用可
-cnoremap <C-d> <Del>
+" オリジナルの <C-D> (c_CTRL-D) は <Tab> で代用可
+cnoremap <C-D> <Del>
 cnoremap <S-BS> <Del>
-inoremap <expr><C-n> pumvisible() ? '<C-n>' : '<Down>'
-snoremap <expr><C-n> pumvisible() ? '<C-n>' : '<Down>'
-xnoremap <expr><C-n> pumvisible() ? '<C-n>' : '<Down>'
+inoremap <expr><C-N> pumvisible() ? '<C-N>' : '<Down>'
+snoremap <expr><C-N> pumvisible() ? '<C-N>' : '<Down>'
+xnoremap <expr><C-N> pumvisible() ? '<C-N>' : '<Down>'
 "↑ insert moode の補完候補の選択にも使っている
-" コマンドモードの <C-n>, <C-k> を <Up>, <Down> に割当 {{{2
-cnoremap <C-n> <Down>
-cnoremap <C-k> <Up>
-" カーソル下のファイルを開く" gfと<C-w> を入れ替えつ (なお gf はプラグインで :tabe 相当に (開いていれば、そちらをアクティブ)) {{{2
+" コマンドモードの <C-N>, <C-K> を <Up>, <Down> に割当 {{{2
+cnoremap <C-N> <Down>
+cnoremap <C-K> <Up>
+" カーソル下のファイルを開く" gfと<C-W> を入れ替えつ (なお gf はプラグインで :tabe 相当に (開いていれば、そちらをアクティブ)) {{{2
 " F 大文字は、後ろに数字が有れば、行番号として開く
-nnoremap <C-w>gf gf
-nnoremap <C-w>gF gF
-nnoremap <silent>gF <C-w>gF
+nnoremap <C-W>gf gf
+nnoremap <C-W>gF gF
+nnoremap <silent>gF <C-W>gF
 " [BS] などがアンドゥーの単位になるように {{{2
 " [BS] と同等
-" inoremap <C-h> <C-g>u<bs>
-inoremap <BS> <C-g>u<bs>
-inoremap <Del> <C-g>u<del>
-inoremap <S-BS> <C-g>u<del>
-" [Esc] を二回押すことでハイライトを消す (2 つ目は範囲選択時にエラーが出ないようにする) {{{2
-noremap  <nowait><silent><Esc><Esc>      :nohlsearch<CR>
-vnoremap <nowait><silent><Esc><Esc> <Esc>:nohlsearch<CR>
-" ウィンドウ・サイズ変更 <C-w> の後の [+], [-], [<], [>] を押しっぱなしでサイズ変更できる {{{2
-nmap <C-w>+ <C-w>+<SID>ws
-nmap <C-w>- <C-w>-<SID>ws
-nmap <C-w>> <C-w>><SID>ws
-nmap <C-w>< <C-w><<SID>ws
-nnoremap <script><SID>ws+ <C-w>+<SID>ws
-nnoremap <script><SID>ws- <C-w>-<SID>ws
-nnoremap <script><SID>ws> <C-w>><SID>ws
-nnoremap <script><SID>ws< <C-w><<SID>ws
+" inoremap <C-H> <C-G>u<BS>
+inoremap <BS> <C-G>u<BS>
+inoremap <Del> <C-G>u<Del>
+inoremap <S-BS> <C-G>u<Del>
+" 検索ハイライトを消す (2 つ目は範囲選択時にエラーが出ないようにする) {{{2 [Esc] を二回だと一回の [Esc] の反応が悪くなる
+noremap  <nowait><silent><leader>n      <Cmd>nohlsearch<CR>
+vnoremap <nowait><silent><leader>n <Esc>:nohlsearch<CR>
+" ウィンドウ・サイズ変更 <C-W> の後の [+], [-], [<], [>] を押しっぱなしでサイズ変更できる {{{2
+nmap <C-W>+ <C-W>+<SID>ws
+nmap <C-W>- <C-W>-<SID>ws
+nmap <C-W>> <C-W>><SID>ws
+nmap <C-W>< <C-W><<SID>ws
+nnoremap <script><SID>ws+ <C-W>+<SID>ws
+nnoremap <script><SID>ws- <C-W>-<SID>ws
+nnoremap <script><SID>ws> <C-W>><SID>ws
+nnoremap <script><SID>ws< <C-W><<SID>ws
 nmap <SID>ws <Nop>
 " 選択範囲で検索 {{{2
 vnoremap <Leader>/ <Esc>/\%V
 " 範囲選択中の増加、減少 (インクリメント、ディクリメント) は、再度選択状態に戻す {{{2
 " vim-speeddating の組み合わせでうまくいかない
-" vnoremap <C-a> <C-a>gv
-" vnoremap <C-x> <C-x>gv
+" vnoremap <C-A> <C-A>gv
+" vnoremap <C-X> <C-X>gv
 set nrformats=bin,hex,alpha                     " アルファベットでもインクリメント、ディクリメント←8進数,octalは除外
 " j, gj, k, gk の入れ替え {{{2
 nnoremap j gj
