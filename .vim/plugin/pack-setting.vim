@@ -62,8 +62,8 @@ nnoremap m        <Cmd>call signature#utils#Input()<CR>
 " augroup END
 
 ": Tabedit ~/.vim/pack/my-plug/start/tabedit/ {{{2
-nnoremap <silent>gf :TabEdit <C-r><C-p><CR>
-" nnoremap <silent>gf :TabEdit <cfile><CR> " ← 存在しなくても開く <C-r><C-f> と同じ
+nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
+" nnoremap <silent>gf :TabEdit <cfile><CR> " ← 存在しなくても開く <C-R><C-F> と同じ
 " ↑opt/ に入れて呼び出すようにすると、最初の使用時に補完が働かない
 
 " https://github.com/t9md/vim-foldtext を ~/.vim/pack/my-plug/start/vim-foldtext/ で書き換え {{{2
@@ -258,12 +258,12 @@ augroup loadNotmuchPy
 augroup END
 
 " yank の履歴 https://github.com/justinhoward/fzf-neoyank {{{2
-nnoremap <leader>fy :FZFNeoyank<CR>
-nnoremap <leader>fY :FZFNeoyank " P<CR>
-vnoremap <leader>fy :FZFNeoyankSelection<CR>
-" nnoremap <leader>dy :FZFNeoyank<CR>
-" nnoremap <leader>dY :FZFNeoyank " P<CR>
-" vnoremap <leader>dy :FZFNeoyankSelection<CR>
+nnoremap <Leader>fy :FZFNeoyank<CR>
+nnoremap <Leader>fY :FZFNeoyank " P<CR>
+vnoremap <Leader>fy :FZFNeoyankSelection<CR>
+" nnoremap <Leader>dy :FZFNeoyank<CR>
+" nnoremap <Leader>dY :FZFNeoyank " P<CR>
+" vnoremap <Leader>dy :FZFNeoyankSelection<CR>
 augroup loadfzf_neoyank
 	autocmd!
 	autocmd CmdUndefined FZFNeoyank,FZFNeoyankSelection
@@ -347,8 +347,8 @@ augroup END
 " |vipga=|visual-select inner paragragh ga =|
 " |gaip=|ga inner paragragh =|
 " に対して
-" ヴィジュアルモードで選択し整形.(e.g. vip<Enter> or vip<leader>ea)
-" easy-align を呼んだ上で、移動したりテキストオブジェクトを指定して整形.(e.g. <leader>eaip)
+" ヴィジュアルモードで選択し整形.(e.g. vip<Enter> or vip<Leader>ea)
+" easy-align を呼んだ上で、移動したりテキストオブジェクトを指定して整形.(e.g. <Leader>eaip)
 " * ←範囲 (列数) 指定
 " | 基準となる記号
 " のタイプで↓と整形
@@ -357,9 +357,9 @@ augroup END
 " | vipga=  | visual-select inner paragragh ga = |
 " | gaip=   | ga inner paragragh =               |
 vmap <Enter>    <Cmd>call set_easy_align#main()<CR>
-vmap <leader>ea <Cmd>call set_easy_align#main()<CR>
-nmap <leader>ea <Cmd>call set_easy_align#main()<CR>
-" ↑全て対象を全体 * にしたいが、nmap の <leader>eaip などテキストオブジェクトの場合の方法がわからない
+vmap <Leader>ea <Cmd>call set_easy_align#main()<CR>
+nmap <Leader>ea <Cmd>call set_easy_align#main()<CR>
+" ↑全て対象を全体 * にしたいが、nmap の <Leader>eaip などテキストオブジェクトの場合の方法がわからない
 
 " ctags や LSP を使ったlist https://github.com/liuchengxu/vista.vim {{{2
 augroup loadVista
@@ -370,7 +370,7 @@ augroup loadVista
 				\ | delfunction set_vista#main
 augroup END
 " 次の Voom に未対応は Vista を使う様に分岐関数とキーマップ
-nnoremap <silent><leader>o :call switch_voom_vista#main()<CR>
+nnoremap <silent><Leader>o :call switch_voom_vista#main()<CR>
 
 " アウトライン https://github.com/vim-voom/VOoM {{{2
 augroup loadVOoM
@@ -461,8 +461,8 @@ augroup loadPageDown
 augroup END
 
 " カーソル位置の単語を Google で検索 ~/.vim/pack/my-plug/opt/google-search/ https://www.rasukarusan.com/entry/2019/03/09/011630 を参考にした {{{2
-nnoremap <silent><leader>g :SearchByGoogle<CR>
-vnoremap <silent><leader>g :SearchByGoogle<CR>
+nnoremap <silent><Leader>g :SearchByGoogle<CR>
+vnoremap <silent><Leader>g :SearchByGoogle<CR>
 augroup loadSearchByGoogle
 	autocmd!
 	autocmd CmdUndefined SearchByGoogle packadd google-search | autocmd! loadSearchByGoogle
@@ -517,18 +517,18 @@ augroup loadVimspector
 				\ | autocmd! loadVimspector
 				\ | delfunction set_vimspector#main
 augroup END
-nnoremap <leader>df       <Cmd>call vimspector#AddFunctionBreakpoint('<cexpr>')<CR>
-nnoremap <leader>dc       <Cmd>call vimspector#Continue()<CR>
-nnoremap <leader>dd       <Cmd>call vimspector#DownFrame()<CR>
-nnoremap <leader>dp       <Cmd>call vimspector#Pause()<CR>
-nnoremap <leader>dR       <Cmd>call vimspector#Restart()<CR>
-nnoremap <leader>dr       <Cmd>call vimspector#RunToCursor()<CR>
-nnoremap <leader>ds       <Cmd>call vimspector#StepInto()<CR>
-nnoremap <leader>dS       <Cmd>call vimspector#StepOut()<CR>
-nnoremap <leader>dn       <Cmd>call vimspector#StepOver()<CR>
-nnoremap <leader>d<space> <Cmd>call vimspector#Stop()<CR>
-nnoremap <leader>db       <Cmd>call vimspector#ToggleBreakpoint()<CR>
-nnoremap <leader>dx       <Cmd>call vimspector#Reset( { 'interactive': v:false } )<CR>
+nnoremap <Leader>df       <Cmd>call vimspector#AddFunctionBreakpoint('<cexpr>')<CR>
+nnoremap <Leader>dc       <Cmd>call vimspector#Continue()<CR>
+nnoremap <Leader>dd       <Cmd>call vimspector#DownFrame()<CR>
+nnoremap <Leader>dp       <Cmd>call vimspector#Pause()<CR>
+nnoremap <Leader>dR       <Cmd>call vimspector#Restart()<CR>
+nnoremap <Leader>dr       <Cmd>call vimspector#RunToCursor()<CR>
+nnoremap <Leader>ds       <Cmd>call vimspector#StepInto()<CR>
+nnoremap <Leader>dS       <Cmd>call vimspector#StepOut()<CR>
+nnoremap <Leader>dn       <Cmd>call vimspector#StepOver()<CR>
+nnoremap <Leader>d<space> <Cmd>call vimspector#Stop()<CR>
+nnoremap <Leader>db       <Cmd>call vimspector#ToggleBreakpoint()<CR>
+nnoremap <Leader>dx       <Cmd>call vimspector#Reset( { 'interactive': v:false } )<CR>
 nmap     <Leader>di       <Plug>VimspectorBalloonEval
 xmap     <Leader>di       <Plug>VimspectorBalloonEval
 
@@ -542,8 +542,8 @@ augroup loadprecious
 augroup END
 
 " ファイル・マネージャー https://github.com/lambdalisue/fern.vim {{{2
-nnoremap <leader>e <Cmd>Fern $HOME -drawer -reveal=%:p -toggle<CR>
-" nnoremap <leader>e <Cmd>Fern %:p:h -drawer -reveal=%:p -toggle<CR>
+nnoremap <Leader>e <Cmd>Fern $HOME -drawer -reveal=%:p -toggle<CR>
+" nnoremap <Leader>e <Cmd>Fern %:p:h -drawer -reveal=%:p -toggle<CR>
 augroup loadFern
 	autocmd!
 	autocmd CmdUndefined Fern call set_fern#main()
@@ -561,8 +561,8 @@ augroup END
 
 " 素早く移動する https://github.com/easymotion/vim-easymotion {{{2
 for key in ['f', 'F', 't', 'T', 'w', 'W', 'b', 'B', 'e', 'E', 'ge', 'gE', 'j', 'k', 'n', 'N']
-	execute 'nmap <leader><leader>' .. key .. '  <Cmd>call set_easymotion#main(''(easymotion-' .. key .. ')'') <bar> delfunction set_easymotion#main<CR>'
-	execute 'vmap <leader><leader>' .. key .. '  <Cmd>call set_easymotion#main(''(easymotion-' .. key .. ')'') <bar> delfunction set_easymotion#main<CR>'
+	execute 'nmap <Leader><Leader>' .. key .. '  <Cmd>call set_easymotion#main(''(easymotion-' .. key .. ')'') <bar> delfunction set_easymotion#main<CR>'
+	execute 'vmap <Leader><Leader>' .. key .. '  <Cmd>call set_easymotion#main(''(easymotion-' .. key .. ')'') <bar> delfunction set_easymotion#main<CR>'
 endfor
 
 " 各種言語のコメントの追加/削除 gc{motion} https://github.com/tpope/vim-commentary {{{2

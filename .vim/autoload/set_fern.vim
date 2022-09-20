@@ -53,7 +53,7 @@ function s:init_fern() abort
 	nmap <buffer><Enter>         <Plug>(fern-action-open:select)
 	nmap <buffer><F5>            <Plug>(fern-action-reload)
 	nmap <buffer>!               <Plug>(fern-action-hidden:toggle)
-	nmap <buffer><C-h>           <Plug>(fern-action-hidden:toggle)
+	nmap <buffer><C-H>           <Plug>(fern-action-hidden:toggle)
 	nmap <buffer>-               <Plug>(fern-action-mark:toggle)
 	nmap <buffer>.               <Plug>(fern-action-repeat)
 	nmap <buffer>?               <Plug>(fern-action-help)

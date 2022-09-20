@@ -4,8 +4,8 @@ function set_eblook#main() abort
 	" let eblook_no_default_key_mappings = 1 "デフォルトのキーマッピング<Leader>yと<Leader><C-Y>を登録しない
 	" マッピングしてから読み込めば、登録されない
 	call set_map_plug#main('eblook.vim', 'EblookSearch', [
-				\ {'mode': 'n', 'key': '<leader>eb', 'cmd': 'EblookSearch'},
-				\ {'mode': 'v', 'key': '<leader>eb', 'cmd': 'EblookSearch'}
+				\ {'mode': 'n', 'key': '<Leader>eb', 'cmd': 'EblookSearch'},
+				\ {'mode': 'v', 'key': '<Leader>eb', 'cmd': 'EblookSearch'}
 				\ ] )
 	let g:eblookenc = 'utf-8'
 	let eblook_stemming = 1
