@@ -40,7 +40,7 @@ def g:Toggle_menu()
 	endif
 enddef
 
-def MakeGUItabline(): string
+def g:MakeGUItabline(): string
 	var bufnrlist = tabpagebuflist(v:lnum)
 	# ウィンドウが複数あるときにはその数を追加する
 	var wincount = tabpagewinnr(v:lnum, '$')
