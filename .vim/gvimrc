@@ -1,43 +1,44 @@
+vim9script
 scriptencoding utf-8
-scriptversion 4
-set antialias             " アンチエイリアス
-set columns=164           " columns width of the display
-set lines=999             " lines number of lines in the display
-if has('unix')            " 使用フォント(優先的に使う)
+set antialias             # アンチエイリアス
+set columns=164           # columns width of the display
+set lines=999             # lines number of lines in the display
+if has('unix')            # 使用フォント(最初に見つかったフォントを使う)
 	set guifont=RictyDiminished\ Nerd\ Font\ 14,Ricty\ Diminished\ Regular\ 14,Noto\ Mono\ 13,Monospace\ 12
-	" set guifont=HackGenNerd\ Regular\ 13,Ricty\ Diminished\ Regular\ 14,Noto\ Mono\ 13,Monospace\ 12
+	# set guifont=HackGenNerd\ Regular\ 13,Ricty\ Diminished\ Regular\ 14,Noto\ Mono\ 13,Monospace\ 12
 else
 	set guifont=RictyDiminished\ Nerd\ Font:h14,Ricty\ Diminished\ Regular:h14,MS_Gothic:h13,Monaco:h10
 endif
-" if exists('&ambiwidth')  " guifont を指定すると auto にされるらしい←勘違い?
-" 	set ambiwidth=double
-" endif
-set guioptions-=T guioptions-=m " ツール・バー/メニュー表示を OFF
+# if exists('&ambiwidth')  # guifont を指定すると auto にされるらしい←勘違い?
+# 	set ambiwidth=double
+# endif
+set guioptions-=T guioptions-=m # ツール・バー/メニュー表示を OFF
 augroup GVIMRC
 	autocmd!
-	autocmd GUIEnter * winpos 0 0                "左上に (help に有る通り autocmd を使わないと環境によって gvimrc の記載では無効)
-	" autocmd VimEnter,GUIEnter * if &lines != 48 | set lines=48 | endif | autocmd! GVIMRC
-	" ↑GTK でズレが生じるため再設定 https://github.com/vim-jp/issues/issues/1374
-	" lines=999 としたのでコメントに
+	# 画面左上に表示 (help に有る通り autocmd を使わないと環境によって gvimrc の記載では無効)
+	autocmd GUIEnter * winpos 0 0 | autocmd! GVIMRC
+	# autocmd VimEnter,GUIEnter * if &lines != 48 | set lines=48 | endif | autocmd! GVIMRC
+	# ↑GTK でズレが生じるため再設定 https://github.com/vim-jp/issues/issues/1374
+	# lines=999 としたのでコメントに
 augroup END
 set mousemodel=popup
-" set nomousefocus          " デフォルト
-" ホイール・スクロールは [Shift] 押しながらと逆にする {{{
-nnoremap <ScrollWheelUp>      <S-ScrollWheelUp>
-nnoremap <S-ScrollWheelUp>    <ScrollWheelUp>
-nnoremap <ScrollWheelDown>    <S-ScrollWheelDown>
-nnoremap <S-ScrollWheelDown>  <ScrollWheelDown>
-xnoremap <ScrollWheelUp>      <C-U>
-xnoremap <ScrollWheelDown>    <C-D>
-" }}}
+# set nomousefocus          # デフォルト
+# ホイール・スクロールは [Shift] 押しながらと逆にする {{{
+nnoremap <ScrollWheelUp>     <S-ScrollWheelUp>
+nnoremap <S-ScrollWheelUp>   <ScrollWheelUp>
+nnoremap <ScrollWheelDown>   <S-ScrollWheelDown>
+nnoremap <S-ScrollWheelDown> <ScrollWheelDown>
+xnoremap <ScrollWheelUp>     <C-U>
+xnoremap <ScrollWheelDown>   <C-D>
+# }}}
 
-function Toggle_menu() abort
+def g:Toggle_menu()
 	if &guioptions =~# 'm'
 		silent set guioptions-=m
 	else
 		silent set guioptions+=m
 	endif
-endfunction
+enddef
 
 def MakeGUItabline(): string
 	var bufnrlist = tabpagebuflist(v:lnum)
