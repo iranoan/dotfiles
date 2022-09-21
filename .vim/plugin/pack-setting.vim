@@ -7,29 +7,28 @@ scriptencoding utf-8
 # 導入しただけで、設定の無い分はコメントで簡単な説明と入手先
 
 # ~/.vim/pack でプラグインを管理する上で、FileType で読み込んだプラグインを再設定するために、再度 setfiletype して、そのイベント・トリガーを削除 {{{2
-for s in ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'html', 'xhtml', 'css', 'tex', 'sh', 'markdown', 'go', 'help']
-	var ext: string
-	if s ==# 'python'
-		ext = '*.py'
-	elseif s ==# 'ruby'
-		ext = '*.rb'
-	elseif s ==# 'yaml'
-		ext = '*.yml'
-	elseif s ==# 'html'
-		ext = '*.htm,*.html'
-	elseif s ==# 'vim'
-		ext = '*.vim,.vimrc,vimrc,_vimrc,.gvimrc,gvimrc,_gvimrc'
-	elseif s ==# 'markdown'
-		ext = '*.md'
+for g:packe_setting_s in ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'html', 'xhtml', 'css', 'tex', 'sh', 'markdown', 'go', 'help']
+	if g:packe_setting_s ==# 'python'
+		g:packe_setting_ext = '*.py'
+	elseif g:packe_setting_s ==# 'ruby'
+		g:packe_setting_ext = '*.rb'
+	elseif g:packe_setting_s ==# 'yaml'
+		g:packe_setting_ext = '*.yml'
+	elseif g:packe_setting_s ==# 'html'
+		g:packe_setting_ext = '*.htm,*.html'
+	elseif g:packe_setting_s ==# 'vim'
+		g:packe_setting_ext = '*.vim,.vimrc,vimrc,_vimrc,.gvimrc,gvimrc,_gvimrc'
+	elseif g:packe_setting_s ==# 'markdown'
+		g:packe_setting_ext = '*.md'
 	else
-		ext = '*.' .. s
+		g:packe_setting_ext = '*.' .. g:packe_setting_s
 	endif
-	execute 'augroup ResetFiletype__' .. s
+	execute 'augroup ResetFiletype__' .. g:packe_setting_s
 					 autocmd!
-	execute	'    autocmd BufWinEnter ' .. ext .. ' setfiletype ' .. s .. '| autocmd! ResetFiletype__' .. s
+	execute	'    autocmd BufWinEnter ' .. g:packe_setting_ext .. ' setfiletype ' .. g:packe_setting_s .. '| autocmd! ResetFiletype__' .. g:packe_setting_s
 					augroup END
 endfor
-# unlet ext s
+unlet g:packe_setting_ext g:packe_setting_s
 
 # まず ~/.vim/pack/*/start 配下で遅延読込しない分 {{{1
 # vim-surround などのプラグインでも . リピートを可能にする https://github.com/tpope/vim-repeat {{{2
@@ -121,8 +120,8 @@ augroup ChangeHighlight
 augroup END
 s:color_light_dark()
 
-# 日本語ヘルプ {{{2
-# packadd vimdoc-ja " https://github.com/vim-jp/vimdoc-ja
+# 日本語ヘルプ https://github.com/vim-jp/vimdoc-ja {{{2
+# packadd vimdoc-ja
 
 #挿入モード時、ステータスラインの色を変更 ~/.vim/pack/my-plug/start/insert-status {{{2
 g:hi_insert = 'highlight StatusLine gui=bold guifg=white guibg=darkred cterm=bold ctermfg=white ctermbg=darkred'
@@ -137,8 +136,8 @@ g:hi_insert = 'highlight StatusLine gui=bold guifg=white guibg=darkred cterm=bol
 
 # シンタックスをテキストオプジェクト化 https://github.com/kana/vim-textobj-syntax {{{2
 # キーマップ iy, ay
-# コメントのテキスト・オブジェクト化 https://github.com/thinca/vim-textobj-comment {{{3
-# キーマップ ic, ac →コメントより優先されるシンタックスは多くないので syntax on なら vim-textobj-syntax が有れば良い
+# コメントのテキスト・オブジェクト化 https://github.com/thinca/vim-textobj-comment はコメントより優先されるシンタックスは多くないので syntax on なら vim-textobj-syntax が有れば良い
+# ↓キーマップ ic, ac
 omap ac <Plug>(textobj-syntax-a)
 omap ic <Plug>(textobj-syntax-i)
 xmap ic <Plug>(textobj-syntax-i)
