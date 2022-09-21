@@ -34,17 +34,17 @@ unlet g:packe_setting_ext g:packe_setting_s
 # vim-surround などのプラグインでも . リピートを可能にする https://github.com/tpope/vim-repeat {{{2
 
 # マークを可視化 visial mark https://github.com/kshenoy/vim-signature {{{2
-nnoremap ']       <Cmd>call signature#mark#Goto("next", "line", "alpha")<CR>
-nnoremap '[       <Cmd>call signature#mark#Goto("prev", "line", "alpha")<CR>
-nnoremap ]'       <Cmd>call signature#mark#Goto("next", "line", "pos")<CR>
-nnoremap ['       <Cmd>call signature#mark#Goto("prev", "line", "pos")<CR>
-nnoremap `]       <Cmd>call signature#mark#Goto("next", "spot", "alpha")<CR>
-nnoremap `[       <Cmd>call signature#mark#Goto("prev", "spot", "alpha")<CR>
+# nnoremap ']       <Cmd>call signature#mark#Goto("next", "line", "alpha")<CR>
+# nnoremap '[       <Cmd>call signature#mark#Goto("prev", "line", "alpha")<CR>
+# nnoremap ]'       <Cmd>call signature#mark#Goto("next", "line", "pos")<CR>
+# nnoremap ['       <Cmd>call signature#mark#Goto("prev", "line", "pos")<CR>
+# nnoremap `]       <Cmd>call signature#mark#Goto("next", "spot", "alpha")<CR>
+# nnoremap `[       <Cmd>call signature#mark#Goto("prev", "spot", "alpha")<CR>
 nnoremap ]`       <Cmd>call signature#mark#Goto("next", "spot", "pos")<CR>
 nnoremap [`       <Cmd>call signature#mark#Goto("prev", "spot", "pos")<CR>
 nnoremap m<Space> <Cmd>call signature#mark#Purge("all")<CR>
 nnoremap m-       <Cmd>call signature#mark#Purge("line")<CR>
-nnoremap m,       <Cmd>call signature#mark#Toggle("next")<CR>
+# nnoremap m,       <Cmd>call signature#mark#Toggle("next")<CR>
 nnoremap m.       <Cmd>call signature#mark#ToggleAtLine()<CR>
 nnoremap m        <Cmd>call signature#utils#Input()<CR>
 # nnoremap ]=       <Cmd>call signature#marker#Goto("next", "any",  v:count)<CR>
