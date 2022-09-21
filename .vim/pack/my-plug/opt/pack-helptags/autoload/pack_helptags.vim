@@ -13,7 +13,7 @@ def s:mkHelpTags(h: string): void
 	endif
 	for d in glob(h .. '/pack/*/{start,opt}/*/doc', 1, 1)
 		var dir = fnamemodify(d, ':p:h:h:s?.\+/??')
-		if dir ==# 'vimdoc-ja' # 日本語ヘルプは除外 +tags,tags-ja は作成済み
+		if dir ==# 'vimdoc' || dir ==# 'vimdoc-ja' # ヘルプは除外 tags,tags-ja は作成済み
 			continue
 		endif
 		if isdirectory(d)
