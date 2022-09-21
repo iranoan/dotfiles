@@ -89,7 +89,7 @@ augroup IME
 		# 	autocmd InsertLeave,CmdwinLeave *      system('xvkbd -text "\C\S\[Muhenkan]" > /dev/null 2>&1') # ←ターミナルではこれで OFF になるのに、なぜか動作しない
 		# 	# ibus OFF→https://qiita.com/ka_/items/dad955fe7423318b7dae, https://qh73xebitbucketorg.readthedocs.io/ja/latest/0.OS/linux/DESKTOP/gnome/input/
 		# 	# ibus を OFF にするのであって、IME を OFF にしない
-		# 	" autocmd InsertLeave,CmdwinLeave * system('ibus engine "xkb:jp::jpn"')
+		# 	# autocmd InsertLeave,CmdwinLeave * system('ibus engine "xkb:jp::jpn"')
 		endif
 	endif
 augroup END
@@ -148,7 +148,7 @@ g:ff_table = {'dos': 'CR+LF', 'unix': 'LF', 'mac': 'CR'}
 # function s:ZenkakuSpace()
 # 	highlight ZenkakuSpace cterm=reverse ctermfg=Black gui=reverse guifg=#CCCCCC
 # endfunction
-# " if &t_Co > 1                                 " ←上でターミナル起動も256色にしている
+# # if &t_Co > 1                                 # ←上でターミナル起動も256色にしている
 # # 	syntax enable
 # # endif
 # if has('syntax') && !has('gui_running')        # GUI では全角空白が可視化されるフォントを使っている
@@ -197,13 +197,13 @@ augroup VIMRC
 	# ウィンドウ切り替えでもとの位置に戻ってしまう
 	# autocmd BufEnter,BufWinEnter *
 	# 			\ silent if &diff |
-	# 			\ execute "normal! gg]c[c" |
+	# 			\ execute 'normal! gg]c[c' |
 	# 			\ endif # diff モードでは、最初の差分(先頭が差分のことも有るので、]c[c と二重指定)
 	# 			ウィンドウ切り替えで最初に戻ってしまう
 	# 			↓と上手く両立しない
 	autocmd BufReadPost *
 				\ silent if &filetype !~# 'commit' && line("'\"") > 1 && line("'\"") <= line("$") |
-				\ 	execute "normal! g`\"" |
+				\ 	execute 'normal! g`"' |
 				\ endif #前回閉じた時のカーソル位置に移動← $VIMRUNTIME/defaults.vim
 augroup END
 # 日本語の表示/編集に関わる設定 {{{1
@@ -308,8 +308,8 @@ vnoremap <S-Insert> "+gp
 nnoremap <C-P> "+gp
 nnoremap <Insert> "+gp
 nnoremap <S-Insert> "+gp
-# vnoremap <C-X> "+x                            " デフォルトでカーソル位置の数字減算にマップ (ctrl-aとペア)
-# vnoremap <C-D> "+x                            " デフォルトで下方スクロールにマップ
+# vnoremap <C-X> "+x                            # デフォルトでカーソル位置の数字減算にマップ (ctrl-aとペア)
+# vnoremap <C-D> "+x                            # デフォルトで下方スクロールにマップ
 vnoremap <S-Del> "+x
 vnoremap X "+x
 # ↑元の v_X ほぼ v_x と同じだが行単位←元々行単位なら V を使う
