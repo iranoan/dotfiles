@@ -110,7 +110,7 @@ def s:color_light_dark(): void
 	# Terminal の色は Normal に揃える
 	# これはバグで 8.2.3996 ～ 8.2.5172 のどこかで修正ずみ→https://github.com/vim-jp/issues/issues/1388
 	highlight clear Terminal
-	execute 'highlight Terminal ' .. substitute(substitute(execute('highlight Normal'), '[\n\r\s]\+', ' ', 'g'), ' *Normal\s\+xxx *', '', '')
+	execute 'highlight Terminal ' .. substitute(substitute(execute('highlight Normal'), '[\n\r \t]\+', ' ', 'g'), ' *Normal\s\+xxx *', '', '')
 enddef
 augroup ChangeHighlight
 	autocmd!
