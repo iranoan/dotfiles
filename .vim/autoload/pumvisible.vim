@@ -1,16 +1,16 @@
 vim9script
-# $B%]%C%W%"%C%W$7$F$$$k$H$-$NF~NO(B
+# ポップアップしているときの入力
+# どうやら1つ目の \n が確定の扱いになる
 
-def pumvisible#insert(str: string): string
-	echomsg 1
+def pumvisible#insert(str: string): string # str 入力前に改行
 	if pumvisible()
 		asyncomplete#close_popup()
-		return "\n\n" .. str # $B$I$&$d$i(B1$B$DL\$N(B \n $B$,3NDj$N07$$(B
+		return "\n\n" .. str
 	endif
 	return (getline('.') =~# '^\s*$' ?  '' : "\n") .. str
 enddef
 
-def pumvisible#insert_after(str: string): string
+def pumvisible#insert_after(str: string): string # str 入力後に改行
 	if pumvisible()
 		asyncomplete#close_popup()
 		return "\n" .. str .. "\n"
