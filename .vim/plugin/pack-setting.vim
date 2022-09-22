@@ -173,27 +173,33 @@ augroup END
 # 小文字で始まるコマンドを定義可能に https://github.com/kana/vim-altercmd {{{2
 # ↓実質 /start/と同じになるが、単純に /start/ に置くと、このスクリプト読み込み時点では AlterCommand が使えず、エラーになるので読み込み明示形式にする
 packadd vim-altercmd
-AlterCommand e[dit] TabEdit
-AlterCommand u[tf8] edit\ ++enc=utf8
-AlterCommand sj[is] edit\ ++enc=cp932
-AlterCommand c[p932] edit\ ++enc=cp932
-AlterCommand eu[c] edit\ ++enc=euc-jp
-AlterCommand j[is] edit\ ++enc=iso-2022-jp-3
-AlterCommand gr[ep] silent\ grep
-AlterCommand mak[e] silent\ make
+AlterCommand e[dit]     TabEdit
+AlterCommand ut[f8]     edit\ ++enc=utf8
+AlterCommand sj[is]     edit\ ++enc=cp932
+AlterCommand cp[932]    edit\ ++enc=cp932
+AlterCommand eu[c]      edit\ ++enc=eucjp-ms
+AlterCommand ji[s]      edit\ ++enc=iso-2022-jp-3
+AlterCommand gr[ep]     silent\ grep
+AlterCommand mak[e]     silent\ make
+AlterCommand tabd[o]    silent\ tabdo
+AlterCommand windo      silent\ windo
+AlterCommand argdo      silent\ argdo
+AlterCommand cdo        silent\ cdo
+AlterCommand cfdo       silent\ cfdo
+AlterCommand ld[o]      silent\ ldo
+AlterCommand lfdo       silent\ lfdo
 AlterCommand ter[minal] topleft\ terminal
-AlterCommand man Man
-AlterCommand p[rint] call\ print#main()
+AlterCommand man        Man
+AlterCommand p[rint]    call\ print#main()
 # ↑:print は使わないので、印刷関数 (~/.vim/autoload/print.vim) に置き換え
 AlterCommand helpt[ags] PackHelpTags
-AlterCommand bc .!bc\ -l\ -q\ ~/.bc\ <Bar>\ sed\ -E\ -e\ 's/^\./0./g'\ -e\ 's/(.[0-9]*[1-9])0+/\\\\1/g'
-AlterCommand bi[nary] if\ !&binary\ <Bar>\ execute('setlocal\ binary\ <Bar>\ %!xxd')\ <Bar>\ endif
+AlterCommand bc         .!bc\ -l\ -q\ ~/.bc\ <Bar>\ sed\ -E\ -e\ 's/^\\\./0./g'\ -e\ 's/(.[0-9]*[1-9])0+/\\\1/g'\ -e\ 's/\\\.$//g'
+AlterCommand bi[nary]   if\ !&binary\ <Bar>\ execute('setlocal\ binary\ <Bar>\ %!xxd')\ <Bar>\ endif
 AlterCommand nob[inary] if\ &binary\ <Bar>\ execute('setlocal\ nobinary\ <Bar>\ %!xxd\ -r')\ <Bar>\ endif
 if glob('~/.vim/pack/*/*/vim-fugitive/plugin/fugitive.vim') !=# ''
-	AlterCommand git Git
-	AlterCommand gs[tatus] Git
-	AlterCommand gl[og] Gllog
-	AlterCommand gd[iff] Gdiffsplit
+	AlterCommand git      Git
+	AlterCommand gl[og]   Gllog
+	AlterCommand gd[iff]  Gdiffsplit
 endif
 
 # 2019-03-31 14:51 などの日付や時刻もうまい具合に Ctrl-a/x で加算減算する https://github.com/tpope/vim-speeddating {{{2
