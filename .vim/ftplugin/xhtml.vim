@@ -28,8 +28,10 @@ inoremap <buffer> </ </<C-x><C-o>
 " ↑オムニ補完を利用して閉じタグ自動補完
 
 nnoremap <silent><buffer><Leader>v :silent !/usr/bin/firefox %<CR>
-inoremap <expr><buffer><C-Enter>   (getline('.') =~# '^\s*$' ?  '' : '<CR>') . '<End><p><CR></p><CR><UP><CR><UP>'
-inoremap <buffer><S-C-Enter>       <End><br><Enter>
+" <S,C-Enter> の組み合わせは GUI のみ有効
+inoremap <expr><buffer><S-Enter>   pumvisible#insert('<li></li>')
+inoremap <expr><buffer><C-Enter>   (getline('.') =~# '^\s*$' ?  '' : '<CR>') . '<End><p><CR></p><UP><CR>'
+inoremap <expr><buffer><S-C-Enter> pumvisible#insert_after('<br />')
 inoremap <buffer><<                &lt;
 inoremap <buffer>>>                &gt;
 inoremap <buffer><=                &#8804;
@@ -38,11 +40,13 @@ inoremap <buffer>&&                &amp;
 inoremap <buffer>~~                &#8764;
 inoremap <buffer>--                &#8211;
 inoremap <buffer>---               &#8212;
-inoremap <buffer><C-space>         &#160;
+" <S,C-Space> の組み合わせは GUI のみ有効
+imap     <expr><buffer><C-Space>   pumvisible() ? asyncomplete#close_popup() : '&#160;'
 inoremap <buffer>&<space>          &#160;
 inoremap <buffer>\\                &#165;
 inoremap <buffer>+-                &#177;
 inoremap <buffer>**                &#215;
 inoremap <buffer>==                &#8801;
 "--------------------------------
+"折りたたみ
 setlocal foldmethod=syntax

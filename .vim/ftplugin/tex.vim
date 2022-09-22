@@ -41,7 +41,7 @@ setlocal errorformat=%WLaTeX\ Warning:\ %.%#line\ %l%m,\"%f\"\\,\ line\ %l:\ %m,
 "--------------------------------
 "ファイルタイプ別 map
 nnoremap <buffer><Leader>v         <Cmd>wa<CR>:silent !zathura-sync.sh <C-r>=expand('%:p')<CR> <C-r>=line(".")<CR> <C-r>=col(".")<CR><CR>
-" <Enter> の組み合わせは GUI のみ有効
+" <S,C-Enter> の組み合わせは GUI のみ有効
 inoremap <expr><buffer><S-Enter>   pumvisible#insert('\item<Tab>')
 inoremap <expr><buffer><S-C-Enter> pumvisible#insert_after('\\')
 inoremap <expr><buffer><C-Enter>   pumvisible#insert("\\clearpage\n")
