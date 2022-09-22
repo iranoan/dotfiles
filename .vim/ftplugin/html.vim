@@ -34,11 +34,10 @@ setlocal omnifunc=htmlcomplete#CompleteTags
 inoremap <buffer> </ </<C-x><C-o>
 " ↑オムニ補完を利用して閉じタグ自動補完
 nnoremap <silent><buffer><Leader>v :silent !firefox %<CR>
-inoremap <buffer><S-Enter>         <CR><li>
+" <Enter> の組み合わせは GUI のみ有効
+inoremap <expr><buffer><S-Enter>   pumvisible#insert('<li>')
 inoremap <expr><buffer><C-Enter>   (getline('.') =~# '^\s*$' ?  '' : '<CR>') . '<End><p><CR></p><UP><CR>'
-" inoremap <buffer><A-Enter>         <End><br><CR>
-" ↑動作しない <br><CR>
-inoremap <buffer><S-C-Enter>       <End><br><Enter>
+inoremap <expr><buffer><S-C-Enter> pumvisible#insert_after('<br>')
 inoremap <buffer><<                &lt;
 inoremap <buffer><=                &le;
 inoremap <buffer>>>                &gt;

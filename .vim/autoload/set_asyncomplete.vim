@@ -1,25 +1,15 @@
 scriptencoding utf-8
 
 function set_asyncomplete#main() abort
-	if exists('s:load_asycomplte') " && s:load_asycomplte
-		return
-	endif
-	let s:load_asycomplte = 1
 	" packadd asyncomplete.vim ←asyncomplete.vim 自体は ~/.vim/pack/*/start に置かないと最初に読み込んだバッファで働かない
 	" let g:asyncomplete_auto_completeopt = 1 " ←デフォルト
-	" let g:asyncomplete_min_chars = 1        " 補完完了直後にも表示されて、うまく働かないキーマップが出てくるが、対処法が見つからない
-	" " ↑例えば TeX で
-	" " inoremap <buffer><S-Enter>       <Enter>\item<Tab>
-	" " としているが、補完直後の <S-Enter> では最初の <Enter> が確定の扱いになってしまう
+	" let g:asyncomplete_min_chars = 1
 	" 以下 plugin {{{3
 	" また 'allowlist': ['*'] を使うと、直ぐ消えてしまうケースが出てくる←vim のコメントで再現
 	" " snippet https://github.com/hrsh7th/vim-vsnip {{{
 	" packadd vim-vsnip
 	" 	" snippet と LSP の連携 https://github.com/hrsh7th/vim-vsnip-integ {{{
 	" 	packadd vim-vsnip-integ
-	" 	" }}}
-	" 	" https://github.com/mattn/vim-lsp-icons {{{
-	" 	packadd vim-lsp-icons
 	" 	" }}}
 	" 	" snippet のファイル https://github.com/rafamadriz/friendly-snippets {{{
 	" 	packadd friendly-snippets
