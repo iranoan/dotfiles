@@ -34,6 +34,7 @@ unlet g:packe_setting_ext g:packe_setting_s
 # vim-surround などのプラグインでも . リピートを可能にする https://github.com/tpope/vim-repeat {{{2
 
 # マークを可視化 visial mark https://github.com/kshenoy/vim-signature {{{2
+# 遅延読み込みだと、開いた時に以前開いた時に付いていたマークが可視化されない
 g:SignatureMap = { # こちらで設定しないとデフォルト指定されてしまう
 	'Leader':            'm',
 	'PlaceNextMark':     '',
@@ -57,12 +58,6 @@ g:SignatureMap = { # こちらで設定しないとデフォルト指定され�
 	'ListBufferMarks':   '',
 	'ListBufferMarkers': ''
 }
-# augroup loadSignature " 遅延読み込みだと、開いた時に以前開いた時に付いていたマークが可視化されない
-# 	autocmd!
-# 	autocmd FuncUndefined signature#mark#Goto,signature#mark#Purge,signature#mark#Toggle,signature#mark#ToggleAtLine,signature#marker#Goto,signature#marker#List,signature#marker#Purge,signature#utils#Input,signature#utils#Remove
-# 				\ set_signature#main()
-# 				\ | autocmd! loadSignature
-# augroup END
 
 #: Tabedit ~/.vim/pack/my-plug/start/tabedit/ {{{2
 nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
