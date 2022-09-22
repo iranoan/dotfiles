@@ -166,7 +166,7 @@ augroup loadasyncomplete
 	autocmd InsertEnter *
 				\ set_asyncomplete#main()
 				\ | autocmd! loadasyncomplete
-				# \ | delfunction set_asyncomplete#main ←実際には Insert 時だけでなく vim-lsp 読み込み時にも設定される
+				\ | delfunction set_asyncomplete#main
 augroup END
 
 # ここから ~/.vim/pack/*/opt 配下 {{{1
