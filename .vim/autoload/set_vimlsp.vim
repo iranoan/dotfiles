@@ -20,7 +20,7 @@ function set_vimlsp#main() abort
 				\ 'pylsp': {
 					\ 'workspace_config': {
 						\ 'pylsp': {
-							\ 'configurationSources': ['flake8']
+							\ 'configurationSources': ['flake8 --config=~/.flake8']
 						\ }
 					\ }
 				\ },
@@ -56,7 +56,7 @@ def s:on_lsp_buffer_enabled(): void
 		setlocal tagfunc=lsp#tagfunc
 	endif
 	# ALE を優先させるか両方使うか {{{
-	if &filetype == 'python' || &filetype == 'vim'
+	if &filetype == 'vim'
 		b:ale_enabled = 0
 		nmap <buffer>[a        <Plug>(lsp-previous-diagnostic)
 		nmap <buffer>]a        <Plug>(lsp-next-diagnostic)

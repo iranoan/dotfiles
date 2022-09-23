@@ -52,7 +52,7 @@ function set_ale#main()
   nmap <silent><leader>p <Cmd>call set_ale#open_eror_ls()<CR>
 	augroup ALE_ON
 		autocmd!
-		autocmd BufWinEnter * let b:ale_enabled = 1
+		autocmd BufWinEnter * let b:ale_enabled = 1 | ALEEnableBuffer | ALEEnable
 	augroup END
 endfunction
 

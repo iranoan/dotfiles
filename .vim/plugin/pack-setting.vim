@@ -106,7 +106,8 @@ def s:color_light_dark(): void
 	# light/dark で同設定
 	highlight SpellBad   term=underline cterm=underline
 	highlight SignColumn ctermbg=NONE guibg=NONE
-	highlight SpecialKey term=bold ctermfg=DarkGray guifg=DarkGray
+	# highlight SpecialKey term=bold cterm=bold ctermfg=11 ctermbg=0 gui=bold guifg=DarkGray
+	# highlight SpecialKey term=bold cterm=bold ctermfg=11 ctermbg=0 gui=bold guifg=#657b83 guibg=#073642 ←Solarized のオリジナル
 	# Terminal の色は Normal に揃える
 	# これはバグで 8.2.3996 ～ 8.2.5172 のどこかで修正ずみ→https://github.com/vim-jp/issues/issues/1388
 	highlight clear Terminal
@@ -291,7 +292,7 @@ augroup END
 # 各種言語の構文チェック https://github.com/dense-analysis/ale {{{2
 augroup loadALE
 	autocmd!
-	autocmd FileType c,cpp,ruby,yaml,markdown,html,xhtml,css,tex,sh,help,json
+	autocmd FileType c,cpp,python,ruby,yaml,markdown,html,xhtml,css,tex,sh,help,json
 				\ set_ale#main()
 				\ | autocmd! loadALE
 				\ | delfunction set_ale#main
