@@ -41,6 +41,7 @@ function set_ale#main()
 				" , 'proselint' はプログラムの文法チェッカーではなく、英語のチェッカー (日本語の textlint にあたる)→ https://githubja.com/amperser/proselint もたつく要因かもしれないので、一旦除外
 	" 各ツールをFixerとして登録
 	let g:ale_fixers = { 'python': ['autopep8'], }
+	let g:ale_python_flake8_options = '--config=$HOME/.config/flake8'
 	let g:ale_linter_aliases = {
 				\ 'help' : 'markdown',
 				\ 'html' : ['html', 'javascript', 'css'],

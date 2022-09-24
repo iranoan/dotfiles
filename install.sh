@@ -46,12 +46,5 @@ if command -v tmux > /dev/null ; then # make tmux plugin directory
 	mkdir -p ~/.tmux/plugins/
 fi
 
-if [ -f "$d.flake8" ]; then
-	# flake8 は
-	# * ~/.flake8 が無いと https://github.com/dense-analysis/ale
-	# * ~/.config/flake8 が無いと https://github.com/prabirshrestha/vim-lsp
-	# に対して効かない?
-	ln -s "$d.flake8" "$HOME/.config/flake8"
-fi
 
 exit 0
