@@ -365,8 +365,8 @@ inoremap <BS> <C-G>u<BS>
 inoremap <Del> <C-G>u<Del>
 inoremap <S-BS> <C-G>u<Del>
 # 検索ハイライトを消す (2 つ目は範囲選択時にエラーが出ないようにする) {{{2 [Esc] を二回だと一回の [Esc] の反応が悪くなる
-noremap  <nowait><silent><leader>n      <Cmd>nohlsearch<CR>
-vnoremap <nowait><silent><leader>n <Esc>:nohlsearch<CR>
+noremap  <nowait><silent><leader><Space> <Cmd>nohlsearch<CR>
+vnoremap <nowait><silent><leader><Space> <Esc>:nohlsearch<CR>
 # ウィンドウ・サイズ変更 <C-W> の後の [+], [-], [<], [>] を押しっぱなしでサイズ変更できる {{{2
 nmap <C-W>+ <C-W>+<SID>ws
 nmap <C-W>- <C-W>-<SID>ws
