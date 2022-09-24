@@ -20,7 +20,7 @@ function set_vimlsp#main() abort
 				\ 'pylsp': {
 					\ 'workspace_config': {
 						\ 'pylsp': {
-							\ 'configurationSources': ['flake8 --config=~/.flake8']
+							\ 'configurationSources': ['flake8']
 						\ }
 					\ }
 				\ },
