@@ -3,3 +3,4 @@ max-line-length=110
 show-source=True
 max-complexity=40
 /* max-cognitive-complexity=7 */
+ignore=CCR001,W503
