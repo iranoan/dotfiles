@@ -167,9 +167,23 @@ set keymodel=startsel,stopsel                  # シフトキー+矢印キーで
 set whichwrap=b,s,h,l,<,>,[,]                  # カーソルを行頭、行末で止まらないようにする
 set virtualedit=block                          # 矩形選択でカーソル以降も範囲選択可能に
 # 検索 {{{1
-set incsearch hlsearch                         # インクリメンタルサーチ+検索ハイライト
+set incsearch                                  # インクリメンタルサーチ
 set ignorecase smartcase                       # 小文字のみの検索では大文字/小文字を無視し、大文字が含まれると区別する
 set infercase                                  # 補完時に大文字/小文字をいい感じに調節してくれる
+# 検索ハイライト・トグル {{{ <Esc> を二回だと一回の <Esc> の反応が悪くなる
+nnoremap <expr><leader><Space> &hlsearch ? '<Cmd>set nohlsearch<CR>' : '<Cmd>set hlsearch<CR>'
+vnoremap <expr><leader><Space> &hlsearch ? '<Cmd>set nohlsearch<CR>' : '<Cmd>set hlsearch<CR>'
+# トグルにするため検索する度に set hlsearch
+nnoremap q/ q/<Cmd>set hlsearch<CR>
+vnoremap q/ q/<Cmd>set hlsearch<CR>
+nnoremap /  /<Cmd>set hlsearch<CR>
+vnoremap /  /<Cmd>set hlsearch<CR>
+nnoremap ?  ?<Cmd>set hlsearch<CR>
+vnoremap ?  ?<Cmd>set hlsearch<CR>
+nnoremap *  *<Cmd>set hlsearch<CR>
+vnoremap *  *<Cmd>set hlsearch<CR>
+nnoremap #  #<Cmd>set hlsearch<CR>
+vnoremap #  #<Cmd>set hlsearch<CR>
 # ファイルの扱い {{{1
 # 読み込み、保存関係
 # 保存時の末尾空白削除は、autocmd なので別場所
@@ -271,19 +285,19 @@ nnoremap <silent><Leader>qf :wall<CR>:silent make<CR>:cwindow<CR>
 # QuickFix と diff モードに共通キー (次/前の変更/エラー箇所を共通化)
 nnoremap <silent><expr>]c   &diff ? ']c' : ':cnext<CR>'
 nnoremap <silent><expr>[c   &diff ? '[c' : ':cprevious<CR>'
-nnoremap <silent>]C         :cnfile<CR>
-nnoremap <silent>[C         :cpfile<CR>
+nnoremap <silent>]C         <Cmd>cnfile<CR>
+nnoremap <silent>[C         <Cmd>cpfile<CR>
 # 移動系 {{{2
-nnoremap <silent>[l         :lprevious<CR>
-nnoremap <silent>]l         :lnext<CR>
-nnoremap <silent>[L         :lpfile<CR>
-nnoremap <silent>]L         :lnfile<CR>
-nnoremap <silent>[b         :bprevious<CR>
-nnoremap <silent>]b         :bnext<CR>
-nnoremap <silent>[T         :tprevious<CR>
-nnoremap <silent>]T         :tnext<CR>
-nnoremap <silent>[C         :cpfile<CR>
-nnoremap <silent>]C         :cnfile<CR>
+nnoremap <silent>[l         <Cmd>lprevious<CR>
+nnoremap <silent>]l         <Cmd>lnext<CR>
+nnoremap <silent>[L         <Cmd>lpfile<CR>
+nnoremap <silent>]L         <Cmd>lnfile<CR>
+nnoremap <silent>[b         <Cmd>bprevious<CR>
+nnoremap <silent>]b         <Cmd>bnext<CR>
+nnoremap <silent>[T         <Cmd>tprevious<CR>
+nnoremap <silent>]T         <Cmd>tnext<CR>
+nnoremap <silent>[C         <Cmd>cpfile<CR>
+nnoremap <silent>]C         <Cmd>cnfile<CR>
 nnoremap <silent>[e         g;
 nnoremap <silent>]e         g,
 nnoremap <silent>[w         <C-W>W
@@ -316,7 +330,7 @@ vnoremap X "+x
 # ↑元の v_X ほぼ v_x と同じだが行単位←元々行単位なら V を使う
 inoremap <S-Insert> <C-R>+
 inoremap <Insert> <C-R>+
-# inoremap <S-C-P> <C-R>+                        # 下と重なり無効になる
+# inoremap <S-C-P> <C-R>+                        # 下と重なり無効になる←modifyOtherKeys
 # inoremap <C-P> <C-R>"
 inoremap <expr><C-P> pumvisible() ? '<C-P>' : '<C-R>"'
 #↑ insert moode の補完候補の選択にも使っている
@@ -326,11 +340,11 @@ cnoremap <Insert> <C-R>+
 # cnoremap <S-C-P> <C-R>+                        # Ctrl-pの割当と重なり無効になる
 cnoremap <C-P> <C-R>"
 # 選択範囲の貼り付けで、直前のレジスタを連続して貼り付け←vimの連続コピペできない問題 https://baqamore.hatenablog.com/entry/2016/07/07/201856
-vnoremap <expr> p 'pgv"' .. v:register .. 'y`>'
-# vnoremap <expr> P 'pgv"' . v:register . 'y`>`'
+vnoremap <expr>p 'pgv"' .. v:register .. 'y`>'
+# vnoremap <expr>P 'pgv"' . v:register . 'y`>`'
 # 2つを入れ替えたい時は、書き換わったほうが都合が良いので、大文字側はデフォルトのままにしておく
 # 挿入/コマンドモード時のカーソル移動 {{{2
-# [Henkan] を <BS> に割り当てているので、<C-H> は他に割り当てる
+# [Henkan] を [BS] に割り当てているので、<C-H> は他に割り当てる
 inoremap <C-H> <Left>
 cnoremap <C-H> <Left>
 inoremap <expr><C-J> pumvisible() ? '<Down>' : '<C-J>'
@@ -358,15 +372,12 @@ cnoremap <C-K> <Up>
 nnoremap <C-W>gf gf
 nnoremap <C-W>gF gF
 nnoremap <silent>gF <C-W>gF
-# [BS] などがアンドゥーの単位になるように {{{2
-# [BS] と同等
+# <BS> などがアンドゥーの単位になるように {{{2
+# 一般的な [BS] と同等
 # inoremap <C-H> <C-G>u<BS>
 inoremap <BS> <C-G>u<BS>
 inoremap <Del> <C-G>u<Del>
 inoremap <S-BS> <C-G>u<Del>
-# 検索ハイライトを消す (2 つ目は範囲選択時にエラーが出ないようにする) {{{2 [Esc] を二回だと一回の [Esc] の反応が悪くなる
-noremap  <nowait><silent><leader><Space> <Cmd>nohlsearch<CR>
-vnoremap <nowait><silent><leader><Space> <Esc>:nohlsearch<CR>
 # ウィンドウ・サイズ変更 <C-W> の後の [+], [-], [<], [>] を押しっぱなしでサイズ変更できる {{{2
 nmap <C-W>+ <C-W>+<SID>ws
 nmap <C-W>- <C-W>-<SID>ws
@@ -399,7 +410,6 @@ vnoremap <Down> gj
 vnoremap <Up>   gk
 tnoremap <C-W><C-[> <C-W>N
 # テキスト・オブジェクト <Shift> を押すのが面倒 vim-surround とのバランスから削除するかも
-omap 4 $
 omap i, i<
 omap i. i>
 omap i2 i"
