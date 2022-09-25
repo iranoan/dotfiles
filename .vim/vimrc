@@ -398,3 +398,19 @@ vnoremap gk k
 vnoremap <Down> gj
 vnoremap <Up>   gk
 tnoremap <C-W><C-[> <C-W>N
+# テキスト・オブジェクト <Shift> を押すのが面倒 vim-surround とのバランスから削除するかも
+omap 4 $
+omap i, i<
+omap i. i>
+omap i2 i"
+omap i7 i'
+omap i8 i(
+omap i9 i)
+omap i@ i`
+omap a, a<
+omap a. a>
+omap a2 a"
+omap a7 a'
+omap a8 a(
+omap a9 a)
+omap a@ a`

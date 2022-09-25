@@ -595,6 +595,15 @@ nmap ys  <Cmd>call set_surround#main('Ysurround') <bar> delfunction set_surround
 nmap cS  <Cmd>call set_surround#main('CSurround') <bar> delfunction set_surround#main<CR>
 nmap cs  <Cmd>call set_surround#main('Csurround') <bar> delfunction set_surround#main<CR>
 nmap ds  <Cmd>call set_surround#main('Dsurround') <bar> delfunction set_surround#main<CR>
+# <Shift> を押すのが面倒
+nmap ds, ds<
+nmap ds. ds>
+nmap ds2 ds"
+nmap ds7 ds'
+nmap ds8 ds(
+nmap ds9 ds)
+nmap ds@ ds`
+# ys, cs の場合の omap si2 si" などを考えてみたたが、多くの場合続けて入力する記号も <shift> 押しながらなのであまり意味がない
 
 # 選択範囲をテキストオブジェクトで広げたり、狭めたり https://github.com/terryma/vim-expand-region {{{2
 vmap v <Cmd>call set_expand_region#main('(expand_region_expand)') <bar> delfunction set_expand_region#main<CR>
