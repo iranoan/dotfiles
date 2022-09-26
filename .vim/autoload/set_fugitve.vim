@@ -21,6 +21,6 @@ function set_fugitve#main() abort
 	" delcommand Gstatus
 	augroup fugitive_keymap
 		autocmd!
-		autocmd FileType fugitive,fugitiveblame,git nnoremap <buffer><silent>q :bwipeout<CR>
+		autocmd FileType fugitive,fugitiveblame,git nnoremap <buffer><nowait><silent>q :bwipeout<CR>
 	augroup END
 endfunction

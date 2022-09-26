@@ -404,7 +404,7 @@ vnoremap <silent><Leader>qr       :QuickRun<CR>
 inoremap <silent><C-\>qr     <ESC>:QuickRun<CR>a
 augroup QuickRnnKeymap
 	autocmd!
-	autocmd FileType quickrun nnoremap <buffer><silent>q :bwipeout!<CR>
+	autocmd FileType quickrun nnoremap <buffer><nowait><silent>q :bwipeout!<CR>
 	autocmd FileType quickrun setlocal signcolumn=auto foldcolumn=0
 	# autocmd FileType tex nnoremap <silent><buffer><Leader>qr       :cclose \| QuickRun<CR>
 augroup END

@@ -60,7 +60,7 @@ setlocal keywordprg=:help
 setlocal commentstring=%s
 " ↑コメント書式がない
 " キーマップ
-nnoremap <buffer><expr><silent>q  &modifiable ? 'q' : ':bwipeout!<CR>'
+nnoremap <buffer><nowait><expr><silent>q  &modifiable ? 'q' : ':bwipeout!<CR>'
 nnoremap <buffer><expr>o          &readonly ? "\<C-]>" : 'o'
 nnoremap <buffer><expr>i          &readonly ? "\<C-]>" : 'i'
 nnoremap <buffer><expr>p          &readonly ? "\<C-o>" : 'p'
