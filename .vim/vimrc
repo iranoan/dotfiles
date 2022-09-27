@@ -196,10 +196,12 @@ set switchbuf=usetab                           # 新しく開く代わりにす�
 set hidden                                     # 未保存ファイルがあってもファイルが開けるようにする
 # set updatetime=500                             # .viminfoの更新時間 (プラグインの機能の更新時間にも使われる)
 set browsedir=buffer                           # ファイルブラウザーの開始時、バッファで開いているファイルのディレクトリ
+# スクリプト・ローカル変数の宣言 {{{1
+var pos: list<number>                          # getpos()
 # 分類のない autocmd {{{1
 augroup VIMRC
 	autocmd!
-	autocmd BufReadPost * if &modifiable && search('[^ -~]', 'n') == 0 | set fileencoding=utf-8 | endif # ASCII のみの時も utf-8 を使う
+	autocmd BufReadPost * if &modifiable && search('[^\t -~]', 'n') == 0 | set fileencoding=utf-8 | endif # ASCII のみの時も utf-8 を使う
 	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,vimgrepadd topleft copen # cwindow を使うと、make で使用されるプログラムによってカーソル位置がずれる
 	# autocmd QuickfixCmdPost lmake,lgrep,lgrepadd,lvimgrep,lvimgrepadd topleft lopen
 	autocmd BufEnter,BufFilePost,BufNewFile,BufRead *
@@ -210,7 +212,7 @@ augroup VIMRC
 				# ↑path にカレント・ディレクトリ以下を追加
 				# ,BufWrite は TeX で \input したファイルで保存するたびに変更されると不便なときが有る
 	# autocmd VimEnter    * if exists(':Explore') | delcommand Explore | endif # netrw の使用自体取りやめ
-	autocmd BufWritePre * b:pos = getpos('.') | :%s/\(^--\|^>.*\)\@<![ \u000B\t\r　]\+$//e | setpos('.', b:pos) # メール署名の区切りと引用行以外の行末空白を保存時に削除
+	autocmd BufWritePre * pos = getpos('.') | :%s/\(^--\|^>.*\)\@<![ \u000B\t\r　]\+$//e | setpos('.', pos) # メール署名の区切りと引用行以外の行末空白を保存時に削除
 	# autocmd TerminalOpen *                       nnoremap <silent><buffer>q :bwipeout<CR>
 	# ↑ターミナルで効いていないし、fzf を使ったバッファで q で閉じる意図しない動きになってしまう
 	# ウィンドウ切り替えでもとの位置に戻ってしまう
@@ -224,18 +226,8 @@ augroup VIMRC
 				\ silent if &filetype !~# 'commit' && line("'\"") > 1 && line("'\"") <= line("$") |
 				\ 	execute 'normal! g`"' |
 				\ endif #前回閉じた時のカーソル位置に移動← $VIMRUNTIME/defaults.vim
-	autocmd BufEnter * if getftype(expand('%')) ==# 'link' | s:symbolic_link() | endif # シンボリック・リンクは展開
+	autocmd BufEnter * if getftype(expand('%')) ==# 'link' | symbolic_link#normalize() | endif # シンボリック・リンクは展開
 augroup END
-def s:symbolic_link(): void
-	var bufname = bufname('%')
-	var pos = getpos('.')
-	var filetype = &filetype
-	var full_path = resolve(expand('%'))
-	enew
-	execute 'bwipeout ' .. bufname .. ' | edit ' .. full_path
-	setpos('.', pos)
-	execute 'setlocal filetype=' .. filetype
-enddef
 # 日本語の表示/編集に関わる設定 {{{1
 if exists('&ambiwidth')                        # □とか○の文字があってもカーソル位置がずれないようにする
 	set ambiwidth=double
