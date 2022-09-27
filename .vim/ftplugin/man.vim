@@ -22,4 +22,4 @@ endif
 setlocal nolist
 setlocal nospell
 setlocal foldmethod=indent foldenable foldlevelstart=99
-setlocal keywordprg=:Man
+nnoremap <buffer><nowait>q :bwipeout!

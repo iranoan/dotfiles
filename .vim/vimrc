@@ -242,6 +242,7 @@ set spell spelllang+=cjk
 set isfname+=:                                 # Maildir では : がフラグの前置文字
 set isfname-=# isfname-==                      # HTML では # は id+シェルスクリプトなどで = は代入
 # キー割り当てを除いたその他 {{{1
+set keywordprg=:Man\ <C-R>w                # デフォルト man
 # ↓grep でスワップファイルとディレクトリ除外←再帰的に行う -r, --recursive オプションと組わせたときのため (なおこの時のファイル絞り込みは、--include='*.txt' 等と使う)
 set grepprg=grep\ --directories=skip\ --line-number\ $*\ --exclude-dir='.git'\ --exclude='.*.sw?'\ /dev/null
 set modeline
