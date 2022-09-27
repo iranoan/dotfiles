@@ -224,7 +224,18 @@ augroup VIMRC
 				\ silent if &filetype !~# 'commit' && line("'\"") > 1 && line("'\"") <= line("$") |
 				\ 	execute 'normal! g`"' |
 				\ endif #前回閉じた時のカーソル位置に移動← $VIMRUNTIME/defaults.vim
+	autocmd BufEnter * if getftype(expand('%')) ==# 'link' | s:symbolic_link() | endif # シンボリック・リンクは展開
 augroup END
+def s:symbolic_link(): void
+	var bufname = bufname('%')
+	var pos = getpos('.')
+	var filetype = &filetype
+	var full_path = resolve(expand('%'))
+	enew
+	execute 'bwipeout ' .. bufname .. ' | edit ' .. full_path
+	setpos('.', pos)
+	execute 'setlocal filetype=' .. filetype
+enddef
 # 日本語の表示/編集に関わる設定 {{{1
 if exists('&ambiwidth')                        # □とか○の文字があってもカーソル位置がずれないようにする
 	set ambiwidth=double
