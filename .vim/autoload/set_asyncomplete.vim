@@ -6,60 +6,56 @@ function set_asyncomplete#main() abort
 	" let g:asyncomplete_min_chars = 1
 	" 以下 plugin {{{3
 	" また 'allowlist': ['*'] を使うと、直ぐ消えてしまうケースが出てくる←vim のコメントで再現
-	" " snippet https://github.com/hrsh7th/vim-vsnip {{{
-	" packadd vim-vsnip
-	" 	" snippet と LSP の連携 https://github.com/hrsh7th/vim-vsnip-integ {{{
-	" 	packadd vim-vsnip-integ
-	" 	" }}}
-	" 	" snippet のファイル https://github.com/rafamadriz/friendly-snippets {{{
-	" 	packadd friendly-snippets
-	" 	" }}}
-	" 	" vim-vsnip で追加したほうが良い設定 {{{
-	" 	let g:lsp_settings = {
-	" 	\   'gopls': {
-	" 	\     'initialization_options': {
-	" 	\       'usePlaceholders': v:true,
-	" 	\     },
-	" 	\   },
-	" 	\ }
-	" 	" }}}
-	" " キーマップ {{{
-	" let g:vsnip_snippet_dir = expand('~/.vim/pack/github/opt/friendly-snippets/snippets') " 上で読み込んだファイルを使う
-	" let g:vsnip_snippet_dirs = [expand('~/.vim/vsnip')]
-	" let g:vsnip_filetypes = {}
-	" let g:vsnip_filetypes.sh = ['shell']
-	" imap <expr> <C-Y> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-Y>'
-	" smap <expr> <C-Y> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-Y>'
-	" }}}
-	" " }}}
-	" LSP との連携する asyncomplete-lsp.vim は vim-lsp 側で行う ← InsertEnter のタイミングではうまく動作しない
-	call s:set_neosnippet() " ←neosnippet の読み込み・設定↓連携 {{{
-	delfunction s:set_neosnippet
+	" snippet https://github.com/hrsh7th/vim-vsnip {{{
+		packadd vim-vsnip
+		" let g:vsnip_snippet_dirs = [expand('~/.vim/vsnip')]
+		let g:vsnip_snippet_dir = expand('~/.vim/vsnip')
+		" let g:vsnip_filetypes['sh'] = ['shell']
+		" vim-vsnip で追加したほうが良い設定例 {{{
+		" 	let g:lsp_settings = {
+		" 	\   'gopls': {
+		" 	\     'initialization_options': {
+		" 	\       'usePlaceholders': v:true,
+		" 	\     },
+		" 	\   },
+		" 	\ }
+		" }}}
+		" snippet のファイル https://github.com/rafamadriz/friendly-snippets {{{
+			packadd friendly-snippets
+		" }}}
 		" キーマップ {{{
-		imap <expr><C-Y> pumvisible() ? asyncomplete#close_popup() : neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '<C-Y>'
-		smap <expr><C-Y> pumvisible() ? asyncomplete#close_popup() : neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '<C-Y>'
-		xmap <expr><C-Y> pumvisible() ? asyncomplete#close_popup() : neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '<C-Y>'
-		nmap <expr><C-Y> pumvisible() ? asyncomplete#close_popup() : neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '<C-Y>'
-		vmap <expr><C-Y> pumvisible() ? asyncomplete#close_popup() : neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '"+y'
-		imap <expr><C-Space> pumvisible() ? asyncomplete#close_popup() : '<C-Space>'
-		" imap <expr><Space> pumvisible() ? asyncomplete#close_popup() : '<Space>'
-		" }}}
-		" LSP と snippet 連携 https://github.com/thomasfaingnaert/vim-lsp-neosnippet {{{
-		" https://github.com/thomasfaingnaert/vim-lsp-snippets
-		packadd vim-lsp-snippets
-		packadd vim-lsp-neosnippet
-		" }}}
-		" snippet https://github.com/prabirshrestha/asyncomplete-neosnippet.vim {{{
-		" vim-lsp-neosnippet だけだと <C-X><C-O> のトリガーをタイプしないと表示されない、もしくは表示まで時間がかかるケースがある
-		packadd asyncomplete-neosnippet.vim
-		call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
-					\ 'name': 'neosnippet',
-					\ 'allowlist': ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'html', 'css', 'tex', 'sh'],
-					\ 'priority': 8,
-					\ 'completor': function('asyncomplete#sources#neosnippet#completor'),
-					\ }))
+			imap <expr> <C-Y> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-Y>'
+			smap <expr> <C-Y> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-Y>'
 		" }}}
 	" }}}
+	" LSP との連携する asyncomplete-lsp.vim は vim-lsp 側で行う ← InsertEnter のタイミングではうまく動作しない
+	" call s:set_neosnippet() " ←neosnippet の読み込み・設定↓連携 {{{
+	" delfunction s:set_neosnippet
+	" 	" キーマップ {{{
+	" 	imap <expr><C-Y> pumvisible() ? asyncomplete#close_popup() : neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '<C-Y>'
+	" 	smap <expr><C-Y> pumvisible() ? asyncomplete#close_popup() : neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '<C-Y>'
+	" 	xmap <expr><C-Y> pumvisible() ? asyncomplete#close_popup() : neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '<C-Y>'
+	" 	nmap <expr><C-Y> pumvisible() ? asyncomplete#close_popup() : neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '<C-Y>'
+	" 	vmap <expr><C-Y> pumvisible() ? asyncomplete#close_popup() : neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '"+y'
+	" 	imap <expr><C-Space> pumvisible() ? asyncomplete#close_popup() : '<C-Space>'
+	" 	" imap <expr><Space> pumvisible() ? asyncomplete#close_popup() : '<Space>'
+	" 	" }}}
+	" 	" LSP と snippet 連携 https://github.com/thomasfaingnaert/vim-lsp-neosnippet {{{
+	" 	" https://github.com/thomasfaingnaert/vim-lsp-snippets
+	" 	packadd vim-lsp-snippets
+	" 	packadd vim-lsp-neosnippet
+	" 	" }}}
+	" 	" snippet https://github.com/prabirshrestha/asyncomplete-neosnippet.vim {{{
+	" 	" vim-lsp-neosnippet だけだと <C-X><C-O> のトリガーをタイプしないと表示されない、もしくは表示まで時間がかかるケースがある
+	" 	packadd asyncomplete-neosnippet.vim
+	" 	call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
+	" 				\ 'name': 'neosnippet',
+	" 				\ 'allowlist': ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'html', 'css', 'tex', 'sh'],
+	" 				\ 'priority': 8,
+	" 				\ 'completor': function('asyncomplete#sources#neosnippet#completor'),
+	" 				\ }))
+	" 	" }}}
+	" " }}}
 	" " omni-function https://github.com/yami-beta/asyncomplete-omni.vim {{{
 	packadd asyncomplete-omni.vim
 	call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
@@ -124,13 +120,6 @@ function s:set_neosnippet() abort
 	packadd neosnippet-snippets
 	" }}}
 	" ↑IME ON の時は効かない (全角空白のため?)
-	" smap <expr><C-P> pumvisible() ? '<Up>' : '<C-P>'
-	" xmap <expr><C-P> pumvisible() ? '<Up>' : '<C-P>'
-	" nmap <expr><C-P> pumvisible() ? '<Up>' : '"+gp'
-	" imap <C-Y>     <Plug>(neosnippet_expand_or_jump)
-	" smap <C-Y>     <Plug>(neosnippet_expand_or_jump)
-	" xmap <C-Y>     <Plug>(neosnippet_expand_or_jump)
-	" nmap <C-Y>     <Plug>(neosnippet_expand_or_jump)
 	" let g:neosnippet#enable_conceal_marker = 1 " conceal 自体が補完時以外の入力で見難いので使わない
 	let g:neosnippet#enable_completed_snippet = 1
 	let g:neosnippet#expand_word_boundary = 1    " 補完は単語で←0のままでは記号の後ろで出ない
