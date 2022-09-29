@@ -75,7 +75,9 @@ def s:xbb(): void # カーソル位置のパスの ebb -x -O の出力 (一部�
 	endwhile
 	var col = col('.')
 	for i in urls
-		if i[1] < col && i[2] >= col
+		if i[1] < col + 1 && i[2] >= col - 1
+			# カーソル位置は開始位置は一つ前、終了位置は一つ後でも許容範囲とする
+			# TeX で画像を扱う時は、\includegraphics{graphic-path} と {} で挟むことが多いから
 			url = i[0]
 			if getftype(url) ==# ''
 				echohl WarningMsg
@@ -90,11 +92,11 @@ def s:xbb(): void # カーソル位置のパスの ebb -x -O の出力 (一部�
 				return
 			endif
 			urls = split(system('ebb -x -O ' .. url), '[\r\n]')
-			execute "normal! A\n" .. urls[0] .. "\n" .. urls[3]
+			execute "normal! o" .. urls[0] .. "\n" .. urls[3]
 			return
 		endif
 	endfor
 	echohl WarningMsg
-	echo 'No path.' .. col
+	echo 'cursor postion do not write path.'
 	echohl None
 enddef
