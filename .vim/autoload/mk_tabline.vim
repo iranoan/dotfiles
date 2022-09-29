@@ -1,3 +1,4 @@
+vim9script
 scriptencoding utf-8
 
 def mk_tabline#main(): string
