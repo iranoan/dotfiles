@@ -18,6 +18,7 @@ def replace#cyclic(args: string, word: number = 0): string
 	# args: dog,cat
 	#       次の様に入れ替えたい文字列自身に , と \ を含む場合は \ でエスケープするして渡す
 	#       1-1,2\,2,3\\3
+	#       '/?!#%-+,_]``' が全て使われいると対応できない
 	# word: 単語扱いで検索するか?
 	#       0 単語扱いしない (デフォルト)
 	#       1 先頭を単語扱い
@@ -60,6 +61,11 @@ def replace#cyclic(args: string, word: number = 0): string
 	var sep: string
 	if i < len('/?!#%-+,_[]``"')
 		sep = '/?!#%-+,_[]``"'[i]
+	else
+		echohl WarningMsg
+		echo "search word include all of '/?!#%-+,_]``'"
+		echohl None
+		return ''
 	endif
 	# 文字列を \(dog\|cat\) といった正規表現文字列に変換
 	var ret_s = 's' .. sep .. ( and(word, 1) ? '\<' : '' ) .. '\('
