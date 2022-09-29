@@ -45,7 +45,7 @@ nnoremap <buffer><Leader>v         <Cmd>wa<CR>:silent !zathura-sync.sh <C-r>=exp
 inoremap <expr><buffer><S-Enter>   pumvisible#insert('\item<Tab>')
 inoremap <expr><buffer><S-C-Enter> pumvisible#insert_after('\\')
 inoremap <expr><buffer><C-Enter>   pumvisible#insert("\\clearpage\n")
-nnoremap <buffer><leader>xbb       <Cmd>call <SID>xbb()<CR>
+nnoremap <buffer><leader>bb       <Cmd>call <SID>xbb()<CR>
 "--------------------------------
 "gfなどで、拡張子を補完
 setlocal suffixesadd=.tex,.cls,.sty
