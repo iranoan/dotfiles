@@ -1,4 +1,5 @@
 vim9script
+scriptencoding utf-8
 # ポップアップしているときの入力
 # どうやら1つ目の \n が確定の扱いになる
 

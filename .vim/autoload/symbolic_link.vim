@@ -1,4 +1,5 @@
 vim9script
+scriptencoding utf-8
 # シンボリック・リンク先を開く
 
 def symbolic_link#normalize(): void

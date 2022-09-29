@@ -1,4 +1,5 @@
 vim9script
+scriptencoding utf-8
 # プラグインがインストール導入済み、runtimepath に加わっているか? か調べる
 scriptencoding utf-8
 def is_plugin_installed#main(plugin: string): bool
