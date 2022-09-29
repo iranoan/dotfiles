@@ -11,25 +11,21 @@ function set_asyncomplete#main() abort
 		" let g:vsnip_snippet_dirs = [expand('~/.vim/vsnip')]
 		let g:vsnip_snippet_dir = expand('~/.vim/vsnip')
 		" let g:vsnip_filetypes['sh'] = ['shell']
-		" vim-vsnip で追加したほうが良い設定例 {{{
-		" 	let g:lsp_settings = {
-		" 	\   'gopls': {
-		" 	\     'initialization_options': {
-		" 	\       'usePlaceholders': v:true,
-		" 	\     },
-		" 	\   },
-		" 	\ }
-		" }}}
 		" snippet のファイル https://github.com/rafamadriz/friendly-snippets {{{
 			packadd friendly-snippets
 		" }}}
 		" キーマップ {{{
 			imap <expr> <C-Y> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-Y>'
 			smap <expr> <C-Y> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-Y>'
+			" Jump forward or backward
+			imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+			smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+			imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+			smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
 		" }}}
 	" }}}
 	" LSP との連携する asyncomplete-lsp.vim は vim-lsp 側で行う ← InsertEnter のタイミングではうまく動作しない
-	" call s:set_neosnippet() " ←neosnippet の読み込み・設定↓連携 {{{
+	" " call s:set_neosnippet() " ←neosnippet の読み込み・設定↓連携 {{{
 	" delfunction s:set_neosnippet
 	" 	" キーマップ {{{
 	" 	imap <expr><C-Y> pumvisible() ? asyncomplete#close_popup() : neosnippet#expandable_or_jumpable() ? '<Plug>(neosnippet_expand_or_jump)' : '<C-Y>'
