@@ -547,7 +547,7 @@ xmap     <Leader>di       <Plug>VimspectorBalloonEval
 # 上の context_filetype.vim はあくまで判定
 augroup loadprecious
 	autocmd!
-	autocmd FileType sh,html,markdown,lua set_precious#main()
+	autocmd FileType sh,vim,html,markdown,lua set_precious#main()
 				\ | autocmd! loadprecious
 				\ | delfunction set_precious#main
 augroup END
