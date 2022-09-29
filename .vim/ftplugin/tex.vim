@@ -45,6 +45,7 @@ nnoremap <buffer><Leader>v         <Cmd>wa<CR>:silent !zathura-sync.sh <C-r>=exp
 inoremap <expr><buffer><S-Enter>   pumvisible#insert('\item<Tab>')
 inoremap <expr><buffer><S-C-Enter> pumvisible#insert_after('\\')
 inoremap <expr><buffer><C-Enter>   pumvisible#insert("\\clearpage\n")
+nnoremap <buffer><leader>xbb       <Cmd>call <SID>xbb()<CR>
 "--------------------------------
 "gfなどで、拡張子を補完
 setlocal suffixesadd=.tex,.cls,.sty
@@ -53,4 +54,47 @@ setlocal iskeyword=@,48-57,_,-,:,.,192-255 "\labelには/を使うことも有�
 " setlocal termwinsize=5x0 " ←グローバルな set なら利く
 " let b:match_ignorecase = 1
 " let b:match_words =  &matchpairs .. ",{,}:[:],<:>,\\begin{\([A-Za-z]\+\)}:\\end{\1}"
+augroup TeXiskeyword " 入力時は補完時は数字を単語から外す (例:width=0.8textw→width=0.8\textwidth をやりやすく)
+	autocmd!
+	autocmd InsertEnter <buffer> setlocal iskeyword=@,_,-,:,.,192-255
+	autocmd InsertLeave <buffer> setlocal iskeyword=@,48-57,_,-,:,.,192-255
+augroup END
 
+def s:xbb(): void # カーソル位置のパスの ebb -x -O の出力 (一部、ファイル名と HiResBoundingBox) を書き込む
+	var line_str = getline('.')
+	var end = 0
+	var urls: list<any>
+	var url: string
+	var start: number
+	while 1
+		[url, start, end] = matchstrpos(line_str, '\(\~\=/\)\=\([A-Za-z\.\-_0-9]\+/\)*[A-Za-z\.\-_0-9]\+\.[A-Za-z]\{1,4\}', end)
+		if start == -1
+			break
+		endif
+		add(urls, [url, start, end])
+	endwhile
+	var col = col('.')
+	for i in urls
+		if i[1] < col && i[2] >= col
+			url = i[0]
+			if getftype(url) ==# ''
+				echohl WarningMsg
+				echo 'Not exist: ' .. url
+				echohl None
+				return
+			endif
+			if !filereadable(url)
+				echohl WarningMsg
+				echo 'Not readable ' .. url
+				echohl None
+				return
+			endif
+			urls = split(system('ebb -x -O ' .. url), '[\r\n]')
+			execute "normal! A\n" .. urls[0] .. "\n" .. urls[3]
+			return
+		endif
+	endfor
+	echohl WarningMsg
+	echo 'No path.' .. col
+	echohl None
+enddef
