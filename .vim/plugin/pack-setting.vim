@@ -630,3 +630,9 @@ augroup loadPackHelpTags
 	autocmd!
 	autocmd CmdUndefined PackHelpTags packadd pack-helptags | autocmd! loadPackHelpTags
 augroup END
+
+# dog と cat の入れ替えなどサイクリックに置換する関数などの定義 ~/.vim/pack/my-plug/opt/replace-cyclic {{{2
+augroup loadReplaceCyclic
+	autocmd!
+	autocmd FuncUndefined replace#* packadd replace-cyclic | autocmd! loadReplaceCyclic
+augroup END
