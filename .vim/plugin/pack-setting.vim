@@ -170,9 +170,6 @@ augroup loadasyncomplete
 				\ | delfunction set_asyncomplete#main
 augroup END
 
-# asyncomplete.vim で snippet と LSP の連携 https://github.com/hrsh7th/vim-vsnip-integ {{{2
-# vim-vsnip-integ 自体は ~/.vim/pack/*/start に置かないと補完が働かない
-
 # ここから ~/.vim/pack/*/opt 配下 {{{1
 # 小文字で始まるコマンドを定義可能に https://github.com/kana/vim-altercmd {{{2
 # ↓実質 /start/と同じになるが、単純に /start/ に置くと、このスクリプト読み込み時点では AlterCommand が使えず、エラーになるので読み込み明示形式にする
