@@ -79,18 +79,17 @@
 	"picture": {
 		"prefix": "picture",
 		"body": [
-			"\\begin{center}",
-			"\t\\begin{picture}(310,160)(0,0)",
-			"\t\\thicklines",
-			"\t\\put(0,0){\\includegraphics[${1:width=${2}}]{${3}}}",
-			"\t% \\put(10,30){\\textcolor{red}{\\vector(1,0){30}}}",
-			"\t% \\put(20,20){\\textcolor{red}{\\oval[5](100,120)}}",
-			"\t% \\put(30,30){\\textcolor{blue}{\\line(0,1){160}}}",
-			"\t\\linethickness{0.1pt} \\multiput(0,0)(10,0){36}{\\textcolor{blue}{\\line(0,1){260}}} \\multiput(0,0)(0,10){27}{\\textcolor{blue}{\\line(1,0){350}}} \\linethickness{0.7pt} \\multiput(0,0)(50,0){7}{\\line(0,1){260}} \\multiput(0,0)(0,50){6}{\\line(1,0){350}} \\footnotesize \\color{red} \\put(-12,46){50} \\put(-17,96){100} \\put(-17,146){150} \\put(-17,196){200} \\put(-17,246){250} \\put(-5,-9){0} \\put(43,-9){50} \\put(90,-9){100} \\put(140,-9){150} \\put(190,-9){200} \\put(240,-9){250} \\put(290,-9){300} % y=0",
-			"\t\\put(43,96){50} \\put(90,96){100} \\put(140,96){150} \\put(190,96){200} \\put(240,96){250} \\put(290,96){300} % y=100",
-			"\t\\put(43,196){50} \\put(90,196){100} \\put(140,196){150} \\put(190,196){200} \\put(240,196){250} \\put(290,196){300} % y=200",
-			"\t\\end{picture}",
-			"\\end{center}"
+			"\\centering%",
+			"\\begin{picture}(310,160)(0,0)",
+			"\\thicklines",
+			"\\put(0,0){\\includegraphics[${1:width=0.8\\linewidth}]{${2}}}",
+			"% \\put(10,30){\\textcolor{red}{\\vector(1,0){30}}}",
+			"% \\put(20,20){\\textcolor{red}{\\oval[5](100,120)}}",
+			"% \\put(30,30){\\textcolor{blue}{\\line(0,1){160}}}",
+			"\\linethickness{0.1pt} \\multiput(0,0)(10,0){36}{\\textcolor{blue}{\\line(0,1){260}}} \\multiput(0,0)(0,10){27}{\\textcolor{blue}{\\line(1,0){350}}} \\linethickness{0.7pt} \\multiput(0,0)(50,0){7}{\\line(0,1){260}} \\multiput(0,0)(0,50){6}{\\line(1,0){350}} \\footnotesize \\color{red} \\put(-12,46){50} \\put(-17,96){100} \\put(-17,146){150} \\put(-17,196){200} \\put(-17,246){250} \\put(-5,-9){0} \\put(43,-9){50} \\put(90,-9){100} \\put(140,-9){150} \\put(190,-9){200} \\put(240,-9){250} \\put(290,-9){300} % y=0",
+			"\\put(43,96){50} \\put(90,96){100} \\put(140,96){150} \\put(190,96){200} \\put(240,96){250} \\put(290,96){300} % y=100",
+			"\\put(43,196){50} \\put(90,196){100} \\put(140,196){150} \\put(190,196){200} \\put(240,196){250} \\put(290,196){300} % y=200",
+			"\\end{picture}"
 		]
 	},
 	"ruler": {
@@ -424,8 +423,24 @@
 		"prefix": "textwidth",
 		"body": "\\textwidth"
 	},
+	"textwidth2": {
+		"prefix": "\\textwidth",
+		"body": "\\textwidth"
+	},
+	"linewidth": {
+		"prefix": "linewidth",
+		"body": "\\linewidth"
+	},
+	"linewidth2": {
+		"prefix": "\\linewidth",
+		"body": "\\linewidth"
+	},
 	"textheight": {
 		"prefix": "textheight",
+		"body": "\\textheight"
+	},
+	"textheight2": {
+		"prefix": "\\textheight",
 		"body": "\\textheight"
 	},
 	"dfrac": {
