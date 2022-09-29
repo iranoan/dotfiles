@@ -178,7 +178,7 @@ augroup END
 # ↓実質 /start/と同じになるが、単純に /start/ に置くと、このスクリプト読み込み時点では AlterCommand が使えず、エラーになるので読み込み明示形式にする
 packadd vim-altercmd
 AlterCommand e[dit]     TabEdit
-AlterCommand ut[f8]     edit\ ++enc=utf8
+AlterCommand u[tf8]     edit\ ++enc=utf8
 AlterCommand sj[is]     edit\ ++enc=cp932
 AlterCommand cp[932]    edit\ ++enc=cp932
 AlterCommand eu[c]      edit\ ++enc=eucjp-ms
