@@ -25,6 +25,12 @@ function set_vimlsp#main() abort
 					\ }
 				\ },
 			\ }
+			" vim-vsnip で追加したほうが良い設定例 {{{
+				" \ 'gopls': {
+				" 	\ 'initialization_options': {
+				" 		\ 'usePlaceholders': v:true,
+				" 	\ },
+				" \ }
 	" }}}
 	" LSP との連携 https://github.com/prabirshrestha/asyncomplete-lsp.vim {{{
 	if !is_plugin_installed#main('asyncomplete-omni.vim') " asyncomplete.vim のプラグインの一つ asyncomplete-omni.vim が導入済みかどうかで、asyncomplete.vim が導入済みかを判断
@@ -57,16 +63,16 @@ def s:on_lsp_buffer_enabled(): void
 	endif
 	# ALE を優先させるか両方使うか {{{
 	if &filetype == 'vim'
-		b:ale_enabled = 0
+		b:ale_enabled = 0 # ALE 不使用
 		nmap <buffer>[a        <Plug>(lsp-previous-diagnostic)
 		nmap <buffer>]a        <Plug>(lsp-next-diagnostic)
+		nmap <buffer><leader>p <Plug>(lsp-document-diagnostics)
 	elseif  &filetype == 'c' || &filetype == 'cpp' || &filetype == 'html' || &filetype == 'xhtml' || &filetype == 'tex'
 		b:lsp_diagnostics_enabled = 0
 		# clang で行末の;無しで次の行がエラー扱いになる
 		# HTML, TeX では文法チェックがない
-	endif
-	if exists('b:lsp_diagnostics_enabled') && b:lsp_diagnostics_enabled != 0  # get(b, 'lsp_diagnostics_enabled') は他のバッファ変数がないせいか使えなかった
-		nmap <leader>p         <Plug>(lsp-document-diagnostics)
+	else # 結果的に b:lsp_diagnostics_enabled != 0 はエラー/警告リスト ALE 優先に
+		nmap <buffer><leader>p <Plug>(lsp-document-diagnostics)
 	endif
 	# CSS などは両方使う
 	# }}}
