@@ -205,4 +205,3 @@ ranger() { # ranger でファイルを less で開いた時にすぐ終わって
 		LESS="$LESS -+F -+X" command ranger "$@"
 	fi
 }
-
