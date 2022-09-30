@@ -2,11 +2,15 @@ vim9script
 scriptencoding utf-8
 
 def replace#escape_search(s: string): string
-	return escape(escape(escape(escape(escape(escape(escape(s, '\'), '~'), '['), '.'), '*'), '$'), '^')
+	return escape(replace#escape_search_core(s), getcmdtype())
+enddef
+
+def replace#escape_search_core(s: string): string
+	return escape(s, '\~[.*$^')
 enddef
 
 def replace#escape_replace(s: string): string
-	return escape(escape(escape(s, '\'), '~'), '&')
+	return escape(s, '\~&')
 enddef
 
 def replace#cyclic(args: string, word: number = 0): string
@@ -70,7 +74,7 @@ def replace#cyclic(args: string, word: number = 0): string
 	# 文字列を \(dog\|cat\) といった正規表現文字列に変換
 	var ret_s = 's' .. sep .. ( and(word, 1) ? '\<' : '' ) .. '\('
 	for s in s_ls
-		ret_s ..= replace#escape_search(s) .. '\|'
+		ret_s ..= replace#escape_search_core(s) .. '\|'
 	endfor
 	ret_s = ret_s[ : -2] .. ')' .. ( !and(word, 2) ? '' : '\>' ) .. sep .. '\={'''
 	# 文字列を {'dog':'cat', 'cat':'dog'} といった辞書に変換
