@@ -10,50 +10,91 @@
 		]
 	},
 	"texttt": {
-		"prefix": ["texttt", "tt"],
+		"prefix": [
+			"texttt",
+			"tt"
+		],
 		"body": "\\texttt{${0}}"
 	},
 	"textit": {
-		"prefix": ["textit", "it"],
+		"prefix": [
+			"textit",
+			"it"
+		],
 		"body": "\\textit{${0}}"
 	},
 	"textmc": {
-		"prefix": ["textmc", "mc"],
+		"prefix": [
+			"textmc",
+			"mc"
+		],
 		"body": "\\textmc{${0}}"
 	},
 	"textrm": {
-		"prefix": ["textrm", "rm"],
+		"prefix": [
+			"textrm",
+			"rm"
+		],
 		"body": "\\textrm{${0}}"
 	},
 	"textbf": {
-		"prefix": ["textbf", "bf"],
+		"prefix": [
+			"textbf",
+			"bf"
+		],
 		"body": "\\textbf{${0}}"
 	},
 	"textsc": {
-		"prefix": ["textsc", "sc"],
+		"prefix": [
+			"textsc",
+			"sc"
+		],
 		"description": "スモールキャピタル",
 		"body": "\\textsc{${0}}"
 	},
 	"textsf": {
-		"prefix": ["textsf", "sf"],
+		"prefix": [
+			"textsf",
+			"sf"
+		],
 		"description": "スラント",
 		"body": "\\textsf{${0}}"
 	},
 	"textup": {
-		"prefix": ["textup", "up"],
+		"prefix": [
+			"textup",
+			"up"
+		],
 		"description": "立体",
 		"body": "\\textup{${0}}"
 	},
 	"itd": {
-		"prefix": ["itd", "item", "item[", "dd", "dt", "id"],
+		"prefix": [
+			"itd",
+			"item",
+			"item[",
+			"dd",
+			"dt",
+			"id"
+		],
 		"body": "\\item[${1}]\t${0}"
 	},
 	"itm": {
-		"prefix": ["itm", "im", "item", "item", "li"],
+		"prefix": [
+			"itm",
+			"im",
+			"item",
+			"item",
+			"li"
+		],
 		"body": "\\item\t${0}"
 	},
 	"description": {
-		"prefix": ["description", "desc dl"],
+		"prefix": [
+			"description",
+			"desc",
+			"dl"
+		],
 		"body": [
 			"\\begin{description}",
 			"\t\\item[${1}]\t${0}",
@@ -61,7 +102,11 @@
 		]
 	},
 	"enumerate": {
-		"prefix": ["enumerate", "enum ol"],
+		"prefix": [
+			"enumerate",
+			"enum",
+			"ol"
+		],
 		"body": [
 			"\\begin{enumerate}",
 			"\t\\item\t${1}",
@@ -69,7 +114,11 @@
 		]
 	},
 	"itemize": {
-		"prefix": ["itemize", "iz ul"],
+		"prefix": [
+			"itemize",
+			"iz",
+			"ul"
+		],
 		"body": [
 			"\\begin{itemize}",
 			"\t\\item\t${1}",
@@ -120,7 +169,10 @@
 		]
 	},
 	"includegraphics": {
-		"prefix": ["includegraphics", "graphics"],
+		"prefix": [
+			"includegraphics",
+			"graphics"
+		],
 		"body": "\\includegraphics[${1:width=${2}}]{${3}}"
 	},
 	"input": {
@@ -174,37 +226,64 @@
 		"body": "\\varphi"
 	},
 	"leftarrow": {
-		"prefix": ["leftarrow", "larrow Arrow"],
+		"prefix": [
+			"leftarrow",
+			"larrow",
+			"Arrow"
+		],
 		"description": "←",
 		"body": "\\leftarrow"
 	},
 	"rightarrow": {
-		"prefix": ["rightarrow", "rarrow arroW"],
+		"prefix": [
+			"rightarrow",
+			"rarrow",
+			"arroW"
+		],
 		"description": "→",
 		"body": "\\rightarrow"
 	},
 	"Leftarrow": {
-		"prefix": ["Leftarrow", "Larrow ArrowBold"],
+		"prefix": [
+			"Leftarrow",
+			"Larrow",
+			"ArrowBold"
+		],
 		"description": "⇐",
 		"body": "\\Leftarrow"
 	},
 	"Rightarrow": {
-		"prefix": ["Rightarrow", "Rarrow arroWBold"],
+		"prefix": [
+			"Rightarrow",
+			"Rarrow",
+			"arroWBold"
+		],
 		"description": "⇒",
 		"body": "\\Rightarrow"
 	},
 	"leftrightarrow": {
-		"prefix": ["leftrightarrow", "lrarrow ArroW"],
+		"prefix": [
+			"leftrightarrow",
+			"lrarrow",
+			"ArroW"
+		],
 		"description": "←→",
 		"body": "\\leftrightarrow"
 	},
 	"Leftrightarrow": {
-		"prefix": ["Leftrightarrow", "LRarrow ArroWBold"],
+		"prefix": [
+			"Leftrightarrow",
+			"LRarrow",
+			"ArroWBold"
+		],
 		"description": "⇔",
 		"body": "\\Leftrightarrow"
 	},
 	"mapsto": {
-		"prefix": ["mapsto", "marrow"],
+		"prefix": [
+			"mapsto",
+			"marrow"
+		],
 		"description": "|→",
 		"body": "\\mapsto"
 	},
@@ -249,57 +328,100 @@
 		"body": "\\Longleftrightarrow"
 	},
 	"longleftarrow": {
-		"prefix": ["longleftarrow", "llarrow ArrowLong"],
+		"prefix": [
+			"longleftarrow",
+			"llarrow",
+			"ArrowLong"
+		],
 		"description": "←-------------",
 		"body": "\\longleftarrow"
 	},
 	"longrightarrow": {
-		"prefix": ["longrightarrow", "lrarrow arroWLong"],
+		"prefix": [
+			"longrightarrow",
+			"lrarrow",
+			"arroWLong"
+		],
 		"description": "-------------→",
 		"body": "\\longrightarrow"
 	},
 	"Longleftarrow": {
-		"prefix": ["Longleftarrow", "Llarrow ArrowLongBold"],
+		"prefix": [
+			"Longleftarrow",
+			"Llarrow",
+			"ArrowLongBold"
+		],
 		"description": "⇐=====",
 		"body": "\\Longleftarrow"
 	},
 	"Longrightarrow": {
-		"prefix": ["Longrightarrow", "Lrarrow arroWLongBold"],
+		"prefix": [
+			"Longrightarrow",
+			"Lrarrow",
+			"arroWLongBold"
+		],
 		"description": "=====⇒",
 		"body": "\\Longrightarrow"
 	},
 	"longmapsto": {
-		"prefix": ["longmapsto", "lmarrow"],
+		"prefix": [
+			"longmapsto",
+			"lmarrow"
+		],
 		"description": "|---→",
 		"body": "\\longmapsto"
 	},
 	"nearrow": {
-		"prefix": ["nearrow", "ruarrow arrowToTopRight"],
+		"prefix": [
+			"nearrow",
+			"ruarrow",
+			"arrowToTopRight"
+		],
 		"description": "↗右上",
 		"body": "\\nearrow"
 	},
 	"searrow": {
-		"prefix": ["searrow", "rdarrow arrowToBottomRight"],
+		"prefix": [
+			"searrow",
+			"rdarrow",
+			"arrowToBottomRight"
+		],
 		"description": "↘右下",
 		"body": "\\searrow"
 	},
 	"swarrow": {
-		"prefix": ["swarrow", "ldarrow arrowToBottomLeft"],
+		"prefix": [
+			"swarrow",
+			"ldarrow",
+			"arrowToBottomLeft"
+		],
 		"description": "↙左下",
 		"body": "\\swarrow"
 	},
 	"nwarrow": {
-		"prefix": ["nwarrow", "luarrow arrowToTopRight"],
+		"prefix": [
+			"nwarrow",
+			"luarrow",
+			"arrowToTopRight"
+		],
 		"description": "↗左上",
 		"body": "\\nwarrow"
 	},
 	"dashleftarrow": {
-		"prefix": ["dashleftarrow", "dlarrow ArrowDash"],
+		"prefix": [
+			"dashleftarrow",
+			"dlarrow",
+			"ArrowDash"
+		],
 		"description": "← - -",
 		"body": "\\dashleftarrow"
 	},
 	"dashrightarrow": {
-		"prefix": ["dashrightarrow", "drarrow arroWDash"],
+		"prefix": [
+			"dashrightarrow",
+			"drarrow",
+			"arroWDash"
+		],
 		"description": "- - →",
 		"body": "\\dashrightarrow"
 	},
@@ -372,12 +494,18 @@
 		"body": "\\curvearrowright"
 	},
 	"circlearrowleft": {
-		"prefix": ["circlearrowleft", "clarrow"],
+		"prefix": [
+			"circlearrowleft",
+			"clarrow"
+		],
 		"description": "↺",
 		"body": "\\circlearrowleft"
 	},
 	"circlearrowright": {
-		"prefix": ["circlearrowright", "crarrow"],
+		"prefix": [
+			"circlearrowright",
+			"crarrow"
+		],
 		"description": "↻",
 		"body": "\\circlearrowright"
 	},
@@ -449,27 +577,27 @@
 	},
 	"Bigl": {
 		"prefix": "Bigl",
-		"description" : "\\Bigl \\Bigr",
+		"description": "\\Bigl \\Bigr",
 		"body": "\\Bigl${1:(} ${2} \\Bigr${3:)}${4}"
 	},
 	"bigl": {
 		"prefix": "bigl",
-		"description" : "\\bigl \\bigr",
+		"description": "\\bigl \\bigr",
 		"body": "\\bigl${1:(} ${2} \\bigr${3:)}${4}"
 	},
 	"Biggl": {
 		"prefix": "Biggl",
-		"description" : "\\Biggl \\Biggr",
+		"description": "\\Biggl \\Biggr",
 		"body": "\\Biggl${1:(} ${2} \\Biggr${3:)}${4}"
 	},
 	"biggl": {
 		"prefix": "biggl",
-		"description" : "\\biggl \\biggr",
+		"description": "\\biggl \\biggr",
 		"body": "\\biggl${1:(} ${2} \\biggr${3:)}${4}"
 	},
 	"left": {
 		"prefix": "left",
-		"description" : "\\left \\right",
+		"description": "\\left \\right",
 		"body": "\\left${1:(} ${2} \\right${3:)}${4}"
 	}
 }
