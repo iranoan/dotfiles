@@ -106,7 +106,7 @@ endfunction
 function! foldtext#latex()
 	let line = getline(v:foldstart)
 	" format theorems/etc nicely {{{
-	let matches = matchlist(line, '\\begin{\([^}]*\)}')
+	let matches = matchlist(line, '\m\C\\begin{\([^}]*\)}')
 	if !empty(matches) && has_key(s:latex_types, matches[1])
 		let type = s:latex_types[matches[1]]
 		let label = ''
@@ -114,7 +114,7 @@ function! foldtext#latex()
 		while linenum <= v:foldend
 			let linenum += 1
 			let line = getline(linenum)
-			let matches = matchlist(line, '\\label{\([^}]*\)}')
+			let matches = matchlist(line, '\m\C\\label{\([^}]*\)}')
 			if !empty(matches)
 				let label = matches[1]
 				break
@@ -139,7 +139,7 @@ function! foldtext#latex()
 			let line = getline(linenum)
 			if line =~# '\\item'
 				if nesting == 0
-					let label = matchstr(line, '\\item\[\zs[^]]*\ze\]')
+					let label = matchstr(line, '\m\C\\item\[\zs[^]]*\ze\]')
 					if len(item_name) == item_depth
 						if label !=# ''
 							let item_name += [label]
@@ -158,7 +158,7 @@ function! foldtext#latex()
 				if nesting > 0
 					let nesting -= 1
 				else
-					let new_type = matchstr(line, '\\begin{\zs[^}]*\ze}')
+					let new_type = matchstr(line, '\m\C\\begin{\zs[^}]*\ze}')
 					if type ==# ''
 						let type = new_type
 					elseif type != new_type
@@ -204,7 +204,7 @@ endfunction
 function! foldtext#perl() " Perl
 	let line = getline(v:foldstart)
 	" format sub names with their arguments {{{
-	let matches = matchlist(line, '^\s*\(sub\|around\|before\|after\|guard\)\s*\(\w\+\)')
+	let matches = matchlist(line, '\m\C^\s*\(sub\|around\|before\|after\|guard\)\s*\(\w\+\)')
 	if !empty(matches)
 		let linenum = v:foldstart - 1
 		let sub_type = matches[1]
@@ -219,7 +219,7 @@ function! foldtext#perl() " Perl
 
 			" handle 'my $var = shift;' type lines
 			let var = '\%(\$\|@\|%\|\*\)\w\+'
-			let shift_line = matchlist(next_line, 'my\s*\(' . var . '\)\s*=\s*shift\%(\s*||\s*\(.\{-}\)\)\?;')
+			let shift_line = matchlist(next_line, '\m\cmy\s*\(' . var . '\)\s*=\s*shift\%(\s*||\s*\(.\{-}\)\)\?;')
 			if !empty(shift_line)
 				if shift_line[1] ==# '$self' && empty(params)
 					if sub_type ==# 'sub'
@@ -243,7 +243,7 @@ function! foldtext#perl() " Perl
 			endif
 
 			" handle 'my ($a, $b) = @_;' type lines
-			let rest_line = matchlist(next_line, 'my\s*(\(.*\))\s*=\s*@_;')
+			let rest_line = matchlist(next_line, '\m\cmy\s*(\(.*\))\s*=\s*@_;')
 			if !empty(rest_line)
 				let rest_params = split(rest_line[1], ',\s*')
 				let params += rest_params
@@ -251,14 +251,14 @@ function! foldtext#perl() " Perl
 			endif
 
 			" handle 'my @args = @_;' type lines
-			let array_line = matchlist(next_line, 'my\s*\(@\w\+\)\s*=\s*@_;')
+			let array_line = matchlist(next_line, '\m\cmy\s*\(@\w\+\)\s*=\s*@_;')
 			if !empty(array_line)
 				let params += [array_line[1]]
 				continue
 			endif
 
 			" handle 'my %args = @_;' type lines
-			let hash_line = matchlist(next_line, 'my\s*%\w\+\s*=\s*@_;')
+			let hash_line = matchlist(next_line, '\m\cmy\s*%\w\+\s*=\s*@_;')
 			if !empty(hash_line)
 				let params += ['paramhash']
 				continue

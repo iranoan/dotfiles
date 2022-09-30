@@ -33,7 +33,7 @@ def replace#cyclic(args: string, word: number = 0): string
 	var start: number
 	var end = -1
 	while 1
-		[s_while, start, end] = matchstrpos(args, '\(\\\\\|\\,\|[^,]\)\+', end + 1)
+		[s_while, start, end] = matchstrpos(args, '\m\(\\\\\|\\,\|[^,]\)\+', end + 1)
 		if start == -1
 			break
 		endif

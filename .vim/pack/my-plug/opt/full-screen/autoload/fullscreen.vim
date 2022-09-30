@@ -15,8 +15,8 @@ def fullscreen#main(): void
 	var win = bufnr('')
 	if has('unix')
 		var wmctrl = system('wmctrl -lp')
-		wmctrl = matchstr(wmctrl, '0x[0-9a-fA-F]\+ \+[0-9-]\+ \+' .. getpid())
-		wmctrl = matchstr(wmctrl, '0x[0-9a-fA-F]\+')
+		wmctrl = matchstr(wmctrl, '\m\C0x[0-9a-fA-F]\+ \+[0-9-]\+ \+' .. getpid())
+		wmctrl = matchstr(wmctrl, '\m\C0x[0-9a-fA-F]\+')
 		system('wmctrl -ir ' .. wmctrl .. ' -b toggle,fullscreen')
 	# elseif has('win32') || has('win32unix')
 	# 	simalt ~x

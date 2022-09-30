@@ -67,7 +67,7 @@ def s:xbb(): void # カーソル位置のパスの ebb -x -O の出力 (一部�
 	var url: string
 	var start: number
 	while 1
-		[url, start, end] = matchstrpos(line_str, '\(\~\=/\)\=\([A-Za-z\.\-_0-9]\+/\)*[A-Za-z\.\-_0-9]\+\.[A-Za-z]\{1,4\}', end)
+		[url, start, end] = matchstrpos(line_str, '\m\C\(\~\=/\)\=\([A-Za-z\.\-_0-9]\+/\)*[A-Za-z\.\-_0-9]\+\.[A-Za-z]\{1,4\}', end)
 		if start == -1
 			break
 		endif

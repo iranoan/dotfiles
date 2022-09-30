@@ -13,7 +13,7 @@ function vim#fold#text() abort
 	let line = getline(v:foldstart)
 	let linenr = v:foldstart + 1
 	while getline(linenr) =~# '^\s*\\'
-		let line .= matchstr(getline(linenr), '^\s*\\\s\{-}\zs\s\?\S.*$')
+		let line .= matchstr(getline(linenr), '\m^\s*\\\s\{-}\zs\s\?\S.*$')
 		let linenr += 1
 	endwhile
 	if linenr == v:foldstart + 1
@@ -53,7 +53,7 @@ function vim#fold#calculate(bufnr) abort
 			endif
 			let is_open = cm_pos < 0 || (0 <= om_pos && om_pos < cm_pos)
 			let col = is_open ? om_pos + om_len : cm_pos + cm_len
-			let marker_lv = matchstr(cur_line, '^\d\+', col)
+			let marker_lv = matchstr(cur_line, '\m^\d\+', col)
 			let col += len(marker_lv)
 			let marker_lv = str2nr(marker_lv)
 			if is_open

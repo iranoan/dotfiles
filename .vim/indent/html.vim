@@ -184,7 +184,7 @@ func! s:AddITags(tags, taglist)
   "{{{
   for itag in a:taglist
     let a:tags[itag] = 1
-    let a:tags['/' . itag] = -1
+    let a:tags['/' .. itag] = -1
   endfor
 endfunc "}}}
 
@@ -193,7 +193,7 @@ func! s:RemoveITags(tags, taglist)
   "{{{
   for itag in a:taglist
     let a:tags[itag] = 1
-    let a:tags['/' . itag] = 1
+    let a:tags['/' .. itag] = 1
   endfor
 endfunc "}}}
 
@@ -201,13 +201,13 @@ endfunc "}}}
 func! s:AddBlockTag(tag, id, ...)
   "{{{
   if !(a:id >= 2 && a:id < len(s:endtags))
-    echoerr 'AddBlockTag ' . a:id
+    echoerr 'AddBlockTag ' .. a:id
     return
   endif
   let s:indent_tags[a:tag] = a:id
   if a:0 == 0
-    let s:indent_tags['/' . a:tag] = -a:id
-    let s:endtags[a:id] = '</' . a:tag . '>'
+    let s:indent_tags['/' .. a:tag] = -a:id
+    let s:endtags[a:id] = '</' .. a:tag .. '>'
   else
     let s:indent_tags[a:1] = -a:id
     let s:endtags[a:id] = a:1
@@ -286,7 +286,7 @@ func! s:CountITags(text)
   let s:nextrel = 0  " relative indent steps for next line [unit &sw]:
   let s:block = 0		" assume starting outside of a block
   let s:countonly = 1	" don't change state
-  call substitute(a:text, '<\zs/\=' . s:tagname . '\>\|<!--\[\|\[endif\]-->\|<!--\|-->', '\=s:CheckTag(submatch(0))', 'g')
+  call substitute(a:text, '<\zs/\=' .. s:tagname .. '\>\|<!--\[\|\[endif\]-->\|<!--\|-->', '\=s:CheckTag(submatch(0))', 'g')
   let s:countonly = 0
 endfunc "}}}
 
@@ -298,9 +298,9 @@ func! s:CountTagsAndState(text)
   let s:nextrel = 0  " relative indent steps for next line [unit &sw]:
 
   let s:block = b:hi_newstate.block
-  let tmp = substitute(a:text, '<\zs/\=' . s:tagname . '\>\|<!--\[\|\[endif\]-->\|<!--\|-->', '\=s:CheckTag(submatch(0))', 'g')
+  let tmp = substitute(a:text, '<\zs/\=' .. s:tagname .. '\>\|<!--\[\|\[endif\]-->\|<!--\|-->', '\=s:CheckTag(submatch(0))', 'g')
   if s:block == 3
-    let b:hi_newstate.scripttype = s:GetScriptType(matchstr(tmp, '\C.*<SCRIPT\>\zs[^>]*'))
+    let b:hi_newstate.scripttype = s:GetScriptType(matchstr(tmp, '\m\c.*<SCRIPT\>\zs[^>]*'))
   endif
   let b:hi_newstate.block = s:block
 endfunc "}}}
@@ -376,7 +376,7 @@ func! s:CheckCustomTag(ctag)
   if match(a:ctag, pattern) == -1
     return 0
   endif
-  if matchstr(a:ctag, '\/\ze.\+') ==# '/'
+  if matchstr(a:ctag, '\m\/\ze.\+') ==# '/'
     " closing tag
     if s:block != 0
       " ignore ctag within a block
@@ -467,12 +467,12 @@ func! s:FreshState(lnum)
   if stopline > 0 && stopline < stopline2
     " ugly ... why isn't there searchstr()
     let tagline = tolower(getline(stopline))
-    let blocktag = matchstr(tagline, '\/\=\%(pre\>\|script\>\|style\>\)', stopcol - 1)
+    let blocktag = matchstr(tagline, '\m\c\/\=\%(pre\>\|script\>\|style\>\)', stopcol - 1)
     if blocktag[0] !=# '/'
       " opening tag found, assume a:lnum within block
       let state.block = s:indent_tags[blocktag]
       if state.block == 3
-        let state.scripttype = s:GetScriptType(matchstr(tagline, '\>[^>]*', stopcol))
+        let state.scripttype = s:GetScriptType(matchstr(tagline, '\m\>[^>]*', stopcol))
       endif
       let state.blocklnr = stopline
       " check preceding tags in the line:
@@ -536,7 +536,7 @@ func! s:FreshState(lnum)
   let swendtag = match(text, '^\s*</') >= 0
 
   " If previous line ended in a closing tag, line up with the opening tag.
-  if !swendtag && text =~ '</' . s:tagname . '\s*>\s*$'
+  if !swendtag && text =~ '</' .. s:tagname .. '\s*>\s*$'
     call cursor(state.lnum, 99999)
     normal! F<
     let start_lnum = HtmlIndent_FindStartTag()
@@ -870,8 +870,8 @@ func! HtmlIndent_FindStartTag()
   " The cursor must be on or before a closing tag.
   " If found, positions the cursor at the match and returns the line number.
   " Otherwise returns 0.
-  let tagname = matchstr(getline('.')[col('.') - 1:], '</\zs' . s:tagname . '\ze')
-  let start_lnum = searchpair('<' . tagname . '\>', '', '</' . tagname . '\>', 'bW')
+  let tagname = matchstr(getline('.')[col('.') - 1:], '\m\c</\zs' .. s:tagname .. '\ze')
+  let start_lnum = searchpair('<' .. tagname .. '\>', '', '</' .. tagname .. '\>', 'bW')
   if start_lnum > 0
     return start_lnum
   endif
@@ -886,12 +886,12 @@ func! HtmlIndent_FindTagEnd()
   " a self-closing tag, to the matching ">".
   " Limited to look up to b:html_indent_line_limit lines away.
   let text = getline('.')
-  let tagname = matchstr(text, s:tagname . '\|!--', col('.'))
+  let tagname = matchstr(text, '\m\c' .. s:tagname .. '\|!--', col('.'))
   if tagname ==# '!--'
     call search('--\zs>')
-  elseif s:get_tag('/' . tagname) != 0
+  elseif s:get_tag('/' .. tagname) != 0
     " tag with a closing tag, find matching "</tag>"
-    call searchpair('<' . tagname, '', '</' . tagname . '\zs>', 'W', '', line('.') + b:html_indent_line_limit)
+    call searchpair('<' .. tagname, '', '</' .. tagname .. '\zs>', 'W', '', line('.') + b:html_indent_line_limit)
   else
     " self-closing tag, find the ">"
     call search('\S\zs>')
@@ -940,11 +940,11 @@ func! s:InsideTag(foundHtmlString)
     endif
     if idx == -1
       " try <tag attr
-      let idx = match(text, '<' . s:tagname . '\s\+\zs\w')
+      let idx = match(text, '<' .. s:tagname .. '\s\+\zs\w')
     endif
     if idx == -1
       " after just "<tag" indent one level more
-      let idx = match(text, '<' . s:tagname . '$')
+      let idx = match(text, '<' .. s:tagname .. '$')
       if idx >= 0
 	call cursor(lnum, idx)
 	return virtcol('.') + shiftwidth()
