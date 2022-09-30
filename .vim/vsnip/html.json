@@ -255,23 +255,35 @@
 		"body": "&deg;"
 	},
 	"lsquo": {
-		"prefix": ["lsquo", "quote-left-single,"],
-		"description": "Åe left single quote",
+		"prefix": [
+			"lsquo",
+			"quote-left-single,"
+		],
+		"description": "‚Äò left single quote",
 		"body": "&lsquo;"
 	},
 	"rsquo": {
-		"prefix": ["rsquo", "quote-right-single,"],
-		"description": "Åf right single quote",
+		"prefix": [
+			"rsquo",
+			"quote-right-single,"
+		],
+		"description": "‚Äô right single quote",
 		"body": "&rsquo;"
 	},
 	"ldquo": {
-		"prefix": ["ldquo", "quote-left-double,"],
-		"description": "Åg left double quote",
+		"prefix": [
+			"ldquo",
+			"quote-left-double,"
+		],
+		"description": "‚Äú left double quote",
 		"body": "&ldquo;"
 	},
 	"rdquo": {
-		"prefix": ["rdquo", "quote-right-double,"],
-		"description": "Åh right double quote",
+		"prefix": [
+			"rdquo",
+			"quote-right-double,"
+		],
+		"description": "‚Äù right double quote",
 		"body": "&rdquo;"
 	},
 	"span": {
