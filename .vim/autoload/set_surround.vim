@@ -18,6 +18,14 @@ function set_surround#main(cmd) abort
 	let g:surround_{char2nr('『')} = "『\r』"
 	let g:surround_{char2nr('』')} = "『\r』"
 	" 標準の S など一部を削除し小文字の s にもマップ(キー割り当て)
+	" カッコ以外に次のアルファベットが使える
+	" ) b
+	" } B
+	" ] r
+	" > a
+	" c
+	let g:surround_99 = "{\r}"
+	" } の対応に c 追加
 	xunmap S
 	nunmap ySS
 	nunmap ySs
