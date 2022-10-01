@@ -18,11 +18,6 @@ fi
 
 #環境変数
 export LESSCHARSET=utf-8
-# export PATH="/home/hiroyuki/perl5/bin${PATH+:}${PATH}"
-# export PERL5LIB="/home/hiroyuki/perl5/lib/perl5${PERL5LIB+:}${PERL5LIB}"
-# export PERL_LOCAL_LIB_ROOT="/home/hiroyuki/perl5${PERL_LOCAL_LIB_ROOT+:}${PERL_LOCAL_LIB_ROOT}"
-# export PERL_MB_OPT="--install_base \"/home/hiroyuki/perl5\""
-# export PERL_MM_OPT="INSTALL_BASE=/home/hiroyuki/perl5"
 # TeX の log で強制改行される位置の指定。デフォルトだと 79 桁←環境変数じゃないと効かない
 export max_print_line=1000
 # man コマンドに Vim を使いたいが、Man コマンドとの両使いでは使いづらい
