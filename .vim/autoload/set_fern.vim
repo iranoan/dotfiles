@@ -69,6 +69,7 @@ function s:init_fern() abort
 	nmap <buffer>r               <Plug>(fern-action-rename)
 	nmap <buffer>y               <Plug>(fern-action-yank)
 	nmap <buffer>x               <Plug>(fern-action-open:system)
+	nmap <buffer><leader>x       <Plug>(fern-action-open:system)
 	nmap <buffer>D               <Plug>(fern-action-clipboard-move)
 	nmap <buffer>Y               <Plug>(fern-action-clipboard-copy)
 	nmap <buffer>P               <Plug>(fern-action-clipboard-paste)
