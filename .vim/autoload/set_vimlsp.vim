@@ -14,6 +14,7 @@ function set_vimlsp#main() abort
 	let g:lsp_diagnostics_signs_hint        = {'text': '💡', 'icon': l:icon_dir .. 'hint' .. l:icon_ext}
 	let g:lsp_diagnostics_signs_information = {'text': '📔', 'icon': l:icon_dir .. 'information' .. l:icon_ext}
 	let g:lsp_fold_enabled = 0
+	let g:lsp_text_edit_enabled = 1
 	" vim-lsp の自動設定 https://github.com/mattn/vim-lsp-settings {{{
 	packadd vim-lsp-settings
 	let g:lsp_settings = {
