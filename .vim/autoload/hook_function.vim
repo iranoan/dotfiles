@@ -1,32 +1,18 @@
 scriptencoding utf-8
+" スクリプト・ローカルな関数を置き換える
 
-function hook_function#main(from_f, to_f, function)
-	" from_f:   置き換え元の関数が書かれたパスの末尾
-	" to_f:     置き換え先の関数が書かれたパスの末尾
+function hook_function#main(from_f, to_f, func)
+	" from_f:   置き換え元の関数が書かれたファイル・パス
+	" to_f:     置き換え先の関数が書かれたファイル・パス
 	" funcname: 関数名
-	call s:hook_func(s:get_func(a:from_f, a:function), s:get_func(a:to_f, a:function))
+	exec "function! " .. s:get_func(a:from_f) .. a:func .. "(...)\nreturn call('" .. s:get_func(a:to_f) .. a:func .. "', a:000)\nendfunction"
 endfunction
 
-function s:get_func(fname, funcname) " https://mattn.kaoriya.net/software/vim/20090826003359.htm を参考にした
-	" fname:    関数が書かれたパスの末尾
-	" funcname: 関数名
-	let snlist = filter(split(execute('silent! scriptnames'), "\n"), 'v:val =~# "/' .. a:fname .. '$"' )[0]
-	let snlist = substitute(snlist,  '^\s*\(\d\+\):\s*\(.*\)$', '\1', '')
-	return function('<SNR>' .. snlist .. '_' .. a:funcname)
-endfunction
-
-function s:hook_func(funcA, funcB) " https://mattn.kaoriya.net/software/vim/20090826003359.htm を参考にした
-	" funcA: 置き換え元の関数名
-	" funcB: 置き換え先の関数名
-	if type(a:funcA) == 2
-		let funcA = substitute(string(a:funcA), "^function('\\(.*\\)')$", '\1', '')
-	else
-		let funcA = a:funcA
-	endif
-	if type(a:funcB) == 2
-		let funcB = substitute(string(a:funcB), "^function('\\(.*\\)')$", '\1', '')
-	else
-		let funcB = a:funcB
-	endif
-	exec "function! " .. funcA .. "(...)\nreturn call('" .. funcB .. "', a:000)\nendfunction"
-endfunction
+def s:get_func(fname: string): string
+	var f = resolve(expand(fname)) # シンボリック・リンク展開
+		->substitute('^' .. escape(expand('$HOME'), '/\.'), '~', 'g') # $HOME を ~ に置換
+	f = execute('silent! filter /\m^\s\+\d\+:\s\+' .. escape(f, '/\~.') .. '$/ scriptnames') # スクリプト ID とパス取得
+		->substitute('[\n\r]', '', 'g') # 改行削除
+		->substitute('^\s*\(\d\+\):.\+', '\1', 'g') # ID のみ取り出し
+	return '<SNR>' .. f .. '_'
+enddef

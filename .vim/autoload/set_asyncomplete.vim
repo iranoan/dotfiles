@@ -11,7 +11,7 @@ function set_asyncomplete#main() abort
 		" let g:vsnip_snippet_dirs = [expand('~/.vim/vsnip')]
 		let g:vsnip_snippet_dir = expand('~/.vim/vsnip')
 		" vim-vsnip/plugin/vsnip.vim s:expand_or_jump() を置き換え←補完後挿入モードにならないケースが有る
-		call hook_function#main('vim-vsnip/plugin/vsnip.vim', 'autoload/set_asyncomplete.vim', 'expand_or_jump')
+		call hook_function#main('~/.vim/pack/github/opt/vim-vsnip/plugin/vsnip.vim', '~/.vim/autoload/set_asyncomplete.vim', 'expand_or_jump')
 		" asyncomplete.vim で snippet と LSP の連携 https://github.com/hrsh7th/vim-vsnip-integ {{{
 			packadd vim-vsnip-integ
 			call vsnip_integ#integration#attach()
