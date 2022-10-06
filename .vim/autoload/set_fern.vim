@@ -75,7 +75,8 @@ function s:init_fern() abort
 	nmap <buffer>P               <Plug>(fern-action-clipboard-paste)
 	nmap <buffer>i               <Plug>(fern-action-zoom:reset)
 	" FZF
-	nmap <buffer>f               :BLines<CR>
+	nmap <buffer>f               <Cmd>BLines<CR>
+	nmap <buffer>/               <Cmd>BLines<CR>
 	" fern-preview.vim 用
 	nmap <buffer>p               <Plug>(fern-action-preview:auto:toggle)
 	nmap <expr><buffer>q         popup_list() != [] ? '<Plug>(fern-action-preview:auto:toggle)' : ':quit<CR>'
