@@ -226,7 +226,8 @@ augroup VIMRC
 				| 	execute 'normal! g`"'
 				| endif #前回閉じた時のカーソル位置に移動← $VIMRUNTIME/defaults.vim
 	autocmd BufEnter * if getftype(expand('%')) ==# 'link' | symbolic_link#normalize() | endif # シンボリック・リンクは展開
-	autocmd CmdlineLeave,CmdwinLeave * if getcmdtype() =~# '[/?]' || getcmdwintype() =~# '[/?]' | set hlsearch | endif # ハイライトはトグル・スイッチ
+	autocmd CmdlineLeave,CmdwinLeave * if getcmdtype() =~# '[/?]' || ( getcmdwintype() =~# '[/?]' && pos != getpos('.')) | set hlsearch | endif # ハイライトはトグル・スイッチ
+	autocmd CmdwinEnter * pos = getpos('.')
 augroup END
 # 日本語の表示/編集に関わる設定 {{{1
 if exists('&ambiwidth')                        # □とか○の文字があってもカーソル位置がずれないようにする
