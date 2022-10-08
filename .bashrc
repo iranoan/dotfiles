@@ -108,7 +108,6 @@ if [ -x /usr/bin/dircolors ]; then
 	fi
 	alias ls='ls --color=auto --hide={*.o,*.fls,*.synctex.gz,*.fdb_latexmk,*.toc,*.out,*.dvi,*.aux,*.nav,*.snm}'
 	#alias dir='dir --color=auto'
-	#alias vdir='vdir --color=auto'
 
 	alias grep='grep --color=auto'
 	alias fgrep='grep -F --color=auto'
@@ -124,9 +123,7 @@ alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo
 
 # Alias definitions.
 # You may want to put all your additions into a separate file like
-# ~/.bash_aliases, instead of adding them here directly.
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
-
 if [ -f ~/.bash/aliases ]; then
 	. ~/.bash/aliases
 fi
