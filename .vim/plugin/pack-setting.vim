@@ -166,8 +166,8 @@ augroup loadasyncomplete
 	autocmd!
 	autocmd InsertEnter *
 				\ set_asyncomplete#main()
-				\ | autocmd! loadasyncomplete
-				\ | delfunction set_asyncomplete#main
+				| autocmd! loadasyncomplete
+				| delfunction set_asyncomplete#main
 augroup END
 
 # ここから ~/.vim/pack/*/opt 配下 {{{1
@@ -232,15 +232,15 @@ augroup loadFZF_Vim
 	autocmd!
 	autocmd CmdUndefined Files,Buffers,Tags,Marks,History,HISTORY,GFiles,Windows,Helptags,Commands,BLines
 				\ set_fzf_vim#main()
-				\ | autocmd! loadFZF_Vim
+				| autocmd! loadFZF_Vim
 augroup END
 
 # 日本語入力に向いた設定にする (行の連結など) https://github.com/vim-jp/autofmt {{{2
 augroup loadautofmt
 	autocmd!
 	autocmd FileType text,mail,notmuch-edit set_autofmt#main()
-				\ | autocmd! loadautofmt
-				\ | delfunction set_autofmt#main
+				| autocmd! loadautofmt
+				| delfunction set_autofmt#main
 augroup END
 
 # vim 折りたたみ fold https://github.com/thinca/vim-ft-vim_fold を組み合わせ追加のため ~/.vim/pack/my-plug/opt/vim-ft-vim_fold/ に置き換え {{{2
@@ -261,8 +261,8 @@ augroup loadNotmuchPy
 	autocmd!
 	autocmd CmdUndefined Notmuch
 				\ set_notmuchpy#main()
-				\ | autocmd! loadNotmuchPy
-				\ | delfunction set_notmuchpy#main
+				| autocmd! loadNotmuchPy
+				| delfunction set_notmuchpy#main
 augroup END
 
 # yank の履歴 https://github.com/justinhoward/fzf-neoyank {{{2
@@ -276,8 +276,8 @@ augroup loadfzf_neoyank
 	autocmd!
 	autocmd CmdUndefined FZFNeoyank,FZFNeoyankSelection
 				\ set_fzf_neoyank#main()
-				\ | autocmd! loadfzf_neoyank
-				\ | delfunction set_fzf_neoyank#main
+				| autocmd! loadfzf_neoyank
+				| delfunction set_fzf_neoyank#main
 augroup END
 
 # 閉じ括弧補完←遅延読み込みでも ) が二重に成らないのはこれぐらいだった https://github.com/cohama/lexima.vim {{{2
@@ -285,8 +285,8 @@ augroup loadlexima
 	autocmd!
 	autocmd InsertEnter *
 				\ set_lexima#main()
-				\ | autocmd! loadlexima
-				\ | delfunction set_lexima#main
+				| autocmd! loadlexima
+				| delfunction set_lexima#main
 augroup END
 
 # 各種言語の構文チェック https://github.com/dense-analysis/ale {{{2
@@ -294,8 +294,8 @@ augroup loadALE
 	autocmd!
 	autocmd FileType c,cpp,python,ruby,yaml,markdown,html,xhtml,css,tex,sh,help,json
 				\ set_ale#main()
-				\ | autocmd! loadALE
-				\ | delfunction set_ale#main
+				| autocmd! loadALE
+				| delfunction set_ale#main
 augroup END
 
 # CSS シンタックス https://github.com/hail2u/vim-css3-syntax {{{2
@@ -374,8 +374,8 @@ augroup loadVista
 	autocmd!
 	autocmd CmdUndefined Vista
 				\ set_vista#main()
-				\ | autocmd! loadVista
-				\ | delfunction set_vista#main
+				| autocmd! loadVista
+				| delfunction set_vista#main
 augroup END
 # 次の Voom に未対応は Vista を使う様に分岐関数とキーマップ
 nnoremap <silent><Leader>o :call switch_voom_vista#main()<CR>
@@ -385,8 +385,8 @@ augroup loadVOoM
 	autocmd!
 	autocmd CmdUndefined Voom
 				\ set_voom#main()
-				\ | autocmd! loadVOoM
-				\ | delfunction set_voom#main
+				| autocmd! loadVOoM
+				| delfunction set_voom#main
 augroup END
 
 # LaTeX fold 折りたたみ https://github.com/matze/vim-tex-fold {{{2
@@ -394,8 +394,8 @@ augroup loadvimTeXfold
 	autocmd!
 	autocmd FileType tex
 				\ set_vim_tex_fold#main()
-				\ | autocmd! loadvimTeXfold
-				\ | delfunction set_vim_tex_fold#main
+				| autocmd! loadvimTeXfold
+				| delfunction set_vim_tex_fold#main
 augroup END
 
 # ソースの実行結果を別バッファに表示 https://github.com/thinca/vim-quickrun {{{2
@@ -412,8 +412,8 @@ augroup loadQuickRun
 	autocmd!
 	autocmd CmdUndefined QuickRun
 				\ set_quickrun#main()
-				\ | autocmd! loadQuickRun
-				\ | delfunction set_quickrun#main
+				| autocmd! loadQuickRun
+				| delfunction set_quickrun#main
 augroup END
 
 # " goobook (Google Contacts) を使ったメールアドレス補完 https://github.com/afwlehmann/vim-goobook {{{2
@@ -428,8 +428,8 @@ augroup loadFugitive
 	autocmd!
 	autocmd CmdUndefined Git,Ggrep,Glgrep,Gclog,Gllog,Gedit,Gread,Gwrite,Gdiffsplit,GRename,GBrowser
 				\ set_fugitve#main()
-				\ | autocmd! loadFugitive
-				\ | delfunction set_fugitve#main
+				| autocmd! loadFugitive
+				| delfunction set_fugitve#main
 augroup END
 
 # カーソル位置の Syntax の情報を表示する ~/.vim/pack/my-plug/opt/syntax_info/ http://cohama.hateblo.jp/entry/2013/08/11/020849 から {{{2
@@ -492,8 +492,8 @@ augroup loadPreview
 	autocmd!
 	autocmd CmdUndefined PrevimOpen
 				\ set_previm#main()
-				\ | autocmd! loadPreview
-				\ | delfunction set_previm#main
+				| autocmd! loadPreview
+				| delfunction set_previm#main
 augroup END
 
 # EPWING の辞書を呼び出す https://github.com/deton/eblook.vim {{{2
@@ -512,8 +512,8 @@ augroup loadvimlsp
 	autocmd!
 	autocmd FileType c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,tex,css,sh,go,conf
 				\ set_vimlsp#main()
-				\ | autocmd! loadvimlsp
-				\ | autocmd! loadasyncomplete
+				| autocmd! loadvimlsp
+				| autocmd! loadasyncomplete
 				# \ | delfunction set_vimlsp#main
 augroup END
 
@@ -522,8 +522,8 @@ augroup loadVimspector
 	autocmd!
 	autocmd FuncUndefined vimspector#*
 				\ set_vimspector#main()
-				\ | autocmd! loadVimspector
-				\ | delfunction set_vimspector#main
+				| autocmd! loadVimspector
+				| delfunction set_vimspector#main
 augroup END
 nnoremap <Leader>df       <Cmd>call vimspector#AddFunctionBreakpoint('<cexpr>')<CR>
 nnoremap <Leader>dc       <Cmd>call vimspector#Continue()<CR>
@@ -545,8 +545,8 @@ xmap     <Leader>di       <Plug>VimspectorBalloonEval
 augroup loadprecious
 	autocmd!
 	autocmd FileType sh,vim,html,markdown,lua set_precious#main()
-				\ | autocmd! loadprecious
-				\ | delfunction set_precious#main
+				| autocmd! loadprecious
+				| delfunction set_precious#main
 augroup END
 
 # ファイル・マネージャー https://github.com/lambdalisue/fern.vim {{{2
@@ -555,16 +555,16 @@ nnoremap <Leader>e <Cmd>Fern $HOME -drawer -reveal=%:p -toggle<CR>
 augroup loadFern
 	autocmd!
 	autocmd CmdUndefined Fern set_fern#main()
-				\ | autocmd! loadFern
-				\ | delfunction set_fern#main
+				| autocmd! loadFern
+				| delfunction set_fern#main
 augroup END
 
 # カーソル位置に合わせて filetype を判定←各種プラグインが依存 https://github.com/Shougo/context_filetype.vim {{{2
 augroup loadcontext_filetype
 	autocmd!
 	autocmd CursorMoved * set_context_filetype#main()
-				\ | autocmd! loadcontext_filetype
-				\ | delfunction set_context_filetype#main
+				| autocmd! loadcontext_filetype
+				| delfunction set_context_filetype#main
 augroup END
 
 # 素早く移動する https://github.com/easymotion/vim-easymotion {{{2

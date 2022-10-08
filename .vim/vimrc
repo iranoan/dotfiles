@@ -39,7 +39,7 @@ augroup loadZipArchive
 	autocmd!
 	autocmd BufReadPre *.aar,*.apk,*.celzip,*.crtx,*.docm,*.docx,*.dotm,*.dotx,*.ear,*.epub,*.gcsx,*.glox,*.gqsx,*.ja,*.jar,*.kmz,*.odb,*.odc,*.odf,*.odg,*.odi,*.odm,*.odp,*.ods,*.odt,*.otc,*.otf,*.otg,*.oth,*.oti,*.otp,*.ots,*.ott,*.oxt,*.potm,*.potx,*.ppam,*.ppsm,*.ppsx,*.pptm,*.pptx,*.sldx,*.thmx,*.vdw,*.war,*.wsz,*.xap,*.xlam,*.xlam,*.xlsb,*.xlsm,*.xlsx,*.xltm,*.xltx,*.xpi,*.zip
 				\ unlet g:loaded_zipPlugin | source $VIM/*/plugin/zipPlugin.vim
-				\ | autocmd! loadZipArchive
+				| autocmd! loadZipArchive
 	# \ | edit!
 	# ↑最後のファイル読み込みし直しが効かない
 augroup END # }}}
@@ -48,8 +48,8 @@ augroup loadTarArchive
 	autocmd!
 	autocmd BufReadPre *.gz,*.bz2,*.Z,*.lzma,*.xz,*.lz,*.zst,*.br,*.lzo,*.tar,*.lrp,*.tbz,*.tgz,*.txz,*.tzs
 				\ unlet g:loaded_tarPlugin | source $VIM/*/plugin/tarPlugin.vim
-				\ | unlet g:loaded_gzip | source $VIM/*/plugin/gzip.vim
-				\ | autocmd! loadTarArchive
+				| unlet g:loaded_gzip | source $VIM/*/plugin/gzip.vim
+				| autocmd! loadTarArchive
 	# \ | edit!
 	# ↑最後のファイル読み込みし直しが効かない
 augroup END # }}}
@@ -205,13 +205,13 @@ var pos: list<number>                          # getpos()
 # 分類のない autocmd {{{1
 augroup VIMRC
 	autocmd!
-	autocmd BufReadPost * if &modifiable && search('[^\t -~]', 'n') == 0 | set fileencoding=utf-8 | endif # ASCII のみの時も utf-8 を使う
+	autocmd BufReadPost * if &modifiable && search('[^\t -~]', 'nw') == 0 | set fileencoding=utf-8 | endif # ASCII のみの時も utf-8 を使う
 	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,vimgrepadd topleft copen # cwindow を使うと、make で使用されるプログラムによってカーソル位置がずれる
 	# autocmd QuickfixCmdPost lmake,lgrep,lgrepadd,lvimgrep,lvimgrepadd topleft lopen
 	autocmd BufEnter,BufFilePost,BufNewFile,BufRead *
-				\ if isdirectory(expand('%:p:h')) |
-				\ 	execute 'lcd ' .. expand('%:p:h') |
-				\ endif # カレントディレクトリをファイルのディレクトリに移動
+				\ if isdirectory(expand('%:p:h'))
+				| 	execute 'lcd ' .. expand('%:p:h')
+				| endif # カレントディレクトリをファイルのディレクトリに移動
 				# \ 	setlocal path+=$PWD/** |
 				# ↑path にカレント・ディレクトリ以下を追加
 				# ,BufWrite は TeX で \input したファイルで保存するたびに変更されると不便なときが有る
@@ -227,16 +227,16 @@ augroup VIMRC
 	# 			ウィンドウ切り替えで最初に戻ってしまう
 	# 			↓と上手く両立しない
 	autocmd BufReadPost *
-				\ silent if &filetype !~# 'commit' && line("'\"") > 1 && line("'\"") <= line("$") |
-				\ 	execute 'normal! g`"' |
-				\ endif #前回閉じた時のカーソル位置に移動← $VIMRUNTIME/defaults.vim
+				\ silent if &filetype !~# 'commit' && line("'\"") > 1 && line("'\"") <= line("$")
+				| 	execute 'normal! g`"'
+				| endif #前回閉じた時のカーソル位置に移動← $VIMRUNTIME/defaults.vim
 	autocmd BufEnter * if getftype(expand('%')) ==# 'link' | symbolic_link#normalize() | endif # シンボリック・リンクは展開
 augroup END
 # 日本語の表示/編集に関わる設定 {{{1
 if exists('&ambiwidth')                        # □とか○の文字があってもカーソル位置がずれないようにする
 	set ambiwidth=double
 endif
-set formatoptions+=mMj formatoptions-=tc       # 日本語の行の連結時には空白を入力しない+textwidth を使った自動折返しをしない
+set formatoptions+=mMj1 formatoptions-=tc      # 日本語の行の連結時には空白を入力しない+textwidth を使った自動折返しをしない
 set display+=lastline                          # 画面最後の行をできる限り表示
 set wrap                                       # 長い行は折り返し表示
 set sidescroll=1                               # 横スクロールでカーソル位置を真ん中にしない
@@ -246,10 +246,9 @@ set helplang=ja,en                             # 日本語ヘルプを優先的�
 # スペル・チェック {{{1
 set spell spelllang+=cjk
 # gf などでファイルとして扱う文字 {{{1
-set isfname+=:                                 # Maildir では : がフラグの前置文字
-set isfname-=# isfname-==                      # HTML では # は id+シェルスクリプトなどで = は代入
+set isfname+=: isfname-=# isfname-==           # Maildir では : がフラグの前置文字 HTML では # は id+シェルスクリプトなどで = は代入
 # キー割り当てを除いたその他 {{{1
-set keywordprg=:Man\ <C-R>w                # デフォルト man
+set keywordprg=:Man\ <C-R>w                    # デフォルト man
 # ↓grep でスワップファイルとディレクトリ除外←再帰的に行う -r, --recursive オプションと組わせたときのため (なおこの時のファイル絞り込みは、--include='*.txt' 等と使う)
 set grepprg=grep\ --directories=skip\ --line-number\ $*\ --exclude-dir='.git'\ --exclude='.*.sw?'\ /dev/null
 set modeline
@@ -259,8 +258,8 @@ set textwidth=0                                # 自動改行させない
 set shellslash                                 # Windowsでもパス区切りにスラッシュを使える
 set diffopt=filler,context:2,iwhite,vertical,internal,algorithm:histogram,indent-heuristic # 差分表示オプション
 set path+=~/bin,~/Templates,
-g:tex_flavor = 'latex'                     # *.tex の新規作成などで plainTeX ではなく LaTeX として扱う
-g:markdown_folding = 1                     # Markdown で折りたたみ
+g:tex_flavor = 'latex'                         # *.tex の新規作成などで plainTeX ではなく LaTeX として扱う
+g:markdown_folding = 1                         # Markdown で折りたたみ
 set conceallevel=0                             # 個々のファイルタイプごとで、文字を省略したり置き換える機能は使わない
 if has('path_extra')                           # tags ファイルは $HOME まで辿る
 	set tags+=tags;$HOME/

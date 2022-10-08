@@ -53,7 +53,7 @@ def g:MakeGUItabline(): string
 	# このタブページに変更のあるバッファは '+' を追加する
 	for bufnr in bufnrlist
 		if getbufvar(bufnr, '&modified')
-					\ && !( match(getbufinfo(bufnr)[0]['name'], '!/') == 0 && swapname(bufnr) ==# '' )
+					&& !( match(getbufinfo(bufnr)[0]['name'], '!/') == 0 && swapname(bufnr) ==# '' )
 					# 名前が !/bin/bash 等で !/、スワップ・ファイルがなければ :terminal の可能性が高い
 			label ..= '+'
 			break
