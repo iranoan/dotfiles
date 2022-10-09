@@ -9,25 +9,25 @@ function set_fern#main() abort
 	" 	is a key of |g:fern#comparators|.
 	" 	Default: "default"
 	packadd fern.vim
-	" https://github.com/lambdalisue/fern-git-status.vim
-	packadd fern-git-status.vim      " Git のステータス表示
-	" https://github.com/yuki-yano/fern-preview.vim
-	packadd fern-preview.vim         " プレビュー
-	" https://github.com/lambdalisue/fern-hijack.vim
-	packadd fern-hijack.vim          " netfw を入れ替え
+	" Git のステータス表示 https://github.com/lambdalisue/fern-git-status.vim {{{
+	packadd fern-git-status.vim " }}}
+	" プレビュー  https://github.com/yuki-yano/fern-preview.vim {{{
+	packadd fern-preview.vim " }}}
+	" netfw を入れ替え https://github.com/lambdalisue/fern-hijack.vim {{{
+	packadd fern-hijack.vim "}}}
 	" fzf と連携
-	" https://github.com/LumaKernel/fern-mapping-fzf.vim
-	packadd fern-mapping-fzf.vim
+	" https://github.com/LumaKernel/fern-mapping-fzf.vim {{{
+	packadd fern-mapping-fzf.vim " }}}
 	let g:fern#mapping#fzf#disable_default_mappings = 1
 	call set_fzf_vim#main()
 	" zoom:reset
 	" アイコン表示
-	" https://github.com/lambdalisue/glyph-palette.vim
-	packadd glyph-palette.vim
-	" https://github.com/lambdalisue/nerdfont.vim
-	packadd nerdfont.vim
-	" https://github.com/lambdalisue/fern-renderer-nerdfont.vim
-	packadd fern-renderer-nerdfont.vim
+	" https://github.com/lambdalisue/glyph-palette.vim {{{
+	packadd glyph-palette.vim " }}}
+	" https://github.com/lambdalisue/nerdfont.vim {{{
+	packadd nerdfont.vim " }}}
+	" https://github.com/lambdalisue/fern-renderer-nerdfont.vim {{{
+	packadd fern-renderer-nerdfont.vim " }}}
 	let g:fern#renderer = "nerdfont"
 	augroup fern-custom
 		autocmd!

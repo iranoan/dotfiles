@@ -2,10 +2,10 @@ scriptencoding utf-8
 
 function set_quickrun#main() abort
 	packadd vim-quickrun
-	" QuickFix 拡張 https://github.com/osyo-manga/shabadou.vim
-	packadd shabadou.vim
-	" 非同期処理 https://github.com/Shougo/vimproc.vim
-	packadd vimproc.vim " 遅延無しで読み込み済み
+	" QuickFix 拡張 https://github.com/osyo-manga/shabadou.vim {{{
+	packadd shabadou.vim " }}}
+	" 非同期処理 https://github.com/Shougo/vimproc.vim {{{
+	packadd vimproc.vim " }}}
 	" #include<> に応じてコンパイル・オプション -l 追加 https://github.com/mattn/vim-quickrunex {{{
 	packadd vim-quickrunex
 	" }}}

@@ -24,9 +24,11 @@ for g:packe_setting_s in ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'html', '
 		g:packe_setting_ext = '*.' .. g:packe_setting_s
 	endif
 	execute 'augroup ResetFiletype__' .. g:packe_setting_s
-					 autocmd!
-	execute	'    autocmd BufWinEnter ' .. g:packe_setting_ext .. ' setfiletype ' .. g:packe_setting_s .. '| autocmd! ResetFiletype__' .. g:packe_setting_s
-					augroup END
+					.. '| autocmd!'
+					.. '| autocmd BufWinEnter ' .. g:packe_setting_ext .. ' setfiletype ' .. g:packe_setting_s
+					.. '| autocmd! ResetFiletype__' .. g:packe_setting_s
+					.. '| augroup! ResetFiletype__' .. g:packe_setting_s
+					.. '| augroup END'
 endfor
 unlet g:packe_setting_ext g:packe_setting_s
 
@@ -120,9 +122,8 @@ augroup END
 s:color_light_dark()
 
 # 日本語ヘルプ https://github.com/vim-jp/vimdoc-ja {{{2
-# packadd vimdoc-ja
 
-#挿入モード時、ステータスラインの色を変更 ~/.vim/pack/my-plug/start/insert-status {{{2
+# 挿入モード時、ステータスラインの色を変更 ~/.vim/pack/my-plug/start/insert-status {{{2
 g:hi_insert = 'highlight StatusLine gui=bold guifg=white guibg=darkred cterm=bold ctermfg=white ctermbg=darkred'
 # ↑インサート・モード時の hilight 指定
 
@@ -167,6 +168,7 @@ augroup loadasyncomplete
 	autocmd InsertEnter *
 				\ set_asyncomplete#main()
 				| autocmd! loadasyncomplete
+				| augroup! loadasyncomplete
 				| delfunction set_asyncomplete#main
 augroup END
 
@@ -193,7 +195,7 @@ AlterCommand ter[minal] topleft\ terminal
 AlterCommand man        Man
 AlterCommand p[rint]    call\ print#main()
 # ↑:print は使わないので、印刷関数 (~/.vim/autoload/print.vim) に置き換え
-AlterCommand helpt[ags] PackHelpTags
+AlterCommand helpt[ags] call\ manage_pack#remakehelptags()
 AlterCommand bc         .!bc\ -l\ -q\ ~/.bc\ <Bar>\ sed\ -E\ -e\ 's/^\\\./0./g'\ -e\ 's/(.[0-9]*[1-9])0+/\\\1/g'\ -e\ 's/\\\.$//g'
 AlterCommand bi[nary]   if\ !&binary\ <Bar>\ execute('setlocal\ binary\ <Bar>\ %!xxd')\ <Bar>\ endif
 AlterCommand nob[inary] if\ &binary\ <Bar>\ execute('setlocal\ nobinary\ <Bar>\ %!xxd\ -r')\ <Bar>\ endif
@@ -212,20 +214,22 @@ nmap <C-X>  <Cmd>call set_speeddating#main('SpeedDatingDown') <bar> delfunction 
 nmap <C-A>  <Cmd>call set_speeddating#main('SpeedDatingUp') <bar> delfunction set_speeddating#main<CR>
 
 # https://github.com/junegunn/fzf.vim {{{2
-nnoremap <silent><Leader>fc :Commands<CR>
 nnoremap <silent><Leader>fr :Files ~<CR>
 nnoremap <silent><Leader>ff :Files<CR>
 nnoremap <silent><Leader>f. :Files ..<CR>
+nnoremap <silent><Leader>fv :Files ~/.vim<CR>
+nnoremap <silent><Leader>fs :Files ~/src<CR>
+nnoremap <silent><Leader>ft :Files ~/Information/slide<CR>
 nnoremap <silent><Leader>fb :Buffers<CR>
-nnoremap <silent><Leader>ft :Tags<CR>
+nnoremap <silent><Leader>fc :Commands<CR>
+nnoremap <silent><Leader>fg :GFiles?<CR>
+nnoremap <silent><Leader>fh :HISTORY<CR>
+nnoremap <silent><Leader>fl :BLines<CR>
 nnoremap <silent><Leader>fm :Marks<CR>
 nnoremap <silent>m/      :Marks<CR>
 # ↑ vim-signature のデフォルト・キーマップをこちらに再定義
-nnoremap <silent><Leader>fh :HISTORY<CR>
-nnoremap <silent><Leader>fg :GFiles?<CR>
+# nnoremap <silent><Leader>ft :Tags<CR>
 nnoremap <silent><Leader>fw :Windows<CR>
-nnoremap <silent><Leader>fs :BLines<CR>
-nnoremap <silent><Leader>fl :BLines<CR>
 nnoremap <silent><Leader>f: :History:<CR>
 nnoremap <silent><Leader>f/ :History/<CR>
 augroup loadFZF_Vim
@@ -233,6 +237,7 @@ augroup loadFZF_Vim
 	autocmd CmdUndefined Files,Buffers,Tags,Marks,History,HISTORY,GFiles,Windows,Helptags,Commands,BLines
 				\ set_fzf_vim#main()
 				| autocmd! loadFZF_Vim
+				| augroup! loadFZF_Vim
 augroup END
 
 # 日本語入力に向いた設定にする (行の連結など) https://github.com/vim-jp/autofmt {{{2
@@ -240,19 +245,24 @@ augroup loadautofmt
 	autocmd!
 	autocmd FileType text,mail,notmuch-edit set_autofmt#main()
 				| autocmd! loadautofmt
+				| augroup! loadautofmt
 				| delfunction set_autofmt#main
 augroup END
 
 # vim 折りたたみ fold https://github.com/thinca/vim-ft-vim_fold を組み合わせ追加のため ~/.vim/pack/my-plug/opt/vim-ft-vim_fold/ に置き換え {{{2
 augroup loadvim_ft_vim_fold
 	autocmd!
-	autocmd FileType vim packadd vim-ft-vim_fold | autocmd! loadvim_ft_vim_fold
+	autocmd FileType vim packadd vim-ft-vim_fold
+	| autocmd! loadvim_ft_vim_fold
+	| augroup! loadvim_ft_vim_fold
 augroup END
 
 # ディレクトリを再帰的に diff https://github.com/will133/vim-dirdiff {{{2
 augroup loadDirDiff
 	autocmd!
-	autocmd CmdUndefined DirDiff packadd vim-dirdiff | autocmd! loadDirDiff
+	autocmd CmdUndefined DirDiff packadd vim-dirdiff
+	| autocmd! loadDirDiff
+	| augroup! loadDirDiff
 augroup END
 
 # notmuch-python-Vim ~/.vim/pack/my-plug/opt/notmuch-py-vim/ {{{2
@@ -262,6 +272,7 @@ augroup loadNotmuchPy
 	autocmd CmdUndefined Notmuch
 				\ set_notmuchpy#main()
 				| autocmd! loadNotmuchPy
+				| augroup! loadNotmuchPy
 				| delfunction set_notmuchpy#main
 augroup END
 
@@ -277,6 +288,7 @@ augroup loadfzf_neoyank
 	autocmd CmdUndefined FZFNeoyank,FZFNeoyankSelection
 				\ set_fzf_neoyank#main()
 				| autocmd! loadfzf_neoyank
+				| augroup! loadfzf_neoyank
 				| delfunction set_fzf_neoyank#main
 augroup END
 
@@ -286,6 +298,7 @@ augroup loadlexima
 	autocmd InsertEnter *
 				\ set_lexima#main()
 				| autocmd! loadlexima
+				| augroup! loadlexima
 				| delfunction set_lexima#main
 augroup END
 
@@ -295,32 +308,41 @@ augroup loadALE
 	autocmd FileType c,cpp,python,ruby,yaml,markdown,html,xhtml,css,tex,sh,help,json
 				\ set_ale#main()
 				| autocmd! loadALE
+				| augroup! loadALE
 				| delfunction set_ale#main
 augroup END
 
 # CSS シンタックス https://github.com/hail2u/vim-css3-syntax {{{2
 augroup loadSyntaxCSS
 	autocmd!
-	autocmd FileType css packadd vim-css3-syntax | autocmd! loadSyntaxCSS
+	autocmd FileType css packadd vim-css3-syntax
+	| autocmd! loadSyntaxCSS
+	| augroup! loadSyntaxCSS
 augroup END
 
 # conky シンタックス https://github.com/smancill/conky-syntax.vim {{{2 ←署名を見ると同じ開発元だが、標準パッケージに含まれているものだと上手く動作しない
 augroup loadSyntaxConky
 	autocmd!
-	autocmd FileType conkyrc packadd conky-syntax.vim | autocmd! loadSyntaxConky
+	autocmd FileType conkyrc packadd conky-syntax.vim
+	| autocmd! loadSyntaxConky
+	| augroup! loadSyntaxConky
 augroup END
 
 # C/C++シンタックス https://github.com/vim-jp/vim-cpp {{{2
 augroup loadSyntaxC
 	autocmd!
-	autocmd FileType c,cpp packadd vim-cpp | autocmd! loadSyntaxC
+	autocmd FileType c,cpp packadd vim-cpp
+	| autocmd! loadSyntaxC
+	| augroup! loadSyntaxC
 augroup END
 
 # #ifdef 〜 #endif をテキストオプジェクト化→a#, i# https://github.com/anyakichi/vim-textobj-ifdef {{{2
 # depends = ['vim-textobj-user']
 augroup loadVimTextObjIfdef
 	autocmd!
-	autocmd FileType c,cpp packadd vim-textobj-ifdef | autocmd! loadVimTextObjIfdef
+	autocmd FileType c,cpp packadd vim-textobj-ifdef
+	| autocmd! loadVimTextObjIfdef
+	| augroup! loadVimTextObjIfdef
 augroup END
 # a#, i# に割当
 
@@ -330,14 +352,19 @@ augroup END
 # af, if に割当
 augroup loadTextObjFunc
 	autocmd!
-	autocmd FileType c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,css,tex,sh packadd vim-textobj-function | packadd vim-textobj-function-syntax | autocmd! loadTextObjFunc
+	autocmd FileType c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,css,tex,sh packadd vim-textobj-function
+	| packadd vim-textobj-function-syntax
+	| autocmd! loadTextObjFunc
+	| augroup! loadTextObjFunc
 augroup END
 
 # LaTeXをテキストオプジェクト化 https://github.com/rbonvall/vim-textobj-latex {{{2
 # depends = ['vim-textobj-user']
 augroup loadTextObjLaTeX
 	autocmd!
-	autocmd FileType tex packadd vim-textobj-latex | autocmd! loadTextObjLaTeX
+	autocmd FileType tex packadd vim-textobj-latex
+	| autocmd! loadTextObjLaTeX
+	| augroup! loadTextObjLaTeX
 augroup END
 # できるのは次のテキストオプジェクト
 # a\ 	i\ 	Inline math surrounded by \( and \).
@@ -375,6 +402,7 @@ augroup loadVista
 	autocmd CmdUndefined Vista
 				\ set_vista#main()
 				| autocmd! loadVista
+				| augroup! loadVista
 				| delfunction set_vista#main
 augroup END
 # 次の Voom に未対応は Vista を使う様に分岐関数とキーマップ
@@ -386,6 +414,7 @@ augroup loadVOoM
 	autocmd CmdUndefined Voom
 				\ set_voom#main()
 				| autocmd! loadVOoM
+				| augroup! loadVOoM
 				| delfunction set_voom#main
 augroup END
 
@@ -395,6 +424,7 @@ augroup loadvimTeXfold
 	autocmd FileType tex
 				\ set_vim_tex_fold#main()
 				| autocmd! loadvimTeXfold
+				| augroup! loadvimTeXfold
 				| delfunction set_vim_tex_fold#main
 augroup END
 
@@ -413,6 +443,7 @@ augroup loadQuickRun
 	autocmd CmdUndefined QuickRun
 				\ set_quickrun#main()
 				| autocmd! loadQuickRun
+				| augroup! loadQuickRun
 				| delfunction set_quickrun#main
 augroup END
 
@@ -420,7 +451,9 @@ augroup END
 # → ~/.vim/pack/my-plug/opt/asyncomplete-mail/ に置き換え
 # augroup loadGoobook
 # 	autocmd!
-# 	autocmd FileType mail,notmuch-draft packadd vim-goobook | autocmd! loadGoobook
+# 	autocmd FileType mail,notmuch-draft packadd vim-goobook
+# 	| autocmd! loadGoobook
+# 	| augroup! loadGoobook
 # augroup END
 
 # Git 連携 https://github.com/tpope/vim-fugitive {{{2
@@ -429,26 +462,33 @@ augroup loadFugitive
 	autocmd CmdUndefined Git,Ggrep,Glgrep,Gclog,Gllog,Gedit,Gread,Gwrite,Gdiffsplit,GRename,GBrowser
 				\ set_fugitve#main()
 				| autocmd! loadFugitive
+				| augroup! loadFugitive
 				| delfunction set_fugitve#main
 augroup END
 
 # カーソル位置の Syntax の情報を表示する ~/.vim/pack/my-plug/opt/syntax_info/ http://cohama.hateblo.jp/entry/2013/08/11/020849 から {{{2
 augroup loadSyntaxInfo
 	autocmd!
-	autocmd CmdUndefined SyntaxInfo packadd syntax_info | autocmd! loadSyntaxInfo
+	autocmd CmdUndefined SyntaxInfo packadd syntax_info
+	| autocmd! loadSyntaxInfo
+	| augroup! loadSyntaxInfo
 augroup END
 
 # Linux では wmctrl を使ってフル・スクリーンをトグル ~/.vim/pack/my-plug/opt/full-screen {{{2
 noremap <silent><F11> :Fullscreen<CR>
 augroup loadFullScreen
 	autocmd!
-	autocmd CmdUndefined Fullscreen packadd full-screen | autocmd! loadFullScreen
+	autocmd CmdUndefined Fullscreen packadd full-screen
+	| autocmd! loadFullScreen
+	| augroup! loadFullScreen
 augroup END
 
 # Man コマンドを使用可能にする ~/.vim/pack/my-plug/opt/man {{{2
 augroup ManCommand
 	autocmd!
-	autocmd CmdUndefined Man packadd man | autocmd! ManCommand
+	autocmd CmdUndefined Man packadd man
+	| autocmd! ManCommand
+	| augroup! ManCommand
 augroup END
 
 # カレント・タブ・ページ内では同じターミナルを閉じる ~/.vim/pack/my-plug/opt/kill-terminal {{{2
@@ -458,14 +498,18 @@ augroup KillTerminal
 augroup END
 augroup loadKillTerminal
 	autocmd!
-	autocmd FuncUndefined kill_terminal#main packadd kill-terminal | autocmd! loadKillTerminal
+	autocmd FuncUndefined kill_terminal#main packadd kill-terminal
+	| autocmd! loadKillTerminal
+	| augroup! loadKillTerminal
 augroup END
 
 # ページ送りに ~/.vim/pack/my-plug/opt/page-down {{{2
 nnoremap <silent><space> :call page_down#main()<CR>
 augroup loadPageDown
 	autocmd!
-	autocmd FuncUndefined page_down#main packadd page-down | autocmd! loadPageDown
+	autocmd FuncUndefined page_down#main packadd page-down
+	| autocmd! loadPageDown
+	| augroup! loadPageDown
 augroup END
 
 # カーソル位置の単語を Google で検索 ~/.vim/pack/my-plug/opt/google-search/ https://www.rasukarusan.com/entry/2019/03/09/011630 を参考にした {{{2
@@ -473,14 +517,22 @@ nnoremap <silent><Leader>g :SearchByGoogle<CR>
 vnoremap <silent><Leader>g :SearchByGoogle<CR>
 augroup loadSearchByGoogle
 	autocmd!
-	autocmd CmdUndefined SearchByGoogle packadd google-search | autocmd! loadSearchByGoogle
+	autocmd CmdUndefined SearchByGoogle packadd google-search
+	| autocmd! loadSearchByGoogle
+	| augroup! loadSearchByGoogle
 augroup END
 
 # vim のヘルプ・ファイルから Readme.md を作成する https://github.com/LeafCage/vimhelpgenerator {{{2
 augroup loadVimHelpGenerator
 	autocmd!
-	autocmd CmdUndefined VimHelpGenerator packadd vimhelpgenerator| set filetype=help | autocmd! loadVimHelpGenerator
-	autocmd BufWinEnter *.jax packadd vimhelpgenerator | set filetype=help | autocmd! loadVimHelpGenerator
+	autocmd CmdUndefined VimHelpGenerator packadd vimhelpgenerator
+	| set filetype=help
+	| autocmd! loadVimHelpGenerator
+	| augroup! loadVimHelpGenerator
+	autocmd BufWinEnter *.jax packadd vimhelpgenerator
+	| set filetype=help |
+	| autocmd! loadVimHelpGenerator
+	| augroup! loadVimHelpGenerator
 augroup END
 
 # 編集中の Markdown などをブラウザでプレビュー https://github.com/previm/previm {{{2
@@ -493,6 +545,7 @@ augroup loadPreview
 	autocmd CmdUndefined PrevimOpen
 				\ set_previm#main()
 				| autocmd! loadPreview
+				| augroup! loadPreview
 				| delfunction set_previm#main
 augroup END
 
@@ -504,7 +557,9 @@ vmap <silent><Leader>eb <Cmd>call set_eblook#main() <bar> delfunction set_eblook
 nnoremap <silent><Leader>u <Cmd>UndotreeToggle<CR>
 augroup loadUndotree
 	autocmd!
-	autocmd CmdUndefined UndotreeToggle packadd undotree | autocmd! loadUndotree
+	autocmd CmdUndefined UndotreeToggle packadd undotree
+	| autocmd! loadUndotree
+	| augroup! loadUndotree
 augroup END
 
 # https://github.com/prabirshrestha/vim-lsp {{{2
@@ -513,7 +568,9 @@ augroup loadvimlsp
 	autocmd FileType c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,tex,css,sh,go,conf
 				\ set_vimlsp#main()
 				| autocmd! loadvimlsp
+				| augroup! loadvimlsp
 				| autocmd! loadasyncomplete
+				| augroup! loadasyncomplete
 				# \ | delfunction set_vimlsp#main
 augroup END
 
@@ -523,6 +580,7 @@ augroup loadVimspector
 	autocmd FuncUndefined vimspector#*
 				\ set_vimspector#main()
 				| autocmd! loadVimspector
+				| augroup! loadVimspector
 				| delfunction set_vimspector#main
 augroup END
 nnoremap <Leader>df       <Cmd>call vimspector#AddFunctionBreakpoint('<cexpr>')<CR>
@@ -546,6 +604,7 @@ augroup loadprecious
 	autocmd!
 	autocmd FileType sh,vim,html,markdown,lua set_precious#main()
 				| autocmd! loadprecious
+				| augroup! loadprecious
 				| delfunction set_precious#main
 augroup END
 
@@ -556,6 +615,7 @@ augroup loadFern
 	autocmd!
 	autocmd CmdUndefined Fern set_fern#main()
 				| autocmd! loadFern
+				| augroup! loadFern
 				| delfunction set_fern#main
 augroup END
 
@@ -627,13 +687,17 @@ augroup Gatmail
 augroup END
 
 # ~/.vim/pack/*/{stat,opt}/*/doc に有る tags{,-??} が古ければ再作成 ~/.vim/pack/my-plug/opt/pack-helptags {{{2
-augroup loadPackHelpTags
+augroup loadManagePack
 	autocmd!
-	autocmd CmdUndefined PackHelpTags packadd pack-helptags | autocmd! loadPackHelpTags
+	autocmd FuncUndefined manage_pack#* packadd manage-pack
+	| autocmd! loadManagePack
+	| augroup! loadManagePack
 augroup END
 
 # dog と cat の入れ替えなどサイクリックに置換する関数などの定義 ~/.vim/pack/my-plug/opt/replace-cyclic {{{2
 augroup loadReplaceCyclic
 	autocmd!
-	autocmd FuncUndefined replace#* packadd replace-cyclic | autocmd! loadReplaceCyclic
+	autocmd FuncUndefined replace#* packadd replace-cyclic
+	| autocmd! loadReplaceCyclic
+	| augroup! loadReplaceCyclic
 augroup END

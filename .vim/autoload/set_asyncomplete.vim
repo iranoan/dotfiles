@@ -42,10 +42,10 @@ function set_asyncomplete#main() abort
 	" 	" imap <expr><Space> pumvisible() ? asyncomplete#close_popup() : '<Space>'
 	" 	" }}}
 	" 	" LSP と snippet 連携 https://github.com/thomasfaingnaert/vim-lsp-neosnippet {{{
-	" 	" https://github.com/thomasfaingnaert/vim-lsp-snippets
+	" 	" https://github.com/thomasfaingnaert/vim-lsp-snippets {{{
 	" 	packadd vim-lsp-snippets
 	" 	packadd vim-lsp-neosnippet
-	" 	" }}}
+	" 	" }}} }}}
 	" 	" snippet https://github.com/prabirshrestha/asyncomplete-neosnippet.vim {{{
 	" 	" vim-lsp-neosnippet だけだと <C-X><C-O> のトリガーをタイプしないと表示されない、もしくは表示まで時間がかかるケースがある
 	" 	packadd asyncomplete-neosnippet.vim
@@ -115,10 +115,11 @@ function s:set_neosnippet() abort
 	if is_plugin_installed#main('neosnippet-snippets')
 		return
 	endif
-	" 補完辞書基本 https://github.com/Shougo/neosnippet
+	" 補完辞書基本 https://github.com/Shougo/neosnippet {{{
 	packadd neosnippet
-	" 言語別の補完辞書 https://github.com/Shougo/neosnippet-snippets {{{
-	packadd neosnippet-snippets
+		" 言語別の補完辞書 https://github.com/Shougo/neosnippet-snippets {{{
+		packadd neosnippet-snippets
+		" }}}
 	" }}}
 	" ↑IME ON の時は効かない (全角空白のため?)
 	" let g:neosnippet#enable_conceal_marker = 1 " conceal 自体が補完時以外の入力で見難いので使わない
