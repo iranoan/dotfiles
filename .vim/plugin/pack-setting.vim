@@ -564,6 +564,7 @@ augroup loadcontext_filetype
 	autocmd!
 	autocmd CursorMoved * set_context_filetype#main()
 				| autocmd! loadcontext_filetype
+				| augroup! loadcontext_filetype
 				| delfunction set_context_filetype#main
 augroup END
 
