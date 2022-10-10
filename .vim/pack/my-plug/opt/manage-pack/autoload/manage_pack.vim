@@ -1,6 +1,6 @@
 vim9script
-# ~/.vim/pack/*/{stat,opt}/*/doc に有るヘルプのタグを ~/.vim/doc/tags{,??x} に出力 (packadd しなくても、help が開けるようになる)
 scriptencoding utf-8
+# ~/.vim/pack/*/{stat,opt}/* でプラグインを管理する上で、便利な関数
 
 def s:mkHelpTags(h: string): void
 	var docdir = h .. '/doc'
@@ -38,9 +38,10 @@ def s:mkHelpTags(h: string): void
 	endfor
 enddef
 
-# ~/.vim/pack/*/{stat,opt}/*/doc に有る tags{,-??} が古ければ再作成
-# コンパイル済みの Python スクリプトにしても大して速度は変わらない
-def pack_helptags#remakehelptags(): void
+def manage_pack#helptags(): void
+	# ~/.vim/pack/*/{stat,opt}/*/doc に有るヘルプのタグを ~/.vim/doc/tags{,??x} に出力 (packadd しなくても、help が開けるようになる)
+	# ~/.vim/pack/*/{stat,opt}/*/doc に有る tags{,-??} が古ければ再作成
+	# コンパイル済みの Python スクリプトにしても大して速度は変わらない
 	var h = split(&runtimepath, ',')[0]
 	var docdir = h .. '/doc'
 	if !isdirectory(docdir)
@@ -54,7 +55,7 @@ def pack_helptags#remakehelptags(): void
 		endif
 	endfor
 	for f in glob(h .. '/pack/*/{start,opt}/*/doc/*.{txt,??x}', 1, 1)
-	# for f in glob(h .. '/pack/github/{start,opt}/*/doc/*.{txt,??x}', 1, 1)
+		# for f in glob(h .. '/pack/github/{start,opt}/*/doc/*.{txt,??x}', 1, 1)
 		if fnamemodify(f, ':p:h:h:s?.\+/??') ==# 'vimdoc-ja' # 日本語ヘルプは除外 (tags,tags-ja は作成済み)
 			continue
 		endif
@@ -63,4 +64,85 @@ def pack_helptags#remakehelptags(): void
 			return
 		endif
 	endfor
+enddef
+
+def s:packadd_ls(f: string): list<string>
+	# packadd plugin で書かれたプラグイン読み込みを探す
+	var packages: list<string>
+	for s in systemlist("grep -Ehi '^[^\#\"]*\\<packadd' " .. f)
+		add(packages, substitute(s, '\c^[^\#\"]*\<packadd[ \t]\+\([a-z0-9_.-]\+\).*', '\1', ''))
+	endfor
+	return packages
+enddef
+
+def s:map_ls(f: string): list<string>
+	# set_map_plug(plugin, ...) で書かれたプラグイン読み込みを探す
+	var packages: list<string>
+	for s in systemlist("grep -Ehi '^[^#\"]*\\<set_map_plug\#main\\([ \t]*'\\' " .. f)
+		add(packages, substitute(s, '\c^[^\#\"]*\<set_map_plug\#main([ \t]*''\([^'']\+\).*', '\1', ''))
+	endfor
+	for s in systemlist("grep -Ehi '^[^#\"]*\\<set_map_plug\#main\\([ \t]*\"' " .. f)
+		add(packages, substitute(s, '\c^[^\#\"]*\<set_map_plug\#main([ \t]*"\([^"]\+\).*', '\1', ''))
+	endfor
+	return packages
+enddef
+
+def s:get_pack_ls(): list<dict<string>>
+	# プラグインの名称、リポジトリ、インストール先取得
+	var packages: list<string>
+
+	packages = extendnew(s:packadd_ls('~/.vim/plugin/*.vim'), s:packadd_ls('~/.vim/autoload/*.vim'))
+	extend(packages, s:map_ls('~/.vim/plugin/*.vim'))
+	extend(packages, s:map_ls('~/.vim/autoload/*.vim'))
+	uniq(sort(packages))
+	return extendnew(s:get_packages('~/.vim/plugin/*.vim', packages),
+	s:get_packages('~/.vim/autoload/*.vim', packages))->sort((lhs, rhs) => lhs.package >? rhs.package ? 1 : -1)
+enddef
+
+def manage_pack#install(): void
+	# プラグインのインストール
+	for s in s:get_pack_ls()
+		if isdirectory(s.dir)
+			echo s.package .. ': installed or already existed direcory'
+		else
+			echo s.rep .. ' ' .. s.dir
+			systemlist('git clone ' .. s.rep .. ' ' .. s.dir)
+		endif
+	endfor
+enddef
+
+def manage_pack#reinstall(pack: string): void
+	# プラグインの強制再インストール
+	var pack_ls: list<dict<string>> = s:get_pack_ls()->filter('v:val.package ==# "' .. pack .. '"')
+	if len(pack_ls)
+		var dic: dict<string> = pack_ls[0]
+		if isdirectory(dic.dir)
+			echo 'rm -rf ' .. dic.dir
+			delete(dic.dir, 'rf')
+		endif
+		echo dic.rep .. ' ' .. dic.dir
+		systemlist('git clone ' .. dic.rep .. ' ' .. dic.dir)
+	else
+		echo pack .. ': no setting'
+	endif
+enddef
+
+def s:get_packages(f: string, p: list<string>): list<dict<string>>
+	# ファイル f に書かれたプラグインの名称、リポジトリ、インストール先取得
+	var packages: list<dict<string>>
+	var url: string
+	var pack: string
+	var pack_dir: string = resolve(expand('~/.vim/pack/github/')) .. '/'
+
+	for s in systemlist("grep -Ehi '^[\#\"\t].+https://github\.com/[a-z0-9._/-]+ {{{[0-9]*$' " .. f)
+		url = substitute(s, '\c^[\#\"\t].\+\(https:\/\/github\.com\/[a-z0-9._/-]\+\/[a-z0-9._-]\+\) \+{{{\d*', '\1', '')
+		# 上の検索文字列中の波括弧が foldmarker の扱いにあんるのでダミーとしての波括弧 }}}
+		pack = substitute(url, '.\+/', '', '')
+		add(packages, {
+			'rep': url,
+			'package': pack,
+			'dir': pack_dir .. ( index(p, pack) == -1 ? 'start' : 'opt' ) .. '/' .. pack
+			})
+	endfor
+	return packages
 enddef
