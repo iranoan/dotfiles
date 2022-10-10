@@ -201,7 +201,7 @@ AlterCommand ter[minal] topleft\ terminal
 AlterCommand man        Man
 AlterCommand p[rint]    call\ print#main()
 # ↑:print は使わないので、印刷関数 (~/.vim/autoload/print.vim) に置き換え
-AlterCommand helpt[ags] call\ manage_pack#remakehelptags()
+AlterCommand helpt[ags] call\ manage_pack#helptags()
 AlterCommand bc         .!bc\ -l\ -q\ ~/.bc\ <Bar>\ sed\ -E\ -e\ 's/^\\\./0./g'\ -e\ 's/(.[0-9]*[1-9])0+/\\\1/g'\ -e\ 's/\\\.$//g'
 AlterCommand bi[nary]   if\ !&binary\ <Bar>\ execute('setlocal\ binary\ <Bar>\ %!xxd')\ <Bar>\ endif
 AlterCommand nob[inary] if\ &binary\ <Bar>\ execute('setlocal\ nobinary\ <Bar>\ %!xxd\ -r')\ <Bar>\ endif
