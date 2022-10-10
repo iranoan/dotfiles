@@ -41,12 +41,12 @@ function set_asyncomplete#main() abort
 	" 	imap <expr><C-Space> pumvisible() ? asyncomplete#close_popup() : '<C-Space>'
 	" 	" imap <expr><Space> pumvisible() ? asyncomplete#close_popup() : '<Space>'
 	" 	" }}}
-	" 	" LSP と snippet 連携 https://github.com/thomasfaingnaert/vim-lsp-neosnippet {{{
-	" 	" https://github.com/thomasfaingnaert/vim-lsp-snippets {{{
+	" 	" LSP と snippet 連携 https://github.com/thomasfaingnaert/vim-lsp-neosnippet {{{"
+	" 	" https://github.com/thomasfaingnaert/vim-lsp-snippets {{{"
 	" 	packadd vim-lsp-snippets
 	" 	packadd vim-lsp-neosnippet
 	" 	" }}} }}}
-	" 	" snippet https://github.com/prabirshrestha/asyncomplete-neosnippet.vim {{{
+	" 	" snippet https://github.com/prabirshrestha/asyncomplete-neosnippet.vim {{{"
 	" 	" vim-lsp-neosnippet だけだと <C-X><C-O> のトリガーをタイプしないと表示されない、もしくは表示まで時間がかかるケースがある
 	" 	packadd asyncomplete-neosnippet.vim
 	" 	call asyncomplete#register_source(asyncomplete#sources#neosnippet#get_source_options({
