@@ -204,7 +204,7 @@ augroup VIMRC
 	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,vimgrepadd topleft copen # cwindow を使うと、make で使用されるプログラムによってカーソル位置がずれる
 	# autocmd QuickfixCmdPost lmake,lgrep,lgrepadd,lvimgrep,lvimgrepadd topleft lopen
 	autocmd BufEnter,BufFilePost,BufNewFile,BufRead *
-				\ if &filetype==# 'fugitive'
+				\ if &filetype ==# 'fugitive'
 				| 	execute 'lcd ' .. substitute(expand('%:p:h:h'), '^fugitive://', '', '')
 				| elseif isdirectory(expand('%:p:h'))
 				| 	execute 'lcd ' .. expand('%:p:h')
