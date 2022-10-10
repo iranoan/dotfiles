@@ -32,6 +32,12 @@ for g:packe_setting_s in ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'html', '
 endfor
 unlet g:packe_setting_ext g:packe_setting_s
 
+# 採用を検討したが、何かを理由にして導入を止めたプラグイン {{{1
+# Markdown のシンタックス https://github.com/preservim/vim-markdown
+# vim-precious と相性が悪く、一度コード例内にカーソル移動すると、コード内シンタックスが働かなくなる
+# goobook (Google Contacts) を使ったメールアドレス補完 https://github.com/afwlehmann/vim-goobook
+# → ~/.vim/pack/my-plug/opt/asyncomplete-mail/ に置き換え
+
 # まず ~/.vim/pack/*/start 配下で遅延読込しない分 {{{1
 # vim-surround などのプラグインでも . リピートを可能にする https://github.com/tpope/vim-repeat {{{2
 
@@ -447,15 +453,6 @@ augroup loadQuickRun
 				| delfunction set_quickrun#main
 augroup END
 
-# " goobook (Google Contacts) を使ったメールアドレス補完 https://github.com/afwlehmann/vim-goobook {{{2
-# → ~/.vim/pack/my-plug/opt/asyncomplete-mail/ に置き換え
-# augroup loadGoobook
-# 	autocmd!
-# 	autocmd FileType mail,notmuch-draft packadd vim-goobook
-# 	| autocmd! loadGoobook
-# 	| augroup! loadGoobook
-# augroup END
-
 # Git 連携 https://github.com/tpope/vim-fugitive {{{2
 augroup loadFugitive
 	autocmd!
@@ -676,9 +673,6 @@ nmap cs@ cs`
 # 選択範囲をテキストオブジェクトで広げたり、狭めたり https://github.com/terryma/vim-expand-region {{{2
 vmap v <Cmd>call set_expand_region#main('(expand_region_expand)') <bar> delfunction set_expand_region#main<CR>
 vmap V <Cmd>call set_expand_region#main('(expand_region_shrink)') <bar> delfunction set_expand_region#main<CR>
-
-# Markdown のシンタックス https://github.com/preservim/vim-markdown {{{2
-# vim-precious と相性が悪く、一度コード例内にカーソル移動すると、コード内シンタックスが働かなくなる
 
 # getmail syntax https://github.com/vim-scripts/getmail.vim {{{2
 augroup Gatmail
