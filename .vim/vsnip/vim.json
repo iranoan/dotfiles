@@ -31,6 +31,13 @@
 		"description": "func endfunc",
 		"body": "function! ${1:func_name}(${2}) abort\n\t${0}\nendfunction"
 	},
+	"def": {
+		"prefix": [
+			"def"
+		],
+		"description": "def enddef",
+		"body": "def ${1:func_name}(${2}): ${3:type}\n\t${0}\nenddef"
+	},
 	"try": {
 		"prefix": "try",
 		"description": "try endtry",
