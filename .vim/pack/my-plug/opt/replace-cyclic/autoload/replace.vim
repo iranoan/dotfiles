@@ -80,9 +80,9 @@ def replace#cyclic(args: string, word: number = 0): string
 	# 文字列を {'dog':'cat', 'cat':'dog'} といった辞書に変換
 	i = 1
 	for s in s_ls[ : -2]
-		ret_s ..= s .. "':'" .. replace#escape_replace(s_ls[i]) .. "', '"
+		ret_s ..= substitute(s, "'", "''", 'g') .. "':'" .. substitute(replace#escape_replace(s_ls[i]), "'", "''", 'g') .. "', '"
 		i += 1
 	endfor
-	ret_s ..= s_ls[-1] .. "':'" .. replace#escape_replace(s_ls[0]) .. "'}[submatch(1)]" .. sep .. "g"
+	ret_s ..= substitute(s_ls[-1], "'", "''", 'g') .. "':'" .. substitute(replace#escape_replace(s_ls[0]), "'", "''", 'g') .. "'}[submatch(1)]" .. sep .. "g"
 	return ret_s
 enddef
