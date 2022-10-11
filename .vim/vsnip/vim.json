@@ -38,6 +38,14 @@
 		"description": "def enddef",
 		"body": "def ${1:func_name}(${2}): ${3:type}\n\t${0}\nenddef"
 	},
+	"defcompile": {
+		"prefix": [
+		"defc",
+		"defcompile"
+		],
+		"description": "defcompile",
+		"body": "defcompile"
+	},
 	"try": {
 		"prefix": "try",
 		"description": "try endtry",
