@@ -1,8 +1,10 @@
 scriptencoding utf-8
 
 function set_asyncomplete#main() abort
-	" packadd asyncomplete.vim ←asyncomplete.vim 自体は ~/.vim/pack/*/start に置かないと最初に読み込んだバッファで働かない
+	" packadd asyncomplete.vim " ←asyncomplete.vim 自体は ~/.vim/pack/*/start に置かないと最初に読み込んだバッファで働かない
 	" let g:asyncomplete_auto_completeopt = 1 " ←デフォルト
+	" call asyncomplete#enable_for_buffer()
+	" call asyncomplete#force_refresh()
 	" let g:asyncomplete_min_chars = 1
 	" 以下 plugin {{{3
 	" また 'allowlist': ['*'] を使うと、直ぐ消えてしまうケースが出てくる←vim のコメントで再現
@@ -23,8 +25,8 @@ function set_asyncomplete#main() abort
 			imap <expr> <C-Y> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-Y>'
 			smap <expr> <C-Y> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-Y>'
 			" Jump forward or backward
-			imap <expr> <C-H> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)'      : '<C-H>'
-			smap <expr> <C-H> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)'      : '<C-H>'
+			imap <expr> <C-H> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)'      : '<Left>'
+			smap <expr> <C-H> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)'      : '<Left>'
 			imap <expr> <C-L> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)'      : '<Right>'
 			smap <expr> <C-L> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)'      : '<Right>'
 		" }}}
