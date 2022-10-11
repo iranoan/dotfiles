@@ -36,7 +36,7 @@
 			"def"
 		],
 		"description": "def enddef",
-		"body": "def ${1:func_name}(${2}): ${3:type}\n\t${0}\nenddef"
+		"body": "def ${1:func_name}(${2:arg}: ${3:type}): ${4:type}\n\t${0}\nenddef"
 	},
 	"defcompile": {
 		"prefix": [
