@@ -12,6 +12,7 @@
 /.vim/.netrwhist
 /.vim/doc/
 /.vim/pack/github/
+/.vim/pack/src/
 /.vim/pack/my-plug/opt/asyncomplete-mail/
 /.vim/pack/my-plug/opt/asyncomplete-spell.vim/
 /.vim/pack/my-plug/opt/notmuch-py-vim/
