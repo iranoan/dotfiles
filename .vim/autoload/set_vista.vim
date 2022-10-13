@@ -1,6 +1,9 @@
 function set_vista#main() abort
 	if !is_plugin_installed#main('vim-lsp')
 		call set_vimlsp#main()
+		autocmd! loadvimlsp
+		augroup! loadvimlsp
+		delfunction set_vimlsp#main
 	endif
 	packadd vista.vim
 	let g:vista_executive_for = {

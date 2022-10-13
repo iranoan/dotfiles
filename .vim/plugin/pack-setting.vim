@@ -566,9 +566,7 @@ augroup loadvimlsp
 				\ set_vimlsp#main()
 				| autocmd! loadvimlsp
 				| augroup! loadvimlsp
-				| autocmd! loadasyncomplete
-				| augroup! loadasyncomplete
-				# \ | delfunction set_vimlsp#main
+				| delfunction set_vimlsp#main
 augroup END
 
 # https://github.com/puremourning/vimspector {{{2

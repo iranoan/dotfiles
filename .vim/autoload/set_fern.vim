@@ -20,6 +20,8 @@ function set_fern#main() abort
 	packadd fern-mapping-fzf.vim " }}}
 	let g:fern#mapping#fzf#disable_default_mappings = 1
 	call set_fzf_vim#main()
+	autocmd! loadFZF_Vim
+	augroup! loadFZF_Vim
 	" zoom:reset
 	" アイコン表示
 	" https://github.com/lambdalisue/glyph-palette.vim {{{

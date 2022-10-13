@@ -115,9 +115,9 @@ function set_asyncomplete#main() abort
 endfunction
 
 function s:set_neosnippet() abort
-	if is_plugin_installed#main('neosnippet-snippets')
-		return
-	endif
+	" if is_plugin_installed#main('neosnippet-snippets')
+	" 	return
+	" endif
 	" 補完辞書基本 https://github.com/Shougo/neosnippet {{{
 	packadd neosnippet
 		" 言語別の補完辞書 https://github.com/Shougo/neosnippet-snippets {{{

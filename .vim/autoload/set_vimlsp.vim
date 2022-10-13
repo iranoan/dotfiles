@@ -37,6 +37,9 @@ function set_vimlsp#main() abort
 	" LSP との連携 https://github.com/prabirshrestha/asyncomplete-lsp.vim {{{
 	if !is_plugin_installed#main('asyncomplete-omni.vim') " asyncomplete.vim のプラグインの一つ asyncomplete-omni.vim が導入済みかどうかで、asyncomplete.vim が導入済みかを判断
 		call set_asyncomplete#main() " 先に設定しておかないと補完候補に現れない
+		autocmd! loadasyncomplete
+		augroup! loadasyncomplete
+		delfunction set_asyncomplete#main
 	endif
 	packadd asyncomplete-lsp.vim
 	" }}}
