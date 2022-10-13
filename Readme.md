@@ -2,9 +2,9 @@
 
 ## setup
 
-```sh
+````sh
 ./install.sh
-```
+````
 
 ## attention
 
