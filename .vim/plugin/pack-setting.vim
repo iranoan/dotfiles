@@ -189,7 +189,9 @@ AlterCommand cp[932]    edit\ ++enc=cp932
 AlterCommand eu[c]      edit\ ++enc=eucjp-ms
 AlterCommand ji[s]      edit\ ++enc=iso-2022-jp-3
 AlterCommand gr[ep]     silent\ grep
+AlterCommand lgr[ep]    silent\ lgrep
 AlterCommand mak[e]     silent\ make
+AlterCommand lmak[e]    silent\ lmake
 AlterCommand tabd[o]    silent\ tabdo
 AlterCommand windo      silent\ windo
 AlterCommand argdo      silent\ argdo
@@ -202,7 +204,7 @@ AlterCommand man        Man
 AlterCommand p[rint]    call\ print#main()
 # ↑:print は使わないので、印刷関数 (~/.vim/autoload/print.vim) に置き換え
 AlterCommand helpt[ags] call\ manage_pack#helptags()
-AlterCommand bc         .!bc\ -l\ -q\ ~/.bc\ <Bar>\ sed\ -E\ -e\ 's/^\\\./0./g'\ -e\ 's/(.[0-9]*[1-9])0+/\\\1/g'\ -e\ 's/\\\.$//g'
+AlterCommand bc         .!bc\ -l\ -q\ ~/.bc\ <Bar>\ sed\ -E\ -e\ 's/^\\\./0./g'\ -e\ 's/(\\\.[0-9]*[1-9])0+/\\\1/g'\ -e\ 's/\\\.$//g'
 AlterCommand bi[nary]   if\ !&binary\ <Bar>\ execute('setlocal\ binary\ <Bar>\ %!xxd')\ <Bar>\ endif
 AlterCommand nob[inary] if\ &binary\ <Bar>\ execute('setlocal\ nobinary\ <Bar>\ %!xxd\ -r')\ <Bar>\ endif
 if glob('~/.vim/pack/*/*/vim-fugitive/plugin/fugitive.vim') !=# ''

@@ -202,6 +202,7 @@ augroup VIMRC
 	autocmd!
 	autocmd BufReadPost * if &modifiable && search('[^\t -~]', 'nw') == 0 | set fileencoding=utf-8 | endif # ASCII のみの時も utf-8 を使う
 	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,vimgrepadd topleft copen # cwindow を使うと、make で使用されるプログラムによってカーソル位置がずれる
+	autocmd QuickfixCmdPost lmake,lgrep,lgrepadd,lvimgrep,lvimgrepadd topleft lopen
 	# autocmd QuickfixCmdPost lmake,lgrep,lgrepadd,lvimgrep,lvimgrepadd topleft lopen
 	autocmd BufEnter,BufFilePost,BufNewFile,BufRead *
 				\ if &filetype ==# 'fugitive'
