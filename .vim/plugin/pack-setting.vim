@@ -246,6 +246,7 @@ augroup loadFZF_Vim
 				\ set_fzf_vim#main()
 				| autocmd! loadFZF_Vim
 				| augroup! loadFZF_Vim
+				| delfunction set_fzf_vim#main
 augroup END
 
 # 日本語入力に向いた設定にする (行の連結など) https://github.com/vim-jp/autofmt {{{2
