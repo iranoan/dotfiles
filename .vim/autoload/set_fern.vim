@@ -22,6 +22,7 @@ function set_fern#main() abort
 	call set_fzf_vim#main()
 	autocmd! loadFZF_Vim
 	augroup! loadFZF_Vim
+	delfunction set_fzf_vim#main
 	" zoom:reset
 	" アイコン表示
 	" https://github.com/lambdalisue/glyph-palette.vim {{{

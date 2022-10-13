@@ -6,5 +6,6 @@ function set_fzf_neoyank#main() abort
 	call set_fzf_vim#main()
 	autocmd! loadFZF_Vim
 	augroup! loadFZF_Vim
+	delfunction set_fzf_vim#main
 	packadd fzf-neoyank " }}}
 endfunction
