@@ -67,7 +67,7 @@ VERBOSE=on
 * ^From:.*(shopping-newsclip-master@mail\.yahoo\.co\.jp|info@inose\.gr\.jp|noreply@natureasia\.com|natureasia@e-alert\.nature\.com|evernote\.com|nisseki@kenketsu\.jp|mag@wowow\.co\.jp|admin_oshiete@goo\.ne\.jp|e_service@mof\.go\.jp|infomaster@mx\.nikkei\.co\.jp|@mx\.nikkei\.com|@rakuten\.co\.jp|inet-billing@portalmail\.kddi\.com|(nifty-support@|info@opt\.)nifty\.com|users@justsystems\.com|mailmag@mag2tegami\.com|montblanc\.com|rp@aqfr\.net|wowow\.co\.jp|@unitedcinemas\.jp|ppfleama-master@mail\.yahoo\.co\.jp|@mail\.yahoo\.co\.jp)
 .Nifty.other/
 :0
-* ^Return-Path:(.*@(.+\.)?(nikkeibp\.co\.jp|research-panel\.jp|vector\.co\.jp|club\.panasonic\.jp|bounces\.amazon\.(co\.jp|com)|atmarkit\.co\.jp|saisoncard\.co\.jp|unitedcinemas\.jp|justsystem\.co\.jp|impress\.co\.jp)|info@opt\.nifty\.com|send@panasonic\.jp|@emagazine\.rakuten\.co\.jp|mag2\.com|(nifty-support@|info@opt\.)nifty\.com|infomaster@mx\.nikkei\.co\.jp)
+* ^Return-Path:(.*@(.+\.)?(nikkeibp\.co\.jp|research-panel\.jp|vector\.co\.jp|club\.panasonic\.jp|bounces\.amazon\.(co\.jp|com)|atmarkit\.co\.jp|itmedia\.co\.jp|saisoncard\.co\.jp|unitedcinemas\.jp|justsystem\.co\.jp|impress\.co\.jp)|info@opt\.nifty\.com|send@panasonic\.jp|@emagazine\.rakuten\.co\.jp|mag2\.com|(nifty-support@|info@opt\.)nifty\.com|infomaster@mx\.nikkei\.co\.jp)
 .Nifty.other/
 #さだまさしML
 :0
