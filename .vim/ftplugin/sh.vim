@@ -22,5 +22,4 @@ endif
 "ファイルタイプ別ローカル設定
 "--------------------------------
 setlocal foldmethod=syntax
-" ヘルプ
-" setlocal keywordprg=man
+setlocal keywordprg=:Man\ <C-R>w
