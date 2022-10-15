@@ -1,4 +1,4 @@
-"ƒVƒFƒ‹ƒXƒNƒŠƒvƒg—p‚Ìİ’è
+"ã‚·ã‚§ãƒ«ã‚¹ã‚¯ãƒªãƒ—ãƒˆç”¨ã®è¨­å®š
 scriptencoding utf-8
 if exists('b:did_ftplugin_user')
 	finish
@@ -6,7 +6,7 @@ endif
 let b:did_ftplugin_user = 1
 
 "--------------------------------
-"ƒtƒ@ƒCƒ‹ƒ^ƒCƒv•Ê‚ÌƒOƒ[ƒoƒ‹İ’è
+"ãƒ•ã‚¡ã‚¤ãƒ«ã‚¿ã‚¤ãƒ—åˆ¥ã®ã‚°ãƒ­ãƒ¼ãƒãƒ«è¨­å®š
 "--------------------------------
 if !exists('g:is_bash')
 	let g:sh_fold_enabled=7
@@ -19,7 +19,7 @@ endif
 " 	" augroup END
 " endif
 "--------------------------------
-"ƒtƒ@ƒCƒ‹ƒ^ƒCƒv•Êƒ[ƒJƒ‹İ’è
+"ãƒ•ã‚¡ã‚¤ãƒ«ã‚¿ã‚¤ãƒ—åˆ¥ãƒ­ãƒ¼ã‚«ãƒ«è¨­å®š
 "--------------------------------
 setlocal foldmethod=syntax
 setlocal keywordprg=:Man\ <C-R>w
