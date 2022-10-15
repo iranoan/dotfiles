@@ -26,6 +26,8 @@ setlocal makeprg=html-check.sh\ \"%\"
 "setlocal shellpipe=2>
 " setlocal errorformat=%f:%l:%c:\ %m,%f:%l:%m
 setlocal errorformat=%f:%l:%c:\ %trror:\ %m,%f:%l:%c:\ %m,%f:%l:%m
+setlocal formatlistpat=^\\s*<\\(li\\\|dt\\\|dd\\)>
+setlocal breakindentopt=list:4
 "--------------------------------
 " オムニ補完関数指定
 setlocal omnifunc=htmlcomplete#CompleteTags

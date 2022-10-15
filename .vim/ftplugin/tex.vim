@@ -54,13 +54,14 @@ setlocal iskeyword=@,48-57,_,-,:,.,192-255 "\labelには/を使うことも有�
 " setlocal termwinsize=5x0 " ←グローバルな set なら利く
 " let b:match_ignorecase = 1
 " let b:match_words =  &matchpairs .. ",{,}:[:],<:>,\\begin{\([A-Za-z]\+\)}:\\end{\1}"
+setlocal formatlistpat=^\\s*\\\\item\\(\\[[^]]\\+\\]\\)\\?\\s\\+
 augroup TeXiskeyword " 入力時は補完時は数字を単語から外す (例:width=0.8textw→width=0.8\textwidth をやりやすく)
 	autocmd!
 	autocmd InsertEnter <buffer> setlocal iskeyword=@,_,-,:,.,192-255
 	autocmd InsertLeave <buffer> setlocal iskeyword=@,48-57,_,-,:,.,192-255
 augroup END
 
-def s:xbb(): void # カーソル位置のパスの ebb -x -O の出力 (一部、ファイル名と HiResBoundingBox) を書き込む
+def s:xbb(): void # カーソル位置のパスの ebb -x -O の出力の一部 (ファイル名と HiResBoundingBox) を書き込む
 	var line_str = getline('.')
 	var end = 0
 	var urls: list<any>
