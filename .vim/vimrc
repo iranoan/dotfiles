@@ -354,6 +354,10 @@ cnoremap <C-P> <C-R>"
 vnoremap <expr>p 'pgv"' .. v:register .. 'y`>'
 # vnoremap <expr>P 'pgv"' . v:register . 'y`>`'
 # 2つを入れ替えたい時は、書き換わったほうが都合が良いので、大文字側はデフォルトのままにしておく
+# 未選択の x, c, sはレジスタに入れない
+nnoremap x "_x
+nnoremap c "_c
+nnoremap s "_s
 # 挿入/コマンドモード時のカーソル移動 {{{2
 # [Henkan] を [BS] に割り当てているので、<C-H> は他に割り当てる
 inoremap <C-H> <Left>
