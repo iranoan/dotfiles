@@ -1,7 +1,7 @@
 vim9script
 scriptencoding utf-8
 
-def mk_tabline#main(): string
+export def Main(): string
 	var s = ''
 	var j: number
 	for i in range(tabpagenr('$'))
@@ -18,12 +18,12 @@ def mk_tabline#main(): string
 		else
 			s ..= j
 		endif
-		s ..= '%{mk_tabline#label(' .. j .. ')}|'
+		s ..= '%{mk_tabline#Label(' .. j .. ')} | '
 	endfor
 	return s .. '%#TabLineFill#%T%=%#TabLine#%999XX' # 最後のタブページの後は TabLineFill で埋め、タブページ番号をリセットする
 enddef
 
-def mk_tabline#label(n: number): string
+export def Label(n: number): string
 	var buflist = tabpagebuflist(n)
 	var name = substitute(bufname(buflist[tabpagewinnr(n) - 1]), '^.\+/', '', '')
 	var change = ''

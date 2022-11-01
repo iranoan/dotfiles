@@ -1,5 +1,5 @@
 augroup InsertStatus
 	autocmd!
-	autocmd InsertEnter * call insert_status#main('Enter')
-	autocmd InsertLeave * call insert_status#main('Leave')
+	autocmd InsertEnter * call insert_status#Main('Enter')
+	autocmd InsertLeave * call insert_status#Main('Leave')
 augroup END

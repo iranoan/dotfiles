@@ -1,5 +1,5 @@
 function set_vista#main() abort
-	if !is_plugin_installed#main('vim-lsp')
+	if !is_plugin_installed#Main('vim-lsp')
 		call set_vimlsp#main()
 		autocmd! loadvimlsp
 		augroup! loadvimlsp

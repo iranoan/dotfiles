@@ -2,7 +2,7 @@ scriptencoding utf-8
 
 function set_speeddating#main(cmd) abort
 	let g:speeddating_no_mappings = 1
-	call set_map_plug#main('vim-speeddating', a:cmd, [
+	call set_map_plug#Main('vim-speeddating', a:cmd, [
 				\ {'mode': 'n', 'key': 'd<C-X>', 'cmd': 'SpeedDatingNowLocal'},
 				\ {'mode': 'n', 'key': 'd<C-A>', 'cmd': 'SpeedDatingNowUTC'},
 				\ {'mode': 'x', 'key': '<C-X>',  'cmd': 'SpeedDatingDown'},

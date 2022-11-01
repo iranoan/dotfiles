@@ -42,9 +42,9 @@ setlocal errorformat=%WLaTeX\ Warning:\ %.%#line\ %l%m,\"%f\"\\,\ line\ %l:\ %m,
 "ファイルタイプ別 map
 nnoremap <buffer><Leader>v         <Cmd>wa<CR>:silent !zathura-sync.sh <C-r>=expand('%:p')<CR> <C-r>=line(".")<CR> <C-r>=col(".")<CR><CR>
 " <S,C-Enter> の組み合わせは GUI のみ有効
-inoremap <expr><buffer><S-Enter>   pumvisible#insert('\item<Tab>')
-inoremap <expr><buffer><S-C-Enter> pumvisible#insert_after('\\')
-inoremap <expr><buffer><C-Enter>   pumvisible#insert("\\clearpage\n")
+inoremap <expr><buffer><S-Enter>   pumvisible#Insert('\item<Tab>')
+inoremap <expr><buffer><S-C-Enter> pumvisible#Insert_after('\\')
+inoremap <expr><buffer><C-Enter>   pumvisible#Insert("\\clearpage\n")
 nnoremap <buffer><leader>bb       <Cmd>call <SID>xbb()<CR>
 "--------------------------------
 "gfなどで、拡張子を補完
@@ -55,6 +55,7 @@ setlocal iskeyword=@,48-57,_,-,:,.,192-255 "\labelには/を使うことも有�
 " let b:match_ignorecase = 1
 " let b:match_words =  &matchpairs .. ",{,}:[:],<:>,\\begin{\([A-Za-z]\+\)}:\\end{\1}"
 setlocal formatlistpat=^\\s*\\\\item\\(\\[[^]]\\+\\]\\)\\?\\s\\+
+setlocal breakindentopt=list:1
 augroup TeXiskeyword " 入力時は補完時は数字を単語から外す (例:width=0.8textw→width=0.8\textwidth をやりやすく)
 	autocmd!
 	autocmd InsertEnter <buffer> setlocal iskeyword=@,_,-,:,.,192-255

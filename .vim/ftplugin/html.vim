@@ -37,9 +37,9 @@ inoremap <buffer> </ </<C-x><C-o>
 " ↑オムニ補完を利用して閉じタグ自動補完
 nnoremap <silent><buffer><Leader>v :silent !firefox %<CR>
 " <S,C-Enter> の組み合わせは GUI のみ有効
-inoremap <expr><buffer><S-Enter>   pumvisible#insert('<li>')
+inoremap <expr><buffer><S-Enter>   pumvisible#Insert('<li>')
 inoremap <expr><buffer><C-Enter>   (getline('.') =~# '^\s*$' ?  '' : '<CR>') . '<End><p><CR></p><UP><CR>'
-inoremap <expr><buffer><S-C-Enter> pumvisible#insert_after('<br>')
+inoremap <expr><buffer><S-C-Enter> pumvisible#Insert_after('<br>')
 inoremap <buffer><<                &lt;
 inoremap <buffer><=                &le;
 inoremap <buffer>>>                &gt;

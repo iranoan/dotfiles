@@ -88,7 +88,7 @@ else
 	colorscheme desert
 endif
 # background によって一部の syntax を変える (Solarized を基本としている) {{{
-def s:color_light_dark(): void
+def Color_light_dark(): void
 	highlight clear Pmenu # 一部の絵文字が標準設定では見にくいので一旦クリアして light/dark で異なる設定にする
 	if &background ==? 'light'
 		highlight Normal guifg=#111111 guibg=#FDF6E3 ctermfg=black ctermbg=white
@@ -123,9 +123,9 @@ def s:color_light_dark(): void
 enddef
 augroup ChangeHighlight
 	autocmd!
-	autocmd ColorScheme * s:color_light_dark()
+	autocmd ColorScheme * Color_light_dark()
 augroup END
-s:color_light_dark()
+Color_light_dark()
 
 # 日本語ヘルプ https://github.com/vim-jp/vimdoc-ja {{{2
 
@@ -203,7 +203,7 @@ AlterCommand ter[minal] topleft\ terminal
 AlterCommand man        Man
 AlterCommand p[rint]    call\ print#main()
 # ↑:print は使わないので、印刷関数 (~/.vim/autoload/print.vim) に置き換え
-AlterCommand helpt[ags] call\ manage_pack#helptags()
+AlterCommand helpt[ags] call\ manage_pack#Helptags()
 AlterCommand bc         .!bc\ -l\ -q\ ~/.bc\ <Bar>\ sed\ -E\ -e\ 's/^\\\./0./g'\ -e\ 's/(\\\.[0-9]*[1-9])0+/\\\1/g'\ -e\ 's/\\\.$//g'
 AlterCommand bi[nary]   if\ !&binary\ <Bar>\ execute('setlocal\ binary\ <Bar>\ %!xxd')\ <Bar>\ endif
 AlterCommand nob[inary] if\ &binary\ <Bar>\ execute('setlocal\ nobinary\ <Bar>\ %!xxd\ -r')\ <Bar>\ endif
@@ -504,10 +504,10 @@ augroup loadKillTerminal
 augroup END
 
 # ページ送りに ~/.vim/pack/my-plug/opt/page-down {{{2
-nnoremap <silent><space> :call page_down#main()<CR>
+nnoremap <silent><space> :call page_down#Main()<CR>
 augroup loadPageDown
 	autocmd!
-	autocmd FuncUndefined page_down#main packadd page-down
+	autocmd FuncUndefined page_down#Main packadd page-down
 	| autocmd! loadPageDown
 	| augroup! loadPageDown
 augroup END

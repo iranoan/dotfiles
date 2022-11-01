@@ -4,7 +4,7 @@ vim9script
 
 scriptencoding utf-8
 
-def fullscreen#main(): void
+export def Main(): void
 	if !has('gui_running')
 		echohl WarningMsg | echo "Don't GUI Running!" | echohl None
 		return

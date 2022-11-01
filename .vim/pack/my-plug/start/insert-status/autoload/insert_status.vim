@@ -5,7 +5,7 @@ scriptencoding utf-8
 var s_slhlcmd = 'highlight ' .. substitute(substitute(execute('highlight StatusLine'), '[\r\n]', '', 'g'), 'xxx', '', '')
 var s_mode = ''
 
-def insert_status#main(insert: string): void
+export def Main(insert: string): void
 	if s_mode == insert
 		return
 	endif

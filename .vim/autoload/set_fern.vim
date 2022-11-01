@@ -15,34 +15,44 @@ function set_fern#main() abort
 	packadd fern-preview.vim " }}}
 	" netfw を入れ替え https://github.com/lambdalisue/fern-hijack.vim {{{
 	packadd fern-hijack.vim "}}}
-	" fzf と連携
-	" https://github.com/LumaKernel/fern-mapping-fzf.vim {{{
-	packadd fern-mapping-fzf.vim " }}}
+	" fzf と連携 https://github.com/LumaKernel/fern-mapping-fzf.vim {{{
+	packadd fern-mapping-fzf.vim
 	let g:fern#mapping#fzf#disable_default_mappings = 1
-	call set_fzf_vim#main()
-	autocmd! loadFZF_Vim
-	augroup! loadFZF_Vim
-	delfunction set_fzf_vim#main
-	" zoom:reset
-	" アイコン表示
-	" https://github.com/lambdalisue/glyph-palette.vim {{{
-	packadd glyph-palette.vim " }}}
-	" https://github.com/lambdalisue/nerdfont.vim {{{
-	packadd nerdfont.vim " }}}
-	" https://github.com/lambdalisue/fern-renderer-nerdfont.vim {{{
-	packadd fern-renderer-nerdfont.vim " }}}
-	let g:fern#renderer = "nerdfont"
-	augroup fern-custom
-		autocmd!
-		autocmd FileType nerdtree,startify call glyph_palette#apply()
-		autocmd FileType fern call s:init_fern()
-	augroup END
+	" g:fern#mapping#fzf#fzf_options を指定すると、b:fzf_action, g:fzf_action が無視され開けなくなる
+	" let b:fzf_action = get(g:, 'fzf_action', {
+	" 			\ 'ctrl-t': 'tab split',
+	" 			\ 'ctrl-x': 'split',
+	" 			\ 'ctrl-v': 'vsplit'
+	" 			\ })
+	" let b:fzf_action['enter'] = function('s:fern_fzf')
+	" let g:fern#mapping#fzf#fzf_options = {'options': '--multi --no-unicode --margin=0% --padding=0% --preview=''~/bin/fzf-preview.sh {}'' --bind=''ctrl-]:change-preview-window(hidden|)'''}
+	if !is_plugin_installed#Main('fzf.vim')
+		call set_fzf_vim#main()
+		autocmd! loadFZF_Vim
+		augroup! loadFZF_Vim
+		delfunction set_fzf_vim#main
+	endif
+	" }}}
+	" アイコン表示 {{{
+		" https://github.com/lambdalisue/glyph-palette.vim {{{
+		packadd glyph-palette.vim " }}}
+		" https://github.com/lambdalisue/nerdfont.vim {{{
+		packadd nerdfont.vim " }}}
+		" https://github.com/lambdalisue/fern-renderer-nerdfont.vim {{{
+		packadd fern-renderer-nerdfont.vim
+		let g:fern#renderer = "nerdfont"
+		augroup fern-custom
+			autocmd!
+			autocmd FileType nerdtree,startify call glyph_palette#apply()
+			autocmd FileType fern call s:init_fern()
+		augroup END
+		" }}}
+	" }}}
 endfunction
 
 function s:init_fern() abort
 	setlocal nonumber foldcolumn=0
 	call glyph_palette#apply()     " バッファ毎に呼ばないと効かない
-	" fzf-mapping-fzf.vim
 	let b:fzf_action = get(g:, 'fzf_action', {
 				\ 'ctrl-t': 'tab split',
 				\ 'ctrl-x': 'split',
@@ -59,8 +69,8 @@ function s:init_fern() abort
 	nmap <buffer><C-H>           <Plug>(fern-action-hidden:toggle)
 	nmap <buffer>-               <Plug>(fern-action-mark:toggle)
 	nmap <buffer>.               <Plug>(fern-action-repeat)
-	nmap <buffer>?               <Plug>(fern-action-help)
-	" nmap <buffer>?               <Cmd>echo join(filter(filter(split(execute('map'), '\n'), 'v:val =~? "\(fern-"' ), 'v:val !~? "^[nvxsoilct] *<plug"'), "\n")<CR>
+	" nmap <buffer>?               <Plug>(fern-action-help)
+	nmap <buffer>?               <Cmd>echo join(filter(filter(split(execute('map'), '\n'), 'v:val =~? "\(fern-"' ), 'v:val !~? "^[nvxsoilct] *<plug"'), "\n")<CR>
 	nmap <buffer>a               <Plug>(fern-action-choice)
 	nmap <buffer>c               <Plug>(fern-action-copy)
 	nmap <buffer>d               <Plug>(fern-action-trash=)y<CR>

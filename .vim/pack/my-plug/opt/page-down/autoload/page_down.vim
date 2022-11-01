@@ -2,7 +2,7 @@ vim9script
 # <space> はページ送りに {{{2
 scriptencoding utf-8
 
-def page_down#main()  # ファイル最後の行が表示されていればスクロールしない
+export def Main()  # ファイル最後の行が表示されていればスクロールしない
 	if line('w$') == line('$') # 最終行表示
 		if line('w0') == line('w$') # 最終行でも表示先頭行と最終行が同じなら折り返されている部分が非表示の可能性→カーソル移動
 			execute 'normal!' 2 * winheight(0) - winline() - 1 .. 'gj'

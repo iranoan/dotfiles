@@ -1,7 +1,7 @@
 vim9script
-scriptencoding utf-8
 # 文字コード {{{1
 set encoding=utf-8
+scriptencoding utf-8
 # ファイル・エンコードの自動判定優先順位 fileencodings を決める {{{
 if has('iconv') # iconv を使って NEC 選定 IBM 拡張文字 (ⅰ) を変換して対応文字コードをチェック
 	if iconv('ⅰ ', 'utf-8', 'iso-2022-jp-3') ==# "\x1B$(O,5\x1B(B " # iso-2022-jp-3 対応チェック
@@ -132,7 +132,7 @@ set showtabline=2 tabpagemax=500               # 常にタブを表示+上限 50
 if has('gui_running')                          # タブページの書式変更
 	set guitablabel=%!MakeGUItabline()
 else
-	set tabline=%!mk_tabline#main()
+	set tabline=%!mk_tabline#Main()
 endif
 # インデント {{{2
 set autoindent smartindent                     # オートインデント+改行時に行末記号に合わせてインデント増減
@@ -229,7 +229,8 @@ augroup VIMRC
 				\ silent if &filetype !~# 'commit' && line("'\"") > 1 && line("'\"") <= line("$")
 				| 	execute 'normal! g`"'
 				| endif #前回閉じた時のカーソル位置に移動← $VIMRUNTIME/defaults.vim
-	autocmd BufEnter * if getftype(expand('%')) ==# 'link' | symbolic_link#normalize() | endif # シンボリック・リンクは展開
+	# autocmd BufEnter * if getftype(expand('%')) ==# 'link' | symbolic_link#normalize() | endif # シンボリック・リンクは展開
+	autocmd BufEnter * if getftype(expand('%')) ==# 'link' | symbolic_link#Normalize() | endif # シンボリック・リンクは展開
 	autocmd CmdlineLeave,CmdwinLeave * if getcmdtype() =~# '[/?]' || ( getcmdwintype() =~# '[/?]' && pos != getpos('.')) | set hlsearch | endif # ハイライトはトグル・スイッチ
 	autocmd CmdwinEnter * pos = getpos('.')
 augroup END

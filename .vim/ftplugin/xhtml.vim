@@ -29,9 +29,9 @@ inoremap <buffer> </ </<C-x><C-o>
 
 nnoremap <silent><buffer><Leader>v :silent !/usr/bin/firefox %<CR>
 " <S,C-Enter> の組み合わせは GUI のみ有効
-inoremap <expr><buffer><S-Enter>   pumvisible#insert('<li></li>')
+inoremap <expr><buffer><S-Enter>   pumvisible#Insert('<li></li>')
 inoremap <expr><buffer><C-Enter>   (getline('.') =~# '^\s*$' ?  '' : '<CR>') . '<End><p><CR></p><UP><CR>'
-inoremap <expr><buffer><S-C-Enter> pumvisible#insert_after('<br />')
+inoremap <expr><buffer><S-C-Enter> pumvisible#Insert_after('<br />')
 inoremap <buffer><<                &lt;
 inoremap <buffer>>>                &gt;
 inoremap <buffer><=                &#8804;

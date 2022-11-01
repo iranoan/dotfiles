@@ -1,3 +1,3 @@
 vim9script
 
-command! SyntaxInfo syntax_info#main()
+command! SyntaxInfo syntax_info#Main()

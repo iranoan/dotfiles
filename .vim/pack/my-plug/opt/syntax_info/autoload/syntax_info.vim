@@ -1,6 +1,6 @@
 vim9script
 
-def s:get_syn_id(transparent: bool): number
+def Get_syn_id(transparent: bool): number
 	var v_synid = synID(line('.'), col('.'), 1)
 	if transparent
 		return synIDtrans(v_synid)
@@ -9,7 +9,7 @@ def s:get_syn_id(transparent: bool): number
 	endif
 enddef
 
-def s:get_syn_attr(synid: number): dict<string>
+def Get_syn_attr(synid: number): dict<string>
 	var name = synIDattr(synid, 'name')
 	var ctermfg = synIDattr(synid, 'fg', 'cterm')
 	var ctermbg = synIDattr(synid, 'bg', 'cterm')
@@ -24,14 +24,14 @@ def s:get_syn_attr(synid: number): dict<string>
 				}
 enddef
 
-def syntax_info#main(): void
-	var baseSyn = s:get_syn_attr(s:get_syn_id(0))
+export def Main(): void
+	var baseSyn = s:Get_syn_attr(s:Get_syn_id(0))
 	echo 'name: ' .. baseSyn.name ..
 				' ctermfg: ' .. baseSyn.ctermfg ..
 				' ctermbg: ' .. baseSyn.ctermbg ..
 				' guifg: ' .. baseSyn.guifg ..
 				' guibg: ' .. baseSyn.guibg
-	var linkedSyn = s:get_syn_attr(s:get_syn_id(1))
+	var linkedSyn = s:Get_syn_attr(s:Get_syn_id(1))
 	echo 'link to'
 	echo 'name: ' .. linkedSyn.name ..
 				' ctermfg: ' .. linkedSyn.ctermfg ..

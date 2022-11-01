@@ -2,7 +2,7 @@ vim9script
 scriptencoding utf-8
 # ~/.vim/pack/*/{stat,opt}/* でプラグインを管理する上で、便利な関数
 
-def s:mkHelpTags(h: string): void
+def MkHelpTags(h: string): void
 	var docdir = h .. '/doc'
 	if len(glob(docdir .. '/*.{txt,??x}', 1, 1))
 		execute 'helptags ' .. docdir
@@ -38,7 +38,7 @@ def s:mkHelpTags(h: string): void
 	endfor
 enddef
 
-def manage_pack#helptags(): void
+export def Helptags(): void
 	# ~/.vim/pack/*/{stat,opt}/*/doc に有るヘルプのタグを ~/.vim/doc/tags{,??x} に出力 (packadd しなくても、help が開けるようになる)
 	# ~/.vim/pack/*/{stat,opt}/*/doc に有る tags{,-??} が古ければ再作成
 	# コンパイル済みの Python スクリプトにしても大して速度は変わらない
@@ -60,13 +60,13 @@ def manage_pack#helptags(): void
 			continue
 		endif
 		if max_tags_time < getftime(f)
-			s:mkHelpTags(h)
+			s:MkHelpTags(h)
 			return
 		endif
 	endfor
 enddef
 
-def s:packadd_ls(f: string): list<string>
+def Packadd_ls(f: string): list<string>
 	# packadd plugin で書かれたプラグイン読み込みを探す
 	var packages: list<string>
 	for s in systemlist("grep -Ehi '^[^\#\"]*\\<packadd' " .. f)
@@ -75,7 +75,7 @@ def s:packadd_ls(f: string): list<string>
 	return packages
 enddef
 
-def s:map_ls(f: string): list<string>
+def Map_ls(f: string): list<string>
 	# set_map_plug(plugin, ...) で書かれたプラグイン読み込みを探す
 	var packages: list<string>
 	for s in systemlist("grep -Ehi '^[^#\"]*\\<set_map_plug\#main\\([ \t]*'\\' " .. f)
@@ -87,21 +87,21 @@ def s:map_ls(f: string): list<string>
 	return packages
 enddef
 
-def s:get_pack_ls(): list<dict<string>>
+def Get_pack_ls(): list<dict<string>>
 	# プラグインの名称、リポジトリ、インストール先取得
 	var packages: list<string>
 
-	packages = extendnew(s:packadd_ls('~/.vim/plugin/*.vim'), s:packadd_ls('~/.vim/autoload/*.vim'))
-	extend(packages, s:map_ls('~/.vim/plugin/*.vim'))
-	extend(packages, s:map_ls('~/.vim/autoload/*.vim'))
+	packages = extendnew(s:Packadd_ls('~/.vim/plugin/*.vim'), s:Packadd_ls('~/.vim/autoload/*.vim'))
+	extend(packages, s:Map_ls('~/.vim/plugin/*.vim'))
+	extend(packages, s:Map_ls('~/.vim/autoload/*.vim'))
 	uniq(sort(packages))
-	return extendnew(s:get_packages('~/.vim/plugin/*.vim', packages),
-	s:get_packages('~/.vim/autoload/*.vim', packages))->sort((lhs, rhs) => lhs.package >? rhs.package ? 1 : -1)
+	return extendnew(s:Get_packages('~/.vim/plugin/*.vim', packages),
+	s:Get_packages('~/.vim/autoload/*.vim', packages))->sort((lhs, rhs) => lhs.package >? rhs.package ? 1 : -1)
 enddef
 
-def manage_pack#install(): void
+export def Install(): void
 	# プラグインのインストール
-	for s in s:get_pack_ls()
+	for s in s:Get_pack_ls()
 		if isdirectory(s.dir)
 			echo s.package .. ': installed or already existed direcory'
 		else
@@ -111,9 +111,9 @@ def manage_pack#install(): void
 	endfor
 enddef
 
-def manage_pack#reinstall(pack: string): void
+export def Reinstall(pack: string): void
 	# プラグインの強制再インストール
-	var pack_ls: list<dict<string>> = s:get_pack_ls()->filter('v:val.package ==# "' .. pack .. '"')
+	var pack_ls: list<dict<string>> = s:Get_pack_ls()->filter('v:val.package ==# "' .. pack .. '"')
 	if len(pack_ls)
 		var dic: dict<string> = pack_ls[0]
 		if isdirectory(dic.dir)
@@ -127,7 +127,7 @@ def manage_pack#reinstall(pack: string): void
 	endif
 enddef
 
-def s:get_packages(f: string, p: list<string>): list<dict<string>>
+def Get_packages(f: string, p: list<string>): list<dict<string>>
 	# ファイル f に書かれたプラグインの名称、リポジトリ、インストール先取得
 	var packages: list<dict<string>>
 	var url: string

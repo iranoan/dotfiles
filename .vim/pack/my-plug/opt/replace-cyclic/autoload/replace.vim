@@ -1,19 +1,19 @@
 vim9script
 scriptencoding utf-8
 
-def replace#escape_search(s: string): string
-	return escape(replace#escape_search_core(s), getcmdtype())
+export def Escape_search(s: string): string
+	return escape(replace#Escape_search_core(s), getcmdtype())
 enddef
 
-def replace#escape_search_core(s: string): string
+export def Escape_search_core(s: string): string
 	return escape(s, '\~[.*$^')
 enddef
 
-def replace#escape_replace(s: string): string
+export def Escape_replace(s: string): string
 	return escape(s, '\~&')
 enddef
 
-def replace#cyclic(args: string, word: number = 0): string
+export def Cyclic(args: string, word: number = 0): string
 	# dog と cat の入れ替えのように、再クリックに文字を置換するために
 	# dog,cat
 	# といった , 区切りの文字列を
@@ -74,15 +74,15 @@ def replace#cyclic(args: string, word: number = 0): string
 	# 文字列を \(dog\|cat\) といった正規表現文字列に変換
 	var ret_s = 's' .. sep .. ( and(word, 1) ? '\<' : '' ) .. '\('
 	for s in s_ls
-		ret_s ..= replace#escape_search_core(s) .. '\|'
+		ret_s ..= replace#Escape_search_core(s) .. '\|'
 	endfor
 	ret_s = ret_s[ : -2] .. ')' .. ( !and(word, 2) ? '' : '\>' ) .. sep .. '\={'''
 	# 文字列を {'dog':'cat', 'cat':'dog'} といった辞書に変換
 	i = 1
 	for s in s_ls[ : -2]
-		ret_s ..= substitute(s, "'", "''", 'g') .. "':'" .. substitute(replace#escape_replace(s_ls[i]), "'", "''", 'g') .. "', '"
+		ret_s ..= substitute(s, "'", "''", 'g') .. "':'" .. substitute(replace#Escape_replace(s_ls[i]), "'", "''", 'g') .. "', '"
 		i += 1
 	endfor
-	ret_s ..= substitute(s_ls[-1], "'", "''", 'g') .. "':'" .. substitute(replace#escape_replace(s_ls[0]), "'", "''", 'g') .. "'}[submatch(1)]" .. sep .. "g"
+	ret_s ..= substitute(s_ls[-1], "'", "''", 'g') .. "':'" .. substitute(replace#Escape_replace(s_ls[0]), "'", "''", 'g') .. "'}[submatch(1)]" .. sep .. "g"
 	return ret_s
 enddef

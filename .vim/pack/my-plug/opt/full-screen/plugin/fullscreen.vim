@@ -1,3 +1,3 @@
 vim9script
 
-command Fullscreen fullscreen#main()
+command Fullscreen fullscreen#Main()

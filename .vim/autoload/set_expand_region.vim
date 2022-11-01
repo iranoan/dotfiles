@@ -1,7 +1,7 @@
 scriptencoding utf-8
 
 function set_expand_region#main(cmd) abort
-	call set_map_plug#main('vim-expand-region', a:cmd, [
+	call set_map_plug#Main('vim-expand-region', a:cmd, [
 				\ {'mode': 'v', 'key': 'v',  'cmd': '(expand_region_expand)'},
 				\ {'mode': 'v', 'key': 'V',  'cmd': '(expand_region_shrink)'}
 				\ ] )

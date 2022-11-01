@@ -2,7 +2,7 @@ vim9script
 scriptencoding utf-8
 # nmap k <Plug>... の要領で <Plug> にマッピングするプラグインを遅延読み込み
 
-def set_map_plug#main(plug: string, cmd: string, map_ls: list<dict<string>>): void
+export def Main(plug: string, cmd: string, map_ls: list<dict<string>>): void
 	# plug: 読み込むプラグイン名
 	# cmd: 実際に実行するコマンド (先頭の <Plug> は省略)
 	#      <Plug>Commentary<Plug>Commentary のように複数の場合は 'Commentary<Plug>Commentary' の様に先頭の <Plug> のみ除く
