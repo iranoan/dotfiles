@@ -215,6 +215,11 @@ augroup VIMRC
 				# ↑path にカレント・ディレクトリ以下を追加
 				# ,BufWrite は TeX で \input したファイルで保存するたびに変更されると不便なときが有る
 	# autocmd VimEnter    * if exists(':Explore') | delcommand Explore | endif # netrw の使用自体取りやめ
+	# 見かけ上のインデント量を formatlistpat にヒットした文字数にする
+	autocmd BufEnter,BufFilePost,BufNewFile,BufRead *
+				\ if &filetype ==# '' || &filetype ==# 'text' || &filetype ==# 'markdown'
+				| setlocal breakindentopt=shift:0,min:10,list:-1
+				| endif
 	autocmd BufWritePre * pos = getpos('.') | :%s/\(^--\|^>.*\)\@<![ \u000B\t\r　]\+$//e | setpos('.', pos) # メール署名の区切りと引用行以外の行末空白を保存時に削除
 	# autocmd TerminalOpen *                       nnoremap <silent><buffer>q :bwipeout<CR>
 	# ↑ターミナルで効いていないし、fzf を使ったバッファで q で閉じる意図しない動きになってしまう
