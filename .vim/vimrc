@@ -140,7 +140,7 @@ set autoindent smartindent                     # オートインデント+改行
 set tabstop=2 shiftwidth=2                     # タブ文字は2文字分に合わせてインデントは2文字
 set breakindent                                # 行頭空白の折り返し行で見かけ上インデント
 set formatlistpat=^\\c\\s*\\(\\d\\+[]:.)\\t\ ]\\\|(\\?[0-9a-z]\\+)\\\|[a-z][.\\t\ ]\\\|\\[[0-9a-z]\\]\\)\\?\\s* # 箇条書きとみなす空白、数値、1文字英字とカッコの組み合わせ
-set breakindentopt=shift:0,min:10,list:-1     # 見かけ上のインデント量を formatlistpat にヒットした文字数にする (タブ文字も1文字なので、tabstop-1だけずれる)
+set breakindentopt=shift:0,min:10,list:0       # 見かけ上のインデント量を formatlistpat にヒットした文字数にする (list:-1はタブ文字も1文字なので、tabstop-1だけずれる)
 # コマンド・バー {{{2
 tabdo set cmdheight=1                          # コマンドバー調整
 set wildmenu                                   # 補完が拡張モードで行われる←次の設定にしても最長補完がされない
