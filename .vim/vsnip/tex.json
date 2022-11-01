@@ -1,4 +1,20 @@
 {
+	"section": {
+		"prefix": "section",
+		"body": "\\section{${1:${TM_SELECTED_TEXT}}}",
+		"description": "section"
+
+	},
+	"subsection": {
+		"prefix": "subsection",
+		"body": "\\subsection{${1:${TM_SELECTED_TEXT}}}",
+		"description": "subsection"
+	},
+	"subsubsection": {
+		"prefix": "subsubsection",
+		"body": "\\subsubsection{${1:${TM_SELECTED_TEXT}}}",
+		"description": "subsubsection"
+	},
 	"frame": {
 		"prefix": "frame",
 		"body": [
