@@ -8,12 +8,10 @@ let b:did_ftplugin_user = 1
 "--------------------------------
 "ファイルタイプ別のグローバル設定
 "--------------------------------
-if !exists('g:is_bash')
-	let g:sh_fold_enabled=7
-	let g:is_bash=1
-endif
 " if !exists('g:sh_plugin')
 " 	let g:sh_plugin = 1
+" 	" let g:sh_fold_enabled=7 " ~/.vim/ftplugin で指定しないと $ vim ~/.bashrc 等引数で開くと設定が反映されない
+" 	" let g:is_bash=1 " シェルスクリプトはほぼ sh (POSIX) で書くことが多い
 " 	" augroup mySh
 " 	" 	autocmd!
 " 	" augroup END
@@ -21,5 +19,5 @@ endif
 "--------------------------------
 "ファイルタイプ別ローカル設定
 "--------------------------------
-setlocal foldmethod=syntax
+" setlocal foldmethod=syntax " ← set syntax=sh 相当になるので、それに伴い設定が変えられる
 setlocal keywordprg=:Man\ <C-R>w

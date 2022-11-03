@@ -4,6 +4,7 @@ if exists('s:did_load_filetypes')
 	finish
 endif
 let s:did_load_filetypes = 1
+let g:sh_fold_enabled = 7
 augroup filetypedetect
 	autocmd!
 	"*.plt は mimetypeが設定されていないことも有り得る
