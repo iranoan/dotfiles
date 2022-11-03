@@ -254,6 +254,9 @@ set helplang=ja,en                             # 日本語ヘルプを優先的�
 set spell spelllang+=cjk
 # gf などでファイルとして扱う文字 {{{1
 set isfname+=: isfname-=# isfname-==           # Maildir では : がフラグの前置文字 HTML では # は id+シェルスクリプトなどで = は代入
+# ファイルタイプ別設定 {{{1
+g:tex_flavor = 'latex'                         # *.tex の新規作成などで plainTeX ではなく LaTeX として扱う
+g:markdown_folding = 1                         # Markdown で折りたたみ
 # キー割り当てを除いたその他 {{{1
 set keywordprg=:help
 # ↓grep でスワップファイルとディレクトリ除外←再帰的に行う -r, --recursive オプションと組わせたときのため (なおこの時のファイル絞り込みは、--include='*.txt' 等と使う)
@@ -265,8 +268,6 @@ set textwidth=0                                # 自動改行させない
 set shellslash                                 # Windowsでもパス区切りにスラッシュを使える
 set diffopt=filler,context:2,iwhite,vertical,internal,algorithm:histogram,indent-heuristic # 差分表示オプション
 set path+=~/bin,~/Templates,
-g:tex_flavor = 'latex'                         # *.tex の新規作成などで plainTeX ではなく LaTeX として扱う
-g:markdown_folding = 1                         # Markdown で折りたたみ
 set conceallevel=0                             # 個々のファイルタイプごとで、文字を省略したり置き換える機能は使わない
 if has('path_extra')                           # tags ファイルは $HOME まで辿る
 	set tags+=tags;$HOME/
