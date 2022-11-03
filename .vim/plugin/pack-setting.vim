@@ -596,16 +596,6 @@ nnoremap <Leader>dx       <Cmd>call vimspector#Reset( { 'interactive': v:false }
 nmap     <Leader>di       <Plug>VimspectorBalloonEval
 xmap     <Leader>di       <Plug>VimspectorBalloonEval
 
-# カーソル位置のコンテキストに合わせて filetype を切り替える https://github.com/osyo-manga/vim-precious {{{2
-# 上の context_filetype.vim はあくまで判定
-augroup loadprecious
-	autocmd!
-	autocmd FileType sh,vim,html,markdown,lua set_precious#main()
-				| autocmd! loadprecious
-				| augroup! loadprecious
-				| delfunction set_precious#main
-augroup END
-
 # ファイル・マネージャー https://github.com/lambdalisue/fern.vim {{{2
 nnoremap <Leader>e <Cmd>Fern $HOME -drawer -reveal=%:p -toggle<CR>
 # nnoremap <Leader>e <Cmd>Fern %:p:h -drawer -reveal=%:p -toggle<CR>
@@ -620,7 +610,7 @@ augroup END
 # カーソル位置に合わせて filetype を判定←各種プラグインが依存 https://github.com/Shougo/context_filetype.vim {{{2
 augroup loadcontext_filetype
 	autocmd!
-	autocmd CursorMoved * set_context_filetype#main()
+	autocmd FileType sh,vim,html,markdown,lua set_context_filetype#main()
 				| autocmd! loadcontext_filetype
 				| augroup! loadcontext_filetype
 				| delfunction set_context_filetype#main

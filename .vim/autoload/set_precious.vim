@@ -1,7 +1,7 @@
 function set_precious#main() abort
 	packadd vim-precious
 	let g:precious_enable_switchers = {
-				\ 	'help': {
+				\ 'help': {
 				\ 	'setfiletype': 0
 				\ },
 				\}

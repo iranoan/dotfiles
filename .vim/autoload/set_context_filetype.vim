@@ -2,6 +2,11 @@ scriptencoding utf-8
 
 function set_context_filetype#main() abort
 	packadd context_filetype.vim
+	let g:precious_enable_switchers = {
+				\ 	'help': {
+				\ 	'setfiletype': 0
+				\ },
+				\}
 	if !exists('g:context_filetype#filetypes')
 		let g:context_filetype#filetypes = {}
 	endif
@@ -77,4 +82,13 @@ function set_context_filetype#main() abort
 		" 	\ 	'end': '"'
 		" 	\ },
 		" \ ]
+	" カーソル位置のコンテキストに合わせて filetype を切り替える https://github.com/osyo-manga/vim-precious {{{2
+	" 上の context_filetype.vim はあくまで判定
+	augroup loadprecious
+		autocmd!
+		autocmd CursorMoved,CursorMovedI * call set_precious#main()
+					\ | autocmd! loadprecious
+					\ | augroup! loadprecious
+					\ | delfunction set_precious#main
+	augroup END
 endfunction
