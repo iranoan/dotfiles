@@ -80,13 +80,13 @@ nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 
 # カラースキム https://github.com/altercation/vim-colors-solarized {{{2
 set background=dark
-if glob('~/.vim/pack/*/*/vim-colors-solarized/colors/*', 1, 1) != []
-	set t_Co=16 # ターミナルが 256 色だと、highlight Terminal の色を Normal と同じにできない
+try
 	g:solarized_menu = 0
 	colorscheme solarized
-else
+	# set t_Co=16 # ターミナルが 256 色だと、highlight Terminal の色を Normal と同じにできない
+catch /^Vim\%((\a\+)\)\=:E185:/
 	colorscheme desert
-endif
+endtry
 # background によって一部の syntax を変える (Solarized を基本としている) {{{
 def Color_light_dark(): void
 	highlight clear Pmenu # 一部の絵文字が標準設定では見にくいので一旦クリアして light/dark で異なる設定にする
