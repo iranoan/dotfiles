@@ -68,9 +68,9 @@ g:SignatureMap = { # こちらで設定しないとデフォルト指定され�
 }
 
 #: Tabedit ~/.vim/pack/my-plug/start/tabedit/ {{{2
+# ↑opt/ に入れて呼び出すようにすると、最初の使用時に補完が働かない
 nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 # nnoremap <silent>gf :TabEdit <cfile><CR> " ← 存在しなくても開く <C-R><C-F> と同じ
-# ↑opt/ に入れて呼び出すようにすると、最初の使用時に補完が働かない
 
 # https://github.com/t9md/vim-foldtext を ~/.vim/pack/my-plug/start/vim-foldtext/ で書き換え {{{2
 
