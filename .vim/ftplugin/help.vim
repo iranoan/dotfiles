@@ -9,8 +9,8 @@ let b:did_ftplugin_user = 1
 "--------------------------------
 "ファイルタイプ別のグローバル設定
 "--------------------------------
-if !exists('g:htlp_plugin')
-	let g:htlp_plugin = 1
+if !exists('g:help_plugin')
+	let g:help_plugin = 1
 	function! HelpFold() abort " 折りたたみ関数
 		if v:lnum == 1
 			return '>1'
