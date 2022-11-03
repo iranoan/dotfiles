@@ -24,10 +24,10 @@ function set_asyncomplete#main() abort
 			imap <expr> <C-Y> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-Y>'
 			smap <expr> <C-Y> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-Y>'
 			" Jump forward or backward
-			imap <expr> <C-H> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)'      : '<Left>'
-			smap <expr> <C-H> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)'      : '<Left>'
-			imap <expr> <C-L> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)'      : '<Right>'
-			smap <expr> <C-L> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)'      : '<Right>'
+			imap <expr> <C-O> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)'      : '<C-O>'
+			smap <expr> <C-O> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)'      : '<C-O>'
+			imap <expr> <C-I> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)'      : '<C-I>'
+			smap <expr> <C-I> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)'      : '<C-I>'
 		" }}}
 	" }}}
 	" LSP との連携する asyncomplete-lsp.vim は vim-lsp 側で行う ← InsertEnter のタイミングではうまく動作しない
