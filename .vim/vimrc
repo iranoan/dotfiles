@@ -71,6 +71,10 @@ augroup matchit_words
 	autocmd BufEnter * if exists('b:match_words') | b:match_words ..= ',' .. &matchpairs | endif
 augroup END # }}}
 # packadd termdebug                              # デバッガ ←vimspector を使う
+# マウス {{{2
+set mouse=a                                    # マウス有効化
+set mousemodel=popup                           # マウス右クリックは Windows 風 (GUI のみ)
+# set nomousefocus                               # デフォルト
 # 折りたたみ {{{1
 # set foldmethod=manual                          # 標準では手動←改めて設定する必要がない
 set foldlevelstart=99                          # ファイル・オープン時は折りたたみは開いたまま

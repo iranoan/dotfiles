@@ -21,8 +21,6 @@ augroup GVIMRC
 	# ↑GTK でズレが生じるため再設定 https://github.com/vim-jp/issues/issues/1374
 	# lines=999 としたのでコメントに
 augroup END
-set mousemodel=popup
-# set nomousefocus          # デフォルト
 # ホイール・スクロールは [Shift] 押しながらと逆にする {{{
 nnoremap <ScrollWheelUp>     <S-ScrollWheelUp>
 nnoremap <S-ScrollWheelUp>   <ScrollWheelUp>
