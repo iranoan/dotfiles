@@ -214,6 +214,7 @@ if glob('~/.vim/pack/*/*/vim-fugitive/plugin/fugitive.vim') !=# ''
 endif
 
 # 2019-03-31 14:51 などの日付や時刻もうまい具合に Ctrl-a/x で加算減算する https://github.com/tpope/vim-speeddating {{{2
+# 遅延読み込みにしているので最初の {count}<C-X>/<C-A> の {count} が無視される
 nmap d<C-X> <Cmd>call set_speeddating#main('SpeedDatingNowLocal') <bar> delfunction set_speeddating#main<CR>
 nmap d<C-A> <Cmd>call set_speeddating#main('SpeedDatingNowUTC') <bar> delfunction set_speeddating#main<CR>
 xmap <C-X>  <Cmd>call set_speeddating#main('SpeedDatingDown') <bar> delfunction set_speeddating#main<CR>

@@ -419,7 +419,7 @@ vnoremap <Leader>/ <Esc>/\%V
 # vim-speeddating の組み合わせでうまくいかない
 # vnoremap <C-A> <C-A>gv
 # vnoremap <C-X> <C-X>gv
-set nrformats=bin,hex,alpha                     # アルファベットでもインクリメント、ディクリメント←8進数,octalは除外
+set nrformats=bin,hex,alpha                      # アルファベットでもインクリメント、ディクリメント←8進数,octalは除外
 # j, gj, k, gk の入れ替え {{{2
 nnoremap j gj
 nnoremap k gk
