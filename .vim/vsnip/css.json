@@ -1,0 +1,141 @@
+{
+	"background": {
+		"prefix": [ "bg", "background" ],
+		"body": "background: ${0:#fff};",
+		"description": "background: image position/size repeat attachment box box"
+	},
+	"background-color": {
+		"prefix": [ "bgc", "background-color" ],
+		"body": "background-color: ${0:#fff};"
+	},
+	"border": {
+		"prefix": [ "bor", "border" ],
+		"body": "border: ${1:1px} ${2|solid,dashed,dotted,double,groove,ridge,inset,outset,none,hidden|} ${0:#000};"
+	},
+	"border-color": {
+		"prefix": [ "borc", "border-color" ],
+		"body": "border-color: ${0:#000};"
+	},
+	"border-style": {
+		"prefix": [ "bors", "border-style" ],
+		"body": "border-style: ${1|solid,dashed,dotted,double,groove,ridge,inset,outset,none,hidden|};"
+	},
+	"border-width": {
+		"prefix": [ "borw", "border-width" ],
+		"body": "border-width: ${0:1px};"
+	},
+	"border-bottom": {
+		"prefix": [ "borb", "border-bottom" ],
+		"body": "border-bottom: ${1:1px} ${2|solid,dashed,dotted,double,groove,ridge,inset,outset,none,hidden|} ${0:#000};"
+	},
+	"border-left": {
+		"prefix": [ "borl", "border-left" ],
+		"body": "border-left: ${1:1px} ${2|solid,dashed,dotted,double,groove,ridge,inset,outset,none,hidden|} ${0:#000};"
+	},
+	"border-right": {
+		"prefix": [ "borr", "border-right" ],
+		"body": "border-right: ${1:1px} ${2|solid,dashed,dotted,double,groove,ridge,inset,outset,none,hidden|} ${0:#000};"
+	},
+	"border-top": {
+		"prefix": [ "bort", "border-top" ],
+		"body": "border-top: ${1:1px} ${2|solid,dashed,dotted,double,groove,ridge,inset,outset,none,hidden|} ${0:#000};"
+	},
+	"border-radius": {
+		"prefix": [ "br", "border-radius" ],
+		"body": "border-radius: ${0:2px};"
+	},
+	"clear": {
+		"prefix": [ "clr", "clear" ],
+		"body": "clear: ${1|both,left,right,none|};"
+	},
+	"color": {
+		"prefix": [ "col", "color" ],
+		"body": "color: ${0:#000};"
+	},
+	"float": {
+		"prefix": [ "fl", "float" ],
+		"body": "float: ${1|left,right,none|};"
+	},
+	"font-family": {
+		"prefix": [ "ff", "font-family" ],
+		"body": "font-family: ${0:arial};"
+	},
+	"font-weight": {
+		"prefix": [ "fw", "font-weight" ],
+		"body": "font-weight: ${0:bold};"
+	},
+	"font-size": {
+		"prefix": [ "fz", "font-size" ],
+		"body": "font-size: ${0:12px};"
+	},
+	"font-style": {
+		"prefix": [ "fst", "font-style" ],
+		"body": "font-style: ${1|italic,oblique,normal|};"
+	},
+	"list-style": {
+		"prefix": [ "lis", "list-style" ],
+		"body": "list-style: ${1|disc,circle,square,decimal,lower-roman,upper-roman,lower-alpha,upper-alpha,none,armenian,cjk-ideographic,georgian,lower-greek,hebrew,hiragana,hiragana-iroha,katakana,katakana-iroha,lower-latin,upper-latin|} ${2|outside,inside|};",
+		"description": "list-style: type position image"
+	},
+	"list-style-type": {
+		"prefix": [ "list", "list-style-type" ],
+		"body": "list-style-type: ${1|disc,circle,square,decimal,lower-roman,upper-roman,lower-alpha,upper-alpha,none,armenian,cjk-ideographic,georgian,lower-greek,hebrew,hiragana,hiragana-iroha,katakana,katakana-iroha,lower-latin,upper-latin|};",
+		"description": "initial value: disc"
+	},
+	"margin": {
+		"prefix": [ "mar", "margin" ],
+		"body": "margin: ${1:0};$0"
+	},
+	"margin-bottom": {
+		"prefix": [ "marb", "margin-bttom" ],
+		"body": "margin-bottom: ${1:0};$0"
+	},
+	"margin-left": {
+		"prefix": [ "marl", "margin-left" ],
+		"body": "margin-left: ${1:0};$0"
+	},
+	"margin-right": {
+		"prefix": [ "marr", "margin-right" ],
+		"body": "margin-right: ${1:0};$0"
+	},
+	"margin-top": {
+		"prefix": [ "mart", "margin-top" ],
+		"body": "margin-top: ${1:0};$0"
+	},
+	"margin: 0 auto": {
+		"prefix": "mara",
+		"body": "margin: 0 auto;"
+	},
+	"padding": {
+		"prefix": [ "pad", "padding" ],
+		"body": "padding: ${1:0};$0"
+	},
+	"padding-bottom": {
+		"prefix": [ "pad", "padding-bottom" ],
+		"body": "padding-bottom: ${1:0};$0"
+	},
+	"padding-left": {
+		"prefix": [ "pad", "padding-left" ],
+		"body": "padding-left: ${1:0};$0"
+	},
+	"padding-right": {
+		"prefix": [ "pad", "padding-right" ],
+		"body": "padding-right: ${1:0};$0"
+	},
+	"padding-top": {
+		"prefix": [ "pad", "padding-top" ],
+		"body": "padding-top: ${1:0};$0"
+	},
+	"text-align": {
+		"prefix": [ "ta", "text-align" ],
+		"body": "text-align: ${1|center,left,right,justify,start,end|};"
+	},
+	"vertical-align": {
+		"prefix": [ "va", "vertical-align" ],
+		"body": "vertical-align: ${1|baseline,middle,top,bottom,sub,super,text-top,text-bottom|};"
+	},
+	"width": {
+		"prefix": [ "wid", "width" ],
+		"body": "width: ${1:0};$0"
+	}
+}
