@@ -34,7 +34,9 @@
 		"no-invalid-double-slash-comments": true,
 		"shorthand-property-no-redundant-values": true,
 		"declaration-block-no-redundant-longhand-properties": true,
-		"property-no-vendor-prefix": true
+		"property-no-vendor-prefix": true,
+		"at-rule-no-unknown": true,
+		"at-rule-allowed-list": ["charset"]
 	},
 	"overrides": [
 		{
