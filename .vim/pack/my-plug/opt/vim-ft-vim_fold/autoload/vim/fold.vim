@@ -34,7 +34,7 @@ function vim#fold#calculate(bufnr) abort
 	let cur_lv = 0
 	let endl = line('$')
 
-	let open_pat = '^\s*:\?\s*\%(fu\%[nction]\>\|aug\%[roup]\|if\|for\|wh\%[ile]\|def\)\>'
+	let open_pat = '^\s*:\?\s*\%(fu\%[nction]\>\|aug\%[roup]\|if\|for\|wh\%[ile]\|\(export\s\+\)\?def\)\>'
 	let close_pat = '^\s*:\?\s*\%(endf\%[unction]\>\|aug\%[roup]\s\+END\|endfo\%[r]\|endw\%[hile]\|enddef\|en\%[dif]\)\>'
 
 	while lnum < endl
