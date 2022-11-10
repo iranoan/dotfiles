@@ -38,20 +38,22 @@ g:loaded_gzip = 1 # {{{
 augroup loadZipArchive
 	autocmd!
 	autocmd BufReadPre *.aar,*.apk,*.celzip,*.crtx,*.docm,*.docx,*.dotm,*.dotx,*.ear,*.epub,*.gcsx,*.glox,*.gqsx,*.ja,*.jar,*.kmz,*.odb,*.odc,*.odf,*.odg,*.odi,*.odm,*.odp,*.ods,*.odt,*.otc,*.otf,*.otg,*.oth,*.oti,*.otp,*.ots,*.ott,*.oxt,*.potm,*.potx,*.ppam,*.ppsm,*.ppsx,*.pptm,*.pptx,*.sldx,*.thmx,*.vdw,*.war,*.wsz,*.xap,*.xlam,*.xlam,*.xlsb,*.xlsm,*.xlsx,*.xltm,*.xltx,*.xpi,*.zip
-				\ unlet g:loaded_zipPlugin | source $VIM/*/plugin/zipPlugin.vim
+				\ unlet g:loaded_zipPlugin | source $VIMRUNTIME/plugin/zipPlugin.vim
 				| autocmd! loadZipArchive
-	# \ | edit!
-	# ↑最後のファイル読み込みし直しが効かない
+				| augroup! loadZipArchive
+				# | edit!
+	# ↑最後のファイル読み込みし直しを反映させるイベント不明
 augroup END # }}}
 g:loaded_tarPlugin = 1 # {{{
 augroup loadTarArchive
 	autocmd!
 	autocmd BufReadPre *.gz,*.bz2,*.Z,*.lzma,*.xz,*.lz,*.zst,*.br,*.lzo,*.tar,*.lrp,*.tbz,*.tgz,*.txz,*.tzs
-				\ unlet g:loaded_tarPlugin | source $VIM/*/plugin/tarPlugin.vim
-				| unlet g:loaded_gzip | source $VIM/*/plugin/gzip.vim
+				\ unlet g:loaded_tarPlugin | source $VIMRUNTIME/plugin/tarPlugin.vim
+				| unlet g:loaded_gzip | source $VIMRUNTIME/plugin/gzip.vim
 				| autocmd! loadTarArchive
-	# \ | edit!
-	# ↑最後のファイル読み込みし直しが効かない
+				| augroup! loadTarArchive
+				# | edit!
+	# ↑最後のファイル読み込みし直しを反映させるイベント不明
 augroup END # }}}
 g:loaded_netrwPlugin = 1 # netrw {{{ ← fern を使う
 # g:netrw_banner=0                           # バーナー非表示
