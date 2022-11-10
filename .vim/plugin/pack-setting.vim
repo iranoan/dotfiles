@@ -7,7 +7,7 @@ scriptencoding utf-8
 # 導入しただけで、設定の無い分はコメントで簡単な説明と入手先
 
 # ~/.vim/pack でプラグインを管理する上で、FileType で読み込んだプラグインを再設定するために、再度 setfiletype して、そのイベント・トリガーを削除 {{{2
-for g:packe_setting_s in ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'html', 'xhtml', 'css', 'tex', 'sh', 'markdown', 'go', 'help']
+for g:packe_setting_s in ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'html', 'xhtml', 'css', 'tex', 'sh', 'bash', 'markdown', 'go', 'help']
 	if g:packe_setting_s ==# 'python'
 		g:packe_setting_ext = '*.py'
 	elseif g:packe_setting_s ==# 'ruby'
@@ -315,7 +315,7 @@ augroup END
 # 各種言語の構文チェック https://github.com/dense-analysis/ale {{{2
 augroup loadALE
 	autocmd!
-	autocmd FileType c,cpp,python,ruby,yaml,markdown,html,xhtml,css,tex,sh,help,json
+	autocmd FileType c,cpp,python,ruby,yaml,markdown,html,xhtml,css,tex,help,json
 				\ set_ale#main()
 				| autocmd! loadALE
 				| augroup! loadALE
@@ -362,7 +362,7 @@ augroup END
 # af, if に割当
 augroup loadTextObjFunc
 	autocmd!
-	autocmd FileType c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,css,tex,sh packadd vim-textobj-function
+	autocmd FileType c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,css,tex,sh,bash packadd vim-textobj-function
 	| packadd vim-textobj-function-syntax
 	| autocmd! loadTextObjFunc
 	| augroup! loadTextObjFunc
@@ -566,7 +566,7 @@ augroup END
 # https://github.com/prabirshrestha/vim-lsp {{{2
 augroup loadvimlsp
 	autocmd!
-	autocmd FileType c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,tex,css,sh,go,conf
+	autocmd FileType c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,tex,css,sh,bash,go,conf
 				\ set_vimlsp#main()
 				| autocmd! loadvimlsp
 				| augroup! loadvimlsp
@@ -611,7 +611,7 @@ augroup END
 # カーソル位置に合わせて filetype を判定←各種プラグインが依存 https://github.com/Shougo/context_filetype.vim {{{2
 augroup loadcontext_filetype
 	autocmd!
-	autocmd FileType sh,vim,html,markdown,lua set_context_filetype#main()
+	autocmd FileType sh,bash,vim,html,markdown,lua set_context_filetype#main()
 				| autocmd! loadcontext_filetype
 				| augroup! loadcontext_filetype
 				| delfunction set_context_filetype#main

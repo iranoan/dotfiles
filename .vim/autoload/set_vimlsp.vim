@@ -16,6 +16,16 @@ function set_vimlsp#main() abort
 	let g:lsp_diagnostics_signs_information = {'text': '📔', 'icon': l:icon_dir .. 'information' .. l:icon_ext}
 	let g:lsp_fold_enabled = 0
 	let g:lsp_text_edit_enabled = 1
+	" vim-lsp-settings は &filetype == sh に対応しているが &filetype == bash は未対応 {{{
+	call lsp#register_server({
+				\ 'name': 'bash-language-server',
+				\ 'cmd': {server_info->['bash-language-server', 'start']},
+				\ 'initialization_options': v:null,
+				\ 'allowlist': ['bash'],
+				\ 'blocklist': [],
+				\ 'config': {'refresh_pattern': '\([a-zA-Z0-9_-]\+\|\k\+\)$'}
+				\ })
+	" }}}
 	" vim-lsp の自動設定 https://github.com/mattn/vim-lsp-settings {{{
 	packadd vim-lsp-settings
 	let g:lsp_settings = {
@@ -52,7 +62,7 @@ function set_vimlsp#main() abort
 		" 			\ foldmethod=expr
 		" 			\ foldexpr=lsp#ui#vim#folding#foldexpr()
 		" 			\ foldtext=lsp#ui#vim#folding#foldtext()
-		autocmd WinEnter,FileType c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,tex,css,sh,go,conf if !s:check_run_lsp() | call lsp#activate() | endif
+		autocmd WinEnter,FileType c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,tex,css,sh,bash,go,conf if !s:check_run_lsp() | call lsp#activate() | endif
 		" packadd を使う場合、これがないと開いた既存のウィンドウにでバッファを額た時に有効にならない
 		" autocmd BufWinEnter * call lsp#activate() "
 		" ↑コメントとしたのは、すでに開いている filetype だと、新たに fzf HISTORY に開いたバッファで有効にならないため
@@ -67,7 +77,7 @@ def s:on_lsp_buffer_enabled(): void
 		setlocal tagfunc=lsp#tagfunc
 	endif
 	# ALE を優先させるか両方使うか {{{
-	if &filetype == 'vim'
+	if &filetype == 'vim' || &filetype == 'sh' || &filetype == 'bash'
 		b:ale_enabled = 0 # ALE 不使用
 		nmap <buffer>[a        <Plug>(lsp-previous-diagnostic)
 		nmap <buffer>]a        <Plug>(lsp-next-diagnostic)
