@@ -85,7 +85,7 @@ try
 	colorscheme solarized
 	# set t_Co=16 # ターミナルが 256 色だと、highlight Terminal の色を Normal と同じにできない
 catch /^Vim\%((\a\+)\)\=:E185:/
-	colorscheme desert
+	colorscheme habamax
 endtry
 # background によって一部の syntax を変える (Solarized を基本としている) {{{
 def Color_light_dark(): void
