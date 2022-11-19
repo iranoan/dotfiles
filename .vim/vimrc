@@ -152,7 +152,7 @@ tabdo set cmdheight=1                          # コマンドバー調整
 set wildmenu                                   # 補完が拡張モードで行われる←次の設定にしても最長補完がされない
 set wildmode=list:longest,list:full            # bashライクの補完
 set suffixes+=.aux,.log,.pdf,.synctex.gz,.toc  # 補完の優先度を下げる拡張子
-set wildignore+=*.dvi,*.o,*.opp,*.obj,*.a,*.so,*.fdb_latexmk,*.fls,*.nav,*.out,*.snm # 補完候補から完全に除外
+set wildignore+=*.dvi,*.o,*.opp,*.obj,*.a,*.so,*.fdb_latexmk,*.fls,*.nav,*.out,*.snm # 補完候補から完全に除外 (含めると補完候補にも現れなくなる)
 # ステータス・バー {{{2
 set laststatus=2                               # 表示
 g:ff_table = {'dos': 'CR+LF', 'unix': 'LF', 'mac': 'CR'}
@@ -248,6 +248,15 @@ augroup END
 # 日本語の表示/編集に関わる設定 {{{1
 if exists('&ambiwidth')                        # □とか○の文字があってもカーソル位置がずれないようにする
 	set ambiwidth=double
+	call setcellwidths([                         # 一部を再度半角指定
+		[0x03B1, 0x03C9, 1], [0x0391, 0x03A9, 1],  # ギリシャ文字
+		[0x2B0, 0x2B3, 1], [0x2B7, 0x2B8, 1], [0x2E1, 0x2E3, 1], [0x1D2C, 0x1D61, 1], [0x1D9B, 0x1DBF, 1], [0x2070, 0x2071, 1], [0x2074, 0x2075, 1], [0x2C7D, 0x2C7D, 1], # 上付き文字
+		[0x1D62, 0x1D6A, 1], [0x2080, 0x209C, 1], [0x2C7C, 0x2C7C, 1], # 下付き文字
+		[0x401, 0x401, 1], [0x410, 0x4F9, 1]       # キリル文字 (フォントの関係か上手く半角にならない文字も有る)
+		])
+	# [0xAA, 0xAA, 1], [0xB2, 0xB3, 1], [0xB9, 0xBA, 1], # 上付きの0-3, a←VIM - Vi IMproved 9.0 (2022 Jun 28, compiled Aug 23 2022 20:18:58) 適用済パッチ: 1-242 でエラー
+	# [0xA1, 0xA1, 1], [0xA7, 0xA7, 1], [0xAE, 0xAE, 1], [0xB0, 0xB4, 1], [0xB6, 0xB6, 1], [0xBF, 0xBF, 1] # ¡§®°±´¶¿と上付きの一部
+	#
 endif
 set formatoptions+=mMj1 formatoptions-=tc      # 日本語の行の連結時には空白を入力しない+textwidth を使った自動折返しをしない
 set display+=lastline                          # 画面最後の行をできる限り表示
