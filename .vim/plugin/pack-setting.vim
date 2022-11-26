@@ -238,7 +238,7 @@ nnoremap <silent><Leader>fg :GFiles?<CR>
 nnoremap <silent><Leader>fh :HISTORY<CR>
 nnoremap <silent><Leader>fl :BLines<CR>
 nnoremap <silent><Leader>fm :Marks<CR>
-nnoremap <silent>m/      :Marks<CR>
+nnoremap <silent>m/         :Marks<CR>
 # ↑ vim-signature のデフォルト・キーマップをこちらに再定義
 # nnoremap <silent><Leader>ft :Tags<CR>
 nnoremap <silent><Leader>fw :Windows<CR>
