@@ -10,6 +10,10 @@ function set_asyncomplete#main() abort
 	" また 'allowlist': ['*'] を使うと、直ぐ消えてしまうケースが出てくる←vim のコメントで再現
 	" snippet https://github.com/hrsh7th/vim-vsnip {{{
 		packadd vim-vsnip
+		if !exists('g:vsnip_filetypes')
+			let g:vsnip_filetypes = {}
+		endif
+		let g:vsnip_filetypes.xhtml = ['html']
 		" let g:vsnip_snippet_dirs = [expand('~/.vim/vsnip')]
 		let g:vsnip_snippet_dir = resolve(expand('~/.vim/vsnip'))
 		" vim-vsnip/plugin/vsnip.vim s:expand_or_jump() を置き換え←補完後挿入モードにならないケースが有る
