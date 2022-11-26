@@ -21,9 +21,19 @@ function set_vimlsp#main() abort
 				\ 'name': 'bash-language-server',
 				\ 'cmd': {server_info->['bash-language-server', 'start']},
 				\ 'initialization_options': v:null,
-				\ 'allowlist': ['bash'],
+				\ 'allowlist': ['sh', 'bash'],
 				\ 'blocklist': [],
 				\ 'config': {'refresh_pattern': '\([a-zA-Z0-9_-]\+\|\k\+\)$'}
+				\ })
+	call lsp#register_server({
+				\ 'name': 'vscode-html-language-server',
+				\ 'cmd': {server_info->['vscode-html-language-server', '--stdio']},
+				\ 'initialization_options': {'embeddedLanguages': {'javascript': v:true, 'css': v:true}},
+				\ 'allowlist': ['html', 'xhtml'],
+				\ 'blocklist': [],
+				\ 'config': {'refresh_pattern': '\(/\|\k\+\)$'},
+				\ 'workspace_config': {},
+				\ 'semantic_highlight': {},
 				\ })
 	" }}}
 	" vim-lsp の自動設定 https://github.com/mattn/vim-lsp-settings {{{
