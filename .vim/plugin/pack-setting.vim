@@ -690,3 +690,12 @@ augroup loadReplaceCyclic
 	| autocmd! loadReplaceCyclic
 	| augroup! loadReplaceCyclic
 augroup END
+
+# *.docx をまとめて epub 用のファイルに変換 ~/.vim/pack/my-plug/opt/txt2xhtml {{{2
+augroup loadTxt2xhtml
+	autocmd!
+	autocmd FuncUndefined txt2xhtml#main packadd txt2xhtml
+	| autocmd! loadTxt2xhtml
+	| augroup! loadTxt2xhtml
+augroup END
+
