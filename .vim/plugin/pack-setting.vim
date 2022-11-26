@@ -228,6 +228,9 @@ nnoremap <silent><Leader>ff :Files<CR>
 nnoremap <silent><Leader>f. :Files ..<CR>
 nnoremap <silent><Leader>fv :Files ~/.vim<CR>
 nnoremap <silent><Leader>fs :Files ~/src<CR>
+nnoremap <silent><Leader>fx :Files ~/bin<CR>
+nnoremap <silent><Leader>fe :Files ~/book/epub<CR>
+nnoremap <silent><Leader>fp :Files ~/public_html/iranoan<CR>
 nnoremap <silent><Leader>ft :Files ~/Information/slide<CR>
 nnoremap <silent><Leader>fb :Buffers<CR>
 nnoremap <silent><Leader>fc :Commands<CR>
