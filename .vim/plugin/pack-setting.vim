@@ -292,7 +292,7 @@ augroup END
 # yank の履歴 https://github.com/justinhoward/fzf-neoyank {{{2
 nnoremap <Leader>fy :FZFNeoyank<CR>
 nnoremap <Leader>fY :FZFNeoyank # P<CR>
-vnoremap <Leader>fy :FZFNeoyankSelection<CR>
+xnoremap <Leader>fy :FZFNeoyankSelection<CR>
 # nnoremap <Leader>dy :FZFNeoyank<CR>
 # nnoremap <Leader>dY :FZFNeoyank " P<CR>
 # vnoremap <Leader>dy :FZFNeoyankSelection<CR>
@@ -404,8 +404,8 @@ augroup END
 # | ---     | ---                                |
 # | vipga=  | visual-select inner paragragh ga = |
 # | gaip=   | ga inner paragragh =               |
-vmap <Enter>    <Cmd>call set_easy_align#main()<CR>
-vmap <Leader>ea <Cmd>call set_easy_align#main()<CR>
+xmap <Enter>    <Cmd>call set_easy_align#main()<CR>
+xmap <Leader>ea <Cmd>call set_easy_align#main()<CR>
 nmap <Leader>ea <Cmd>call set_easy_align#main()<CR>
 # ↑全て対象を全体 * にしたいが、nmap の <Leader>eaip などテキストオブジェクトの場合の方法がわからない
 
@@ -443,7 +443,7 @@ augroup END
 
 # ソースの実行結果を別バッファに表示 https://github.com/thinca/vim-quickrun {{{2
 nnoremap <silent><Leader>qr       :QuickRun<CR>
-vnoremap <silent><Leader>qr       :QuickRun<CR>
+xnoremap <silent><Leader>qr       :QuickRun<CR>
 inoremap <silent><C-\>qr     <ESC>:QuickRun<CR>a
 augroup QuickRnnKeymap
 	autocmd!
@@ -518,7 +518,7 @@ augroup END
 
 # カーソル位置の単語を Google で検索 ~/.vim/pack/my-plug/opt/google-search/ https://www.rasukarusan.com/entry/2019/03/09/011630 を参考にした {{{2
 nnoremap <silent><Leader>g :SearchByGoogle<CR>
-vnoremap <silent><Leader>g :SearchByGoogle<CR>
+xnoremap <silent><Leader>g :SearchByGoogle<CR>
 augroup loadSearchByGoogle
 	autocmd!
 	autocmd CmdUndefined SearchByGoogle packadd google-search
@@ -555,7 +555,7 @@ augroup END
 
 # EPWING の辞書を呼び出す https://github.com/deton/eblook.vim {{{2
 nmap <silent><Leader>eb <Cmd>call set_eblook#main() <bar> delfunction set_eblook#main<CR>
-vmap <silent><Leader>eb <Cmd>call set_eblook#main() <bar> delfunction set_eblook#main<CR>
+xmap <silent><Leader>eb <Cmd>call set_eblook#main() <bar> delfunction set_eblook#main<CR>
 
 # Undo をツリー表示で行き来する https://github.com/mbbill/undotree {{{2
 nnoremap <silent><Leader>u <Cmd>UndotreeToggle<CR>
@@ -666,8 +666,8 @@ nmap cs9 cs)
 nmap cs@ cs`
 
 # 選択範囲をテキストオブジェクトで広げたり、狭めたり https://github.com/terryma/vim-expand-region {{{2
-vmap v <Cmd>call set_expand_region#main('(expand_region_expand)') <bar> delfunction set_expand_region#main<CR>
-vmap V <Cmd>call set_expand_region#main('(expand_region_shrink)') <bar> delfunction set_expand_region#main<CR>
+xmap v <Cmd>call set_expand_region#main('(expand_region_expand)') <bar> delfunction set_expand_region#main<CR>
+xmap V <Cmd>call set_expand_region#main('(expand_region_shrink)') <bar> delfunction set_expand_region#main<CR>
 
 # getmail syntax https://github.com/vim-scripts/getmail.vim {{{2
 augroup Gatmail

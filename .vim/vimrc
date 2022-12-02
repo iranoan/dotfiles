@@ -347,7 +347,7 @@ inoremap <silent><S-C-Tab> <C-PageUp>
 # クリップボードのコピー、ペースト、切り取り {{{2
 vnoremap <C-C> "+y
 vnoremap <C-Y> "+y
-vnoremap Y "+y
+xnoremap Y "+y
 # ↑元の v_Y ほぼ v_y と同じだが行単位←元々行単位なら V を使う
 vnoremap <C-Insert> "+`y
 vnoremap <Insert> "+gp
@@ -358,7 +358,7 @@ nnoremap <S-Insert> "+gp
 # vnoremap <C-X> "+x                            # デフォルトでカーソル位置の数字減算にマップ (ctrl-aとペア)
 # vnoremap <C-D> "+x                            # デフォルトで下方スクロールにマップ
 vnoremap <S-Del> "+x
-vnoremap X "+x
+xnoremap X "+x
 # ↑元の v_X ほぼ v_x と同じだが行単位←元々行単位なら V を使う
 inoremap <S-Insert> <C-R>+
 inoremap <Insert> <C-R>+
@@ -372,7 +372,7 @@ cnoremap <Insert> <C-R>+
 # cnoremap <S-C-P> <C-R>+                        # Ctrl-pの割当と重なり無効になる
 cnoremap <C-P> <C-R>"
 # 選択範囲の貼り付けで、直前のレジスタを連続して貼り付け←vimの連続コピペできない問題 https://baqamore.hatenablog.com/entry/2016/07/07/201856
-vnoremap <expr>p 'pgv"' .. v:register .. 'y`>'
+xnoremap <expr>p 'pgv"' .. v:register .. 'y`>'
 # vnoremap <expr>P 'pgv"' . v:register . 'y`>`'
 # 2つを入れ替えたい時は、書き換わったほうが都合が良いので、大文字側はデフォルトのままにしておく
 # 挿入/コマンドモード時のカーソル移動 {{{2
@@ -380,8 +380,7 @@ vnoremap <expr>p 'pgv"' .. v:register .. 'y`>'
 inoremap <C-H> <Left>
 cnoremap <C-H> <Left>
 inoremap <expr><C-J> pumvisible() ? '<Down>' : '<C-J>'
-snoremap <expr><C-J> pumvisible() ? '<Down>' : '<C-J>'
-xnoremap <expr><C-J> pumvisible() ? '<Down>' : '<C-J>'
+vnoremap <expr><C-J> pumvisible() ? '<Down>' : '<C-J>'
 #↑ insert moode の補完候補の選択にも使っている
 inoremap <C-K> <Up>
 inoremap <C-L> <Right>
@@ -393,8 +392,7 @@ cnoremap <C-B> <Left>
 cnoremap <C-D> <Del>
 cnoremap <S-BS> <Del>
 inoremap <expr><C-N> pumvisible() ? '<C-N>' : '<Down>'
-snoremap <expr><C-N> pumvisible() ? '<C-N>' : '<Down>'
-xnoremap <expr><C-N> pumvisible() ? '<C-N>' : '<Down>'
+vnoremap <expr><C-N> pumvisible() ? '<C-N>' : '<Down>'
 #↑ insert moode の補完候補の選択にも使っている
 # コマンドモードの <C-N>, <C-K> を <Up>, <Down> に割当 {{{2
 cnoremap <C-N> <Down>
@@ -421,7 +419,7 @@ nnoremap <script><SID>ws> <C-W>><SID>ws
 nnoremap <script><SID>ws< <C-W><<SID>ws
 nmap <SID>ws <Nop>
 # 選択範囲で検索 {{{2
-vnoremap <Leader>/ <Esc>/\%V
+xnoremap <Leader>/ <Esc>/\%V
 # 範囲選択中の増加、減少 (インクリメント、ディクリメント) は、再度選択状態に戻す {{{2
 # vim-speeddating の組み合わせでうまくいかない
 # vnoremap <C-A> <C-A>gv
@@ -434,10 +432,10 @@ nnoremap gj j
 nnoremap gk k
 nnoremap <Down> gj
 nnoremap <Up>   gk
-vnoremap j gj
-vnoremap k gk
-vnoremap gj j
-vnoremap gk k
+xnoremap j gj
+xnoremap k gk
+xnoremap gj j
+xnoremap gk k
 vnoremap <Down> gj
 vnoremap <Up>   gk
 tnoremap <C-W><C-[> <C-W>N
