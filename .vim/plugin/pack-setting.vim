@@ -178,6 +178,32 @@ augroup loadasyncomplete
 				| delfunction set_asyncomplete#main
 augroup END
 
+# 括弧や引用符をペアで入力/削除 ~/.vim/pack/my-plug/start/pare_bracket/ {{{2
+# https://github.com/cohama/lexima.vim は、対応括弧を追加設定して使うと CmdlineLeave が働いてしまう
+# ほかは全角未対応
+# ドット・リピートは考慮していない
+g:parebracket = {
+	'{': {'pare': '}', 'space': 1},
+	'[': {'pare': ']', 'space': 1},
+	'(': {'pare': ')', 'space': 1},
+	'/*': {'pare': '*/', 'space': 1, 'type': ['c', 'cpp']},
+	'<': {'pare': '>', 'space': 1, 'type': ['tex', 'html']},
+	'「': {'pare': '」'},
+	'『': {'pare': '』'},
+	'【': {'pare': '】'},
+	}
+g:parequote = {
+		'''': {},
+		'"': {},
+		'`': {},
+		'$': {'type': ['tex']},
+		'*': {'type': ['help']},
+		'|': {'type': ['help']},
+		# ↓ ', " 自体の反応が遅くなる
+		# "'''": {},
+		# '"""': {},
+		}
+
 # ここから ~/.vim/pack/*/opt 配下 {{{1
 # 小文字で始まるコマンドを定義可能に https://github.com/kana/vim-altercmd {{{2
 # ↓実質 /start/と同じになるが、単純に /start/ に置くと、このスクリプト読み込み時点では AlterCommand が使えず、エラーになるので読み込み明示形式にする
@@ -303,16 +329,6 @@ augroup loadfzf_neoyank
 				| autocmd! loadfzf_neoyank
 				| augroup! loadfzf_neoyank
 				| delfunction set_fzf_neoyank#main
-augroup END
-
-# 閉じ括弧補完←遅延読み込みでも ) が二重に成らないのはこれぐらいだった https://github.com/cohama/lexima.vim {{{2
-augroup loadlexima
-	autocmd!
-	autocmd InsertEnter *
-				\ set_lexima#main()
-				| autocmd! loadlexima
-				| augroup! loadlexima
-				| delfunction set_lexima#main
 augroup END
 
 # 各種言語の構文チェック https://github.com/dense-analysis/ale {{{2
