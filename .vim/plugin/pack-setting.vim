@@ -691,11 +691,11 @@ augroup loadReplaceCyclic
 	| augroup! loadReplaceCyclic
 augroup END
 
-# *.docx をまとめて epub 用のファイルに変換 ~/.vim/pack/my-plug/opt/txt2xhtml {{{2
-augroup loadTxt2xhtml
+# *.docx をまとめて epub 用のファイルに変換 ~/.vim/pack/my-plug/opt/docx2xhtml {{{2
+# カレント・ディレクトリに有る Google Document を使って OCR したファイルを前提とし、自作シェル・スクリプトや LibreOffice も呼び出しているごく個人的なスクリプト
+augroup loadDocx2xhtml
 	autocmd!
-	autocmd FuncUndefined txt2xhtml#main packadd txt2xhtml
-	| autocmd! loadTxt2xhtml
-	| augroup! loadTxt2xhtml
+	autocmd FuncUndefined docx2xhtml#main packadd docx2xhtml
+	| autocmd! loadDocx2xhtml
+	| augroup! loadDocx2xhtml
 augroup END
-
