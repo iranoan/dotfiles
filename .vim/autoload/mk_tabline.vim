@@ -29,7 +29,7 @@ export def Label(n: number): string
 	var change = ''
 	for bufnr in buflist
 		if getbufvar(bufnr, '&modified')
-					\ && !( match(getbufinfo(bufnr)[0]['name'], '!/') == 0 && swapname(bufnr) ==# '' )
+					\ && !( match(getbufinfo(bufnr)[0].name, '!/') == 0 && swapname(bufnr) ==# '' )
 			# 名前が !/bin/bash 等で !/ ではじまり、スワップ・ファイルがなければ :terminal の可能性が高い
 			change = '+'
 			break

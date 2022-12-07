@@ -28,7 +28,7 @@ function set_quickrun#main() abort
 				\} "outputter/quickfix/into		デフォルト: 0 0 以外を指定すると、結果が出た際に |quickfix-window| へカーソルを移動します。
 	" 言語毎の設定
 	"C コンパイラは clang 優先 (*.cpp に対しては、おそらく既にそうなっている) {{{
-	let g:quickrun_config['c'] = {
+	let g:quickrun_config.c = {
 				\ 'type':
 				\   executable('cl')    ? 'c/vc'  :
 				\   executable('clang') ? 'c/clang' :
@@ -37,7 +37,7 @@ function set_quickrun#main() abort
 				\}
 	" }}}
 	"gnuplot 成功時は出力しない {{{
-	let g:quickrun_config['gnuplot'] = {
+	let g:quickrun_config.gnuplot = {
 				\ 'outputter/error/success' : 'null',
 				\ 'command'                 : 'gnuplot.sh',
 				\ 'cmdopt'                  : '--persist',
@@ -45,7 +45,7 @@ function set_quickrun#main() abort
 				\}
 	" }}}
 	" HTML 使用しているスクリプトは元々エラー以外は何も出力しない {{{
-	let g:quickrun_config['html'] = {
+	let g:quickrun_config.html = {
 				\ 'outputter/error/success' : 'quickfix',
 				\ 'command'                 : 'html-check.sh',
 				\ 'cmdopt'                  : '',
@@ -55,7 +55,7 @@ function set_quickrun#main() abort
 	" TeX 設定 成功時は出力しない←途中エラーが有っても止めない等のオプション追加 {{{
 	" zathura_sync.sh 内部で処理をしようとすると、非同期処理ができないので止めた
 	" TeX を素直に latexmk を使う時の設定
-	let g:quickrun_config['tex'] = {
+	let g:quickrun_config.tex = {
 				\ 'outputter'                        : 'multi:buffer:quickfix',
 				\ 'outputter/buffer/bufname'         : 'quickrun://TeX-log',
 				\ 'outputter/buffer/opener'          : 'rightbelow 4split',
@@ -71,13 +71,13 @@ function set_quickrun#main() abort
 				" \ 'hook/close_quickfix/enable_success' : 1, 上と同じ
 				" \ 'cmdopt'                           : '-pv -src-specials -synctex=1 -file-line-error -interaction=nonstopmode', " zathura が複数起動するので、-pv を無くしたものを使う
 	" srcfile は最初に QuickRun を使ったときだけに指定されるので、バッファごとの指定にしないと、最初に実行したファイルに固定されてしまう
-	let b:quickrun_config['tex'] = {'srcfile' : substitute(system('texmother.sh ' . expand('%')), '\n', '', ''),}
+	let b:quickrun_config.tex = {'srcfile' : substitute(system('texmother.sh ' . expand('%')), '\n', '', ''),}
 	function Qf2qucikrun() abort
 		let l:qf_b = 0
 		let l:qr_b = 0
 		for l:i in getwininfo()
-			let l:b_i = l:i['bufnr']
-			if l:i['quickfix']
+			let l:b_i = l:i.bufnr
+			if l:i.quickfix
 				let l:qf_b = l:b_i
 			elseif bufname(l:b_i) ==# 'quickrun://TeX-log'
 				let l:qr_b = l:b_i
@@ -92,10 +92,10 @@ function set_quickrun#main() abort
 			return
 		endif
 		for l:i in getbufinfo()
-			if l:i['name'] ==# 'quickrun://TeX-log'
+			if l:i.name ==# 'quickrun://TeX-log'
 				let l:c_b = bufnr()
 				call win_gotoid(bufwinid(l:qf_b))
-				execute 'buffer! ' . l:i['bufnr']
+				execute 'buffer! ' . l:i.bufnr
 				call win_gotoid(bufwinid(l:c_b))
 				QuickRun
 				return
@@ -107,15 +107,15 @@ function set_quickrun#main() abort
 	function Quickrn2qf() abort
 		let l:c_b = bufnr()
 		for l:i in getwininfo()
-			if bufname(l:i['bufnr']) ==# 'quickrun://TeX-log'
-				let l:qr_b =  l:i['bufnr']
+			if bufname(l:i.bufnr) ==# 'quickrun://TeX-log'
+				let l:qr_b =  l:i.bufnr
 			endif
 		endfor
 		call win_gotoid(bufwinid(l:qr_b))
 		for l:i in getbufinfo()
-			if has_key(l:i['variables'], 'current_syntax')
-				if l:i['variables']['current_syntax'] ==# 'qf'
-					execute 'buffer! ' . l:i['bufnr']
+			if has_key(l:i.variables, 'current_syntax')
+				if l:i.variables.current_syntax ==# 'qf'
+					execute 'buffer! ' . l:i.bufnr
 					call win_gotoid(bufwinid(l:c_b))
 					return
 				endif
@@ -123,7 +123,7 @@ function set_quickrun#main() abort
 		endfor
 		" qf が無かった
 		quit
-		execute substitute(g:quickrun_config['tex']['outputter/buffer/opener'], '\v(\d+)v?split', 'copen \1', '')
+		execute substitute(g:quickrun_config.tex['outputter/buffer/opener'], '\v(\d+)v?split', 'copen \1', '')
 	endfunction
 	augroup QuickRnnTeXKeymap
 		autocmd!
@@ -134,6 +134,6 @@ function set_quickrun#main() abort
 	endif
 	" }}}
 	" Python は python3 を使う←Ubuntu 21.04 では python コマンドは、python3
-	" let g:quickrun_config['python'] = { 'command'                : 'python3'}
+	" let g:quickrun_config.python = { 'command'                : 'python3'}
 	" vim help
 endfunction

@@ -31,8 +31,8 @@ function! s:open_buffer(f) abort " バッファ番号の可能性を探り有れ
 		return v:false
 	endif
 	for l:v in getbufinfo()
-		if l:v['bufnr'] == l:n  " バッファ番号が見つかった
-			if s:goto_win(l:v['windows'])
+		if l:v.bufnr == l:n  " バッファ番号が見つかった
+			if s:goto_win(l:v.windows)
 				return v:true
 			endif
 			" バッファは有ったが hidden
@@ -46,17 +46,17 @@ endfunction
 
 function! s:open_file(f) abort  " ファイル a:f を開く
 	for l:v in getbufinfo()
-		if a:f != l:v['name']
+		if a:f != l:v.name
 			continue
 		endif
-		if s:goto_win(l:v['windows'])
+		if s:goto_win(l:v.windows)
 			return
 		endif
-		execute 'silent tab sbuffer ' .. l:v['bufnr']
+		execute 'silent tab sbuffer ' .. l:v.bufnr
 		let s:win_id = s:win_id ? s:win_id : winnr()
 		return
 	endfor
-	if wordcount()['bytes'] == 0 && &modified == 0
+	if wordcount().bytes == 0 && &modified == 0
 		execute 'edit ' .. a:f
 	else
 		execute 'silent tabedit ' .. a:f

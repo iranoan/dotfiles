@@ -24,7 +24,7 @@ function set_fern#main() abort
 	" 			\ 'ctrl-x': 'split',
 	" 			\ 'ctrl-v': 'vsplit'
 	" 			\ })
-	" let b:fzf_action['enter'] = function('s:fern_fzf')
+	" let b:fzf_action.enter = function('s:fern_fzf')
 	" let g:fern#mapping#fzf#fzf_options = {'options': '--multi --no-unicode --margin=0% --padding=0% --preview=''~/bin/fzf-preview.sh {}'' --bind=''ctrl-]:change-preview-window(hidden|)'''}
 	if !is_plugin_installed#Main('fzf.vim')
 		call set_fzf_vim#main()
@@ -58,7 +58,7 @@ function s:init_fern() abort
 				\ 'ctrl-x': 'split',
 				\ 'ctrl-v': 'vsplit'
 				\ })
-	let b:fzf_action['enter'] = function('s:fern_fzf')
+	let b:fzf_action.enter = function('s:fern_fzf')
 	" キー・マップ
 	nmap <buffer><BS>            <Plug>(fern-action-leave)
 	nmap <buffer><C-C>           <Plug>(fern-action-cancel)
@@ -113,7 +113,7 @@ endfunction
 
 function s:fern_fzf(line) abort
 	if match(bufname(), '^fern://drawer:\d\+/file:///.\+;\$$') == 0
-		let winids = gettabinfo('.')[0]['windows']
+		let winids = gettabinfo('.')[0].windows
 		call filter(winids, function('s:fern_fzf_filter'))
 		if winids == []
 			" let fern_win = bufwinid(bufnr())
@@ -133,7 +133,7 @@ endfunction
 
 function s:fern_fzf_filter(i, v) abort
 	let v_dic = getwininfo(a:v)[0]
-	if a:v == bufwinid(bufnr()) || v_dic['loclist'] == 1 || v_dic['quickfix'] == 1 || v_dic['terminal'] == 1
+	if a:v == bufwinid(bufnr()) || v_dic.loclist == 1 || v_dic.quickfix == 1 || v_dic.terminal == 1
 		return v:false
 	endif
 	return v:true
