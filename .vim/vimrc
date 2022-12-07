@@ -164,7 +164,7 @@ g:ff_table = {'dos': 'CR+LF', 'unix': 'LF', 'mac': 'CR'}
 # # if &t_Co > 1                                 # ←上でターミナル起動も256色にしている
 # # 	syntax enable
 # # endif
-# if has('syntax') && !has('gui_running')        # GUI では全角空白が可視化されるフォントを使っている
+# if has('syntax') && !has('gui_running')        # 全角空白が可視化されるフォントを使っている
 # 	augroup ZenkakuSpace
 # 		autocmd!
 # 		autocmd ColorScheme       * s:ZenkakuSpace()
@@ -240,7 +240,6 @@ augroup VIMRC
 				\ silent if &filetype !~# 'commit' && line("'\"") > 1 && line("'\"") <= line("$")
 				| 	execute 'normal! g`"'
 				| endif #前回閉じた時のカーソル位置に移動← $VIMRUNTIME/defaults.vim
-	# autocmd BufEnter * if getftype(expand('%')) ==# 'link' | symbolic_link#normalize() | endif # シンボリック・リンクは展開
 	autocmd BufEnter * if getftype(expand('%')) ==# 'link' | symbolic_link#Normalize() | endif # シンボリック・リンクは展開
 	autocmd CmdlineLeave,CmdwinLeave * if getcmdtype() =~# '[/?]' || ( getcmdwintype() =~# '[/?]' && pos != getpos('.')) | set hlsearch | endif # ハイライトはトグル・スイッチ
 	autocmd CmdwinEnter * pos = getpos('.')
