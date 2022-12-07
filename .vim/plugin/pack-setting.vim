@@ -178,21 +178,21 @@ augroup loadasyncomplete
 				| delfunction set_asyncomplete#main
 augroup END
 
-# 括弧や引用符をペアで入力/削除 ~/.vim/pack/my-plug/start/pare_bracket/ {{{2
+# 括弧や引用符をペアで入力/削除 ~/.vim/pack/my-plug/start/pair_bracket/ {{{2
 # https://github.com/cohama/lexima.vim は、対応括弧を追加設定して使うと CmdlineLeave が働いてしまう
 # ほかは全角未対応
 # ドット・リピートは考慮していない
-g:parebracket = {
-	'{': {'pare': '}', 'space': 1},
-	'[': {'pare': ']', 'space': 1},
-	'(': {'pare': ')', 'space': 1},
-	'/*': {'pare': '*/', 'space': 1, 'type': ['c', 'cpp']},
-	'<': {'pare': '>', 'space': 1, 'type': ['tex', 'html']},
-	'「': {'pare': '」'},
-	'『': {'pare': '』'},
-	'【': {'pare': '】'},
+g:pairbracket = {
+	'{': {'pair': '}', 'space': 1},
+	'[': {'pair': ']', 'space': 1},
+	'(': {'pair': ')', 'space': 1},
+	'/*': {'pair': '*/', 'space': 1, 'type': ['c', 'cpp']},
+	'<': {'pair': '>', 'space': 1, 'type': ['tex', 'html']},
+	'「': {'pair': '」'},
+	'『': {'pair': '』'},
+	'【': {'pair': '】'},
 	}
-g:parequote = {
+g:pairquote = {
 		'''': {},
 		'"': {},
 		'`': {},
