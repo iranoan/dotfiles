@@ -715,3 +715,16 @@ augroup loadDocx2xhtml
 	| autocmd! loadDocx2xhtml
 	| augroup! loadDocx2xhtml
 augroup END
+
+# 文字の変換 ~/.vim/pack/my-plug/opt/transform/ {{{2
+augroup loadtransform
+	autocmd!
+	autocmd FuncUndefined transform#* packadd transform
+	| autocmd! loadtransform
+	| augroup! loadtransform
+	autocmd CmdUndefined Zen2han packadd transform
+	| autocmd! loadtransform
+	| augroup! loadtransform
+augroup END
+nnoremap <Leader>ha :Zen2han<CR>
+xnoremap <Leader>ha :Zen2han<CR>
