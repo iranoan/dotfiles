@@ -10,6 +10,11 @@ function! foldtext#base(...) abort
 	" remove the marker that caused this fold from the display
 	let foldmarkers = split(&foldmarker, ',')
 	let line = substitute(line, '\V' . foldmarkers[0] . '\%(\d\+\)\?', ' ', '')
+	let comment = &commentstring
+	if comment !=# ''
+		let comment = escape(comment, '.$*~\')->substitute('%s', '\\(.\\{-}\\)', '')
+		let line = substitute(line, comment, '\1', '')
+	endif
 	" remove any remaining leading or trailing whitespace
 	let line = substitute(line, '^\s*\(.\{-}\)\s*$', '\1', '')
 
