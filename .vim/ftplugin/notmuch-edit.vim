@@ -11,7 +11,7 @@ scriptencoding utf-8
 #--------------------------------
 if !exists("g:mail_draft_plugin")
 	g:mail_draft_plugin = 1
-	def ReformMail(): void
+	def g:ReformMail(): void
 		var msg = readfile(fnameescape(systemlist('notmuch search --output=files id:' .. b:notmuch.msg_id)[0]))
 		var from: string
 		var i = match(msg, '^From:\c')
@@ -24,16 +24,23 @@ if !exists("g:mail_draft_plugin")
 		endwhile
 		from = substitute(from, '^From:\s*', '', 'g')->substitute('.\+\s*<\([^>]*\)>', '\1', 'g')
 		var pos = getpos('.')
+		var search = @/
 		if from ==? 'nikkei-news@mx.nikkei.com'
-			setpos('.', [0, 1, 1, 0])
-			:silent execute ':/^$/+10delete | :$-27,$-15delete'
+			:silent execute ':1 | :/^$/+10delete | :$-27,$-15delete'
+		elseif from ==? 'atmarkit_newarrivals@noreply.itmedia.co.jp'
+			:silent execute ':1 | :/^==PR-\+$/,/^-\+==/+1delete | :/^＠ITの新着記事をお届けします。\n/,/^--- NewsInsight -- 今日のニュース --\+$/-2delete | :/^━＠ITソーシャルアカウント━━━━━━━━━━━━━━━━━━━━━━━━━$/,/^発行：アイティメディア株式会社$/-2delete'
+			setline('.', '-- ')
+		elseif from ==? 'e_service@mof.go.jp'
+			:silent execute ':1 | :/^当メールマガジンについてのご意見、ご感想はこちらへお願いします。$/,$delete | :%substitute/^　//g | :%substitute/　/ /g'
 		else
 			return
 		endif
+		:1 | :/^$/,$Zen2han
+		@/ = search
 		setpos('.', pos)
 	enddef
 endif
 #--------------------------------
 #ファイルタイプ別ローカル設定
 #--------------------------------
-nnoremap <Leader>r <Cmd>call <SID>ReformMail()<CR>
+nnoremap <Leader>r <Cmd>call g:ReformMail()<CR>
