@@ -1,4 +1,5 @@
 scriptencoding utf-8
+scriptversion 4
 
 function! foldtext#base(...) abort
 	" use the argument for display if possible, otherwise the current line
@@ -9,7 +10,7 @@ function! foldtext#base(...) abort
 	endif
 	" remove the marker that caused this fold from the display
 	let foldmarkers = split(&foldmarker, ',')
-	let line = substitute(line, '\V' . foldmarkers[0] . '\%(\d\+\)\?', ' ', '')
+	let line = substitute(line, '\V' .. foldmarkers[0] .. '\%(\d\+\)\?', ' ', '')
 	let comment = &commentstring
 	if comment !=# ''
 		let comment = escape(comment, '.$*~\')->substitute('%s', '\\(.\\{-}\\)', '')
@@ -18,28 +19,28 @@ function! foldtext#base(...) abort
 	" remove any remaining leading or trailing whitespace
 	let line = substitute(line, '^\s*\(.\{-}\)\s*$', '\1', '')
 
-	let cnt = printf('[%' . len(line('$')) . 's] ', (v:foldend - v:foldstart + 1))
+	let cnt = printf('[%' .. len(line('$')) .. 's] ', (v:foldend - v:foldstart + 1))
 	let line_width = winwidth(0) - &foldcolumn
 
 	if &number
 		let line_width -= max([&numberwidth, len(line('$'))])
 	" sing の表示非表示でずれる分の補正
 	elseif &signcolumn ==# 'number'
-		let cnt = cnt . '  '
+		let cnt = cnt .. '  '
 	endif
 	if &signcolumn ==# 'auto'
-		let cnt = cnt . '  '
+		let cnt = cnt .. '  '
 	endif
 	let line_width -= 2 * (&signcolumn ==# 'yes')
 
-	let line = strcharpart(printf('%-'. ( &shiftwidth * (v:foldlevel-1)+2) . 's%s', '▸', line), 0, line_width-len(cnt))
+	let line = strcharpart(printf('%-' .. ( &shiftwidth * (v:foldlevel-1)+2) .. 's%s', '▸', line), 0, line_width-len(cnt))
 	" 全角文字を使っていると、幅でカットすると広すぎる
 	" だからといって strcharpart() の代わりに strpart() を使うと、逆に余分にカットするケースが出てくる
 	" ↓末尾を 1 文字づつカットしていく
 	while strdisplaywidth(line) > line_width-len(cnt)
 		let line = slice(line, 0, -1)
 	endwhile
-	return printf('%s%' . (line_width-strdisplaywidth(line)) . 'S', line, cnt)
+	return printf('%s%' .. (line_width-strdisplaywidth(line)) .. 'S', line, cnt)
 endfunction
 
 " Latex {{{
@@ -60,30 +61,30 @@ function! s:roman_numeral(i)
 		let c10 = strpart(chars, base + 2, 1)
 		let digit = i % 10
 		if digit == 1
-			let numeral = c1 . numeral
+			let numeral = c1 .. numeral
 		elseif digit == 2
-			let numeral = c1 . c1 . numeral
+			let numeral = c1 .. c1 .. numeral
 		elseif digit == 3
-			let numeral = c1 . c1 . c1 . numeral
+			let numeral = c1 .. c1 .. c1 .. numeral
 		elseif digit == 4
-			let numeral = c1 . c5 . numeral
+			let numeral = c1 .. c5 .. numeral
 		elseif digit == 5
-			let numeral = c5 . numeral
+			let numeral = c5 .. numeral
 		elseif digit == 6
-			let numeral = c5 . c1 . numeral
+			let numeral = c5 .. c1 .. numeral
 		elseif digit == 7
-			let numeral = c5 . c1 . c1 . numeral
+			let numeral = c5 .. c1 .. c1 .. numeral
 		elseif digit == 8
-			let numeral = c5 . c1 . c1 . c1 . numeral
+			let numeral = c5 .. c1 .. c1 .. c1 .. numeral
 		elseif digit == 9
-			let numeral = c1 . c10 . numeral
+			let numeral = c1 .. c10 .. numeral
 		endif
 		let i = i / 10
 		if i == 0
 			break
 		end
 	endfor
-	return repeat('m', i) . numeral
+	return repeat('m', i) .. numeral
 endfunction
 
 function! s:upper_letter(i)
@@ -98,7 +99,7 @@ function! s:enumeration(depth, index)
 	if a:depth == 0
 		return a:index + 1
 	elseif a:depth == 1
-		return '(' . s:lower_letter(a:index + 1) . ')'
+		return '(' .. s:lower_letter(a:index + 1) .. ')'
 	elseif a:depth == 2
 		return s:roman_numeral(a:index + 1)
 	elseif a:depth == 3
@@ -126,9 +127,9 @@ function! foldtext#latex()
 			endif
 		endwhile
 		if label !=# ''
-			let label = ': ' . label
+			let label = ': ' .. label
 		endif
-		return foldtext#base(type . label)
+		return foldtext#base(type .. label)
 	endif
 	" }}}
 	" format list items nicely {{{
@@ -185,8 +186,8 @@ function! foldtext#latex()
 				let item_name[i] = s:enumeration(i, item_name[i])
 			endif
 		endfor
-		let type = toupper(strpart(type, 0, 1)) . strpart(type, 1)
-		let line = type . ': ' . join(item_name, '.')
+		let type = toupper(strpart(type, 0, 1)) .. strpart(type, 1)
+		let line = type .. ': ' .. join(item_name, '.')
 		return foldtext#base(line)
 	endif
 	" }}}
@@ -224,7 +225,7 @@ function! foldtext#perl() " Perl
 
 			" handle 'my $var = shift;' type lines
 			let var = '\%(\$\|@\|%\|\*\)\w\+'
-			let shift_line = matchlist(next_line, '\m\cmy\s*\(' . var . '\)\s*=\s*shift\%(\s*||\s*\(.\{-}\)\)\?;')
+			let shift_line = matchlist(next_line, '\m\cmy\s*\(' .. var .. '\)\s*=\s*shift\%(\s*||\s*\(.\{-}\)\)\?;')
 			if !empty(shift_line)
 				if shift_line[1] ==# '$self' && empty(params)
 					if sub_type ==# 'sub'
@@ -240,7 +241,7 @@ function! foldtext#perl() " Perl
 					let arg = shift_line[1]
 					" also catch default arguments
 					if shift_line[2] !=# ''
-						let arg .= ' = ' . shift_line[2]
+						let arg .= ' = ' .. shift_line[2]
 					endif
 					let params += [l:arg]
 				endif
@@ -284,7 +285,7 @@ function! foldtext#perl() " Perl
 
 		let params = filter(params[0:-2], 'strpart(v:val, 0, 1) !=# "@"') + [params[-1]]
 
-		return foldtext#base(sub_type . ' ' . matches[2] . '(' . join(params, ', ') . ')')
+		return foldtext#base(sub_type .. ' ' .. matches[2] .. '(' .. join(params, ', ') .. ')')
 	endif
 	" }}}
 	return foldtext#base(line)
