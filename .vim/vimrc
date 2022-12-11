@@ -325,7 +325,11 @@ vnoremap <Space> <C-D>
 vnoremap <S-Space> <C-U>
 vnoremap <BS> <C-U>
 # ターミナル・モード {{{2
-tnoremap <C-W><Esc> <C-W>N
+# tmux で <prefix> を <C-J> にしているので、それに合わせている
+set termwinkey=<C-J>
+tnoremap <C-J><Esc> <C-J>N
+tnoremap <C-J><C-[> <C-J>N
+tnoremap <C-W><C-W> <C-J><C-W>
 # tnoremap <C-W><C-[> <C-W>N ←上の記述が有れば必要なし
 # ↑端末ノーマル・モードに移行
 tnoremap <C-W>p <C-W>""
