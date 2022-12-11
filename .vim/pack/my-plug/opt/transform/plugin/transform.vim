@@ -3,7 +3,7 @@ scriptencoding utf-8
 let s:save_cpo = &cpoptions
 set cpoptions&vim
 
-if !exists('g:transform')
+if exists('g:transform')
 	finish
 endif
 let g:transform = 1
