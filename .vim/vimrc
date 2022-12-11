@@ -162,7 +162,7 @@ set wildignore+=*.dvi,*.o,*.opp,*.obj,*.a,*.so,*.fdb_latexmk,*.fls,*.nav,*.out,*
 # ステータス・バー {{{2
 set laststatus=2                               # 表示
 set statusline=%#StatusLineLeft#%-16.(%2n%{%&buftype=='terminal'?'[terminal]':&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%#StatusLIne#\ %F%=%#StatusLineRight#\ %c:%v:%{strcharlen(strpart(getline('.'),0,col('.')))}/%{strlen(join(getline(0,line('$'))))}:%{strcharlen(join(getline(0,line('$'))))-line('$')+1}\ %3l/%L%4{line('w$')*100/line('$')}%%\ 0x%04B\ [%{&fenc!=''?&fenc:&enc}:%{%{'dos':'CR+LF','unix':'LF','mac':'CR'}[&ff]%}]
-# bufnr filetype modified etc. | path | line bytes:column:number/file bytes:number line current/full % code charset:cr/lf
+# bufnr filetype modified etc. | path | line bytes:column:count/file bytes:count line current/full % code charset:cr/lf
 augroup StatusLineLeftRight
 	autocmd!
 	autocmd ColorScheme * highlight StatusLineLeft gui=bold term=bold guifg=white guibg=SeaGreen ctermfg=white ctermbg=2
@@ -265,12 +265,17 @@ if exists('&ambiwidth')                        # □とか○の文字があっ�
 		[0x03B1, 0x03C9, 1], [0x0391, 0x03A9, 1],  # ギリシャ文字
 		[0x2B0, 0x2B3, 1], [0x2B7, 0x2B8, 1], [0x2E1, 0x2E3, 1], [0x1D2C, 0x1D61, 1], [0x1D9B, 0x1DBF, 1], [0x2070, 0x2071, 1], [0x2074, 0x2075, 1], [0x2C7D, 0x2C7D, 1], # 上付き文字
 		[0x1D62, 0x1D6A, 1], [0x2080, 0x209C, 1], [0x2C7C, 0x2C7C, 1], # 下付き文字
-		[0x401, 0x401, 1], [0x410, 0x4F9, 1],       # キリル文字 (フォントの関係か上手く半角にならない文字も有る)
+		[0x401, 0x401, 1], [0x410, 0x4F9, 1],      # キリル文字 (フォントの関係か上手く半角にならない文字も有る)
 		])
-	# [0x2010, 0x2010, 1], 半角のデザインが中途半端
+	# 半角のデザインが中途半端
+	# [0x2010, 0x2010, 1], ‐
+	# [0x20A0, 0x20C0, 1],                       # 通貨記号
+	# [0x2102, 0x2104, 1], [0x2107, 0x211F, 1], [0x2123, 0x213A, 1], [0x213C, 0x214C, 1], # ℃などの文字様記号
+	# [0x2200, 0x222B, 1], [0x222E, 0x222E, 1], [0x2231, 0x22FF, 1], # 数式記号
 	# ↓VIM - Vi IMproved 9.0 (2022 Jun 28, compiled Aug 23 2022 20:18:58) 適用済パッチ: 1-242 でエラー
 	# [0xAA, 0xAA, 1], [0xB2, 0xB3, 1], [0xB9, 0xBA, 1], # 上付きの0-3, a
 	# [0xA1, 0xA1, 1], [0xA7, 0xA7, 1], [0xAE, 0xAE, 1], [0xB0, 0xB4, 1], [0xB6, 0xB6, 1], [0xBF, 0xBF, 1] # ¡§®°±´¶¿と上付きの一部
+	# [0xD7, 0xD7, 1], [0xF7, 0xF7, 1], # ×÷
 endif
 set formatoptions+=mMj1 formatoptions-=tc      # 日本語の行の連結時には空白を入力しない+textwidth を使った自動折返しをしない
 set display+=lastline                          # 画面最後の行をできる限り表示
