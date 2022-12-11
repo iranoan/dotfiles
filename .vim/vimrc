@@ -362,10 +362,10 @@ nnoremap <silent>]w         <C-W>w
 nnoremap <silent>]t        gt
 nnoremap <silent>[t        gT
 noremap  <silent><C-Tab>   gt
-tnoremap <silent><C-Tab>   <C-W>gt
+tnoremap <silent><C-Tab>   <C-J>gt
 inoremap <silent><C-Tab>   <C-PageDown>
 noremap  <silent><S-C-Tab> gT
-tnoremap <silent><S-C-Tab> <C-W>gT
+tnoremap <silent><S-C-Tab> <C-J>gT
 inoremap <silent><S-C-Tab> <C-PageUp>
 # クリップボードのコピー、ペースト、切り取り {{{2
 vnoremap <C-C> "+y
