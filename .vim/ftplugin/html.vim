@@ -53,7 +53,6 @@ imap     <expr><buffer><C-Space>   pumvisible() ? asyncomplete#close_popup() : '
 inoremap <buffer>&<space>          &nbsp;
 inoremap <buffer>\\                &yen;
 inoremap <buffer>+-                &plusmn;
-inoremap <buffer>**                &times;
 inoremap <buffer>==                &equiv;
 inoremap <buffer><!                <!DOCTYPE html>
 "--------------------------------
