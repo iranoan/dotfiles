@@ -6,6 +6,14 @@ scriptencoding utf-8
 # ! を外すと、~/.vim/ftplugin/man.vim のみ読み込まれて動作しない←https://github.com/vim-jp/issues/issues/1378#issuecomment-918812314
 # ! を付けると、最初の起動時にファイルタイプに関係なく ~/.vim/ftplugin/man.vim も読み込まれ、各種変数設定や環境変更が行われ都合が悪い
 
+if exists('g:man_plugin')
+	finish
+endif
+let g:man_plugin = 1
+
+let s:save_cpo = &cpoptions
+set cpoptions&vim
+
 # ユーザごとでなく、システムに有る /ftplugin/man.vim を読み込む
 for h in split(&runtimepath, ',')
 	if match(h, expand('~/.vim')) != -1
@@ -20,3 +28,7 @@ for h in split(&runtimepath, ',')
 		augroup END
 	endif
 endfor
+
+" Reset User condition
+let &cpoptions = s:save_cpo
+unlet s:save_cpo
