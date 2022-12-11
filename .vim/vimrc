@@ -91,9 +91,11 @@ set iminsert=0 imsearch=-1                     # 挿入モード/検索開始時
 set imdisable                                  # Vim による IM 制御を使わない
 augroup IME
 	autocmd!
-	if has('unix') # インサート・モードを抜けた時は必ず日本語 OFF
+	if has('unix') # ノーマル・モードになれば日本語 OFF
 		if executable('fcitx')
-			autocmd InsertLeave,CmdwinLeave,CmdlineLeave *        system('fcitx-remote -c') # ←lexima.vim を使っていると、改行入力で OFF になる→プラグイン自作
+			autocmd ModeChanged *:n*                 system('fcitx-remote -c')
+			# ↓だと R (置換モード) に対応できない (r{char} には対応できていない)
+			# autocmd InsertLeave,CmdwinLeave,CmdlineLeave * system('fcitx-remote -c')
 		# elseif executable('ibus')
 		# 	autocmd InsertLeave,CmdwinLeave *      system('xvkbd -text "\C\S\[Muhenkan]" > /dev/null 2>&1') # ←ターミナルではこれで OFF になるのに、なぜか GUI では動作しない
 		# 	# ibus OFF→https://qiita.com/ka_/items/dad955fe7423318b7dae, https://qh73xebitbucketorg.readthedocs.io/ja/latest/0.OS/linux/DESKTOP/gnome/input/
