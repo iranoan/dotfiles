@@ -9,10 +9,7 @@ scriptencoding utf-8
 if exists('g:man_plugin')
 	finish
 endif
-let g:man_plugin = 1
-
-let s:save_cpo = &cpoptions
-set cpoptions&vim
+g:man_plugin = 1
 
 # ユーザごとでなく、システムに有る /ftplugin/man.vim を読み込む
 for h in split(&runtimepath, ',')
@@ -28,7 +25,3 @@ for h in split(&runtimepath, ',')
 		augroup END
 	endif
 endfor
-
-" Reset User condition
-let &cpoptions = s:save_cpo
-unlet s:save_cpo
