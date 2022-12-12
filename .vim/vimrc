@@ -111,6 +111,7 @@ set shortmess+=IWc shortmess-=S                # I 起動時にファイル未�
                                                # S 検索ヒット件数表示←コマンドラインに検索のヒット位置、総個数を [?/?] で表示し、ファイルの先頭・終端になった時のメッセージが一瞬で消える
 syntax enable                                  # カラー表示 ON (実際の syntax 設定はカラー・スキーム読み込み後)
 set nomore                                     # メッセージが一杯になっても一旦停止せずそのまま続ける
+set noequalalways                              # ウィンドウ分割/閉じた時に全てのウィンドウを同じ大きさにしない
 augroup CoursolLineColumn # 挿入モードでは、カーソール行桁背景色無し、ノーマル・モードでは付ける
 	autocmd!
 	autocmd WinEnter     *                       set cursorline cursorcolumn
@@ -283,6 +284,7 @@ set wrap                                       # 長い行は折り返し表示
 set sidescroll=1                               # 横スクロールでカーソル位置を真ん中にしない
 set linebreak                                  # wrap at 'breakat
 set breakat-=@*-+;:,.                          # break point for linebreak (default " ^I!@*-+;:,./?" )→" ^I!?" になる (日本語は全角文字に空白が余分に表示されてしまう←helpに8bit文字のみとある)
+set breakat+=)}>
 set helplang=ja,en                             # 日本語ヘルプを優先的に表示
 # スペル・チェック {{{1
 set spell spelllang+=cjk
@@ -312,7 +314,8 @@ set delcombine                                 # 結合文字を別々に削除�
 # set maxcombine=2                               # 結合文字の最大個数
 set clipboard=exclude:cons\|linux              # クリップボードの扱い
 set viminfo+=n~/.vim/viminfo                   # viminfo の保存先
-# ↑alias は外部フィルタ無効+選択状態でうまく処理してくれない
+set history=10000                              # コマンド履歴の保存数
+set timeoutlen=300                             # デフォルトの 1000 だとコマンドラインの <C-P> がマップに関係なく <Up> の扱いになる
 # 個人的なキー割り当て keymap キーマップ {{{1
 # 日付と時刻入力 {{{2
 inoremap <silent><expr><C-X>d strftime('%Y/%m/%d')
