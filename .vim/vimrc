@@ -327,10 +327,15 @@ vnoremap <BS> <C-U>
 # ターミナル・モード {{{2
 # tmux で <prefix> を <C-J> にしているので、それに合わせている
 set termwinkey=<C-J>
-tnoremap <C-J><Esc> <C-J>N
-tnoremap <C-J><C-[> <C-J>N
-tnoremap <C-W><C-W> <C-J><C-W>
-# tnoremap <C-W><C-[> <C-W>N ←上の記述が有れば必要なし
+tnoremap <silent><C-J><Esc> <C-J>N
+tnoremap <silent><C-J><C-[> <C-J>N
+tnoremap <silent><C-W><Esc> <C-J>N
+tnoremap <silent><C-W><C-[> <C-J>N
+tnoremap <silent><C-W><C-W> <C-J><C-W>
+tnoremap <silent><C-W>j     <C-J>j
+tnoremap <silent><C-W>k     <C-J>k
+tnoremap <silent><C-W>h     <C-J>h
+tnoremap <silent><C-W>l     <C-J>l
 # ↑端末ノーマル・モードに移行
 tnoremap <C-W>p <C-W>""
 # ↑貼り付け
@@ -461,7 +466,6 @@ xnoremap gj j
 xnoremap gk k
 vnoremap <Down> gj
 vnoremap <Up>   gk
-tnoremap <C-W><C-[> <C-W>N
 # テキスト・オブジェクト <Shift> を押すのが面倒 vim-surround とのバランスから削除するかも
 omap i, i<
 omap i. i>
