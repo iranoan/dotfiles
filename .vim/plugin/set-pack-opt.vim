@@ -477,10 +477,6 @@ nmap cs8 cs(
 nmap cs9 cs)
 nmap cs@ cs`
 
-# 選択範囲をテキストオブジェクトで広げたり、狭めたり https://github.com/terryma/vim-expand-region {{{1
-xmap v <Cmd>call set_expand_region#main('(expand_region_expand)') <bar> delfunction set_expand_region#main<CR>
-xmap V <Cmd>call set_expand_region#main('(expand_region_shrink)') <bar> delfunction set_expand_region#main<CR>
-
 # getmail syntax https://github.com/vim-scripts/getmail.vim {{{1
 augroup Gatmail
 	autocmd!

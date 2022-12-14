@@ -11,6 +11,11 @@ scriptencoding utf-8
 # 	- → ~/.vim/pack/my-plug/opt/asyncomplete-mail/ に置き換え
 # * https://github.com/cohama/lexima.vim は、対応括弧を追加設定して使うと CmdlineLeave が働いてしまう+他は全角未対応
 # 	- → ~/.vim/pack/my-plug/start/pair_bracket/ に置き換え
+# * 選択範囲をテキストオブジェクトで広げたり、狭めたり https://github.com/terryma/vim-expand-region {{{1
+#		- 反応が遅く、なれると直接テキスト・オブジェクトを使うように変わった
+#		- xmap v <Cmd>call set_expand_region#main('(expand_region_expand)') <bar> delfunction set_expand_region#main<CR>
+# 	- xmap V <Cmd>call set_expand_region#main('(expand_region_shrink)') <bar> delfunction set_expand_region#main<CR>
+
 
 # プラグイン管理 {{{1
 # ~/.vim/pack でプラグインを管理する上で、FileType で読み込んだプラグインを再設定するために、再度 setfiletype して、そのイベント・トリガーを削除 {{{2
