@@ -198,8 +198,6 @@ augroup END
 # aQ 	iQ 	Double-quoted text ``like this''.
 # ae 	ie 	Environment \begin{…} to \end{…}
 
-# CSS をテキストオプジェクト化 https://github.com/rbonvall/vim-textobj-css {{{1 ← vim-textobj-fold で代用できるしカーソルの桁位置でも変わるので、使いづらい
-
 # 整形 https://github.com/junegunn/vim-easy-align {{{1
 # 下記の例の ip はテキスト・オブジェクトの「段落」を表す
 # |command|how to remember|

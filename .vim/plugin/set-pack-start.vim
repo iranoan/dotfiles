@@ -11,10 +11,13 @@ scriptencoding utf-8
 # 	- → ~/.vim/pack/my-plug/opt/asyncomplete-mail/ に置き換え
 # * https://github.com/cohama/lexima.vim は、対応括弧を追加設定して使うと CmdlineLeave が働いてしまう+他は全角未対応
 # 	- → ~/.vim/pack/my-plug/start/pair_bracket/ に置き換え
-# * 選択範囲をテキストオブジェクトで広げたり、狭めたり https://github.com/terryma/vim-expand-region {{{1
+# * 選択範囲をテキストオブジェクトで広げたり、狭めたり https://github.com/terryma/vim-expand-region
 #		- 反応が遅く、なれると直接テキスト・オブジェクトを使うように変わった
 #		- xmap v <Cmd>call set_expand_region#main('(expand_region_expand)') <bar> delfunction set_expand_region#main<CR>
 # 	- xmap V <Cmd>call set_expand_region#main('(expand_region_shrink)') <bar> delfunction set_expand_region#main<CR>
+# * https://github.com/rbonvall/vim-textobj-css
+#		- CSS をテキストオプジェクト化 ← vim-textobj-fold で代用できるしカーソルの桁位置でも変わるので、使いづらい
+
 
 
 # プラグイン管理 {{{1
