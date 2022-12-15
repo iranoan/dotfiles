@@ -117,13 +117,12 @@ enddef
 
 export def Install(): void # プラグインのインストール
 	for s in Get_pack_ls()
-			echomsg s.rep .. ' ' .. s.dir
 		# if isdirectory(s.dir)
 		# 	echomsg s.rep .. ' ' .. s.dir
 		# else
-		# if !isdirectory(s.dir)
-		# 	echo system('git clone ' .. s.rep .. ' ' .. s.dir)
-		# endif
+		if !isdirectory(s.dir)
+			echo system('git clone ' .. s.rep .. ' ' .. s.dir)
+		endif
 	endfor
 enddef
 
