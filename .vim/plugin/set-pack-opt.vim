@@ -481,14 +481,6 @@ augroup Gatmail
 	autocmd BufRead ~/.getmail/*,~/.config/getmail/* set_getmail_vim#main()
 augroup END
 
-# ~/.vim/pack/*/{stat,opt}/*/doc に有る tags{,-??} が古ければ再作成 ~/.vim/pack/my-plug/opt/pack-helptags {{{1
-augroup loadManagePack
-	autocmd!
-	autocmd FuncUndefined manage_pack#* packadd manage-pack
-	| autocmd! loadManagePack
-	| augroup! loadManagePack
-augroup END
-
 # dog と cat の入れ替えなどサイクリックに置換する関数などの定義 ~/.vim/pack/my-plug/opt/replace-cyclic {{{1
 augroup loadReplaceCyclic
 	autocmd!
