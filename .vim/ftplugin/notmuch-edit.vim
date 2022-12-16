@@ -13,6 +13,21 @@ if !exists("g:mail_draft_plugin")
 	g:mail_draft_plugin = 1
 	packadd transform
 	def g:ReformMail(): void
+		def DelBlock(s: string, e: string, i: number, j: number): void # s, e 両方の文字列 (行) が有ったときのみ、その範囲を削除
+			var buf = getline(1, '$')
+			var start = match(buf, '^$')
+			var s_pos = match(buf, '^' .. s .. '$', start) + 1 + i
+			if !s_pos
+				return
+			endif
+			var e_pos = match(buf, '^' .. e .. '$', s_pos) + 1 + j
+			if !e_pos
+				return
+			endif
+			:silent execute ':' .. s_pos .. ',' .. e_pos .. 'delete _'
+			return
+		enddef
+
 		def Nature(): void
 			def GetBoundary(): string
 				var s: string
@@ -49,11 +64,12 @@ if !exists("g:mail_draft_plugin")
 			:1 | :silent :/<!DOCTYPE /;/<p>/delete _
 			:silent :%substitute/\(<br>\)\+\s*\n\?/\r/g
 			:silent global/^━ PR ━━\+$/:-1,/^━━\+$/+1delete _
-			DeleBlock('■最新科学情報をフォローしよう！　　', '━━\+')
-			DeleBlock('━━\+\n購読案内：　Nature ダイジェスト　お申し込みはこちら', '===\+')
+			DelBlock('■最新科学情報をフォローしよう！　　', '━━\+', 0, 1)
+			DelBlock('購読案内：　Nature ダイジェスト　お申し込みはこちら *', '===\+', -1, -1)
 			:silent :/^配信停止はこちらからお手続きください。$/;$delete _
 			:1 | silent :/^$/,$substitute/<a href="https:\/\/[^>]\+>\zehttps:\/\///g
-			:1 | silent :/^$/,$substitute/\(?utm_source=\(Nature_TXT\|NM\)&utm_medium=\d\{6}&utm_campaign=Newsletter\)\?<\/a>//g
+			:1 | silent :/^$/,$substitute/?utm_source=\(Nature_TXT\|NM\)&utm_medium=\d\{8}&utm_campaign=Newsletter//g
+			:1 | silent :/^$/,$substitute/<\/a>//g
 			var rep_dic = {
 						\ '&amp;': '&',
 						\ '&alpha;': 'α',
@@ -77,20 +93,6 @@ if !exists("g:mail_draft_plugin")
 			:silent :%substitute/\(&\(amp\|\alpha\|beta\|gamma\|delta\|reg\|copy\|ndash\);\|<\(su[bp]\)>[123]<\/\2>\)\c/\=rep_dic[submatch(0)]/ge
 		enddef
 
-		def DeleBlock(s: string, e: string): void # s, e 両方の文字列 (行) が有ったときのみ、その範囲を削除
-			var buf = getline(1, '$')
-			var start = match(buf, '^$')
-			var s_pos = match(buf, '^' .. s .. '$', start) + 1
-			if !s_pos
-				return
-			endif
-			var e_pos = match(buf, '^' .. e .. '$', s_pos) + 1
-			if !e_pos
-				return
-			endif
-			:silent execute ':' .. s_pos .. ',' .. (e_pos + 1) .. 'delete _'
-		enddef
-
 		var msg = readfile(fnameescape(systemlist('notmuch search --output=files id:' .. b:notmuch.msg_id)[0]))
 		var from: string
 		var i = match(msg, '^From:\c')
@@ -108,7 +110,7 @@ if !exists("g:mail_draft_plugin")
 		if from ==? 'nikkei-news@mx.nikkei.com'
 			:silent execute ':1 | :/^$/+10delete | :$-27,$-15delete'
 		elseif from ==? 'atmarkit_newarrivals@noreply.itmedia.co.jp'
-			DeleBlock('==PR-\+', '-\+==')
+			DelBlock('==PR-\+', '-\+==', 0, 1)
 			:silent execute ':1 | :/^＠ITの新着記事をお届けします。$/+1,/^--- NewsInsight -- 今日のニュース --\+$/-2delete | :/^━＠ITソーシャルアカウント━━━━━━━━━━━━━━━━━━━━━━━━━$/,/^発行：アイティメディア株式会社$/-2delete'
 			setline('.', '-- ')
 		elseif from ==? 'e_service@mof.go.jp'
