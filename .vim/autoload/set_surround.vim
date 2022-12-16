@@ -1,7 +1,7 @@
 scriptencoding utf-8
 
 function set_surround#main(cmd) abort
-	call set_map_plug#Main('vim-surround', a:cmd, [
+	call manage_pack#SetMAP('vim-surround', a:cmd, [
 				\ {'mode': 'x', 'key': 's',   'cmd': 'VSurround'},
 				\ {'mode': 'n', 'key': 'ysS', 'cmd': 'YSsurround'},
 				\ {'mode': 'n', 'key': 'yss', 'cmd': 'Yssurround'},

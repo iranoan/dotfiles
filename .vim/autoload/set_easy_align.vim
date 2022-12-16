@@ -1,10 +1,10 @@
 scriptencoding utf-8
 
 function set_easy_align#main() abort
-	call set_map_plug#Main('vim-easy-align',  '(EasyAlign)', [
+	call manage_pack#SetMAP('vim-easy-align',  '(EasyAlign)', [
 			\ {'mode': 'n', 'key': '<Leader>ea', 'cmd': '(EasyAlign)'},
-			\ {'mode': 'v', 'key': '<Enter>',    'cmd': '(EasyAlign)'},
-			\ {'mode': 'v', 'key': '<Leader>ea', 'cmd': '(EasyAlign)'}
+			\ {'mode': 'x', 'key': '<Enter>',    'cmd': '(EasyAlign)'},
+			\ {'mode': 'x', 'key': '<Leader>ea', 'cmd': '(EasyAlign)'}
 			\ ] )
 	let g:easy_align_delimiters = {
 				\ '|': { 'align': 'al*' },
