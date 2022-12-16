@@ -36,13 +36,33 @@ if glob('~/.vim/pack/*/*/vim-fugitive/plugin/fugitive.vim') !=# ''
 endif
 
 # 2019-03-31 14:51 などの日付や時刻もうまい具合に Ctrl-a/x で加算減算する https://github.com/tpope/vim-speeddating {{{1
-# 遅延読み込みにしているので最初の {count}<C-X>/<C-A> の {count} が無視される
-nmap d<C-X> <Cmd>call set_speeddating#main('SpeedDatingNowLocal') <bar> delfunction set_speeddating#main<CR>
-nmap d<C-A> <Cmd>call set_speeddating#main('SpeedDatingNowUTC') <bar> delfunction set_speeddating#main<CR>
-xmap <C-X>  <Cmd>call set_speeddating#main('SpeedDatingDown') <bar> delfunction set_speeddating#main<CR>
-xmap <C-A>  <Cmd>call set_speeddating#main('SpeedDatingUp') <bar> delfunction set_speeddating#main<CR>
-nmap <C-X>  <Cmd>call set_speeddating#main('SpeedDatingDown') <bar> delfunction set_speeddating#main<CR>
-nmap <C-A>  <Cmd>call set_speeddating#main('SpeedDatingUp') <bar> delfunction set_speeddating#main<CR>
+# 遅延読み込みにすると {count}<C-a> とした時に {count} が無視される
+g:speeddating_no_mappings = 1
+packadd vim-speeddating
+SpeedDatingFormat! %H:%M:%S
+SpeedDatingFormat! %a %b %_d %H:%M:%S %Z %Y
+SpeedDatingFormat! %a %h %-d %H:%M:%S %Y %z
+SpeedDatingFormat! %B %o, %Y
+SpeedDatingFormat! %d%[-/ ]%b%1%y
+SpeedDatingFormat! %d%[-/ ]%b%1%Y
+SpeedDatingFormat! %Y %b %d
+SpeedDatingFormat! %b %d, %Y
+SpeedDatingFormat! %-I%?[ ]%^P
+SpeedDatingFormat %Y/%m/%d(%a)%?[ ]%H:%M:%S
+SpeedDatingFormat %Y/%m/%d(%a)%?[ ]%H:%M
+SpeedDatingFormat %Y/%m/%d%[ T_:]%H:%M:%S
+SpeedDatingFormat %Y/%m/%d%[ T_:]%H:%M
+SpeedDatingFormat %Y/%m/%d
+SpeedDatingFormat %m/%d
+SpeedDatingFormat %^P%?[ ]%I:%M
+SpeedDatingFormat %H:%M:%S
+SpeedDatingFormat %H:%M
+nmap d<C-X> <Plug>SpeedDatingNowLocal
+nmap d<C-A> <Plug>SpeedDatingNowUTC
+xmap <C-X>  <Plug>SpeedDatingDown
+xmap <C-A>  <Plug>SpeedDatingUp
+nmap <C-X>  <Plug>SpeedDatingDown
+nmap <C-A>  <Plug>SpeedDatingUp
 
 # https://github.com/junegunn/fzf.vim {{{1
 nnoremap <silent><Leader>fr :Files ~<CR>
