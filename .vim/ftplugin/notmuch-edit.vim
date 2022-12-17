@@ -12,7 +12,7 @@ scriptencoding utf-8
 if !exists("g:mail_draft_plugin")
 	g:mail_draft_plugin = 1
 	packadd transform
-	def g:ReformMail(): void
+	def g:ReformMail(): void # ML の広告を削除する個人的な関数
 		def DelBlock(s: string, e: string, i: number, j: number): void # s, e 両方の文字列 (行) が有ったときのみ、その範囲を削除
 			var buf = getline(1, '$')
 			var start = match(buf, '^$')
@@ -117,6 +117,10 @@ if !exists("g:mail_draft_plugin")
 			:silent execute ':1 | :/^当メールマガジンについてのご意見、ご感想はこちらへお願いします。$/;$delete | :%substitute/^　//g | :%substitute/　/ /g'
 		elseif from ==? 'natureasia@e-alert.nature.com'
 			Nature()
+		elseif from ==? 'mailmag@mag2tegami.com'
+			:silent :/\%^/,/^$/s/^From: *mag2 *0000013455 *<mailmag@mag2tegami.com>/From: Liyn-an <info@Liyn-an.com>/
+			DelBlock('──\+\[PR\]─', '─\[PR\]──\+', -1, 1)
+			:silent :/^ \+Copyright(c), 2022 \+Liyn-an co\.,Ltd./+2;$delete _
 		else
 			return
 		endif
