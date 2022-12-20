@@ -189,18 +189,21 @@ augroup END
 # 括弧や引用符をペアで入力/削除 ~/.vim/pack/my-plug/start/pair_bracket/ {{{1
 # ドット・リピートは考慮していない
 g:pairbracket = {
-	'{': {'pair': '}', 'space': 1},
-	'[': {'pair': ']', 'space': 1},
-	'(': {'pair': ')', 'space': 1},
-	'/*': {'pair': '*/', 'space': 1, 'type': ['c', 'cpp'], 'cmap': 0},
+	'(': {'pair': ')', 'space': 1, 'escape': {'tex': 2, 'vim': 1},
+		'search': {'v\': 0, '\': 2, 'v': 1, '_': 0}},
+	'[': {'pair': ']', 'space': 1, 'escape': {'tex': 2, 'vim': 1},
+		'search': {'v\': 0, '\': 0, 'v': 1, '_': 1}},
+	'{': {'pair': '}', 'space': 1, 'escape': {'tex': 2, 'vim': 1},
+		'search': {'v\': 0, '\': 1, 'v': 1, '_': 0}},
 	'<': {'pair': '>', 'space': 1, 'type': ['tex'], 'cmap': 0},
+	'/*': {'pair': '*/', 'space': 1, 'type': ['c', 'cpp'], 'cmap': 0},
 	'「': {'pair': '」'},
 	'『': {'pair': '』'},
 	'【': {'pair': '】'},
 	}
 g:pairquote = {
-		'''': {},
 		'"': {},
+		'''': {},
 		'`': {},
 		'$': {'type': ['tex']},
 		'*': {'type': ['help'], 'cmap': 0},
