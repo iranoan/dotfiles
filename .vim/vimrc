@@ -93,9 +93,10 @@ augroup IME
 	autocmd!
 	if has('unix') # ノーマル・モードになれば日本語 OFF
 		if executable('fcitx')
-			autocmd ModeChanged *:n*                 system('fcitx-remote -c')
-			# ↓だと R (置換モード) に対応できない (r{char} には対応できていない)
+			autocmd ModeChanged *:n* system('fcitx-remote -c')
+			# ↓だと R (置換モード) に対応できない
 			# autocmd InsertLeave,CmdwinLeave,CmdlineLeave * system('fcitx-remote -c')
+			autocmd TextChanged *    system('fcitx-remote -c') # (r{char} に対応する他の方法がわからない
 		# elseif executable('ibus')
 		# 	autocmd InsertLeave,CmdwinLeave *      system('xvkbd -text "\C\S\[Muhenkan]" > /dev/null 2>&1') # ←ターミナルではこれで OFF になるのに、なぜか GUI では動作しない
 		# 	# ibus OFF→https://qiita.com/ka_/items/dad955fe7423318b7dae, https://qh73xebitbucketorg.readthedocs.io/ja/latest/0.OS/linux/DESKTOP/gnome/input/
@@ -168,8 +169,9 @@ augroup StatusLineLeftRight
 	autocmd!
 	autocmd ColorScheme * highlight StatusLineLeft gui=bold term=bold guifg=white guibg=SeaGreen ctermfg=white ctermbg=2
 				| highlight StatusLineRight gui=bold term=bold guifg=white guibg=DarkYellow ctermfg=white ctermbg=3
-				| autocmd! StatusLineLeftRight
-				| augroup! StatusLineLeftRight
+				# | autocmd! StatusLineLeftRight
+				# | augroup! StatusLineLeftRight
+				# 削除すると colorscheme を変更すると Normal 色になる
 augroup END
 
 # # 全角スペースをハイライト表示←フォントで対応したのですべてコメント・アウト {{{2
