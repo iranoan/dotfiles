@@ -8,7 +8,7 @@ function set_vimlsp#main() abort
 	let g:lsp_diagnostics_float_delay = 200 " 表示の待ち時間
 	" let g:lsp_diagnostics_signs_enabled = 1 " デフォルト
 	let g:lsp_diagnostics_echo_cursor = 1
-	let g:lsp_diagnostics_virtual_text_enabled = 0 " 行末に表示され邪魔だし、set wrap でキャレットがずれる
+	let g:lsp_diagnostics_virtual_text_enabled = 0 " 行末に表示され邪魔だし、set wrap でキャレットや n の検索ヒットがずれる行がでてくる
 	let l:icon_dir = split(&runtimepath, ',')[0] .. '/icons/'
 	let l:icon_ext = has('win32') ? '.ico' : '.png'
 	let g:lsp_diagnostics_signs_error       = {'text': '😰', 'icon': l:icon_dir .. 'error' .. l:icon_ext}
