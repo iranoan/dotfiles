@@ -151,7 +151,27 @@ share_history(){  # 以下の内容を関数として定義
 		# コマンド成功時は、重複履歴を削除
 		history -a  # .bash_historyに前回コマンドを1行追記
 		history -c  # 端末ローカルの履歴を一旦消去
-		tac ~/.bash_history | sed -e 's/\s\+$//g' -e '/^.\?$/d' | awk '!a[$0]++' | tac > ~/.tmp/bash_history && mv ~/.tmp/bash_history ~/.bash_history
+		awk 'BEGIN {i=0}
+			{
+				if($0 ~/[^\s]/){ # 空白以外が存在する
+					a[i]=$0
+					i++
+				}
+			}
+			END{
+				for (j=0; i>=0 ;){ # 逆順格納
+					b[j++]=a[--i]
+				}
+				i=0
+				while(j>0){
+					j--
+					if(!c[b[j]]++){ # 重複でない
+						a[i++] = b[j]
+					}
+				}
+				i--
+				while(j<i)print a[++j]
+			}' ~/.bash_history > ~/.tmp/bash_history && mv ~/.tmp/bash_history ~/.bash_history
 		history -r  # .bash_historyから履歴を読み込み直す
 	# fi
 }
