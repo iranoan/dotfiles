@@ -1,4 +1,11 @@
 # bash aliases
+case "$(uname)" in
+	# Linux)
+	# 	;;
+	Darwin) # macOS, BSD
+		alias tac='tail -r'
+		;;
+esac
 alias info=pinfo
 # alias info='info --vi-keys'
 alias gpgupdate='gpg --keyserver pgp.nic.ad.jp --refresh-keys && gpg --update-trustdb'
