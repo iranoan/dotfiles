@@ -69,6 +69,8 @@ while read -r file ; do
 		"C-g")      geeqie "$file" & ;;
 		"e")        gimp "$file" & ;;
 		"C-e")      gimp "$file" & ;;
+		"s")        sushi "$file" & ;;
+		"C-s")      sushi "$file" & ;;
 		# "C-r")      rawtherapee "$file" & done ;;
 		# "C-comma")  rotate "$file" 270 ;;
 		# "C-period") rotate "$file"  90 ;;
