@@ -153,24 +153,23 @@ share_history(){  # 以下の内容を関数として定義
 		history -c  # 端末ローカルの履歴を一旦消去
 		awk 'BEGIN {i=0}
 			{
-				if($0 ~/[^\s]/){ # 空白以外が存在する
-					a[i]=$0
+				if ( $0 ~ /[^\s]/ ){ # 空白以外が存在する
+					a[i] = $0
 					i++
 				}
 			}
 			END{
-				for (j=0; i>=0 ;){ # 逆順格納
-					b[j++]=a[--i]
+				for (j = 0; i > 0; ){ # 逆順格納
+					b[j++] = a[--i]
 				}
-				i=0
-				while(j>0){
-					j--
-					if(!c[b[j]]++){ # 重複でない
-						a[i++] = b[j]
+				k = 0
+				for ( i = 0; i < j; i++ ){ # 重複削除
+					if( !c[b[i]]++ ){ # 重複でない
+						sub("[ \t]+$", "", b[i]) # 行末空白削除
+						a[k++] = b[i]
 					}
 				}
-				i--
-				while(j<i)print a[++j]
+				while( k > 0 )print a[--k] # 逆順出力
 			}' ~/.bash_history > ~/.tmp/bash_history && mv ~/.tmp/bash_history ~/.bash_history
 		history -r  # .bash_historyから履歴を読み込み直す
 	# fi
