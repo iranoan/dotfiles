@@ -39,6 +39,11 @@ function set_context_filetype#main() abort
 			\ 	'start': '<style>',
 			\ 	'end': '</style>'
 		\ },
+		\ {
+			\ 	'filetype': 'javascript',
+			\ 	'start': '<script>',
+			\ 	'end': '</script>'
+		\ },
 		\ ],
 		\ 'sh': [
 		\ {
