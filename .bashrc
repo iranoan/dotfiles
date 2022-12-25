@@ -154,6 +154,7 @@ share_history(){  # 以下の内容を関数として定義
 		awk 'BEGIN {i=0}
 			{
 				if ( $0 ~ /[^\s]/ ){ # 空白以外が存在する
+					sub("[ \t]+$", "") # 行末空白削除
 					a[i] = $0
 					i++
 				}
@@ -164,10 +165,7 @@ share_history(){  # 以下の内容を関数として定義
 				}
 				k = 0
 				for ( i = 0; i < j; i++ ){ # 重複削除
-					if( !c[b[i]]++ ){ # 重複でない
-						sub("[ \t]+$", "", b[i]) # 行末空白削除
-						a[k++] = b[i]
-					}
+					if( !c[b[i]]++ )a[k++] = b[i] # 重複でない
 				}
 				while( k > 0 )print a[--k] # 逆順出力
 			}' ~/.bash_history > ~/.tmp/bash_history && mv ~/.tmp/bash_history ~/.bash_history
