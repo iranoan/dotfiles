@@ -196,7 +196,7 @@ g:pairbracket = {
 	'{': {'pair': '}', 'space': 1, 'escape': {'tex': 2, 'vim': 1},
 		'search': {'v\': 0, '\': 1, 'v': 1, '_': 0}},
 	'<': {'pair': '>', 'space': 1, 'type': ['tex'], 'cmap': 0},
-	'/*': {'pair': '*/', 'space': 1, 'type': ['c', 'cpp'], 'cmap': 0},
+	'/*': {'pair': '*/', 'space': 1, 'type': ['c', 'cpp', 'css'], 'cmap': 0},
 	'「': {'pair': '」'},
 	'『': {'pair': '』'},
 	'【': {'pair': '】'},
