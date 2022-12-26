@@ -13,7 +13,27 @@ export def Zen2han(s: string): string # 全角を半角に変換
 enddef
 
 export function Zen2hanCmd() range abort
+	let pos = getpos('.')
 	for i in range(a:firstline, a:lastline)
 		call setline(i, Zen2han(getline(i)))
 	endfor
+	call setpos('.', pos)
+endfunction
+
+export function InsertSpaceCmd() range abort " 英数字と全角の間に空白を入れる
+	let pos = getpos('.')
+	if &filetype ==# 'tex'
+		let end = '[[0-9a-zA-Z<(]'
+		let top = '[]0-9a-zA-Z>)$.,?!%]'
+	elseif &filetype ==# 'html' || &filetype ==# 'xhtml'
+		let end = '[[0-9a-zA-Z{(]'
+		let top = '[]0-9a-zA-Z})$.,?!%]'
+	else
+		let end = '[[0-9a-zA-Z<{(]'
+		let top = '[]0-9a-zA-Z>})$.,?!%]'
+	endif
+	let ja_char = '[〃-〇〓〠-〾ぁ-ゞゟァ-ヺー-ヿㇰ-ㇿ㐀-䶵一-鿪]'
+	execute('silent ' .. a:firstline .. ',' .. a:lastline .. 's/' .. top .. '\zs\ze' .. ja_char .. '/ /g')
+	execute('silent ' .. a:firstline .. ',' .. a:lastline .. 's/' .. ja_char .. '\zs\ze' .. end .. '/ /g')
+	call setpos('.', pos)
 endfunction

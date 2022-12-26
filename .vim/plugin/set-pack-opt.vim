@@ -524,9 +524,11 @@ augroup loadtransform
 	autocmd FuncUndefined transform#* packadd transform
 	| autocmd! loadtransform
 	| augroup! loadtransform
-	autocmd CmdUndefined Zen2han packadd transform
+	autocmd CmdUndefined Zen2han,InsertSpace packadd transform
 	| autocmd! loadtransform
 	| augroup! loadtransform
 augroup END
 nnoremap <Leader>ha :Zen2han<CR>
 xnoremap <Leader>ha :Zen2han<CR>
+nnoremap <Leader>hh :InsertSpace<CR>
+xnoremap <Leader>hh :InsertSpace<CR>

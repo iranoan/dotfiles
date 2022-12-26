@@ -9,6 +9,7 @@ endif
 let g:transform = 1
 
 command -range=% Zen2han <line1>,<line2>call transform#Zen2hanCmd()
+command -range=% InsertSpace <line1>,<line2>call transform#InsertSpaceCmd()
 
 " Reset User condition
 let &cpoptions = s:save_cpo
