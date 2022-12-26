@@ -27,13 +27,13 @@ if !exists('g:vim_plugin')
 		if &filetype !=# 'vim'
 			return
 		endif
-		var defs = filter(getline(1, '.'), 'v:val =~# ''^\s*\(\(end\)\?def\|endf\%[unction]\|fu\%[nction]\)\>''')
-		call map(defs, 'substitute(v:val, ''\v^\s*(enddef|def|endf|fu).*'', ''\1'', ''g'')')
+		var defs = filter(getline(1, '.'), 'v:val =~# ''^\s*\(\(export\s\+\|end\)\?def\|endf\%[unction]\|\(export\s\+\)\?fu\%[nction]\)\>''')
+		map(defs, 'substitute(v:val, ''\v^\s*(export\s+)?(enddef|def|endf|fu).*'', ''\2'', ''g'')')
 		if len(defs) == 0
 			&commentstring = getline(1) =~# '^\s*vim9script\>' ? '#%s' : '"%s'
 			return
 		endif
-		var f_kind0 = substitute(getline('.'), '\v^\s*(enddef|def|endf|fu).*', '\1', 'g')
+		var f_kind0 = substitute(getline('.'), '\v\<(enddef|def|endf|fu).*', '\1', 'g')
 		if f_kind0 ==# 'fu' || f_kind0 ==# 'def'
 			remove(defs, -1)
 		endif
