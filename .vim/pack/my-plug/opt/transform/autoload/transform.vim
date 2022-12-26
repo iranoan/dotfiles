@@ -32,8 +32,11 @@ export function InsertSpaceCmd() range abort " 英数字と全角の間に空白
 		let end = '[[0-9a-zA-Z<{(]'
 		let top = '[]0-9a-zA-Z>})$.,?!%]'
 	endif
+	" for i in range(a:firstline, a:lastline) " こちらは関数を呼び出すと遅い
+	" 	call setline(i, InsertSpace(getline(i), top, end))
+	" endfor
 	let ja_char = '[〃-〇〓〠-〾ぁ-ゞゟァ-ヺー-ヿㇰ-ㇿ㐀-䶵一-鿪]'
-	execute('silent ' .. a:firstline .. ',' .. a:lastline .. 's/' .. top .. '\zs\ze' .. ja_char .. '/ /g')
-	execute('silent ' .. a:firstline .. ',' .. a:lastline .. 's/' .. ja_char .. '\zs\ze' .. end .. '/ /g')
+	execute('silent ' .. a:firstline .. ',' .. a:lastline .. 's/' .. top .. '\zs\ze' .. ja_char .. '/ /ge')
+	execute('silent ' .. a:firstline .. ',' .. a:lastline .. 's/' .. ja_char .. '\zs\ze' .. end .. '/ /ge')
 	call setpos('.', pos)
 endfunction
