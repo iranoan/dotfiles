@@ -15,7 +15,7 @@ enddef
 # 旧来のスクリプトから呼ぶので、|vim9-lambda| が使えない
 # var Zen2han = (s: string): string =>
 # 	substitute(s, '[^　 \t]\zs　', ' ', 'g')
-# 		->substitute('[￥＼＆]', '\={"￥": "¥", "＼": "⧵", "＆": "&"}[submatch(0)]', 'g')
+# 		->substitute('[￥＼]', '\={"￥": "¥", "＼": "⧵"}[submatch(0)]', 'g')
 # 		->map('v:val =~# "[！-～]" ? nr2char(strgetchar(v:val, 0) - 65248) : v:val' )
 
 export function Zen2hanCmd() range abort
