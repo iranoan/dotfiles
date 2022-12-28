@@ -36,7 +36,11 @@ export def Label(n: number): string
 		endif
 	endfor
 	if name != ''
-		return change .. ' ' .. name
+		if &filetype ==# 'notmuch-edit'
+			return change .. ' ' .. b:notmuch.subject .. ' ' .. b:notmuch.date
+		else
+			return change .. ' ' .. name
+		endif
 	else
 		if system('echo $LANGUAGE') !~? '^ja:'
 			return change .. ' ' .. '[No Name]'
