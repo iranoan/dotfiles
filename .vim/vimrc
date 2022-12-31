@@ -113,12 +113,6 @@ set shortmess+=IWc shortmess-=S                # I 起動時にファイル未�
 syntax enable                                  # カラー表示 ON (実際の syntax 設定はカラー・スキーム読み込み後)
 set nomore                                     # メッセージが一杯になっても一旦停止せずそのまま続ける
 # set noequalalways                              # ウィンドウ分割/閉じた時に全てのウィンドウを同じ大きさにしない←すでに分割されていると、プラグインが開くウィンドウ高さが狭くなり使いにくい
-augroup CoursolLineColumn # 挿入モードでは、カーソール行桁背景色無し、ノーマル・モードでは付ける
-	autocmd!
-	autocmd WinEnter     *                       set cursorline cursorcolumn
-	autocmd WinLeave,InsertEnter  *              set nocursorline nocursorcolumn
-	autocmd InsertLeave  *                       set cursorline cursorcolumn
-augroup END
 # 対応するカッコ {{{2
 set cpoptions+=MI                             # 対応するカッコで、\によるエスケープを除外+インデントの自動削除なしに
 if $LANG !=# 'C'                              # LANG=C では全角文字が使えない
@@ -136,6 +130,12 @@ set fillchars=vert:\|,fold:\ ,
 set noexpandtab                                # 通常はタブ文字入力可能に
 # カーソル行 {{{2
 set number signcolumn=yes                      # 行番号、sign (マーク表示桁) 表示
+augroup CoursolLineColumn # 挿入モードでは、カーソール行桁背景色無し、ノーマル・モードでは付ける
+	autocmd!
+	autocmd WinEnter     *                       set cursorline cursorcolumn
+	autocmd WinLeave,InsertEnter  *              set nocursorline nocursorcolumn
+	autocmd InsertLeave  *                       set cursorline cursorcolumn
+augroup END
 set cursorline cursorcolumn                    # 起動時は、カーソール行桁背景色付ける
 # タブ・ページ/ターミナル環境の時のカーソル形状 {{{2
 set showtabline=2 tabpagemax=500               # 常にタブを表示+上限 500
@@ -173,7 +173,6 @@ augroup StatusLineLeftRight
 				# | augroup! StatusLineLeftRight
 				# 削除すると colorscheme を変更すると Normal 色になる
 augroup END
-
 # # 全角スペースをハイライト表示←フォントで対応したのですべてコメント・アウト {{{2
 # function s:ZenkakuSpace()
 # 	highlight ZenkakuSpace cterm=reverse ctermfg=Black gui=reverse guifg=#CCCCCC
@@ -301,7 +300,7 @@ set keywordprg=:help
 set grepprg=grep\ --directories=skip\ --line-number\ $*\ --exclude-dir='.git'\ --exclude='.*.sw?'\ /dev/null
 set modeline
 # set modeline modelineexpr
-$LESS = substitute($LESS, '\([' .. '''' .. ' " =]\)-\(-quit-if-one-screen\|F\)\>', '\1', 'g') # less 環境変数置き換え
+$LESS = substitute($LESS, '\(['' " =]\)-\(-quit-if-one-screen\|F\)\>', '\1', 'g') # less 環境変数置き換え
 # ↑alias は外部フィルタ無効+選択状態でうまく処理してくれない
 set textwidth=0                                # 自動改行させない
 set shellslash                                 # Windowsでもパス区切りにスラッシュを使える
@@ -343,7 +342,7 @@ tnoremap <silent><C-W>k     <C-J>k
 tnoremap <silent><C-W>h     <C-J>h
 tnoremap <silent><C-W>l     <C-J>l
 # ↑端末ノーマル・モードに移行
-tnoremap <C-W>p <C-W>""
+tnoremap <C-J>p <C-J>""
 # ↑貼り付け
 # QuickFix {{{2
 nnoremap <silent><Leader>qf :wall<CR>:silent make<CR>:cwindow<CR>
@@ -360,14 +359,14 @@ nnoremap <silent>[L         <Cmd>lpfile<CR>
 nnoremap <silent>]L         <Cmd>lnfile<CR>
 nnoremap <silent>[b         <Cmd>bprevious<CR>
 nnoremap <silent>]b         <Cmd>bnext<CR>
-nnoremap <silent>[T         <Cmd>tprevious<CR>
-nnoremap <silent>]T         <Cmd>tnext<CR>
 nnoremap <silent>[C         <Cmd>cpfile<CR>
 nnoremap <silent>]C         <Cmd>cnfile<CR>
 nnoremap <silent>[e         g;
 nnoremap <silent>]e         g,
 nnoremap <silent>[w         <C-W>W
 nnoremap <silent>]w         <C-W>w
+nnoremap <silent>[T         <Cmd>tprevious<CR>
+nnoremap <silent>]T         <Cmd>tnext<CR>
 # ]t,[t は下記のマッピングタブ・モードの切り替えに使っている
 # タブ・モードのタブ切り替えキー設定 {{{2
 nnoremap <silent>]t        gt
