@@ -4,14 +4,14 @@
 		"stylelint-config-recess-order"
 	],
 	"rules": {
-		"": "CSS Colors Level 4 では rgb(R, G, B) で , 区切りだけでなく空白区切りが追加されたが、, 区切りに限定",
 		"color-function-notation": "legacy",
 		"color-no-invalid-hex": true,
 		"color-hex-case": "upper",
 		"font-weight-notation": "named-where-possible",
+		"font-family-no-duplicate-names": true,
+		"font-family-no-missing-generic-family-keyword": true,
 		"indentation": "tab",
 		"selector-list-comma-newline-after": "always-multi-line",
-		"function-calc-no-unspaced-operator": true,
 		"function-linear-gradient-no-nonstandard-direction": true,
 		"string-no-newline": true,
 		"unit-no-unknown": true,
@@ -38,7 +38,6 @@
 	},
 	"overrides": [
 		{
-			"": "EPUB では -epub-* などを使わないと縦書きすら出来ない",
 			"files": ["book/epub/*/OEBPS/css/*.css", "bin/kindle/epub.css"],
 			"rules": {
 				"property-no-vendor-prefix": false
