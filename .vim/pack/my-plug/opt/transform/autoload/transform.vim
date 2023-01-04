@@ -19,9 +19,9 @@ enddef
 # 		->map('v:val =~# "[！-～]" ? nr2char(strgetchar(v:val, 0) - 65248) : v:val' )
 
 export function Zen2hanCmd() range abort
-	let pos = getpos('.')
+	" let pos = getcurpos('.')
 	execute('silent ' .. a:firstline .. ',' .. a:lastline .. 'global/[！-～　￥＼]/call setline(".", Zen2han(getline(".")))')
-	call setpos('.', pos)
+	" call setpos('.', pos)
 endfunction
 
 export def InsertSpace(s: string): string # 英数字と全角の間に空白を入れる
@@ -42,7 +42,7 @@ export def InsertSpace(s: string): string # 英数字と全角の間に空白を
 enddef
 
 export function InsertSpaceCmd() range abort
-	let pos = getpos('.')
+	" let pos = getcurpos('.')
 	if &filetype ==# 'tex'
 		let end = '[[0-9a-zA-Z<(]'
 		let top = '[]0-9a-zA-Z>)$.,?!%]'
@@ -56,5 +56,5 @@ export function InsertSpaceCmd() range abort
 	let ja_char = '[〃-〇〓〠-〾ぁ-ゞゟァ-ヺー-ヿㇰ-ㇿ㐀-䶵一-鿪]'
 	execute('silent ' .. a:firstline .. ',' .. a:lastline .. 's/' .. top .. '\zs\ze' .. ja_char .. '/ /ge')
 	execute('silent ' .. a:firstline .. ',' .. a:lastline .. 's/' .. ja_char .. '\zs\ze' .. end .. '/ /ge')
-	call setpos('.', pos)
+	" call setpos('.', pos)
 endfunction
