@@ -93,14 +93,13 @@ augroup IME
 	autocmd!
 	if has('unix') # ノーマル・モードになれば日本語 OFF
 		if executable('fcitx5')
-			autocmd ModeChanged *:n* silent system('fcitx5-remote -c')
+			autocmd ModeChanged *:n* silent system('fcitx5-remote -o')
+			# 起動時に Mozc を OFF にしたいので、Mozc を第一候補にしているため通常の 'fcitx5-remote -c' でなく 'fcitx5-remote -o'
 			# ↓だと R (置換モード) に対応できない
 			# autocmd InsertLeave,CmdwinLeave,CmdlineLeave * system('fcitx5-remote -c')
-			autocmd TextChanged *    silent system('fcitx5-remote -c') # (r{char} に対応する他の方法がわからない
+			autocmd TextChanged *    silent system('fcitx5-remote -o') # (r{char} に対応する他の方法がわからない
 		# elseif executable('ibus')
 		# 	autocmd InsertLeave,CmdwinLeave *      system('xvkbd -text "\C\S\[Muhenkan]" > /dev/null 2>&1') # ←ターミナルではこれで OFF になるのに、なぜか GUI では動作しない
-		# 	# ibus OFF→https://qiita.com/ka_/items/dad955fe7423318b7dae, https://qh73xebitbucketorg.readthedocs.io/ja/latest/0.OS/linux/DESKTOP/gnome/input/
-		# 	# ibus を OFF にするのであって、IME を OFF にしない
 		# 	# autocmd InsertLeave,CmdwinLeave * system('ibus engine "xkb:jp::jpn"')
 		endif
 	endif
