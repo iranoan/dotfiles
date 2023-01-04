@@ -120,7 +120,7 @@ if !exists("g:mail_draft_plugin")
 		elseif from ==? 'mailmag@mag2tegami.com'
 			:silent :/\%^/,/^$/s/^From: *mag2 *0000013455 *<mailmag@mag2tegami.com>/From: Liyn-an <info@Liyn-an.com>/
 			DelBlock('──\+\[PR\]─', '─\[PR\]──\+', -1, 1)
-			:silent :/^ \+Copyright(c), 2022 \+Liyn-an co\.,Ltd./+2;$delete _
+			:silent :/^ \+Copyright(c), \d\{4} \+Liyn-an co\.,Ltd./+2;$delete _
 		elseif from ==? 'ndh-news@nikkeibp.co.jp'
 			DelBlock('', '◇日経デジタルヘルスNEWS', 0, -3)
 		else
