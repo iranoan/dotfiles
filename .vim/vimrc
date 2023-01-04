@@ -319,8 +319,8 @@ set viminfo+=n~/.vim/viminfo                   # viminfo の保存先
 set history=10000                              # コマンド履歴の保存数
 # 個人的なキー割り当て keymap キーマップ {{{1
 # 日付と時刻入力 {{{2
-inoremap <silent><expr><C-X>d strftime('%Y/%m/%d')
-inoremap <silent><expr><C-X>t strftime('%H:%M:%S')
+inoremap <silent><expr><C-X><C-D> strftime('%Y/%m/%d')
+inoremap <silent><expr><C-X><C-T> strftime('%H:%M:%S')
 # スクロール {{{2
 # nnoremap <Space> <PageDown> # → ~/.vim/pack/my-plug/opt/page-down
 nnoremap <S-Space> <PageUp>
