@@ -45,9 +45,8 @@ inoremap <buffer><=                &le;
 inoremap <buffer>>>                &gt;
 inoremap <buffer>>=                &ge;
 inoremap <buffer>&&                &amp;
-inoremap <buffer>~~                &sim;
-inoremap <buffer>--                &ndash;
-inoremap <buffer>---               &mdash;
+inoremap <buffer>--                ‐
+inoremap <buffer>---               ―
 " <S,C-Space> の組み合わせは GUI のみ有効
 imap     <expr><buffer><C-Space>   pumvisible() ? asyncomplete#close_popup() : '&nbsp;'
 inoremap <buffer>&<space>          &nbsp;
