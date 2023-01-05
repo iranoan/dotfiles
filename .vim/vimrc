@@ -89,21 +89,43 @@ set foldcolumn=3                               # 折りたたみ状態を表示�
 # IME {{{1
 set iminsert=0 imsearch=-1                     # 挿入モード/検索開始時 IME OFF
 set imdisable                                  # Vim による IM 制御を使わない
-augroup IME
-	autocmd!
-	if has('unix') # ノーマル・モードになれば日本語 OFF
-		if executable('fcitx5')
-			autocmd ModeChanged *:n* silent system('fcitx5-remote -o')
+if has('unix') # ノーマル・モードになれば日本語 OFF にするために IM を調べる
+	var im: string
+	if executable('im-config')
+		im = systemlist('im-config -m')[1]
+		if im == 'fcitx5'
 			# 起動時に Mozc を OFF にしたいので、Mozc を第一候補にしているため通常の 'fcitx5-remote -c' でなく 'fcitx5-remote -o'
-			# ↓だと R (置換モード) に対応できない
-			# autocmd InsertLeave,CmdwinLeave,CmdlineLeave * system('fcitx5-remote -c')
-			autocmd TextChanged *    silent system('fcitx5-remote -o') # (r{char} に対応する他の方法がわからない
-		# elseif executable('ibus')
-		# 	autocmd InsertLeave,CmdwinLeave *      system('xvkbd -text "\C\S\[Muhenkan]" > /dev/null 2>&1') # ←ターミナルではこれで OFF になるのに、なぜか GUI では動作しない
-		# 	# autocmd InsertLeave,CmdwinLeave * system('ibus engine "xkb:jp::jpn"')
+			im = 'fcitx5-remote -o'
+		elseif im == 'fcitx'
+			im = 'fcitx-remote -c'
+		elseif im == 'ibus'
+			im = 'ibus engine "xkb:jp::jpn"'
+		else
+			im = ''
 		endif
+	elseif executable('fcitx5-remote')
+		im = 'fcitx5-remote -o'
+	elseif executable('fcitx-remote')
+		im = 'fcitx-remote -c'
+	elseif executable('ibus')
+		im = 'ibus engine "xkb:jp::jpn"'
+	else
+		im = ''
 	endif
-augroup END
+	if im !=# ''
+		augroup IME
+			autocmd!
+			execute 'autocmd InsertLeave,CmdwinLeave,CmdlineLeave * system(''' .. im .. ''')'
+			execute 'autocmd ModeChanged R*:n*                      system(''' .. im .. ''')'
+			# ↑R (置換モード) ReplaceLeave は無い
+			# ModeChanged *:n* に纏められれば良いが、inoremap <expr><buffer><S-Enter>   pumvisible#Insert('<li>') でも変わってしまう
+			# (r{char} に対応する他の方法がわからない
+			execute 'autocmd TextChanged *                          system(''' .. im .. ''')'
+		augroup END
+	endif
+else
+	inoremap <silent><Esc> <Esc><Cmd>setlocal iminsert=0<CR>
+endif
 # 表示関係 {{{1
 set shortmess+=IWc shortmess-=S                # I 起動時にファイル未指定時に表示される紹介文を表示しない
                                                # W ファイルの書き込み時に "書込み" や "[w]" を表示しない。
