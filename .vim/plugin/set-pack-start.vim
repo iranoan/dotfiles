@@ -161,7 +161,7 @@ xmap ac <Plug>(textobj-syntax-a)
 # キーマップ iz, az
 
 # テキストオブジェクトで (), {} "", '' を区別せずにカーソル近くで判定して、全て b で扱えるようにする https://github.com/osyo-manga/vim-textobj-multiblock {{{1
-# キーマップしなと ", ' の指定が働かない
+# キーマップしないと ", ' の指定が働かない
 omap ab <Plug>(textobj-multiblock-a)
 omap ib <Plug>(textobj-multiblock-i)
 xmap ab <Plug>(textobj-multiblock-a)
