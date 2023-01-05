@@ -8,8 +8,8 @@ if exists('g:transform')
 endif
 let g:transform = 1
 
-command -range=% Zen2han <line1>,<line2>call transform#Zen2hanCmd()
-command -range=% InsertSpace <line1>,<line2>call transform#InsertSpaceCmd()
+command -range=% Zen2han     let s:pos = getpos('.') | :<line1>,<line2>call transform#Zen2hanCmd()     | call setpos('.', s:pos)
+command -range=% InsertSpace let s:pos = getpos('.') | :<line1>,<line2>call transform#InsertSpaceCmd() | call setpos('.', s:pos)
 
 " Reset User condition
 let &cpoptions = s:save_cpo
