@@ -55,7 +55,7 @@ export function InsertSpaceCmd() range abort
 	execute('silent ' .. a:firstline .. ',' .. a:lastline .. 's/' .. ja_char .. '\zs\ze' .. end .. '/ /ge')
 endfunction
 
-export def Han2zen(s: string): string
+export def Han2zen(s: string): string # 半角カタカナを全角に変換
 	var dic0: dict<string> = {
 			'ｶﾞ': 'ガ', 'ｷﾞ': 'ギ', 'ｸﾞ': 'グ', 'ｹﾞ': 'ゲ', 'ｺﾞ': 'ゴ',
 			'ｻﾞ': 'ザ', 'ｼﾞ': 'ジ', 'ｽﾞ': 'ズ', 'ｾﾞ': 'ゼ', 'ｿﾞ': 'ゾ',
@@ -85,7 +85,14 @@ export def Han2zen(s: string): string
 		'[｡-ﾟ]', '\=dic1[submatch(0)]', 'g')
 enddef
 
-
 export function Han2zenCmd() range abort
 	execute('silent ' .. a:firstline .. ',' .. a:lastline .. 'global/[｡-ﾟ]/call setline(".", Han2zen(getline(".")))')
+endfunction
+
+export def Hira2kata(s: string): string # ひらがなをカタカナへ
+	return map(s, 'v:val =~# "[ぁ-ゖ]" ? nr2char(strgetchar(v:val, 0) + 96, true) : v:val')
+enddef
+
+export function Hira2kataCmd() range abort
+	execute('silent ' .. a:firstline .. ',' .. a:lastline .. 'global/[ぁ-ゖ]/call setline(".", Hira2kata(getline(".")))')
 endfunction

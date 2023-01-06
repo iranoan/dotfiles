@@ -26,18 +26,6 @@ function s:main( command, select, opt, fline, lline ) abort " この関数が範
 	echo 'filtering by ' . substitute(a:command, ' .\+','','')
 endfunction
 
-function shell_filter#Zen2ASCII( select ) range abort
-	call s:main( 'zen2ascii.sh', a:select, '', a:firstline, a:lastline )
-endfunction
-
-function shell_filter#InsertSpace( select ) range abort
-	call s:main( 'insert-space.sh', a:select, '', a:firstline, a:lastline )
-endfunction
-
-function shell_filter#han2zen( select ) range abort
-	call s:main( 'han2zen.sh', a:select, '', a:firstline, a:lastline )
-endfunction
-
 function shell_filter#hira2kata( select ) range abort
 	call s:main( 'hira2kata.sh', a:select, '', a:firstline, a:lastline )
 endfunction
