@@ -15,9 +15,6 @@ xnoremap <silent><silent><Leader>hq :!perl -M'MIME::QuotedPrint' -e 'while (<STD
 " base64 のデコード←範囲選択しないと上手くいかない {{{1
 " nnoremap <silent><silent><Leader>hb :let b:pos=getpos(".") <CR>:%!base64 -di -w 0 -<CR>
 xnoremap <silent><silent><Leader>hb :!base64 -di -w 0 -<CR>
-" 半角カタカナを全角に {{{1
-nnoremap <silent><Leader>hz :call shell_filter#han2zen( 0 )<CR>
-xnoremap <silent><Leader>hz :call shell_filter#han2zen( 1 )<CR>
 " ひらがなをカタカナに {{{1
 nnoremap <silent><Leader>hk :call shell_filter#hira2kata( 0 )<CR>
 xnoremap <silent><Leader>hk :call shell_filter#hira2kata( 1 )<CR>"

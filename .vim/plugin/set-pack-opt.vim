@@ -532,6 +532,8 @@ nnoremap <Leader>ha :Zen2han<CR>
 xnoremap <Leader>ha :Zen2han<CR>
 nnoremap <Leader>hh :InsertSpace<CR>
 xnoremap <Leader>hh :InsertSpace<CR>
+nnoremap <Leader>hz :Han2zen<CR>
+xnoremap <Leader>hz :Han2zen<CR>
 
 # Vim の環境を出力する ~/.vim/pack/my-plug/opt/vim-system/ {{{1
 augroup loadVimSystem
