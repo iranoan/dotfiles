@@ -524,7 +524,7 @@ augroup loadtransform
 	autocmd FuncUndefined transform#* packadd transform
 	| autocmd! loadtransform
 	| augroup! loadtransform
-	autocmd CmdUndefined Zen2han,InsertSpace packadd transform
+	autocmd CmdUndefined Zen2han,InsertSpace,Han2zen packadd transform
 	| autocmd! loadtransform
 	| augroup! loadtransform
 augroup END
