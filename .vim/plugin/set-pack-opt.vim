@@ -524,7 +524,7 @@ augroup loadtransform
 	autocmd FuncUndefined transform#* packadd transform
 	| autocmd! loadtransform
 	| augroup! loadtransform
-	autocmd CmdUndefined Zen2han,InsertSpace,Han2zen,Hira2kata packadd transform
+	autocmd CmdUndefined Zen2han,InsertSpace,Han2zen,Hira2kata,Kata2hira packadd transform
 	| autocmd! loadtransform
 	| augroup! loadtransform
 augroup END
@@ -536,6 +536,8 @@ nnoremap <Leader>hz :Han2zen<CR>
 xnoremap <Leader>hz :Han2zen<CR>
 nnoremap <Leader>hk :Hira2kata<CR>
 xnoremap <Leader>hk :Hira2kata<CR>
+nnoremap <Leader>hH :Kata2hira<CR>
+xnoremap <Leader>hH :Kata2hira<CR>
 
 # Vim の環境を出力する ~/.vim/pack/my-plug/opt/vim-system/ {{{1
 augroup loadVimSystem

@@ -12,6 +12,7 @@ command -range=% Zen2han     let s:pos = getpos('.') | :<line1>,<line2>call tran
 command -range=% InsertSpace let s:pos = getpos('.') | :<line1>,<line2>call transform#InsertSpaceCmd() | call setpos('.', s:pos)
 command -range=% Han2zen     let s:pos = getpos('.') | :<line1>,<line2>call transform#Han2zenCmd()     | call setpos('.', s:pos)
 command -range=% Hira2kata   let s:pos = getpos('.') | :<line1>,<line2>call transform#Hira2kataCmd()   | call setpos('.', s:pos)
+command -range=% Kata2hira   let s:pos = getpos('.') | :<line1>,<line2>call transform#Kata2hiraCmd()   | call setpos('.', s:pos)
 
 " Reset User condition
 let &cpoptions = s:save_cpo

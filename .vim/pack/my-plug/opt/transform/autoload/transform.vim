@@ -96,3 +96,11 @@ enddef
 export function Hira2kataCmd() range abort
 	execute('silent ' .. a:firstline .. ',' .. a:lastline .. 'global/[ぁ-ゖ]/call setline(".", Hira2kata(getline(".")))')
 endfunction
+
+export def Kata2hira(s: string): string # カタカナをひらがなへ
+	return map(s, 'v:val =~# "[ァ-ヶ]" ? nr2char(strgetchar(v:val, 0) - 96, true) : v:val')
+enddef
+
+export function Kata2hiraCmd() range abort
+	execute('silent ' .. a:firstline .. ',' .. a:lastline .. 'global/[ァ-ヶ]/call setline(".", Kata2hira(getline(".")))')
+endfunction
