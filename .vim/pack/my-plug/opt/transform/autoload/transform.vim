@@ -24,35 +24,35 @@ endfunction
 
 export def InsertSpace(s: string): string # 英数字と全角の間に空白を入れる
 	var top: string
-	var end: string
+	var last: string
 	if &filetype ==# 'tex'
-		end = '[[0-9a-zA-Z<(]'
+		last = '[[0-9a-zA-Z<(]'
 		top = '[]0-9a-zA-Z>)$.,?!%]'
 	elseif &filetype ==# 'html' || &filetype ==# 'xhtml'
-		end = '[[0-9a-zA-Z{(]'
+		last = '[[0-9a-zA-Z{(]'
 		top = '[]0-9a-zA-Z})$.,?!%]'
 	else
-		end = '[[0-9a-zA-Z<{(]'
+		last = '[[0-9a-zA-Z<{(]'
 		top = '[]0-9a-zA-Z>})$.,?!%]'
 	endif
 	return substitute(s, top .. '\zs\ze[〃-〇〓〠-〾ぁ-ゞゟァ-ヺー-ヿㇰ-ㇿ㐀-䶵一-鿪]', ' ', 'g')
-		->substitute('[〃-〇〓〠-〾ぁ-ゞゟァ-ヺー-ヿㇰ-ㇿ㐀-䶵一-鿪]\zs\ze' .. end, ' ', 'g')
+		->substitute('[〃-〇〓〠-〾ぁ-ゞゟァ-ヺー-ヿㇰ-ㇿ㐀-䶵一-鿪]\zs\ze' .. last, ' ', 'g')
 enddef
 
 export function InsertSpaceCmd() range abort
 	if &filetype ==# 'tex'
-		let end = '[[0-9a-zA-Z<(]'
+		let last = '[[0-9a-zA-Z<(]'
 		let top = '[]0-9a-zA-Z>)$.,?!%]'
 	elseif &filetype ==# 'html' || &filetype ==# 'xhtml'
-		let end = '[[0-9a-zA-Z{(]'
+		let last = '[[0-9a-zA-Z{(]'
 		let top = '[]0-9a-zA-Z})$.,?!%]'
 	else
-		let end = '[[0-9a-zA-Z<{(]'
+		let last = '[[0-9a-zA-Z<{(]'
 		let top = '[]0-9a-zA-Z>})$.,?!%]'
 	endif
 	let ja_char = '[〃-〇〓〠-〾ぁ-ゞゟァ-ヺー-ヿㇰ-ㇿ㐀-䶵一-鿪]'
 	execute('silent ' .. a:firstline .. ',' .. a:lastline .. 's/' .. top .. '\zs\ze' .. ja_char .. '/ /ge')
-	execute('silent ' .. a:firstline .. ',' .. a:lastline .. 's/' .. ja_char .. '\zs\ze' .. end .. '/ /ge')
+	execute('silent ' .. a:firstline .. ',' .. a:lastline .. 's/' .. ja_char .. '\zs\ze' .. last .. '/ /ge')
 endfunction
 
 export def Han2zen(s: string): string # 半角カタカナを全角に変換
