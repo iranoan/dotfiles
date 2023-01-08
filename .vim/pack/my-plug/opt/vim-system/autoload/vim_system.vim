@@ -15,6 +15,7 @@ def System(): list<string>
 		endif
 		add(mes, '$ uname -a')
 		extend(mes, systemlist('uname -a'))
+		mes[-1] = substitute(mes[-1], systemlist('hostname')[0], 'xxx', '')
 	elseif has('osx')
 		add(mes, '$ sw_vers')
 		extend(mes, systemlist('sw_vers'))
