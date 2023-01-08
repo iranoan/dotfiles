@@ -48,7 +48,15 @@ function vim#fold#calculate(bufnr) abort
 		while 1
 			let om_pos = stridx(cur_line, open_marker, col)
 			let cm_pos = stridx(cur_line, close_marker, col)
-			if om_pos < 0 && cm_pos < 0
+			if om_pos >= 0
+				if synIDattr(synIDtrans(synID(lnum, om_pos, 1)), 'name') !=# 'Comment'
+					break
+				endif
+			elseif cm_pos >= 0
+				if synIDattr(synIDtrans(synID(lnum, cm_pos, 1)), 'name') !=# 'Comment'
+					break
+				endif
+			else
 				break
 			endif
 			let is_open = cm_pos < 0 || (0 <= om_pos && om_pos < cm_pos)
@@ -92,9 +100,19 @@ function vim#fold#calculate(bufnr) abort
 		endif
 
 		if ch_lv < 0
-			let levels[lnum] = '<' . cur_lv
+			if next_line =~# '\<el\%[se]\|elseif\=\>' && cur_line =~# close_pat
+				let levels[lnum] = '<' . (cur_lv - 1)
+			else
+				let levels[lnum] = '<' . cur_lv
+			endif
 		elseif 0 < ch_lv
 			let levels[lnum] = '>' . (cur_lv + ch_lv)
+		elseif next_line =~# '\<el\%[se]\|elseif\=\>'
+			if cur_line =~# close_pat
+				let levels[lnum] = '<' . (cur_lv - 1)
+			else
+				let levels[lnum] = '<' . cur_lv
+			endif
 		else
 			let levels[lnum] = cur_lv + ch_lv
 		endif
