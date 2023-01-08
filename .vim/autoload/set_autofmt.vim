@@ -7,12 +7,12 @@ function set_autofmt#main() abort
 	let s:unicode = autofmt#unicode#import()
 	let s:orig_prop_line_break = s:unicode.prop_line_break
 	function! s:unicode.prop_line_break(char)
-		if     a:char == '\u201C' || a:char == '\u2018' || a:char == '\u300C' || a:char == '\u300E'
+		if     a:char == "\u201C" || a:char == "\u2018" || a:char == "\u300C" || a:char == "\u300E"
 			" “‘「『
-			return "OP"   " Open Punctuation
-		elseif a:char == '\u201D' || a:char == '\u2019' || a:char == '\u300D' || a:char == '\u300F' || a:char == '\u3001'
+			return 'OP'   " Open Punctuation
+		elseif a:char == "\u201D" || a:char == "\u2019" || a:char == "\u300D" || a:char == "\u300F" || a:char == "\u3001"
 			" ”’」』、。
-			return "CL"   " Close Punctuation
+			return 'CL'   " Close Punctuation
 		endif
 		return call(s:orig_prop_line_break, [a:char], self)
 	endfunction
