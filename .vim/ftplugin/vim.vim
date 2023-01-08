@@ -11,6 +11,7 @@ let b:did_ftplugin_user = 1
 if !exists('g:vim_plugin')
 	let g:vim_plugin = 1
 	"--------------------------------
+	" let g:vimsyn_folding = 'afP'
 	augroup myVIM
 		autocmd!
 		autocmd CursorMoved,InsertLeave * call <SID>get_comment_string()
