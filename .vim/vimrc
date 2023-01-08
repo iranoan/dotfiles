@@ -18,7 +18,8 @@ if has('iconv') # iconv を使って NEC 選定 IBM 拡張文字 (ⅰ) を変換
 	endif
 else # iconvが無いときはシンプルに
 	set fileencodings=iso-2022-jp,cp932,euc-jp,ucs-bom,utf-8,default,latin1
-endif # }}}
+endif
+# }}}
 set fileformats=unix,dos,mac
 set termencoding=utf-8
 set makeencoding=char                          # 外部コマンドの出力を読むときに使用されるエンコーディングにシステムロケール使用
@@ -43,7 +44,8 @@ augroup loadZipArchive
 				| augroup! loadZipArchive
 				# | edit!
 	# ↑最後のファイル読み込みし直しを反映させるイベント不明
-augroup END # }}}
+augroup END
+# }}}
 g:loaded_tarPlugin = 1 # {{{
 augroup loadTarArchive
 	autocmd!
@@ -54,8 +56,10 @@ augroup loadTarArchive
 				| augroup! loadTarArchive
 				# | edit!
 	# ↑最後のファイル読み込みし直しを反映させるイベント不明
-augroup END # }}}
-g:loaded_netrwPlugin = 1 # netrw {{{ ← fern を使う
+augroup END
+# }}}
+# netrw {{{ ↓ fern を使う
+g:loaded_netrwPlugin = 1
 # g:netrw_banner=0                           # バーナー非表示
 # g:netrw_liststyle = 0                      # ファイル・サイズ/タイム・スタンプも非表示←除外がしにくくなる
 # # g:netrw_list_hide = netrw_gitignore#Hide() .. '.*\.swp$' ヘルプに有る関数は遅い
@@ -64,14 +68,16 @@ g:loaded_netrwPlugin = 1 # netrw {{{ ← fern を使う
 # g:netrw_sort_options = 'i'                 # ソートで大/小文字を区別しない
 # # g:netrw_timefmt = '%Y/%m/%d(%a) %H:%M:%S'
 # g:netrw_sort_by = 'time'                   # 日付で逆順ソート
-# g:netrw_sort_direction = 'reverse' # }}}
+# g:netrw_sort_direction = 'reverse'
+# }}}
 # 読み込み明示が必要な分 {{{2
 packadd! editexisting                          # 既に開いていれば、そちらをアクティブに
 packadd! matchit                               # 対応するカッコ移動%を拡張→ファイルタイプ別設定でb:match_words {{{
 augroup matchit_words
 	autocmd!
 	autocmd BufEnter * if exists('b:match_words') | b:match_words ..= ',' .. &matchpairs | endif
-augroup END # }}}
+augroup END
+# }}}
 # packadd termdebug                              # デバッガ ←vimspector を使う
 # マウス {{{2
 set mouse=a                                    # マウス有効化

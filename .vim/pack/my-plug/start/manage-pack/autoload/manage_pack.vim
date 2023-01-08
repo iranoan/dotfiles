@@ -82,10 +82,9 @@ def GrepList(s: string, files: string): list<string> # 外部プログラム無�
 	return ret
 enddef
 
-def Pack_ls(f: string): list<string> # f に書かれた # OR " で始まり comment https://github.com/user/plugin {{(foldmaker){ をリスト・アプ
-	return GrepList('^["#\t ]\+.*https://github\.com/[a-z0-9._/-]\+ *{' .. '{{[0-9]*', f)
-		->map('substitute(v:val, ''\c^[#"\t ]\+.*\(https:\/\/github\.com\/[a-z0-9._/-]\+\/[a-z0-9._-]\+\)\s*{'' .. ''{{\d*.*'', ''\1'', "")')
-		# 上 2 つの検索文字列中の波括弧がそのままだと foldmarker の扱いになるので文字列結合を使うことで分断している
+def Pack_ls(f: string): list<string> # f に書かれた # OR " で始まり comment https://github.com/user/plugin {{{(foldmaker)をリスト・アプ
+	return GrepList('^["#\t ]\+.*https://github\.com/[a-z0-9._/-]\+ *{{{[0-9]*', f)
+		->map('substitute(v:val, ''\c^[#"\t ]\+.*\(https:\/\/github\.com\/[a-z0-9._/-]\+\/[a-z0-9._-]\+\)\s*{{{\d*.*'', ''\1'', "")')
 enddef
 
 def Get_pack_ls(): list<dict<string>> # プラグインの名称、リポジトリ、インストール先取得

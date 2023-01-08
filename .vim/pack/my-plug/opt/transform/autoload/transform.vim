@@ -10,7 +10,7 @@ export def Zen2han(s: string): string # 全角を半角に変換
 	# ￥, ＼ は \ (0x6C:ASCII code) ではなく UNICODE 独自の記号 ¥ (0xA5), ⧵ (0x29F5) に変換
 	return map(substitute(substitute(s, '[^　 \t]\zs　', ' ', 'g'),
 		'[￥＼]', '\={"￥": "¥", "＼": "⧵"}[submatch(0)]', 'g'),
-		'v:val =~# "[！-～]" ? nr2char(strgetchar(v:val, 0) - 65248) : v:val' )
+		'v:val =~# "[！-～]" ? nr2char(strgetchar(v:val, 0) - 65248) : v:val')
 enddef
 # 旧来のスクリプトから呼ぶので、|vim9-lambda| が使えない
 # var Zen2han = (s: string): string =>
