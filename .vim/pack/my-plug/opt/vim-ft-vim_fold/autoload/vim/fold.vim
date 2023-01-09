@@ -13,7 +13,7 @@ function vim#fold#text() abort
 	let line = getline(v:foldstart)
 	let linenr = v:foldstart + 1
 	while getline(linenr) =~# '^\s*\\'
-		let line .= matchstr(getline(linenr), '\m^\s*\\\s\{-}\zs\s\?\S.*$')
+		let line ..= matchstr(getline(linenr), '\m^\s*\\\s\{-}\zs\s\?\S.*$')
 		let linenr += 1
 	endwhile
 	if linenr == v:foldstart + 1
