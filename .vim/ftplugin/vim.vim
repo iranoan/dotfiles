@@ -75,4 +75,5 @@ setlocal textwidth=0 "自動改行させない
 setlocal keywordprg=:help
 setlocal iskeyword+=?   " is?, isnot? の syntax highlight を効かせるため
 setlocal isfname-=,     " ファイルの区切り
+" setlocal foldmethod=syntax
 call <SID>get_comment_string()
