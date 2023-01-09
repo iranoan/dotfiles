@@ -1,5 +1,5 @@
 scriptencoding utf-8
-" https://github.com/thinca/vim-ft-vim_fold に if/endif, for/endfor を追加
+" https://github.com/thinca/vim-ft-vim_fold に if/endif, for/endfor, while/endwhile, try/endtry を追加
 
 function vim#fold#level(lnum) abort
 	if b:changedtick != get(b:, 'vim_fold_last_changedtick', -1)
@@ -34,8 +34,8 @@ function vim#fold#calculate(bufnr) abort
 	let cur_lv = 0
 	let endl = line('$')
 
-	let open_pat = '^\s*:\?\s*\%(\(export\s\+\)\?fu\%[nction]\>\|aug\%[roup]\|if\|for\|wh\%[ile]\|\(export\s\+\)\?def\)\>'
-	let close_pat = '^\s*:\?\s*\%(endf\%[unction]\>\|aug\%[roup]\s\+END\|endfo\%[r]\|endw\%[hile]\|enddef\|en\%[dif]\)\>'
+	let open_pat = '^\s*:\?\s*\%(\(export\s\+\)\?fu\%[nction]\>\|aug\%[roup]\|if\|for\|wh\%[ile]\|\(export\s\+\)\?def\|try\)\>'
+	let close_pat = '^\s*:\?\s*\%(endf\%[unction]\>\|aug\%[roup]\s\+END\|endfo\%[r]\|endw\%[hile]\|enddef\|en\%[dif]\|endt\%[ry]\)\>'
 
 	while lnum < endl
 		let lnum += 1
@@ -102,6 +102,8 @@ function vim#fold#calculate(bufnr) abort
 		if ch_lv < 0
 			if next_line =~# '\<el\%[se]\|elseif\=\>' && cur_line =~# close_pat
 				let levels[lnum] = '<' . (cur_lv - 1)
+			elseif next_line =~# '\<cat\%[ch]\|fina\%[lly]\|th\[row]\>'
+				let levels[lnum] = '<' . (cur_lv - 1)
 			else
 				let levels[lnum] = '<' . cur_lv
 			endif
@@ -113,6 +115,8 @@ function vim#fold#calculate(bufnr) abort
 			else
 				let levels[lnum] = '<' . cur_lv
 			endif
+		elseif next_line =~# '\<cat\%[ch]\|fina\%[lly]\|th\[row]\>'
+			let levels[lnum] = '<' . cur_lv
 		else
 			let levels[lnum] = cur_lv + ch_lv
 		endif
