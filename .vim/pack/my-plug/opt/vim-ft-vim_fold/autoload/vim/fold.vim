@@ -87,14 +87,14 @@ function vim#fold#calculate(bufnr) abort
 				if marker_lv is# 0
 					let ch_lv += 1
 				else
-					let levels[lnum] = '>' . marker_lv
+					let levels[lnum] = '>' .. marker_lv
 					let cur_lv = marker_lv
 				endif
 			else
 				if marker_lv is# 0
 					let ch_lv -= 1
 				else
-					let levels[lnum] = '<' . marker_lv
+					let levels[lnum] = '<' .. marker_lv
 					let cur_lv = marker_lv - 1
 				endif
 			endif
@@ -119,23 +119,26 @@ function vim#fold#calculate(bufnr) abort
 		endif
 
 		if ch_lv < 0
+			" if next_line =~# close_pat && cur_line =~# close_pat
+			" 	let levels[lnum] = '<' .. (cur_lv - 1)
+			" elseif next_line =~# '\<el\%[se]\|elseif\=\>' && cur_line =~# close_pat
 			if next_line =~# '\<el\%[se]\|elseif\=\>' && cur_line =~# close_pat
-				let levels[lnum] = '<' . (cur_lv - 1)
+				let levels[lnum] = '<' .. (cur_lv - 1)
 			elseif next_line =~# '\<cat\%[ch]\|fina\%[lly]\|th\[row]\>'
-				let levels[lnum] = '<' . (cur_lv - 1)
+				let levels[lnum] = '<' .. (cur_lv - 1)
 			else
-				let levels[lnum] = '<' . cur_lv
+				let levels[lnum] = '<' .. cur_lv
 			endif
 		elseif 0 < ch_lv
-			let levels[lnum] = '>' . (cur_lv + ch_lv)
+			let levels[lnum] = '>' .. (cur_lv + ch_lv)
 		elseif next_line =~# '\<el\%[se]\|elseif\=\>'
 			if cur_line =~# close_pat
-				let levels[lnum] = '<' . (cur_lv - 1)
+				let levels[lnum] = '<' .. (cur_lv - 1)
 			else
-				let levels[lnum] = '<' . cur_lv
+				let levels[lnum] = '<' .. cur_lv
 			endif
 		elseif next_line =~# '\<cat\%[ch]\|fina\%[lly]\|th\[row]\>'
-			let levels[lnum] = '<' . cur_lv
+			let levels[lnum] = '<' .. cur_lv
 		else
 			let levels[lnum] = cur_lv + ch_lv
 		endif
