@@ -104,3 +104,84 @@ enddef
 export function Kata2hiraCmd() range abort
 	execute('silent ' .. a:firstline .. ',' .. a:lastline .. 'global/[ァ-ヶ]/call setline(".", Kata2hira(getline(".")))')
 endfunction
+
+def CheckBase64(s: string): bool
+	if len(s) % 4 != 0 || s !~? '^[0-9A-Za-z+/]\+=\{0,2}$'
+		echohl ErrorMsg | echo "Don't BASE64!" | echohl None
+		return false
+	endif
+	return true
+enddef
+
+export def Base64(str: string): string # BASE64 をデコード
+	var base64: dict<number> = {
+			'A': 0x00, 'B': 0x01, 'C': 0x02, 'D': 0x03, 'E': 0x04, 'F': 0x05, 'G': 0x06, 'H': 0x07,
+			'I': 0x08, 'J': 0x09, 'K': 0x0A, 'L': 0x0B, 'M': 0x0C, 'N': 0x0D, 'O': 0x0E, 'P': 0x0F,
+			'Q': 0x10, 'R': 0x11, 'S': 0x12, 'T': 0x13, 'U': 0x14, 'V': 0x15, 'W': 0x16, 'X': 0x17,
+			'Y': 0x18, 'Z': 0x19, 'a': 0x1A, 'b': 0x1B, 'c': 0x1C, 'd': 0x1D, 'e': 0x1E, 'f': 0x1F,
+			'g': 0x20, 'h': 0x21, 'i': 0x22, 'j': 0x23, 'k': 0x24, 'l': 0x25, 'm': 0x26, 'n': 0x27,
+			'o': 0x28, 'p': 0x29, 'q': 0x2A, 'r': 0x2B, 's': 0x2C, 't': 0x2D, 'u': 0x2E, 'v': 0x2F,
+			'w': 0x30, 'x': 0x31, 'y': 0x32, 'z': 0x33, '0': 0x34, '1': 0x35, '2': 0x36, '3': 0x37,
+			'4': 0x38, '5': 0x39, '6': 0x3A, '7': 0x3B, '8': 0x3C, '9': 0x3D, '+': 0x3E, '/': 0x3F
+		}
+	var i: number = 0
+	var s_len = len(str)
+	var decode: string
+	var s: string
+	var code: number
+
+	if !CheckBase64(str)
+		return str
+	endif
+	while i < s_len
+		s = str[i : i + 3]
+		if s[2 : ] ==# '=='
+			decode ..= nr2char((base64[s[0]] * 0x40 + base64[s[1]]) / 0x10)
+		elseif s[3] ==# '='
+			code = (base64[s[0]] * 0x1000 + base64[s[1]] * 0x40 + base64[s[2]]) / 0x04
+			decode = decode .. nr2char(and(code, 0xFF00) / 0x100) ..  nr2char(and(code, 0x00FF))
+		else
+			code = base64[s[0]] * 0x40000 + base64[s[1]] * 0x1000 + base64[s[2]] * 0x40 + base64[s[3]]
+			decode = decode .. nr2char(and(code, 0xFF0000) / 0x10000) ..  nr2char(and(code, 0x00FF00) / 0x100) ..  nr2char(and(code, 0x0000FF))
+		endif
+		i += 4
+	endwhile
+	return decode
+enddef
+
+export def Base64Cmd(): void
+	var ls: list<string> = getline(1, '$')
+	var s: string
+	var b: number
+	var c: number = line('.') - 1
+	var l: number = line('$') - 1
+	var i: number
+
+	i = c
+	while true
+		if ls[i] == ''
+			i += 1
+			break
+		elseif i == 0
+			break
+		endif
+		i -= 1
+	endwhile
+	b = i
+	i = c
+	while true
+		if ls[i] == ''
+			i -= 1
+			break
+		elseif i == l
+			break
+		endif
+		i += 1
+	endwhile
+	s = join(ls[b : i], '')
+	if !CheckBase64(s)
+		return
+	endif
+	silent execute ':' .. (b + 1) .. ',' .. (i + 1) .. 'delete _'
+	append(b, Base64(s)->split('\(\r\n\|\r\|\n\)'))
+enddef
