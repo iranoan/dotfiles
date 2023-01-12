@@ -43,6 +43,25 @@ function vim#fold#calculate(bufnr) abort
 		let next_line = get(lines, lnum, '')
 		let ch_lv = 0
 
+		" here document
+		if cur_line =~# '\<\(py\%[thon]\|py3\|python3\|rub\%[y]\|lua\|mz\%[scheme]\|pe\%[rl]\|tcl\)\s*<<\s*\(trim\)\?\s*\zs\(\w\+\)'
+			let here_lv = cur_lv + 1
+			let levels[lnum] = '>' .. here_lv
+			let end_marker = substitute(cur_line,
+						\ '.*\<\(py\%[thon]\|py3\|python3\|rub\%[y]\|lua\|mz\%[scheme]\|pe\%[rl]\|tcl\)\s*<<\s*\(trim\)\?\s*\(\w\+\)/*', '\3', '')
+			let g:g = end_marker .. ',' .. cur_lv .. ',' .. here_lv
+			while lnum < endl
+				let lnum += 1
+				let levels[lnum] = here_lv
+				let next_line = get(lines, lnum, '')
+				if next_line =~# '^' .. end_marker .. '$'
+					let levels[lnum] = here_lv
+					let levels[lnum+1] = '<' .. here_lv
+					break
+				endif
+			endwhile
+			continue
+		endif
 		" marker
 		let col = 0
 		while 1
