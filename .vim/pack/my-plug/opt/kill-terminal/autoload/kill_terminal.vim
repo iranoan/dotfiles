@@ -5,6 +5,9 @@
 
 scriptencoding utf-8
 
+let s:save_cpo = &cpoptions
+set cpoptions&vim
+
 function kill_terminal#main() abort
 	let bufnum = bufnr('') " カレント・バッファ (直前に開いたターミナルを想定)
 	let tabs = tabpagebuflist()
@@ -32,3 +35,7 @@ function kill_terminal#main() abort
 	let terms_in_tab = filter(terms_in_tab, 'v:key !=' . bufnum)
 	call win_gotoid(bufwinid(terms_in_tab[0]))
 endfunction
+
+" Reset User condition
+let &cpoptions = s:save_cpo
+unlet s:save_cpo

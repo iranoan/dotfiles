@@ -5,6 +5,9 @@
 scriptencoding utf-8
 scriptversion 4
 
+let s:save_cpo = &cpoptions
+set cpoptions&vim
+
 function! s:goto_win(windows) abort  " windows[] をアクティブ候補に
 	if a:windows == []
 		return v:false
@@ -115,3 +118,7 @@ function! tabedit#tabedit(...) abort
 	redraw  " これが無いとタグが切り替わったように見えない
 	unlet s:win_id
 endfunction
+
+" Reset User condition
+let &cpoptions = s:save_cpo
+unlet s:save_cpo

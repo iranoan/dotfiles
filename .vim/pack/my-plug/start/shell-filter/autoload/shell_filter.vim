@@ -2,7 +2,10 @@ scriptencoding utf-8
 " 選択範囲もしくは全体をフィルタにかける
 " シェルスクリプトは UTF-8 前提なので一度 fileencoding を変える
 " カーソル位置は元に戻す
-"
+
+let s:save_cpo = &cpoptions
+set cpoptions&vim
+
 function s:main( command, select, opt, fline, lline ) abort " この関数が範囲選択状態で受け取るようにしたいが、別の関数から呼び出された時に既に範囲選択が解除されてしまっている
 	let pos=getpos('.')
 	let search = @/
@@ -29,3 +32,7 @@ endfunction
 function shell_filter#hira2kata( select ) range abort
 	call s:main( 'hira2kata.sh', a:select, '', a:firstline, a:lastline )
 endfunction
+
+" Reset User condition
+let &cpoptions = s:save_cpo
+unlet s:save_cpo

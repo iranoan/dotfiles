@@ -1,5 +1,8 @@
 scriptencoding utf-8
 
+let s:save_cpo = &cpoptions
+set cpoptions&vim
+
 " カーソル下の単語をGoogleで検索する
 function google#search_by_google(range) range abort
 	if a:range > 0
@@ -32,3 +35,7 @@ function google#search_by_google(range) range abort
 	endif
 	echo 'Google search: ' .. l:searchWord
 endfunction
+
+" Reset User condition
+let &cpoptions = s:save_cpo
+unlet s:save_cpo

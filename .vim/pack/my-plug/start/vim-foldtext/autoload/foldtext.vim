@@ -1,6 +1,9 @@
 scriptencoding utf-8
 scriptversion 4
 
+let s:save_cpo = &cpoptions
+set cpoptions&vim
+
 function! foldtext#base(...) abort
 	" use the argument for display if possible, otherwise the current line
 	if a:0 > 0
@@ -290,3 +293,7 @@ function! foldtext#perl() " Perl
 	" }}}
 	return foldtext#base(line)
 endfunction
+
+" Reset User condition
+let &cpoptions = s:save_cpo
+unlet s:save_cpo

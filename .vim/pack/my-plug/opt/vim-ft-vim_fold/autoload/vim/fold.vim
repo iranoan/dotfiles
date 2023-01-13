@@ -1,6 +1,9 @@
 scriptencoding utf-8
 " https://github.com/thinca/vim-ft-vim_fold に if/endif, for/endfor, while/endwhile, try/endtry を追加
 
+let s:save_cpo = &cpoptions
+set cpoptions&vim
+
 function vim#fold#level(lnum) abort
 	if b:changedtick != get(b:, 'vim_fold_last_changedtick', -1)
 		let b:vim_fold_last_changedtick = b:changedtick
@@ -145,3 +148,7 @@ function vim#fold#calculate(bufnr) abort
 	endwhile
 	return levels
 endfunction
+
+" Reset User condition
+let &cpoptions = s:save_cpo
+unlet s:save_cpo

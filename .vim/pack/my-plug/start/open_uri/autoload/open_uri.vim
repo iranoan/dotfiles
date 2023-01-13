@@ -1,5 +1,8 @@
 scriptencoding utf-8
 
+let s:save_cpo = &cpoptions
+set cpoptions&vim
+
 function open_uri#main()
 	let l:line_str = getline('.')
 	let l:end = 0
@@ -70,3 +73,7 @@ function open_uri#main()
 	endif
 	return
 endfunction
+
+" Reset User condition
+let &cpoptions = s:save_cpo
+unlet s:save_cpo
