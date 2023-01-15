@@ -1,154 +1,162 @@
+vim9script
 scriptencoding utf-8
-" https://github.com/thinca/vim-ft-vim_fold に if/endif, for/endfor, while/endwhile, try/endtry を追加
+# https://github.com/thinca/vim-ft-vim_fold がオリジナル
+# if/endif, for/endfor, while/endwhile, try/endtry を追加
 
-let s:save_cpo = &cpoptions
-set cpoptions&vim
-
-function vim#fold#level(lnum) abort
+export def Level(): any
 	if b:changedtick != get(b:, 'vim_fold_last_changedtick', -1)
-		let b:vim_fold_last_changedtick = b:changedtick
-		let b:vim_fold_levels = vim#fold#calculate(bufnr('%'))
+		b:vim_fold_last_changedtick = b:changedtick
+		b:vim_fold_levels = Calculate(bufnr('%'))
 	endif
-	return get(b:vim_fold_levels, a:lnum, 0)
-endfunction
+	return get(b:vim_fold_levels, v:lnum, 0)
+enddef
 
-function vim#fold#text() abort
-	let line = getline(v:foldstart)
-	let linenr = v:foldstart + 1
+def Text(): string
+	var line: string = getline(v:foldstart)
+	var linenr: number = v:foldstart + 1
 	while getline(linenr) =~# '^\s*\\'
-		let line ..= matchstr(getline(linenr), '\m^\s*\\\s\{-}\zs\s\?\S.*$')
-		let linenr += 1
+		line ..= matchstr(getline(linenr), '\m^\s*\\\s\{-}\zs\s\?\S.*$')
+		linenr += 1
 	endwhile
 	if linenr == v:foldstart + 1
 		return foldtext()
 	endif
 	return line
-endfunction
+enddef
 
-function vim#fold#calculate(bufnr) abort
-	let foldmarker = getbufvar(a:bufnr, '&foldmarker')
-	let [open_marker, close_marker] = split(foldmarker, ',')
-	let om_len = len(open_marker)
-	let cm_len = len(close_marker)
-	let levels = {}
-	let lines = getbufline(a:bufnr, 1, '$')
-	let lnum = 0
-	let next_line = lines[lnum]
-	let cur_lv = 0
-	let endl = line('$')
+def Calculate(bufnr: number): dict<any>
+	var foldmarker: string = getbufvar(bufnr, '&foldmarker')
+	var levels: dict<any>
+	var lines: list<string> = getbufline(bufnr, 1, '$')
+	var lnum: number
+	var next_line: string = lines[lnum]
+	var cur_line: string
+	var cur_lv: number
+	var ch_lv: number
+	var here_lv: number
+	var endl: number = line('$')
+	var open_marker: string
+	var close_marker: string
+	var om_pos: number
+	var cm_pos: number
+	var om_len: number
+	var cm_len: number
+	var end_marker: string
+	var is_open: bool
+	var col: number
+	var marker_lv: number
+	var s_marker_lv: string
 
-	let open_pat = '^\s*:\?\s*\%(\(export\s\+\)\?fu\%[nction]\s\|\(exe\%[cute]\s\+["'']\|execute(["'']\)\?aug\%[roup]\>\|if\>\|for\>\|wh\%[ile]\>\|\(export\s\+\)\?def\>\|try\>\)'
-	let close_pat = '^\s*:\?\s*\%(endf\%[unction]\>\|aug\%[roup]\s\+END\|endfo\%[r]\|endw\%[hile]\|enddef\|en\%[dif]\|endt\%[ry]\)\>'
+	var open_pat: string = '^\s*:\?\s*\%(\(export\s\+\)\?fu\%[nction]\s\|\(exe\%[cute]\s\+["'']\|execute(["'']\)\?aug\%[roup]\>\|if\>\|for\>\|wh\%[ile]\>\|\(export\s\+\)\?def\>\|try\>\)'
+	var close_pat: string = '^\s*:\?\s*\%(endf\%[unction]\>\|aug\%[roup]\s\+END\|endfo\%[r]\|endw\%[hile]\|enddef\|en\%[dif]\|endt\%[ry]\)\>'
 
+	[open_marker, close_marker] = split(foldmarker, ',')
+	om_len = len(open_marker)
+	cm_len = len(close_marker)
 	while lnum < endl
-		let lnum += 1
-		let cur_line = next_line
-		let next_line = get(lines, lnum, '')
-		let ch_lv = 0
-
-		" here document
+		lnum += 1
+		cur_line = next_line
+		next_line = get(lines, lnum, '')
+		ch_lv = 0
+		# empty line
+		if cur_line ==# '' && type(levels[lnum - 1]) == 1
+			levels[lnum] = levels[lnum - 1]
+			levels[lnum - 1] = levels[lnum - 1][1 : ]
+		endif
+		# here document
 		if cur_line =~# '\<\(py\%[thon]\|py3\|python3\|rub\%[y]\|lua\|mz\%[scheme]\|pe\%[rl]\|tcl\)\s*<<\s*\(trim\)\?\s*\zs\(\w\+\)'
-			let here_lv = cur_lv + 1
-			let levels[lnum] = '>' .. here_lv
-			let end_marker = substitute(cur_line,
+			here_lv = cur_lv + 1
+			levels[lnum] = '>' .. here_lv
+			end_marker = substitute(cur_line,
 						\ '.*\<\(py\%[thon]\|py3\|python3\|rub\%[y]\|lua\|mz\%[scheme]\|pe\%[rl]\|tcl\)\s*<<\s*\(trim\)\?\s*\(\w\+\)/*', '\3', '')
 			while lnum < endl
-				let lnum += 1
-				let levels[lnum] = here_lv
-				let next_line = get(lines, lnum, '')
+				lnum += 1
+				levels[lnum] = here_lv
+				next_line = get(lines, lnum, '')
 				if next_line =~# '^' .. end_marker .. '$'
-					let levels[lnum] = here_lv
-					let levels[lnum+1] = '<' .. here_lv
+					levels[lnum] = here_lv
+					levels[lnum + 1] = '<' .. here_lv
 					break
 				endif
 			endwhile
 			continue
 		endif
-		" marker
-		let col = 0
-		while 1
-			let om_pos = stridx(cur_line, open_marker, col)
-			let cm_pos = stridx(cur_line, close_marker, col)
+		# marker
+		col = 0
+		while true
+			om_pos = stridx(cur_line, open_marker, col)
+			cm_pos = stridx(cur_line, close_marker, col)
 			if om_pos >= 0
 				if synIDattr(synIDtrans(synID(lnum, om_pos, 1)), 'name') !=# 'Comment'
 					break
 				endif
 			elseif cm_pos >= 0
-				if synIDattr(synIDtrans(synID(lnum, cm_pos, 1)), 'name') !=# 'Comment'
+				if synIDattr(synIDtrans(synID(lnum, om_pos, 1)), 'name') !=# 'Comment'
 					break
 				endif
 			else
 				break
 			endif
-			let is_open = cm_pos < 0 || (0 <= om_pos && om_pos < cm_pos)
-			let col = is_open ? om_pos + om_len : cm_pos + cm_len
-			let marker_lv = matchstr(cur_line, '\m^\d\+', col)
-			let col += len(marker_lv)
-			let marker_lv = str2nr(marker_lv)
+			is_open = (cm_pos < 0 || (0 <= om_pos && om_pos < cm_pos))
+			col = is_open ? om_pos + om_len : cm_pos + cm_len
+			s_marker_lv = matchstr(cur_line, '\m^\d\+', col)
+			col += len(s_marker_lv)
+			marker_lv = str2nr(s_marker_lv)
 			if is_open
-				if marker_lv is# 0
-					let ch_lv += 1
+				if marker_lv == 0
+					ch_lv += 1
 				else
-					let levels[lnum] = '>' .. marker_lv
-					let cur_lv = marker_lv
+					levels[lnum] = '>' .. marker_lv
+					cur_lv = marker_lv
 				endif
 			else
-				if marker_lv is# 0
-					let ch_lv -= 1
+				if marker_lv == 0
+					ch_lv -= 1
 				else
-					let levels[lnum] = '<' .. marker_lv
-					let cur_lv = marker_lv - 1
+					levels[lnum] = '<' .. marker_lv
+					cur_lv = marker_lv - 1
 				endif
 			endif
 		endwhile
 
 		if has_key(levels, lnum)
-			let cur_lv = max([cur_lv + ch_lv, 0])
+			cur_lv = max([cur_lv + ch_lv, 0])
 			continue
 		endif
-
-		if cur_line =~# close_pat
-			let ch_lv -= 1
+		if cur_line =~# close_pat # if/end など対になる文字列
+			ch_lv -= 1
 		elseif cur_line =~# open_pat
-			let ch_lv += 1
-		endif
-		if cur_line =~# '^\s*\\'
+			ch_lv += 1
+		elseif cur_line =~# '^\s*\\' # 行頭の \
 			if next_line !~# '^\s*\\'
-				let ch_lv -= 1
+				ch_lv -= 1
 			endif
 		elseif next_line =~# '^\s*\\'
-			let ch_lv += 1
+			ch_lv += 1
 		endif
 
 		if ch_lv < 0
-			" if next_line =~# close_pat && cur_line =~# close_pat
-			" 	let levels[lnum] = '<' .. (cur_lv - 1)
-			" elseif next_line =~# '\<el\%[se]\|elseif\=\>' && cur_line =~# close_pat
 			if next_line =~# '\<el\%[se]\|elseif\=\>' && cur_line =~# close_pat
-				let levels[lnum] = '<' .. (cur_lv - 1)
+				levels[lnum] = '<' .. (cur_lv - 1)
 			elseif next_line =~# '\<cat\%[ch]\|fina\%[lly]\|th\[row]\>'
-				let levels[lnum] = '<' .. (cur_lv - 1)
+				levels[lnum] = '<' .. (cur_lv - 1)
 			else
-				let levels[lnum] = '<' .. cur_lv
+				levels[lnum] = '<' .. cur_lv
 			endif
 		elseif 0 < ch_lv
-			let levels[lnum] = '>' .. (cur_lv + ch_lv)
+			levels[lnum] = '>' .. (cur_lv + ch_lv)
 		elseif next_line =~# '\<el\%[se]\|elseif\=\>'
 			if cur_line =~# close_pat
-				let levels[lnum] = '<' .. (cur_lv - 1)
+				levels[lnum] = '<' .. (cur_lv - 1)
 			else
-				let levels[lnum] = '<' .. cur_lv
+				levels[lnum] = '<' .. cur_lv
 			endif
 		elseif next_line =~# '\<cat\%[ch]\|fina\%[lly]\|th\[row]\>'
-			let levels[lnum] = '<' .. cur_lv
+			levels[lnum] = '<' .. cur_lv
 		else
-			let levels[lnum] = cur_lv + ch_lv
+			levels[lnum] = cur_lv + ch_lv
 		endif
-		let cur_lv = max([cur_lv + ch_lv, 0])
+		cur_lv = max([cur_lv + ch_lv, 0])
 	endwhile
 	return levels
-endfunction
-
-" Reset User condition
-let &cpoptions = s:save_cpo
-unlet s:save_cpo
+enddef
