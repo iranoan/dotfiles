@@ -47,7 +47,7 @@ def Calculate(bufnr: number): dict<any>
 	var marker_lv: number
 	var s_marker_lv: string
 
-	var open_pat: string = '^\s*:\?\s*\%(\(export\s\+\)\?fu\%[nction]\s\|\(exe\%[cute]\s\+["'']\|execute(["'']\)\?aug\%[roup]\s\|if\>\|for\>\|wh\%[ile]\>\|\(export\s\+\)\?def\>\|try\>\)'
+	var open_pat: string = '^\s*:\?\s*\%(\(export\s\+\)\?fu\%[nction][!\s]\|\(exe\%[cute]\s\+["'']\|execute(["'']\)\?aug\%[roup]\s\|if\>\|for\>\|wh\%[ile]\>\|\(export\s\+\)\?def\>\|try\>\)'
 	var close_pat: string = '^\s*:\?\s*\%(endf\%[unction]\>\|aug\%[roup]\s\+END\|endfo\%[r]\|endw\%[hile]\|enddef\|en\%[dif]\|endt\%[ry]\)\>'
 
 	def PareBracket(): number # ペアで存在しない (), [], {}
@@ -127,7 +127,7 @@ def Calculate(bufnr: number): dict<any>
 					break
 				endif
 			elseif cm_pos >= 0
-				if synIDattr(synIDtrans(synID(lnum, om_pos, 1)), 'name') !=# 'Comment'
+				if synIDattr(synIDtrans(synID(lnum, cm_pos, 1)), 'name') !=# 'Comment'
 					break
 				endif
 			else
