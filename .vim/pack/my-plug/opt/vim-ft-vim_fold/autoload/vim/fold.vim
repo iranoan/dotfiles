@@ -50,6 +50,42 @@ def Calculate(bufnr: number): dict<any>
 	var open_pat: string = '^\s*:\?\s*\%(\(export\s\+\)\?fu\%[nction]\s\|\(exe\%[cute]\s\+["'']\|execute(["'']\)\?aug\%[roup]\>\|if\>\|for\>\|wh\%[ile]\>\|\(export\s\+\)\?def\>\|try\>\)'
 	var close_pat: string = '^\s*:\?\s*\%(endf\%[unction]\>\|aug\%[roup]\s\+END\|endfo\%[r]\|endw\%[hile]\|enddef\|en\%[dif]\|endt\%[ry]\)\>'
 
+	def PareBracket(): number # ペアで存在しない (), [], {}
+		var i: number
+		var no_match: number
+		var synid: string
+		var regex: string
+		for s in '[({'
+			regex = '^\("\([^"]\|\"\)*"\|''\([^'']\|''''\)*''\|[^' .. s .. '"'']\)*' .. s
+			i = 0
+			while true
+				i = matchend(cur_line, regex, i)
+				synid = synIDattr(synIDtrans(synID(lnum, i, 1)), 'name')
+				if i == -1 || synid ==# 'Comment'
+					break
+				endif
+				if synid !=# 'Constant'
+					no_match += 1
+				endif
+			endwhile
+		endfor
+		for s in '})]'
+			regex = '^\("\([^"]\|\"\)*"\|''\([^'']\|''''\)*''\|[^' .. s .. '"'']\)*' .. s
+			i = 0
+			while true
+				i = matchend(cur_line, regex, i)
+				synid = synIDattr(synIDtrans(synID(lnum, i, 1)), 'name')
+				if i == -1 || synid ==# 'Comment'
+					break
+				endif
+				if synid !=# 'Constant'
+					no_match -= 1
+				endif
+			endwhile
+		endfor
+		return no_match
+	enddef
+
 	[open_marker, close_marker] = split(foldmarker, ',')
 	om_len = len(open_marker)
 	cm_len = len(close_marker)
@@ -127,13 +163,8 @@ def Calculate(bufnr: number): dict<any>
 			ch_lv -= 1
 		elseif cur_line =~# open_pat
 			ch_lv += 1
-		elseif cur_line =~# '^\s*\\' # 行頭の \
-			if next_line !~# '^\s*\\'
-				ch_lv -= 1
-			endif
-		elseif next_line =~# '^\s*\\'
-			ch_lv += 1
 		endif
+		ch_lv += PareBracket()
 
 		if ch_lv < 0
 			if next_line =~# '\<el\%[se]\|elseif\=\>' && cur_line =~# close_pat
@@ -160,3 +191,4 @@ def Calculate(bufnr: number): dict<any>
 	endwhile
 	return levels
 enddef
+defcompile
