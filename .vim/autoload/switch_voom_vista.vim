@@ -8,10 +8,11 @@ function switch_voom_vista#main() abort
 				\ 'asciidoc', 'cwiki', 'dokuwiki', 'fmr', 'fmr1', 'fmr2', 'fmr3', 'hashes', 'html', 'xhtml', 'inverseAtx', 'latex', 'latexDtx', 'markdown', 'org', 'pandoc', 'paragraphBlank', 'paragraphIndent', 'paragraphNoIndent', 'python', 'rest', 'taskpaper', 'thevimoutliner', 'txt2tags', 'viki', 'vimoutliner', 'vimwiki', 'wiki'
 				\ ]
 	if &filetype ==? 'tex'
-		silent execute 'Voom latex'
+		Voom latex
 	elseif &filetype ==? 'text'
-		silent execute 'Voom markdown'
-		echo 'Voom markdown'
+		Voom markdown
+	elseif &filetype ==? 'vim' " Vista というか LSP vim-language-Server は vim9script 未対応 2023/01/17
+		Voom vimoutliner
 	elseif index( [ 'c', 'h', 'cpp', 'sh', 'python', 'vim' ], &filetype ) >= 0 " taglist, Voom 両方に対応しているファイルタイプも有るので、取り敢えずこれだけを Vista を使う
 		silent Vista
 	elseif &filetype ==? 'xhtml'

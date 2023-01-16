@@ -5,6 +5,12 @@ function set_vista#main() abort
 		augroup! loadvimlsp
 		delfunction set_vimlsp#main
 	endif
+	" if !is_plugin_installed#Main('ale') " 通常不要
+	" 	call set_ale#main()
+	" 	autocmd! loadALE
+	" 	augroup! loadALE
+	" 	delfunction set_ale#main
+	" endif
 	packadd vista.vim
 	let g:vista_executive_for = {
 		\ 'c'     : 'vim_lsp',
