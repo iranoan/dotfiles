@@ -303,7 +303,7 @@ if exists('&ambiwidth')                        # □とか○の文字があっ�
 	# [0x20A0, 0x20C0, 1],                       # 通貨記号
 	# [0x2102, 0x2104, 1], [0x2107, 0x211F, 1], [0x2123, 0x213A, 1], [0x213C, 0x214C, 1], # ℃などの文字様記号
 	# [0x2200, 0x222B, 1], [0x222E, 0x222E, 1], [0x2231, 0x22FF, 1], # 数式記号
-	# ↓VIM - Vi IMproved 9.0 (2022 Jun 28, compiled Aug 23 2022 20:18:58) 適用済パッチ: 1-242 でエラー
+	# ↓VIM - Vi IMproved 9.0 (2022 Jun 28, compiled Aug 23 2022 20:18:58) 適用済パッチ: 1-242 でエラー→0x80-0xFF は可能にhttps://github.com/vim-jp/issues/issues/1400#issuecomment-1398647611
 	# [0xAA, 0xAA, 1], [0xB2, 0xB3, 1], [0xB9, 0xBA, 1], # 上付きの0-3, a
 	# [0xA1, 0xA1, 1], [0xA7, 0xA7, 1], [0xAE, 0xAE, 1], [0xB0, 0xB4, 1], [0xB6, 0xB6, 1], [0xBF, 0xBF, 1] # ¡§®°±´¶¿と上付きの一部
 	# [0xD7, 0xD7, 1], [0xF7, 0xF7, 1], # ×÷
