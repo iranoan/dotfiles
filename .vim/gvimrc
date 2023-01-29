@@ -1,11 +1,10 @@
 vim9script
 scriptencoding utf-8
 set antialias             # アンチエイリアス
-set columns=164           # columns width of the display
+set columns=168           # columns width of the display
 set lines=999             # lines number of lines in the display
 if has('unix')            # 使用フォント(最初に見つかったフォントを使う)
-	set guifont=RictyDiminished\ Nerd\ Font\ 14,Ricty\ Diminished\ Regular\ 14,Noto\ Mono\ 13,Monospace\ 12
-	# set guifont=HackGenNerd\ Regular\ 13,Ricty\ Diminished\ Regular\ 14,Noto\ Mono\ 13,Monospace\ 12
+	set guifont=RictyDiminished\ Nerd\ Font\ Regular\ 14,Ricty\ Diminished\ Regular\ 14,Noto\ Mono\ 13,Monospace\ 12
 else
 	set guifont=RictyDiminished\ Nerd\ Font:h14,Ricty\ Diminished\ Regular:h14,MS_Gothic:h13,Monaco:h10
 endif
