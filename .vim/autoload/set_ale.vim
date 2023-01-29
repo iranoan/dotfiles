@@ -14,6 +14,7 @@ function set_ale#main()
 	let g:ale_echo_msg_info_str    = '📔'
 	let g:ale_echo_msg_warning_str = '🤔'
 	let g:ale_echo_msg_format = '[%linter%]%severity% %s [%...code...%]'
+	let g:ale_virtualtext_cursor = 0          " virtual text をカーソル位置に表示しない
 	" let g:ale_sign_column_always=1
 	let g:ale_close_preview_on_insert=1
 	" let g:ale_keep_list_window_open=1
