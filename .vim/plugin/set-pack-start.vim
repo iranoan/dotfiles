@@ -124,7 +124,6 @@ def Color_light_dark(): void
 	# highlight SpecialKey term=bold cterm=bold ctermfg=11 ctermbg=0 gui=bold guifg=DarkGray
 	# highlight SpecialKey term=bold cterm=bold ctermfg=11 ctermbg=0 gui=bold guifg=#657b83 guibg=#073642 ←Solarized のオリジナル
 	# Terminal の色は Normal に揃える
-	# これはバグで 8.2.3996 ～ 8.2.5172 のどこかで修正ずみ→https://github.com/vim-jp/issues/issues/1388
 	highlight clear Terminal
 	execute 'highlight Terminal ' .. substitute(substitute(execute('highlight Normal'), '[\n\r \t]\+', ' ', 'g'), ' *Normal\s\+xxx *', '', '')
 enddef
