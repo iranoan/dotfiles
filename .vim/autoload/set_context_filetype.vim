@@ -48,13 +48,8 @@ function set_context_filetype#main() abort
 		\ 'sh': [
 		\ {
 			\ 	'filetype': 'awk',
-			\ 	'start': '\<[mg]\?awk\s\+.*''{',
-			\ 	'end': '}'''
-		\ },
-		\ {
-			\ 	'filetype': 'awk',
-			\ 	'start': '\<[mg]\?awk\s\+.*''BEGIN',
-			\ 	'end': '}'''
+			\ 	'start': '\<[mg]\?awk\s\+''\(F\?NR\s*==\s*\d\+\s*;\|BEGIN\)*\s*{',
+			\ 	'end': '}\(;F\?NR\s*==\s*\d\+\s*\)*;\?'''
 		\ },
 		\ {
 			\ 	'filetype': 'perl',
