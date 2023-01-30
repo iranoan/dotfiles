@@ -17,6 +17,7 @@ if [ -f ~/.xprofile ]; then
 fi
 
 #環境変数
+export EDITOR=vim
 export LESSCHARSET=utf-8
 # TeX の log で強制改行される位置の指定。デフォルトだと 79 桁←環境変数じゃないと効かない
 export max_print_line=1000
