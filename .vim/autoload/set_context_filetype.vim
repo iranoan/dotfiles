@@ -48,8 +48,13 @@ function set_context_filetype#main() abort
 		\ 'sh': [
 		\ {
 			\ 	'filetype': 'awk',
-			\ 	'start': '\<[mg]\?awk\s\+''\(F\?NR\s*==\s*\d\+\s*;\|BEGIN\)*\s*{',
-			\ 	'end': '}\(;F\?NR\s*==\s*\d\+\s*\)*;\?'''
+			\ 	'start': '\<[mg]\?awk\s\+.*''{',
+			\ 	'end': '}'''
+		\ },
+		\ {
+			\ 	'filetype': 'awk',
+			\ 	'start': '\<[mg]\?awk\s\+.*''.*\<BEGIN\s*{',
+			\ 	'end': '}[;'']'
 		\ },
 		\ {
 			\ 	'filetype': 'perl',
@@ -65,13 +70,13 @@ function set_context_filetype#main() abort
 		\ 'bash': [
 		\ {
 			\ 	'filetype': 'awk',
-			\ 	'start': '\<[mg]\?awk\s\+.*''{',
-			\ 	'end': '}'''
+			\ 	'start': '\<[mg]\?awk\s\+.*''\(F\?NR\s*==\s*\d\+;\)*BEGIN\s*{\zs',
+			\ 	'end': '}\ze\s*[{;'']'
 		\ },
 		\ {
 			\ 	'filetype': 'awk',
-			\ 	'start': '\<[mg]\?awk\s\+.*''BEGIN',
-			\ 	'end': '}'''
+			\ 	'start': '\<[mg]\?awk\s\+''.*{',
+			\ 	'end': '}\s*[{;'']'
 		\ },
 		\ {
 			\ 	'filetype': 'perl',
