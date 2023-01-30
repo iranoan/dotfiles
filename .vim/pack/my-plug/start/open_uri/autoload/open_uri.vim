@@ -9,7 +9,7 @@ function open_uri#main()
 	let l:urls = []
 	let l:only_urls = []
 	while 1
-		let [l:url, l:start, l:end] = matchstrpos(l:line_str, '\m\C\([a-z]*://[^][ <>,;"''(){}]*\|\(mailto:\)\=[A-Za-z0-9_.+-]\+@[A-Za-z0-9.-]\+[a-z]\{2,\}\|\(\~\=/\)\=\([A-Za-z\.\-_0-9]\+/\)*[A-Za-z\.\-_0-9]\+\(\.\([A-Za-z]\{1,4\}\)\|/\)\)', l:end)
+		let [l:url, l:start, l:end] = matchstrpos(l:line_str, '\m\C\([a-z]*://[^][ <>,;"''(){}]*\|\(mailto:\)\=[A-Za-z0-9_.+-]\+@[A-Za-z0-9.-]\+[a-z]\{2,\}\|\(\~\=/\)\=\([A-Za-z\.\-_0-9]\+/\)*[A-Za-z\.\-_0-9]\+\(\.\([A-Za-z0-9]\{1,4\}\)\|/\)\)', l:end)
 		if l:start == -1
 			break
 		endif
