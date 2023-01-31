@@ -123,7 +123,7 @@ def Color_light_dark(): void
 	highlight SignColumn ctermbg=NONE guibg=NONE
 	# highlight SpecialKey term=bold cterm=bold ctermfg=11 ctermbg=0 gui=bold guifg=DarkGray
 	# highlight SpecialKey term=bold cterm=bold ctermfg=11 ctermbg=0 gui=bold guifg=#657b83 guibg=#073642 ←Solarized のオリジナル
-	# Terminal の色は Normal に揃える
+	# Terminal の色は Normal に揃える←Solarized では更新されていない
 	highlight clear Terminal
 	execute 'highlight Terminal ' .. substitute(substitute(execute('highlight Normal'), '[\n\r \t]\+', ' ', 'g'), ' *Normal\s\+xxx *', '', '')
 enddef
