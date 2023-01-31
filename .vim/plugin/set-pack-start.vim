@@ -86,11 +86,13 @@ nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 # カーソル行の URL やファイルを開く ~/.vim/pack/my-plug/start/open_uri/ {{{1
 
 # カラースキム https://github.com/altercation/vim-colors-solarized {{{1
-set background=dark
 try
+	set background=dark
 	g:solarized_menu = 0
+	if !has('gui_running') # ターミナルが 256 色一部の色が変わる
+		set t_Co=16
+	endif
 	colorscheme solarized
-	# set t_Co=16 # ターミナルが 256 色だと、highlight Terminal の色を Normal と同じにできない
 catch /^Vim\%((\a\+)\)\=:E185:/
 	colorscheme habamax
 endtry
@@ -123,9 +125,10 @@ def Color_light_dark(): void
 	highlight SignColumn ctermbg=NONE guibg=NONE
 	# highlight SpecialKey term=bold cterm=bold ctermfg=11 ctermbg=0 gui=bold guifg=DarkGray
 	# highlight SpecialKey term=bold cterm=bold ctermfg=11 ctermbg=0 gui=bold guifg=#657b83 guibg=#073642 ←Solarized のオリジナル
-	# Terminal の色は Normal に揃える←Solarized では更新されていない
-	highlight clear Terminal
-	execute 'highlight Terminal ' .. substitute(substitute(execute('highlight Normal'), '[\n\r \t]\+', ' ', 'g'), ' *Normal\s\+xxx *', '', '')
+	# Terminal の色は Normal に揃える←Solarized で未定義
+	# highlight clear Terminal
+	# execute 'highlight Terminal ' .. substitute(substitute(execute('highlight Normal'), '[\n\r \t]\+', ' ', 'g'), ' *Normal\s\+xxx *', '', '')
+	highlight! link Terminal Normal
 enddef
 augroup ChangeHighlight
 	autocmd!
