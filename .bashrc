@@ -10,7 +10,7 @@ esac
 
 if [[ $( tty ) =~ /dev/tty.* ]]; then # 仮想コンソールでは、そのままでは日本語が使えないので fbterm 起動
 	if which fbterm > /dev/null 2>&1 ; then
-		fbterm -- "$HOME/bin/fbterm.sh"
+		FBTERM=1 fbterm -- "$HOME/bin/fbterm.sh"
 	fi
 elif which tmux > /dev/null 2>&1 ; then # シェル開始時に tmux 起動 (デタッチされたセッションがあればそちらに繋げる)
 	[[ $- != *i* ]] && return
