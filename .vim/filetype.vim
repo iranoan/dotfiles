@@ -12,7 +12,7 @@ augroup filetypedetect
 	autocmd BufNewFile,BufRead .bash_history,.bashrc,~/dotfiles/.bash/*,~/.bash/* set filetype=bash
 	autocmd BufNewFile,BufRead .xprofile      set filetype=sh
 	autocmd BufNewFile,BufRead .textlintrc,.stylelintrc set filetype=json
-	autocmd BufNewFile,BufRead .msmtprc       set filetype=msmtp | source $VIM/addons/syntax/msmtp.vim | setlocal commentstring=#%s
+	autocmd BufNewFile,BufRead .msmtprc       set filetype=msmtp | setlocal commentstring=#%s
 	autocmd BufNewFile,BufRead tags-??        set filetype=tags
 	autocmd BufEnter           */textern/textern-*/*.txt setlocal syntax=mail foldmethod=syntax commentstring=>%s
 	" autocmd BufNewFile,BufRead *.htm,*.html   setlocal filetype=html
