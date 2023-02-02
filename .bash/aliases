@@ -24,6 +24,6 @@ alias octave='octave-cli --silent'
 alias gnuplot='PAGER=less gnuplot'
 if type -t vim > /dev/null 2>&1 ; then
 	alias vi=vim
-	# vim としてそのまま起動すると、vim9script による記述がエラーになる
+	# vi としてそのまま起動すると、vim9script による記述がエラーになる
 	# alias vi='grep -E "^set" ~/.vim/vimrc | sed -E "s/ +#.*//g" > ~/.exrc && vi -u ~/.exrc'
 fi
