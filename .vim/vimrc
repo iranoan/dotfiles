@@ -308,7 +308,6 @@ if exists('&ambiwidth')                        # □とか○の文字があっ�
 endif
 set formatoptions+=mMj1 formatoptions-=tc      # 日本語の行の連結時には空白を入力しない+textwidth を使った自動折返しをしない
 set display+=lastline                          # 画面最後の行をできる限り表示
-set showcmd                                    # 選択時などで情報表示
 set wrap                                       # 長い行は折り返し表示
 set sidescroll=1                               # 横スクロールでカーソル位置を真ん中にしない
 set linebreak                                  # wrap at 'breakat
