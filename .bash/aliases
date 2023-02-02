@@ -1,4 +1,8 @@
 # bash aliases
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$( history | tail -n1 | sed -e "s/^\\s*[0-9]\\+\\s\\+//;s/[;&|]\\s*alert$//" )"'
 case "$(uname)" in
 	# Linux)
 	# 	;;
@@ -12,11 +16,14 @@ alias gpgupdate='gpg --keyserver hkp://keyserver.ubuntu.com:80 --refresh-keys &&
 alias 3cal='ncal -3'
 alias bc='bc -l -q ~/.bc | sed -E -e "s/^\./0./g" -e "s/(.[0-9]*[1-9])0+/\1/g" -e\ "s/\.$//g"'
 alias diff='colordiff -wu'
-# alias fbterm='fbterm -- fbterm.sh'
 alias m='~/bin/import-thuderbird-Maildir.sh && gvim +"Notmuch start"'
 alias plot=gnuplot.sh
 alias g='gvim.sh $@'
 # alias matlab='/usr/bin/octave --gui &'
 alias octave='octave-cli --silent'
 alias gnuplot='PAGER=less gnuplot'
-alias vi='grep -E "^set" ~/.vim/vimrc | sed -E "s/ +#.*//g" > ~/.exrc && vi -u ~/.exrc'
+if type -t vim 2>&1 /dev/null ; then
+	alias vi=vim
+	# vim としてそのまま起動すると、vim9script による記述がエラーになる
+	# alias vi='grep -E "^set" ~/.vim/vimrc | sed -E "s/ +#.*//g" > ~/.exrc && vi -u ~/.exrc'
+fi
