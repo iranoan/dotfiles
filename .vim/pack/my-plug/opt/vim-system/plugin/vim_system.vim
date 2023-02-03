@@ -1,18 +1,11 @@
-scriptencoding utf-8
-
-let s:save_cpo = &cpoptions
-set cpoptions&vim
+vim9script
 
 if exists('g:transform')
 	finish
 endif
-let g:transform = 1
+g:transform = 1
 
-command VimSystem call vim_system#Write()
-command VimSystemEcho call vim_system#Echo()
-command System call vim_system#EnvWrite()
-command SystemEcho call vim_system#EnvEcho()
-
-" Reset User condition
-let &cpoptions = s:save_cpo
-unlet s:save_cpo
+command VimSystem     vim_system#Write()
+command VimSystemEcho vim_system#Echo()
+command System        vim_system#EnvWrite()
+command SystemEcho    vim_system#EnvEcho()
