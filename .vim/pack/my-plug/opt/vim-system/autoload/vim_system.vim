@@ -25,19 +25,15 @@ def Enviroment(): list<string>
 enddef
 
 def System(): list<string>
-	var mes: list<string> = ['$ vim --version']
-	var win: string
+	var mes: list<string> = [ ( ( has('win32') || has('win64') ) ? '>' : '$' ) .. ' vim --version' ]
 	extend(mes, split(execute('version'), '\n'))
 	mes[3] = substitute(mes[3], $USER .. '@' .. systemlist('hostname')[0], 'xxx@xxx', '')
-	if has('win32') || has('win64')
-		mes[0] = '> vim --version'
-	endif
 	extend(mes, Enviroment())
 	return mes
 enddef
 
 export def Write(): void
-	append(line('.') - 1, System())
+	append(line('.'), System())
 enddef
 
 export def Echo(): void
@@ -45,7 +41,7 @@ export def Echo(): void
 enddef
 
 export def EnvWrite(): void
-	append(line('.') - 1, Enviroment())
+	append(line('.'), Enviroment())
 enddef
 
 export def EnvEcho(): void
