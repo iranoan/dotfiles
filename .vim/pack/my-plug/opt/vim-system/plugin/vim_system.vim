@@ -10,6 +10,8 @@ let g:transform = 1
 
 command VimSystem call vim_system#Write()
 command VimSystemEcho call vim_system#Echo()
+command System call vim_system#EnvWrite()
+command SystemEcho call vim_system#EnvEcho()
 
 " Reset User condition
 let &cpoptions = s:save_cpo

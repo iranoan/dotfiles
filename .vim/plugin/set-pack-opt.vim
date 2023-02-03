@@ -546,7 +546,7 @@ augroup loadVimSystem
 	autocmd FuncUndefined vim_system#* packadd vim-system
 	| autocmd! loadVimSystem
 	| augroup! loadVimSystem
-	autocmd CmdUndefined VimSystem,VimSystemEcho packadd vim-system
+	autocmd CmdUndefined VimSystem,VimSystemEcho,System,SystemEcho packadd vim-system
 	| autocmd! loadVimSystem
 	| augroup! loadVimSystem
 augroup END

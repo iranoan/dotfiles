@@ -1,10 +1,8 @@
 vim9script
 scriptencoding utf-8
 
-def System(): list<string>
-	var mes: list<string> = ['$ vim --version']
-	var win: string
-	extend(mes, split(execute('version'), '\n'))
+def Enviroment(): list<string>
+	var mes: list<string>
 	if has('unix')
 		if executable('lsb_release')
 			add(mes, '$ lsb_release -a')
@@ -20,10 +18,21 @@ def System(): list<string>
 		add(mes, '$ sw_vers')
 		extend(mes, systemlist('sw_vers'))
 	elseif has('win32') || has('win64')
-		mes[0] = '> vim --version'
 		add(mes, '> systeminfo')
 		extend(mes, systemlist('chcp 65001 | systeminfo')[2 : 6])
 	endif
+	return mes
+enddef
+
+def System(): list<string>
+	var mes: list<string> = ['$ vim --version']
+	var win: string
+	extend(mes, split(execute('version'), '\n'))
+	mes[3] = substitute(mes[3], $USER .. '@' .. systemlist('hostname')[0], 'xxx@xxx', '')
+	if has('win32') || has('win64')
+		mes[0] = '> vim --version'
+	endif
+	extend(mes, Enviroment())
 	return mes
 enddef
 
@@ -33,4 +42,12 @@ enddef
 
 export def Echo(): void
 	echo join(System(), "\n")
+enddef
+
+export def EnvWrite(): void
+	append(line('.') - 1, Enviroment())
+enddef
+
+export def EnvEcho(): void
+	echo join(Enviroment(), "\n")
 enddef
