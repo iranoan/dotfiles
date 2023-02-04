@@ -538,7 +538,7 @@ nnoremap <Leader>hk :Hira2kata<CR>
 xnoremap <Leader>hk :Hira2kata<CR>
 nnoremap <Leader>hH :Kata2hira<CR>
 xnoremap <Leader>hH :Kata2hira<CR>
-nnoremap <Leader>hb :Base64<CR>
+# nnoremap <Leader>hb :Base64<CR>
 
 # Vim の環境を出力する ~/.vim/pack/my-plug/opt/vim-system/ {{{1
 augroup loadVimSystem
