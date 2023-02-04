@@ -14,6 +14,7 @@ augroup filetypedetect
 	autocmd BufNewFile,BufRead .textlintrc,.stylelintrc set filetype=json
 	autocmd BufNewFile,BufRead .msmtprc       set filetype=msmtp | setlocal commentstring=#%s
 	autocmd BufNewFile,BufRead tags-??        set filetype=tags
+	autocmd BufNewFile,BufRead .uim         set filetype=scheme
 	autocmd BufEnter           */textern/textern-*/*.txt setlocal syntax=mail foldmethod=syntax commentstring=>%s
 	" autocmd BufNewFile,BufRead *.htm,*.html   setlocal filetype=html
 	autocmd BufNewFile         *.sh           call <SID>insert_templte('sh.sh')
