@@ -189,7 +189,8 @@ set suffixes+=.aux,.log,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.toc,.pdf,.syncte
 set wildignore+=*.dvi,*.o,*.opp,*.obj,*.a,*.so,*.fdb_latexmk,*.fls,*.nav,*.out,*.snm,*.swp # 補完候補から完全に除外 (含めると補完候補にも現れなくなる)
 # ステータス・バー {{{2
 set laststatus=2                               # 表示
-set statusline=%#StatusLineLeft#%-16.(%2n%{%&buftype=='terminal'?'[terminal]':&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%#StatusLIne#\ %<%F\ %=%#StatusLineRight#\ %c:%v:%{strcharlen(strpart(getline('.'),0,col('.')))}/%{strlen(join(getline(0,line('$'))))}:%{strcharlen(join(getline(0,line('$'))))-line('$')+1}\ %3l/%L%4{line('w$')*100/line('$')}%%\ 0x%04B\ [%{&fenc!=''?&fenc:&enc}:%{%{'dos':'CR+LF','unix':'LF','mac':'CR'}[&ff]%}]
+set statusline=%#StatusLineLeft#%-16.(%2n%{%&buftype=='terminal'?'[terminal]':&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%*\ %<%F\ %=%#StatusLineRight#\ %c:%v:%{strcharlen(strpart(getline('.'),0,col('.')))}/%{strlen(join(getline(0,line('$'))))}:%{strcharlen(join(getline(0,line('$'))))-line('$')+1}\ %3l/%L%4{line('w$')*100/line('$')}%%\ 0x%04B\ [%{&fenc!=''?&fenc:&enc}:%{%{'dos':'CR+LF','unix':'LF','mac':'CR'}[&ff]%}]
+# 表示しているのを大雑把に↓
 # bufnr filetype modified etc. | path | line bytes:column:count/file bytes:count line current/full % code charset:cr/lf
 augroup StatusLineLeftRight
 	autocmd!
