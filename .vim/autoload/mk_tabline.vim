@@ -28,9 +28,7 @@ export def Label(n: number): string
 	var name = substitute(bufname(buflist[tabpagewinnr(n) - 1]), '^.\+/', '', '')
 	var change = ''
 	for bufnr in buflist
-		if getbufvar(bufnr, '&modified')
-					\ && !( match(getbufinfo(bufnr)[0].name, '!/') == 0 && swapname(bufnr) ==# '' )
-			# 名前が !/bin/bash 等で !/ ではじまり、スワップ・ファイルがなければ :terminal の可能性が高い
+		if getbufvar(bufnr, '&modified') && !get(getwininfo(getbufinfo(bufnr)[0]['windows'][0])[0], 'terminal', 0)
 			change = '+'
 			break
 		endif
