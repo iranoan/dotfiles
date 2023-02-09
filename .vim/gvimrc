@@ -64,7 +64,7 @@ def g:MakeGUItabline(): string
 				return label .. substitute(&shell, '^.\+/', '!', '') #.. ' [' .. substitute(getcwd(), '^' .. $HOME, '~', '') .. ']' # ← cd 未対応 pwd もダメ
 			endif
 			if &filetype =~# '^notmuch-'
-				return label .. notmuch_py#GetGUITabline()
+				return '%N|  ' .. notmuch_py#GetGUITabline()
 			elseif &filetype ==# 'fugitive' || &filetype == 'git'
 				return label .. '%y'
 			endif
