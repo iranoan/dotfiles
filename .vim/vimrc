@@ -360,19 +360,11 @@ vnoremap <S-Space> <C-U>
 vnoremap <BS> <C-U>
 # ターミナル・モード {{{2
 set termwinscroll=30000                         # ターミナルで遡れる行数
-# tmux で <prefix> を <C-J> にしているので、それに合わせている
-set termwinkey=<C-J>
-tnoremap <silent><C-J><Esc> <C-J>N
-tnoremap <silent><C-J><C-[> <C-J>N
-tnoremap <silent><C-W><Esc> <C-J>N
-tnoremap <silent><C-W><C-[> <C-J>N
-tnoremap <silent><C-W><C-W> <C-J><C-W>
-tnoremap <silent><C-W>j     <C-J>j
-tnoremap <silent><C-W>k     <C-J>k
-tnoremap <silent><C-W>h     <C-J>h
-tnoremap <silent><C-W>l     <C-J>l
+# tmux で <prefix> を <C-J> に合わせてると端末で使えない
+tnoremap <silent><C-W><C-[> <C-W>N
+tnoremap <silent><C-W><Esc> <C-W>N
 # ↑端末ノーマル・モードに移行
-tnoremap <C-J>p <C-J>""
+tnoremap <C-W>p <C-W>""
 # ↑貼り付け
 # QuickFix {{{2
 nnoremap <silent><Leader>qf :wall<CR>:silent make<CR>:cwindow<CR>
@@ -402,10 +394,10 @@ nnoremap <silent>]T         <Cmd>tnext<CR>
 nnoremap <silent>]t        gt
 nnoremap <silent>[t        gT
 noremap  <silent><C-Tab>   gt
-tnoremap <silent><C-Tab>   <C-J>gt
+tnoremap <silent><C-Tab>   <C-W>gt
 inoremap <silent><C-Tab>   <C-PageDown>
 noremap  <silent><S-C-Tab> gT
-tnoremap <silent><S-C-Tab> <C-J>gT
+tnoremap <silent><S-C-Tab> <C-W>gT
 inoremap <silent><S-C-Tab> <C-PageUp>
 # クリップボードのコピー、ペースト、切り取り {{{2
 vnoremap <C-C> "+y
