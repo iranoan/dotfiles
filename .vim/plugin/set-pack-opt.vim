@@ -298,6 +298,19 @@ augroup loadFugitive
 				| autocmd! loadFugitive
 				| augroup! loadFugitive
 				| delfunction set_fugitve#main
+	autocmd FuncUndefined fugitive#*
+				\ set_fugitve#main()
+				| autocmd! loadFugitive
+				| augroup! loadFugitive
+				| delfunction set_fugitve#main
+augroup END
+
+# Git の変更のあった signcolumn にマークをつける https://github.com/airblade/vim-gitgutter {{{1
+augroup loadGitgutter
+	autocmd!
+	autocmd FileType c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,css,tex,sh,bash set_gitgutter#main()
+				| autocmd! loadGitgutter
+				| augroup! loadGitgutter
 augroup END
 
 # カーソル位置の Syntax の情報を表示する ~/.vim/pack/my-plug/opt/syntax_info/ http://cohama.hateblo.jp/entry/2013/08/11/020849 から {{{1
