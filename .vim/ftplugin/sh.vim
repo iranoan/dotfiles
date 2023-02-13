@@ -10,7 +10,6 @@
 " "--------------------------------
 " " if !exists('g:sh_plugin')
 " " 	let g:sh_plugin = 1
-" " 	" let g:sh_fold_enabled=7 " ~/.vim/ftplugin で指定しないと $ vim ~/.bashrc 等引数で開くと設定が反映されない
 " " 	" let g:is_bash=1 " シェルスクリプトはほぼ sh (POSIX) で書くことが多い
 " " 	" augroup mySh
 " " 	" 	autocmd!

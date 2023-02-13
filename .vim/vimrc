@@ -87,6 +87,7 @@ set mousemodel=popup                           # マウス右クリックは Win
 # set foldmethod=manual                          # 標準では手動←改めて設定する必要がない
 set foldlevelstart=99                          # ファイル・オープン時は折りたたみは開いたまま
 set foldcolumn=3                               # 折りたたみ状態を表示する左カラムの数
+g:sh_fold_enabled = 7                          # シェルスクリプトの折りたたみ方法 ~/.vim/ftplugin/sh.vim で指定すると $ vim ~/.bashrc 等引数で開くと設定が反映されない
 # Undo アンドゥ {{{1
 # if has('persistent_undo')
 # 	set undodir=~/.vim/undo
@@ -285,6 +286,8 @@ augroup VIMRC
 				| endif #前回閉じた時のカーソル位置に移動← $VIMRUNTIME/defaults.vim
 	autocmd BufEnter * if getftype(expand('%')) ==# 'link' | symbolic_link#Normalize() | endif # シンボリック・リンクは展開
 	autocmd CmdlineLeave,CmdwinLeave * if getcmdtype() =~# '[/?]' || ( getcmdwintype() =~# '[/?]' && pos != getpos('.')) | set hlsearch | endif # ハイライトはトグル・スイッチ
+	autocmd BufEnter           *.sw?          bwipeout!             # スワップファイルは閉じる
+	autocmd BufEnter           tags           edit ++encoding=utf-8 # tags ファイルは UTF-8 強制←開き直しているが他にもっと良い方法が解らない
 	autocmd CmdwinEnter * pos = getpos('.')
 augroup END
 # 日本語の表示/編集に関わる設定 {{{1

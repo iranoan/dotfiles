@@ -14,3 +14,4 @@ if !exists('g:mail_plugin')
 	augroup END
 endif
 
+setlocal foldmethod=syntax commentstring=>%s
