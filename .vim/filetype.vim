@@ -16,5 +16,5 @@ augroup filetypedetect
 	autocmd BufNewFile,BufRead tags-??        set filetype=tags
 	autocmd BufNewFile,BufRead .uim           set filetype=scheme
 	# autocmd BufNewFile,BufRead *.htm,*.html   setlocal filetype=html
-	autocmd BufEnter           */textern/textern-*/*.txt set filetype==mail
+	autocmd BufEnter           */textern/textern-*/*.txt set filetype=mail
 augroup END
