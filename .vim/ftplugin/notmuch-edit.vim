@@ -1,10 +1,10 @@
 vim9script
 scriptencoding utf-8
 
-# if exists('b:did_ftplugin_user')
-# 	finish
-# endif
-# var b:did_ftplugin_user = 1
+if exists('b:did_ftplugin_user')
+	finish
+endif
+var b:did_ftplugin_user = 1
 
 #--------------------------------
 #ファイルタイプ別のグローバル設定
