@@ -73,10 +73,6 @@ g:loaded_netrwPlugin = 1
 # 読み込み明示が必要な分 {{{2
 packadd! editexisting                          # 既に開いていれば、そちらをアクティブに
 packadd! matchit                               # 対応するカッコ移動%を拡張→ファイルタイプ別設定でb:match_words {{{
-augroup matchit_words
-	autocmd!
-	autocmd BufEnter * if exists('b:match_words') | b:match_words ..= ',' .. &matchpairs | endif
-augroup END
 # }}}
 # packadd termdebug                              # デバッガ ←vimspector を使う
 # マウス {{{2
