@@ -8,13 +8,13 @@ var did_load_filetypes = 1
 
 augroup filetypedetect
 	autocmd!
-	autocmd BufNewFile,BufRead *.plt          set filetype=gnuplot # *.plt は mimetypeが設定されていないことも有り得る
-	autocmd BufNewFile,BufRead .bash_history,.bashrc,~/dotfiles/.bash/*,~/.bash/* set filetype=bash
-	autocmd BufNewFile,BufRead .xprofile      set filetype=sh
-	autocmd BufNewFile,BufRead .textlintrc,.stylelintrc set filetype=json
-	autocmd BufNewFile,BufRead .msmtprc       set filetype=msmtp
-	autocmd BufNewFile,BufRead tags-??        set filetype=tags
-	autocmd BufNewFile,BufRead .uim           set filetype=scheme
+	autocmd BufNewFile,BufRead *.plt          setfiletype gnuplot # *.plt は mimetypeが設定されていないことも有り得る
+	autocmd BufNewFile,BufRead .bash_history,.bashrc,~/dotfiles/.bash/*,~/.bash/* setfiletype bash
+	autocmd BufNewFile,BufRead .xprofile      setfiletype sh
+	autocmd BufNewFile,BufRead .textlintrc,.stylelintrc setfiletype json
+	autocmd BufNewFile,BufRead .msmtprc       setfiletype msmtp
+	autocmd BufNewFile,BufRead tags-??        setfiletype tags
+	autocmd BufNewFile,BufRead .uim           setfiletype scheme
 	# autocmd BufNewFile,BufRead *.htm,*.html   setlocal filetype=html
-	autocmd BufEnter           */textern/textern-*/*.txt set filetype=mail
+	autocmd BufEnter           */textern/textern-*/*.txt setfiletype mail
 augroup END
