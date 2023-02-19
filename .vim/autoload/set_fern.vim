@@ -60,10 +60,10 @@ function s:init_fern() abort
 				\ })
 	let b:fzf_action.enter = function('s:fern_fzf')
 	" キー・マップ
-	nmap <buffer><BS>            <Plug>(fern-action-leave)
+	nmap <buffer><C-K>           <Plug>(fern-action-leave)
 	nmap <buffer><C-C>           <Plug>(fern-action-cancel)
 	nmap <buffer><C-L>           <Plug>(fern-action-redraw)
-	nmap <buffer><Enter>         <Plug>(fern-action-open:select)
+	" nmap <buffer><Enter>         <Plug>(fern-action-open:select)
 	nmap <buffer><F5>            <Plug>(fern-action-reload)
 	nmap <buffer>!               <Plug>(fern-action-hidden:toggle)
 	nmap <buffer><C-H>           <Plug>(fern-action-hidden:toggle)
@@ -75,14 +75,12 @@ function s:init_fern() abort
 	nmap <buffer>c               <Plug>(fern-action-copy)
 	nmap <buffer>d               <Plug>(fern-action-trash=)y<CR>
 	nmap <buffer>s               <Plug>(fern-action-open:right)
-	nmap <buffer>h               <Plug>(fern-action-collapse)
-	nmap <buffer>l               <Plug>(fern-action-expand)
-	" nmap <buffer>o               <Cmd>call set_fern#open()<CR>
-	nmap <expr><buffer>o         (len(getwininfo()) == 1 && match(bufname(), '^fern://drawer:\d\+/file:///.\+;\$$') == 0) ? '<Plug>(fern-action-open:right)' : '<Plug>(fern-action-open:select)'
+	nmap <expr><buffer>O         fern#smart#leaf("\<Plug>(fern-action-collapse)", "\<Plug>(fern-action-expand)", "\<Plug>(fern-action-collapse)")
+	nmap <expr><buffer>o         set_fern#open()
 	nmap <buffer>r               <Plug>(fern-action-rename)
 	nmap <buffer>y               <Plug>(fern-action-yank)
-	nmap <buffer>x               <Plug>(fern-action-open:system)
-	nmap <buffer><leader>x       <Plug>(fern-action-open:system)
+	" nmap <buffer>x               <Plug>(fern-action-open:system)
+	" nmap <buffer><leader>x       <Plug>(fern-action-open:system)
 	nmap <buffer>D               <Plug>(fern-action-clipboard-move)
 	nmap <buffer>Y               <Plug>(fern-action-clipboard-copy)
 	nmap <buffer>P               <Plug>(fern-action-clipboard-paste)
@@ -103,11 +101,20 @@ function set_fern#open() abort
 	if &filetype != 'fern'
 		return
 	endif
-	if len(getwininfo()) == 1 && match(bufname(), '^fern://drawer:\d\+/file:///.\+;\$$') == 0
-		call feedkeys("\<Plug>(fern-action-open:right)")
-		call feedkeys("\<Plug>(fern-action-zoom:reset)")
+	let f = getline('.')
+	if match(f, '^ \+ .\+[\u001F]') !=# -1
+		call feedkeys("\<Plug>(fern-action-expand)")
+	elseif match(f, '^ \+ .\+[\u001F]') !=# -1
+		call feedkeys("\<Plug>(fern-action-collapse)")
+	elseif match(['asf', 'aux', 'avi', 'bmc', 'bmp', 'cer', 'chm', 'chw', 'class', 'crt', 'cur', 'dll', 'doc', 'docx', 'dvi', 'emf', 'eps', 'exe', 'fdb_latexmk', 'fls', 'flv', 'gif', 'gpg', 'hlp', 'hmereg', 'icc', 'icm', 'ico', 'ics', 'jar', 'jp2', 'jpeg', 'jpg', 'lzh', 'm4a', 'mkv', 'mov', 'mp3', 'mp4', 'mpg', 'nav', 'nvram', 'o', 'obj', 'odb', 'odg', 'odp', 'ods', 'odt', 'oll', 'opf', 'opp', 'out', 'pdf', 'pfa', 'pl3', 'png', 'ppm', 'ppt', 'pptx', 'ps', 'pyc', 'reg', 'rm', 'rtf', 'snm', 'sqlite', 'svg', 'swf', 'swp', 'tfm', 'toc', 'ttf', 'vbox', 'vbox-prev', 'vdi', 'vf', 'webm', 'wmf', 'wmv', 'xls', 'xlsm', 'xlsx'], '^' .. matchstr(f, '^ \+[^ ] .*\.\zs.\+\ze[\u001F]' .. '$')) != -1 " バイナリ
+		call feedkeys("\<Plug>(fern-action-open:system)")
 	else
-		call feedkeys("\<Plug>(fern-action-open:select)")
+		if len(getwininfo()) == 1 && match(bufname(), '^fern://drawer:\d\+/file:///.\+;\$$') == 0
+			call feedkeys("\<Plug>(fern-action-open:right)")
+			call feedkeys("\<Plug>(fern-action-zoom:reset)")
+		else
+			call feedkeys("\<Plug>(fern-action-open:select)")
+		endif
 	endif
 endfunction
 
