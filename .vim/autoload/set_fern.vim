@@ -50,26 +50,26 @@ function set_fern#main() abort
 	" }}}
 endfunction
 
-function s:init_fern() abort
+def s:init_fern(): void
 	setlocal nonumber foldcolumn=0
-	call glyph_palette#apply()     " バッファ毎に呼ばないと効かない
-	let b:fzf_action = get(g:, 'fzf_action', {
+	glyph_palette#apply()     # バッファ毎に呼ばないと効かない
+	b:fzf_action = get(g:, 'fzf_action', {
 				\ 'ctrl-t': 'tab split',
 				\ 'ctrl-x': 'split',
 				\ 'ctrl-v': 'vsplit'
 				\ })
-	let b:fzf_action.enter = function('s:fern_fzf')
-	" キー・マップ
+	b:fzf_action.enter = s:fern_fzf
+	# キー・マップ
 	nmap <buffer><C-K>           <Plug>(fern-action-leave)
 	nmap <buffer><C-C>           <Plug>(fern-action-cancel)
 	nmap <buffer><C-L>           <Plug>(fern-action-redraw)
-	" nmap <buffer><Enter>         <Plug>(fern-action-open:select)
+	# nmap <buffer><Enter>         <Plug>(fern-action-open:select)
 	nmap <buffer><F5>            <Plug>(fern-action-reload)
 	nmap <buffer>!               <Plug>(fern-action-hidden:toggle)
 	nmap <buffer><C-H>           <Plug>(fern-action-hidden:toggle)
 	nmap <buffer>-               <Plug>(fern-action-mark:toggle)
 	nmap <buffer>.               <Plug>(fern-action-repeat)
-	" nmap <buffer>?               <Plug>(fern-action-help)
+	# nmap <buffer>?               <Plug>(fern-action-help)
 	nmap <buffer>?               <Cmd>echo join(filter(filter(split(execute('map'), '\n'), 'v:val =~? "\(fern-"' ), 'v:val !~? "^[nvxsoilct] *<plug"'), "\n")<CR>
 	nmap <buffer>a               <Plug>(fern-action-choice)
 	nmap <buffer>c               <Plug>(fern-action-copy)
@@ -79,23 +79,23 @@ function s:init_fern() abort
 	nmap <expr><buffer>o         set_fern#open()
 	nmap <buffer>r               <Plug>(fern-action-rename)
 	nmap <buffer>y               <Plug>(fern-action-yank)
-	" nmap <buffer>x               <Plug>(fern-action-open:system)
-	" nmap <buffer><leader>x       <Plug>(fern-action-open:system)
+	# nmap <buffer>x               <Plug>(fern-action-open:system)
+	# nmap <buffer><leader>x       <Plug>(fern-action-open:system)
 	nmap <buffer>D               <Plug>(fern-action-clipboard-move)
 	nmap <buffer>Y               <Plug>(fern-action-clipboard-copy)
 	nmap <buffer>P               <Plug>(fern-action-clipboard-paste)
 	nmap <buffer>i               <Plug>(fern-action-zoom:reset)
-	" FZF
+	# FZF
 	nmap <buffer>f               <Cmd>BLines<CR>
 	nmap <buffer>/               <Cmd>BLines<CR>
-	" fern-preview.vim 用
+	# fern-preview.vim 用
 	nmap <buffer>p               <Plug>(fern-action-preview:auto:toggle)
 	nmap <expr><buffer>q         popup_list() != [] ? '<Plug>(fern-action-preview:auto:toggle)' : ':quit<CR>'
 	nmap <expr><buffer><Space>   popup_list() != [] ? '<Plug>(fern-action-preview:scroll:down:half)' : '<PageDown>'
 	nmap <expr><buffer><S-Space> popup_list() != [] ? '<Plug>(fern-action-preview:scroll:up:half)' : '<PageUp>'
-	" fzf-mapping-fzf.vim
+	# fzf-mapping-fzf.vim
 	nmap <buffer><leader>f       <Plug>(fern-action-fzf-files)
-endfunction
+enddef
 
 function set_fern#open() abort
 	if &filetype != 'fern'
@@ -118,30 +118,30 @@ function set_fern#open() abort
 	endif
 endfunction
 
-function s:fern_fzf(line) abort
+def s:fern_fzf(line: list<string>): void
 	if match(bufname(), '^fern://drawer:\d\+/file:///.\+;\$$') == 0
-		let winids = gettabinfo('.')[0].windows
-		call filter(winids, function('s:fern_fzf_filter'))
+		var winids = gettabinfo(tabpagenr())[0].windows
+		filter(winids, s:fern_fzf_filter)
 		if winids == []
-			" let fern_win = bufwinid(bufnr())
-			execute 'rightbelow vsplit ' .. a:line[-1]
-			" call win_execute(fern_win, 'feedkeys("\<Plug>(fern-action-zoom:reset)")')
+			# let fern_win = bufwinid(bufnr())
+			execute 'rightbelow vsplit ' .. line[-1]
+			# call win_execute(fern_win, 'feedkeys("\<Plug>(fern-action-zoom:reset)")')
 		else
-			call win_execute(winids[0], 'edit ' .. a:line[-1])
+			win_execute(winids[0], 'edit ' .. line[-1])
 		endif
 	else
-		execute 'edit ' .. a:line[-1]
+		execute 'edit ' .. line[-1]
 	endif
-	call remove(a:line, -1)
-	if len(a:line) >= 1
-		args join(a:line)
+	remove(line, -1)
+	if len(line) >= 1
+		args join(line)
 	endif
-endfunction
+enddef
 
-function s:fern_fzf_filter(i, v) abort
-	let v_dic = getwininfo(a:v)[0]
-	if a:v == bufwinid(bufnr()) || v_dic.loclist == 1 || v_dic.quickfix == 1 || v_dic.terminal == 1
-		return v:false
+def s:fern_fzf_filter(i: number, v: number): bool
+	var v_dic: dict<number> = getwininfo(v)[0]
+	if v == bufwinid(bufnr()) || v_dic.loclist == 1 || v_dic.quickfix == 1 || v_dic.terminal == 1
+		return false
 	endif
-	return v:true
-endfunction
+	return true
+enddef
