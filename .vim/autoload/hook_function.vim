@@ -4,7 +4,7 @@ scriptencoding utf-8
 function hook_function#main(from_f, to_f, func)
 	" from_f:   置き換え元の関数が書かれたファイル・パス
 	" to_f:     置き換え先の関数が書かれたファイル・パス
-	" funcname: 関数名
+	" func:     関数名
 	exec "function! " .. s:get_func(a:from_f) .. a:func .. "(...)\nreturn call('" .. s:get_func(a:to_f) .. a:func .. "', a:000)\nendfunction"
 endfunction
 
