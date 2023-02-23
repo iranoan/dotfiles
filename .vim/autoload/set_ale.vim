@@ -59,8 +59,8 @@ function set_ale#main()
 	augroup END
 endfunction
 
-function set_ale#open_eror_ls()
-	let org_win = bufwinid(bufnr())
+def set_ale#open_eror_ls(): void
+	var org_win = bufwinid(bufnr())
 	botright lwindow 5
-	call win_gotoid(org_win)
-endfunction
+	win_gotoid(org_win)
+enddef
