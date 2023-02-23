@@ -342,11 +342,11 @@ augroup END
 # カレント・タブ・ページ内では同じターミナルを閉じる ~/.vim/pack/my-plug/opt/kill-terminal {{{1
 augroup KillTerminal
 	autocmd!
-	autocmd TerminalOpen * kill_terminal#main()
+	autocmd TerminalOpen * kill_terminal#Main()
 augroup END
 augroup loadKillTerminal
 	autocmd!
-	autocmd FuncUndefined kill_terminal#main packadd kill-terminal
+	autocmd FuncUndefined kill_terminal#Main packadd kill-terminal
 	| autocmd! loadKillTerminal
 	| augroup! loadKillTerminal
 augroup END
