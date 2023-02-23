@@ -249,7 +249,7 @@ augroup loadVista
 				| delfunction set_vista#main
 augroup END
 # 次の Voom に未対応は Vista を使う様に分岐関数とキーマップ
-nnoremap <silent><Leader>o :call switch_voom_vista#main()<CR>
+nnoremap <silent><Leader>o :call switch_voom_vista#Main()<CR>
 
 # アウトライン https://github.com/vim-voom/VOoM {{{1
 augroup loadVOoM
