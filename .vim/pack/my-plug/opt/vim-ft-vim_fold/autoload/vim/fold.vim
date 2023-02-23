@@ -55,8 +55,8 @@ def Calculate(bufnr: number): dict<any>
 		var no_match: number
 		var synid: string
 		var regex: string
-		for s in '[({'
-			regex = '^\("\([^"]\|\"\)*"\|''\([^'']\|''''\)*''\|[^' .. s .. '"'']\)*' .. s
+		for s in [ ['[', 'vimFuncBody'], ['(', 'Special'], ['{', 'Special'] ]
+			regex = '^\("\([^"]\|\"\)*"\|''\([^'']\|''''\)*''\|[^' .. s[0] .. '"'']\)*' .. s[0]
 			i = 0
 			while true
 				i = matchend(cur_line, regex, i)
@@ -64,13 +64,13 @@ def Calculate(bufnr: number): dict<any>
 				if i == -1 || synid ==# 'Comment'
 					break
 				endif
-				if synid !=# 'Constant'
+				if synid ==# s[1]
 					no_match += 1
 				endif
 			endwhile
 		endfor
-		for s in '})]'
-			regex = '^\("\([^"]\|\"\)*"\|''\([^'']\|''''\)*''\|[^' .. s .. '"'']\)*' .. s
+		for s in [ [']', 'vimFuncBody'], [')', 'Special'], ['}', 'Special'] ]
+			regex = '^\("\([^"]\|\"\)*"\|''\([^'']\|''''\)*''\|[^' .. s[0] .. '"'']\)*' .. s[0]
 			i = 0
 			while true
 				i = matchend(cur_line, regex, i)
@@ -78,7 +78,7 @@ def Calculate(bufnr: number): dict<any>
 				if i == -1 || synid ==# 'Comment'
 					break
 				endif
-				if synid !=# 'Constant'
+				if synid ==# s[1]
 					no_match -= 1
 				endif
 			endwhile
