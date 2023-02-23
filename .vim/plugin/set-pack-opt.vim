@@ -23,7 +23,7 @@ AlterCommand ld[o]      silent\ ldo
 AlterCommand lfdo       silent\ lfdo
 AlterCommand ter[minal] topleft\ terminal
 AlterCommand man        Man
-AlterCommand p[rint]    call\ print#main()
+AlterCommand p[rint]    call\ print#Main()
 # ↑:print は使わないので、印刷関数 (~/.vim/autoload/print.vim) に置き換え
 AlterCommand helpt[ags] call\ manage_pack#Helptags()
 AlterCommand bc         .!bc\ -l\ -q\ ~/.bc\ <Bar>\ sed\ -E\ -e\ 's/^\\\./0./g'\ -e\ 's/(\\\.[0-9]*[1-9])0+/\\\1/g'\ -e\ 's/\\\.$//g'
