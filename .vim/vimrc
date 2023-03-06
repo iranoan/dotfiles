@@ -117,7 +117,8 @@ if has('unix') # ノーマル・モードになれば日本語 OFF にするた�
 	if im !=# ''
 		augroup IME
 			autocmd!
-			execute 'autocmd InsertLeave,CmdwinLeave,CmdlineLeave,FocusGained * system(''' .. im .. ''')'
+			execute 'autocmd InsertLeave,CmdwinLeave,CmdlineLeave * system(''' .. im .. ''')'
+			execute 'autocmd FocusGained *                          if mode(1) !~# ''[iR]'' | system(''' .. im .. ''') | endif'
 			execute 'autocmd ModeChanged R*:n*                      system(''' .. im .. ''')'
 			# ↑R (置換モード) ReplaceLeave は無い
 			# ModeChanged *:n* に纏められれば良いが、inoremap <expr><buffer><S-Enter>   pumvisible#Insert('<li>') でも変わってしまう
