@@ -434,12 +434,14 @@ xnoremap <expr>p 'pgv"' .. v:register .. 'y`>'
 # 挿入/コマンドモード時のカーソル移動 {{{2
 # [Henkan] を [BS] に割り当てているので、<C-H> は他に割り当てる
 inoremap <C-H> <C-G>U<Left>
+inoremap <Left> <C-G>U<Left>
 cnoremap <C-H> <Left>
 inoremap <expr><C-J> pumvisible() ? '<Down>' : '<C-J>'
 vnoremap <expr><C-J> pumvisible() ? '<Down>' : '<C-J>'
 #↑ insert moode の補完候補の選択にも使っている
 inoremap <C-K> <Up>
 inoremap <C-L> <C-G>U<Right>
+inoremap <Right> <C-G>U<Right>
 cnoremap <C-L> <Right>
 cnoremap <C-A> <Home>
 cnoremap <C-B> <Left>

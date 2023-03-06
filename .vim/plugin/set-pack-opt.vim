@@ -438,7 +438,7 @@ nnoremap <Leader>dr       <Cmd>call vimspector#RunToCursor()<CR>
 nnoremap <Leader>ds       <Cmd>call vimspector#StepInto()<CR>
 nnoremap <Leader>dS       <Cmd>call vimspector#StepOut()<CR>
 nnoremap <Leader>dn       <Cmd>call vimspector#StepOver()<CR>
-nnoremap <Leader>d<space> <Cmd>call vimspector#Stop()<CR>
+nnoremap <Leader>d<Space> <Cmd>call vimspector#Stop()<CR>
 nnoremap <Leader>db       <Cmd>call vimspector#ToggleBreakpoint()<CR>
 nnoremap <Leader>dx       <Cmd>call vimspector#Reset( { 'interactive': v:false } )<CR>
 nmap     <Leader>di       <Plug>VimspectorBalloonEval

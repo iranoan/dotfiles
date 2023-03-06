@@ -25,13 +25,13 @@ function set_asyncomplete#main() abort
 			packadd friendly-snippets
 		" }}}
 		" キーマップ {{{
-			imap <expr> <C-Y> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-Y>'
-			smap <expr> <C-Y> vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-Y>'
+			imap <expr><C-Y>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-Y>'
+			smap <expr><C-Y>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-Y>'
 			" Jump forward or backward
-			imap <expr> <C-O> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)'      : '<C-O>'
-			smap <expr> <C-O> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)'      : '<C-O>'
-			imap <expr> <C-I> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)'      : '<C-I>'
-			smap <expr> <C-I> vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)'      : '<C-I>'
+			imap <expr><Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-N>' : '<Tab>'
+			smap <expr><Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-N>' : '<Tab>'
+			imap <expr><S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-P>' : '<S-Tab>'
+			smap <expr><S-Tab> vsnip#jumpable(-1) ? '<Plug>(vsnip-jump-prev)' : pumvisible() ? '<C-p>' : '<S-Tab>'
 		" }}}
 	" }}}
 	" LSP との連携する asyncomplete-lsp.vim は vim-lsp 側で行う ← InsertEnter のタイミングではうまく動作しない
