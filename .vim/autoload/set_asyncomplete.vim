@@ -41,13 +41,14 @@ function set_asyncomplete#main() abort
 				\ 'name': 'omni',
 				\ 'priority': 7,
 				\ 'allowlist': ['*'],
-				\ 'blocklist': ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'html', 'css', 'tex', 'sh', 'go','notmuch-draft'],
+				\ 'blocklist': ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'css', 'tex', 'sh', 'go','notmuch-draft'],
 				\ 'completor': function('asyncomplete#sources#omni#completor'),
 				\ 'config': {
 					\   'show_source_kind': 1,
 					\ },
 				\ }))
-				" \ 'blocklist': ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'html', 'css', 'tex', 'sh', 'go'],
+				" \ 'blocklist': ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'html', 'css', 'tex', 'sh', 'go','notmuch-draft'],
+				" LSP を優先させたいので、ブロックしているが、HTML も含めると inoremap <buffer> </ </<C-x><C-o> が効かなくなる
 	" }}}
 	" path https://github.com/prabirshrestha/asyncomplete-file.vim {{{
 	packadd asyncomplete-file.vim
