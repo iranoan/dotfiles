@@ -93,39 +93,55 @@ g:sh_fold_enabled = 7                          # シェルスクリプトの折�
 set iminsert=0 imsearch=-1                     # 挿入モード/検索開始時 IME OFF
 set imdisable                                  # Vim による IM 制御を使わない
 if has('unix') # ノーマル・モードになれば日本語 OFF にするために IM を調べる
-	var im: string
 	if executable('im-config')
-		im = systemlist('im-config -m')[1]
-		if im == 'fcitx5'
-			im = 'fcitx5-remote -c'
-		elseif im == 'fcitx'
-			im = 'fcitx-remote -c'
-		elseif im == 'ibus'
-			im = 'ibus engine "xkb:jp::jpn"'
+		g:IME = systemlist('im-config -m') # 設定後に unlet するためにグローバル変数
+		# 0   active configuration (system)
+		# 1   active configuration (user)
+		# 2   automatic configuration for the current locale
+		# 3   override configuration for the current locale
+		# 4   automatic configuration for most locales
+		if g:IME[1] !=# ''
+			g:IME = g:IME[1]
+		elseif g:IME[0] !=# ''
+			g:IME = g:IME[0]
+		elseif g:IME[3] !=# ''
+			g:IME = g:IME[3]
+		elseif g:IME[2] !=# ''
+			g:IME = g:IME[2]
 		else
-			im = ''
+			g:IME = g:IME[4]
+		endif
+		if g:IME == 'fcitx5'
+			g:IME = 'fcitx5-remote -c'
+		elseif g:IME == 'fcitx'
+			g:IME = 'fcitx-remote -c'
+		elseif g:IME == 'ibus' || g:IME == 'default'
+			g:IME = 'ibus engine "xkb:jp::jpn"'
+		else
+			g:IME = ''
 		endif
 	elseif executable('fcitx5-remote')
-		im = 'fcitx5-remote -c'
+		g:IME = 'fcitx5-remote -c'
 	elseif executable('fcitx-remote')
-		im = 'fcitx-remote -c'
+		g:IME = 'fcitx-remote -c'
 	elseif executable('ibus')
-		im = 'ibus engine "xkb:jp::jpn"'
+		g:IME = 'ibus engine "xkb:jp::jpn"'
 	else
-		im = ''
+		g:IME = ''
 	endif
-	if im !=# ''
+	if g:IME !=# ''
 		augroup IME
 			autocmd!
-			execute 'autocmd InsertLeave,CmdwinLeave,CmdlineLeave * system(''' .. im .. ''')'
-			execute 'autocmd FocusGained *                          if mode(1) !~# ''[iR]'' | system(''' .. im .. ''') | endif'
-			execute 'autocmd ModeChanged R*:n*                      system(''' .. im .. ''')'
+			execute 'autocmd InsertLeave,CmdwinLeave,CmdlineLeave * system("' .. g:IME .. '")'
+			execute 'autocmd FocusGained * if mode(1) !~# "^[iR]" | system("' .. g:IME .. '") | endif'
+			execute 'autocmd ModeChanged R*:n*                      system("' .. g:IME .. '")'
 			# ↑R (置換モード) ReplaceLeave は無い
 			# ModeChanged *:n* に纏められれば良いが、inoremap <expr><buffer><S-Enter>   pumvisible#Insert('<li>') でも変わってしまう
 			# (r{char} に対応する他の方法がわからない
-			execute 'autocmd TextChanged *                          system(''' .. im .. ''')'
+			execute 'autocmd TextChanged *                          system("' .. g:IME .. '")'
 		augroup END
 	endif
+	unlet g:IME
 else
 	inoremap <silent><Esc> <Esc><Cmd>setlocal iminsert=0<CR>
 endif
