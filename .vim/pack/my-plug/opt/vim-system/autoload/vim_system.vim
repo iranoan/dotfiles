@@ -4,9 +4,9 @@ scriptencoding utf-8
 def Enviroment(): list<string>
 	var mes: list<string>
 	if has('unix')
-		if executable('lsb_release')
-			add(mes, '$ lsb_release -a')
-			extend(mes, systemlist('lsb_release -a'))
+		if getftype('/etc/os-release') !=# ''
+			add(mes, '$ cat /etc/os-release')
+			extend(mes, systemlist('cat /etc/os-release'))
 		else
 			add(mes, '$ cat /etc/issue')
 			extend(mes, systemlist('cat /etc/issue'))
