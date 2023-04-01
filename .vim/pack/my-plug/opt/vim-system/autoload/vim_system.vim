@@ -19,7 +19,8 @@ def Enviroment(): list<string>
 		extend(mes, systemlist('sw_vers'))
 	elseif has('win32') || has('win64')
 		add(mes, '> systeminfo')
-		extend(mes, systemlist('chcp 65001 | systeminfo')[2 : 6])
+		var cp: string = 'cp' .. substitute(system('chcp'), '^[^0-9]\+\(\d\+\)\n\?', '\1', '')
+		extend(mes, split(iconv(system('systeminfo'), cp, 'utf-8'), '\n')[0 : 5])
 	endif
 	return mes
 enddef
