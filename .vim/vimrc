@@ -283,7 +283,7 @@ augroup VIMRC
 				\ if &filetype ==# '' || &filetype ==# 'text' || &filetype ==# 'markdown'
 				| setlocal breakindentopt=shift:0,min:10,list:-1
 				| endif
-	autocmd BufWritePre * pos = getpos('.') | :%s/\(^--\|^>.*\)\@<![ \u000B\t\r　]\+$//e | setpos('.', pos) # メール署名の区切りと引用行以外の行末空白を保存時に削除
+	autocmd BufWritePre * if &filetype != 'markdown' | pos = getpos('.') | :%s/\(^--\|^>.*\)\@<![ \u000B\t\r　]\+$//e | setpos('.', pos) | endif # メール署名の区切りと引用行以外の行末空白を保存時に削除
 	# autocmd TerminalOpen *                       nnoremap <silent><buffer>q :bwipeout<CR>
 	# ↑ターミナルで効いていないし、fzf を使ったバッファで q で閉じる意図しない動きになってしまう
 	# ウィンドウ切り替えでもとの位置に戻ってしまう
