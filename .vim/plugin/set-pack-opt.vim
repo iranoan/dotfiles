@@ -361,8 +361,8 @@ augroup loadPageDown
 augroup END
 
 # カーソル位置の単語を Google で検索 ~/.vim/pack/my-plug/opt/google-search/ https://www.rasukarusan.com/entry/2019/03/09/011630 を参考にした {{{1
-nnoremap <silent><Leader>g :SearchByGoogle<CR>
-xnoremap <silent><Leader>g :SearchByGoogle<CR>
+nnoremap <silent><Leader>s :SearchByGoogle<CR>
+xnoremap <silent><Leader>s :SearchByGoogle<CR>
 augroup loadSearchByGoogle
 	autocmd!
 	autocmd CmdUndefined SearchByGoogle packadd google-search

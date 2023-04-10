@@ -4,9 +4,9 @@ function set_gitgutter#main() abort
 	packadd vim-gitgutter
 	let g:gitgutter_preview_win_floating = 1 " GitGutterPreviewHunk 表示はポップアップ
 	let g:gitgutter_map_keys = 0             " デフォルト・マッピング OFF
-	nmap <leader>hp <Plug>(GitGutterPreviewHunk)
-	nmap <leader>hs <Plug>(GitGutterStageHunk)
-	nmap <leader>hu <Plug>(GitGutterUndoHunk)
+	nmap <leader>gp <Plug>(GitGutterPreviewHunk)
+	nmap <leader>gs <Plug>(GitGutterStageHunk)
+	nmap <leader>gu <Plug>(GitGutterUndoHunk)
 	nmap [g <Plug>(GitGutterPrevHunk)
 	nmap ]g <Plug>(GitGutterNextHunk)
 	" GitGutter* コマンドが定義され、vim-fugitive の Git コマンドが未定義ではなく、曖昧扱いになるので、コマンドのみ定義しておく
