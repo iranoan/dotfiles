@@ -15,8 +15,8 @@ if [ -d "$HOME/.local/bin" ] ; then
 	PATH="$HOME/.local/bin:$PATH"
 fi
 if which npm > /dev/null 2>&1 ; then
-	if [ -d "$(npm bin)" ] ; then
-		PATH="$PATH:$(npm bin)"
+	if [ -d "$HOME/node_modules/.bin" ] ; then
+		PATH="$PATH:$HOME/node_modules/.bin"
 	fi
 fi
 
