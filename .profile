@@ -4,16 +4,16 @@
 # see /usr/share/doc/bash/examples/startup-files for examples.
 # the files are located in the bash-doc package.
 
+if [ -f ~/.xprofile ]; then
+	. ~/.xprofile
+fi
+
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
 	# include .bashrc if it exists
 	if [ -f ~/.bashrc ]; then
 		. ~/.bashrc
 	fi
-fi
-
-if [ -f ~/.xprofile ]; then
-	. ~/.xprofile
 fi
 
 #環境変数
@@ -70,5 +70,4 @@ esac
 sed -e "/\\[\\(RecentsMRL\\|General\\|Playlist\\)\\]$/,/^$/d" -e "/^playlistSize=@Size([0-9]\\+ [0-9]\\+)/d" ~/.config/vlc/vlc-qt-interface.conf > ~/Information/backup/home/.config/vlc/vlc-qt-interface.conf
 sed "/^ *\\(last_path\\|\\(main\\|float\\)_window\\.\\w\\+\\) = /d" ~/.config/geeqie/geeqierc.xml > ~/Information/backup/home/.config/geeqie/geeqierc.xml
 # sed "/^nautilus-icon-\\(position\\|view-layout\\)-timestamp=/d" ~/.config/nautilus/desktop-metadata > ~/Information/backup/home/.config/nautilus/desktop-metadata
-# dconf dump / | /bin/sed "/^\\(launch-time\\|geometry\\|minimize-count\\|check-timestamp\\|window-\\(height\\|width\\)\\|numlock-state\\|virtual-root\\|night-light-last-coordinates\\)=/d" > ~/Information/backup/dconf-dump.txt
 

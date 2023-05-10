@@ -5,18 +5,26 @@ umask 077
 #xmodmap ~/.Xmodmap
 
 # set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/go/bin" ] ; then
-	PATH="$HOME/go/bin:$PATH"
-fi
 if [ -d "$HOME/bin" ] ; then
-	PATH="$HOME/bin:$PATH"
+if echo $PATH | grep -qvE ":$HOME/bin$" && echo $PATH | grep -qv ":$HOME/bin:"; then
+		PATH="$PATH:$HOME/bin"
+	fi
+fi
+if [ -d "$HOME/go/bin" ] ; then
+	if echo $PATH | grep -qvE ":$HOME/go/bin$" && echo $PATH | grep -qv ":$HOME/go/bin:"; then
+		PATH="$PATH:$HOME/go/bin"
+	fi
 fi
 if [ -d "$HOME/.local/bin" ] ; then
-	PATH="$HOME/.local/bin:$PATH"
+	if echo $PATH | grep -qvE ":$HOME/.local/bin$" && echo $PATH | grep -qv ":$HOME/.local/bin:"; then
+		PATH="$PATH:$HOME/.local/bin"
+	fi
 fi
 if which npm > /dev/null 2>&1 ; then
 	if [ -d "$HOME/node_modules/.bin" ] ; then
-		PATH="$PATH:$HOME/node_modules/.bin"
+		if echo $PATH | grep -qvE ":$HOME/node_modules/.bin$" && echo $PATH | grep -qv ":$HOME/node_modules/.bin:"; then
+			PATH="$PATH:$HOME/node_modules/.bin"
+		fi
 	fi
 fi
 
