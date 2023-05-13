@@ -204,14 +204,18 @@ set wildignore+=*.dvi,*.o,*.opp,*.obj,*.a,*.so,*.fdb_latexmk,*.fls,*.nav,*.out,*
 # ステータス・バー {{{2
 set laststatus=2                               # 表示
 set statusline=%#StatusLineLeft#%-16.(%2n%{%&buftype=='terminal'?'[terminal]':&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%*\ %<%F\ %=%#StatusLineRight#\ %c:%v:%{strcharlen(strpart(getline('.'),0,col('.')))}/%{strlen(join(getline(0,line('$'))))}:%{strcharlen(join(getline(0,line('$'))))-line('$')+1}\ %3l/%L%4{line('w$')*100/line('$')}%%\ 0x%04B\ [%{&fenc!=''?&fenc:&enc}:%{%{'dos':'CR+LF','unix':'LF','mac':'CR'}[&ff]%}]
+# set statusline=%#StatusLineLeft#%-16.(%2n%{%&buftype=='terminal'?'[terminal]':&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%#StatusLineLeftR#%*\ %<%F\ %=%#StatusLineRightL#%#StatusLineRight#%c:%v:%{strcharlen(strpart(getline('.'),0,col('.')))}/%{strlen(join(getline(0,line('$'))))}:%{strcharlen(join(getline(0,line('$'))))-line('$')+1}\ %3l/%L%4{line('w$')*100/line('$')}%%\ 0x%04B\ [%{&fenc!=''?&fenc:&enc}:%{%{'dos':'CR+LF','unix':'LF','mac':'CR'}[&ff]%}]
 # 表示しているのを大雑把に↓
 # bufnr filetype modified etc. | path | line bytes:column:count/file bytes:count line current/full % code charset:cr/lf
+# 区切りにを使いたいが、適当なフォンがない
 augroup StatusLineLeftRight
 	autocmd!
 	autocmd ColorScheme * highlight StatusLineLeft gui=bold term=bold guifg=white guibg=SeaGreen ctermfg=white ctermbg=2
 				| highlight StatusLineRight gui=bold term=bold guifg=white guibg=DarkYellow ctermfg=white ctermbg=3
-				# | autocmd! StatusLineLeftRight
-				# | augroup! StatusLineLeftRight
+				# | highlight StatusLineLeftR gui=bold term=bold guifg=SeaGreen guibg=#93a1a1 ctermfg=2 ctermbg=white
+				# | highlight StatusLineRightL gui=bold term=bold guifg=DarkYellow guibg=#93a1a1 ctermfg=3 ctermbg=white
+				# | autocmd! StatusLineRight
+				# | augroup! StatusLineLeft
 				# 削除すると colorscheme を変更すると Normal 色になる
 augroup END
 # # 全角スペースをハイライト表示←フォントで対応したのですべてコメント・アウト {{{2
