@@ -23,8 +23,8 @@ AlterCommand ld[o]      silent\ ldo
 AlterCommand lfdo       silent\ lfdo
 AlterCommand ter[minal] topleft\ terminal
 AlterCommand man        Man
-AlterCommand p[rint]    call\ print#Main()
-# ↑:print は使わないので、印刷関数 (~/.vim/autoload/print.vim) に置き換え
+AlterCommand p[rint]    PrintBuffer
+# ↑:print は使わないので、印刷に置き換え
 AlterCommand helpt[ags] call\ manage_pack#Helptags()
 AlterCommand bc         .!bc\ -l\ -q\ ~/.bc\ <Bar>\ sed\ -E\ -e\ 's/^\\\./0./g'\ -e\ 's/(\\\.[0-9]*[1-9])0+/\\\1/g'\ -e\ 's/\\\.$//g'
 AlterCommand bi[nary]   if\ !&binary\ <Bar>\ execute('setlocal\ binary\ <Bar>\ %!xxd')\ <Bar>\ endif
@@ -563,4 +563,12 @@ augroup loadVimSystem
 	autocmd CmdUndefined VimSystem,VimSystemEcho,System,SystemEcho packadd vim-system
 	| autocmd! loadVimSystem
 	| augroup! loadVimSystem
+augroup END
+
+# 印刷
+augroup loadPrint
+	autocmd!
+	autocmd CmdUndefined PrintBuffer packadd print
+				| autocmd! loadPrint
+				| augroup! loadPrint
 augroup END
