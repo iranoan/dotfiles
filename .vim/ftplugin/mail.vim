@@ -9,8 +9,8 @@ if !exists('g:mail_plugin')
 	let g:mail_plugin = 1
 	augroup myMail
 		autocmd!
-		autocmd BufEnter mutt-*,neomutt-* setlocal expandtab          "メール作成ではタブ文字は空白で
-		autocmd BufEnter mutt-*,neomutt-* setlocal nolist             "空白文字非表示
+		"メール作成ではタブ文字は空白 空白文字非表示 自動改行させない
+		autocmd BufEnter mutt-*,neomutt-* setlocal expandtab nolist
 	augroup END
 endif
 
