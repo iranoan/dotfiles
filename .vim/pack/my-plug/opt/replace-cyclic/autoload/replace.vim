@@ -19,6 +19,9 @@ export def Cyclic(args: string, word: number = 0): string
 	# といった , 区切りの文字列を
 	# s/\(dog|cat\)/\={'dog':'cat', 'cat':'dog'}[submatch(1)]/g
 	# といった文字列に変換する
+	# コマンドで
+	# <C-R>=replace#Cyclic('dog,cat')
+	# などと使う
 	# args: dog,cat
 	#       次の様に入れ替えたい文字列自身に , と \ を含む場合は \ でエスケープするして渡す
 	#       1-1,2\,2,3\\3
