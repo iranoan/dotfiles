@@ -1,4 +1,4 @@
-set fontpath '~/Form/pfa'
+set fontpath "/home/hiroyuki/Form/pfa"
 GNUPLOT_PFBTOPFA="pfb2pfa %s"
 #光速度
 c=299792458	# FIXED
