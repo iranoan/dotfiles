@@ -15,8 +15,8 @@ set guioptions-=T guioptions-=m # ツール・バー/メニュー表示を OFF
 augroup GVIMRC
 	autocmd!
 	# 画面左上に表示 (help に有る通り autocmd を使わないと環境によって gvimrc の記載では無効)
-	autocmd GUIEnter * winpos 0 0 | autocmd! GVIMRC
-	# autocmd VimEnter,GUIEnter * if &lines != 48 | set lines=48 | endif | autocmd! GVIMRC
+	autocmd GUIEnter * winpos 0 0 | autocmd! GVIMRC | augroup! GVIMRC
+	# autocmd VimEnter,GUIEnter * if &lines != 48 | set lines=48 | endif
 	# ↑GTK でズレが生じるため再設定 https://github.com/vim-jp/issues/issues/1374
 	# lines=999 としたのでコメントに
 augroup END
