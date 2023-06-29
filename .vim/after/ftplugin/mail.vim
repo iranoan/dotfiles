@@ -3,4 +3,4 @@ if exists('b:did_ftplugin_user_after')
 endif
 let b:did_ftplugin_user_after = 1
 
-setlocal textwidth=0
+setlocal textwidth=0 expandtab
