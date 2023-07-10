@@ -210,6 +210,8 @@ g:pairquote = {
 	'*': {'type': ['help'], 'cmap': 0},     # tag
 	'|': {'type': ['help'], 'cmap': 0},     # link
 	'_': {'type': ['markdown'], 'cmap': 0}, # * は箇条書きで使う
+	'~': {'type': ['markdown'], 'cmap': 0}, # 下付き添字
+	'^': {'type': ['markdown'], 'cmap': 0}, # 上付き添字
 	# ↓ ', " 自体の反応が遅くなる
 	# "'''": {},
 	# '"""': {},
