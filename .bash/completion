@@ -15,7 +15,7 @@ _install_xspec '!*.@(plt|gp|gpi)' plot
 _install_xspec '!*.pdf' pdftk pdfnup pdfimages pdftoppm
 _install_xspec '!*.@(synctex\.gz|tex)' zathura_sync.sh
 _install_xspec '!*.@(docx|doc|docm|odt|ppt|pptx|pptm|odp)' office2text.sh
-_install_xspec '*.@([ao]|so|so.!(conf|*/*)|[rs]pm|gif|jp?(e)g|png|mp[34]|mp?(e)g|avi|asf|ogg|class|wmv|flv|mov|mp4|m4a|pdf|dvi|od[tspg]|doc[xm]|xls[xm]|ppt[xm]|doc|xls|ppt|o|opp|gz|bz2|xz|zip|lzh|fdb_latexmk|fls|nav|out|toc|snm)' vi vim gvim rvim view rview rgvim rgview gview gvim.sh g
+_install_xspec '*.@([ao]|so|so.!(conf|*/*)|[rs]pm|gif|jp?(e)g|png|mp[34]|mp?(e)g|avi|asf|ogg|class|wmv|flv|mov|mp4|m4a|pdf|dvi|od[tspg]|doc[xm]|xls[xm]|ppt[xm]|doc|xls|ppt|o|opp|gz|bz2|xz|zip|lzh|fdb_latexmk|fls|nav|out|toc|snm|ltjruby)' vi vim gvim rvim view rview rgvim rgview gview gvim.sh g
 # オプションの補完が有るので止める
 # _install_xspec '!*.cpp' g++ clang++
 # _install_xspec '!*.c' gcc clang
