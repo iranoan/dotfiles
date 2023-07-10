@@ -144,7 +144,7 @@ g:hi_insert = 'highlight StatusLine gui=bold guifg=white guibg=darkred cterm=bol
 
 # テキストオブジェクト化の元となる https://github.com/kana/vim-textobj-user {{{1
 # 遅延読み込みにすると、最初に gcaz 等、プラグイン+textobj-* の組み合わせた時うまく動作しない
-# またこのファイルの処理自他に時間がかかるようになるので、遅延処理の美味みがない
+# またこのファイルの処理自体に時間がかかるようになるので、遅延処理の美味みがない
 
 # 同じインデントをテキストオプジェクト化 https://github.com/kana/vim-textobj-indent {{{1
 # キーマップ ii, ai
