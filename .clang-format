@@ -14,6 +14,7 @@ BraceWrapping: # {} 前後の改行の入れ方 catch, else の前で改行
   AfterUnion:                 false
   BeforeCatch:                true
   BeforeElse:                 true
+ColumnLimit:                  0 # 勝手に改行を入れない
 IndentCaseLabels:             true
 SpacesInAngles:               true
 SpacesInParentheses:          true
