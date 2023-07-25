@@ -4,6 +4,7 @@ function set_ale#main()
 	" let g:ale_set_balloons = 1
 	" let g:ale_hover_to_preview=1
 	packadd ale
+	let g:ale_disable_lsp = 1
 	let g:ale_set_balloons = 0                " エラー/警告をバルーン表示しない
 	let g:ale_enabled = 0                     " デフォルトでは OFF にして BufWinEnter で ON にする (argdo などで複数のファイルにも使われると遅い)
 	let g:ale_sign_error = '😰'
