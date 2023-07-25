@@ -292,6 +292,6 @@
 	},
 	"ruby": {
 		"prefix": "ruby",
-		"body": "<ruby>${1}<rp>(</rp><rt>${2}</rt><rp>)</rp></ruby>"
+		"body": "<ruby>${1}<rp>(</rp><rt>${2}</rt><rp>)</rp></ruby>${3}"
 	}
 }
