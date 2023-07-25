@@ -31,14 +31,15 @@ function set_ale#main()
 	" 他の Linter のオプションが増えないように限定しておく
 	let g:ale_linters = {
 				\ 'python': ['flake8'],
-				\ 'c'     : ['clangd', 'clang', 'gcc'],
-				\ 'cpp'   : ['clangd', 'clang', 'g++'],
+				\ 'c'     : ['clang'],
+				\ 'cpp'   : ['clang'],
 				\ 'h'     : ['clangd', 'clang', 'g++'],
 				\ 'html'  : ['tidy'],
 				\ 'tex'   : ['lacheck', 'chktex'],
 				\ 'json'  : ['jsonlint'],
 				\ }
 				" \ 'tex'   : ['textlint'],
+				" \ 'cpp'   : ['clangd', 'clang', 'g++'], " ←clang 以外は行末の;無しで次の行がエラー扱いになる
 				" \ 'tex'   : ['lacheck', 'alex', 'chktex', 'proselint', 'redpen', 'texlab', 'vale', 'writegood'],
 				" , 'proselint' はプログラムの文法チェッカーではなく、英語のチェッカー (日本語の textlint にあたる)→ https://githubja.com/amperser/proselint もたつく要因かもしれないので、一旦除外
 	" 各ツールをFixerとして登録
