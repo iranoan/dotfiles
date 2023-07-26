@@ -153,7 +153,19 @@ shopt -u histappend   # .bash_history追記モードは不要なのでOFFに
 export HISTSIZE=9999  # 履歴のMAX保存数を指定
 export HISTCONTROL=erasedups #重複歴を記録しない
 
-export TEXEDIT='gvim -p --remote-tab-silent +%d "%s"'
+if command -v vim > /dev/null ; then
+	if [[ $( tty ) =~ /dev/tty.* ]] || ps x | awk '{print $5}' | grep -qE '\<[f]bterm\>' ; then # 仮想コンソール→非 GUI
+		export TEXEDIT='vim -p --remote-tab-silent +%d "%s"'
+	else
+		if command -v gvim > /dev/null ; then
+			export TEXEDIT='gvim -p --remote-tab-silent +%d "%s"'
+		else
+			export TEXEDIT='vim -p --remote-tab-silent +%d "%s"'
+		fi
+	fi
+else
+	export TEXEDIT='vi +%d "%s"'
+fi
 #export HISTIGNORE=cd:history:ls:which:pwd:exit:*\ -v:*\ --version:*\ -h:*\ --help:cd\ -:kill\ *:killall\ *:man\ * #一部のコマンドは履歴を残さない
 # LESS のカラー表示
 export LESS='--no-init --quit-if-one-screen --RAW-CONTROL-CHARS --IGNORE-CASE --LONG-PROMPT --jump-target=5 --ignore-case'
