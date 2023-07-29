@@ -3,7 +3,7 @@ scriptencoding utf-8
 function set_fern#main() abort
 	let g:fern#disable_default_mappings = 1
 	let g:fern#disable_drawer_smart_quit = 1 " fern のウィンドウだけに成っても Vim を閉じない
-	let g:fern#default_exclude = '^\%\(\(\.git\|node_modules\)\|.\+\(\.o\|\.fls\|\.synctex\.gz\|\.fdb_latexmk\|\.toc\|\.out\|\.dvi\|\.aux\|\.nav\|\.snm\|\.swp\)\)$'
+	let g:fern#default_exclude = '^\%\(\(\.git\|node_modules\)\|.\+\(\.o\|\.fls\|\.synctex\.gz\|\.fdb_latexmk\|\.toc\|\.out\|\.dvi\|\.aux\|\.nav\|\.ltjruby\|\.snm\|\.swp\)\)$'
 	" *g:fern#comparator*
 	" 	A |String| name of comparator used to sort tree items. Allowed value
 	" 	is a key of |g:fern#comparators|.
