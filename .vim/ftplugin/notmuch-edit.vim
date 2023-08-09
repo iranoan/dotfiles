@@ -125,8 +125,8 @@ if !exists("g:mail_draft_plugin")
 			Nature()
 		elseif from ==? 'mailmag@mag2tegami.com'
 			:silent :/\%^/,/^$/s/^From: *mag2 *0000013455 *<mailmag@mag2tegami.com>/From: Liyn-an <info@Liyn-an.com>/
-			DelBlock('──\+\[PR\]─', '─\[PR\]──\+', -1, 1)
-			:silent :/^ \+Copyright(c), \d\{4} \+Liyn-an co\.,Ltd/+2;$delete _
+			DelBlock('──\+\[PR\]─', '─\[PR\]──\+', 0, 1)
+			:silent :/^☆Ｏｏｏｏ.... 紅 茶 通 信 ☆ Liyn-an Tea TIMES ....ｏｏＯ☆/+2;$delete _
 		elseif from ==? 'ndh-news@nikkeibp.co.jp'
 			DelBlock('', '◇日経デジタルヘルスNEWS', 0, -3)
 		else
