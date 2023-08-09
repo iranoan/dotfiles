@@ -244,11 +244,11 @@ set infercase                                  # 補完時に大文字/小文字
 # set hlsearch                                   # 検索ハイライトはトグル・スイッチにするために autocmd と map で行う
 # 一時的な取り消しが <Esc> を二回だと一回の <Esc> の反応が悪くなる
 nnoremap <expr><leader><Space> &hlsearch ? '<Cmd>set nohlsearch<CR>' : '<Cmd>set hlsearch<CR>'
-vnoremap <expr><leader><Space> &hlsearch ? '<Cmd>set nohlsearch<CR>' : '<Cmd>set hlsearch<CR>'
+xnoremap <expr><leader><Space> &hlsearch ? '<Cmd>set nohlsearch<CR>' : '<Cmd>set hlsearch<CR>'
 nnoremap *  *<Cmd>set hlsearch<CR>
-vnoremap *  *<Cmd>set hlsearch<CR>
+xnoremap *  *<Cmd>set hlsearch<CR>
 nnoremap #  #<Cmd>set hlsearch<CR>
-vnoremap #  #<Cmd>set hlsearch<CR>
+xnoremap #  #<Cmd>set hlsearch<CR>
 # 上/下候補はハイライト OFF のままにしておきたいことが有る
 # nnoremap n  n<Cmd>set hlsearch<CR>
 # vnoremap n  n<Cmd>set hlsearch<CR>
