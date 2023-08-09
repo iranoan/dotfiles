@@ -261,9 +261,9 @@ nnoremap #  #<Cmd>set hlsearch<CR>
 xnoremap #  #<Cmd>set hlsearch<CR>
 # 上/下候補はハイライト OFF のままにしておきたいことが有る
 # nnoremap n  n<Cmd>set hlsearch<CR>
-# vnoremap n  n<Cmd>set hlsearch<CR>
+# xnoremap n  n<Cmd>set hlsearch<CR>
 # nnoremap N  N<Cmd>set hlsearch<CR>
-# vnoremap N  N<Cmd>set hlsearch<CR>
+# xnoremap N  N<Cmd>set hlsearch<CR>
 # ファイルの扱い {{{1
 # 読み込み、保存関係
 # 保存時の末尾空白削除は、autocmd なので別場所
@@ -385,9 +385,9 @@ inoremap <silent><expr><C-X><C-T> strftime('%H:%M:%S')
 # nnoremap <Space> <PageDown> # → ~/.vim/pack/my-plug/opt/page-down
 nnoremap <S-Space> <PageUp>
 nnoremap <BS> <PageUp>
-vnoremap <Space> <C-D>
-vnoremap <S-Space> <C-U>
-vnoremap <BS> <C-U>
+xnoremap <Space> <C-D>
+xnoremap <S-Space> <C-U>
+xnoremap <BS> <C-U>
 # ターミナル・モード {{{2
 set termwinscroll=30000                         # ターミナルで遡れる行数
 # tmux で <prefix> を <C-J> に合わせてると端末で使えない
@@ -442,7 +442,7 @@ nnoremap <Insert> "+gp
 nnoremap <S-Insert> "+gp
 # vnoremap <C-X> "+x                            # デフォルトでカーソル位置の数字減算にマップ (ctrl-aとペア)
 # vnoremap <C-D> "+x                            # デフォルトで下方スクロールにマップ
-vnoremap <S-Del> "+x
+xnoremap <S-Del> "+x
 xnoremap X "+x
 # ↑元の v_X ほぼ v_x と同じだが行単位←元々行単位なら V を使う
 inoremap <S-Insert> <C-R>+
@@ -458,7 +458,7 @@ cnoremap <Insert> <C-R>+
 cnoremap <C-P> <C-R>"
 # 選択範囲の貼り付けで、直前のレジスタを連続して貼り付け←vimの連続コピペできない問題 https://baqamore.hatenablog.com/entry/2016/07/07/201856
 xnoremap <expr>p 'pgv"' .. v:register .. 'y`>'
-# vnoremap <expr>P 'pgv"' . v:register . 'y`>`'
+# xnoremap <expr>P 'pgv"' . v:register . 'y`>`'
 # 2つを入れ替えたい時は、書き換わったほうが都合が良いので、大文字側はデフォルトのままにしておく
 # 挿入/コマンドモード時のカーソル移動 {{{2
 # [Henkan] を [BS] に割り当てているので、<C-H> は他に割り当てる
@@ -466,7 +466,7 @@ inoremap <C-H> <C-G>U<Left>
 inoremap <Left> <C-G>U<Left>
 cnoremap <C-H> <Left>
 inoremap <expr><C-J> pumvisible() ? '<Down>' : '<C-J>'
-vnoremap <expr><C-J> pumvisible() ? '<Down>' : '<C-J>'
+xnoremap <expr><C-J> pumvisible() ? '<Down>' : '<C-J>'
 #↑ insert moode の補完候補の選択にも使っている
 inoremap <C-K> <Up>
 inoremap <C-L> <C-G>U<Right>
@@ -526,20 +526,20 @@ xnoremap gk k
 vnoremap <Down> gj
 vnoremap <Up>   gk
 # テキスト・オブジェクト <Shift> を押すのが面倒 vim-surround とのバランスから削除するかも (キーボードにも依存が欠点)
-vmap i, i<
-vmap i. i>
-vmap i2 i"
-vmap i7 i'
-vmap i8 i(
-vmap i9 i)
-vmap i@ i`
-vmap a, a<
-vmap a. a>
-vmap a2 a"
-vmap a7 a'
-vmap a8 a(
-vmap a9 a)
-vmap a@ a`
+xmap i, i<
+xmap i. i>
+xmap i2 i"
+xmap i7 i'
+xmap i8 i(
+xmap i9 i)
+xmap i@ i`
+xmap a, a<
+xmap a. a>
+xmap a2 a"
+xmap a7 a'
+xmap a8 a(
+xmap a9 a)
+xmap a@ a`
 omap i, i<
 omap i. i>
 omap i2 i"

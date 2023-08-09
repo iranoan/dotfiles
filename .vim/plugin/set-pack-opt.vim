@@ -137,7 +137,7 @@ nnoremap <Leader>fY :FZFNeoyank # P<CR>
 xnoremap <Leader>fy :FZFNeoyankSelection<CR>
 # nnoremap <Leader>dy :FZFNeoyank<CR>
 # nnoremap <Leader>dY :FZFNeoyank " P<CR>
-# vnoremap <Leader>dy :FZFNeoyankSelection<CR>
+# xnoremap <Leader>dy :FZFNeoyankSelection<CR>
 augroup loadfzf_neoyank
 	autocmd!
 	autocmd CmdUndefined FZFNeoyank,FZFNeoyankSelection
@@ -467,7 +467,7 @@ augroup END
 # 素早く移動する https://github.com/easymotion/vim-easymotion {{{1
 for key in ['f', 'F', 't', 'T', 'w', 'W', 'b', 'B', 'e', 'E', 'ge', 'gE', 'j', 'k', 'n', 'N']
 	execute 'nmap <Leader><Leader>' .. key .. '  <Cmd>call set_easymotion#main(''(easymotion-' .. key .. ')'') <bar> delfunction set_easymotion#main<CR>'
-	execute 'vmap <Leader><Leader>' .. key .. '  <Cmd>call set_easymotion#main(''(easymotion-' .. key .. ')'') <bar> delfunction set_easymotion#main<CR>'
+	execute 'xmap <Leader><Leader>' .. key .. '  <Cmd>call set_easymotion#main(''(easymotion-' .. key .. ')'') <bar> delfunction set_easymotion#main<CR>'
 endfor
 
 # 各種言語のコメントの追加/削除 gc{motion} https://github.com/tpope/vim-commentary {{{1
