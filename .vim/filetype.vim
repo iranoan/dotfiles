@@ -15,7 +15,6 @@ augroup filetypedetect
 	autocmd BufNewFile,BufRead .msmtprc       setfiletype msmtp
 	autocmd BufNewFile,BufRead tags-??        setfiletype tags
 	autocmd BufNewFile,BufRead .uim           setfiletype scheme
-	autocmd BufNewFile,BufRead ~/Hidemaru/Macro/{**/,}*.mac setfiletype hidemaru
 	# autocmd BufNewFile,BufRead *.htm,*.html   setlocal filetype=html
 	autocmd BufEnter           */textern/textern-*/*.txt setfiletype mail
 augroup END

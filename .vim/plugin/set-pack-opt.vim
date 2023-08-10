@@ -565,10 +565,22 @@ augroup loadVimSystem
 	| augroup! loadVimSystem
 augroup END
 
-# 印刷
+# 印刷 ~/.vim/pack/my-plug/opt/print/ {{{1
 augroup loadPrint
 	autocmd!
 	autocmd CmdUndefined PrintBuffer packadd print
 				| autocmd! loadPrint
 				| augroup! loadPrint
+augroup END
+
+# 秀丸マクロ ~/.vim/pack/my-plug/opt/hidemaru/ {{{1
+augroup loadHidemaru
+	autocmd!
+	autocmd BufNewFile,BufRead ~/Hidemaru/Macro/{**/,}*.mac packadd hidemaru
+				| autocmd! loadHidemaru
+				| augroup! loadHidemaru
+augroup END
+augroup SetHidemaru
+	autocmd!
+	autocmd BufNewFile,BufRead ~/Hidemaru/Macro/{**/,}*.mac setlocal filetype=hidemaru
 augroup END
