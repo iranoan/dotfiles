@@ -131,9 +131,9 @@ share_history(){  # 以下の内容を関数として定義
 			{
 				sub("^[ \t]+", "") # 行頭空白削除
 				sub("[ \t]+$", "") # 行末空白削除
-				sub("^(which|kill|killall|ls|less|cd|man|texdoc|help|info|ps|pgrep|whatis|echo)( [$.A-Za-z0-9_ -]+/?)?$", "") # 一部のコマンドを記録しない
-				sub("^[A-Za-z0-9_-]+ -(v|-version|h|-help) ?$", "") # バージョン、ヘルプ記録しない
-				sub("^(cd|cd (-|$_)|ls|history|pwd|exit) ?$", "") # 一部のコマンド記録しない
+				# sub("^(which|kill|killall|ls|less|cd|man|texdoc|help|info|ps|pgrep|whatis|echo)( [$.A-Za-z0-9_ -]+/?)?$", "") # 一部のコマンドを記録しない
+				# sub("^[A-Za-z0-9_-]+ -(v|-version|h|-help)$", "") # バージョン、ヘルプ記録しない
+				# sub("^(cd|cd (-|$_)|ls|history|pwd|exit)$", "") # 一部のコマンド記録しない
 				if ( $0 ~ /[^\s]/ ){ # 空白以外が存在する
 					a[i] = $0
 					i++
