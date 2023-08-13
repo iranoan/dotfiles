@@ -64,16 +64,14 @@ syntax match	HidemaruVar	/\(##\|#\|\$\$\|\$\)\w\+/
 syntax match	HidemaruOper	"\([=!<>]=\?\|[?:+-/%^*&]\)"
 
 " Number {{{1
-syntax match	HidemaruNumber	/[-+]\?\<\d\+\>\.\?/                " 整数
-syntax match	HidemaruNumber	/[-+]\?\<\d\+\.\d\+\>/              " 小数
-syntax match	HidemaruNumber	/[-+]\?\<\d\+\.\d\+[eE][+-]\d\+\>/  " 浮動小数点数
-syntax match	HidemaruFloat	/\<0x[0-9A-Za-z]\+\>/               " 浮動小数点数
+syntax match	HidemaruNumber	/[-+]\?\<\d\+\(\.\d*\)\?\([eE][+-]\d\+\)\?/ " integer+float
+syntax match	HidemaruFloat	/\<0x[0-9A-Fa-f]\+\>/ " hexadecimal
 
 " Boolean {{{1
 syntax keyword	HidemaruBoolean	false true
 
 " Constant {{{1
-syntax keyword	HidemaruConstant	eof no yes
+syntax keyword	HidemaruConst	eof no yes
 
 " Comment {{{1
 syntax region	HidemaruComment	start="//" end="$" keepend contains=@Spell
@@ -84,7 +82,7 @@ highlight default link HidemaruDllFunc	Function
 highlight default link HidemaruOption	PreProc
 highlight default link HidemaruCnf	PreProc
 highlight default link HidemaruKeyword	Keyword
-highlight default link HidemaruCommand	Statement
+highlight default link HidemaruCommand	Typedef
 highlight default link HidemaruState	Statement
 highlight default link HidemaruComment	Comment
 highlight default link HidemaruString	String
@@ -93,11 +91,11 @@ highlight default link HidemaruVar	Identifier
 highlight default link HidemaruOper	Operator
 highlight default link HidemaruNumber	Number
 highlight default link HidemaruFloat	Float
-highlight default link HidemaruConstant	Constant
+highlight default link HidemaruConst	Constant
 
 " reset setting {{{1
 let b:current_syntax = "hidemaru"
 let &cpo = s:keepcpo
 unlet s:keepcpo
 
-" vim:ts=18  fdm=marker
+" vim:ts=16  fdm=marker
