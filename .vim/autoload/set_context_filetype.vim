@@ -7,10 +7,7 @@ function set_context_filetype#main() abort
 				\ 	'setfiletype': 0
 				\ },
 				\}
-	if !exists('g:context_filetype#filetypes')
-		let g:context_filetype#filetypes = {}
-	endif
-	let g:context_filetype#filetypes = {
+	let add_dic = {
 		\ 'lua': [
 		\ {
 			\ 	'filetype': 'conkyrc',
@@ -48,29 +45,7 @@ function set_context_filetype#main() abort
 		\ 'sh': [
 		\ {
 			\ 	'filetype': 'awk',
-			\ 	'start': '\<[mg]\?awk\s\+.*''{',
-			\ 	'end': '}'''
-		\ },
-		\ {
-			\ 	'filetype': 'awk',
-			\ 	'start': '\<[mg]\?awk\s\+.*''.*\<BEGIN\s*{',
-			\ 	'end': '}[;'']'
-		\ },
-		\ {
-			\ 	'filetype': 'perl',
-			\ 	'start': '\<perl\s\+\-[0-9a-zA-Z]*[ep][0-9a-zA-Z]\(\s\+\-[0-9a-zA-Z]\)*\s\+"',
-			\ 	'end': '"'
-		\ },
-		\ {
-			\ 	'filetype': 'perl',
-			\ 	'start': '\<perl\s\+\-[0-9a-zA-Z]*[ep][0-9a-zA-Z]\(\s\+\-[0-9a-zA-Z]\)*\s\+''',
-			\ 	'end': ''''
-		\ },
-		\ ],
-		\ 'bash': [
-		\ {
-			\ 	'filetype': 'awk',
-			\ 	'start': '\<[mg]\?awk\s\+.*''\(F\?NR\s*==\s*\d\+;\)*BEGIN\s*{\zs',
+			\ 	'start': '\<[mg]\?awk\s\+.*''\ze\(F\?NR\s*==\s*\d\+;\)*BEGIN\s*{',
 			\ 	'end': '}\ze\s*[{;'']'
 		\ },
 		\ {
@@ -109,13 +84,28 @@ function set_context_filetype#main() abort
 		" 	\ 	'end': '"'
 		" 	\ },
 		" \ ]
+	let add_dic.bash = add_dic.sh
+	if exists('g:context_filetype#filetypes')
+		call extend(g:context_filetype#filetypes, add_dic)
+	else
+		let g:context_filetype#filetypes = add_dic
+	endif
 	" カーソル位置のコンテキストに合わせて filetype を切り替える https://github.com/osyo-manga/vim-precious {{{2
 	" 上の context_filetype.vim はあくまで判定
 	augroup loadprecious
 		autocmd!
-		autocmd CursorMoved,CursorMovedI * call set_precious#main()
+		autocmd CursorMoved,CursorMovedI * call s:set_precious()
 					\ | autocmd! loadprecious
 					\ | augroup! loadprecious
-					\ | delfunction set_precious#main
+					\ | delfunction s:set_precious
 	augroup END
+endfunction
+
+function s:set_precious() abort
+	packadd vim-precious
+	let g:precious_enable_switchers = {
+				\ 'help': {
+				\ 	'setfiletype': 0
+				\ },
+				\}
 endfunction
