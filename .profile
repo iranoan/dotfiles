@@ -26,7 +26,7 @@ export max_print_line=1000
 
 if [ -f "$HOME/.bash_history" ]; then # bash の一部の履歴を削除
 	tac ~/.bash_history |
-		sed -r -e 's/\s+$//g' -e '/^$/d' \
+		sed -E -e 's/\s+$//g' -e '/^$/d' \
 		-e '/^(which|kill|killall|ls|less|cd|man|texdoc|help|info|ps|pgrep|whatis)( [\.A-Za-z0-9_ -]+\/?)?$/d' \
 		-e "/ -(v|-version|h|-help) ?$/d" \
 		-e "/^(cd|cd (-|\$_)|ls|history|pwd|exit) ?$/d" |
