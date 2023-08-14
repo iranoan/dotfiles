@@ -13,7 +13,7 @@ if !exists('g:py_plugin')
 	augroup myPython " 通常はローカル設定で良いが、vim スクリプト内で書かれていた時/逆に python スクリプト内の vim スクリプトにカーソル移動して設定が変更後に改めてカーソル移動した時に元に戻すため
 		autocmd!
 		" 本当にタブ文字が有れば2文字幅、それ以外では4文字空白の扱い 80桁に線を入れる
-		autocmd FileType python setlocal tabstop=4 softtabstop=4 expandtab shiftwidth=4 colorcolumn=80
+		autocmd FileType python setlocal tabstop=4 softtabstop=0 expandtab shiftwidth=4 colorcolumn=80
 					\ errorformat=%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
 					\ foldexpr=PythonFold() foldmethod=expr
 					\ iskeyword-=? " Vim スクリプト の is?, isnot? を syntax highlight で有効にするために追加した ? を除く
@@ -26,7 +26,7 @@ endif
 "ファイルタイプ別ローカル設定
 "--------------------------------
 " autocmd のダブらせている分
-setlocal tabstop=4 softtabstop=4 expandtab shiftwidth=4 colorcolumn=80
+setlocal tabstop=4 softtabstop=4 expandtab shiftwidth=0 colorcolumn=80
 " setlocal keywordprg=pydoc3 だと os.path などの選択状態で思った動作をしない←コマンドラインに出てしまう
 setlocal errorformat=%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
 "--------------------------------
