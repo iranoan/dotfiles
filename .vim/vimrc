@@ -369,7 +369,8 @@ set conceallevel=0                             # 個々のファイルタイプ�
 if has('path_extra')                           # tags ファイルは $HOME まで辿る :help file-searching
 	set tags+=tags;$HOME/
 endif
-set belloff=all                                # 音を消し画面フラッシュを使う
+set belloff=all                                # 音を消す
+# set visualbell                                 # 多くの colorscheme や tmux, Gvim で効かない
 # set mouse=a                                  # マウスの設定全てのモードで有効に:デフォルトでそうなっていた
 set delcombine                                 # 結合文字を別々に削除する
 # set maxcombine=2                               # 結合文字の最大個数
