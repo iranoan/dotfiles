@@ -29,13 +29,30 @@ xnoremap <ScrollWheelUp>     <C-U>
 xnoremap <ScrollWheelDown>   <C-D>
 # }}}
 
-def g:Toggle_menu()
-	if &guioptions =~# 'm'
-		silent set guioptions-=m
-	else
-		silent set guioptions+=m
+def GuiOptionM(): void
+	if &guioptions =~# 'M'
+		silent set guioptions-=M
+		execute 'source ' .. resolve(globpath(&runtimepath, 'menu.vim', 1, 1)[0])
 	endif
 enddef
+def Toggle_menu()
+	call GuiOptionM()
+	if &guioptions =~# 'm'
+		set guioptions-=m
+	else
+		set guioptions+=m
+	endif
+enddef
+def Toggle_Toolbar()
+	call GuiOptionM()
+	if &guioptions =~# 'T'
+		set guioptions-=T
+	else
+		set guioptions+=T
+	endif
+enddef
+nnoremap <leader>cm <Cmd>call <SID>Toggle_menu()<CR>
+nnoremap <leader>ct <Cmd>call <SID>Toggle_Toolbar()<CR>
 
 def g:MakeGUItabline(): string
 	var label: string = '%N|'
