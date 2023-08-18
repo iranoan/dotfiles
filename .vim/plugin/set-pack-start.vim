@@ -48,6 +48,26 @@ unlet g:packe_setting_ext g:packe_setting_s
 
 # vim-surround などのプラグインでも . リピートを可能にする https://github.com/tpope/vim-repeat {{{1
 
+# Git の変更のあった signcolumn にマークをつける https://github.com/airblade/vim-gitgutter {{{1
+# 遅延読み込みをすると vim-signature との連携機能が使えない←連携できないだけ
+# augroup loadGitgutter
+# 	autocmd!
+# 	autocmd FileType c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,css,tex,sh,bash set_gitgutter#main()
+# 				| autocmd! loadGitgutter
+# 				| augroup! loadGitgutter
+# 				| delfunction set_gitgutter#main
+# augroup END
+# packadd vim-gitgutter
+g:gitgutter_preview_win_floating = 1 # GitGutterPreviewHunk 表示はポップアップ
+g:gitgutter_map_keys = 0             # デフォルト・マッピング OFF
+nmap <leader>gp <Plug>(GitGutterPreviewHunk)
+nmap <leader>gs <Plug>(GitGutterStageHunk)
+nmap <leader>gu <Plug>(GitGutterUndoHunk)
+nmap [g <Plug>(GitGutterPrevHunk)
+nmap ]g <Plug>(GitGutterNextHunk)
+# GitGutter* コマンドが定義され、vim-fugitive の Git コマンドが未定義ではなく、曖昧扱いになるので、コマンドのみ定義しておく
+command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Git exe fugitive#Command(<line1>, <count>, +<range>, <bang>0, "<mods>", <q-args>)
+
 # マークを可視化 visial mark https://github.com/kshenoy/vim-signature {{{1
 # 遅延読み込みだと、開いた時に以前開いた時に付いていたマークが可視化されない
 g:SignatureMap = { # こちらで設定しないとデフォルト指定されてしまう
@@ -73,6 +93,19 @@ g:SignatureMap = { # こちらで設定しないとデフォルト指定され�
 	'ListBufferMarks':   '',
 	'ListBufferMarkers': ''
 }
+# vim-gitgutter との連携 {{{2
+g:SignatureMarkTextHLDynamic = 1
+g:SignatureMarkerTextHLDynamic = 1
+nnoremap <silent><C-M> <Cmd>SignatureRefresh<CR>
+augroup VimSignature # SignColumn デフォルトの色が使われるので他の設定に合わせて変更
+	autocmd!
+	autocmd ColorScheme * if &background ==? 'light' |
+											\ highlight SignatureMarkText ctermbg=white guibg=#FDF6E3 guifg=Red ctermfg=9 | else |
+											\ highlight SignatureMarkText ctermbg=8 guibg=#00282D guifg=Red ctermfg=9 | endif |
+											\ highlight GitGutterAdd      ctermbg=8 guibg=#00282D |
+											\ highlight GitGutterChange   ctermbg=8 guibg=#00282D |
+											\ highlight GitGutterDelete   ctermbg=8 guibg=#00282D
+augroup END
 
 #: Tabedit ~/.vim/pack/my-plug/start/tabedit/ {{{1
 # ↑opt/ に入れて呼び出すようにすると、最初の使用時に補完が働かない
