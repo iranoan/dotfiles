@@ -96,15 +96,15 @@ g:SignatureMap = { # こちらで設定しないとデフォルト指定され�
 # vim-gitgutter との連携 {{{2
 g:SignatureMarkTextHLDynamic = 1
 g:SignatureMarkerTextHLDynamic = 1
-nnoremap <silent><C-M> <Cmd>SignatureRefresh<CR>
+nnoremap <silent>mm <Cmd>SignatureRefresh<CR>
 augroup VimSignature # SignColumn デフォルトの色が使われるので他の設定に合わせて変更
 	autocmd!
 	autocmd ColorScheme * if &background ==? 'light' |
-											\ highlight SignatureMarkText ctermbg=white guibg=#FDF6E3 guifg=Red ctermfg=9 | else |
-											\ highlight SignatureMarkText ctermbg=8 guibg=#00282D guifg=Red ctermfg=9 | endif |
-											\ highlight GitGutterAdd      ctermbg=8 guibg=#00282D |
-											\ highlight GitGutterChange   ctermbg=8 guibg=#00282D |
-											\ highlight GitGutterDelete   ctermbg=8 guibg=#00282D
+				\ highlight SignatureMarkText ctermbg=white guibg=#FDF6E3 guifg=Red ctermfg=9 | else |
+				\ highlight SignatureMarkText ctermbg=8     guibg=#00282D guifg=Red ctermfg=9 | endif |
+				\ highlight GitGutterAdd      ctermbg=8     guibg=#00282D |
+				\ highlight GitGutterChange   ctermbg=8     guibg=#00282D |
+				\ highlight GitGutterDelete   ctermbg=8     guibg=#00282D
 augroup END
 
 #: Tabedit ~/.vim/pack/my-plug/start/tabedit/ {{{1
