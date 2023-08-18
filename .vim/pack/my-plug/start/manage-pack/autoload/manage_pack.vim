@@ -27,7 +27,6 @@ export def Helptags(): void
 					dir = substitute(substitute(f, 'tags\(-..\)\?$', '', ''), h, '..', '')
 					execute ':0split ' .. f
 					execute 'silent :%s;^[^\t]\+\t;&' .. dir .. '; '
-					var docrid: string
 					execute 'silent write! >> ' .. docdir .. '/' .. tags
 					bwipeout!
 					delete(f)
