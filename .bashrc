@@ -91,7 +91,7 @@ if [ -x /usr/bin/dircolors ]; then
 		eval "$(dircolors -b)"
 	fi
 	alias ls='ls --color=auto --hide={*.o,*.fls,*.synctex.gz,*.fdb_latexmk,*.toc,*.out,*.dvi,*.aux,*.nav,*.snm,*.swp}'
-	alias grep='grep --color=auto --directories=skip --exclude-dir=.git --exclude={.*.sw?,*.o,*.fls,*.synctex.gz,*.fdb_latexmk,*.toc,*.out,*.dvi,*.aux,*.nav,*.snm,*.pdf,*.jpg,*.png}'
+	alias grep='grep --color=auto --directories=skip --exclude-dir=.git --exclude={.*.sw?,*.o,*.fls,*.synctex.gz,*.fdb_latexmk,*.toc,*.out,*.dvi,*.aux,*.nav,*.snm,*.pdf,*.jpg,*.png,viminfo,.viminfo}'
 fi
 
 # colored GCC warnings and errors
