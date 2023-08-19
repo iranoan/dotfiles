@@ -282,15 +282,7 @@ augroup VIMRC
 	autocmd BufReadPost * if &modifiable && search('[^\t -~]', 'nw') == 0 | set fileencoding=utf-8 | endif # ASCII のみの時も utf-8 を使う
 	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,vimgrepadd topleft copen # cwindow を使うと、make で使用されるプログラムによってカーソル位置がずれる
 	autocmd QuickfixCmdPost lmake,lgrep,lgrepadd,lvimgrep,lvimgrepadd topleft lopen
-	autocmd BufEnter,BufFilePost,BufNewFile,BufRead *
-				\ if &filetype ==# 'fugitive'
-				| 	execute 'lcd ' .. substitute(expand('%:p:h:h'), '^fugitive://', '', '')
-				| elseif isdirectory(expand('%:p:h'))
-				| 	execute 'lcd ' .. expand('%:p:h')
-				| endif # カレントディレクトリをファイルのディレクトリに移動
-				# \ 	setlocal path+=$PWD/** |
-				# ↑path にカレント・ディレクトリ以下を追加
-				# ,BufWrite は TeX で \input したファイルで保存するたびに変更されると不便なときが有る
+	autocmd BufEnter,BufFilePost,BufNewFile,BufRead * change_directory#Lcd()
 	# autocmd VimEnter    * if exists(':Explore') | delcommand Explore | endif # netrw の使用自体取りやめ
 	# 見かけ上のインデント量を formatlistpat にヒットした文字数にする
 	autocmd BufEnter,BufFilePost,BufNewFile,BufRead *
