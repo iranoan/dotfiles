@@ -25,16 +25,16 @@ export def Helptags(): void
 				for f in glob(d .. 'tags{,-??}', 1, 1)
 					tags = substitute(f, '[-_/A-Za-z0-9.]\+\/\zetags\(-..\)\?$', '', '')
 					dir = substitute(substitute(f, 'tags\(-..\)\?$', '', ''), h, '..', '')
-					execute ':0split ' .. f
+					execute 'noautocmd :0split ' .. f
 					execute 'silent :%s;^[^\t]\+\t;&' .. dir .. '; '
-					execute 'silent write! >> ' .. docdir .. '/' .. tags
+					execute 'silent noautocmd write! >> ' .. docdir .. '/' .. tags
 					bwipeout!
 					delete(f)
 				endfor
 			endif
 		endfor
 		for f in glob(docdir .. '/tags{,-??}', 1, 1)
-			execute 'split ' .. f
+			execute 'noautocmd split ' .. f
 			sort u | write
 			bwipeout!
 		endfor

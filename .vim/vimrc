@@ -313,7 +313,7 @@ augroup VIMRC
 				| endif #前回閉じた時のカーソル位置に移動← $VIMRUNTIME/defaults.vim
 	autocmd BufEnter * if getftype(expand('%')) ==# 'link' | symbolic_link#Normalize() | endif # シンボリック・リンクは展開
 	autocmd BufEnter           *.sw?          bwipeout!             # スワップファイルは閉じる
-	# autocmd BufEnter           tags           edit ++encoding=utf-8 # tags ファイルは UTF-8 強制←開き直しているが他にもっと良い方法が解らない+ manage_pack#Helptags() が上手く動作しなくなる
+	autocmd BufEnter           tags           edit ++encoding=utf-8 # tags ファイルは UTF-8 強制←開き直しているが他にもっと良い方法が解らない
 	# ハイライトはトグル・スイッチ
 	autocmd CmdlineLeave,CmdwinLeave * if (getcmdtype() =~# '[/?]' || getcmdwintype() =~# '[/?]') && pos != getpos('.') | set hlsearch | endif
 	autocmd CmdwinEnter * pos = getpos('.')
