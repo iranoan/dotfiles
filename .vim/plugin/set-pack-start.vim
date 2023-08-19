@@ -60,6 +60,13 @@ unlet g:packe_setting_ext g:packe_setting_s
 # packadd vim-gitgutter
 g:gitgutter_preview_win_floating = 1 # GitGutterPreviewHunk 表示はポップアップ
 g:gitgutter_map_keys = 0             # デフォルト・マッピング OFF
+g:gitgutter_close_preview_on_escape = 1 # <ESC> で閉じる
+# g:gitgutter_sign_added              = '+'
+g:gitgutter_sign_modified           = '/'
+g:gitgutter_sign_removed            = '-'
+# g:gitgutter_sign_removed_first_line = '-<'
+# g:gitgutter_sign_removed_above_and_below = '->'
+# g:gitgutter_sign_modified_removed   = '/-'
 nmap <leader>gp <Plug>(GitGutterPreviewHunk)
 nmap <leader>gs <Plug>(GitGutterStageHunk)
 nmap <leader>gu <Plug>(GitGutterUndoHunk)
@@ -72,7 +79,7 @@ command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Git exe
 # 遅延読み込みだと、開いた時に以前開いた時に付いていたマークが可視化されない
 g:SignatureMap = { # こちらで設定しないとデフォルト指定されてしまう
 	'Leader':            'm',
-	'PlaceNextMark':     '',
+	'PlaceNextMark':     'm,',
 	'ToggleMarkAtLine':  'm.',
 	'PurgeMarksAtLine':  'm-',
 	'DeleteMark':        '',
@@ -96,15 +103,16 @@ g:SignatureMap = { # こちらで設定しないとデフォルト指定され�
 # vim-gitgutter との連携 {{{2
 g:SignatureMarkTextHLDynamic = 1
 g:SignatureMarkerTextHLDynamic = 1
+# バッファを開いた直後や編集で頻繁に vim-gitgutter に上書きされ更新の必要があるが対策不明
 nnoremap <silent>mm <Cmd>SignatureRefresh<CR>
 augroup VimSignature # SignColumn デフォルトの色が使われるので他の設定に合わせて変更
 	autocmd!
 	autocmd ColorScheme * if &background ==? 'light' |
-				\ highlight SignatureMarkText ctermbg=white guibg=#FDF6E3 guifg=Red ctermfg=9 | else |
-				\ highlight SignatureMarkText ctermbg=8     guibg=#00282D guifg=Red ctermfg=9 | endif |
-				\ highlight GitGutterAdd      ctermbg=8     guibg=#00282D |
-				\ highlight GitGutterChange   ctermbg=8     guibg=#00282D |
-				\ highlight GitGutterDelete   ctermbg=8     guibg=#00282D
+				\ highlight SignatureMarkText ctermbg=NONE guibg=#FDF6E3 gui=bold cterm=bold guifg=black ctermfg=white | else |
+				\ highlight SignatureMarkText ctermbg=NONE guibg=#00282D gui=bold cterm=bold guifg=white ctermfg=black | endif |
+				\ highlight GitGutterAdd      ctermbg=NONE guibg=#00282D gui=bold cterm=bold |
+				\ highlight GitGutterChange   ctermbg=NONE guibg=#00282D gui=bold cterm=bold |
+				\ highlight GitGutterDelete   ctermbg=NONE guibg=#00282D gui=bold cterm=bold
 augroup END
 
 #: Tabedit ~/.vim/pack/my-plug/start/tabedit/ {{{1
