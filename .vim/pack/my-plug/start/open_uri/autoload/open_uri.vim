@@ -9,9 +9,14 @@ function open_uri#main()
 	let l:urls = []
 	let l:only_urls = []
 	while 1
-		let [l:url, l:start, l:end] = matchstrpos(l:line_str, '\m\C\([a-z]*://[^][ <>,"''(){}]*\|\(mailto:\)\=[A-Za-z0-9_.+-]\+@[A-Za-z0-9.-]\+[a-z]\{2,\}\|\(\~\=/\)\=\([A-Za-z\.\-_0-9]\+/\)*[A-Za-z\.\-_0-9]\+\(\.\([A-Za-z0-9]\{1,4\}\)\|/\)\)', l:end)
+		let [url, start, end] = matchstrpos(line_str, '\v<(((https?|ftp|gopher)://|(mailto|file|news):)[^][{}()'' \t<>"]+|(www|web|w3)[a-z0-9_-]*\.[a-z0-9._-]+\.[^][{}()'' \t<>"]+)[a-z0-9/]|(\~?/)?([-A-Za-z._0-9]+/)*[-A-Za-z._0-9]+(\.\a([A-Za-z0-9]{,3})|/)', end)
 		if l:start == -1
 			break
+		endif
+		if url !~# '\v^(((https?|ftp|gopher)://|(mailto|file|news):)[^][{}()'' \t<>"]+|(www|web|w3)[a-z0-9_-]*\.[a-z0-9._-]+\.[^][{}()'' \t<>"]+)[a-z0-9/]'
+			if glob(url) == ''
+				continue
+			endif
 		endif
 		if count(l:only_urls, l:url) == 0
 			call add(l:only_urls, l:url)
