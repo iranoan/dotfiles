@@ -17,7 +17,9 @@ export def Base(...arg: list<any>): string
 	line = substitute(line, '\V' .. foldmarkers[0] .. '\%(\d\+\)\?', ' ', '')
 	if comment !=# ''
 		comment = escape(comment, '.$*~\')->substitute('%s', '\\(.\\{-}\\)', '')
-		line = substitute(line, comment, '\1', '')
+		while match(line, comment) != -1
+			line = substitute(line, comment, '\1', '')
+		endwhile
 	endif
 	# remove any remaining leading or trailing whitespace
 	line = substitute(line, '^\s*\(.\{-}\)\s*$', '\1', '')
