@@ -108,11 +108,11 @@ nnoremap <silent>mm <Cmd>SignatureRefresh<CR>
 augroup VimSignature # SignColumn デフォルトの色が使われるので他の設定に合わせて変更
 	autocmd!
 	autocmd ColorScheme * if &background ==? 'light' |
-				\ highlight SignatureMarkText ctermbg=NONE guibg=#FDF6E3 gui=bold cterm=bold guifg=black ctermfg=white | else |
-				\ highlight SignatureMarkText ctermbg=NONE guibg=#00282D gui=bold cterm=bold guifg=white ctermfg=black | endif |
-				\ highlight GitGutterAdd      ctermbg=NONE guibg=#00282D gui=bold cterm=bold |
-				\ highlight GitGutterChange   ctermbg=NONE guibg=#00282D gui=bold cterm=bold |
-				\ highlight GitGutterDelete   ctermbg=NONE guibg=#00282D gui=bold cterm=bold
+				\ highlight SignatureMarkText cterm=bold gui=bold ctermbg=NONE guibg=NONE guifg=#111111 ctermfg=0 | else |
+				\ highlight SignatureMarkText cterm=bold gui=bold ctermbg=NONE guibg=NONE guifg=#dddddd ctermfg=15 | endif |
+				\ highlight GitGutterAdd      cterm=bold gui=bold ctermbg=NONE guibg=NONE |
+				\ highlight GitGutterChange   cterm=bold gui=bold ctermbg=NONE guibg=NONE |
+				\ highlight GitGutterDelete   cterm=bold gui=bold ctermbg=NONE guibg=NONE
 augroup END
 
 #: Tabedit ~/.vim/pack/my-plug/start/tabedit/ {{{1
@@ -126,14 +126,25 @@ nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 
 # カーソル行の URL やファイルを開く ~/.vim/pack/my-plug/start/open_uri/ {{{1
 
-# カラースキム https://github.com/altercation/vim-colors-solarized {{{1
+# カラースキム {{{1
 try
 	set background=dark
-	g:solarized_menu = 0
-	if !has('gui_running') # ターミナルが 256 色一部の色が変わる
-		set t_Co=16
+	# https://github.com/altercation/vim-colors-solarized {{{1https://github.com/altercation/vim-colors-solarized {{{2
+	# g:solarized_menu = 0
+	# if !has('gui_running') # ターミナルが 256 色一部の色が変わる
+	# 	set t_Co=16
+	# endif
+	# colorscheme solarized
+	# 2}}}
+	# https://github.com/lifepillar/vim-solarized8 {{{2
+	if !has('gui_running')
+		set termguicolors  # ターミナルで GUI の色設定を使う→solarized の読み込みが早い
 	endif
-	colorscheme solarized
+	# ↓端末やの色設定ぞ見で不要? 変化が不明
+	# &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+	# &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+	colorscheme solarized8
+	# 2}}}
 catch /^Vim\%((\a\+)\)\=:E185:/
 	colorscheme habamax
 endtry
@@ -141,35 +152,50 @@ endtry
 def Color_light_dark(): void
 	highlight clear Pmenu # 一部の絵文字が標準設定では見にくいので一旦クリアして light/dark で異なる設定にする
 	if &background ==? 'light'
-		highlight Normal guifg=#111111 guibg=#FDF6E3 ctermfg=black ctermbg=white
-		highlight CursorLineNr gui=bold cterm=bold ctermfg=3 guifg=Brown
-		highlight LineNr guifg=#000000 guibg=#EEEEEE cterm=NONE ctermfg=Blue
-		highlight Comment gui=NONE guifg=#008800 ctermfg=DarkGreen
-		highlight StatusLine term=bold ctermfg=black ctermbg=white
-		highlight TabLineSel cterm=bold,underline ctermfg=black ctermbg=white
-		# highlight TabLine cterm=underline ctermfg=black ctermbg=white
-		highlight TabLineFill cterm=underline ctermfg=black ctermbg=white
-		highlight Pmenu guifg=#000000 guibg=#EEEEEE cterm=NONE ctermfg=Blue
+		highlight Normal       ctermfg=0 ctermbg=NONE guifg=#111111 guibg=#fdf6e3
+		highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=15 guifg=#b58900 guibg=NONE
+		highlight CursorLine   term=underline ctermbg=7 guibg=#eee8d5
+		highlight CursorColumn term=underline ctermbg=7 guibg=#eee8d5
+		highlight SignColumn   term=standout ctermfg=66 guifg=#657b83
+		highlight LineNr       cterm=NONE ctermfg=10 ctermbg=7 guifg=#000000 guibg=#eee8d5
+		highlight Comment      cterm=NONE gui=NONE ctermfg=2 guifg=#008800
+		highlight StatusLine   term=bold ctermfg=0 ctermbg=15
+		highlight TabLineSel   cterm=bold,underline ctermfg=0 ctermbg=7
+		# highlight TabLine      cterm=underline ctermfg=0 ctermbg=7
+		highlight TabLineFill  cterm=underline ctermfg=0 ctermbg=7
+		highlight Pmenu        cterm=NONE ctermfg=8 ctermbg=7 guifg=#000000 guibg=#eeeeee
+		highlight SpecialKey   term=bold cterm=bold gui=bold ctermfg=12 ctermbg=NONE guibg=NONE
+		highlight FoldColumn   term=standout ctermfg=3 ctermbg=7 guibg=#eee8d5
 	else
-		highlight Normal guifg=#DDDDDD ctermfg=15 ctermbg=8
-		highlight CursorLineNr gui=bold cterm=bold ctermfg=3 guifg=Yellow
-		highlight LineNr guibg=#00282D ctermfg=15
-		highlight Comment gui=NONE guifg=#00A800 ctermfg=DarkGreen
-		highlight StatusLine term=bold ctermfg=white ctermbg=black
-		highlight TabLineSel cterm=bold,underline ctermfg=white ctermbg=black
-		# highlight TabLine cterm=underline ctermfg=white ctermbg=black
-		highlight TabLineFill cterm=underline ctermfg=white ctermbg=black
-		highlight Pmenu guibg=#00282D ctermfg=15
+		# Solarized に合わせて Normal 背景色より少し明るい色を計算する {{{
+		var bg: string = matchstr(substitute(execute('highlight Normal'), '[\n\r \t]\+', ' ', 'g'), '.\+guibg=#\zs[0-9A-Za-z]\+\>\ze')
+		bg = printf('#%02x%02x%02x',      # ↓ Normal - ColorLine の色を引きたいので、-+ 逆転
+			str2nr(strpart(bg, 0, 2), 16) - 0x00 + 0x07, # Red
+			str2nr(strpart(bg, 2, 2), 16) - 0x2B + 0x36, # Green
+			str2nr(strpart(bg, 4, 2), 16) - 0x36 + 0x42  # Blue
+		) # }}}
+		         highlight Normal       ctermfg=15 ctermbg=NONE guifg=#dddddd
+		         highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=8 guifg=#b58900 guibg=NONE
+		execute 'highlight CursorLine   term=underline ctermbg=0 guibg=' .. bg
+		execute 'highlight CursorColumn term=underline ctermbg=0 guibg=' .. bg
+		execute 'highlight LineNr       ctermfg=14 ctermbg=0 guifg=#93a1a1 guibg=' .. bg
+		         highlight Comment      cterm=NONE gui=NONE guifg=#dddddd guifg=#00a800 ctermfg=2
+		         highlight StatusLine   term=bold ctermfg=15 ctermbg=0
+		         highlight TabLineSel   term=bold,underline ctermfg=0 ctermbg=15
+		         highlight TabLine      term=underline ctermfg=0 ctermbg=15
+		         highlight TabLineFill  term=underline ctermfg=0 ctermbg=15
+		execute 'highlight Pmenu        ctermfg=7 ctermbg=0 guibg=' .. bg
+		         highlight SpecialKey   term=bold cterm=bold gui=bold ctermfg=11 ctermbg=NONE guibg=NONE
+		execute 'highlight FoldColumn   term=standout ctermbg=0 guibg=' .. bg
 	endif
 	# light/dark で同設定
-	highlight SpellBad   term=underline cterm=underline
+	highlight SpellBad   term=underline cterm=underline ctermfg=NONE ctermul=9 guifg=NONE guisp=#cb4b16
 	highlight SignColumn ctermbg=NONE guibg=NONE
-	# highlight SpecialKey term=bold cterm=bold ctermfg=11 ctermbg=0 gui=bold guifg=DarkGray
-	# highlight SpecialKey term=bold cterm=bold ctermfg=11 ctermbg=0 gui=bold guifg=#657b83 guibg=#073642 ←Solarized のオリジナル
+	highlight Cursor     guibg=#657b83
+	highlight MatchParen term=bold,reverse cterm=bold,reverse gui=bold,reverse ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
 	# Terminal の色は Normal に揃える←Solarized で未定義
 	# highlight clear Terminal
 	# execute 'highlight Terminal ' .. substitute(substitute(execute('highlight Normal'), '[\n\r \t]\+', ' ', 'g'), ' *Normal\s\+xxx *', '', '')
-	highlight! link Terminal Normal
 enddef
 augroup ChangeHighlight
 	autocmd!
@@ -180,7 +206,7 @@ Color_light_dark()
 # 日本語ヘルプ https://github.com/vim-jp/vimdoc-ja {{{1
 
 # 挿入モード時、ステータスラインの色を変更 ~/.vim/pack/my-plug/start/insert-status {{{1
-g:hi_insert = 'highlight StatusLine gui=bold guifg=white guibg=darkred cterm=bold ctermfg=white ctermbg=darkred'
+g:hi_insert = 'highlight StatusLine gui=bold guifg=White guibg=darkred cterm=bold ctermfg=White ctermbg=darkred'
 # ↑インサート・モード時の highlight 指定
 
 # テキストオブジェクト化の元となる https://github.com/kana/vim-textobj-user {{{1
