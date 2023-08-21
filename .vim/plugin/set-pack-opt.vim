@@ -65,27 +65,27 @@ nmap <C-X>  <Plug>SpeedDatingDown
 nmap <C-A>  <Plug>SpeedDatingUp
 
 # https://github.com/junegunn/fzf.vim {{{1
-nnoremap <silent><Leader>fr :Files ~<CR>
-nnoremap <silent><Leader>ff :Files<CR>
-nnoremap <silent><Leader>f. :Files ..<CR>
-nnoremap <silent><Leader>fv :Files ~/.vim<CR>
-nnoremap <silent><Leader>fs :Files ~/src<CR>
-nnoremap <silent><Leader>fx :Files ~/bin<CR>
-nnoremap <silent><Leader>fe :Files ~/book/epub<CR>
-nnoremap <silent><Leader>fp :Files ~/public_html/iranoan<CR>
-nnoremap <silent><Leader>ft :Files ~/Information/slide<CR>
-nnoremap <silent><Leader>fb :Buffers<CR>
-nnoremap <silent><Leader>fc :Commands<CR>
-nnoremap <silent><Leader>fg :GFiles?<CR>
-nnoremap <silent><Leader>fh :HISTORY<CR>
-nnoremap <silent><Leader>fl :BLines<CR>
-nnoremap <silent><Leader>fm :Marks<CR>
-nnoremap <silent>m/         :Marks<CR>
+nnoremap <silent><Leader>fr <Cmd>Files ~<CR>
+nnoremap <silent><Leader>ff <Cmd>Files<CR>
+nnoremap <silent><Leader>f. <Cmd>Files ..<CR>
+nnoremap <silent><Leader>fv <Cmd>Files ~/.vim<CR>
+nnoremap <silent><Leader>fs <Cmd>Files ~/src<CR>
+nnoremap <silent><Leader>fx <Cmd>Files ~/bin<CR>
+nnoremap <silent><Leader>fe <Cmd>Files ~/book/epub<CR>
+nnoremap <silent><Leader>fp <Cmd>Files ~/public_html/iranoan<CR>
+nnoremap <silent><Leader>fi <Cmd>Files ~/Information/slide<CR>
+nnoremap <silent><Leader>fb <Cmd>Buffers<CR>
+nnoremap <silent><Leader>fc <Cmd>Commands<CR>
+nnoremap <silent><Leader>fg <Cmd>GFiles?<CR>
+nnoremap <silent><Leader>fh <Cmd>HISTORY<CR>
+nnoremap <silent><Leader>fl <Cmd>BLines<CR>
+nnoremap <silent><Leader>fm <Cmd>Marks<CR>
+nnoremap <silent>m/         <Cmd>Marks<CR>
 # ↑ vim-signature のデフォルト・キーマップをこちらに再定義
 # nnoremap <silent><Leader>ft :Tags<CR>
-nnoremap <silent><Leader>fw :Windows<CR>
-nnoremap <silent><Leader>f: :History:<CR>
-nnoremap <silent><Leader>f/ :History/<CR>
+nnoremap <silent><Leader>fw <Cmd>Windows<CR>
+nnoremap <silent><Leader>f: <Cmd>History:<CR>
+nnoremap <silent><Leader>f/ <Cmd>History/<CR>
 augroup loadFZF_Vim
 	autocmd!
 	autocmd CmdUndefined Files,Buffers,Tags,Marks,History,HISTORY,GFiles,Windows,Helptags,Commands,BLines
