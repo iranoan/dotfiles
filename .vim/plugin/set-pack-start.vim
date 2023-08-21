@@ -203,6 +203,10 @@ def Color_light_dark(): void
 	# Terminal の色は Normal に揃える←Solarized で未定義
 	# highlight clear Terminal
 	# execute 'highlight Terminal ' .. substitute(substitute(execute('highlight Normal'), '[\n\r \t]\+', ' ', 'g'), ' *Normal\s\+xxx *', '', '')
+	execute 'highlight VertSplit' ..
+		execute('highlight VertSplit')
+			->substitute('\nVertSplit[ \t\n\r]\+xxx', '', '')
+			->substitute('ctermfg=\S\+ ctermbg=\(\S\+\) guifg=\S\+ guibg=\(\S\+\)', 'ctermfg=\1 ctermbg=\1 guifg=\2 guibg=\2', '')
 enddef
 augroup ChangeHighlight
 	autocmd!
@@ -213,7 +217,7 @@ Color_light_dark()
 # 日本語ヘルプ https://github.com/vim-jp/vimdoc-ja {{{1
 
 # 挿入モード時、ステータスラインの色を変更 ~/.vim/pack/my-plug/start/insert-status {{{1
-g:hi_insert = 'highlight StatusLine gui=bold guifg=White guibg=darkred cterm=bold ctermfg=White ctermbg=darkred'
+g:hi_insert = 'highlight StatusLine cterm=bold gui=bold  ctermfg=White ctermbg=darkred guifg=White guibg=darkred'
 # ↑インサート・モード時の highlight 指定
 
 # テキストオブジェクト化の元となる https://github.com/kana/vim-textobj-user {{{1
