@@ -7,7 +7,7 @@ export def Lcd(): void # カレントディレクトリをファイルのディ�
 		return
 	endif
 	if &filetype ==# 'fugitive' || bufname() =~# '^fugitive://'
-		c_path = substitute(expand('%:p:h:h'), '^fugitive://', '', '')
+		c_path = expand('%:p:h:h')->substitute('^fugitive://', '', '')
 	elseif &buftype ==# 'help' || &buftype ==# 'nofile'
 		return
 	elseif &filetype ==# 'tex'
@@ -24,12 +24,12 @@ export def Lcd(): void # カレントディレクトリをファイルのディ�
 		c_path = expand('%:p:h')
 	endif
 	if !isdirectory(c_path)
-		b:lcd_worked = true
 		var make: number = confirm("No exist '" .. simplify(c_path)->escape('\')->substitute('^' .. $HOME .. '\ze[/\\]', '~', '')
-			.. "'\nDo you make?", "(&Y)Yes\n(&N)No", 1, 'Question')
+			.. "'\nDo you make?", "(&Y)es\n(&N)o", 1, 'Question')
 		if make == 1
 			mkdir(c_path, 'p', 0o700)
 		else
+			b:lcd_worked = true
 			return
 		endif
 	endif
