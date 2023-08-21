@@ -7,8 +7,8 @@
 # font family names/pixelsize used by fbterm, multiple font family names must be seperated by ','
 # and using a fixed width font as the first is strongly recommended
 # font-names=Ubuntu mono,mono,unifont
-font-names=RictyDiminished\ Nerd\ Font\ Regula,Ricty\ Diminished,Noto\ Serif\ CJK\ JP,Ubuntu mono,mono,unifont
-font-size=18
+font-names=Ricty\ Diminished\ Regular,Noto\ Mono,Monospace,Noto\ Serif\ CJK\ JP,Ubuntu mono,unifont
+font-size=16
 
 # force font width (and/or height), usually for non-fixed width fonts
 # legal value format: n (fw_new = n), +n (fw_new = fw_old + n), -n (fw_new = fw_old - n)
