@@ -198,7 +198,7 @@ export def LaTeX(): string
 		endfor
 		# XXX: vim crashes if i just reverse the actual list
 		# should be fixed in patch 7.1.287
-		#let item_name = reverse(item_name)
+		# let item_name = reverse(item_name)
 		item_name = reverse(deepcopy(item_name))
 		for i in range(len(item_name))
 			if type(item_name[i]) != 1
