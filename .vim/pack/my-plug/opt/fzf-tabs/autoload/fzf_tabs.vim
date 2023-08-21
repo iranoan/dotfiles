@@ -5,9 +5,11 @@ export def TabOpen(): void
 	fzf#run({
 				source:  GetTabList(),
 				sink:    function('TabListSink'),
-				# options: ['--preview', '~/bin/fzf-preview.sh {}', '--margin=0%', '--padding=0%', '--extended', '--no-multi', '--prompt', 'tab win_id(hex) filename > '],
-				options: ['--prompt', 'tab win_id(hex) filename > '],
-				down:    '10%'})
+				# options: ['--preview', '~/bin/fzf-preview.sh {}', '--margin=0%', '--padding=0%', '--prompt', 'tab win_id(hex) filename > '],
+				options: ['--no-multi', '--prompt', 'tab win_id(hex) filename > '],
+				window: { width: 0.9, height: 0.6, xoffset: 0.4 }
+				# down:    '10%'
+	})
 enddef
 
 def GetTabList(): list<string>
