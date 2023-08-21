@@ -66,7 +66,7 @@ g:gitgutter_sign_modified           = '/'
 g:gitgutter_sign_removed            = '-'
 # g:gitgutter_sign_removed_first_line = '-<'
 # g:gitgutter_sign_removed_above_and_below = '->'
-# g:gitgutter_sign_modified_removed   = '/-'
+g:gitgutter_sign_modified_removed   = '/-'
 nmap <leader>gp <Plug>(GitGutterPreviewHunk)
 nmap <leader>gs <Plug>(GitGutterStageHunk)
 nmap <leader>gu <Plug>(GitGutterUndoHunk)
@@ -137,10 +137,10 @@ try
 	# colorscheme solarized
 	# 2}}}
 	# https://github.com/lifepillar/vim-solarized8 {{{2
-	if !has('gui_running')
-		set termguicolors  # ターミナルで GUI の色設定を使う→solarized の読み込みが早い
-	endif
-	# ↓端末やの色設定ぞ見で不要? 変化が不明
+	# if !has('gui_running')
+	# 	set termguicolors  # ターミナルで GUI の色設定を使う→solarized の読み込みが早くなるが透過が効かなくなる
+	# endif
+	# ↓端末やの色設定あれば不要? 変化が不明
 	# &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 	# &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 	colorscheme solarized8
@@ -150,40 +150,44 @@ catch /^Vim\%((\a\+)\)\=:E185:/
 endtry
 # background によって一部の syntax を変える (Solarized を基本としている) {{{
 def Color_light_dark(): void
+	def DiffColor(r0: number, g0: number, b0: number, r1: number, g1: number, b1: number): string # Solarized を基本に Normal 背景色より少し明るい/暗い色を計算
+		var bg: string = matchstr(substitute(execute('highlight Normal'), '[\n\r \t]\+', ' ', 'g'), '.\+guibg=#\zs[0-9A-Za-z]\+\>\ze')
+		return printf('#%02x%02x%02x',      # ↓ Normal - ColorLine の色を引きたいので、-+ 逆転
+			str2nr(strpart(bg, 0, 2), 16) - r0 + r1, # Red
+			str2nr(strpart(bg, 2, 2), 16) - g0 + g1, # Green
+			str2nr(strpart(bg, 4, 2), 16) - b0 + b1  # Blue
+		)
+	enddef
+
 	highlight clear Pmenu # 一部の絵文字が標準設定では見にくいので一旦クリアして light/dark で異なる設定にする
 	if &background ==? 'light'
-		highlight Normal       ctermfg=0 ctermbg=NONE guifg=#111111 guibg=#fdf6e3
-		highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=15 guifg=#b58900 guibg=NONE
-		highlight CursorLine   term=underline ctermbg=7 guibg=#eee8d5
-		highlight CursorColumn term=underline ctermbg=7 guibg=#eee8d5
-		highlight SignColumn   term=standout ctermfg=66 guifg=#657b83
-		highlight LineNr       cterm=NONE ctermfg=10 ctermbg=7 guifg=#000000 guibg=#eee8d5
-		highlight Comment      cterm=NONE gui=NONE ctermfg=2 guifg=#008800
-		highlight StatusLine   term=bold ctermfg=0 ctermbg=15
-		highlight TabLineSel   cterm=bold,underline ctermfg=0 ctermbg=7
-		# highlight TabLine      cterm=underline ctermfg=0 ctermbg=7
-		highlight TabLineFill  cterm=underline ctermfg=0 ctermbg=7
-		highlight Pmenu        cterm=NONE ctermfg=8 ctermbg=7 guifg=#000000 guibg=#eeeeee
-		highlight SpecialKey   term=bold cterm=bold gui=bold ctermfg=12 ctermbg=NONE guibg=NONE
-		highlight FoldColumn   term=standout ctermfg=3 ctermbg=7 guibg=#eee8d5
+		var bg: string = DiffColor(0xfd, 0xf6, 0xe3, 0xee, 0xe8, 0xd5)
+		         highlight Normal       ctermfg=0 ctermbg=NONE guifg=#111111 guibg=#fdf6e3
+		         highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=15 guifg=#b58900 guibg=NONE
+		execute 'highlight CursorLine   term=underline ctermbg=7 guibg=' .. bg
+		execute 'highlight CursorColumn term=underline ctermbg=7 guibg=' .. bg
+		         highlight SignColumn   term=standout ctermfg=66 guifg=#657b83
+		execute 'highlight LineNr       cterm=NONE ctermfg=10 ctermbg=7 guifg=#839496 guibg=' .. bg
+		         highlight Comment      cterm=NONE gui=NONE ctermfg=2 guifg=#008800
+		         highlight StatusLine   term=bold ctermfg=11 ctermbg=15
+		execute 'highlight TabLineSel   term=bold,underline cterm=bold,underline gui=bold,underline ctermfg=0 ctermbg=7 guifg=#111111 guibg=' .. bg
+		         highlight TabLine      term=underline cterm=underline gui=underline ctermfg=8 ctermbg=NONE guifg=#839496 guibg=NONE
+		         highlight TabLineFill  term=underline cterm=underline gui=underline ctermfg=8 ctermbg=NONE guifg=#839496 guibg=NONE
+		execute 'highlight Pmenu        cterm=NONE ctermfg=8 ctermbg=7 guifg=#839496 guibg=' .. bg
+		         highlight SpecialKey   term=bold cterm=bold gui=bold ctermfg=12 ctermbg=NONE guibg=NONE
+		execute 'highlight FoldColumn   term=standout ctermfg=3 ctermbg=7 guibg=' .. bg
 	else
-		# Solarized に合わせて Normal 背景色より少し明るい色を計算する {{{
-		var bg: string = matchstr(substitute(execute('highlight Normal'), '[\n\r \t]\+', ' ', 'g'), '.\+guibg=#\zs[0-9A-Za-z]\+\>\ze')
-		bg = printf('#%02x%02x%02x',      # ↓ Normal - ColorLine の色を引きたいので、-+ 逆転
-			str2nr(strpart(bg, 0, 2), 16) - 0x00 + 0x07, # Red
-			str2nr(strpart(bg, 2, 2), 16) - 0x2B + 0x36, # Green
-			str2nr(strpart(bg, 4, 2), 16) - 0x36 + 0x42  # Blue
-		) # }}}
-		         highlight Normal       ctermfg=15 ctermbg=NONE guifg=#dddddd
+		var bg: string = DiffColor(0x00, 0x2b, 0x36, 0x07, 0x36, 0x42)
+		         highlight Normal       ctermfg=15 ctermbg=NONE guifg=#dddddd guibg=#002b36
 		         highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=8 guifg=#b58900 guibg=NONE
 		execute 'highlight CursorLine   term=underline ctermbg=0 guibg=' .. bg
 		execute 'highlight CursorColumn term=underline ctermbg=0 guibg=' .. bg
 		execute 'highlight LineNr       ctermfg=14 ctermbg=0 guifg=#93a1a1 guibg=' .. bg
 		         highlight Comment      cterm=NONE gui=NONE guifg=#dddddd guifg=#00a800 ctermfg=2
 		         highlight StatusLine   term=bold ctermfg=15 ctermbg=0
-		         highlight TabLineSel   term=bold,underline ctermfg=0 ctermbg=15
-		         highlight TabLine      term=underline ctermfg=0 ctermbg=15
-		         highlight TabLineFill  term=underline ctermfg=0 ctermbg=15
+		execute 'highlight TabLineSel   term=bold,underline cterm=bold,underline gui=bold,underline ctermfg=15 ctermbg=0 guifg=#dddddd guibg=' .. bg
+		         highlight TabLine      term=underline cterm=underline gui=underline ctermfg=14 ctermbg=NONE guifg=#93a1a1 guibg=NONE
+		         highlight TabLineFill  term=underline cterm=underline gui=underline ctermfg=14 ctermbg=NONE guifg=#93a1a1 guibg=NONE
 		execute 'highlight Pmenu        ctermfg=7 ctermbg=0 guibg=' .. bg
 		         highlight SpecialKey   term=bold cterm=bold gui=bold ctermfg=11 ctermbg=NONE guibg=NONE
 		execute 'highlight FoldColumn   term=standout ctermbg=0 guibg=' .. bg
