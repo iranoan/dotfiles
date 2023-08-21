@@ -2,8 +2,15 @@ vim9script
 # scriptencoding utf-8
 
 export def TabOpen(): void
+	var sink_ls: list<string> = GetTabList()
+	if len(sink_ls) == 1
+		echohl WarningMsg
+		echo 'Only One Tab'
+		echohl None
+		return
+	endif
 	fzf#run({
-				source:  GetTabList(),
+				source: sink_ls,
 				sink:    function('TabListSink'),
 				# options: ['--preview', '~/bin/fzf-preview.sh {}', '--margin=0%', '--padding=0%', '--prompt', 'tab win_id(hex) filename > '],
 				options: ['--no-multi', '--prompt', 'tab win_id(hex) filename > '],
@@ -16,13 +23,7 @@ def GetTabList(): list<string>
 	var tab_n: number
 	var ls: list<string>
 	var win_n: number = win_getid()
-	var tabs: list<dict<any>> = gettabinfo()
-	if len(tabs) == 1
-		echohl WarningMsg
-		echo 'Only One Tab'
-		echohl None
-	endif
-	for tab in tabs
+	for tab in gettabinfo()
 		tab_n = tab['tabnr']
 		for win in tab['windows']
 			add(ls, printf('%s%d %x %s',
