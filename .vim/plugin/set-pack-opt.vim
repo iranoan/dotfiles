@@ -95,6 +95,33 @@ augroup loadFZF_Vim
 				| delfunction set_fzf_vim#main
 augroup END
 
+# yank の履歴 https://github.com/justinhoward/fzf-neoyank {{{1
+nnoremap <Leader>fy <Cmd>FZFNeoyank<CR>
+nnoremap <Leader>fY <Cmd>FZFNeoyank # P<CR>
+xnoremap <Leader>fy <Cmd>FZFNeoyankSelection<CR>
+# nnoremap <Leader>dy <Cmd>FZFNeoyank<CR>
+# nnoremap <Leader>dY <Cmd>FZFNeoyank " P<CR>
+# xnoremap <Leader>dy <Cmd>FZFNeoyankSelection<CR>
+augroup loadfzf_neoyank
+	autocmd!
+	autocmd CmdUndefined FZFNeoyank,FZFNeoyankSelection
+				\ set_fzf_neoyank#main()
+				| autocmd! loadfzf_neoyank
+				| augroup! loadfzf_neoyank
+				| delfunction set_fzf_neoyank#main
+augroup END
+
+# fzf を使ってタブ・ページの切り替え ~/.vim/pack/my-plug/opt/fzf-tabs/ {{{1
+nnoremap <Leader>ft <Cmd>FZFTabOpen<CR>
+augroup load_fzf_tabs
+	autocmd!
+	autocmd CmdUndefined FZFTabOpen
+				\ set_fzf_tabs#main()
+				| autocmd! load_fzf_tabs
+				| augroup! load_fzf_tabs
+				| delfunction set_fzf_tabs#main
+augroup END
+
 # 日本語入力に向いた設定にする (行の連結など) https://github.com/vim-jp/autofmt {{{1
 augroup loadautofmt
 	autocmd!
@@ -129,22 +156,6 @@ augroup loadNotmuchPy
 				| autocmd! loadNotmuchPy
 				| augroup! loadNotmuchPy
 				| delfunction set_notmuchpy#main
-augroup END
-
-# yank の履歴 https://github.com/justinhoward/fzf-neoyank {{{1
-nnoremap <Leader>fy :FZFNeoyank<CR>
-nnoremap <Leader>fY :FZFNeoyank # P<CR>
-xnoremap <Leader>fy :FZFNeoyankSelection<CR>
-# nnoremap <Leader>dy :FZFNeoyank<CR>
-# nnoremap <Leader>dY :FZFNeoyank " P<CR>
-# xnoremap <Leader>dy :FZFNeoyankSelection<CR>
-augroup loadfzf_neoyank
-	autocmd!
-	autocmd CmdUndefined FZFNeoyank,FZFNeoyankSelection
-				\ set_fzf_neoyank#main()
-				| autocmd! loadfzf_neoyank
-				| augroup! loadfzf_neoyank
-				| delfunction set_fzf_neoyank#main
 augroup END
 
 # 各種言語の構文チェック https://github.com/dense-analysis/ale {{{1
