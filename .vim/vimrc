@@ -188,7 +188,8 @@ augroup CoursolLineColumn # 挿入モードでは、カーソール行桁背景�
 augroup END
 set cursorline cursorcolumn                    # 起動時は、カーソール行桁背景色付ける
 # タブ・ページ/ターミナル環境の時のカーソル形状 {{{2
-set showtabline=2 tabpagemax=500               # 常にタブを表示+上限 500
+# set showtabline=2 tabpagemax=500               # 常にタブを表示+上限 500
+set showtabline=0 tabpagemax=500               # 常にタブを非表示+上限 500
 if has('gui_running')                          # タブページの書式変更
 	set guitablabel=%!MakeGUItabline()
 else
