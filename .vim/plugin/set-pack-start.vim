@@ -151,7 +151,11 @@ endtry
 # background によって一部の syntax を変える (Solarized を基本としている) {{{
 def Color_light_dark(): void
 	def DiffColor(r0: number, g0: number, b0: number, r1: number, g1: number, b1: number): string # Solarized を基本に Normal 背景色より少し明るい/暗い色を計算
-		var bg: string = matchstr(substitute(execute('highlight Normal'), '[\n\r]\+', '', 'g'), '.\+guibg=#\zs[0-9A-Za-z]\+\>\ze')
+		var bg: string = substitute(execute('highlight Normal'), '[\n\r]\+', '', 'g')
+		if bg !~# '\<guibg=#'
+			return '#fdf6e3'
+		endif
+		bg = matchstr(bg, '.\+guibg=#\zs[0-9A-Za-z]\+\>\ze')
 		return printf('#%02x%02x%02x',      # ↓ Normal - ColorLine の色を引きたいので、-+ 逆転
 			str2nr(strpart(bg, 0, 2), 16) - r0 + r1, # Red
 			str2nr(strpart(bg, 2, 2), 16) - g0 + g1, # Green
