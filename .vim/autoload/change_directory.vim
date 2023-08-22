@@ -8,6 +8,8 @@ export def Lcd(): void # カレントディレクトリをファイルのディ�
 	endif
 	if &filetype ==# 'fugitive' || bufname() =~# '^fugitive://'
 		c_path = expand('%:p:h:h')->substitute('^fugitive://', '', '')
+	elseif &buftype ==# 'terminal' || &filetype ==# 'terminal' || bufname() ==# '!' .. &shell
+		return
 	elseif &buftype ==# 'help' || &buftype ==# 'nofile'
 		return
 	elseif &filetype ==# 'tex'
