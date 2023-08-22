@@ -18,12 +18,12 @@ export def Main(): string
 		else
 			s ..= j
 		endif
-		s ..= '%{mk_tabline#Label(' .. j .. ')} | '
+		s ..= Label(j) .. '|'
 	endfor
 	return s .. '%#TabLineFill#%T%=%#TabLine#%999XX' # 最後のタブページの後は TabLineFill で埋め、タブページ番号をリセットする
 enddef
 
-export def Label(n: number): string
+def Label(n: number): string
 	var buflist = tabpagebuflist(n)
 	var name = substitute(bufname(buflist[tabpagewinnr(n) - 1]), '^.\+/', '', '')
 	var change = ''
