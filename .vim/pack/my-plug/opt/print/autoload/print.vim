@@ -19,12 +19,22 @@ set printmbfont+=,c:no,a:yes                   " ASCII 文字の扱い
 set printheader=%y%F%m%=%N
 set printoptions+=number:y,formfeed:y,left:5mm,right:5mm,top:5mm,bottom:5mm " 行番号印刷、改ページ文字を処理し、現在の行を新しいページに印刷
 
+function s:set_none(s) abort
+	let s = a:s
+	for var in ['ctermfg', 'ctermbg', 'guifg', 'guibg']
+		if s !~# '\<' .. var .. '='
+			let s ..= ' ' .. var .. '=NONE'
+		endif
+	endfor
+	return s
+endfunction
+
 function print#Main(first, last) range abort
-	let l:normal = substitute(substitute(substitute(execute('highlight Normal'), '[\n\r\s]\+', ' ', 'g'), ' *Normal\s\+xxx *', '', ''), 'font=.*', '', 'g')
-	let l:linenr = substitute(substitute(execute('highlight LineNr'), '[\n\r\s]\+', ' ', 'g'), ' *LineNr\s\+xxx *', '', '')
+	let l:normal = substitute(substitute(substitute(execute('highlight Normal'), '[\n\r]\+', '', 'g'), ' *Normal\s\+xxx *', '', ''), 'font=.*', '', 'g')
+	let l:linenr = substitute(substitute(execute('highlight LineNr'), '[\n\r]\+', '', 'g'), ' *LineNr\s\+xxx *', '', '')
 	highlight Normal guifg=#000000 guibg=#FFFFFF gui=NONE cterm=NONE ctermfg=black ctermbg=white
 	highlight LineNr guifg=#000000 guibg=#FFFFFF gui=bold cterm=bold ctermfg=black ctermbg=white
 	execute a:first .. ',' .. a:last .. 'hardcopy'
-	execute 'highlight Normal ' .. l:normal
-	execute 'highlight LineNr ' .. l:linenr
+	execute 'highlight Normal ' .. s:set_none(l:normal)
+	execute 'highlight LineNr ' .. s:set_none(l:linenr)
 endfunction
