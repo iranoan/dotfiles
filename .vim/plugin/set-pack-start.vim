@@ -230,7 +230,7 @@ def Color_light_dark(): void
 	highlight Cursor     guibg=#657b83
 	highlight MatchParen term=bold,reverse cterm=bold,reverse gui=bold,reverse ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
 	# Terminal の色は Normal に揃える←Solarized で未定義
-	# highlight clear Terminal
+	highlight link Terminal Normal
 	# execute 'highlight Terminal ' .. substitute(substitute(execute('highlight Normal'), '[\n\r]\+', '', 'g'), ' *Normal\s\+xxx *', '', '')
 	highlight clear CursorColumn
 	highlight link CursorColumn CursorLine
