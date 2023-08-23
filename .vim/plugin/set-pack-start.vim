@@ -131,9 +131,6 @@ try
 	set background=dark
 	# https://github.com/altercation/vim-colors-solarized {{{1https://github.com/altercation/vim-colors-solarized {{{2
 	# g:solarized_menu = 0
-	# if !has('gui_running') # ターミナルが 256 色一部の色が変わる
-	# 	set t_Co=16
-	# endif
 	# colorscheme solarized
 	# 2}}}
 	# https://github.com/lifepillar/vim-solarized8 {{{2
@@ -217,6 +214,13 @@ def Color_light_dark(): void
 			->substitute('[\n\r]\+', '', 'g')
 			->substitute('^VertSplit \+xxx', '', '')
 			->substitute('ctermfg=\S\+ ctermbg=\(\S\+\) guifg=\S\+ guibg=\(\S\+\)', 'ctermfg=\1 ctermbg=\1 guifg=\2 guibg=\2', '')
+	if !has('gui_running')
+		if execute('colorscheme') =~ '\<solarized$' # ターミナルが 256 色一部の色が変わる
+			set t_Co=16
+		else # ~/.tmux.conf→ set-option -g default-terminal "tmux-256color"
+			set t_Co=256
+		endif
+	endif
 enddef
 augroup ChangeHighlight
 	autocmd!
