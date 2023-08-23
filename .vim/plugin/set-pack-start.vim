@@ -167,10 +167,6 @@ def Color_light_dark(): void
 
 	highlight clear Pmenu # 一部の絵文字が標準設定では見にくいので一旦クリアして light/dark で異なる設定にする
 	if &background ==? 'light'
-		execute 'highlight NormalDefault ' .. execute('highlight Normal')
-																						->substitute('[\n\r]', '', 'g')
-																						->substitute('^Normal \+xxx ', ' ', '')
-																						->substitute(' ctermfg=\S\+ ctermbg=\S\+\>', ' ctermfg=0 ctermbg=15', '')
 		var bg: string = GetCursorLine(0xfd, 0xf6, 0xe3, 0xee, 0xe8, 0xd5)
 		         highlight Normal       ctermfg=0 ctermbg=NONE guifg=#111111 guibg=#fdf6e3
 		         highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=15 guifg=#b58900 guibg=NONE
@@ -186,10 +182,6 @@ def Color_light_dark(): void
 		         highlight SpecialKey   term=bold cterm=bold gui=bold ctermfg=12 ctermbg=NONE guibg=NONE
 		execute 'highlight FoldColumn   term=standout ctermfg=3 ctermbg=7 guibg=' .. bg
 	else
-		execute 'highlight NormalDefault ' .. execute('highlight Normal')
-																						->substitute('[\n\r]', '', 'g')
-																						->substitute('^Normal \+xxx ', ' ', '')
-																						->substitute(' ctermfg=\S\+ ctermbg=\S\+\>', ' ctermfg=15 ctermbg=0', '')
 		var bg: string = GetCursorLine(0x00, 0x2b, 0x36, 0x07, 0x36, 0x42)
 		         highlight Normal       ctermfg=15 ctermbg=NONE guifg=#dddddd guibg=#002b36
 		         highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=8 guifg=#b58900 guibg=NONE
@@ -208,8 +200,6 @@ def Color_light_dark(): void
 				g:fzf_colors = {
 					'fg':     ['fg', 'Normal'],
 					'bg':     ['bg', 'CursorLine'],
-					'fg+':    ['fg', 'Normal'],
-					'bg+':    ['bg', 'NormalDefault'],
 					'border': ['fg', 'Normal'],
 				}
 				g:terminal_ansi_colors = [
