@@ -57,25 +57,3 @@ function set_fzf_vim#main() abort
 	let g:fzf_buffers_jump = 1
 	let g:fzf_preview_window = ['right:50%', 'ctrl-]']
 endfunction
-
-if has('gui_running')
-	augroup FZF_VIM_Solarized
-		autocmd!
-		autocmd ColorScheme *
-					\   if execute('colorscheme') =~ '\<solarized$'
-					\ | 	let g:fzf_colors = {
-					\ 			'fg':     ['fg', 'Normal'],
-					\ 			'bg':     ['bg', 'CursorLine'],
-					\ 			'fg+':    ['fg', 'Normal'],
-					\ 			'bg+':    ['bg', 'CursorLine'],
-					\ 			'border': ['fg', 'Normal'],
-					\ }
-					\ | 	let g:terminal_ansi_colors = [
-					\ 			'#073642', '#dc322f', '#859900', '#b58900', '#268bd2', '#d33682', '#2aa198', '#eee8d5',
-					\ 			'#002b36', '#cb4b16', '#586e75', '#657b83', '#839496', '#6c71c4', '#93a1a1', '#fdf6e3'
-					\ ]
-					\ | else
-					\ | 	let g:fzf_colors = {} | unlet g:fzf_colors
-					\ | endif
-	augroup END
-endif
