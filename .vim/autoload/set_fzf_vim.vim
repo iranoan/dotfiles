@@ -13,26 +13,11 @@ function set_fzf_vim#main() abort
 						\ '--multi', '--no-unicode', '--margin=0%', '--padding=0%',
 						\ '--preview', '~/bin/fzf-preview.sh {}',
 						\ ]
-	if has('gui_running')  " Gvim で preview のハイライトを Solarized に揃える
-		if execute('colorscheme') =~ '\<solarized$'
-			let g:terminal_ansi_colors = [
-						\ '#073642', '#dc322f', '#859900', '#b58900', '#268bd2', '#d33682', '#2aa198', '#eee8d5',
-						\ '#002b36', '#cb4b16', '#586e75', '#657b83', '#839496', '#6c71c4', '#93a1a1', '#fdf6e3'
-						\ ]
-			let g:fzf_colors = {
-						\ 'fg':     ['fg', 'Normal'],
-						\ 'bg':     ['bg', 'CursorLine'],
-						\ 'fg+':    ['fg', 'Normal'],
-						\ 'bg+':    ['bg', 'CursorLine'],
-						\ 'border': ['fg', 'Constant'],
-						\ }
-		endif
-	else
-		" CUI では Normal の ctermbg=NOE としているので、そのまま使うと黒色になる
+	if !has('gui_running') " CUI では Normal の ctermbg=NOE としているので、そのまま使うと黒色になる
 		let g:fzf_colors = {
 					\ 'fg':     ['fg', 'Normal'],
 					\ 'bg':     ['bg', 'CursorLine'],
-					\ 'border': ['fg', 'Constant'],
+					\ 'border': ['fg', 'Normal'],
 					\ }
 		if execute('colorscheme') =~ '\<solarized$'
 			let s:fzf_options += ['--color', &background]

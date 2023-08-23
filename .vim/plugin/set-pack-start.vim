@@ -131,7 +131,19 @@ try
 	set background=dark
 	# https://github.com/altercation/vim-colors-solarized {{{1https://github.com/altercation/vim-colors-solarized {{{2
 	# g:solarized_menu = 0
-	# if !has('gui_running') # ターミナルが 256 色一部の色が変わる
+	# if has('gui_running') # ターミナルが 256 色一部の色が変わる
+	# 	g:fzf_colors = {
+	# 				\ 'fg':     ['fg', 'Normal'],
+	# 				\ 'bg':     ['bg', 'CursorLine'],
+	# 				\ 'fg+':    ['fg', 'Normal'],
+	# 				\ 'bg+':    ['bg', 'CursorLine'],
+	# 				\ 'border': ['fg', 'Normal'],
+	# 				\ }
+	# 	g:terminal_ansi_colors = [
+	# 				\ '#073642', '#dc322f', '#859900', '#b58900', '#268bd2', '#d33682', '#2aa198', '#eee8d5',
+	# 				\ '#002b36', '#cb4b16', '#586e75', '#657b83', '#839496', '#6c71c4', '#93a1a1', '#fdf6e3'
+	# 				\ ]
+	# else
 	# 	set t_Co=16
 	# endif
 	# colorscheme solarized
