@@ -13,15 +13,21 @@ function set_fzf_vim#main() abort
 						\ '--multi', '--no-unicode', '--margin=0%', '--padding=0%',
 						\ '--preview', '~/bin/fzf-preview.sh {}',
 						\ ]
-	if !has('gui_running') " CUI では Normal の ctermbg=NOE としているので、そのまま使うと黒色になる
+	if has('gui_running')
+		call set_fzf_vim#Color()
+		augroup FZF_Vim_Solaraized
+			autocmd!
+			autocmd ColorScheme * call set_fzf_vim#Color()
+		augroup END
+	else " CUI では Normal の ctermbg=NOE としているので、そのまま使うと黒色になる
 		let g:fzf_colors = {
 					\ 'fg':     ['fg', 'Normal'],
 					\ 'bg':     ['bg', 'CursorLine'],
 					\ 'border': ['fg', 'Normal'],
 					\ }
-		if execute('colorscheme') =~ '\<solarized$'
-			let s:fzf_options += ['--color', &background]
-		endif
+		" if execute('colorscheme') =~ '\<solarized$'
+		" 	" let s:fzf_options += ['--color', &background] " ↑上の色指定が無視される
+		" endif
 	endif
 	command! -bang -nargs=? -complete=dir Files call fzf#vim#files(
 				\ <q-args>, {
@@ -57,3 +63,19 @@ function set_fzf_vim#main() abort
 	let g:fzf_buffers_jump = 1
 	let g:fzf_preview_window = ['right:50%', 'ctrl-]']
 endfunction
+
+def set_fzf_vim#Color(): void
+	if execute('colorscheme') =~ '\<solarized$'
+		g:fzf_colors = {
+						'fg':     ['fg', 'Normal'],
+						'bg':     ['bg', 'Normal'],
+						'border': ['fg', 'Normal'],
+					}
+		g:terminal_ansi_colors = [
+						'#073642', '#dc322f', '#859900', '#b58900', '#268bd2', '#d33682', '#2aa198', '#eee8d5',
+						'#002b36', '#cb4b16', '#586e75', '#657b83', '#839496', '#6c71c4', '#93a1a1', '#fdf6e3'
+					]
+	else
+		g:fzf_colors = {} | unlet g:fzf_colors
+	endif
+enddef

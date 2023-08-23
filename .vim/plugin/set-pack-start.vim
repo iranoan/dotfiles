@@ -129,10 +129,10 @@ nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 # カラースキム {{{1
 try
 	set background=dark
-	# https://github.com/altercation/vim-colors-solarized {{{1https://github.com/altercation/vim-colors-solarized {{{2
+	# # https://github.com/altercation/vim-colors-solarized {{{1https://github.com/altercation/vim-colors-solarized {{{2
 	# g:solarized_menu = 0
 	# colorscheme solarized
-	# 2}}}
+	# # 2}}}
 	# https://github.com/lifepillar/vim-solarized8 {{{2
 	# if !has('gui_running')
 	# 	set termguicolors  # ターミナルで GUI の色設定を使う→solarized の読み込みが早くなるが透過が効かなくなる
@@ -195,21 +195,6 @@ def Color_light_dark(): void
 		execute 'highlight Pmenu        ctermfg=7 ctermbg=0 guibg=' .. bg
 		         highlight SpecialKey   term=bold cterm=bold gui=bold ctermfg=11 ctermbg=NONE guibg=NONE
 		execute 'highlight FoldColumn   term=standout ctermbg=0 guibg=' .. bg
-		if has('gui_running')
-			if execute('colorscheme') =~ '\<solarized$'
-				g:fzf_colors = {
-					'fg':     ['fg', 'Normal'],
-					'bg':     ['bg', 'CursorLine'],
-					'border': ['fg', 'Normal'],
-				}
-				g:terminal_ansi_colors = [
-					'#073642', '#dc322f', '#859900', '#b58900', '#268bd2', '#d33682', '#2aa198', '#eee8d5',
-					'#002b36', '#cb4b16', '#586e75', '#657b83', '#839496', '#6c71c4', '#93a1a1', '#fdf6e3'
-				]
-			else
-				g:fzf_colors = {} | unlet g:fzf_colors
-			endif
-		endif
 	endif
 	# light/dark で同設定
 	highlight SpellBad   term=underline cterm=underline ctermfg=NONE ctermul=9 guifg=NONE guisp=#cb4b16
