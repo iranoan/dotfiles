@@ -162,12 +162,17 @@ catch /^Vim\%((\a\+)\)\=:E185:/
 endtry
 # background によって一部の syntax を変える (Solarized を基本としている) {{{
 def Color_light_dark(): void
-	def DiffColor(r0: number, g0: number, b0: number, r1: number, g1: number, b1: number): string # Solarized を基本に Normal 背景色より少し明るい/暗い色を計算
-		var bg: string = substitute(execute('highlight Normal'), '[\n\r]\+', '', 'g')
-		if bg !~# '\<guibg=#'
-			return '#fdf6e3'
+	def GetCursorLine(r0: number, g0: number, b0: number, r1: number, g1: number, b1: number): string # CursorLine の guibg を取得
+		# 無ければ Solarized を基本に Normal 背景色より少し明るい/暗い色を計算
+		var bg: string = execute('highlight CursorLine')
+		if bg =~# '\<guibg='
+			return matchstr(bg, '.\+ guibg=\zs\S\+\ze')
 		endif
-		bg = matchstr(bg, '.\+guibg=#\zs[0-9A-Za-z]\+\>\ze')
+		bg = execute('highlight Normal')
+		if bg !~# '\<guibg=#'
+			return &background ==? 'light' ? '#fdf6e3' : '#002b36'
+		endif
+		bg = matchstr(bg, '.\+ guibg=#\zs[0-9A-Fa-f]\+\>\ze')
 		return printf('#%02x%02x%02x',      # ↓ Normal - ColorLine の色を引きたいので、-+ 逆転
 			str2nr(strpart(bg, 0, 2), 16) - r0 + r1, # Red
 			str2nr(strpart(bg, 2, 2), 16) - g0 + g1, # Green
@@ -177,15 +182,14 @@ def Color_light_dark(): void
 
 	highlight clear Pmenu # 一部の絵文字が標準設定では見にくいので一旦クリアして light/dark で異なる設定にする
 	if &background ==? 'light'
-		var bg: string = DiffColor(0xfd, 0xf6, 0xe3, 0xee, 0xe8, 0xd5)
+		var bg: string = GetCursorLine(0xfd, 0xf6, 0xe3, 0xee, 0xe8, 0xd5)
 		         highlight Normal       ctermfg=0 ctermbg=NONE guifg=#111111 guibg=#fdf6e3
 		         highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=15 guifg=#b58900 guibg=NONE
 		execute 'highlight CursorLine   term=underline ctermbg=7 guibg=' .. bg
-		execute 'highlight CursorColumn term=underline ctermbg=7 guibg=' .. bg
 		         highlight SignColumn   term=standout ctermfg=66 guifg=#657b83
 		execute 'highlight LineNr       cterm=NONE ctermfg=10 ctermbg=7 guifg=#839496 guibg=' .. bg
 		         highlight Comment      cterm=NONE gui=NONE ctermfg=2 guifg=#008800
-		         highlight StatusLine   term=bold ctermfg=11 ctermbg=15
+		#          highlight StatusLine   term=bold ctermfg=11 ctermbg=15
 		# execute 'highlight TabLineSel   term=bold,underline cterm=bold,underline gui=bold,underline ctermfg=0 ctermbg=7 guifg=#111111 guibg=' .. bg
 		#          highlight TabLine      term=underline cterm=underline gui=underline ctermfg=8 ctermbg=NONE guifg=#839496 guibg=NONE
 		#          highlight TabLineFill  term=underline cterm=underline gui=underline ctermfg=8 ctermbg=NONE guifg=#839496 guibg=NONE
@@ -193,14 +197,13 @@ def Color_light_dark(): void
 		         highlight SpecialKey   term=bold cterm=bold gui=bold ctermfg=12 ctermbg=NONE guibg=NONE
 		execute 'highlight FoldColumn   term=standout ctermfg=3 ctermbg=7 guibg=' .. bg
 	else
-		var bg: string = DiffColor(0x00, 0x2b, 0x36, 0x07, 0x36, 0x42)
+		var bg: string = GetCursorLine(0x00, 0x2b, 0x36, 0x07, 0x36, 0x42)
 		         highlight Normal       ctermfg=15 ctermbg=NONE guifg=#dddddd guibg=#002b36
 		         highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=8 guifg=#b58900 guibg=NONE
 		execute 'highlight CursorLine   term=underline ctermbg=0 guibg=' .. bg
-		execute 'highlight CursorColumn term=underline ctermbg=0 guibg=' .. bg
 		execute 'highlight LineNr       ctermfg=14 ctermbg=0 guifg=#93a1a1 guibg=' .. bg
 		         highlight Comment      cterm=NONE gui=NONE guifg=#dddddd guifg=#00a800 ctermfg=2
-		         highlight StatusLine   term=bold ctermfg=15 ctermbg=0
+		#          highlight StatusLine   term=bold ctermfg=15 ctermbg=0
 		# execute 'highlight TabLineSel   term=bold,underline cterm=bold,underline gui=bold,underline ctermfg=15 ctermbg=0 guifg=#dddddd guibg=' .. bg
 		#          highlight TabLine      term=underline cterm=underline gui=underline ctermfg=14 ctermbg=NONE guifg=#93a1a1 guibg=NONE
 		#          highlight TabLineFill  term=underline cterm=underline gui=underline ctermfg=14 ctermbg=NONE guifg=#93a1a1 guibg=NONE
@@ -219,6 +222,8 @@ def Color_light_dark(): void
 	# Terminal の色は Normal に揃える←Solarized で未定義
 	# highlight clear Terminal
 	# execute 'highlight Terminal ' .. substitute(substitute(execute('highlight Normal'), '[\n\r]\+', '', 'g'), ' *Normal\s\+xxx *', '', '')
+	highlight clear CursorColumn
+	highlight link CursorColumn CursorLine
 	execute 'highlight VertSplit' ..
 		execute('highlight VertSplit')
 			->substitute('[\n\r]\+', '', 'g')
