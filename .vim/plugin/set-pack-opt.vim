@@ -78,6 +78,7 @@ nnoremap <silent><Leader>fb <Cmd>Buffers<CR>
 nnoremap <silent><Leader>fc <Cmd>Commands<CR>
 nnoremap <silent><Leader>fg <Cmd>GFiles?<CR>
 nnoremap <silent><Leader>fh <Cmd>HISTORY<CR>
+nnoremap <silent><Leader>fH <Cmd>Helptags<CR>
 nnoremap <silent><Leader>fl <Cmd>BLines<CR>
 nnoremap <silent><Leader>fm <Cmd>Marks<CR>
 nnoremap <silent>m/         <Cmd>Marks<CR>
