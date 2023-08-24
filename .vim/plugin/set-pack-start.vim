@@ -116,7 +116,7 @@ augroup VimSignature # SignColumn デフォルトの色が使われるので他�
 				\ highlight GitGutterDelete   cterm=bold gui=bold ctermbg=NONE guibg=NONE
 augroup END
 
-#: Tabedit ~/.vim/pack/my-plug/start/tabedit/ {{{1
+# :Tabedit ~/.vim/pack/my-plug/start/tabedit/ {{{1
 # ↑opt/ に入れて呼び出すようにすると、最初の使用時に補完が働かない
 nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 # nnoremap <silent>gf :TabEdit <cfile><CR> " ← 存在しなくても開く <C-R><C-F> と同じ
