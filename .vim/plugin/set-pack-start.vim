@@ -241,8 +241,8 @@ augroup ChangeHighlight
 	autocmd ColorScheme * Color_light_dark()
 	autocmd ColorSchemePre * SETt_Co(expand('<amatch>'))
 augroup END
-Color_light_dark()
 SETt_Co(g:colors_name)
+Color_light_dark()
 
 # 日本語ヘルプ https://github.com/vim-jp/vimdoc-ja {{{1
 
