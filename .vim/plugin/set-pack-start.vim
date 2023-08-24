@@ -168,7 +168,7 @@ def Color_light_dark(): void
 		         highlight Normal       ctermfg=8 ctermbg=15 guifg=#111111 guibg=#fdf6e3
 		         highlight NormalDefault ctermfg=8 ctermbg=15 guifg=#111111 guibg=#fdf6e3
 		         highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=15 guifg=#b58900 guibg=#fdf6e3
-		execute 'highlight CursorLine   term=NONE ctermbg=7 guibg=' .. bg
+		execute 'highlight CursorLine   term=NONE cterm=NONE ctermbg=7 guibg=' .. bg
 		         highlight SignColumn   term=standout ctermfg=66 guifg=#657b83
 		execute 'highlight LineNr       cterm=NONE ctermfg=10 ctermbg=7 guifg=#839496 guibg=' .. bg
 		         highlight Comment      cterm=NONE gui=NONE ctermfg=2 guifg=#008800
@@ -184,7 +184,7 @@ def Color_light_dark(): void
 		execute 'highlight Normal       ctermfg=15 ctermbg=NONE guifg=#dddddd guibg=' .. (!has('gui_running') && g:colors_name ==# 'solarized8' ? 'NONE' : '#002b36')
 		         highlight NormalDefault ctermfg=15 ctermbg=8 guifg=#dddddd guibg=#002b36
 		         highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=8 guifg=#b58900 guibg=#002b36
-		execute 'highlight CursorLine   term=NONE ctermbg=0 guibg=' .. bg
+		execute 'highlight CursorLine   term=NONE cterm=NONE ctermbg=0 guibg=' .. bg
 		execute 'highlight LineNr       ctermfg=14 ctermbg=0 guifg=#93a1a1 guibg=' .. bg
 		         highlight Comment      cterm=NONE gui=NONE guifg=#dddddd guifg=#00a800 ctermfg=2
 		#          highlight StatusLine   term=bold ctermfg=15 ctermbg=0
@@ -217,6 +217,9 @@ def Color_light_dark(): void
 enddef
 
 def SETt_Co(color: string): void # colorscheme によって t_Co, termguicolors を変える
+	if has('gui_running')
+		return
+	endif
 	if color ==# 'solarized' # ターミナルが 256 色だと一部の色が変わる
 		set notermguicolors
 		set t_Co=16
@@ -236,9 +239,7 @@ enddef
 augroup ChangeHighlight
 	autocmd!
 	autocmd ColorScheme * Color_light_dark()
-	if !has('gui_running')
-		autocmd ColorScheme * SETt_Co(expand('<amatch>'))
-	endif
+	autocmd ColorSchemePre * SETt_Co(expand('<amatch>'))
 augroup END
 Color_light_dark()
 SETt_Co(g:colors_name)
