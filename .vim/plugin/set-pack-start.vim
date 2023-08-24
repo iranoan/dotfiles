@@ -219,18 +219,34 @@ def Color_light_dark(): void
 			->substitute('[\n\r]\+', '', 'g')
 			->substitute('^VertSplit \+xxx', '', '')
 			->substitute('ctermfg=\S\+ ctermbg=\(\S\+\) guifg=\S\+ guibg=\(\S\+\)', 'ctermfg=\1 ctermbg=\1 guifg=\2 guibg=\2', '')
-	if execute('colorscheme') =~ '\<solarized8\?$' # ターミナルが 256 色一部の色が変わる
-		# GUI の時も、solarized8 で ctermfg, cctermbg に違いがあり、fzf のウィンドウに関係してくる
+enddef
+
+def SETt_Co(color: string): void # colorscheme によって t_Co, termguicolors を変える
+	if color ==# 'solarized' # ターミナルが 256 色だと一部の色が変わる
+		set notermguicolors
 		set t_Co=16
-	else # ~/.tmux.conf→ set-option -g default-terminal "tmux-256color"
-		set t_Co=256
+	else
+		set t_Co=256 # ↓~/.tmux_conf set-option -g default-terminal "tmux-256color"
+		if color ==# 'solarized8' # ターミナルで termguicolors を ON にしつつ透過可能にする
+			set termguicolors
+			# ↓端末やの色設定あれば不要? 変化が不明
+			# &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+			# &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+		else
+			set notermguicolors
+		endif
 	endif
 enddef
+
 augroup ChangeHighlight
 	autocmd!
 	autocmd ColorScheme * Color_light_dark()
+	if !has('gui_running')
+		autocmd ColorScheme * SETt_Co(expand('<amatch>'))
+	endif
 augroup END
 Color_light_dark()
+SETt_Co(g:colors_name)
 
 # 日本語ヘルプ https://github.com/vim-jp/vimdoc-ja {{{1
 
