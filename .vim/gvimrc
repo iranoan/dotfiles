@@ -12,7 +12,7 @@ endif
 # if exists('&ambiwidth')  # guifont を指定すると auto にされるらしい←勘違い?
 # 	set ambiwidth=double
 # endif
-set guioptions-=T guioptions-=m # ツール・バー/メニュー表示を OFF
+set guioptions-=T guioptions-=m guioptions-=r guioptions-=L # ツール・バー/メニュー/スクロール・バー表示を OFF
 augroup GVIMRC
 	autocmd!
 	# 画面左上に表示 (help に有る通り autocmd を使わないと環境によって gvimrc の記載では無効)
