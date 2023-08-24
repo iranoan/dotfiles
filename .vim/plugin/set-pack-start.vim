@@ -218,6 +218,7 @@ def Color_light_dark(): void
 	# execute 'highlight Terminal ' .. substitute(substitute(execute('highlight Normal'), '[\n\r]\+', '', 'g'), ' *Normal\s\+xxx *', '', '')
 	highlight clear CursorColumn
 	highlight link CursorColumn CursorLine
+	highlight clear NonText
 	execute 'highlight VertSplit' ..
 		execute('highlight VertSplit')
 			->substitute('[\n\r]\+', '', 'g')
