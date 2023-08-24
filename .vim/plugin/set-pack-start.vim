@@ -47,6 +47,7 @@ endfor
 unlet g:packe_setting_ext g:packe_setting_s
 
 # vim-surround などのプラグインでも . リピートを可能にする https://github.com/tpope/vim-repeat {{{1
+# 1}}}
 
 # Git の変更のあった signcolumn にマークをつける https://github.com/airblade/vim-gitgutter {{{1
 # 遅延読み込みをすると vim-signature との連携機能が使えない←連携できないだけ
@@ -121,10 +122,13 @@ nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 # nnoremap <silent>gf :TabEdit <cfile><CR> " ← 存在しなくても開く <C-R><C-F> と同じ
 
 # https://github.com/t9md/vim-foldtext を ~/.vim/pack/my-plug/start/vim-foldtext/ で書き換え {{{1
+# 1}}}
 
 # shell program を用いてバッファにフィルタを掛ける ~/.vim/pack/my-plug/start/shell-filter/ {{{1
+# 1}}}
 
 # カーソル行の URL やファイルを開く ~/.vim/pack/my-plug/start/open_uri/ {{{1
+# 1}}}
 
 # カラースキム {{{1
 set background=dark
@@ -245,6 +249,7 @@ SETt_Co(g:colors_name)
 Color_light_dark()
 
 # 日本語ヘルプ https://github.com/vim-jp/vimdoc-ja {{{1
+# 1}}}
 
 # 挿入モード時、ステータスラインの色を変更 ~/.vim/pack/my-plug/start/insert-status {{{1
 g:hi_insert = 'highlight StatusLine cterm=bold gui=bold  ctermfg=White ctermbg=darkred guifg=White guibg=darkred'
