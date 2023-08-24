@@ -127,24 +127,19 @@ nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 # カーソル行の URL やファイルを開く ~/.vim/pack/my-plug/start/open_uri/ {{{1
 
 # カラースキム {{{1
-try
-	set background=dark
-	# # https://github.com/altercation/vim-colors-solarized {{{1https://github.com/altercation/vim-colors-solarized {{{2
-	# g:solarized_menu = 0
-	# colorscheme solarized
-	# # 2}}}
-	# https://github.com/lifepillar/vim-solarized8 {{{2
-	# if !has('gui_running')
-	# 	set termguicolors  # ターミナルで GUI の色設定を使う→透過が効かなくなる→代わりに下の関数で t_Co=16 とする
-	# endif
-	# ↓端末やの色設定あれば不要? 変化が不明
-	# &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-	# &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+set background=dark
+# https://github.com/lifepillar/vim-solarized8 {{{2
+if glob('~/.vim/**/colors/*.vim', 1, 1, 1)->filter('v:val =~# "/solarized8.vim$"')->len() > 0
 	colorscheme solarized8
-	# 2}}}
-catch /^Vim\%((\a\+)\)\=:E185:/
+# 2}}}
+# https://github.com/altercation/vim-colors-solarized {{{1https://github.com/altercation/vim-colors-solarized {{{2
+elseif glob('~/.vim/**/colors/*.vim', 1, 1, 1)->filter('v:val =~# "/solarized.vim$"')->len() > 0
+	g:solarized_menu = 0
+	colorscheme solarized
+# 2}}}
+else
 	colorscheme habamax
-endtry
+endif
 # background によって一部の syntax を変える (Solarized を基本としている) {{{
 def Color_light_dark(): void
 	def GetCursorLine(r0: number, g0: number, b0: number, r1: number, g1: number, b1: number): string # CursorLine の guibg を取得
