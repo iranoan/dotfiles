@@ -135,7 +135,7 @@ try
 	# # 2}}}
 	# https://github.com/lifepillar/vim-solarized8 {{{2
 	# if !has('gui_running')
-	# 	set termguicolors  # ターミナルで GUI の色設定を使う→solarized の読み込みが早くなるが透過が効かなくなる
+	# 	set termguicolors  # ターミナルで GUI の色設定を使う→透過が効かなくなる→代わりに下の関数で t_Co=16 とする
 	# endif
 	# ↓端末やの色設定あれば不要? 変化が不明
 	# &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
