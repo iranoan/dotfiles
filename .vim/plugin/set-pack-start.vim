@@ -134,6 +134,7 @@ nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 set background=dark
 # https://github.com/lifepillar/vim-solarized8 {{{2
 if glob('~/.vim/**/colors/*.vim', 1, 1, 1)->filter('v:val =~# "/solarized8.vim$"')->len() > 0
+	g:solarized_old_cursor_style = 1
 	colorscheme solarized8
 # 2}}}
 # https://github.com/altercation/vim-colors-solarized {{{1https://github.com/altercation/vim-colors-solarized {{{2
@@ -205,7 +206,6 @@ def Color_light_dark(): void
 	highlight SpellLocal term=underline cterm=underline ctermfg=NONE ctermul=3 guifg=NONE guisp=#b58900
 	highlight SpellRare term=underline cterm=underline ctermfg=NONE ctermul=6 guifg=NONE guisp=#2aa198
 	highlight SignColumn ctermbg=NONE guibg=NONE
-	highlight Cursor     guibg=#657b83
 	highlight MatchParen term=bold,reverse cterm=bold,reverse gui=bold,reverse ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
 	# Terminal の色は Normal に揃える←Solarized で未定義
 	highlight link Terminal Normal
