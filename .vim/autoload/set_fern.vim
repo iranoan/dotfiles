@@ -26,7 +26,7 @@ function set_fern#main() abort
 	" 			\ })
 	" let b:fzf_action.enter = function('s:fern_fzf')
 	" let g:fern#mapping#fzf#fzf_options = {'options': '--multi --no-unicode --margin=0% --padding=0% --preview=''~/bin/fzf-preview.sh {}'' --bind=''ctrl-]:change-preview-window(hidden|)'''}
-	if !is_plugin_installed#Main('fzf.vim')
+	if !manage_pack#IsInstalled('fzf.vim')
 		call set_fzf_vim#main()
 		autocmd! loadFZF_Vim
 		augroup! loadFZF_Vim

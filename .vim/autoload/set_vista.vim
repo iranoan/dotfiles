@@ -1,11 +1,11 @@
 function set_vista#main() abort
-	if !is_plugin_installed#Main('vim-lsp')
+	if !manage_pack#IsInstalled('vim-lsp')
 		call set_vimlsp#main()
 		autocmd! loadvimlsp
 		augroup! loadvimlsp
 		delfunction set_vimlsp#main
 	endif
-	" if !is_plugin_installed#Main('ale') " 通常不要
+	" if !manage_pack#IsInstalled('ale') " 通常不要
 	" 	call set_ale#main()
 	" 	autocmd! loadALE
 	" 	augroup! loadALE

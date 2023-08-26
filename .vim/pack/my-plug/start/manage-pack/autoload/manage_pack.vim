@@ -72,6 +72,10 @@ export function CompPackList(arg, cmd, pos) abort " ~/.vim/plugin/set-pack-{star
 				\ ->filter('v:val =~ "^' .. a:arg .. '"')
 endfunction
 
+export def IsInstalled(plugin: string): bool
+	return (match(substitute(&runtimepath, ',', '\n', 'g'), '/' .. plugin .. '\n') != -1)
+enddef
+
 def GrepList(s: string, files: string): list<string> # 外部プログラム無しの grep もどき
 	var ret: list<string>
 	for f in glob(files, false, true, true)
