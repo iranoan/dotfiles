@@ -12,10 +12,8 @@ export def TabOpen(): void
 	fzf#run({
 				source: sink_ls,
 				sink:    function('TabListSink'),
-				# options: ['--preview', '~/bin/fzf-preview.sh {}', '--margin=0%', '--padding=0%', '--prompt', 'tab win_id(hex) filename > '],
-				options: ['--no-multi', '--prompt', 'tab win_id filename > '],
-				window: { width: 0.9, height: 0.6, xoffset: 0.4 }
-				# down:    '10%'
+				options: ['--delimiter', '\t', '--no-multi', '--prompt', " tab win_id\tfilename > ", '--tabstop', 2] + g:fzf_tabs_options,
+				window: get(g:, 'fzf_layout', {'window': { 'width': 0.9, 'height': 0.6}})->get('window', {'width': 0.9, 'height': 0.6})
 	})
 enddef
 
@@ -27,6 +25,7 @@ def GetTabList(): list<string>
 	var c_buf: number = bufnr()
 	var c_tab: number = tabpagenr()
 	var marker: string
+	var updated: string
 	for tab in gettabinfo()
 		tab_n = tab['tabnr']
 		for win in tab['windows']
@@ -41,16 +40,20 @@ def GetTabList(): list<string>
 				endif
 			elseif buf_n == c_buf # 同一バッファ
 				marker = '*'
-			else # それ以外はタブページ番号
-				marker = printf('%d', tab_n)
+			else # それ以外
+				marker = '|'
 			endif
-			add(ls, printf('%s %6x %s', marker, win, bufname(buf_n)->substitute('^' .. $HOME .. '\ze[/\\]', '~', ''))
-			)
+			if getbufinfo(buf_n)[0]['changed']
+				updated = '[+]'
+			else
+				updated = ''
+			endif
+			add(ls, printf("%2d %s%5x\t%s\t%s", tab_n, marker, win, bufname(buf_n)->substitute('^' .. $HOME .. '\ze[/\\]', '~', ''), updated))
 		endfor
 	endfor
 	return ls
 enddef
 
 def TabListSink(line: string): void
-	win_gotoid(str2nr(split(line, '\s\+')[1], 16))
+	win_gotoid(str2nr(split(line, '\s\+')[2], 16))
 enddef
