@@ -459,7 +459,8 @@ cnoremap <Insert> <C-R>+
 cnoremap <C-P> <C-R>"
 # 選択範囲の貼り付けで、直前のレジスタを連続して貼り付け←vimの連続コピペできない問題 https://baqamore.hatenablog.com/entry/2016/07/07/201856
 xnoremap <expr>p 'pgv"' .. v:register .. 'y`>'
-# xnoremap <expr>P 'pgv"' . v:register . 'y`>`'
+# 選択モード不明
+# snoremap <expr><C-P> '<C-G>pgv"' .. v:register .. 'y`>'
 # 2つを入れ替えたい時は、書き換わったほうが都合が良いので、大文字側はデフォルトのままにしておく
 # 挿入/コマンドモード時のカーソル移動 {{{2
 # [Henkan] を [BS] に割り当てているので、<C-H> は他に割り当てる
