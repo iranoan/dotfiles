@@ -8,5 +8,4 @@ function set_fzf_tabs#main() abort
 		augroup! loadFZF_Vim
 		delfunction set_fzf_vim#main
 	endif
-	packadd fzf-neoyank
 endfunction
