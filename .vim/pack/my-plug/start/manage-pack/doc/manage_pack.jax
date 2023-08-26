@@ -9,6 +9,9 @@ License: GPL Ver.3.
 ~/.vim/pack でプラグインを管理を少しでも便利にする関数・コマンド群
                                                           *manage_pack-commands*
 コマンド~
+
+ReinstallPack {args}                                 *manage_pack-ReinstallPack*
+	{args} で指定されたプラグラインを強制的に再インストールする
                                                          *manage_pack-functions*
 関数 ~
 
@@ -23,8 +26,6 @@ IsInstalled({plugin})                                 *manage_pack-IsInstalled*
 	{plugin} が既に |runtimepath| に加わっているか確認する
 
 	plug: 読み込むプラグイン名
-ReinstallPack {args}                                 *manage_pack-ReinstallPack*
-	{args} で指定されたプラグラインを強制的に再インストールする
 
 SetMAP({plugin}, {cmd}, {map})                              *manage_pack-SetMAP*
 	nmap k <Plug>... の要領で <Plug> にマッピングするプラグインを遅延読み込みを
