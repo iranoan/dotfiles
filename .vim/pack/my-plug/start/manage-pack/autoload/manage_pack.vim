@@ -85,7 +85,7 @@ def GrepList(s: string, files: string): list<string> # 外部プログラム無�
 	return ret
 enddef
 
-def Pack_ls(f: string): list<string> # f に書かれた # OR " で始まり comment https://github.com/user/plugin {{{(foldmaker)をリスト・アプ
+def Pack_ls(f: string): list<string> # f に書かれた # OR " (comment) で始まり https://github.com/user/plugin {{{ (foldmaker) をリスト・アップ"
 	return GrepList('^["#\t ]\+.*https://github\.com/[a-z0-9._/-]\+ *{{{[0-9]*', f)
 		->map('substitute(v:val, ''\c^[#"\t ]\+.*\(https:\/\/github\.com\/[a-z0-9._/-]\+\/[a-z0-9._-]\+\)\s*{{{\d*.*'', ''\1'', "")')
 enddef
