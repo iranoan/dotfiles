@@ -108,7 +108,6 @@ def Get_pack_ls(): list<dict<string>> # プラグインの名称、リポジト�
 		var pack_dir: string = resolve(expand('~/.vim/pack/github/')) .. '/'
 
 		for url in Pack_ls(f)
-			# 上 2 つの検索文字列中の波括弧がそのままだと foldmarker の扱いにあんるので文字列結合を使うことで分断している
 			pack = substitute(url, '.\+/', '', '')
 			add(packages, {
 				'rep': url,
