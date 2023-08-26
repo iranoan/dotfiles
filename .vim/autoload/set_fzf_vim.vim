@@ -13,6 +13,7 @@ function set_fzf_vim#main() abort
 						\ '--multi', '--no-unicode', '--margin=0%', '--padding=0%',
 						\ '--preview', '~/bin/fzf-preview.sh {}',
 						\ ]
+	let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9 } }
 	if has('gui_running')
 		call set_fzf_vim#solarized()
 		augroup FZF_Vim_Solaraized
