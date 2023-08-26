@@ -6,7 +6,11 @@ License: GPL Ver.3.
 
 ==============================================================================
                                                       *manage_pack-introduction*
-関数・コマンド~
+~/.vim/pack でプラグインを管理を少しでも便利にする関数・コマンド群
+                                                          *manage_pack-commands*
+コマンド~
+                                                         *manage_pack-functions*
+関数 ~
 
 Helptags()                                                *manage_pack-Helptags*
 	~/.vim/pack に有るヘルプのタグを纏めて |packadd| 使用前でもヘルプを引けるよ
@@ -15,6 +19,28 @@ Helptags()                                                *manage_pack-Helptags*
 	使用法: >
 		call manage_pack#Helptags()
 <
+IsInstalled({plugin})                                 *manage_pack-IsInstalled*
+	{plugin} が既に |runtimepath| に加わっているか確認する
+
+	plug: 読み込むプラグイン名
+ReinstallPack {args}                                 *manage_pack-ReinstallPack*
+	{args} で指定されたプラグラインを強制的に再インストールする
+
+SetMAP({plugin}, {cmd}, {map})                              *manage_pack-SetMAP*
+	nmap k <Plug>... の要領で <Plug> にマッピングするプラグインを遅延読み込みを
+	実現させる
+
+	plugn: 読み込むプラグイン名
+	cmd:   実際に実行するコマンド (先頭の <Plug> は省略)
+	       <Plug>command1<Plug>command2 のように複数の場合は
+				 'command1<Plug>command2' の様に先頭の <Plug> のみ除く
+	map:   マッピングの内容の辞書リスト
+	{
+		mode: n, x, o などのモード
+		map: 割り当てるキーマップ {lhs}
+		cmd: 割り当てるコマンド (<Plug> を除く)
+	}
+
 Setup()                                                      *manage_pack-Setup*
 	プラグインを導入/削除する
 
@@ -36,20 +62,3 @@ Setup()                                                      *manage_pack-Setup*
 <		の容量の記載が有る plugin は ~/.vim/pack/github/opt/ に入れる
 	* start, opt のは一が記載と違いが有れば移動する
 		設定のないものは ~/.vim/pack/github/ から削除する
-
-ReinstallPack {args}                                 *manage_pack-ReinstallPack*
-	{args} で指定されたプラグラインを強制的に再インストールする
-
-SetMAP({plugin}, {cmd}, {map})                              *manage_pack-SetMAP*
-	nmap k <Plug>... の要領で <Plug> にマッピングするプラグインを遅延読み込みを
-	実現させる
-
-	plug: 読み込むプラグイン名
-	cmd: 実際に実行するコマンド (先頭の <Plug> は省略)
-	     <Plug>command1<Plug>command2 のように複数の場合は 'command1<Plug>command2' の様に先頭の <Plug> のみ除く
-	map: マッピングの内容の辞書リスト
-	{
-		mode: n, x, o などのモード
-		map: 割り当てるキーマップ {lhs}
-		cmd: 割り当てるコマンド (<Plug> を除く)
-	}
