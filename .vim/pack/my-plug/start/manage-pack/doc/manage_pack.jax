@@ -15,19 +15,19 @@ ReinstallPack {args}                                 *manage_pack-ReinstallPack*
                                                          *manage_pack-functions*
 関数 ~
 
-Helptags()                                                *manage_pack-Helptags*
+Helptags()                                                *manage_pack#Helptags()*
 	~/.vim/pack に有るヘルプのタグを纏めて |packadd| 使用前でもヘルプを引けるよ
 	うにする
 
 	使用法: >
 		call manage_pack#Helptags()
 <
-IsInstalled({plugin})                                 *manage_pack-IsInstalled*
+IsInstalled({plugin})                                 *manage_pack#IsInstalled()*
 	{plugin} が既に |runtimepath| に加わっているか確認する
 
 	plug: 読み込むプラグイン名
 
-SetMAP({plugin}, {cmd}, {map})                              *manage_pack-SetMAP*
+SetMAP({plugin}, {cmd}, {map})                              *manage_pack#SetMAP()*
 	nmap k <Plug>... の要領で <Plug> にマッピングするプラグインを遅延読み込みを
 	実現させる
 
@@ -42,7 +42,7 @@ SetMAP({plugin}, {cmd}, {map})                              *manage_pack-SetMAP*
 		cmd: 割り当てるコマンド (<Plug> を除く)
 	}
 
-Setup()                                                      *manage_pack-Setup*
+Setup()                                                      *manage_pack#Setup()*
 	プラグインを導入/削除する
 
 	使用法: >
