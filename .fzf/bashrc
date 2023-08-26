@@ -19,3 +19,5 @@ export FZF_DEFAULT_OPTS='--layout=reverse --info=inline --multi --color="border:
 # export FZF_DEFAULT_OPTS='--layout=reverse --info=inline --multi --preview="cat {}"'
 # export MANPATH="$MANPATH":~/.vim/bundle/repos/github.com/junegunn/fzf/man
 export MANPATH="$MANPATH":~/.vim/pack/github/opt/fzf/man
+
+alias f='fzf --preview '\''~/bin/fzf-preview.sh {}'\'' | xargs --no-run-if-empty -n 1 xdg-open'
