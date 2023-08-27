@@ -13,7 +13,7 @@ fi
 source ~/.fzf/key-bindings.bash
 
 # Default option
-export FZF_DEFAULT_COMMAND='find -L . -type d \( -name ".git" -o -name ".cache" -o -name ".thumbnails" \) -prune -o -type f \( -name ".*" -o -name "*" \) ! \( -name "*.sw?" -o -name ".*.sw?" \) -printf "%P\n"'
+export FZF_DEFAULT_COMMAND='find -L . \( -type d -name ".git" -o -name ".cache" -o -name ".thumbnails" -o -name ".ecryptfs" \) -prune -o -type f \( -name ".*" -o -name "*" ! -name "*.sw?" ! -name ".*.sw?" \) -printf "%P\n"'
 export FZF_DEFAULT_OPTS='--layout=reverse --info=inline --multi --color="border:7" --preview-window=border-left --bind "ctrl-]:change-preview-window(hidden|)"'
 # export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
 # export FZF_DEFAULT_OPTS='--layout=reverse --info=inline --multi --preview="cat {}"'
