@@ -20,4 +20,12 @@ export FZF_DEFAULT_OPTS='--layout=reverse --info=inline --multi --color=border:7
 # export MANPATH="$MANPATH":~/.vim/bundle/repos/github.com/junegunn/fzf/man
 export MANPATH="$MANPATH":~/.vim/pack/github/opt/fzf/man
 
-alias f='fzf --preview '\''~/bin/fzf-preview.sh {}'\'' | xargs --no-run-if-empty -n 1 xdg-open'
+f(){
+	if [ $# -eq 1 ]; then
+		dir="$1"
+	else
+		dir=$( pwd )
+	fi
+	eval ${FZF_DEFAULT_COMMAND/find -L ./find -L $dir} |
+		fzf --preview '~/bin/fzf-preview.sh {}'
+}
