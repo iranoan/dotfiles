@@ -90,7 +90,7 @@ if [ -x /usr/bin/dircolors ]; then
 	else
 		eval "$(dircolors -b)"
 	fi
-	alias ls='ls --color=auto --hide={*.o,*.fls,*.synctex.gz,*.fdb_latexmk,*.toc,*.out,*.dvi,*.aux,*.nav,*.snm,*.swp}'
+	alias ls='ls --color=auto --hide={*.o,*.fls,*.synctex.gz,*.fdb_latexmk,*.toc,*.out,*.dvi,*.aux,*.nav,*.snm,*.swp} --time-style=long-iso'
 	alias grep='grep --color=auto --directories=skip --exclude-dir=.git --exclude={.*.sw?,*.o,*.fls,*.synctex.gz,*.fdb_latexmk,*.toc,*.out,*.dvi,*.aux,*.nav,*.snm,*.pdf,*.jpg,*.png,viminfo,.viminfo}'
 fi
 
