@@ -12,6 +12,7 @@ function set_fzf_vim#main() abort
 	let s:fzf_options = [
 						\ '--multi', '--no-unicode', '--margin=0%', '--padding=0%',
 						\ '--preview', '~/bin/fzf-preview.sh {}',
+						\ '--bind', 'ctrl-o:execute-silent(xdg-open {})',
 						\ ]
 	let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9 } }
 	if has('gui_running')
