@@ -27,5 +27,6 @@ f(){
 		dir=$( pwd )
 	fi
 	eval ${FZF_DEFAULT_COMMAND/find -L ./find -L $dir} |
-		fzf --preview '~/bin/fzf-preview.sh {}'
+		xargs -I{} realpath --relative-base=$( pwd ) "{}" 2> /dev/null |
+		fzf --preview '~/bin/fzf-preview.sh {}' --bind='enter:become(xdg-open {})'
 }
