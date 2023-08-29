@@ -6,11 +6,11 @@ fi
 
 # Auto-completion
 # ---------------
-[[ $- == *i* ]] && source ~/.fzf/completion.bash 2> /dev/null
+[[ $- == *i* ]] && source "$HOME/.fzf/completion.bash" 2> /dev/null
 
 # Key bindings
 # ------------
-source ~/.fzf/key-bindings.bash
+source "$HOME/.fzf/key-bindings.bash"
 
 # Default option
 export FZF_DEFAULT_COMMAND='find -L . -type d -name ".git" -o -name ".cache" -o -name ".thumbnails" -o -name ".ecryptfs" -prune -o -type f \( -name ".*" -o -name "*" ! -name "*.sw?" ! -name ".*.sw?" \) -printf "%p\n" 2> /dev/null '
@@ -26,7 +26,7 @@ f(){
 	else
 		dir=$( pwd )
 	fi
-	eval ${FZF_DEFAULT_COMMAND/find -L ./find -L $dir} |
-		xargs -I{} realpath --relative-base=$( pwd ) "{}" 2> /dev/null |
-		fzf --preview '~/bin/fzf-preview.sh {}' --bind='enter:become(xdg-open {})'
+	eval "${FZF_DEFAULT_COMMAND/find -L ./find -L $dir}" |
+		xargs -I{} realpath --relative-base="$( pwd )" "{}" 2> /dev/null |
+		fzf --preview "$HOME/bin/fzf-preview.sh {}" --bind='enter:become(xdg-open {})'
 }
