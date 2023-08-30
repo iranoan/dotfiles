@@ -18,7 +18,7 @@ elif command -v tmux > /dev/null 2>&1 ; then # シェル開始時に tmux 起動
 	export FZF_TMUX_OPTS="-p 95%,95% -y 23"
 	if [[ -z "$TMUX" && -z $VSCODE_PID && -z "$VSCODE_GIT_ASKPASS_NODE" && -z "$MYVIMRC" ]]; then
 		# VS code と Vim の terminal は除外
-		detach_tmux=$( tmux ls | grep -v attached | tail --lines=1 | cut -d: -f1 )
+		detach_tmux="$( tmux ls | grep -v attached | tail --lines=1 | cut -d: -f1 )"
 		if [ -z "$detach_tmux" ]; then
 			exec tmux new-session
 		else
