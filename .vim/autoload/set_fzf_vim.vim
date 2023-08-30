@@ -8,7 +8,7 @@ function set_fzf_vim#main() abort
 	packadd fzf
 	" }}}
 	packadd fzf.vim
-	delcommand GitFiles " vim-fugitive の :Git となり使いにくくなる
+	delcommand GitFiles " vim-fugitive の :Git と重なり使いにくくなる
 	let s:fzf_options = [
 						\ '--multi', '--no-unicode', '--margin=0%', '--padding=0%',
 						\ '--preview', '~/bin/fzf-preview.sh {}',
