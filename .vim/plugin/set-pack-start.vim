@@ -59,22 +59,8 @@ unlet g:packe_setting_ext g:packe_setting_s
 # 				| delfunction set_gitgutter#main
 # augroup END
 # packadd vim-gitgutter
-g:gitgutter_preview_win_floating = 1 # GitGutterPreviewHunk 表示はポップアップ
-g:gitgutter_map_keys = 0             # デフォルト・マッピング OFF
-g:gitgutter_close_preview_on_escape = 1 # <ESC> で閉じる
-# g:gitgutter_sign_added              = '+'
-g:gitgutter_sign_modified           = '/'
-g:gitgutter_sign_removed            = '-'
-# g:gitgutter_sign_removed_first_line = '-<'
-# g:gitgutter_sign_removed_above_and_below = '->'
-g:gitgutter_sign_modified_removed   = '/-'
-nmap <leader>gp <Plug>(GitGutterPreviewHunk)
-nmap <leader>gs <Plug>(GitGutterStageHunk)
-nmap <leader>gu <Plug>(GitGutterUndoHunk)
-nmap [g <Plug>(GitGutterPrevHunk)
-nmap ]g <Plug>(GitGutterNextHunk)
-# GitGutter* コマンドが定義され、vim-fugitive の Git コマンドが未定義ではなく、曖昧扱いになるので、コマンドのみ定義しておく
-command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Git exe fugitive#Command(<line1>, <count>, +<range>, <bang>0, "<mods>", <q-args>)
+set_gitgutter#main()
+delfunction set_gitgutter#main
 
 # マークを可視化 visial mark https://github.com/kshenoy/vim-signature {{{1
 # 遅延読み込みだと、開いた時に以前開いた時に付いていたマークが可視化されない
