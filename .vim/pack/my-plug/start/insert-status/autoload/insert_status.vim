@@ -39,14 +39,14 @@ enddef
 
 def SetColor(n_set: list<string>, c_set: list<string>): void
 	def Sub(hi_set: string, ui: string): string
-			return substitute(hi_set, ui .. 'fg=' .. n_set[ui ==# 'cterm' ? 0 : 1], ui .. 'fg=' .. c_set[ui ==# 'cterm' ? 0 : 1], '')
-							->substitute(ui .. 'bg=' .. n_set[ui ==# 'cterm' ? 0 : 1], ui .. 'bg=' .. c_set[ui ==# 'cterm' ? 0 : 1], '')
+			return substitute(hi_set, ui .. 'fg=' .. n_set[ui ==# 'cterm' ? 0 : 1] .. '\>\c', ui .. 'fg=' .. c_set[ui ==# 'cterm' ? 0 : 1], '')
+							->substitute(ui .. 'bg=' .. n_set[ui ==# 'cterm' ? 0 : 1] .. '\>\c', ui .. 'bg=' .. c_set[ui ==# 'cterm' ? 0 : 1], '')
 	enddef
 	for k_hi in execute('highlight')
 			->split('\n')
-			->filter('v:val =~# "^StatusLine"')
+			->filter('v:val =~? "^StatusLine"')
 			->map('substitute(v:val, " .\\+", "", "")')
-			->filter('v:val !~# ''^StatusLine\(NC\|Term\|TermNC\)\?$''')
+			->filter('v:val !~? ''^StatusLine\(NC\|Term\|TermNC\)\?$\c''')
 		execute 'highligh ' .. Sub(execute('highligh ' .. k_hi)->substitute('[\n\r]', '', 'g')->substitute(' \+xxx \+', ' ', ''), 'cterm')->Sub('gui')
 	endfor
 enddef
