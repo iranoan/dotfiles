@@ -556,7 +556,7 @@ xnoremap gj j
 xnoremap gk k
 vnoremap <Down> gj
 vnoremap <Up>   gk
-# テキスト・オブジェクト <Shift> を押すのが面倒 vim-surround とのバランスから削除するかも (キーボードにも依存が欠点)
+# テキスト・オブジェクト <Shift> を押すのが面倒 vim-surround とのバランスから削除するかも (キーボードにも依存が欠点) {{{2
 xmap i, i<
 xmap i. i>
 xmap i2 i"
