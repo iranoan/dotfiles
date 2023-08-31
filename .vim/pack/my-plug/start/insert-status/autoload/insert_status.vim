@@ -29,11 +29,11 @@ export def Main(insert: string): void
 enddef
 
 def GetColor(ui: string, hi: string): string
-	var attr: string = matchstr(hi, '\<' .. ui .. '=\zs[^ ]\+')
-	if attr ==# '' || match(attr, '\<\(reverse\|inverse\)\>') == -1
-		return matchstr(hi, '\<' .. ui .. 'bg=\zs[^ ]\+')
+	var attr: string = matchstr(hi, '\<' .. ui .. '=\zs[^ ]\+\c')
+	if attr ==# '' || match(attr, '\<\(reverse\|inverse\)\>\c') == -1
+		return matchstr(hi, '\<' .. ui .. 'bg=\zs[^ ]\+\c')
 	else
-		return matchstr(hi, '\<' .. ui .. 'fg=\zs[^ ]\+')
+		return matchstr(hi, '\<' .. ui .. 'fg=\zs[^ ]\+\c')
 	endif
 enddef
 
