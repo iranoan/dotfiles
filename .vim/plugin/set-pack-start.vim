@@ -160,7 +160,6 @@ def Color_light_dark(): void
 		         highlight NormalDefault ctermfg=8 ctermbg=15 guifg=#111111 guibg=#fdf6e3
 		         highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=15 guifg=#b58900 guibg=#fdf6e3
 		execute 'highlight CursorLine   term=NONE cterm=NONE ctermbg=7 guibg=' .. bg
-		         highlight SignColumn   term=standout ctermfg=66 guifg=#657b83
 		execute 'highlight LineNr       cterm=NONE ctermfg=10 ctermbg=7 guifg=#839496 guibg=' .. bg
 		         highlight Comment      cterm=NONE gui=NONE ctermfg=2 guifg=#008800
 		#          highlight StatusLine   term=bold ctermfg=11 ctermbg=15
@@ -191,7 +190,6 @@ def Color_light_dark(): void
 	highlight SpellCap   term=underline cterm=underline ctermfg=NONE ctermul=13 guifg=NONE guisp=#6c71c4
 	highlight SpellLocal term=underline cterm=underline ctermfg=NONE ctermul=3 guifg=NONE guisp=#b58900
 	highlight SpellRare term=underline cterm=underline ctermfg=NONE ctermul=6 guifg=NONE guisp=#2aa198
-	highlight SignColumn ctermbg=NONE guibg=NONE
 	highlight MatchParen term=bold,reverse cterm=bold,reverse gui=bold,reverse ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
 	highlight QuickFixLine term=underline cterm=underline gui=undercurl ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE ctermul=Yellow guisp=Yellow
 	# Terminal の色は Normal に揃える←Solarized で未定義
