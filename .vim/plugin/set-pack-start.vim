@@ -152,13 +152,16 @@ def Color_light_dark(): void
 	enddef
 
 	highlight clear Pmenu # 一部の絵文字が標準設定では見にくいので一旦クリアして light/dark で異なる設定にする
+	var nbg: string = matchstr(execute('highlight Normal'), '\<guibg=\zs[^ ]\+')
 	if &background ==? 'light'
+		if nbg ==# ''
+			nbg = '#fdf6e3'
+		endif
 		var bg: string = GetCursorLine(0xfd, 0xf6, 0xe3, 0xee, 0xe8, 0xd5)
-		         # highlight Normal       ctermfg=8 ctermbg=NONE guifg=#111111 guibg=#fdf6e3
-		         # 黒背景端末を使っているので背景色を明示する
-		         highlight Normal       ctermfg=8 ctermbg=15 guifg=#111111 guibg=#fdf6e3
-		         highlight NormalDefault ctermfg=8 ctermbg=15 guifg=#111111 guibg=#fdf6e3
-		         highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=15 guifg=#b58900 guibg=#fdf6e3
+		         # 黒背景端末を使っているので背景色を明示する←端末も背景に NONE を使わない
+		execute 'highlight Normal       ctermfg=8 ctermbg=15 guifg=#111111 guibg=' .. nbg
+		execute 'highlight NormalDefault ctermfg=8 ctermbg=15 guifg=#111111 guibg=' .. nbg
+		execute 'highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=15 guifg=#b58900 guibg=' .. nbg
 		execute 'highlight CursorLine   term=NONE cterm=NONE ctermbg=7 guibg=' .. bg
 		execute 'highlight LineNr       cterm=NONE ctermfg=10 ctermbg=7 guifg=#839496 guibg=' .. bg
 		         highlight Comment      cterm=NONE gui=NONE ctermfg=2 guifg=#008800
@@ -171,10 +174,13 @@ def Color_light_dark(): void
 		         highlight SpecialKey   term=bold cterm=bold gui=bold ctermfg=12 ctermbg=NONE guibg=NONE
 		execute 'highlight FoldColumn   term=standout ctermfg=3 ctermbg=7 guibg=' .. bg
 	else
+		if nbg ==# ''
+			nbg = '#002b36'
+		endif
 		var bg: string = GetCursorLine(0x00, 0x2b, 0x36, 0x07, 0x36, 0x42)
-		execute 'highlight Normal       ctermfg=15 ctermbg=NONE guifg=#dddddd guibg=' .. (!has('gui_running') && g:colors_name ==# 'solarized8' ? 'NONE' : '#002b36')
-		         highlight NormalDefault ctermfg=15 ctermbg=8 guifg=#dddddd guibg=#002b36
-		         highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=8 guifg=#b58900 guibg=#002b36
+		execute 'highlight Normal       ctermfg=15 ctermbg=NONE guifg=#dddddd guibg=' .. (!has('gui_running') && g:colors_name ==# 'solarized8' ? 'NONE' : nbg)
+		execute 'highlight NormalDefault ctermfg=15 ctermbg=8 guifg=#dddddd guibg=' .. nbg
+		execute 'highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=8 guifg=#b58900 guibg=' .. nbg
 		execute 'highlight CursorLine   term=NONE cterm=NONE ctermbg=0 guibg=' .. bg
 		execute 'highlight LineNr       ctermfg=14 ctermbg=0 guifg=#93a1a1 guibg=' .. bg
 		         highlight Comment      cterm=NONE gui=NONE guifg=#00a800 ctermfg=2
