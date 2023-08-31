@@ -162,6 +162,7 @@ def Color_light_dark(): void
 		execute 'highlight CursorLine   term=NONE cterm=NONE ctermbg=7 guibg=' .. bg
 		execute 'highlight LineNr       cterm=NONE ctermfg=10 ctermbg=7 guifg=#839496 guibg=' .. bg
 		         highlight Comment      cterm=NONE gui=NONE ctermfg=2 guifg=#008800
+		         highlight QuickFixLine term=NONE cterm=NONE gui=NONE ctermfg=NONE ctermbg=7 guifg=NONE guibg=#dddddd
 		#          highlight StatusLine   term=bold ctermfg=11 ctermbg=15
 		# execute 'highlight TabLineSel   term=bold,underline cterm=bold,underline gui=bold,underline ctermfg=0 ctermbg=7 guifg=#111111 guibg=' .. bg
 		#          highlight TabLine      term=underline cterm=underline gui=underline ctermfg=8 ctermbg=NONE guifg=#839496 guibg=NONE
@@ -176,7 +177,8 @@ def Color_light_dark(): void
 		         highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=8 guifg=#b58900 guibg=#002b36
 		execute 'highlight CursorLine   term=NONE cterm=NONE ctermbg=0 guibg=' .. bg
 		execute 'highlight LineNr       ctermfg=14 ctermbg=0 guifg=#93a1a1 guibg=' .. bg
-		         highlight Comment      cterm=NONE gui=NONE guifg=#dddddd guifg=#00a800 ctermfg=2
+		         highlight Comment      cterm=NONE gui=NONE guifg=#00a800 ctermfg=2
+		         highlight QuickFixLine term=NONE cterm=NONE gui=NONE ctermfg=NONE ctermbg=0 guifg=NONE guibg=#111111
 		#          highlight StatusLine   term=bold ctermfg=15 ctermbg=0
 		# execute 'highlight TabLineSel   term=bold,underline cterm=bold,underline gui=bold,underline ctermfg=15 ctermbg=0 guifg=#dddddd guibg=' .. bg
 		#          highlight TabLine      term=underline cterm=underline gui=underline ctermfg=14 ctermbg=NONE guifg=#93a1a1 guibg=NONE
@@ -191,7 +193,6 @@ def Color_light_dark(): void
 	highlight SpellLocal term=underline cterm=underline ctermfg=NONE ctermul=3 guifg=NONE guisp=#b58900
 	highlight SpellRare term=underline cterm=underline ctermfg=NONE ctermul=6 guifg=NONE guisp=#2aa198
 	highlight MatchParen term=bold,reverse cterm=bold,reverse gui=bold,reverse ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
-	highlight QuickFixLine term=underline cterm=underline gui=undercurl ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE ctermul=Yellow guisp=Yellow
 	# Terminal の色は Normal に揃える←Solarized で未定義
 	highlight link Terminal Normal
 	# execute 'highlight Terminal ' .. substitute(substitute(execute('highlight Normal'), '[\n\r]\+', '', 'g'), ' *Normal\s\+xxx *', '', '')
