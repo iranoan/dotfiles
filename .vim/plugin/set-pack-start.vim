@@ -238,7 +238,7 @@ Color_light_dark()
 # 1}}}
 
 # 挿入モード時、ステータスラインの色を変更 ~/.vim/pack/my-plug/start/insert-status {{{1
-g:hi_insert = 'highlight StatusLine cterm=bold gui=bold  ctermfg=White ctermbg=darkred guifg=White guibg=darkred'
+g:hi_insert = 'highlight StatusLine term=reverse cterm=bold,reverse gui=bold,reverse ctermbg=White ctermfg=darkred guibg=White guifg=darkred'
 # ↑インサート・モード時の highlight 指定
 
 # テキストオブジェクト化の元となる https://github.com/kana/vim-textobj-user {{{1

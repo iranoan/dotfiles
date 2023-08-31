@@ -215,17 +215,46 @@ set suffixes+=.aux,.log,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.toc,.pdf,.syncte
 set wildignore+=*.dvi,*.o,*.opp,*.obj,*.a,*.so,*.fdb_latexmk,*.fls,*.nav,*.out,*.snm,*.ltjruby,*.swp # 補完候補から完全に除外 (含めると補完候補にも現れなくなる)
 # ステータス・バー {{{2
 set laststatus=2                               # 表示
-set statusline=%#StatusLineLeft#%-16.(%2n%{%&buftype=='terminal'?'[terminal]':&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%*\ %<%F\ %=%#StatusLineRight#\ %c:%v:%{strcharlen(strpart(getline('.'),0,col('.')))}/%{strlen(join(getline(0,line('$')),(&ff=='dos'?'12':'1')))}:%{strcharlen(join(getline(0,line('$')),''))}\ %3l/%L%4{line('w$')*100/line('$')}%%\ 0x%04B\ [%{&fenc!=''?&fenc:&enc}:%{%{'dos':'CR+LF','unix':'LF','mac':'CR'}[&ff]%}]
-# set statusline=%#StatusLineLeft#%-16.(%2n%{%&buftype=='terminal'?'[terminal]':&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%#StatusLineLeftR#%*\ %<%F\ %=%#StatusLineRightL#%#StatusLineRight#\ %c:%v:%{strcharlen(strpart(getline('.'),0,col('.')))}/%{strlen(join(getline(0,line('$')),(&ff=='dos'?'12':'1')))}:%{strcharlen(join(getline(0,line('$')),''))}\ %3l/%L%4{line('w$')*100/line('$')}%%\ 0x%04B\ [%{&fenc!=''?&fenc:&enc}:%{%{'dos':'CR+LF','unix':'LF','mac':'CR'}[&ff]%}]
+if has('gui_running')
+	set statusline=%#StatusLineLeft#%-16.(%2n%{%&buftype=='terminal'?'[terminal]':&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%*\ %<%F\ %=%#StatusLineRight#\ %c:%v:%{strcharlen(strpart(getline('.'),0,col('.')))}/%{strlen(join(getline(0,line('$')),(&ff=='dos'?'12':'1')))}:%{strcharlen(join(getline(0,line('$')),''))}\ %3l/%L%4{line('w$')*100/line('$')}%%\ 0x%04B\ [%{&fenc!=''?&fenc:&enc}:%{%{'dos':'CR+LF','unix':'LF','mac':'CR'}[&ff]%}]
+	# 区切りにを使いたいが、GUI で隙間が開かない適当な文字がない
+else
+	set statusline=%#StatusLineLeft#%-16.(%2n%{%&buftype=='terminal'?'[terminal]':&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%#StatusLineCenterL#%*%<%F\ %=%#StatusLineCenterR#%#StatusLineRight#%c:%v:%{strcharlen(strpart(getline('.'),0,col('.')))}/%{strlen(join(getline(0,line('$')),(&ff=='dos'?'12':'1')))}:%{strcharlen(join(getline(0,line('$')),''))}\ %3l/%L%4{line('w$')*100/line('$')}%%\ 0x%04B\ [%{&fenc!=''?&fenc:&enc}:%{%{'dos':'CR+LF','unix':'LF','mac':'CR'}[&ff]%}]
+endif
 # 表示しているのを大雑把に↓
 # bufnr filetype modified etc. | path | column bytes:number:word-count/file bytes:word-count line current/full % code charset:cr/lf
-# 区切りにを使いたいが、適当なフォンがない
+def StatusLineLeftRight(): void
+	var status: string = execute('highlight StatusLine')->substitute('[\n\r]', '', 'g')
+	var gfg: string = matchstr(status, '\<guifg=\zs[^ ]\+\ze')
+	var cfg: string = matchstr(status, '\<ctermfg=\zs[^ ]\+\ze')
+	var gbg: string = matchstr(status, '\<guibg=\zs[^ ]\+\ze')
+	var cbg: string = matchstr(status, '\<ctermbg=\zs[^ ]\+\ze')
+	if gfg !=# ''
+		if matchstr(status, '\<gui=\zs[^ ]\+\ze') =~# '\<reverse\>'
+			gbg = ' guibg=' .. gfg
+			gfg = ' guifg=' .. gfg
+		else
+			gfg = ' guifg=' .. gbg
+			gbg = ' guibg=' .. gbg
+		endif
+	endif
+	if cfg !=# ''
+		if matchstr(status, '\<cterm=\zs[^ ]\+\ze') =~# '\<reverse\>'
+			cbg = ' ctermbg=' .. cfg
+			cfg = ' ctermfg=' .. cfg
+		else
+			cfg = ' ctermfg=' .. cbg
+			cbg = ' ctermbg=' .. cbg
+		endif
+	endif
+	highlight StatusLineLeft gui=bold term=bold guifg=white guibg=SeaGreen ctermfg=white ctermbg=2
+	highlight StatusLineRight gui=bold term=bold guifg=white guibg=DarkYellow ctermfg=white ctermbg=3
+	execute 'highlight StatusLineCenterL gui=reverse term=reverse cterm=reverse guibg=SeaGreen' .. gfg .. ' ctermbg=2' .. cfg
+	execute 'highlight StatusLineCenterR gui=reverse term=reverse cterm=reverse guifg=DarkYellow' .. gbg .. ' ctermfg=3' .. cbg
+enddef
 augroup StatusLineLeftRight
 	autocmd!
-	autocmd ColorScheme * highlight StatusLineLeft gui=bold term=bold guifg=white guibg=SeaGreen ctermfg=white ctermbg=2
-				| highlight StatusLineRight gui=bold term=bold guifg=white guibg=DarkYellow ctermfg=white ctermbg=3
-				# | highlight StatusLineLeftR gui=bold term=bold guifg=SeaGreen guibg=#93a1a1 ctermfg=2 ctermbg=white
-				# | highlight StatusLineRightL gui=bold term=bold guifg=DarkYellow guibg=#93a1a1 ctermfg=3 ctermbg=white
+	autocmd ColorScheme * StatusLineLeftRight()
 				# | autocmd! StatusLineRight
 				# | augroup! StatusLineLeft
 				# 削除すると colorscheme を変更すると Normal 色になる
