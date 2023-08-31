@@ -403,9 +403,9 @@ set history=10000                              # コマンド履歴の保存数
 # set runtimepath+=/usr/share/vim/addons,/usr/share/vim/vimfiles
 set runtimepath+=/usr/share/vim/addons
 # 個人的なキー割り当て keymap キーマップ {{{1
-# 設定の切り替え
+# 設定の切り替え {{{2
 nnoremap <silent><leader>cw <Cmd>setlocal wrap!<CR>
-# gvimrc に↓がある
+# gvimrc に書かれた分 {{{3
 # nnoremap <leader>cm <Cmd>call <SID>Toggle_menu()<CR>
 # nnoremap <leader>ct <Cmd>call <SID>Toggle_Toolbar()<CR>
 # 日付と時刻入力 {{{2
