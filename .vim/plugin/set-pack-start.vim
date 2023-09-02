@@ -151,7 +151,7 @@ def Color_light_dark(): void
 		)
 	enddef
 	var nbg: string = matchstr(execute('highlight Normal'), '\<guibg=\zs\S\+')
-	var bg: string = GetCursorLine(0xfd, 0xf6, 0xe3, 0xee, 0xe8, 0xd5)
+	var bg: string
 	if &background ==? 'light'
 		if nbg ==# ''
 			nbg = '#fdf6e3'
