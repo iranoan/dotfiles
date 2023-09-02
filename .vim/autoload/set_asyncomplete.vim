@@ -1,7 +1,7 @@
 scriptencoding utf-8
 
 function set_asyncomplete#main() abort
-	" packadd asyncomplete.vim " ←asyncomplete.vim 自体は ~/.vim/pack/*/start に置かないと最初に読み込んだバッファで働かない
+	packadd asyncomplete.vim " ←asyncomplete.vim 自体は ~/.vim/pack/*/start に置かないと最初に読み込んだバッファで働かない
 	" let g:asyncomplete_auto_completeopt = 1 " ←デフォルト
 	" call asyncomplete#enable_for_buffer()
 	" call asyncomplete#force_refresh()

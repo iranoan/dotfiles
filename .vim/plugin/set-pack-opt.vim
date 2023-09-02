@@ -1,6 +1,16 @@
 vim9script
 scriptencoding utf-8
 
+# 補完 https://github.com/prabirshrestha/asyncomplete.vim {{{1
+augroup loadasyncomplete
+	autocmd!
+	autocmd InsertEnter *
+				\ set_asyncomplete#main()
+				| autocmd! loadasyncomplete
+				| augroup! loadasyncomplete
+				| delfunction set_asyncomplete#main
+augroup END
+
 # 小文字で始まるコマンドを定義可能に https://github.com/kana/vim-altercmd {{{1
 # ↓実質 /start/と同じになるが、単純に /start/ に置くと、このスクリプト読み込み時点では AlterCommand が使えず、エラーになるので読み込み明示形式にする
 packadd vim-altercmd

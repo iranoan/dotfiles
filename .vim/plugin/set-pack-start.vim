@@ -275,17 +275,6 @@ g:textobj_multiblock_blocks = [
 			[ '[', ']' ],
 			]
 
-# 補完 https://github.com/prabirshrestha/asyncomplete.vim {{{1
-# asyncomplete.vim 自体は ~/.vim/pack/*/start に置かないと↓の最初の InsertEnter イベントが起きたバッファで補完が働かない
-augroup loadasyncomplete
-	autocmd!
-	autocmd InsertEnter *
-				\ set_asyncomplete#main()
-				| autocmd! loadasyncomplete
-				| augroup! loadasyncomplete
-				| delfunction set_asyncomplete#main
-augroup END
-
 # 括弧や引用符をペアで入力/削除 ~/.vim/pack/my-plug/start/pair_bracket/ {{{1
 # ドット・リピートは考慮していない
 g:pairbracket = {
