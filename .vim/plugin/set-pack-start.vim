@@ -121,17 +121,19 @@ set background=dark
 # https://github.com/lifepillar/vim-solarized8 {{{2
 if glob('~/.vim/**/colors/*.vim', 1, 1, 1)->filter('v:val =~# "/solarized8.vim$"')->len() > 0
 	g:solarized_old_cursor_style = 1
+	change_colorscheme#SETt_Co('solarized8')
 	colorscheme solarized8
 # 2}}}
 # https://github.com/altercation/vim-colors-solarized {{{1https://github.com/altercation/vim-colors-solarized {{{2
 elseif glob('~/.vim/**/colors/*.vim', 1, 1, 1)->filter('v:val =~# "/solarized.vim$"')->len() > 0
 	g:solarized_menu = 0
+	change_colorscheme#SETt_Co('solarized')
 	colorscheme solarized
 # 2}}}
-else
+else # 標準にある {{{
+	change_colorscheme#SETt_Co('habamax')
 	colorscheme habamax
 endif
-# autocmd {{{
 augroup ChangeHighlight
 	autocmd!
 	autocmd ColorScheme * change_colorscheme#Color_light_dark()
@@ -145,8 +147,6 @@ augroup ColorSchemeKind # colorscheme の種類別
 				\ | highlight SignColumn ctermfg=11 ctermbg=8 guifg=#839496 guibg=NONE
 augroup END
 endif
-# call function {{{
-change_colorscheme#SETt_Co(g:colors_name)
 change_colorscheme#Color_light_dark()
 
 # 日本語ヘルプ https://github.com/vim-jp/vimdoc-ja {{{1
