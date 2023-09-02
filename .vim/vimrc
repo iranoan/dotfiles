@@ -182,7 +182,7 @@ set noexpandtab                                # 通常はタブ文字入力可�
 set number signcolumn=yes                      # 行番号、sign (マーク表示桁) 表示
 augroup CoursolLineColumn # 挿入モードでは、カーソール行桁背景色無し、ノーマル・モードでは付ける
 	autocmd!
-	autocmd WinEnter     *                       set cursorline cursorcolumn
+	autocmd WinEnter,TabEnter     *              set cursorline cursorcolumn
 	autocmd WinLeave,InsertEnter  *              set nocursorline nocursorcolumn
 	autocmd InsertLeave  *                       set cursorline cursorcolumn
 augroup END
