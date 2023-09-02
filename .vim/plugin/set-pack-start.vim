@@ -150,48 +150,33 @@ def Color_light_dark(): void
 			str2nr(strpart(bg, 4, 2), 16) - b0 + b1  # Blue
 		)
 	enddef
-
-	highlight clear Pmenu # 一部の絵文字が標準設定では見にくいので一旦クリアして light/dark で異なる設定にする
-	var nbg: string = matchstr(execute('highlight Normal'), '\<guibg=\zs[^ ]\+')
+	var nbg: string = matchstr(execute('highlight Normal'), '\<guibg=\zs\S\+')
+	var bg: string = GetCursorLine(0xfd, 0xf6, 0xe3, 0xee, 0xe8, 0xd5)
 	if &background ==? 'light'
 		if nbg ==# ''
 			nbg = '#fdf6e3'
 		endif
-		var bg: string = GetCursorLine(0xfd, 0xf6, 0xe3, 0xee, 0xe8, 0xd5)
+		bg = GetCursorLine(0xfd, 0xf6, 0xe3, 0xee, 0xe8, 0xd5)
 		         # 黒背景端末を使っているので背景色を明示する←端末も背景に NONE を使わない
 		execute 'highlight Normal       ctermfg=8 ctermbg=15 guifg=#111111 guibg=' .. nbg
 		execute 'highlight NormalDefault ctermfg=8 ctermbg=15 guifg=#111111 guibg=' .. nbg
-		execute 'highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=15 guifg=#b58900 guibg=' .. nbg
-		execute 'highlight CursorLine   term=NONE cterm=NONE ctermbg=7 guibg=' .. bg
-		execute 'highlight LineNr       cterm=NONE ctermfg=10 ctermbg=7 guifg=#839496 guibg=' .. bg
+		         highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=15 guifg=#b58900 guibg=NONE
 		         highlight Comment      cterm=NONE gui=NONE ctermfg=2 guifg=#008800
-		         highlight QuickFixLine term=NONE cterm=NONE gui=NONE ctermfg=NONE ctermbg=7 guifg=NONE guibg=#dddddd
-		#          highlight StatusLine   term=bold ctermfg=11 ctermbg=15
 		# execute 'highlight TabLineSel   term=bold,underline cterm=bold,underline gui=bold,underline ctermfg=0 ctermbg=7 guifg=#111111 guibg=' .. bg
 		#          highlight TabLine      term=underline cterm=underline gui=underline ctermfg=8 ctermbg=NONE guifg=#839496 guibg=NONE
 		#          highlight TabLineFill  term=underline cterm=underline gui=underline ctermfg=8 ctermbg=NONE guifg=#839496 guibg=NONE
-		execute 'highlight Pmenu        cterm=NONE ctermfg=8 ctermbg=7 guifg=#839496 guibg=' .. bg
-		         highlight SpecialKey   term=bold cterm=bold gui=bold ctermfg=12 ctermbg=NONE guibg=NONE
-		execute 'highlight FoldColumn   term=standout ctermfg=3 ctermbg=7 guibg=' .. bg
 	else
 		if nbg ==# ''
 			nbg = '#002b36'
 		endif
-		var bg: string = GetCursorLine(0x00, 0x2b, 0x36, 0x07, 0x36, 0x42)
+		bg = GetCursorLine(0x00, 0x2b, 0x36, 0x07, 0x36, 0x42)
 		execute 'highlight Normal       ctermfg=15 ctermbg=NONE guifg=#dddddd guibg=' .. (!has('gui_running') && g:colors_name ==# 'solarized8' ? 'NONE' : nbg)
 		execute 'highlight NormalDefault ctermfg=15 ctermbg=8 guifg=#dddddd guibg=' .. nbg
-		execute 'highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=8 guifg=#b58900 guibg=' .. nbg
-		execute 'highlight CursorLine   term=NONE cterm=NONE ctermbg=0 guibg=' .. bg
-		execute 'highlight LineNr       ctermfg=14 ctermbg=0 guifg=#93a1a1 guibg=' .. bg
+		         highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=8 guifg=#b58900 guibg=NONE
 		         highlight Comment      cterm=NONE gui=NONE guifg=#00a800 ctermfg=2
-		         highlight QuickFixLine term=NONE cterm=NONE gui=NONE ctermfg=NONE ctermbg=0 guifg=NONE guibg=#111111
-		#          highlight StatusLine   term=bold ctermfg=15 ctermbg=0
 		# execute 'highlight TabLineSel   term=bold,underline cterm=bold,underline gui=bold,underline ctermfg=15 ctermbg=0 guifg=#dddddd guibg=' .. bg
 		#          highlight TabLine      term=underline cterm=underline gui=underline ctermfg=14 ctermbg=NONE guifg=#93a1a1 guibg=NONE
 		#          highlight TabLineFill  term=underline cterm=underline gui=underline ctermfg=14 ctermbg=NONE guifg=#93a1a1 guibg=NONE
-		execute 'highlight Pmenu        ctermfg=7 ctermbg=0 guibg=' .. bg
-		         highlight SpecialKey   term=bold cterm=bold gui=bold ctermfg=11 ctermbg=NONE guibg=NONE
-		execute 'highlight FoldColumn   term=standout ctermbg=0 guibg=' .. bg
 	endif
 	# light/dark で同設定
 	highlight SpellBad   term=underline cterm=underline ctermfg=NONE ctermul=9 guifg=NONE guisp=#cb4b16
@@ -199,12 +184,11 @@ def Color_light_dark(): void
 	highlight SpellLocal term=underline cterm=underline ctermfg=NONE ctermul=3 guifg=NONE guisp=#b58900
 	highlight SpellRare term=underline cterm=underline ctermfg=NONE ctermul=6 guifg=NONE guisp=#2aa198
 	highlight MatchParen term=bold,reverse cterm=bold,reverse gui=bold,reverse ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
-	# Terminal の色は Normal に揃える←Solarized で未定義
-	highlight link Terminal Normal
-	# execute 'highlight Terminal ' .. substitute(substitute(execute('highlight Normal'), '[\n\r]\+', '', 'g'), ' *Normal\s\+xxx *', '', '')
-	highlight clear CursorColumn
-	highlight link CursorColumn CursorLine
-	highlight clear NonText
+	execute 'highlight QuickFixLine term=NONE cterm=NONE gui=NONE ctermfg=NONE ctermbg=0 guifg=NONE guibg=' .. bg
+	bg = execute('highlight Terminal', 'silent!')->substitute('[\r\n]', '', 'g')
+	if bg ==# '' || match(bg, '\<cleared\>') != -1 # Terminal 未定義は Normal
+		highlight link Terminal Normal
+	endif
 	execute 'highlight VertSplit' ..
 		execute('highlight VertSplit')
 			->substitute('[\n\r]\+', '', 'g')
@@ -237,6 +221,16 @@ augroup ChangeHighlight
 	autocmd ColorScheme * Color_light_dark()
 	autocmd ColorSchemePre * SETt_Co(expand('<amatch>'))
 augroup END
+
+if has('gui_running')
+augroup ColorSchemeKind # colorscheme の種類別
+	autocmd!
+	 # Solarized で GUI が CUI と異なる色になっている
+	autocmd ColorScheme solarized highlight Pmenu term=reverse ctermfg=0 ctermbg=13 gui=reverse guifg=#073642 guibg=#839496
+				\ | highlight SignColumn ctermfg=11 ctermbg=8 guifg=#839496 guibg=NONE
+augroup END
+endif
+
 SETt_Co(g:colors_name)
 Color_light_dark()
 
