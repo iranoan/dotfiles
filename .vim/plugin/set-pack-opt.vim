@@ -82,6 +82,8 @@ nnoremap <silent><Leader>fv <Cmd>Files ~/.vim<CR>
 nnoremap <silent><Leader>fs <Cmd>Files ~/src<CR>
 nnoremap <silent><Leader>fx <Cmd>Files ~/bin<CR>
 nnoremap <silent><Leader>fe <Cmd>Files ~/book/epub<CR>
+nnoremap <silent><Leader>fd <Cmd>Files ~/downloads<CR>
+nnoremap <silent><Leader>fD <Cmd>Files ~/Document<CR>
 nnoremap <silent><Leader>fp <Cmd>Files ~/public_html/iranoan<CR>
 nnoremap <silent><Leader>fi <Cmd>Files ~/Information/slide<CR>
 nnoremap <silent><Leader>fb <Cmd>Buffers<CR>
