@@ -121,12 +121,14 @@ set background=dark
 # https://github.com/lifepillar/vim-solarized8 {{{2
 if glob('~/.vim/**/colors/*.vim', 1, 1, 1)->filter('v:val =~# "/solarized8.vim$"')->len() > 0
 	g:solarized_old_cursor_style = 1
+	# g:solarized_italics = 0
 	change_colorscheme#SETt_Co('solarized8')
 	colorscheme solarized8
 # 2}}}
 # https://github.com/altercation/vim-colors-solarized {{{1https://github.com/altercation/vim-colors-solarized {{{2
 elseif glob('~/.vim/**/colors/*.vim', 1, 1, 1)->filter('v:val =~# "/solarized.vim$"')->len() > 0
 	g:solarized_menu = 0
+	# g:solarized_italic = 0
 	change_colorscheme#SETt_Co('solarized')
 	colorscheme solarized
 # 2}}}
