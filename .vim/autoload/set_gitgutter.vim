@@ -17,5 +17,6 @@ function set_gitgutter#main() abort
 	nmap ]g <Plug>(GitGutterNextHunk)
 	" GitGutter* コマンドが定義され、vim-fugitive の Git コマンドが未定義ではなく、曖昧扱いになるので、コマンドのみ定義しておく
 	command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Git exe fugitive#Command(<line1>, <count>, +"<range>", <bang>0, "<mods>", <q-args>)
-	" ↑vim9script で定義されると問題なく動作はするが「E1126: Vim9 スクリプトでは :let は使用できません」のエラーが出る
+	" ↑vim9script で定義されると「E1126: Vim9 スクリプトでは :let は使用できません」のエラーが出る (autocmd FuncUndefined fugitive#* → packadd vim-fugitve でファイルが読み込まれ、それによってコマンドが再定義されるので問題なく動作はする)
+	" → :help E1231
 endfunction
