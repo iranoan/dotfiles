@@ -13,7 +13,7 @@ fi
 source "$HOME/.fzf/key-bindings.bash"
 
 # Default option
-export FZF_DEFAULT_COMMAND='find . -type d -name ".git" -o -name ".cache" -o -name ".thumbnails" -o -name ".ecryptfs" -prune -o \( -type f -o -type l \) \( -name ".*" -o -name "*" ! -name "*.sw?" ! -name ".*.sw?" \) -printf "%p\n" 2> /dev/null '
+export FZF_DEFAULT_COMMAND='find -L . -type d -name ".git" -o -name ".cache" -o -name ".thumbnails" -o -name ".ecryptfs" -prune -o -name ".*" -o -name "*" ! -name "*.sw?" ! -name ".*.sw?" -printf "%p\n" 2> /dev/null'
 export FZF_DEFAULT_OPTS='--layout=reverse --info=inline --multi --color=border:7 --preview-window=border-left --bind="ctrl-]:change-preview-window(hidden|),ctrl-h:backward-char,ctrl-l:forward-char,ctrl-f:page-down,ctrl-b:page-up,ctrl-v:execute-silent(~/bin/rifle_sxiv.sh {}),ctrl-o:become(xdg-open {})"'
 # export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
 # export FZF_DEFAULT_OPTS='--layout=reverse --info=inline --multi --preview="cat {}"'
@@ -26,6 +26,8 @@ f(){
 	else
 		dir=$( pwd )
 	fi
-	eval "${FZF_DEFAULT_COMMAND/find ./find $dir}" |
+	cmd=${FZF_DEFAULT_COMMAND/find -L ./find -L $dir}
+	eval "${cmd/ -printf \"%p\\n\"/ -print0}" |
+		xargs -0 -I{} realpath --no-symlinks --relative-base="$( pwd )" "{}" 2> /dev/null |
 		fzf --preview "$HOME/bin/fzf-preview.sh {}" --bind='enter:become(xdg-open {})'
 }
