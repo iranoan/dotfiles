@@ -22,14 +22,23 @@ export FZF_DEFAULT_OPTS='--layout=reverse --info=inline --multi --color=border:7
 export MANPATH="$MANPATH":~/.vim/pack/github/opt/fzf/man
 
 f(){
-	if [ $# -eq 1 ]; then
-		dir="$1"
-	else
-		dir=$( pwd )
-	fi
+	# find を使う場合
+	# if [ $# -eq 1 ]; then
+	# 	dir="$1"
+	# else
+	# 	dir=$( pwd )
+	# fi
 	# cmd=${FZF_DEFAULT_COMMAND/find -L ./find -L $dir}
 	# eval "${cmd/ -printf \"%p\\n\"/ -print0}" |
-	eval "$( echo "$FZF_DEFAULT_COMMAND" | sed "s: \.$: --print0 --full-path $dir:" )" |
-		xargs -0 -I{} realpath --no-symlinks --relative-base="$( pwd )" "{}" 2> /dev/null |
+	# 	xargs --no-run-if-empty -n 1 -P 0 -0 -I{} realpath --no-symlinks --relative-base="$( pwd )" "{}" 2> /dev/null |
+	# 	fzf --preview "$HOME/bin/fzf-preview.sh {}" --bind='enter:become(xdg-open {})'
+
+	# fd (fdfind) を使う場合
+	if [ $# -eq 1 ]; then
+		dir=" . $1"
+	else
+		dir=""
+	fi
+	eval "$( echo "$FZF_DEFAULT_COMMAND" | sed "s: \.$:$dir:" )" |
 		fzf --preview "$HOME/bin/fzf-preview.sh {}" --bind='enter:become(xdg-open {})'
 }
