@@ -1,8 +1,8 @@
 vim9script
 scriptencoding utf-8
 
-# background によって一部の syntax を変える (Solarized を基本としている) {{{
-export def Color_light_dark(): void
+# background によって一部の highlight を変える (Solarized を基本としている) {{{
+export def Highlight(): void
 	def GetCursorLine(r0: number, g0: number, b0: number, r1: number, g1: number, b1: number): string # CursorLine の guibg を取得
 		# 無ければ Solarized を基本に Normal 背景色より少し明るい/暗い色を計算
 		var bg: string = execute('highlight CursorLine')
@@ -66,22 +66,27 @@ export def Color_light_dark(): void
 			->substitute('ctermfg=\S\+ ctermbg=\(\S\+\) guifg=\S\+ guibg=\(\S\+\)', 'ctermfg=\1 ctermbg=\1 guifg=\2 guibg=\2', '')
 enddef
 
-export def SETt_Co(color: string): void # colorscheme によって t_Co, termguicolors を変える
-	if has('gui_running')
-		return
-	endif
-	if color ==# 'solarized' # ターミナルが 256 色だと一部の色が変わる
-		set notermguicolors
-		set t_Co=16
-	else
-		set t_Co=256 # ↓~/.tmux_conf set-option -g default-terminal "tmux-256color"
-		if color ==# 'solarized8' # ターミナルで termguicolors を ON にしつつ透過可能にする
+export def Before(color: string): void # t_Co, termguicolors 等 colorscheme 切り替え前に必要な設定をする
+	if color ==# 'solarized'
+		# g:solarized_italic = 0
+		if has('gui_running')
+			g:solarized_menu = 0
+		else
+			set notermguicolors
+			set t_Co=16 # ターミナルが 256 色だと一部の色が変わる
+		endif
+	elseif color ==# 'solarized8' # ターミナルで termguicolors を ON にしつつ透過可能にする
+		g:solarized_old_cursor_style = 1
+		# g:solarized_italics = 0
+		if !has('gui_running')
+			set t_Co=256
 			set termguicolors
 			# ↓端末やの色設定あれば不要? 変化が不明
 			# &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 			# &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-		else
-			set notermguicolors
 		endif
+	elseif!has('gui_running')
+		set t_Co=256 # ↓~/.tmux_conf set-option -g default-terminal "tmux-256color"
+		set notermguicolors
 	endif
 enddef

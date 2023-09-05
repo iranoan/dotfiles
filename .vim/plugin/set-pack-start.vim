@@ -119,37 +119,34 @@ nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 # カラースキム {{{1
 set background=dark
 # https://github.com/lifepillar/vim-solarized8 {{{2
-if glob('~/.vim/**/colors/*.vim', 1, 1, 1)->filter('v:val =~# "/solarized8.vim$"')->len() > 0
-	g:solarized_old_cursor_style = 1
-	# g:solarized_italics = 0
-	change_colorscheme#SETt_Co('solarized8')
-	colorscheme solarized8
 # 2}}}
-# https://github.com/altercation/vim-colors-solarized {{{1https://github.com/altercation/vim-colors-solarized {{{2
-elseif glob('~/.vim/**/colors/*.vim', 1, 1, 1)->filter('v:val =~# "/solarized.vim$"')->len() > 0
-	g:solarized_menu = 0
-	# g:solarized_italic = 0
-	change_colorscheme#SETt_Co('solarized')
-	colorscheme solarized
+# https://github.com/altercation/vim-colors-solarized {{{2
 # 2}}}
-else # 標準にある {{{
-	change_colorscheme#SETt_Co('habamax')
+for s in ['solarized8', 'solarized']
+	if glob('~/.vim/**/colors/*.vim', 1, 1, 1)->filter('v:val =~# "/' .. s .. '\.vim$"')->len() > 0
+		change_colorscheme#Before(s)
+		execute 'colorscheme ' .. s
+		break
+	endif
+endfor
+if !exists('g:colors_name')
+	change_colorscheme#Before('habamax')
 	colorscheme habamax
 endif
 augroup ChangeHighlight
 	autocmd!
-	autocmd ColorScheme * change_colorscheme#Color_light_dark()
-	autocmd ColorSchemePre * change_colorscheme#SETt_Co(expand('<amatch>'))
+	autocmd ColorScheme * change_colorscheme#Highlight()
+	autocmd ColorSchemePre * change_colorscheme#Before(expand('<amatch>'))
 augroup END
 if has('gui_running')
 augroup ColorSchemeKind # colorscheme の種類別
 	autocmd!
 	 # Solarized で GUI が CUI と異なる色になっている
 	autocmd ColorScheme solarized highlight Pmenu term=reverse ctermfg=0 ctermbg=13 gui=reverse guifg=#073642 guibg=#839496
-				\ | highlight SignColumn ctermfg=11 ctermbg=8 guifg=#839496 guibg=NONE
+				| highlight SignColumn ctermfg=11 ctermbg=8 guifg=#839496 guibg=NONE
 augroup END
 endif
-change_colorscheme#Color_light_dark()
+change_colorscheme#Highlight()
 
 # 日本語ヘルプ https://github.com/vim-jp/vimdoc-ja {{{1
 # 1}}}
