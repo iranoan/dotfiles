@@ -75,11 +75,11 @@ export def Before(color: string): void # t_Co, termguicolors 等 colorscheme 切
 			set notermguicolors
 			set t_Co=16 # ターミナルが 256 色だと一部の色が変わる
 		endif
-	elseif color ==# 'solarized8' # ターミナルで termguicolors を ON にしつつ透過可能にする
+	elseif color ==# 'solarized8'
 		g:solarized_old_cursor_style = 1
 		# g:solarized_italics = 0
 		if !has('gui_running')
-			set t_Co=256
+			set t_Co=256 # ↓~/.tmux_conf set-option -g default-terminal "tmux-256color"
 			set termguicolors
 			# ↓端末やの色設定あれば不要? 変化が不明
 			# &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
