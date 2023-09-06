@@ -38,7 +38,6 @@ function set_fzf_vim#main() abort
 				\ <q-args>, {
 					\ 'source':
 					\ 'fdfind --hidden --no-ignore --follow -t f -t l -E .texlive2023/ -E .npm/ -E .thumbnails/ -E thumbnails/ -E .log/ -E .tmp/ -E xapian/ -E .git/ -E cache/ -E .cache/ -E .ecryptfs/ -E .Private/ -E kpeoplevcard/ -E "*.nav" -E "*.synctex.gz" -E "*.asf" -E "*.bmc" -E "*.bmp" -E "*.cer" -E "*.chm" -E "*.chw" -E "*.crt" -E "*.dll" -E "*.doc" -E "*.docx" -E "*.dvi" -E "*.emf" -E "*.exe" -E "*.fdb_latexmk" -E "*.flv" -E "*.gpg" -E "*.hlp" -E "*.hmereg" -E "*.icc" -E "*.icm" -E "*.ico" -E "*.ics" -E "*.jp2" -E "*.lzh" -E "*.m4a" -E "*.mov" -E "*.mp3" -E "*.mp4" -E "*.mpg" -E "*.o" -E "*.obj" -E "*.odb" -E "*.odg" -E "*.odp" -E "*.ods" -E "*.odt" -E "*.oll" -E "*.opf" -E "*.opp" -E "*.pfa" -E "*.pl3" -E "*.ppm" -E "*.ppt" -E "*.pptx" -E "*.reg" -E "*.rtf" -E "*.sqlite" -E "*.tfm" -E "*.ttf" -E "*.vf" -E "*.webm" -E "*.wmf" -E "*.wmv" -E "*.xls" -E "*.xlsm" -E "*.xlsx" -E ".*.sw?" -Ea.out -E "*.rm" -E "*.vdi" -E "*.mkv" -E "*.swf" -E "*.avi" -E "*.jar" -E "*.pyc" -E "*.vbox" -E "*.nvram" -E "*.cur" -E "*.class" -E "*.vbox-prev" -E "*.fls" -E .viminfo -E viminfo -E "*.ltjruby" -E "Mail/.*/{cur,new,tmp}/*" . ',
-					\ 'sink': 'silent TabEdit',
 					\ 'options': s:fzf_options + ['--prompt', 'Files> '],
 					\ },
 					\ <bang>0
@@ -49,7 +48,6 @@ function set_fzf_vim#main() abort
 	command! -bang -nargs=* HISTORY call fzf#run(
 				\ fzf#wrap(
 					\ {
-						\ 'sink': 'TabEdit',
 						\ 'options': s:fzf_options + [
 							\ '--header-lines', !empty(expand('%')),
 							\ '--prompt', 'Hist> ',
@@ -59,12 +57,13 @@ function set_fzf_vim#main() abort
 					\ <bang>0
 					\ )
 				\ )
-	" let g:fzf_action = {
-	" 			\ 'ctrl-e': 'edit',
-	" 			\ 'ctrl-t': 'tab split',
-	" 			\ 'ctrl-s': 'split',
-	" 			\ 'ctrl-v': 'vsplit'
-	" 			\ } " FZF_DEFAULT_OPTS に --bind が有るとそちらが優先され無視される
+	let g:fzf_action = {
+				\ 'enter': 'TabEdit',
+				\ 'ctrl-e': 'edit',
+				\ 'ctrl-t': 'tab split',
+				\ 'ctrl-s': 'split',
+				\ 'ctrl-v': 'vsplit'
+				\ } " 他で sink を使うと、この設定は無視されるので注意←:help fzf-global-options-supported-by-fzf#wrap
 	" [Buffers] Jump to the existing window if possible
 	let g:fzf_buffers_jump = 1
 	" let g:fzf_preview_window = ['right:50%', 'ctrl-]'] " FZF_DEFAULT_OPTS で定義済み
