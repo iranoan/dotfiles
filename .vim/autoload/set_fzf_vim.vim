@@ -67,7 +67,7 @@ function set_fzf_vim#main() abort
 	" 			\ } " FZF_DEFAULT_OPTS に --bind が有るとそちらが優先され無視される
 	" [Buffers] Jump to the existing window if possible
 	let g:fzf_buffers_jump = 1
-	" let g:fzf_preview_window = ['right:50%', 'ctrl-]'] " FZF_DEFAULT_OPTS に --bind が有るとそちらが優先され無視される
+	" let g:fzf_preview_window = ['right:50%', 'ctrl-]'] " FZF_DEFAULT_OPTS で定義済み
 endfunction
 
 def set_fzf_vim#solarized(): void
