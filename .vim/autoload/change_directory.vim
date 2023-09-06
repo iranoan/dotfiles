@@ -2,15 +2,20 @@ vim9script
 scriptencoding utf-8
 
 export def Lcd(): void # カレントディレクトリをファイルのディレクトリに移動
-	var c_path: string
 	if get(b:, 'lcd_worked', false)
 		return
 	endif
-	if &filetype ==# 'fugitive' || bufname() =~# '^fugitive://'
+	var c_path: string
+	var buf_name: string = bufname()
+	if &filetype ==# 'fugitive' || buf_name =~# '^fugitive://'
 		c_path = expand('%:p:h:h')->substitute('^fugitive://', '', '')
-	elseif &buftype ==# 'terminal' || &filetype ==# 'terminal' || bufname() ==# '!' .. &shell || bufname() =~# '^quickrun://'
-		return
-	elseif &buftype ==# 'help' || &buftype ==# 'nofile'
+	elseif &buftype ==# 'terminal' ||
+			&buftype ==# 'help' ||
+			&buftype ==# 'nofile' ||
+			&filetype ==# 'terminal' ||
+			buf_name ==# '^!' .. &shell ||
+			buf_name =~# '^quickrun://' ||
+			buf_name =~# '^zipfile:///'
 		return
 	elseif &filetype ==# 'tex'
 		if match(getline(1, 10), '^\s*\\documentclass\>') > 0 # 先頭 10 行の \documentclass の有無確認
