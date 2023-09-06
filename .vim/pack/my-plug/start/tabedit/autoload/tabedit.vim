@@ -47,18 +47,28 @@ function! s:open_buffer(f) abort " バッファ番号の可能性を探り有れ
 	return v:false
 endfunction
 
-function! s:open_file(f) abort  " ファイル a:f を開く
+function! s:sub_open_file(f) abort " 既に開いていれば移動、もしくは閉じたバッファを開き直す
 	for l:v in getbufinfo()
 		if a:f != l:v.name
 			continue
 		endif
 		if s:goto_win(l:v.windows)
-			return
+			return v:true
 		endif
 		execute 'silent tab sbuffer ' .. l:v.bufnr
 		let s:win_id = s:win_id ? s:win_id : winnr()
-		return
+		return v:true
 	endfor
+	return v:false
+endfunction
+
+function! s:open_file(f) abort  " ファイル a:f を開く
+	if s:sub_open_file(a:f)
+		return
+	endif
+	if getftype(a:f) ==# 'link' && s:sub_open_file(resolve(a:f))
+		return
+	endif
 	if wordcount().bytes == 0 && &modified == 0
 		execute 'edit ' .. a:f
 	else
@@ -69,9 +79,10 @@ endfunction
 
 function! s:open(f, pwd) abort  " a:f (バッファ番号、もしくはファイル名) を開く
 	let l:full = s:to_fullpath(a:f, a:pwd)
-	if getftype(l:full) ==? 'files'  " ファイルが存在するなら無条件で開く
+	let ftype = getftype(l:full)
+	if ftype ==# 'files' || ftype ==# 'link'  " ファイルが存在するなら無条件で開く
 		call s:open_file(l:full)
-	elseif getftype(l:full) ==? 'dir'  " ディレクトリなら Fern で開く
+	elseif ftype ==# 'dir'  " ディレクトリなら Fern で開く
 		execute 'tabedit | Fern ' .. l:full
 	elseif !s:open_buffer(a:f)
 		call s:open_file(l:full)
@@ -106,7 +117,7 @@ function! tabedit#tabedit(...) abort
 	let l:pwd = getcwd()
 	for l:files in a:000
 		let l:glob = glob(l:files)
-		if l:glob ==? ''
+		if l:glob ==# ''
 			call s:open(l:files, l:pwd)
 		else
 			for l:f in split(l:glob)
