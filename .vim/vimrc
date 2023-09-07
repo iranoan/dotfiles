@@ -30,34 +30,34 @@ filetype plugin indent on                      # ファイルタイプ別プラ�
 # 一部のプラグインは読み込まない {{{2
 g:loaded_getscriptPlugin = 1
 g:loaded_vimballPlugin = 1
-g:loaded_zipPlugin = 1
 g:loaded_2html_plugin = 1
 g:loaded_logiPat = 1
 g:loaded_rrhelper = 1
 # g:loaded_matchparen = 1
-g:loaded_gzip = 1 # {{{
+g:loaded_zipPlugin = 1 # {{{
 augroup loadZipArchive
 	autocmd!
 	autocmd BufReadPre *.aar,*.apk,*.celzip,*.crtx,*.docm,*.docx,*.dotm,*.dotx,*.ear,*.epub,*.gcsx,*.glox,*.gqsx,*.ja,*.jar,*.kmz,*.odb,*.odc,*.odf,*.odg,*.odi,*.odm,*.odp,*.ods,*.odt,*.otc,*.otf,*.otg,*.oth,*.oti,*.otp,*.ots,*.ott,*.oxt,*.potm,*.potx,*.ppam,*.ppsm,*.ppsx,*.pptm,*.pptx,*.sldx,*.thmx,*.vdw,*.war,*.wsz,*.xap,*.xlam,*.xlam,*.xlsb,*.xlsm,*.xlsx,*.xltm,*.xltx,*.xpi,*.zip
 				\ unlet g:loaded_zipPlugin | source $VIMRUNTIME/plugin/zipPlugin.vim
+	autocmd BufRead *.aar,*.apk,*.celzip,*.crtx,*.docm,*.docx,*.dotm,*.dotx,*.ear,*.epub,*.gcsx,*.glox,*.gqsx,*.ja,*.jar,*.kmz,*.odb,*.odc,*.odf,*.odg,*.odi,*.odm,*.odp,*.ods,*.odt,*.otc,*.otf,*.otg,*.oth,*.oti,*.otp,*.ots,*.ott,*.oxt,*.potm,*.potx,*.ppam,*.ppsm,*.ppsx,*.pptm,*.pptx,*.sldx,*.thmx,*.vdw,*.war,*.wsz,*.xap,*.xlam,*.xlam,*.xlsb,*.xlsm,*.xlsx,*.xltm,*.xltx,*.xpi,*.zip
+				\ ++nested edit!
 				| autocmd! loadZipArchive
 				| augroup! loadZipArchive
-				# | edit!
-	# ↑最後のファイル読み込みし直しを反映させるイベント不明
 augroup END
 # }}}
-g:loaded_tarPlugin = 1 # {{{
-augroup loadTarArchive
-	autocmd!
-	autocmd BufReadPre *.gz,*.bz2,*.Z,*.lzma,*.xz,*.lz,*.zst,*.br,*.lzo,*.tar,*.lrp,*.tbz,*.tgz,*.txz,*.tzs
-				\ unlet g:loaded_tarPlugin | source $VIMRUNTIME/plugin/tarPlugin.vim
-				| unlet g:loaded_gzip | source $VIMRUNTIME/plugin/gzip.vim
-				| autocmd! loadTarArchive
-				| augroup! loadTarArchive
-				# | edit!
-	# ↑最後のファイル読み込みし直しを反映させるイベント不明
-augroup END
-# }}}
+# g:loaded_gzip = 1 # {{{ # $VIMRUNTIME/plugin/gzip.vim で exists("#BufReadPre#*.gz") は finish としているので、Vim 起動後に BufReadPre をトリガーとして遅延読み込みできない
+# g:loaded_tarPlugin = 1
+# augroup loadTarArchive
+# 	autocmd!
+# 	autocmd FileReadPre *.gz,*.bz2,*.Z,*.lzma,*.xz,*.lz,*.zst,*.br,*.lzo,*.tar,*.lrp,*.tbz,*.tgz,*.txz,*.tzs
+# 				\ unlet g:loaded_tarPlugin | source $VIMRUNTIME/plugin/tarPlugin.vim
+# 				| unlet g:loaded_gzip | source $VIMRUNTIME/plugin/gzip.vim
+# 	autocmd BufRead *.tar.*,*.tar,*.tbz,*.tgz,*.txz,*.tzs
+# 				\ ++nested edit!
+# 				\ autocmd! loadTarArchive
+# 				| augroup! loadTarArchive
+# augroup END
+# # }}}
 # netrw {{{ ↓ fern を使う
 g:loaded_netrwPlugin = 1
 # g:netrw_banner=0                           # バーナー非表示
