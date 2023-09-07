@@ -4,9 +4,24 @@ vim9script
 export def TabOpen(): void
 	var sink_ls: list<string> = GetTabList()
 	if len(sink_ls) == 1 && len(sink_ls[0]->split('\n')) == 1
-		echohl WarningMsg
-		echo 'Only One Tab/One Window'
-		echohl None
+		if has('popupwin')
+			popup_create('Only One Tab/One Window', {
+				line: 'cursor+1', col: 'cursor', # カーソル位置
+				minwidth: 20,
+				time: 3000,
+				zindex: 300,
+				drag: 1,
+				highlight: 'WarningMsg',
+				border: [1, 1, 1, 1],
+				borderhighlight: ['CursorLine'],
+				close: 'click',
+				padding: [0, 1, 0, 1],
+				})
+		else
+			echohl WarningMsg
+			echo 'Only One Tab/One Window'
+			echohl None
+		endif
 		return
 	endif
 	fzf#run({
