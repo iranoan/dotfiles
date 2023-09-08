@@ -53,4 +53,4 @@ def Toggle_Toolbar()
 	endif
 enddef
 nnoremap <leader>cm <Cmd>call <SID>Toggle_menu()<CR>
-nnoremap <leader>ct <Cmd>call <SID>Toggle_Toolbar()<CR>
+nnoremap <leader>cT <Cmd>call <SID>Toggle_Toolbar()<CR>
