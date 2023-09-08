@@ -28,7 +28,7 @@ export def TabOpen(): void
 				source: sink_ls,
 				sink:    function('TabListSink'),
 				options: ['--delimiter', '\t', '--no-multi', '--prompt', " tab win_id\tfilename > ", '--tabstop', 2] + g:fzf_tabs_options,
-				window: get(g:, 'fzf_layout', {'window': { 'width': 0.9, 'height': 0.6}})->get('window', {'width': 0.9, 'height': 0.6})
+				window: get(g:, 'fzf_layout', {window: {width: 0.9, height: 0.6}})->get('window', {width: 0.9, height: 0.6})
 	})
 enddef
 
