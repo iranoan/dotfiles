@@ -13,7 +13,7 @@ export def Lcd(): void # カレントディレクトリをファイルのディ�
 			&buftype ==# 'help' ||
 			&buftype ==# 'nofile' ||
 			&filetype ==# 'terminal' ||
-			buf_name ==# '^!' .. &shell ||
+			buf_name =~# '^!' .. &shell ||
 			buf_name =~# '^quickrun://' ||
 			buf_name =~# '^zipfile:///'
 		return
