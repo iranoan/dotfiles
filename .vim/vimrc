@@ -45,8 +45,12 @@ augroup loadZipArchive
 				| augroup! loadZipArchive
 augroup END
 # }}}
-# g:loaded_gzip = 1 # {{{ # $VIMRUNTIME/plugin/gzip.vim で exists("#BufReadPre#*.gz") は finish としているので、Vim 起動後に BufReadPre をトリガーとして遅延読み込みできない
-# g:loaded_tarPlugin = 1
+g:loaded_gzip = 1 # {{{ # $VIMRUNTIME/plugin/gzip.vim で exists("#BufReadPre#*.gz") は finish としているので、Vim 起動後に BufReadPre をトリガーとして遅延読み込みできない
+g:loaded_tarPlugin = 1
+command GzipEnable unlet g:loaded_tarPlugin g:loaded_gzip
+	| source $VIMRUNTIME/plugin/tarPlugin.vim
+	| source $VIMRUNTIME/plugin/gzip.vim
+	| delcommand GzipEnable
 # augroup loadTarArchive
 # 	autocmd!
 # 	autocmd FileReadPre *.gz,*.bz2,*.Z,*.lzma,*.xz,*.lz,*.zst,*.br,*.lzo,*.tar,*.lrp,*.tbz,*.tgz,*.txz,*.tzs
