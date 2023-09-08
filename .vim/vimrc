@@ -405,9 +405,10 @@ set runtimepath+=/usr/share/vim/addons
 # 個人的なキー割り当て keymap キーマップ {{{1
 # 設定の切り替え {{{2
 nnoremap <silent><leader>cw <Cmd>setlocal wrap!<CR>
+nnoremap <silent><leader>ct <Cmd>execute 'set showtabline=' .. ( &showtabline ? 0 : 2 )<CR>
 # gvimrc に書かれた分 {{{3
 # nnoremap <leader>cm <Cmd>call <SID>Toggle_menu()<CR>
-# nnoremap <leader>ct <Cmd>call <SID>Toggle_Toolbar()<CR>
+# nnoremap <leader>cT <Cmd>call <SID>Toggle_Toolbar()<CR>
 # 日付と時刻入力 {{{2
 inoremap <silent><expr><C-X><C-D> strftime('%Y/%m/%d')
 inoremap <silent><expr><C-X><C-T> strftime('%H:%M:%S')
@@ -450,7 +451,7 @@ nnoremap <silent>]w         <C-W>w
 nnoremap <silent>[T         <Cmd>tprevious<CR>
 nnoremap <silent>]T         <Cmd>tnext<CR>
 # ]t,[t は下記のマッピングタブ・モードの切り替えに使っている
-# タブ・モードのタブ切り替えキー設定 {{{2
+# タブページの切り替えキー設定 {{{2
 nnoremap <silent>]t        gt
 nnoremap <silent>[t        gT
 noremap  <silent><C-Tab>   gt
