@@ -20,11 +20,10 @@ if [ -d "$HOME/.local/bin" ] ; then
 		PATH="$PATH:$HOME/.local/bin"
 	fi
 fi
-if which npm > /dev/null 2>&1 ; then
-	if [ -d "$HOME/node_modules/.bin" ] ; then
-		if echo "$PATH" | grep -qvE ":$HOME/node_modules/.bin$" && echo "$PATH" | grep -qv ":$HOME/node_modules/.bin:"; then
-			PATH="$PATH:$HOME/node_modules/.bin"
-		fi
+if [ -d "$HOME/node_modules/.bin" ] ; then
+	if echo "$PATH" | grep -qvE ":$HOME/node_modules/.bin$" && echo "$PATH" | grep -qv ":$HOME/node_modules/.bin:"; then
+		# node はユーザー・ローカルを優先させる
+		PATH="$HOME/node_modules/.bin:$PATH"
 	fi
 fi
 
