@@ -4,16 +4,14 @@ scriptencoding utf-8
 
 set printencoding=utf-8
 set printmbcharset=UniJIS2004 " ln -s /usr/share/fonts/cmap/adobe-japan1/UniJIS2004-UTF8-H "$HOME/.vim/print/UniJIS2004-UTF8-H.ps"
-set printfont=Japanese-Mincho-Regular:h11
-set printmbfont=r:Japanese-Mincho-Regular
+" set printfont=Japanese-Mincho-Regular:h11 printmbfont=r:Japanese-Mincho-Regular
 " 印刷 hardcopy で Japanese-Mincho-Regular など標準的なフォントが使えない時は、{{{
 " sudo apt install fonts-ipafont
-" set printmbfont=r:Japanese-Gothic-Regular " ←ゴチック体
+" set printfont=Japanese-Gothic-Regular:h11 printmbfont=r:Japanese-Gothic-Regular " ←ゴチック体
 " /var/lib/ghostscript/fonts/cidfmap に
 " /RictyDiminished-Regular << /FileType /TrueType /Path (/usr/share/fonts/truetype/ricty-diminished/RictyDiminished-Regular.ttf) /SubfontID 0 /CSI [(Japan1) 4] >> ;
 " を使えば、↓で Ricty Diminished も使える
-" set printfont=RictyDiminished-Regular:h11
-" set printmbfont=r:RictyDiminished-Regular
+set printfont=RictyDiminished-Regular:h11 printmbfont=r:RictyDiminished-Regular
 " }}}
 set printmbfont+=,c:no,a:yes                   " ASCII 文字の扱い
 set printheader=%y%F%m%=%N
