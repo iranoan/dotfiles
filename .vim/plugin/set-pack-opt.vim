@@ -86,7 +86,7 @@ nnoremap <silent><Leader>fd <Cmd>Files ~/downloads<CR>
 nnoremap <silent><Leader>fD <Cmd>Files ~/Document<CR>
 nnoremap <silent><Leader>fp <Cmd>Files ~/public_html/iranoan<CR>
 nnoremap <silent><Leader>fi <Cmd>Files ~/Information/slide<CR>
-nnoremap <silent><Leader>fb <Cmd>Buffers<CR>
+# nnoremap <silent><Leader>fb <Cmd>Buffers<CR>
 nnoremap <silent><Leader>fc <Cmd>Commands<CR>
 nnoremap <silent><Leader>fg <Cmd>GFiles?<CR>
 nnoremap <silent><Leader>fh <Cmd>HISTORY<CR>
@@ -96,7 +96,7 @@ nnoremap <silent><Leader>fm <Cmd>Marks<CR>
 nnoremap <silent>m/         <Cmd>Marks<CR>
 # ↑ vim-signature のデフォルト・キーマップをこちらに再定義
 # nnoremap <silent><Leader>ft :Tags<CR>
-nnoremap <silent><Leader>fw <Cmd>Windows<CR>
+# nnoremap <silent><Leader>fw <Cmd>Windows<CR>
 nnoremap <silent><Leader>f: <Cmd>History:<CR>
 nnoremap <silent><Leader>f/ <Cmd>History/<CR>
 augroup loadFZF_Vim
@@ -126,6 +126,8 @@ augroup END
 
 # fzf を使ってタブ・ページの切り替え ~/.vim/pack/my-plug/opt/fzf-tabs/ {{{1
 nnoremap <Leader>ft <Cmd>FZFTabOpen<CR>
+nnoremap <Leader>fb <Cmd>FZFTabOpen<CR>
+nnoremap <Leader>fw <Cmd>FZFTabOpen<CR>
 augroup load_fzf_tabs
 	autocmd!
 	autocmd CmdUndefined FZFTabOpen

@@ -15,7 +15,6 @@ Require~
 
 * Vim Ver. 9.0 以上
 * fzf (https://github.com/junegunn/fzf)
-* fzf.vim (https://github.com/junegunn/fzf.vim)
 * NeoVim では動作しない
 
 ==============================================================================
@@ -24,18 +23,20 @@ Use~
 >
 	:FZFTabOpen
 >
-	 tab win_id filename >
-	>  1 >  3ea current buffer
-	   1 <  3eb same buffer in same tabpage
-	   1 ?  3ec other buffer in same tabpage
-	   2 *  3ed same buffer in other tabpage
-	   2 |  3ee other buffer in other tabpage
+	 tab win_id buf filename >
+	   1    3ea  1  current window (header line: not selectable)
+	>  2 *  3ed 13   same   buffer in other tabpage
+	   2 |  3ee 14+  other  buffer in other tabpage
+	   1 <  3eb  2   same   buffer in same  tabpage
+	   1 >  3ec  3   other  buffer in same  tabpage
+	   0 ?    0  9  hidden  buffer
 <
-	* win_id 列の >, <, ?, *, | によって同じ/異なるバッファ、同じ/異なるタブ・
-		ページを示す
+	* win_id 列の >, <, ?, *, | によって同じ/異なるバッファ、同じ/異なるタブ
+		ページ、隠れバッファを示す (ファイル名に使えない記号を使っている)
 	* win_id の ID 番号は 16 進数で表示している (選択しやすいように)
-	* 更新バッファはファイル名の後に [+] が付く
+	* 更新バッファはバッファ番号の後に + が付く
 	* <Enter> で切り替え
+		- 隠れバッファの場合は新たなタブを開く
 
 ==============================================================================
                                                                *fzf-tabs-option*
@@ -49,7 +50,7 @@ Option~
 	* プレビュー・プログラムに渡すファイル名は {2} を使う
 
 	Example: >
-		let g:fzf_tabs_options = ['--preview', 'cat $(echo {2} | sed "s:^~:$HOME:")']
+		let g:fzf_tabs_options = ['--preview', 'cat $(echo {2} | sed "s>^~>$HOME>")']
 <
 |g:fzf_layout|
 
