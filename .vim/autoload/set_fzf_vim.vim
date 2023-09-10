@@ -58,7 +58,7 @@ function set_fzf_vim#main() abort
 					\ )
 				\ )
 	let g:fzf_action = {
-				\ 'enter': 'TabEdit',
+				\ 'enter': function('FZF_enter'),
 				\ 'ctrl-e': 'edit',
 				\ 'ctrl-t': 'tab split',
 				\ 'ctrl-s': 'split',
@@ -68,6 +68,10 @@ function set_fzf_vim#main() abort
 	let g:fzf_buffers_jump = 1
 	" let g:fzf_preview_window = ['right:50%', 'ctrl-]'] " FZF_DEFAULT_OPTS で定義済み
 endfunction
+
+def FZF_enter(arg: list<string>): void
+	tabedit#tabedit(arg[0])
+enddef
 
 def set_fzf_vim#solarized(): void
 	if g:colors_name ==# 'solarized'
