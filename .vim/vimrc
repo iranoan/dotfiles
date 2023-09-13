@@ -10,14 +10,14 @@ if has('iconv') # iconv を使って NEC 選定 IBM 拡張文字 (ⅰ) を変換
 		&fileencodings = 'iso-2022-jp,'
 	endif
 	if iconv('ⅰ ', 'utf-8', 'eucjp-ms') ==# "\x8F\xF3\xF3 " # eucJP-ms 対応チェック
-		&fileencodings ..= 'eucjp-ms,cp932,ucs-bom,utf-8,default,latin1'
+		&fileencodings ..= 'eucjp-ms,ucs-bom,utf-8,cp932,default,latin1'
 	elseif iconv('ⅰ ', 'utf-8', 'euc-jisx0213') ==# "\xAC\xB5 " # JISX0213 対応チェック
-		&fileencodings ..= 'euc-jisx0213,cp932,ucs-bom,utf-8,default,latin1'
+		&fileencodings ..= 'euc-jisx0213,ucs-bom,utf-8,cp932,default,latin1'
 	else
-		&fileencodings ..= 'euc-jp,cp932,ucs-bom,utf-8,default,latin1'
+		&fileencodings ..= 'euc-jp,ucs-bom,utf-8,cp932,default,latin1'
 	endif
 else # iconvが無いときはシンプルに
-	set fileencodings=iso-2022-jp,euc-jp,cp932,ucs-bom,utf-8,default,latin1
+	set fileencodings=iso-2022-jp,euc-jp,ucs-bom,utf-8,cp932,default,latin1
 endif
 # }}}
 set fileformats=unix,dos,mac
