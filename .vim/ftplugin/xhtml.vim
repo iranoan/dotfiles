@@ -10,12 +10,12 @@ let b:did_ftplugin_user = 1
 "--------------------------------
 " if !exists('g:xml_syntax_folding')
 " 	let g:xml_syntax_folding = 1
-" " 	"--------------------------------
-" " 	" augroup myHTML
-" " 	" 	autocmd!
-" " 	" 	" 以下プラグインに変えた
-" " 	" 	" autocmd FileType markdown      inoremap <buffer> </ </<C-x><C-o>
-" " 	" augroup END
+" 	"--------------------------------
+" 	" augroup myHTML
+" 	" 	autocmd!
+" 	" 	" 以下プラグインに変えた
+" 	" 	" autocmd FileType markdown      inoremap <buffer> </ </<C-x><C-o>
+" 	" augroup END
 " endif
 "--------------------------------
 "ファイルタイプ別ローカル設定
