@@ -625,3 +625,19 @@ augroup SetHidemaru
 	autocmd!
 	autocmd BufNewFile,BufRead ~/Hidemaru/Macro/{**/,}*.mac setlocal filetype=hidemaru
 augroup END
+
+# タグで挟む ~/.vim/pack/my-plug/opt/hidemaru/ {{{1
+# vim-surround では複数のタグを一度につけたり、クラス指定まで含む場合タイプ量が多くなる
+augroup loadSurroundTag
+	autocmd!
+	autocmd CmdUndefined SurroundTag packadd surroundTag
+				| autocmd! loadSurroundTag
+				| augroup! loadSurroundTag
+augroup END
+augroup loadSurroundTagMap
+	autocmd!
+	autocmd FileType html,xhtml nnoremap <silent><buffer><leader>tt <Cmd>SurroundTag <span\ class="tcy"><CR>
+	autocmd FileType html,xhtml xnoremap <silent><buffer><leader>tt <Cmd>SurroundTag <span\ class="tcy"><CR>
+	autocmd FileType html,xhtml nnoremap <silent><buffer><leader>tr <Cmd>SurroundTag <ruby> <rp>(</rp><rt></rt><rp>)</rp><CR>
+	autocmd FileType html,xhtml xnoremap <silent><buffer><leader>tr <Cmd>SurroundTag <ruby> <rp>(</rp><rt></rt><rp>)</rp><CR>
+augroup END
