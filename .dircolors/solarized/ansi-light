@@ -311,6 +311,12 @@ EXEC 01;31  # Unix
 .yuv 33
 .nef 33 # Nikon RAW format
 .NEF 33
+.webp 33
+.jp2 33
+.j2k 33
+.j2c 33
+.jpf 33
+.jpx 33
 
 # Audio
 .aac 33
