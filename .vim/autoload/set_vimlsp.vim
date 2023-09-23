@@ -90,32 +90,32 @@ def s:on_lsp_buffer_enabled(): void
 	# ALE を優先させるか両方使うか {{{
 	if &filetype == 'vim' || &filetype == 'sh' || &filetype == 'bash'
 		b:ale_enabled = 0 # ALE 不使用
-		nmap <buffer>[a        <Plug>(lsp-previous-diagnostic)
-		nmap <buffer>]a        <Plug>(lsp-next-diagnostic)
-		nmap <buffer><leader>p <Plug>(lsp-document-diagnostics)
+		nnoremap <buffer>[a        <Plug>(lsp-previous-diagnostic)
+		nnoremap <buffer>]a        <Plug>(lsp-next-diagnostic)
+		nnoremap <buffer><leader>p <Plug>(lsp-document-diagnostics)
 	elseif  &filetype == 'c' || &filetype == 'cpp' || &filetype == 'html' || &filetype == 'xhtml' || &filetype == 'tex'
 		b:lsp_diagnostics_enabled = 0
 		# clang 以外で行末の;無しで次の行がエラー扱いになる
 		# HTML, TeX では文法チェックがない
 	else # 結果的に b:lsp_diagnostics_enabled != 0 はエラー/警告リスト ALE 優先に
-		nmap <buffer><leader>p <Plug>(lsp-document-diagnostics)
+		nnoremap <buffer><leader>p <Plug>(lsp-document-diagnostics)
 	endif
 	# CSS などは両方使う
 	# }}}
 	# {{{ キーマップ
 	# outline ジャンプ
-	nmap <buffer><Leader>lo  <Plug>(lsp-document-symbol-search)
+	nnoremap <buffer><Leader>lo  <Plug>(lsp-document-symbol-search)
 	# # 名前変更
-	# nmap <buffer><leader>R <plug>(lsp-rename)
+	# nnoremap <buffer><leader>R <plug>(lsp-rename)
 	# # 参照検索
-	# nmap <buffer><leader>n <plug>(lsp-references)
+	# nnoremap <buffer><leader>n <plug>(lsp-references)
 	# # テキスト整形
-	# nmap <leader>s          <Plug>(lsp-document-format)
+	# nnoremap <leader>s          <Plug>(lsp-document-format)
 	# # Lint結果をQuickFixで表示
-	nmap <buffer><expr>K     &filetype ==# 'vim' ? 'K' : '<Plug>(lsp-hover)'
-	nmap <buffer><C-]>       <Plug>(lsp-definition)
-	# nmap <buffer>gi        <Plug>(lsp-implementation)
-	# nmap <buffer>gt        <Plug>(lsp-type-definition)
+	nnoremap <buffer><expr>K     &filetype ==# 'vim' ? 'K' : '<Plug>(lsp-hover)'
+	nnoremap <buffer><C-]>       <Plug>(lsp-definition)
+	# nnoremap <buffer>gi        <Plug>(lsp-implementation)
+	# nnoremap <buffer>gt        <Plug>(lsp-type-definition)
 	# }}}
 enddef
 

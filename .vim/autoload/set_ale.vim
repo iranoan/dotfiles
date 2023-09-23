@@ -52,9 +52,9 @@ function set_ale#main()
 				\ }
 				" \ 'xhtml': 'html',
 	" マッピング
-	nmap <silent>[a        <Plug>(ale_previous)
-	nmap <silent>]a        <Plug>(ale_next)
-	nmap <silent><leader>p <Cmd>call set_ale#open_eror_ls()<CR>
+	nnoremap <silent>[a        <Plug>(ale_previous)
+	nnoremap <silent>]a        <Plug>(ale_next)
+	nnoremap <silent><leader>p <Cmd>call set_ale#open_eror_ls()<CR>
 	augroup ALE_ON
 		autocmd!
 		autocmd BufWinEnter * let b:ale_enabled = 1 | ALEEnableBuffer | ALEEnable

@@ -166,20 +166,20 @@ g:hi_insert = 'highlight StatusLine term=reverse cterm=bold,reverse gui=bold,rev
 # キーマップ iy, ay
 # コメントのテキスト・オブジェクト化 https://github.com/thinca/vim-textobj-comment はコメントより優先されるシンタックスは多くないので syntax on なら vim-textobj-syntax が有れば良い
 # ↓キーマップ ic, ac
-omap ac <Plug>(textobj-syntax-a)
-omap ic <Plug>(textobj-syntax-i)
-xmap ic <Plug>(textobj-syntax-i)
-xmap ac <Plug>(textobj-syntax-a)
+onoremap ac <Plug>(textobj-syntax-a)
+onoremap ic <Plug>(textobj-syntax-i)
+xnoremap ic <Plug>(textobj-syntax-i)
+xnoremap ac <Plug>(textobj-syntax-a)
 
 # 折りたたみをテキストオプジェクト化 https://github.com/kana/vim-textobj-fold {{{1
 # キーマップ iz, az
 
 # テキストオブジェクトで (), {} "", '' を区別せずにカーソル近くで判定して、全て b で扱えるようにする https://github.com/osyo-manga/vim-textobj-multiblock {{{1
 # キーマップしないと ", ' の指定が働かない
-omap ab <Plug>(textobj-multiblock-a)
-omap ib <Plug>(textobj-multiblock-i)
-xmap ab <Plug>(textobj-multiblock-a)
-xmap ib <Plug>(textobj-multiblock-i)
+onoremap ab <Plug>(textobj-multiblock-a)
+onoremap ib <Plug>(textobj-multiblock-i)
+xnoremap ab <Plug>(textobj-multiblock-a)
+xnoremap ib <Plug>(textobj-multiblock-i)
 g:textobj_multiblock_blocks = [
 			[ '"', '"', 1 ],
 			[ "'", "'", 1 ],

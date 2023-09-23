@@ -206,7 +206,7 @@ export def SetMAP(plug: string, cmd: string, map_ls: list<dict<string>>): void #
 		extra ..= nr2char(c)
 	endwhile
 	for i in map_ls
-		execute i.mode .. 'map ' .. i.key .. ' <Plug>' .. i.cmd
+		execute i.mode .. 'noremap ' .. i.key .. ' <Plug>' .. i.cmd
 	endfor
 	var exe_cmd = substitute(cmd, ' ', "\<Plug>", 'g')
 	execute 'packadd ' .. plug

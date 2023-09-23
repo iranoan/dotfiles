@@ -67,12 +67,12 @@ SpeedDatingFormat %m/%d
 SpeedDatingFormat %^P%?[ ]%I:%M
 SpeedDatingFormat %H:%M:%S
 SpeedDatingFormat %H:%M
-nmap d<C-X> <Plug>SpeedDatingNowLocal
-nmap d<C-A> <Plug>SpeedDatingNowUTC
-xmap <C-X>  <Plug>SpeedDatingDown
-xmap <C-A>  <Plug>SpeedDatingUp
-nmap <C-X>  <Plug>SpeedDatingDown
-nmap <C-A>  <Plug>SpeedDatingUp
+nnoremap d<C-X> <Plug>SpeedDatingNowLocal
+nnoremap d<C-A> <Plug>SpeedDatingNowUTC
+xnoremap <C-X>  <Plug>SpeedDatingDown
+xnoremap <C-A>  <Plug>SpeedDatingUp
+nnoremap <C-X>  <Plug>SpeedDatingDown
+nnoremap <C-A>  <Plug>SpeedDatingUp
 
 # https://github.com/junegunn/fzf.vim {{{1
 nnoremap <silent><Leader>fr <Cmd>Files ~<CR>
@@ -482,8 +482,8 @@ nnoremap <Leader>dn       <Cmd>call vimspector#StepOver()<CR>
 nnoremap <Leader>d<Space> <Cmd>call vimspector#Stop()<CR>
 nnoremap <Leader>db       <Cmd>call vimspector#ToggleBreakpoint()<CR>
 nnoremap <Leader>dx       <Cmd>call vimspector#Reset( { 'interactive': v:false } )<CR>
-nmap     <Leader>di       <Plug>VimspectorBalloonEval
-xmap     <Leader>di       <Plug>VimspectorBalloonEval
+nnoremap <Leader>di       <Plug>VimspectorBalloonEval
+xnoremap <Leader>di       <Plug>VimspectorBalloonEval
 
 # ファイル・マネージャー https://github.com/lambdalisue/fern.vim {{{1
 nnoremap <Leader>e <Cmd>Fern $HOME -drawer -reveal=%:p -toggle<CR>

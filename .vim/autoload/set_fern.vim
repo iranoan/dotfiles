@@ -60,41 +60,41 @@ def s:init_fern(): void
 				\ })
 	b:fzf_action.enter = s:fern_fzf
 	# キー・マップ
-	nmap <buffer><C-K>           <Plug>(fern-action-leave)
-	nmap <buffer><C-C>           <Plug>(fern-action-cancel)
-	nmap <buffer><C-L>           <Plug>(fern-action-redraw)
-	# nmap <buffer><Enter>         <Plug>(fern-action-open:select)
-	nmap <buffer><F5>            <Plug>(fern-action-reload)
-	nmap <buffer>!               <Plug>(fern-action-hidden:toggle)
-	nmap <buffer><C-H>           <Plug>(fern-action-hidden:toggle)
-	nmap <buffer>-               <Plug>(fern-action-mark:toggle)
-	nmap <buffer>.               <Plug>(fern-action-repeat)
-	# nmap <buffer>?               <Plug>(fern-action-help)
-	nmap <buffer>?               <Cmd>echo join(filter(filter(split(execute('map'), '\n'), 'v:val =~? "\(fern-"' ), 'v:val !~? "^[nvxsoilct] *<plug"'), "\n")<CR>
-	nmap <buffer>a               <Plug>(fern-action-choice)
-	nmap <buffer>c               <Plug>(fern-action-copy)
-	nmap <buffer>d               <Plug>(fern-action-trash=)y<CR>
-	nmap <buffer>s               <Plug>(fern-action-open:right)
-	nmap <expr><buffer>O         fern#smart#leaf("\<Plug>(fern-action-collapse)", "\<Plug>(fern-action-expand)", "\<Plug>(fern-action-collapse)")
-	nmap <expr><buffer>o         set_fern#open()
-	nmap <buffer>r               <Plug>(fern-action-rename)
-	nmap <buffer>y               <Plug>(fern-action-yank)
-	nmap <buffer>x               <Plug>(fern-action-open:system)
-	nmap <buffer><leader>x       <Plug>(fern-action-open:system)
-	nmap <buffer>D               <Plug>(fern-action-clipboard-move)
-	nmap <buffer>Y               <Plug>(fern-action-clipboard-copy)
-	nmap <buffer>P               <Plug>(fern-action-clipboard-paste)
-	nmap <buffer>i               <Plug>(fern-action-zoom:reset)
+	nnoremap <buffer><C-K>           <Plug>(fern-action-leave)
+	nnoremap <buffer><C-C>           <Plug>(fern-action-cancel)
+	nnoremap <buffer><C-L>           <Plug>(fern-action-redraw)
+	# nnoremap <buffer><Enter>         <Plug>(fern-action-open:select)
+	nnoremap <buffer><F5>            <Plug>(fern-action-reload)
+	nnoremap <buffer>!               <Plug>(fern-action-hidden:toggle)
+	nnoremap <buffer><C-H>           <Plug>(fern-action-hidden:toggle)
+	nnoremap <buffer>-               <Plug>(fern-action-mark:toggle)
+	nnoremap <buffer>.               <Plug>(fern-action-repeat)
+	# nnoremap <buffer>?               <Plug>(fern-action-help)
+	nnoremap <buffer>?               <Cmd>echo join(filter(filter(split(execute('map'), '\n'), 'v:val =~? "\(fern-"' ), 'v:val !~? "^[nvxsoilct] *<plug"'), "\n")<CR>
+	nnoremap <buffer>a               <Plug>(fern-action-choice)
+	nnoremap <buffer>c               <Plug>(fern-action-copy)
+	nnoremap <buffer>d               <Plug>(fern-action-trash=)y<CR>
+	nnoremap <buffer>s               <Plug>(fern-action-open:right)
+	nnoremap <expr><buffer>O         fern#smart#leaf("\<Plug>(fern-action-collapse)", "\<Plug>(fern-action-expand)", "\<Plug>(fern-action-collapse)")
+	nnoremap <expr><buffer>o         set_fern#open()
+	nnoremap <buffer>r               <Plug>(fern-action-rename)
+	nnoremap <buffer>y               <Plug>(fern-action-yank)
+	nnoremap <buffer>x               <Plug>(fern-action-open:system)
+	nnoremap <buffer><leader>x       <Plug>(fern-action-open:system)
+	nnoremap <buffer>D               <Plug>(fern-action-clipboard-move)
+	nnoremap <buffer>Y               <Plug>(fern-action-clipboard-copy)
+	nnoremap <buffer>P               <Plug>(fern-action-clipboard-paste)
+	nnoremap <buffer>i               <Plug>(fern-action-zoom:reset)
 	# FZF
-	nmap <buffer>f               <Cmd>BLines<CR>
-	nmap <buffer>/               <Cmd>BLines<CR>
+	nnoremap <buffer>f               <Cmd>BLines<CR>
+	nnoremap <buffer>/               <Cmd>BLines<CR>
 	# fern-preview.vim 用
-	nmap <buffer>p               <Plug>(fern-action-preview:auto:toggle)
-	nmap <expr><buffer>q         popup_list() != [] ? '<Plug>(fern-action-preview:auto:toggle)' : ':quit<CR>'
-	nmap <expr><buffer><Space>   popup_list() != [] ? '<Plug>(fern-action-preview:scroll:down:half)' : '<PageDown>'
-	nmap <expr><buffer><S-Space> popup_list() != [] ? '<Plug>(fern-action-preview:scroll:up:half)' : '<PageUp>'
+	nnoremap <buffer>p               <Plug>(fern-action-preview:auto:toggle)
+	nnoremap <expr><buffer>q         popup_list() != [] ? '<Plug>(fern-action-preview:auto:toggle)' : ':quit<CR>'
+	nnoremap <expr><buffer><Space>   popup_list() != [] ? '<Plug>(fern-action-preview:scroll:down:half)' : '<PageDown>'
+	nnoremap <expr><buffer><S-Space> popup_list() != [] ? '<Plug>(fern-action-preview:scroll:up:half)' : '<PageUp>'
 	# fzf-mapping-fzf.vim
-	nmap <buffer><leader>f       <Plug>(fern-action-fzf-files)
+	nnoremap <buffer><leader>f       <Plug>(fern-action-fzf-files)
 enddef
 
 function set_fern#open() abort
