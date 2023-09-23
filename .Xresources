@@ -19,7 +19,8 @@
 *color14: #93A1A1
 *color15: #FDF6E3
 ! sxiv config
-Sxiv.font: Ricty Diminished Regular 14
+Sxiv.font: Ricty Diminished Regular:size=14
+Sxiv.background: #000000
 ! xterm config
 xterm*termName: xterm-256color
 xterm*scrollBar:  off
