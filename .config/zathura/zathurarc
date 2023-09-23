@@ -42,6 +42,8 @@ map [fullscreen] x adjust_window best-fit
 map [normal]     w adjust_window width
 map [fullscreen] w adjust_window width
 
+map              b toggle_statusbar
+
 set font "Ricty\ Diminished normal 14"
 set guioptions ""
 
