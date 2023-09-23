@@ -63,6 +63,7 @@ function set_vimlsp#main() abort
 		delfunction set_asyncomplete#main
 	endif
 	packadd asyncomplete-lsp.vim
+	call lsp#activate()
 	" }}}
 	" command! LspDebug let lsp_log_verbose=1 | let lsp_log_file = expand('~/lsp.log')
 	augroup set_lsp_install
