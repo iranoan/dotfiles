@@ -388,32 +388,45 @@ EXEC 01;31  # Unix
 
 # Archives, compressed
 .7z   1;35
+.Z    1;35
+.ace  1;35
 .apk  1;35
 .arj  1;35
 .bin  1;35
 .bz   1;35
 .bz2  1;35
-.cab  1;35  # Win
+.cab  1;35
+.cpio 1;35
 .deb  1;35
-.dmg  1;35  # OSX
+.dmg  1;35
+.dz   1;35
 .gem  1;35
 .gz   1;35
 .iso  1;35
 .jar  1;35
-.msi  1;35  # Win
+.lz   1;35
+.lz4  1;35
+.lzh  1;35
+.lzma 1;35
+.msi  1;35
 .rar  1;35
 .rpm  1;35
+.rz   1;35
 .tar  1;35
+.taz  1;35
 .tbz  1;35
 .tbz2 1;35
 .tgz  1;35
+.tlz  1;35
 .tx   1;35
+.txz  1;35
+.tz   1;35
 .war  1;35
 .xpi  1;35
 .xz   1;35
 .z    1;35
-.Z    1;35
 .zip  1;35
+.zoo  1;35
 .zst  1;35
 
 # For testing
