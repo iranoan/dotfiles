@@ -60,7 +60,7 @@ function set_fzf_vim#main() abort
 	let g:fzf_action = {
 				\ 'enter': function('FZF_enter'),
 				\ 'ctrl-e': 'edit',
-				\ 'ctrl-t': 'tab split',
+				\ 'ctrl-t': function('FZF_enter'),
 				\ 'ctrl-s': 'split',
 				\ 'ctrl-v': 'vsplit'
 				\ } " 他で sink を使うと、この設定は無視されるので注意←:help fzf-global-options-supported-by-fzf#wrap
