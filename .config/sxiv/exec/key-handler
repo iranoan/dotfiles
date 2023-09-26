@@ -71,6 +71,18 @@ while read -r file ; do
 		"C-e")      gimp "$file" & ;;
 		"s")        sushi "$file" & ;;
 		"C-s")      sushi "$file" & ;;
+		"r")
+			name="$(dmenu -p "Rename $file to: ")" 2> /dev/null
+			if [ -n "$name" ]; then
+				if [ -f "${file%/*}/$name" ]; then
+					case "$(dmenu -p "Exist ${file%/*}/$name, Overwrite? [y/N]: ")" in
+						[Yy]*) ;;
+						*) exit ;;
+					esac
+				fi
+				mv "$file" "${file%/*}/$name"
+			fi
+			;;
 		# "C-r")      rawtherapee "$file" & done ;;
 		# "C-comma")  rotate "$file" 270 ;;
 		# "C-period") rotate "$file"  90 ;;
