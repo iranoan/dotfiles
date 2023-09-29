@@ -95,6 +95,6 @@ def BufListSink(line: string): void
 	if win != 0
 		win_gotoid(win)
 	else
-		execute 'tab split | buffer ' .. split(line, '\s\+')[3]
+		execute printf('tab split | buffer %s', split(line, '\s\+')[3])
 	endif
 enddef
