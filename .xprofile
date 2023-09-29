@@ -5,26 +5,18 @@ umask 077
 #xmodmap ~/.Xmodmap
 
 # set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ] ; then
-if echo "$PATH" | grep -qvE ":$HOME/bin$" && echo "$PATH" | grep -qv ":$HOME/bin:"; then
+if [ -d "$HOME/bin" ] && echo "$PATH" | grep -qvE ":$HOME/bin($|:)"; then
 		PATH="$PATH:$HOME/bin"
-	fi
 fi
-if [ -d "$HOME/go/bin" ] ; then
-	if echo "$PATH" | grep -qvE ":$HOME/go/bin$" && echo "$PATH" | grep -qv ":$HOME/go/bin:"; then
+if [ -d "$HOME/go/bin" ] && echo "$PATH" | grep -qvE ":$HOME/go/bin($|:)"; then
 		PATH="$PATH:$HOME/go/bin"
-	fi
 fi
-if [ -d "$HOME/.local/bin" ] ; then
-	if echo "$PATH" | grep -qvE ":$HOME/.local/bin$" && echo "$PATH" | grep -qv ":$HOME/.local/bin:"; then
+if [ -d "$HOME/.local/bin" ] && echo "$PATH" | grep -qvE ":$HOME/.local/bin($|:)"; then
 		PATH="$PATH:$HOME/.local/bin"
-	fi
 fi
-if [ -d "$HOME/node_modules/.bin" ] ; then
-	if echo "$PATH" | grep -qvE ":$HOME/node_modules/.bin$" && echo "$PATH" | grep -qv ":$HOME/node_modules/.bin:"; then
+if [ -d "$HOME/node_modules/.bin" ] && echo "$PATH" | grep -qvE ":$HOME/node_modules/.bin($|:)"; then
 		# node はユーザー・ローカルを優先させる
 		PATH="$HOME/node_modules/.bin:$PATH"
-	fi
 fi
 
 # notmuch で日本語検索が出来るように (指定しないとカタカナ検索が出来ない?)
