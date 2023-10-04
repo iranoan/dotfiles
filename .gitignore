@@ -10,6 +10,7 @@
 /.*.sw?
 
 # プラグイン管理下ファイル (いつでもダウンロードできる)+履歴ファイルは無視
+/.fzf/completion.bash
 /.vim/.netrwhist
 /.vim/doc/
 /.vim/pack/github/
