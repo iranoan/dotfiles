@@ -27,7 +27,7 @@ export def TabOpen(): void
 	fzf#run({
 				source: sink_ls,
 				sink:    function('BufListSink'),
-				options: ['--delimiter', '\t', '--no-multi', '--header-lines=1', '--prompt', " tab win_id buf\tfilename > ", '--tabstop', 2] + g:fzf_tabs_options,
+				options: ['--delimiter', '\t', '--no-multi', '--header-lines=1', '--prompt', " tab win_id buf  \tfilename > ", '--tabstop', 2] + g:fzf_tabs_options,
 				window: get(g:, 'fzf_layout', {window: {width: 0.9, height: 0.6}})->get('window', {width: 0.9, height: 0.6})
 	})
 enddef
@@ -40,7 +40,7 @@ def GetBufList(): list<string>
 	var c_tab: number = tabpagenr()
 	var marker: string
 	var updated: string
-	var ls: list<string> = [printf("%2d %s%5x %2d%s\t%s", c_tab, ' ', c_win, c_buf, ( getbufinfo(c_buf)[0]['changed'] ? '+' : ' '), bufname(c_buf)->substitute('^' .. $HOME .. '\ze[/\\]', '~', ''))]
+	var ls: list<string> = [printf("%2d %s%5x %2d%s\t%s", c_tab, ' ', c_win, c_buf, ( getbufinfo(c_buf)[0]['changed'] ? '[+]' : '   '), bufname(c_buf)->substitute('^' .. $HOME .. '\ze[/\\]', '~', ''))]
 	for tab in gettabinfo()->filter((idx, val) => val.tabnr != c_tab) # カレント・タブページ以外
 		tab_n = tab['tabnr']
 		for win in tab['windows']
@@ -53,7 +53,7 @@ def GetBufList(): list<string>
 			if getbufinfo(buf_n)[0]['changed']
 				updated = '[+]'
 			else
-				updated = ''
+				updated = '   '
 			endif
 			add(ls, printf("%2d %s%5x %2d%s\t%s", tab_n, marker, win, buf_n, updated, bufname(buf_n)->substitute('^' .. $HOME .. '\ze[/\\]', '~', '')))
 		endfor
@@ -69,7 +69,7 @@ def GetBufList(): list<string>
 		if getbufinfo(buf_n)[0]['changed']
 			updated = '[+]'
 		else
-			updated = ''
+			updated = '   '
 		endif
 		add(ls, printf("%2d %s%5x %2d%s\t%s", tab_n, marker, win, buf_n, updated, bufname(buf_n)->substitute('^' .. $HOME .. '\ze[/\\]', '~', '')))
 	endfor
@@ -83,7 +83,7 @@ def GetBufList(): list<string>
 		if getbufinfo(buf_n)[0]['changed']
 			updated = '[+]'
 		else
-			updated = ''
+			updated = '   '
 		endif
 		add(ls, printf(" 0 %s    0 %2d%s\t%s", marker, buf_n, updated, bufname(buf_n)->substitute('^' .. $HOME .. '\ze[/\\]', '~', '')))
 	endfor
@@ -95,6 +95,6 @@ def BufListSink(line: string): void
 	if win != 0
 		win_gotoid(win)
 	else
-		execute printf('tab split | buffer %s', split(line, '\s\+')[3])
+		execute printf('tab split | buffer %s', split(line, '[\[\]+* \t]\+')[3])
 	endif
 enddef
