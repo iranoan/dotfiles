@@ -1,7 +1,11 @@
 scriptencoding utf-8
 
 function set_asyncomplete#main() abort
-	packadd asyncomplete.vim " ←asyncomplete.vim 自体は ~/.vim/pack/*/start に置かないと最初に読み込んだバッファで働かない
+	" packadd asyncomplete.vim " ←asyncomplete.vim 自体は ~/.vim/pack/*/start に置かないと最初に読み込んだバッファで働かないケースが有る
+	" 具体的には notmuch-draft
+	" バッファを開き終わった後に
+	"     call asyncomplete#enable_for_buffer()
+	" をすれば働くが、この関数の最後に追記してもダメだった
 	" let g:asyncomplete_auto_completeopt = 1 " ←デフォルト
 	" call asyncomplete#enable_for_buffer()
 	" call asyncomplete#force_refresh()
@@ -25,6 +29,9 @@ function set_asyncomplete#main() abort
 			packadd friendly-snippets
 		" }}}
 		" キーマップ {{{
+			" <C-j> はポップアップ候補の移動に使っている
+			" inoremap <expr><C-j>   vsnip#expandable() ? '<Plug>(vsnip-expand)'         : '<C-j>'
+			" snoremap <expr><C-j>   vsnip#expandable() ? '<Plug>(vsnip-expand)'         : '<C-j>'
 			inoremap <expr><C-Y>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-Y>'
 			snoremap <expr><C-Y>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-Y>'
 			" Jump forward or backward
