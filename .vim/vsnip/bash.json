@@ -21,7 +21,7 @@
   },
   "for_i": {
     "prefix": "for_i",
-    "body": "for ${1:i} in \\$( seq 0 ${2:10} ); do\n\t${3:command} \"\\$${1:i}\"${0}\ndone\n",
+    "body": "for ((${1:i} = 0; ${1:i} < ${2:10}; ${1:i}++)); do\n\t${3:command} \"\\$${1:i}\"${0}\ndone\n",
     "description": "An index-based iteration for loop."
   },
   "until": {
