@@ -23,7 +23,6 @@ install.sh
 * FZF
   * .fzf/
     * bashrc
-    * completion.bash
     * key-bindings.bash
 * GDB
 * gnuplot
