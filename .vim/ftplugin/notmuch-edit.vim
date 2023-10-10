@@ -28,77 +28,6 @@ if !exists("g:mail_draft_plugin")
 			return
 		enddef
 
-		def Nature(): void
-			def GetBoundary(): string
-				var s: string
-				var boundary = ''
-				for i in range(1, line('$'))
-					s = getline(i)
-					if s ==# ''
-						break
-					elseif s =~? '^Content-Type:'
-						if s =~? '\<boundary=["'']'
-								boundary = substitute(s, '\<boundary=["'']\([^"'']\+\)["'']', '\1', '')
-						endif
-						var j = i + 1
-						while true
-							s = getline(j)
-							if boundary ==# '' && s =~? '\<boundary=["'']'
-								boundary = substitute(s, '.\+\<boundary=["'']\([^"'']\+\)["'']', '\1', '')
-							endif
-							:silent execute ':' .. j .. 'delete _'
-							if s !~# '^\s1'
-								break
-							endif
-							j += 1
-						endwhile
-						:silent execute ':' .. i .. 'delete _'
-						append(i - 1, ['Content-Type: text/plain; charset="UTF-8"', 'Content-Transfer-Encoding: 8bit'])
-						break
-					endif
-				endfor
-				return boundary
-			enddef
-			:silent execute ':global/^--' .. GetBoundary() .. '$/:.,+3delete _'
-			:silent :-1delete | :silent :.,/^$/!base64 -di -w 0 -
-			:silent :%substitute/<body[^>]*>\zs/\r/g
-			:silent :%substitute/\(<br[^>]*>\|<\/\?\(tr\|table\|p\|li\)>\)\zs\n\?/\r/ge
-			:silent :%substitute/<!\(\[\|--\)[^>]*-->//ge
-			:silent :%substitute/\s*\(rel="noopener noreferrer"\|target="_blank"\)\s*/ /ge
-			:1 | :silent :/<!DOCTYPE /;/\(<body[ >\t]\|<body$\)/delete _
-			:silent :%substitute/\(<br[^>]*>\)\+\s*\n\?/\r/ge
-			DelBlock('━ PR ━━\+', '━━\+', 0, 1)
-			DelBlock('■最新科学情報をフォローしよう！　　', '━━\+', 0, 1)
-			DelBlock('購読案内：　Nature ダイジェスト　お申し込みはこちら *', '===\+', 0, -1)
-			:silent :%substitute/^配信停止はこちらからお手続きください。\n//ge
-			:1 | silent :/^$/,$substitute/<a href="https:\/\/[^>]\+>\zehttps:\/\///ge
-			:1 | silent :/^$/,$substitute/?utm_source=\(Nature_TXT\|NM\|NBT\)&utm_medium=\d\{6,}&utm_campaign=Newsletter//ge
-			:1 | silent :/^$/,$substitute/<\/a>//ge
-			var rep_dic = {
-						\ '&amp;': '&',
-						\ '&alpha;': 'α',
-						\ '&beta;': 'β',
-						\ '&gamma;': 'γ',
-						\ '&delta;': 'δ',
-						\ '&Alpha;': 'Α',
-						\ '&Beta;': 'Β',
-						\ '&Gamma;': 'Γ',
-						\ '&Delta;': 'Δ',
-						\ '&reg;': '®',
-						\ '&copy;': '©',
-						\ '&ndash;': '‐',
-						\ '<sub>1</sub>': '₁',
-						\ '<sub>2</sub>': '₂',
-						\ '<sub>3</sub>': '₃',
-						\ '<sub>+</sub>': '₊',
-						\ '<sup>1</sup>': '¹',
-						\ '<sup>2</sup>': '²',
-						\ '<sup>3</sup>': '³',
-						\ '<sup>+</sup>': '⁺',
-			}
-			:silent :%substitute/\(&\(amp\|\alpha\|beta\|gamma\|delta\|reg\|copy\|ndash\);\|<\(su[bp]\)>[123+]<\/\2>\)\c/\=rep_dic[submatch(0)]/ge
-		enddef
-
 		var msg = readfile(fnameescape(systemlist('notmuch search --output=files id:' .. b:notmuch.msg_id)[0]))
 		var from: string
 		var i = match(msg, '^From:\c')
@@ -121,8 +50,6 @@ if !exists("g:mail_draft_plugin")
 			setline('.', '-- ')
 		elseif from ==? 'e_service@mof.go.jp'
 			:silent execute ':1 | :/^当メールマガジンについてのご意見、ご感想はこちらへお願いします。$/;$delete | :%substitute/^　//g | :%substitute/　/ /g'
-		elseif from ==? 'natureasia@e-alert.nature.com'
-			Nature()
 		elseif from ==? 'mailmag@mag2tegami.com'
 			:silent :/\%^/,/^$/s/^From: *mag2 *0000013455 *<mailmag@mag2tegami.com>/From: Liyn-an <info@Liyn-an.com>/
 			DelBlock('──\+\[PR\]─', '─\[PR\]──\+', 0, 1)
