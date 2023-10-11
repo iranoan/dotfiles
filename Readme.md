@@ -26,6 +26,7 @@ install.sh
     * key-bindings.bash
 * GDB
 * gnuplot
+* Gromit-MPX
 * LanguageTool
 * Shell
   * .bashrc
@@ -57,4 +58,6 @@ install.sh
   * .config/pep8
 * ranger
 * sxiv
+  * font, color setting → .Xresources
+  * other → .config/sxiv/
 * Zathura
