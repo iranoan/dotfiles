@@ -53,5 +53,5 @@ def Toggle_Toolbar()
 		set guioptions+=T
 	endif
 enddef
-nnoremap <leader>cm <Cmd>call <SID>Toggle_menu()<CR>
+nnoremap <leader>cM <Cmd>call <SID>Toggle_menu()<CR>
 nnoremap <leader>cT <Cmd>call <SID>Toggle_Toolbar()<CR>
