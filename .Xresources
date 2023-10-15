@@ -32,7 +32,7 @@ xterm*eightBitInput: false
 xterm*utf8: 1
 xterm*locale: true
 xterm*faceName: Inconsolata:style=regular:antialias=true
-xterm*faceNameDoublesize: RictyDiminished Nerd Font:style=regular:antialias=true
+xterm*faceNameDoublesize: RictyDiminished NF:style=regular:antialias=true
 xterm*faceSize: 14
 xterm*ximFont: -misc-fixed-medium-r-normal--14-130-75-75-c-140-jisx0208.1983-0
 ! ↓絵文字が表示されか確認の為試してみたが変化なし
