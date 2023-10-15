@@ -411,6 +411,9 @@ set runtimepath+=/usr/share/vim/addons
 # 設定の切り替え {{{2
 nnoremap <silent><leader>cw <Cmd>setlocal wrap!<CR>
 nnoremap <silent><leader>ct <Cmd>execute 'set showtabline=' .. ( &showtabline ? 0 : 2 )<CR>
+nnoremap <silent><leader>cm <Cmd>execute 'set scrolloff=' .. ( &scrolloff ? 0 : ( &lines > 20 ? &lines / 4 : 5 ) )<CR>
+# |SafeState|		保留中のものはなく、ユーザーの文字入力を待つとき
+# |SafeStateAgain|	繰り返された SafeState
 # gvimrc に書かれた分 {{{3
 # nnoremap <leader>cM <Cmd>call <SID>Toggle_menu()<CR>
 # nnoremap <leader>cT <Cmd>call <SID>Toggle_Toolbar()<CR>
