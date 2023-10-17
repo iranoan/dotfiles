@@ -221,7 +221,7 @@ set wildignore+=*.dvi,*.o,*.opp,*.obj,*.a,*.so,*.fdb_latexmk,*.fls,*.nav,*.out,*
 # ステータス・バー {{{2
 set laststatus=2                               # 表示
 if has('gui_running')
-	# 区切りにを自由に使いたいが、隙間の空き方が GUI/CUI で異なる
+	# 区切りにを自由に使いたいが、隙間の空き方が GUI/CUI で異なる+フォントによっても微妙に異なる
 	set statusline=%#StatusLineLeft#%-16.(%2n%{%&buftype=='terminal'?'[terminal]':&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%#StatusLineCenterL#%*%<%F\ %=%#StatusLineCenterR#%#StatusLineRight#%c:%v:%{strcharlen(strpart(getline('.'),0,col('.')))}/%{strlen(join(getline(0,line('$')),(&ff=='dos'?'12':'1')))}:%{strcharlen(join(getline(0,line('$')),''))}\ %3l/%L%4{line('w$')*100/line('$')}%%\ 0x%04B\ [%{&fenc!=''?&fenc:&enc}:%{%{'dos':'CR+LF','unix':'LF','mac':'CR'}[&ff]%}]
 else
 	set statusline=%#StatusLineLeft#%-16.(%2n%{%&buftype=='terminal'?'[terminal]':&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%#StatusLineCenterL#%*%<%F\ %=%#StatusLineCenterR#%#StatusLineRight#%c:%v:%{strcharlen(strpart(getline('.'),0,col('.')))}/%{strlen(join(getline(0,line('$')),(&ff=='dos'?'12':'1')))}:%{strcharlen(join(getline(0,line('$')),''))}\ %3l/%L%4{line('w$')*100/line('$')}%%\ 0x%04B\ [%{&fenc!=''?&fenc:&enc}:%{%{'dos':'CR+LF','unix':'LF','mac':'CR'}[&ff]%}]
