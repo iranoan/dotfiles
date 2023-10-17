@@ -221,8 +221,8 @@ set wildignore+=*.dvi,*.o,*.opp,*.obj,*.a,*.so,*.fdb_latexmk,*.fls,*.nav,*.out,*
 # ステータス・バー {{{2
 set laststatus=2                               # 表示
 if has('gui_running')
-	set statusline=%#StatusLineLeft#%-16.(%2n%{%&buftype=='terminal'?'[terminal]':&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%*\ %<%F\ %=%#StatusLineRight#\ %c:%v:%{strcharlen(strpart(getline('.'),0,col('.')))}/%{strlen(join(getline(0,line('$')),(&ff=='dos'?'12':'1')))}:%{strcharlen(join(getline(0,line('$')),''))}\ %3l/%L%4{line('w$')*100/line('$')}%%\ 0x%04B\ [%{&fenc!=''?&fenc:&enc}:%{%{'dos':'CR+LF','unix':'LF','mac':'CR'}[&ff]%}]
-	# 区切りにを使いたいが、GUI で隙間が開かない適当な文字がない
+	# 区切りにを自由に使いたいが、隙間の空き方が GUI/CUI で異なる
+	set statusline=%#StatusLineLeft#%-16.(%2n%{%&buftype=='terminal'?'[terminal]':&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%#StatusLineCenterL#%*%<%F\ %=%#StatusLineCenterR#%#StatusLineRight#%c:%v:%{strcharlen(strpart(getline('.'),0,col('.')))}/%{strlen(join(getline(0,line('$')),(&ff=='dos'?'12':'1')))}:%{strcharlen(join(getline(0,line('$')),''))}\ %3l/%L%4{line('w$')*100/line('$')}%%\ 0x%04B\ [%{&fenc!=''?&fenc:&enc}:%{%{'dos':'CR+LF','unix':'LF','mac':'CR'}[&ff]%}]
 else
 	set statusline=%#StatusLineLeft#%-16.(%2n%{%&buftype=='terminal'?'[terminal]':&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%#StatusLineCenterL#%*%<%F\ %=%#StatusLineCenterR#%#StatusLineRight#%c:%v:%{strcharlen(strpart(getline('.'),0,col('.')))}/%{strlen(join(getline(0,line('$')),(&ff=='dos'?'12':'1')))}:%{strcharlen(join(getline(0,line('$')),''))}\ %3l/%L%4{line('w$')*100/line('$')}%%\ 0x%04B\ [%{&fenc!=''?&fenc:&enc}:%{%{'dos':'CR+LF','unix':'LF','mac':'CR'}[&ff]%}]
 endif
@@ -254,8 +254,13 @@ def StatusLineLeftRight(): void
 	endif
 	highlight StatusLineLeft gui=bold term=bold guifg=white guibg=SeaGreen ctermfg=white ctermbg=2
 	highlight StatusLineRight gui=bold term=bold guifg=white guibg=DarkYellow ctermfg=white ctermbg=3
-	execute 'highlight StatusLineCenterL gui=reverse term=reverse cterm=reverse guibg=SeaGreen' .. gfg .. ' ctermbg=2' .. cfg
-	execute 'highlight StatusLineCenterR gui=reverse term=reverse cterm=reverse guifg=DarkYellow' .. gbg .. ' ctermfg=3' .. cbg
+	if has('gui_running')
+		execute 'highlight StatusLineCenterL cterm=reverse guibg=SeaGreen' .. gfg .. ' ctermbg=2' .. cfg
+		execute 'highlight StatusLineCenterR cterm=reverse guifg=DarkYellow' .. gbg .. ' ctermfg=3' .. cbg
+	else
+		execute 'highlight StatusLineCenterL gui=reverse term=reverse cterm=reverse guibg=SeaGreen' .. gfg .. ' ctermbg=2' .. cfg
+		execute 'highlight StatusLineCenterR gui=reverse term=reverse cterm=reverse guifg=DarkYellow' .. gbg .. ' ctermfg=3' .. cbg
+	endif
 enddef
 augroup StatusLineLeftRight
 	autocmd!
