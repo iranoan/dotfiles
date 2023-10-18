@@ -14,7 +14,7 @@ if !exists('g:vim_plugin')
 	" let g:vimsyn_folding = 'afP'
 	augroup myVIM
 		autocmd!
-		autocmd CursorMoved,InsertLeave * call <SID>get_comment_string()
+		autocmd CursorMoved,InsertLeave * call s:get_comment_string()
 		 " 通常はローカル設定で良いが、vim スクリプト内で ruby/python スクリプトが有ると変わる可能性のあるものも含める
 		autocmd FileType vim setlocal keywordprg=:help
 					\ tabstop=2 softtabstop=0 noexpandtab shiftwidth=2
@@ -76,4 +76,4 @@ setlocal keywordprg=:help
 setlocal iskeyword+=?   " is?, isnot? の syntax highlight を効かせるため
 setlocal isfname-=,     " ファイルの区切り
 " setlocal foldmethod=syntax
-call <SID>get_comment_string()
+call s:get_comment_string()
