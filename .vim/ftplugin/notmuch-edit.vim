@@ -56,6 +56,9 @@ if !exists("g:mail_draft_plugin")
 			:silent :/^☆Ｏｏｏｏ.... 紅 茶 通 信 ☆ Liyn-an Tea TIMES ....ｏｏＯ☆/+2;$delete _
 		elseif from ==? 'ndh-news@nikkeibp.co.jp'
 			DelBlock('', '◇日経デジタルヘルスNEWS', 0, -3)
+		elseif from ==? 'xtech-ac@nikkeibp.co.jp'
+			:silent :1 | :/^$/,/^$/+1delete _ | :%s/^　//g
+			DelBlock('◆登録内容の変更や配信停止は', 'Copyright (C)\d\{4}、日経BP', 0, -1)
 		else
 			return
 		endif
