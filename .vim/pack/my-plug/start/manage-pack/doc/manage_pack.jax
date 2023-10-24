@@ -11,7 +11,8 @@ License: GPL Ver.3.
 コマンド~
 
 ReinstallPack {args}                                 *manage_pack-ReinstallPack*
-	{args} で指定されたプラグラインを強制的に再インストールする
+	* {args} で指定されたプラグラインを強制的に再インストールする
+	* Setup() (|manage_pack#Setup()|) で説明が記載済みの必要がある
                                                          *manage_pack-functions*
 関数 ~
 
@@ -23,14 +24,17 @@ Helptags()                                                *manage_pack#Helptags(
 		ルがあった時のみ再作成する
 
 	使用法: >
-		call manage_pack#Helptags()
-		call manage_pack#Helptags(0)
-		call manage_pack#Helptags(1)
+		:call manage_pack#Helptags()
+		:call manage_pack#Helptags(0)
+		:call manage_pack#Helptags(1)
 <
 IsInstalled({plugin})                                 *manage_pack#IsInstalled()*
 	{plugin} が既に |runtimepath| に加わっているか確認する
 
 	plugin: 確認するプラグイン名
+
+	使用法: >
+		:call manage_pack#IsInstalled('plugin')
 
 SetMAP({plugin}, {cmd}, {map})                              *manage_pack#SetMAP()*
 	nmap k <Plug>... の要領で <Plug> にマッピングするプラグインを遅延読み込みを
@@ -47,7 +51,7 @@ SetMAP({plugin}, {cmd}, {map})                              *manage_pack#SetMAP(
 		cmd: 割り当てるコマンド (<Plug> を除く)
 	}
 
-	使用法: >
+	記載例: >
 	call manage_pack#SetMAP('plugin', 'Commad', [
 				\ {'mode': 'n', 'key': 'lhs',  'cmd': 'Commad'},
 				\ {'mode': 'x', 'key': 'lhs',  'cmd': 'Commad'}
