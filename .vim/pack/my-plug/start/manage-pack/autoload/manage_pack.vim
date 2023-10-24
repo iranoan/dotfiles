@@ -1,7 +1,7 @@
 vim9script
 scriptencoding utf-8
 
-export def Helptags(): void
+export def Helptags(remake: bool = false): void
 	# ~/.vim/pack/*/{stat,opt}/*/doc に有るヘルプのタグを ~/.vim/doc/tags{,??x} に出力 (packadd しなくても、help が開けるようになる)
 	# ~/.vim/pack/*/{stat,opt}/*/doc に有る tags{,-??} が古ければ再作成
 	# コンパイル済みの Python スクリプトにしても大して速度は変わらない
@@ -16,7 +16,7 @@ export def Helptags(): void
 		endif
 		for d in glob(h .. '/pack/*/{start,opt}/*/doc', 1, 1)
 			var dir: string = fnamemodify(d, ':p:h:h:s?.\+/??')
-			if dir ==# 'vimdoc' || dir ==# 'vimdoc-ja' # ヘルプは除外 tags,tags-ja は作成済み
+			if dir ==# 'vimdoc' || dir =~# '^vimdoc-..$' # ヘルプは除外 tags,tags-ja は作成済み
 				continue
 			endif
 			if isdirectory(d)
@@ -44,6 +44,10 @@ export def Helptags(): void
 	var docdir: string = h .. '/doc'
 	if !isdirectory(docdir)
 		mkdir(docdir, 'p', 0o700)
+	endif
+	if remake
+		MkHelpTags(h)
+		return
 	endif
 	var max_tags_time: number = 0 # tags, tags-?? 最終更新日時取得
 	for tags in glob(h .. '/doc/tags{,-??}', 1, 1)

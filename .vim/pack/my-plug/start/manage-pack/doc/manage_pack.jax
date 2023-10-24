@@ -16,11 +16,16 @@ ReinstallPack {args}                                 *manage_pack-ReinstallPack*
 関数 ~
 
 Helptags()                                                *manage_pack#Helptags()*
-	~/.vim/pack に有るヘルプのタグを纏めて |packadd| 使用前でもヘルプを引けるよ
-	うにする
+	* ~/.vim/pack に有るヘルプのタグを纏めて |packadd| 使用前でもヘルプを引けるよ
+		うにする
+	* 0 以外の数値を引数に与えると、必ずタグ・ファイルを再作成する
+	* 引数がなかったり、0 を与えた場合は、タグ・ファイルより新しいヘルプ・ファイ
+		ルがあった時のみ再作成する
 
 	使用法: >
 		call manage_pack#Helptags()
+		call manage_pack#Helptags(0)
+		call manage_pack#Helptags(1)
 <
 IsInstalled({plugin})                                 *manage_pack#IsInstalled()*
 	{plugin} が既に |runtimepath| に加わっているか確認する
