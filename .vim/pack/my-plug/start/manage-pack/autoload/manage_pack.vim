@@ -69,7 +69,7 @@ export def Helptags(remake: bool = false): void
 enddef
 
 export function CompPackList(arg, cmd, pos) abort " ~/.vim/plugin/set-pack-{start,opt}.vim, ~/.vim/autoload/*.vim で設定されたプラグインの補完関数
-	return extendnew(<SID>Pack_ls('~/.vim/plugin/*.vim'), <SID>Pack_ls('~/.vim/autoload/*.vim'))
+	return extendnew(s:Pack_ls('~/.vim/plugin/*.vim'), s:Pack_ls('~/.vim/autoload/*.vim'))
 				\ ->uniq()
 				\ ->map('substitute(v:val, ''.\+/'', "", "")')
 				\ ->sort('i')
