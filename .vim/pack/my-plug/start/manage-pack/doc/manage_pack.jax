@@ -38,16 +38,24 @@ SetMAP({plugin}, {cmd}, {map})                              *manage_pack#SetMAP(
 	map:    マッピングの内容の辞書リスト
 	{
 		mode: n, x, o などのモード
-		map: 割り当てるキーマップ {lhs}
+		key: 割り当てるキーマップ {lhs}
 		cmd: 割り当てるコマンド (<Plug> を除く)
 	}
 
+	使用法: >
+	call manage_pack#SetMAP('plugin', 'Commad', [
+				\ {'mode': 'n', 'key': 'lhs',  'cmd': 'Commad'},
+				\ {'mode': 'x', 'key': 'lhs',  'cmd': 'Commad'}
+				\ ] )
+<
 Setup()                                                      *manage_pack#Setup()*
 	プラグインを導入/削除する
 
 	詳細:
 	* ~/.vim/plugin/*.vim か ~/.vim/autoload/*.vim に >
 		# [comment] http://github.com/author/plugin {{{
+<		や >
+		" [comment] http://github.com/author/plugin {{{
 <		の様に Repository の URL がフォールド・マーカー直前に有れば、導入対象にな
 		り ~/.vim/pack/github/start/ に入れる
 	* ただし、その中で >
