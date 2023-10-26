@@ -147,6 +147,7 @@ augroup ColorSchemeKind # colorscheme の種類別
 augroup END
 endif
 change_colorscheme#Highlight()
+syntax enable
 
 # 日本語ヘルプ https://github.com/vim-jp/vimdoc-ja {{{1
 # 1}}}
