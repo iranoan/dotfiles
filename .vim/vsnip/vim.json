@@ -92,7 +92,7 @@
 			"redir => var\n",
 			"redir => ${1:var}"
 		],
-		"body": "${2::TARGET}\nredir END"
+		"body": "${2}\nredir END"
 	},
 	"bundle_hooks": {
 		"prefix": "bundle_hooks",

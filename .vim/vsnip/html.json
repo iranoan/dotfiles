@@ -14,7 +14,7 @@
 			"<table>",
 			"<caption>${1}</caption>",
 			"<tr><th>${2}</th>${3}</tr>",
-			"${4:TARGET}",
+			"${4}",
 			"</table>${5}"
 		]
 	},
@@ -24,7 +24,7 @@
 	},
 	"th": {
 		"prefix": "th",
-		"body": "<th abbr=\"${1}\">${2:TARGET}</th>${3}"
+		"body": "<th abbr=\"${1}\">${2}</th>${3}"
 	},
 	"td": {
 		"prefix": "td",
@@ -194,26 +194,21 @@
 	"p": {
 		"prefix": "p",
 		"body": [
-			"<p>",
-			"${1}",
-			"</p>",
+			"<p>${1}</p>",
 			"${2}"
 		]
 	},
 	"pclass": {
 		"prefix": "pclass",
 		"body": [
-			"<p class=\"${1}\">",
-			"${2:TARGET}",
-			"</p>${3}"
+			"<p class=\"${1}\">${2}</p>",
+			"${3}"
 		]
 	},
 	"pid": {
 		"prefix": "pid",
 		"body": [
-			"<p id=\"${1}\">",
-			"${2:TARGET}",
-			"</p>",
+			"<p id=\"${1}\">${2}</p>",
 			"${3}"
 		]
 	},
@@ -288,7 +283,7 @@
 	},
 	"span": {
 		"prefix": "span",
-		"body": "<span ${1:class}=\"${2}\">${3:TARGET}</span>${4}"
+		"body": "<span ${1:class}=\"${2}\">${3}</span>${4}"
 	},
 	"ruby": {
 		"prefix": "ruby",
