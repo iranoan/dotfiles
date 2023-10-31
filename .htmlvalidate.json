@@ -1,0 +1,16 @@
+{
+	"root": true,
+	"extends": [
+		"html-validate:recommended",
+		"html-validate:document"
+	],
+	"rules": {
+		"prefer-tbody": "off",
+		"wcag/h63": "off",
+		"no-inline-style": "off",
+		"require-sri": "off"
+	},
+	"elements": [
+		"html5"
+	]
+}
