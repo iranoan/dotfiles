@@ -35,7 +35,7 @@ function set_ale#main()
 				\ 'c'     : ['clang'],
 				\ 'cpp'   : ['clang'],
 				\ 'h'     : ['clangd', 'clang', 'g++'],
-				\ 'html'  : ['tidy'],
+				\ 'html'  : ['htmlhint'],
 				\ 'tex'   : ['lacheck', 'chktex'],
 				\ 'json'  : ['jsonlint'],
 				\ }
