@@ -213,8 +213,7 @@ set formatlistpat=^\\c\\s*\\(\\d\\+[]:.)\\t\ ]\\\|(\\?[0-9a-z]\\+)\\\|[a-z][.\\t
 set breakindentopt=shift:0,min:10,list:0       # 見かけ上のインデント量を formatlistpat にヒットした文字数にする (list:-1はタブ文字も1文字なので、tabstop-1だけずれる)
 # コマンド・バー {{{2
 tabdo set cmdheight=1                          # コマンドバー調整
-set wildmenu                                   # 補完が拡張モードで行われる←次の設定にしても最長補完がされない
-set wildmode=list:longest,list                 # bashライクの補完
+set wildmenu wildmode=full wildoptions=pum,fuzzy # 補完が拡張モード+最長展開+ポップアップ
 set suffixes+=.aux,.log,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.toc,.pdf,.synctex.gz # 補完の優先度を下げる拡張子
 set wildignore+=*.dvi,*.o,*.opp,*.obj,*.a,*.so,*.fdb_latexmk,*.fls,*.nav,*.out,*.snm,*.ltjruby,*.swp # 補完候補から完全に除外 (含めると補完候補にも現れなくなる)
 # ステータス・バー {{{2
