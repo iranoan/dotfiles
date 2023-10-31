@@ -24,4 +24,4 @@ setlocal foldmethod=syntax
 " inoremap <buffer> ' ''<Left>
 " inoremap <buffer> /* /*  */<Left><Left><Left>
 setlocal equalprg=stylelint\ --fix\ --stdin
-
+setlocal spelloptions=camel

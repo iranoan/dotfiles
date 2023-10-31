@@ -77,3 +77,4 @@ setlocal iskeyword+=?   " is?, isnot? の syntax highlight を効かせるため
 setlocal isfname-=,     " ファイルの区切り
 " setlocal foldmethod=syntax
 call s:get_comment_string()
+setlocal spelloptions=camel

@@ -29,6 +29,7 @@ endif
 setlocal tabstop=4 softtabstop=4 expandtab shiftwidth=0 colorcolumn=80
 " setlocal keywordprg=pydoc3 だと os.path などの選択状態で思った動作をしない←コマンドラインに出てしまう
 setlocal errorformat=%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
+setlocal spelloptions=camel
 "--------------------------------
 " setlocal makeprg=python3\ \"%\"
 " ↑標準入力からの入力待ちが有る場合いつまで経っても終わらない←素直に QuickRun を使えば良い

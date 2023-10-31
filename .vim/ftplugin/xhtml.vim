@@ -48,5 +48,6 @@ inoremap <buffer>+-                &#177;
 inoremap <buffer>**                &#215;
 inoremap <buffer>==                &#8801;
 "--------------------------------
+setlocal spelloptions=camel
 "折りたたみ
 setlocal foldmethod=syntax
