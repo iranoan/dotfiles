@@ -51,7 +51,7 @@ function set_fern#main() abort
 endfunction
 
 def s:init_fern(): void
-	setlocal nonumber foldcolumn=0
+	setlocal nonumber foldcolumn=0 statusline=%#StatusLineLeft#[%{&filetype}]
 	glyph_palette#apply()     # バッファ毎に呼ばないと効かない
 	b:fzf_action = get(g:, 'fzf_action', {
 				\ 'ctrl-t': 'tab split',
