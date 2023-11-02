@@ -38,8 +38,8 @@ inoremap <expr><buffer><S-Enter>   pumvisible#Insert('<li>') .. '<C-G>u'
 inoremap <expr><buffer><C-Enter>   (getline('.') =~# '^\s*$' ?  '' : '<CR>') . '<End><p></p><Left><Left><Left><Left><C-G>u'
 inoremap <expr><buffer><S-C-Enter> pumvisible#Insert_after('<br>') .. '<C-G>u'
 inoremap <buffer><<                &lt;
-inoremap <buffer><=                &le;
 inoremap <buffer>>>                &gt;
+inoremap <buffer><=                &le;
 inoremap <buffer>>=                &ge;
 inoremap <buffer>&&                &amp;
 inoremap <buffer>--                ‐
