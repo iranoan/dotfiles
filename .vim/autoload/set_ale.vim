@@ -30,12 +30,27 @@ function set_ale#main()
 	" let g:ale_open_list = 0
 	" let g:ale_keep_list_window_open = 0
 	" 他の Linter のオプションが増えないように限定しておく
+	call ale#linter#Define('html', {
+				\ 'name': 'vnu',
+				\ 'executable': 'java',
+				\ 'command': '%e -jar ~/node_modules/vnu-jar/build/dist/vnu.jar --vabose --stdout --format json -',
+				\ 'callback': 'set_ale#HandleVnuJar',
+				\ })
+				"{
+				"	"messages":[
+				"	{
+				"		"extract":"<html>\n<head",
+				"		"hiliteStart":0,
+				"		"hiliteLength":6
+				"	}
+				"	]
+				"}
 	let g:ale_linters = {
 				\ 'python': ['flake8'],
 				\ 'c'     : ['clang'],
 				\ 'cpp'   : ['clang'],
 				\ 'h'     : ['clangd', 'clang', 'g++'],
-				\ 'html'  : ['htmlhint'],
+				\ 'html'  : ['vnu'],
 				\ 'tex'   : ['lacheck', 'chktex'],
 				\ 'json'  : ['jsonlint'],
 				\ }
@@ -65,4 +80,48 @@ def set_ale#open_eror_ls(): void
 	var org_win = bufwinid(bufnr())
 	botright lwindow 5
 	win_gotoid(org_win)
+enddef
+
+def set_ale#HandleVnuJar(b: number, lines: list<string>): list<dict<any>>
+	var output: list<dict<any>>
+	var obj: dict<any>
+	var type: string
+
+	for input in json_decode(lines[0])['messages']
+		echomsg input
+		obj = {
+			'lnum': get(input, 'firstLine', input.lastLine),
+			'end_lnum': input.lastLine,
+			'col': input.firstColumn,
+			'end_col': input.lastColumn,
+			'text': input.message,
+		}
+		if len(getline(obj.lnum)) <= obj.col
+			obj.lnum += 1
+			obj.col = 1
+		endif
+		type = input.type
+		if type ==# 'error'
+			obj.type = 'E'
+		elseif type ==# 'info'
+			if get(input, 'subType', '') ==# 'warning'
+				obj.type = 'W'
+			else
+				obj.type = 'I'
+			endif
+		elseif type ==# 'warning'
+			obj.type = 'W'
+		else
+			obj.type = 'N'
+		endif
+		# if has_key(error, 'ruleId')
+		# 	let code = error['ruleId']
+		# 	 Sometimes ESLint returns null here
+		# 	if !empty(code)
+		# 		let obj.code = code
+		# 	endif
+		# endif
+		add(output, obj)
+	endfor
+	return output
 enddef
