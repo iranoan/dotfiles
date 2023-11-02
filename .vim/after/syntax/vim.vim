@@ -53,9 +53,9 @@ if exists("g:vimsyn_folding")
 	syn region vimOperParen                        start="\[" end="\]"  contains=@vimOperGroup nextgroup=vimVar,vimFuncVar fold contains=vimOperParen
 
 	" bug fix
-	syntax clear vimFunction
-	syntax match	vimFunction	'\<\%(fu\%[nction]\)!\=\s\+\%(<[sS][iI][dD]>\|[sSgGbBwWtTlL]:\)\=\%(\i\|[#.]\|{.\{-1,}}\)*\ze\s*('	contains=@vimFuncList nextgroup=vimFuncBody
-	syntax match	vimFunction	'\<def!\=\s\+\%(\i\|[#.]\|{.\{-1,}}\)*\ze\s*(' contains=@vimFuncList nextgroup=vimFuncBody
+	" syntax clear vimFunction
+	" syntax match	vimFunction	'\<\%(fu\%[nction]\)!\=\s\+\%(<[sS][iI][dD]>\|[sSgGbBwWtTlL]:\)\=\%(\i\|[#.]\|{.\{-1,}}\)*\ze\s*('	contains=@vimFuncList nextgroup=vimFuncBody
+	" syntax match	vimFunction	'\<def!\=\s\+\%(\i\|[#.]\|{.\{-1,}}\)*\ze\s*(' contains=@vimFuncList nextgroup=vimFuncBody
 endif
 " fix https://github.com/vim-jp/issues/issues/1418
 syn region	vimString	oneline keepend	start=+[^a-zA-Z>!\\@]"+lc=1 skip=+\\\\\|\\"+ matchgroup=vimStringEnd end=+"+	contains=@vimStringGroup
