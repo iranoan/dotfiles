@@ -28,6 +28,7 @@ export def Main(): void
 		execute 'Voom ' .. &filetype
 	else
 		echomsg 'No Support filetype:''' .. &filetype .. ''''
+		return
 	endif
 	execute 'setlocal statusline=%#StatusLineRight#[%{&filetype}]\ ' .. name
 enddef
