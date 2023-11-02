@@ -168,8 +168,8 @@
 	"minipage": {
 		"prefix": "minipage",
 		"body": [
-			"\\begin{minipage}{${1:0.47\\textwidth}}",
-			"\t${2}",
+			"\\begin{minipage}{${1:0.47}${2:\\textwidth}}",
+			"\t${3}",
 			"\\end{minipage}"
 		]
 	},
@@ -178,9 +178,9 @@
 		"body": [
 			"\\begin{figure}[!htbp]",
 			"\t\\centering",
-			"\t\\includegraphics[${1:width=${2}}]{${3}}",
-			"\t\\caption{${4}}",
-			"\t\\label{${5}}",
+			"\t\\includegraphics[${1:width}=${2:0.9}${3:\\linewidth}]{${4}}",
+			"\t\\caption{${5}}",
+			"\t\\label{${6}}",
 			"\\end{figure}"
 		]
 	},
@@ -189,7 +189,7 @@
 			"includegraphics",
 			"graphics"
 		],
-		"body": "\\includegraphics[${1:width=${2}}]{${3}}"
+		"body": "\\includegraphics[${1:width}=${2:0.9}${3:\\linewidth}]{${4}}"
 	},
 	"input": {
 		"prefix": "input",
