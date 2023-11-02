@@ -20,6 +20,12 @@ let b:did_ftplugin_user = 1
 "--------------------------------
 "ファイルタイプ別ローカル設定
 "--------------------------------
+" compiler XHTML
+setlocal makeprg=html-check.sh\ \"%\"
+setlocal errorformat=%f:%l:%c:\ %trror:\ %m,%f:%l:%c:\ info\ %tarning:\ %m,%f:%l:%c:\ %tnfo\ warning:\ %m,%f:%l:%c:\ %m,%f:%l:%m
+setlocal formatlistpat=^\\s*<\\(li\\\|dt\\\|dd\\)>
+setlocal breakindentopt=list:4
+"--------------------------------
 " オムニ補完関数指定
 setlocal omnifunc=htmlcomplete#CompleteTags
 "--------------------------------

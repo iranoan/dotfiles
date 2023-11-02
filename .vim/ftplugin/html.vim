@@ -22,10 +22,7 @@ let b:did_ftplugin_user = 1
 "--------------------------------
 " compiler HTML
 setlocal makeprg=html-check.sh\ \"%\"
-"setlocal makeprg=tidy\ -raw\ -quiet\ -errors\ -e\ --gnu-emacs\ yes\ \"%\"
-"setlocal shellpipe=2>
-" setlocal errorformat=%f:%l:%c:\ %m,%f:%l:%m
-setlocal errorformat=%f:%l:%c:\ %trror:\ %m,%f:%l:%c:\ %m,%f:%l:%m
+setlocal errorformat=%f:%l:%c:\ %trror:\ %m,%f:%l:%c:\ info\ %tarning:\ %m,%f:%l:%c:\ %tnfo\ warning:\ %m,%f:%l:%c:\ %m,%f:%l:%m
 setlocal formatlistpat=^\\s*<\\(li\\\|dt\\\|dd\\)>
 setlocal breakindentopt=list:4
 "--------------------------------
