@@ -7,13 +7,18 @@ export def Lcd(): void # カレントディレクトリをファイルのディ�
 	endif
 	var c_path: string
 	var buf_name: string = bufname()
-	if &filetype ==# 'fugitive' || buf_name =~# '^fugitive://'
+	# echomsg '&filetype:' .. &filetype
+	# echomsg '&buftype:' .. &buftype
+	# echomsg 'bufname():' .. buf_name
+	if buf_name ==# ''
+		return
+	elseif &filetype ==# 'fugitive' || buf_name =~# '^fugitive://'
 		c_path = expand('%:p:h:h')->substitute('^fugitive://', '', '')
 	elseif &buftype ==# 'terminal' ||
 			&buftype ==# 'help' ||
 			&buftype ==# 'nofile' ||
 			&filetype ==# 'terminal' ||
-			buf_name =~# '^!' .. &shell ||
+			buf_name =~# '^!/' ||
 			buf_name =~# '^quickrun://' ||
 			buf_name =~# '^zipfile:///'
 		return
