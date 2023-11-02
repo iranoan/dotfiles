@@ -32,8 +32,8 @@ function set_asyncomplete#main() abort
 			" <C-j> はポップアップ候補の移動に使っている
 			" inoremap <expr><C-j>   vsnip#expandable() ? '<Plug>(vsnip-expand)'         : '<C-j>'
 			" snoremap <expr><C-j>   vsnip#expandable() ? '<Plug>(vsnip-expand)'         : '<C-j>'
-			inoremap <expr><C-Y>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-Y>'
-			snoremap <expr><C-Y>   vsnip#available(1) ? '<Plug>(vsnip-expand-or-jump)' : '<C-Y>'
+			inoremap <expr><C-Y>   vsnip#available(1) ? (pumvisible() ? '<Plug>(vsnip-expand-or-jump)' : '<Plug>(vsnip-jump-next)') : '<C-Y>'
+			snoremap <expr><C-Y>   vsnip#available(1) ? (pumvisible() ? '<Plug>(vsnip-expand-or-jump)' : '<Plug>(vsnip-jump-next)') : '<C-Y>'
 			" Jump forward or backward
 			inoremap <expr><Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-N>' : '<Tab>'
 			snoremap <expr><Tab>   vsnip#jumpable(1)  ? '<Plug>(vsnip-jump-next)' : pumvisible() ? '<C-N>' : '<Tab>'
