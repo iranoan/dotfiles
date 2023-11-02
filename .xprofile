@@ -5,16 +5,16 @@ umask 077
 #xmodmap ~/.Xmodmap
 
 # set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/bin" ] && echo "$PATH" | grep -qvE ":$HOME/bin($|:)"; then
+if [ -d "$HOME/bin" ] && echo "$PATH" | grep -qvE "(^|:)$HOME/bin($|:)"; then
 		PATH="$PATH:$HOME/bin"
 fi
-if [ -d "$HOME/go/bin" ] && echo "$PATH" | grep -qvE ":$HOME/go/bin($|:)"; then
+if [ -d "$HOME/go/bin" ] && echo "$PATH" | grep -qvE "(^|:)$HOME/go/bin($|:)"; then
 		PATH="$PATH:$HOME/go/bin"
 fi
-if [ -d "$HOME/.local/bin" ] && echo "$PATH" | grep -qvE ":$HOME/.local/bin($|:)"; then
+if [ -d "$HOME/.local/bin" ] && echo "$PATH" | grep -qvE "(^|:)$HOME/.local/bin($|:)"; then
 		PATH="$PATH:$HOME/.local/bin"
 fi
-if [ -d "$HOME/node_modules/.bin" ] && echo "$PATH" | grep -qvE ":$HOME/node_modules/.bin($|:)"; then
+if [ -d "$HOME/node_modules/.bin" ] && echo "$PATH" | grep -qvE "^$HOME/node_modules/.bin:"; then
 		# node はユーザー・ローカルを優先させる
 		PATH="$HOME/node_modules/.bin:$PATH"
 fi
