@@ -408,7 +408,7 @@ set delcombine                                 # 結合文字を別々に削除�
 # set maxcombine=2                               # 結合文字の最大個数
 set clipboard=exclude:cons\|linux              # クリップボードの扱い
 set viminfo+=n~/.vim/viminfo                   # viminfo の保存先
-set history=10000                              # コマンド履歴の保存数
+set history=500                                # コマンド履歴の保存数 (あまり大きくすると q: 等で時間がかかるようになる)
 # set runtimepath+=/usr/share/vim/addons,/usr/share/vim/vimfiles
 set runtimepath+=/usr/share/vim/addons
 # 個人的なキー割り当て keymap キーマップ {{{1
