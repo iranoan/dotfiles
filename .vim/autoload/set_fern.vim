@@ -10,7 +10,11 @@ function set_fern#main() abort
 	" 	Default: "default"
 	packadd fern.vim
 	" Git のステータス表示 https://github.com/lambdalisue/fern-git-status.vim {{{
-	packadd fern-git-status.vim " }}}
+	" どういう規則性で表示されるのかわからない
+	" とりあえず変更の有るフォルダで a -> open:right などでは表示される
+	packadd fern-git-status.vim
+	call fern_git_status#init()
+	" }}}
 	" プレビュー  https://github.com/yuki-yano/fern-preview.vim {{{
 	packadd fern-preview.vim " }}}
 	" netfw を入れ替え https://github.com/lambdalisue/fern-hijack.vim {{{
