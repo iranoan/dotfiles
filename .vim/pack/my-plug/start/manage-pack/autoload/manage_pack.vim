@@ -80,9 +80,13 @@ export def IsInstalled(plugin: string): bool
 	return (match(substitute(&runtimepath, ',', '\n', 'g'), '/' .. plugin .. '\n') != -1)
 enddef
 
-def GrepList(s: string, files: string): list<string> # 外部プログラム無しの grep もどき
+export def Grep(s: string, file: string): list<string> # 外部プログラム無しの grep もどき
+	return GrepList(s, file, true)
+enddef
+
+def GrepList(s: string, file: string, nosuf: bool): list<string> # 外部プログラム無しの grep もどき
 	var ret: list<string>
-	for f in glob(files, false, true, true)
+	for f in glob(file, false, true, true)
 		extend(ret, readfile(resolve(expand(f))))
 			->filter('v:val =~? ''' .. substitute(s, "'", "''", '') .. '''')
 	endfor
@@ -90,7 +94,7 @@ def GrepList(s: string, files: string): list<string> # 外部プログラム無�
 enddef
 
 def Pack_ls(f: string): list<string> # f に書かれた # OR 「" (comment) で始まり https://github.com/user/plugin {{{ (foldmaker)」の記載をリスト・アップ"
-	return GrepList('^["#\t ]\+.*https://github\.com/[a-z0-9._/-]\+ *{{{[0-9]*', f)
+	return GrepList('^["#\t ]\+.*https://github\.com/[a-z0-9._/-]\+ *{{{[0-9]*', f, false)
 		->map('substitute(v:val, ''\c^[#"\t ]\+.*\(https:\/\/github\.com\/[a-z0-9._/-]\+\/[a-z0-9._-]\+\)\s*{{{\d*.*'', ''\1'', "")')
 enddef
 
@@ -102,7 +106,7 @@ def Get_pack_ls(): list<dict<string>> # プラグインの名称、リポジト�
 			->filter('v:val =~# ''' .. s .. '''')
 
 	var Packadd_ls: func(string): list<any> = (f: string) => # packadd plugin で書かれたプラグイン読み込みを探す
-		GrepList('\<packadd\>', f)
+		GrepList('\<packadd\>', f, false)
 			->Filter('\<packadd\>')
 			->map('substitute(v:val, ''\c^.*\<packadd[ \t]\+\([a-z0-9_.-]\+\).*'', ''\1'', "")')
 
@@ -123,7 +127,7 @@ def Get_pack_ls(): list<dict<string>> # プラグインの名称、リポジト�
 	enddef
 
 	var Map_ls: func(string): list<any> = (f: string) => # manage_pack#SetMAP(plugin, ...) で書かれたプラグイン読み込みを探す
-		GrepList('^[^#"]*\<manage_pack#SetMAP([ \t]*[''"]', f)
+		GrepList('^[^#"]*\<manage_pack#SetMAP([ \t]*[''"]', f, false)
 			->map('substitute(v:val, ''\c^[^#"]*\<manage_pack#SetMAP([ \t]*["'''']\([^"'''']\+\).*'', ''\1'', "")')
 
 	var packadds: list<string> = Packadd_ls('~/.vim/plugin/*.vim')
@@ -167,16 +171,16 @@ export def Setup(): void # プラグインのインストール、設定のな�
 	# 設定なしを削除
 	# packs = map(pack_info, 'v:val.dir')
 	packs = GetDirs(pack_info)
+	echohl WarningMsg
 	for s in dirs
-		echohl WarningMsg
 		if match(packs, '^' .. s .. '$') != -1
 			continue
 		else
 			echo 'no setting: rm ' .. s
 			delete(s, 'rf')
 		endif
-		echohl None
 	endfor
+	echohl None
 enddef
 
 export def Reinstall(...packs: list<string>): void # プラグインの強制再インストール

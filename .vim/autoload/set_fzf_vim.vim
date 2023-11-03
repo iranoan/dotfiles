@@ -58,20 +58,45 @@ function set_fzf_vim#main() abort
 					\ )
 				\ )
 	let g:fzf_action = {
-				\ 'enter': function('FZF_enter'),
+				\ 'enter': function('set_fzf_vim#FZF_enter'),
 				\ 'ctrl-e': 'edit',
-				\ 'ctrl-t': function('FZF_enter'),
+				\ 'ctrl-t': function('set_fzf_vim#FZF_enter'),
 				\ 'ctrl-s': 'split',
-				\ 'ctrl-v': 'vsplit'
+				\ 'ctrl-v': 'vsplit',
+				\ 'ctrl-o': function('set_fzf_vim#FZF_open')
 				\ } " 他で sink を使うと、この設定は無視されるので注意←:help fzf-global-options-supported-by-fzf#wrap
 	" [Buffers] Jump to the existing window if possible
 	let g:fzf_buffers_jump = 1
 	" let g:fzf_preview_window = ['right:50%', 'ctrl-]'] " FZF_DEFAULT_OPTS で定義済み
 endfunction
 
-def FZF_enter(arg: list<string>): void
-	tabedit#tabedit(arg[0])
+def set_fzf_vim#FZF_enter(arg: list<string>): void
+	for f in arg
+		tabedit#tabedit(f)
+	endfor
 enddef
+
+def set_fzf_vim#FZF_open(arg: list<string>): void
+	var app: string
+	var ret: list<string>
+	for f in arg
+		app = system('file --brief --mime-type "' .. f .. '"')
+		if app[0 : 4] ==# 'text/'
+			tabedit#tabedit(f)
+			continue
+		endif
+		# org.pwmt.zathura-pdf-poppler.desktop
+		app = systemlist('xdg-mime query default ' .. app)[0]
+		var desktop = expand('$HOME') .. '/.local/share/applications/' .. app
+		if !filereadable(desktop)
+			desktop = '/usr/share/applications/' .. app
+		endif
+		ret = manage_pack#Grep('^Exec=', desktop )
+		app = matchstr(ret[0], 'Exec=\zs.\+\ze%')
+		system(app .. ' ' .. f .. ' &')
+	endfor
+enddef
+defcompile
 
 def set_fzf_vim#solarized(): void
 	if g:colors_name ==# 'solarized'
