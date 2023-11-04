@@ -220,3 +220,7 @@ export def SetMAP(plug: string, cmd: string, map_ls: list<dict<string>>): void #
 	execute 'packadd ' .. plug
 	feedkeys("\<Plug>" .. exe_cmd .. extra)
 enddef
+
+export def GetPackLs(): list<dict<string>> # プラグインの名称、リポジトリ、インストール先取得
+	return Get_pack_ls()
+enddef

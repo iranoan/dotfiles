@@ -16,7 +16,16 @@ ReinstallPack {args}                                 *manage_pack-ReinstallPack*
                                                          *manage_pack-functions*
 関数 ~
 
-Helptags()                                                *manage_pack#Helptags()*
+GetPackLs()                                             *manage_pack#GetPackLs()*
+	* インストールされているプラグインの情報の |Dictionaries| を要素とするの |List|
+		- package: 名称
+		- dir:     保存場所
+		- rep:     インストール元取得
+
+	使用法: >
+		:let packinfo = manage_pack#GetPackLs()
+
+Helptags()                                               *manage_pack#Helptags()*
 	* ~/.vim/pack に有るヘルプのタグを纏めて |packadd| 使用前でもヘルプを引けるよ
 		うにする
 	* 0 以外の数値を引数に与えると、必ずタグ・ファイルを再作成する
@@ -36,7 +45,7 @@ IsInstalled({plugin})                                 *manage_pack#IsInstalled()
 	使用法: >
 		:call manage_pack#IsInstalled('plugin')
 
-SetMAP({plugin}, {cmd}, {map})                              *manage_pack#SetMAP()*
+SetMAP({plugin}, {cmd}, {map})                             *manage_pack#SetMAP()*
 	nmap k <Plug>... の要領で <Plug> にマッピングするプラグインを遅延読み込みを
 	実現させる
 
