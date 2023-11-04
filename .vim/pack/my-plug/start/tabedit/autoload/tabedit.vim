@@ -120,7 +120,12 @@ export def Tabedit(...arg: list<string>): void
 		if ftype ==# 'files' || ftype ==# 'link'  # ファイルが存在するなら無条件で開く
 			OpenFile(full)
 		elseif ftype ==# 'dir'  # ディレクトリなら Fern で開く
-			execute 'tabedit | Fern ' .. full
+			if manage_pack#GetPackLs()->map('v:val["package"]')->count('fern.vim') >= 1
+				echomsg manage_pack#GetPackLs()->map('v:val["package"]')->count('fern.vim')
+				execute 'tabedit | Fern ' .. full
+			else
+				execute 'tabedit ' .. full
+			endif
 		else
 			if wordcount().bytes == 0 && &modified == false
 				execute 'silent edit ' .. f
