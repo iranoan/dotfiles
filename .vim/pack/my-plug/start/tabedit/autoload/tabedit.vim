@@ -121,8 +121,12 @@ export def Tabedit(...arg: list<string>): void
 			OpenFile(full)
 		elseif ftype ==# 'dir'  # ディレクトリなら Fern で開く
 			execute 'tabedit | Fern ' .. full
-		elseif !OpenBuffer(f)
-			OpenFile(full)
+		else
+			if wordcount().bytes == 0 && &modified == false
+				execute 'silent edit ' .. f
+			else
+				execute 'silent tabedit ' .. f
+			endif
 		endif
 	enddef
 
