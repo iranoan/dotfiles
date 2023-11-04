@@ -13,7 +13,7 @@ if exists('g:loaded_tabedit')
 	finish
 endif
 
-command! -nargs=* -complete=file TabEdit call tabedit#tabedit(<f-args>)
+command! -nargs=* -complete=file TabEdit call tabedit#Tabedit(<f-args>)
 
 " Reset User condition
 let &cpoptions = s:save_cpo
