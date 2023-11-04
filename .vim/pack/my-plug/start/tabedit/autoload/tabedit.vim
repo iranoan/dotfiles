@@ -27,6 +27,16 @@ export def Tabedit(...arg: list<string>): void
 	enddef
 
 	def Open(f: any, pwd: string): void  # f (バッファ番号、もしくはファイル名) を開く
+		def AssociateCore(subf: string): void
+			if has('unix')
+				system('xdg-open "' .. subf .. '" &')
+			elseif has('win32') || has('win32unix')
+				system('start "' .. subf .. '"')
+			elseif has('mac')
+				system('open "' .. subf .. '" &')
+			endif
+		enddef
+
 		def OpenFile(subf: string): void  # ファイル subf を開く
 			def SubOpenFile(subsubf: string): bool # 既に開いていれば移動、もしくは閉じたバッファを開き直す
 				for v in getbufinfo()
@@ -54,13 +64,14 @@ export def Tabedit(...arg: list<string>): void
 					execute 'silent ' .. cmd .. ' ' .. subsubf
 					return
 				endif
-				app = systemlist('xdg-mime query default ' .. app)[0]
-				var desktop = expand('$HOME') .. '/.local/share/applications/' .. app
-				if !filereadable(desktop)
-					desktop = '/usr/share/applications/' .. app
-				endif
-				app = matchstr(manage_pack#Grep('^Exec=', desktop )[0], 'Exec=\zs.\+\ze%')
-				system(app .. ' ' .. subsubf .. ' &')
+				AssociateCore(subsubf)
+				# app = systemlist('xdg-mime query default ' .. app)[0]
+				# var desktop = expand('$HOME') .. '/.local/share/applications/' .. app
+				# if !filereadable(desktop)
+				# 	desktop = '/usr/share/applications/' .. app
+				# endif
+				# app = matchstr(manage_pack#Grep('^Exec=', desktop )[0], 'Exec=\zs.\+\ze%')
+				# system(app .. ' ' .. subsubf .. ' &')
 			enddef
 
 			if SubOpenFile(subf)
@@ -117,14 +128,13 @@ export def Tabedit(...arg: list<string>): void
 
 		var full: string = ToFullpath(f, pwd)
 		var ftype: string = getftype(full)
-		if ftype ==# 'files' || ftype ==# 'link'  # ファイルが存在するなら無条件で開く
+		if ftype ==# 'file' || ftype ==# 'link'  # ファイルが存在するなら無条件で開く
 			OpenFile(full)
 		elseif ftype ==# 'dir'  # ディレクトリなら Fern で開く
 			if manage_pack#GetPackLs()->map('v:val["package"]')->count('fern.vim') >= 1
-				echomsg manage_pack#GetPackLs()->map('v:val["package"]')->count('fern.vim')
 				execute 'tabedit | Fern ' .. full
 			else
-				execute 'tabedit ' .. full
+				AssociateCore(full)
 			endif
 		else
 			if wordcount().bytes == 0 && &modified == false
