@@ -74,7 +74,7 @@ endfunction
 
 def set_fzf_vim#FZF_open(arg: list<string>): void
 	for f in arg
-		tabedit#Associate(f)
+		tabedit#Tabedit(f)
 	endfor
 enddef
 defcompile

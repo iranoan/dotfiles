@@ -4,30 +4,8 @@ vim9script
 # 複数指定では、最初に見つかった分をアクティブに
 # mimetype が text/* でない、圧縮ファイル (zip, tar.*) でもないときは関連付けで開く
 
-var win_id: number # 終了後最初に見つかった/開いたアクティブにする候補の初期値
-
-export def Associate(f: string): void # mimetype が text/* でないときは関連付けで開く
-	var app: string = systemlist('file --brief --mime-type "' .. f .. '"')[0]
-				echomsg app
-				if app[0 : 4] ==# 'text/'
-						|| app ==# 'application/zip'
-						|| app ==# 'application/x-xz'
-						|| app ==# 'application/x-tar'
-						|| app ==# 'application/x-gzip'
-						|| app ==# 'application/x-bz2-compressed'
-		execute 'silent tabedit ' .. f
-		return
-	endif
-	app = systemlist('xdg-mime query default ' .. app)[0]
-	var desktop = expand('$HOME') .. '/.local/share/applications/' .. app
-	if !filereadable(desktop)
-		desktop = '/usr/share/applications/' .. app
-	endif
-	app = matchstr(manage_pack#Grep('^Exec=', desktop )[0], 'Exec=\zs.\+\ze%')
-	system(app .. ' ' .. f .. ' &')
-enddef
-
 export def Tabedit(...arg: list<string>): void
+	var win_id: number = 0  # 終了後最初に見つかった/開いたアクティブにする候補の初期値 (有り得ない 0 としておく)
 	def GotoWin(windows: list<number>): bool  # windows[] をアクティブ候補に
 		if windows == []
 			return false
@@ -65,6 +43,26 @@ export def Tabedit(...arg: list<string>): void
 				return false
 			enddef
 
+			def Associate(cmd: string, subsubf: string): void # mimetype が text/* でないときは関連付けで開く
+				var app: string = systemlist('file --brief --mime-type "' .. subsubf .. '"')[0]
+				if app[0 : 4] ==# 'text/'
+						|| app =~# '^application/\(x-\)\?zip$'
+						|| app =~# '^application/\(x-\)\?xz$'
+						|| app =~# '^application/\(x-\)\?tar$'
+						|| app =~# '^application/\(x-\)\?gzip$'
+						|| app =~# '^application/\(x-\)\?bz2-compressed$'
+					execute 'silent ' .. cmd .. ' ' .. subsubf
+					return
+				endif
+				app = systemlist('xdg-mime query default ' .. app)[0]
+				var desktop = expand('$HOME') .. '/.local/share/applications/' .. app
+				if !filereadable(desktop)
+					desktop = '/usr/share/applications/' .. app
+				endif
+				app = matchstr(manage_pack#Grep('^Exec=', desktop )[0], 'Exec=\zs.\+\ze%')
+				system(app .. ' ' .. subsubf .. ' &')
+			enddef
+
 			if SubOpenFile(subf)
 				return
 			endif
@@ -72,9 +70,9 @@ export def Tabedit(...arg: list<string>): void
 				return
 			endif
 			if wordcount().bytes == 0 && &modified == false
-				execute 'edit ' .. subf
+				Associate('edit', subf)
 			else
-				tabedit#Associate(subf)
+				Associate('tabedit', subf)
 			endif
 			win_id = win_id ? win_id : winnr()
 		enddef
@@ -132,7 +130,6 @@ export def Tabedit(...arg: list<string>): void
 		tabedit
 		return
 	endif
-	win_id = 0  # 終了後最初に見つかった/開いたアクティブにする候補の初期値 (有り得ない 0 としておく)
 	var pwd: string = getcwd()
 	for files in arg
 		var fs: string = glob(files)
