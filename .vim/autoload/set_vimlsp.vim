@@ -74,10 +74,14 @@ function set_vimlsp#main() abort
 		" 			\ foldmethod=expr
 		" 			\ foldexpr=lsp#ui#vim#folding#foldexpr()
 		" 			\ foldtext=lsp#ui#vim#folding#foldtext()
-		autocmd WinEnter,FileType c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,tex,css,sh,bash,go,conf if !s:check_run_lsp() | call lsp#activate() | endif
-		" packadd を使う場合、これがないと開いた既存のウィンドウにでバッファを額た時に有効にならない
-		" autocmd BufWinEnter * call lsp#activate() "
-		" ↑コメントとしたのは、すでに開いている filetype だと、新たに fzf HISTORY に開いたバッファで有効にならないため
+		" ↓packadd を使う場合、これがないと開いた既存のウィンドウにでバッファを開いた時に有効にならない
+		autocmd FileType c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,tex,css,sh,bash,go,conf if !s:check_run_lsp() | call lsp#activate() | endif
+		autocmd BufAdd *
+					\ if count(['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'html', 'xhtml', 'tex', 'css', 'sh', 'bash', 'go', 'conf'], &filetype) >=1
+					\ | if !s:check_run_lsp()
+					\ | 	call lsp#activate()
+					\ | endif
+					\ | endif
 	augroup END
 endfunction
 
@@ -118,13 +122,28 @@ def s:on_lsp_buffer_enabled(): void
 	# nnoremap <buffer>gi        <Plug>(lsp-implementation)
 	# nnoremap <buffer>gt        <Plug>(lsp-type-definition)
 	# }}}
+	# 次の条件の時、うまく動かない (running で起動しているのに Diagnostic 系が動作しない) ケースが有るので、一度止めてから再度有効にする
+	# * まだ LSP が動作していない
+	# * 空のバッファに LSP を使用するファイルを開く
+	# 例えば、空のバッファで起動後 :edit ~/.bash_history した時
+	var s_info: dict<any>
+	for s in lsp#get_server_names()
+		s_info = lsp#get_server_info(s)
+		if index(s_info.allowlist, &filetype) != -1
+			break
+		endif
+	endfor
+	while lsp#get_server_status(s_info.name) !=? 'running'
+		lsp#stop_server(s_info.name)
+		break
+	endwhile
+	lsp#enable()
 enddef
 
 def s:check_run_lsp(): bool # 後から同じウィンドウに開いた時以下の設定がないと、LSP server が起動しない
 	call s:on_lsp_buffer_enabled()  # すでに開いているファイルタイプと同じファイルを開いたとき、これがないとキーマップが有効にならない
 	# autocmd User lsp_buffer_enabled では不十分
-	var i = {}
-	var html_server = ''
+	var i: dict<any>
 	var servers_name = lsp#get_server_names()
 	for s in servers_name
 		i = lsp#get_server_info(s)
@@ -134,7 +153,7 @@ def s:check_run_lsp(): bool # 後から同じウィンドウに開いた時以�
 			endif
 			if &filetype ==? 'css' # HTML の style 属性では一度 HTML の LSP を止めないとうまく働いてくれない
 				# まだ不完全で、再度 style 属性に入り直さないとうまく動作しない
-				var j = {}
+				var j: dict<any>
 				for h in servers_name
 					j = lsp#get_server_info(h)
 					if index(j.allowlist, 'html') != -1
