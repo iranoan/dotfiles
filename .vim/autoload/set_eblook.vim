@@ -20,22 +20,26 @@ function set_eblook#main() abort
 				\ 'name': 'genius',
 				\ 'title': 'ジーニアス英和大辞典',
 				\},
+				\]
+	let g:eblook_dictlist2 = [
 				\{
 				\ 'book': '/home/hiroyuki/EPWING/kohjien/',
 				\ 'name': 'koujien',
 				\ 'title': '広辞苑　第四版',
 				\},
+				\]
+	let g:eblook_dictlist3 = [
 				\{
 				\ 'book': '/home/hiroyuki/EPWING/Gakken/',
 				\ 'name': 'kanjigen',
 				\ 'title': '漢字源',
 				\},
 				\]
-	let g:eblook_viewers = {
-				\'jpeg': 'xdg-open %s &',
-				\'bmp': 'xdg-open %s &',
-				\'pbm': 'xdg-open %s &',
-				\'wav': 'xdg-open %s &',
-				\'mpg': 'xdg-open %s &',
-				\}
+	" let g:eblook_viewers = {
+	" 			\'jpeg': 'xdg-open %s &',
+	" 			\'bmp': 'xdg-open %s &',
+	" 			\'pbm': 'xdg-open %s &',
+	" 			\'wav': 'xdg-open %s &',
+	" 			\'mpg': 'xdg-open %s &',
+	" 			\}
 endfunction
