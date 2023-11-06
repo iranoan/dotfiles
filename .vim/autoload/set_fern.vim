@@ -89,6 +89,7 @@ def s:init_fern(): void
 	nnoremap <buffer>Y               <Plug>(fern-action-clipboard-copy)
 	nnoremap <buffer>P               <Plug>(fern-action-clipboard-paste)
 	nnoremap <buffer>i               <Plug>(fern-action-zoom:reset)
+	nnoremap <buffer><C-L>           <Plug>(fern-action-reload:all)
 	# FZF
 	nnoremap <buffer>f               <Cmd>BLines<CR>
 	nnoremap <buffer>/               <Cmd>BLines<CR>
