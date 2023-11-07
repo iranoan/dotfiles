@@ -55,7 +55,7 @@ endif
 setlocal foldmethod=expr foldexpr=HelpFold() foldtext=HelpFoldText()
 setlocal makeprg=textlint\ --format\ compact\ \"%\"
 setlocal errorformat=%f:\ line\ %l\\,\ col\ %c\\,\ %trror\ -\ %m
-" /home/hiroyuki/.vim/pack/my-plug/opt/notmuch-py-vim/doc/notmuch-python.jax: line 41, col 15, Error - 一文に二回以上利用されている助詞 "が" がみつかりました。 (japanese/no-doubled-joshi)
+" ~/.vim/pack/my-plug/opt/notmuch-py-vim/doc/notmuch-python.jax: line 41, col 15, Error - 一文に二回以上利用されている助詞 "が" がみつかりました。 (japanese/no-doubled-joshi)
 setlocal keywordprg=:help
 setlocal commentstring=%s
 " ↑コメント書式がない
