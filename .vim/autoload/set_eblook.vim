@@ -3,6 +3,7 @@ scriptencoding utf-8
 function set_eblook#setup() abort
 	let g:eblook_no_default_key_mappings = 1 "デフォルトのキーマッピング<Leader>yと<Leader><C-Y>を登録しない
 	packadd eblook.vim
+	unlet g:eblook_no_default_key_mappings " 読み込み時のみ使われるので、読み込みが終われば削除する
 	let g:eblook_dictlist1 = [
 				\{
 				\ 'book': '/home/hiroyuki/EPWING/readers/',
