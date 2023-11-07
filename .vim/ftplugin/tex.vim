@@ -24,7 +24,7 @@ let b:did_ftplugin_user = 1
 " r!find $HOME/texmf/ -type f -name "*.ty" -o -name "*.tex" -o -name "*.cls" -o -name "*.bst" -o -name "*.bib" | sed -r 's/\/[^\/]+$//g' | sort | uniq | sed -e 's/^/\t\t\t\\ .. '\''/g' -e 's/$/,'\''/g'
 " r!find /usr/local/texlive/*/texmf-dist -type f -name "*.sty" -o -name "*.cls" -o -name "*.bst" -o -name "*.bib" | sed -r 's/\/[^\/]+$//g' | sort | uniq |  sed -e 's/^/\t\t\t\\ .. '\''/g' -e 's/$/,'\''/g'
 " で探す
-let &l:path=',/home/hiroyuki/texmf/**,/usr/local/texlive/*/texmf-dist/tex/**,'
+let &l:path=',' .. expand('~/texmf/') .. '**,/usr/local/texlive/*/texmf-dist/tex/**,'
 " 検索 path の設定:あまりに長いので、一行一ディレクトリ形式は次の方法でも出来るが開くのに時間がかかる
 " let &l:path=
 " 			\ '.,' .. substitute(substitute(substitute(system('find ~/texmf/ -type d'),'\n',',',"g"),
