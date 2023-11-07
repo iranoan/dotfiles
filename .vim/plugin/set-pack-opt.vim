@@ -441,8 +441,16 @@ augroup loadPreview
 augroup END
 
 # EPWING の辞書を呼び出す https://github.com/deton/eblook.vim {{{1
-nmap <silent><Leader>eb <Cmd>call set_eblook#main() <bar> delfunction set_eblook#main<CR>
-xmap <silent><Leader>eb <Cmd>call set_eblook#main() <bar> delfunction set_eblook#main<CR>
+xnoremap <silent><Leader>eb <Cmd>call set_eblook#setup() <Bar>call set_eblook#searchVisual()<CR>
+nnoremap <silent><Leader>eb <Cmd>call set_eblook#setup() <Bar>call set_eblook#searchWord()<CR>
+# augroup loadeblook
+# 	autocmd!
+# 	autocmd FuncUndefined eblook#* # 何故か動作しない
+# 				\ set_eblook#setup()
+# 				| autocmd! loadeblook
+# 				| augroup! loadeblook
+# 				| delfunction set_eblook#setup
+# augroup END
 
 # Undo をツリー表示で行き来する https://github.com/mbbill/undotree {{{1
 nnoremap <silent><Leader>u <Cmd>UndotreeToggle<CR>
