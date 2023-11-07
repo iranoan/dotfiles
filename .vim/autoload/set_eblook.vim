@@ -6,24 +6,24 @@ function set_eblook#setup() abort
 	unlet g:eblook_no_default_key_mappings " 読み込み時のみ使われるので、読み込みが終われば削除する
 	let g:eblook_dictlist1 = [
 				\{
-				\ 'book': '/home/hiroyuki/EPWING/readers/',
+				\ 'book': expand('~/EPWING/readers/'),
 				\ 'name': 'plus',
 				\ 'title': '研究社リーダーズ＋プラスＶ２',
 				\},
 				\{
-				\ 'book': '/home/hiroyuki/EPWING/Genius/',
+				\ 'book': expand('~/EPWING/Genius/'),
 				\ 'name': 'genius',
 				\ 'title': 'ジーニアス英和大辞典',
 				\},
 				\]
 	let g:eblook_dictlist2 = [
 				\{
-				\ 'book': '/home/hiroyuki/EPWING/kohjien/',
+				\ 'book': expand('~/EPWING/kohjien/'),
 				\ 'name': 'koujien',
 				\ 'title': '広辞苑　第四版',
 				\},
 				\{
-				\ 'book': '/home/hiroyuki/EPWING/Gakken/',
+				\ 'book': expand('~/EPWING/Gakken/'),
 				\ 'name': 'kanjigen',
 				\ 'title': '漢字源',
 				\},
