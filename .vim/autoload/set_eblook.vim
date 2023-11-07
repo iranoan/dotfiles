@@ -42,10 +42,18 @@ function set_eblook#setup() abort
 endfunction
 
 def set_eblook#search(s: string): void # 使う辞書グループの分岐して検索する
-	if s =~? '[^''"A-Z]'
-		eblook#Search(2, s, 0)
+	var ss: string = s
+	if ss ==# ''
+		ss = input('Input search word: ')
+		if ss ==# ''
+			return
+		endif
+	endif
+	ss = substitute(ss, '^\(["'']\)\([^"'']\+\)\1$', '\2', '')
+	if ss =~? '[^''"A-Z]'
+		eblook#Search(2, ss, 0)
 	else
-		eblook#Search(1, s, 0)
+		eblook#Search(1, ss, 0)
 	endif
 enddef
 
@@ -62,7 +70,6 @@ def set_eblook#searchVisual(): void
 			->substitute('\s*\n\s*', '', 'g')
 			->substitute('^\s\+', '', 'g')
 			->substitute('\s\+$', '', 'g')
-			->substitute('^\(["'']\)\([^"'']\+\)\1$', '\2', '')
 	)
 	@a = save_reg
 enddef
