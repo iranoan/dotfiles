@@ -62,7 +62,7 @@ def set_eblook#searchWord(): void
 enddef
 
 def set_eblook#searchVisual(): void
-	var save_reg: string = @a
+	var save_reg: dict<any> = getreginfo('a')
 	silent execute "normal! \<Esc>"
 	silent execute 'normal! `<' .. visualmode() .. '`>"ay'
 	set_eblook#search(
@@ -71,5 +71,5 @@ def set_eblook#searchVisual(): void
 			->substitute('^\s\+', '', 'g')
 			->substitute('\s\+$', '', 'g')
 	)
-	@a = save_reg
+	setreg('a', save_reg)
 enddef
