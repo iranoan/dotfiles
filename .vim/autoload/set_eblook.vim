@@ -73,4 +73,3 @@ def set_eblook#searchVisual(): void
 	)
 	@a = save_reg
 enddef
-defcompile
