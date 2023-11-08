@@ -1,6 +1,6 @@
 # vim: set filetype=perl : vim のモードラインを使って Perl スタイルで表示されるようにしておく
-$lualatex_silent = 'lualatex -shell-escape  -src-specials -synctex=1 -file-line-error  -interaction=nonstopmode';
-$lualatex = 'lualatex -shell-escape  -src-specials -synctex=1 -file-line-error';
+$lualatex_silent = 'lualatex -shell-escape -synctex=1 -file-line-error  -interaction=nonstopmode';
+$lualatex = 'lualatex -shell-escape -synctex=1 -file-line-error';
 $pdflualatex  = $lualatex;
 $biber = 'biber %O --bblencoding=utf8 -u -U --output_safechars %B';
 $bibtex = 'bibtex %O %B';
