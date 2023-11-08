@@ -14,7 +14,7 @@ function set_fzf_vim#main() abort
 						\ '--preview', '~/bin/fzf-preview.sh {}',
 						\ '--bind', 'ctrl-o:execute-silent(xdg-open {})',
 						\ ]
-	let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9 } }
+	let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9, 'relative': v:true, 'xoffset': 0 , 'yoffset': 0 } }
 	if has('gui_running')
 		call set_fzf_vim#solarized()
 		augroup FZF_Vim_Solaraized
@@ -42,8 +42,8 @@ function set_fzf_vim#main() abort
 					\ },
 					\ <bang>0
 				\ )
-					" \ 'find -L . -type d \( -name .texlive2023 -o -name .npm -o -name .thumbnails -o -name thumbnails -o -name .log -o -name .tmp -o -name xapian -o -name .git -o -name cache -o -name .cache -o -name .Trash -o -name .ecryptfs -o -name .Private \) -prune -o \( -type f -o -type l \) ! -name "*.nav" ! -name "*.synctex.gz" ! -name "*.asf" ! -name "*.bmc" ! -name "*.bmp" ! -name "*.cer" ! -name "*.chm" ! -name "*.chw" ! -name "*.crt" ! -name "*.dll" ! -name "*.doc" ! -name "*.docx" ! -name "*.dvi" ! -name "*.emf" ! -name "*.exe" ! -name "*.fdb_latexmk" ! -name "*.flv" ! -name "*.gpg" ! -name "*.hlp" ! -name "*.hmereg" ! -name "*.icc" ! -name "*.icm" ! -name "*.ico" ! -name "*.ics" ! -name "*.jp2" ! -name "*.lzh" ! -name "*.m4a" ! -name "*.mov" ! -name "*.mp3" ! -name "*.mp4" ! -name "*.mpg" ! -name "*.o" ! -name "*.obj" ! -name "*.odb" ! -name "*.odg" ! -name "*.odp" ! -name "*.ods" ! -name "*.odt" ! -name "*.oll" ! -name "*.opf" ! -name "*.opp" ! -name "*.pfa" ! -name "*.pl3" ! -name "*.ppm" ! -name "*.ppt" ! -name "*.pptx" ! -name "*.reg" ! -name "*.rtf" ! -name "*.sqlite" ! -name "*.tfm" ! -name "*.ttf" ! -name "*.vf" ! -name "*.webm" ! -name "*.wmf" ! -name "*.wmv" ! -name "*.xls" ! -name "*.xlsm" ! -name "*.xlsx" ! -name ".*.sw?" ! -name a.out ! -name "*.rm" ! -name "*.vdi" ! -name "*.mkv" ! -name "*.swf" ! -name "*.avi" ! -name "*.jar" ! -name "*.pyc" ! -name "*.vbox" ! -name "*.nvram" ! -name "*.cur" ! -name "*.class" ! -name "*.vbox-prev" ! -name "*.fls" ! -name .viminfo ! -name viminfo ! -name "*.ltjruby" -regextype posix-extended ! -regex "\./Mail/(\.[^/]+/)+(cur|new|tmp)/[^/]+$" -printf "%P\n"',
-				" バイナリ・ファイルとメールを除隊 (メールはファイル名だけ見ても分らない)
+					" \ 'find -L . -type d \( -name .texlive2023 -o -name .npm -o -name .thumbnails -o -name thumbnails -o -name .log -o -name .tmp -o -name xapian -o -name .git -o -name cache -o -name .cache -o -name .Trash -o -name .ecryptfs -o -name .Private \) -prune -o \( -type f -o -type l \) ! -name "*.nav" ! -name "*.synctex.gz" ! -name "*.asf" ! -name "*.bmc" ! -name "*.bmp" ! -name "*.cer" ! -name "*.chm" ! -name "*.chw" ! -name "*.crt" ! -name "*.dll" ! -name "*.doc" ! -name "*.docx" ! -name "*.dvi" ! -name "*.emf" ! -name "*.exe" ! -name "*.fdb_latexmk" ! -name "*.flv" ! -name "*.gpg" ! -name "*.hlp" ! -name "*.hmereg" ! -name "*.icc" ! -name "*.icm" ! -name "*.ico" ! -name "*.ics" ! -name "*.jp2" ! -name "*.lzh" ! -name "*.m4a" ! -name "*.mov" ! -name "*.mp3" ! -name "*.mp4" ! -name "*.mpg" ! -name "*.o" ! -name "*.obj" ! -name "*.odb" ! -name "*.odg" ! -name "*.odp" ! -name "*.ods" ! -name "*.odt" ! -name "*.oll" ! -name "*.opf" ! -name "*.opp" ! -name "*.pfa" ! -name "*.pl3" ! -name "*.ppm" ! -name "*.ppt" ! -name "*.pptx" ! -name "*.reg" ! -name "*.rtf" ! -name "*.sqlite" ! -name "*.tfm" ! -name "*.ttf" ! -name "*.vf" ! -name "*.webm" ! -name "*.wmf" ! -name "*.wmv" ! -name "*.xls" ! -name "*.xlsm" ! -name "*.xlsx" ! -name ".*.sw?" ! -name a.out ! -name "*.rm" ! -name "*.vdi" ! -name "*.mkv" ! -name "*.swf" ! -name "*.avi" ! -name "*.jar" ! -name "*.pyc" ! -name "*.vbox" ! -name "*.nvram" ! -name "*.cur" ! -name "*.class" ! -name "*.vbox-prev" ! -name "*.fls" ! -name .viminfo ! -name viminfo ! -name "*.ltjruby" -regextype posix-extended ! -regex "\./Mail/(\.[^/]+/)+(cur|new|tmp)/[^/]+$" -printf "%P\n"', " {{{
+					" バイナリ・ファイルとメールを除隊 (メールはファイル名だけ見ても分らない) " }}}
 	" TabEdit が --multi に対応したつもり History そのものは、コマンドや検索履歴で使うので、上書きしない
 	command! -bang -nargs=* HISTORY call fzf#run(
 				\ fzf#wrap(
@@ -70,6 +70,10 @@ function set_fzf_vim#main() abort
 	" [Buffers] Jump to the existing window if possible
 	let g:fzf_buffers_jump = 1
 	" let g:fzf_preview_window = ['right:50%', 'ctrl-]'] " FZF_DEFAULT_OPTS で定義済み
+	" let g:fzf_vim = {
+	" 			\ 'buffers_jump': 1,
+	" 			\ 'commits_log_options': '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"',
+	" 			\ }
 endfunction
 
 def set_fzf_vim#FZF_open(arg: list<string>): void
