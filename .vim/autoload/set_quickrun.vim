@@ -62,7 +62,7 @@ function set_quickrun#main() abort
 				\ 'outputter/quickfix/open_cmd'      : 'call Quickrn2qf()',
 				\ 'hook/close_buffer/enable_failure' : 0,
 				\ 'command'                          : 'latexmk',
-				\ 'cmdopt'                           : '-src-specials -synctex=1 -file-line-error -interaction=nonstopmode',
+				\ 'cmdopt'                           : '-synctex=1 -file-line-error -interaction=nonstopmode',
 				\ 'hook/cd/directory'                : '%S:h',
 				\ 'arg'                              : '',
 				\ 'exec'                             : ['%c %o %s'],
