@@ -99,15 +99,12 @@ def Pack_ls(f: string): list<string> # f に書かれた # OR 「" (comment) で
 enddef
 
 def Get_pack_ls(): list<dict<string>> # プラグインの名称、リポジトリ、インストール先取得
-	var Filter: func(list<string>, string): list<any> = (l: list<string>, s: string) => # 文字列、コメントを削除した上で更に filter
-			l->filter('v:val !~# ''^[\t ]*["#]''') # 行頭コメント削除
-			->map('substitute(v:val, ''\("\(\"\|[^"]\)*"\|''''\(''''\|[^'''']\)*''''\)'', "", "")') # 文字列削除
-			->map('substitute(v:val, ''["#].*'', "", "")') # コメント削除
-			->filter('v:val =~# ''' .. s .. '''')
-
 	var Packadd_ls: func(string): list<any> = (f: string) => # packadd plugin で書かれたプラグイン読み込みを探す
 		GrepList('\<packadd\>', f, false)
-			->Filter('\<packadd\>')
+			->filter('v:val !~# ''^[\t ]*["#]''') # 行頭コメント削除
+			->map('substitute(v:val, ''\("\(\"\|[^"]\)*"\|''''\(''''\|[^'''']\)*''''\)'', "", "")') # 文字列削除
+			->map('substitute(v:val, ''["#].*'', "", "")') # コメント削除
+			->filter('v:val =~# ''\<packadd\>''')
 			->map('substitute(v:val, ''\c^.*\<packadd[ \t]\+\([a-z0-9_.-]\+\).*'', ''\1'', "")')
 
 	def Get_packages(f: string, p: list<string>): list<dict<string>> # ファイル f に書かれたプラグインの名称、リポジトリ、インストール先取得
@@ -126,7 +123,7 @@ def Get_pack_ls(): list<dict<string>> # プラグインの名称、リポジト�
 		return packages
 	enddef
 
-	var Map_ls: func(string): list<any> = (f: string) => # manage_pack#SetMAP(plugin, ...) で書かれたプラグイン読み込みを探す
+	var Map_ls: func(string): list<string> = (f: string) => # manage_pack#SetMAP(plugin, ...) で書かれたプラグイン読み込みを探す
 		GrepList('^[^#"]*\<manage_pack#SetMAP([ \t]*[''"]', f, false)
 			->map('substitute(v:val, ''\c^[^#"]*\<manage_pack#SetMAP([ \t]*["'''']\([^"'''']\+\).*'', ''\1'', "")')
 
@@ -142,7 +139,7 @@ enddef
 export def Setup(): void # プラグインのインストール、設定のないものの削除
 	var swap_dir: string
 	var pack_info: list<dict<string>> = Get_pack_ls()
-	var packs: list<any>
+	var packs: list<string>
 	var dirs: list<string> = glob(resolve(expand('~/.vim/pack/github/opt')) .. '/*', false, true, true)
 	extend(dirs, glob(resolve(expand('~/.vim/pack/github/start')) .. '/*', false, true, true))
 	def GetDirs(l: list<dict<string>>): list<string>
