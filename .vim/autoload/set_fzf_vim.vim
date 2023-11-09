@@ -14,7 +14,7 @@ function set_fzf_vim#main() abort
 						\ '--preview', '~/bin/fzf-preview.sh {}',
 						\ '--bind', 'ctrl-o:execute-silent(xdg-open {})',
 						\ ]
-	let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9, 'relative': v:true, 'xoffset': 0 , 'yoffset': 0 } }
+	let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9, 'xoffset': 0 , 'yoffset': 0 } }
 	if has('gui_running')
 		call set_fzf_vim#solarized()
 		augroup FZF_Vim_Solaraized
