@@ -23,12 +23,6 @@ function set_fern#main() abort
 	packadd fern-mapping-fzf.vim
 	let g:fern#mapping#fzf#disable_default_mappings = 1
 	" g:fern#mapping#fzf#fzf_options を指定すると、b:fzf_action, g:fzf_action が無視され開けなくなる
-	" let b:fzf_action = get(g:, 'fzf_action', {
-	" 			\ 'ctrl-t': 'tab split',
-	" 			\ 'ctrl-x': 'split',
-	" 			\ 'ctrl-v': 'vsplit'
-	" 			\ })
-	" let b:fzf_action.enter = function('s:fern_fzf')
 	" let g:fern#mapping#fzf#fzf_options = {'options': '--multi --no-unicode --margin=0% --padding=0% --preview=''~/bin/fzf-preview.sh {}'' --bind=''ctrl-]:change-preview-window(hidden|)'''}
 	if !manage_pack#IsInstalled('fzf.vim')
 		call set_fzf_vim#main()
