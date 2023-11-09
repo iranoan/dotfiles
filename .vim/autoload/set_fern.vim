@@ -51,7 +51,6 @@ endfunction
 def s:init_fern(): void
 	setlocal nonumber foldcolumn=0 statusline=%#StatusLineLeft#[%{&filetype}]
 	glyph_palette#apply()     # バッファ毎に呼ばないと効かない
-	b:fzf_action.enter = s:fern_fzf
 	# キー・マップ
 	nnoremap <buffer><C-K>           <Plug>(fern-action-leave)
 	nnoremap <buffer><C-C>           <Plug>(fern-action-cancel)
