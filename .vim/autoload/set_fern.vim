@@ -102,26 +102,26 @@ def s:init_fern(): void
 	nnoremap <buffer><leader>f       <Plug>(fern-action-fzf-files)
 enddef
 
-function set_fern#open() abort
+def set_fern#open(): string
 	if &filetype != 'fern'
-		return
+		return ''
 	endif
-	let f = getline('.')
+	var f: string = getline('.')
 	if match(f, '^ \+ .\+[\u001F]') !=# -1
-		call feedkeys("\<Plug>(fern-action-expand)")
+		feedkeys("\<Plug>(fern-action-expand)")
 	elseif match(f, '^ \+ .\+[\u001F]') !=# -1
-		call feedkeys("\<Plug>(fern-action-collapse)")
-	elseif match(['asf', 'aux', 'avi', 'bmc', 'bmp', 'cer', 'chm', 'chw', 'class', 'crt', 'cur', 'dll', 'doc', 'docx', 'dvi', 'emf', 'eps', 'exe', 'fdb_latexmk', 'fls', 'flv', 'gif', 'gpg', 'hlp', 'hmereg', 'icc', 'icm', 'ico', 'ics', 'jar', 'jp2', 'jpeg', 'jpg', 'lzh', 'm4a', 'mkv', 'mov', 'mp3', 'mp4', 'mpg', 'nav', 'nvram', 'o', 'obj', 'odb', 'odg', 'odp', 'ods', 'odt', 'oll', 'opf', 'opp', 'out', 'pdf', 'pfa', 'pl3', 'png', 'ppm', 'ppt', 'pptx', 'ps', 'pyc', 'reg', 'rm', 'rtf', 'snm', 'sqlite', 'svg', 'swf', 'swp', 'tfm', 'toc', 'ttf', 'vbox', 'vbox-prev', 'vdi', 'vf', 'webm', 'wmf', 'wmv', 'xls', 'xlsm', 'xlsx'], '^' .. matchstr(f, '^ \+[^ ] .*\.\zs.\+\ze[\u001F]') .. '$') != -1 " バイナリ
-		call feedkeys("\<Plug>(fern-action-open:system)")
+		feedkeys("\<Plug>(fern-action-collapse)")
+	elseif match(['asf', 'aux', 'avi', 'bmc', 'bmp', 'cer', 'chm', 'chw', 'class', 'crt', 'cur', 'dll', 'doc', 'docx', 'dvi', 'emf', 'eps', 'exe', 'fdb_latexmk', 'fls', 'flv', 'gif', 'gpg', 'hlp', 'hmereg', 'icc', 'icm', 'ico', 'ics', 'jar', 'jp2', 'jpeg', 'jpg', 'lzh', 'm4a', 'mkv', 'mov', 'mp3', 'mp4', 'mpg', 'nav', 'nvram', 'o', 'obj', 'odb', 'odg', 'odp', 'ods', 'odt', 'oll', 'opf', 'opp', 'out', 'pdf', 'pfa', 'pl3', 'png', 'ppm', 'ppt', 'pptx', 'ps', 'pyc', 'reg', 'rm', 'rtf', 'snm', 'sqlite', 'svg', 'swf', 'swp', 'tfm', 'toc', 'ttf', 'vbox', 'vbox-prev', 'vdi', 'vf', 'webm', 'wmf', 'wmv', 'xls', 'xlsm', 'xlsx'], '^' .. matchstr(f, '^ \+[^ ] .*\.\zs.\+\ze[\u001F]') .. '$') != -1 # バイナリ
+		feedkeys("\<Plug>(fern-action-open:system)")
 	else
-		if len(getwininfo()) == 1 && match(bufname(), '^fern://drawer:\d\+/file:///.\+;\$$') == 0
-			call feedkeys("\<Plug>(fern-action-open:right)")
-			call feedkeys("\<Plug>(fern-action-zoom:reset)")
+		if len(gettabinfo(tabpagenr())[0].windows) == 1
+			feedkeys("\<Plug>(fern-action-open:right)")
 		else
-			call feedkeys("\<Plug>(fern-action-open:select)")
+			feedkeys("\<Plug>(fern-action-open:select)")
 		endif
 	endif
-endfunction
+	return ''
+enddef
 
 def s:fern_fzf(line: list<string>): void
 	if match(bufname(), '^fern://drawer:\d\+/file:///.\+;\$$') == 0
