@@ -57,11 +57,6 @@ endfunction
 def s:init_fern(): void
 	setlocal nonumber foldcolumn=0 statusline=%#StatusLineLeft#[%{&filetype}]
 	glyph_palette#apply()     # バッファ毎に呼ばないと効かない
-	b:fzf_action = get(g:, 'fzf_action', {
-				\ 'ctrl-t': 'tab split',
-				\ 'ctrl-x': 'split',
-				\ 'ctrl-v': 'vsplit'
-				\ })
 	b:fzf_action.enter = s:fern_fzf
 	# キー・マップ
 	nnoremap <buffer><C-K>           <Plug>(fern-action-leave)
@@ -79,7 +74,7 @@ def s:init_fern(): void
 	nnoremap <buffer>c               <Plug>(fern-action-copy)
 	nnoremap <buffer>d               <Plug>(fern-action-trash=)y<CR>
 	nnoremap <buffer>s               <Plug>(fern-action-open:right)
-	nnoremap <expr><buffer>O         fern#smart#leaf("\<Plug>(fern-action-collapse)", "\<Plug>(fern-action-expand)", "\<Plug>(fern-action-collapse)")
+	nnoremap <buffer>t               <Plug>(fern-action-open:tabedit)
 	nnoremap <expr><buffer>o         set_fern#open()
 	nnoremap <buffer>r               <Plug>(fern-action-rename)
 	nnoremap <buffer>y               <Plug>(fern-action-yank)
@@ -91,7 +86,6 @@ def s:init_fern(): void
 	nnoremap <buffer>i               <Plug>(fern-action-zoom:reset)
 	nnoremap <buffer><C-L>           <Plug>(fern-action-reload:all)
 	# FZF
-	nnoremap <buffer>f               <Cmd>BLines<CR>
 	nnoremap <buffer>/               <Cmd>BLines<CR>
 	# fern-preview.vim 用
 	nnoremap <buffer>p               <Plug>(fern-action-preview:auto:toggle)
@@ -100,6 +94,10 @@ def s:init_fern(): void
 	nnoremap <expr><buffer><S-Space> popup_list() != [] ? '<Plug>(fern-action-preview:scroll:up:half)' : '<PageUp>'
 	# fzf-mapping-fzf.vim
 	nnoremap <buffer><leader>f       <Plug>(fern-action-fzf-files)
+	nnoremap <buffer>f               <Plug>(fern-action-fzf-files)
+	# ranger like collapse/expand
+	nnoremap <buffer>h               <Plug>(fern-action-collapse)
+	nnoremap <buffer>l               <Plug>(fern-action-expand)
 enddef
 
 def set_fern#open(): string
