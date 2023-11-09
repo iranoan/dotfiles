@@ -126,12 +126,23 @@ export def Tabedit(...arg: list<string>): void
 			return false
 		enddef
 
+		def PackedFern(): bool
+			# if manage_pack#GetPackLs()->map('v:val["package"]')->count('fern.vim') >= 1
+			# が使えないので関数に
+			for p in manage_pack#GetPackLs()
+				if p.package == 'fern.vim'
+					return true
+				endif
+			endfor
+			return false
+		enddef
+
 		var full: string = ToFullpath(f, pwd)
 		var ftype: string = getftype(full)
 		if ftype ==# 'file' || ftype ==# 'link'  # ファイルが存在するなら無条件で開く
 			OpenFile(full)
 		elseif ftype ==# 'dir'  # ディレクトリなら Fern で開く
-			if manage_pack#GetPackLs()->map('v:val["package"]')->count('fern.vim') >= 1
+			if PackedFern()
 				execute 'tabedit | Fern ' .. full
 			else
 				AssociateCore(full)
