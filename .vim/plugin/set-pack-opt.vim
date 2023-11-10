@@ -496,7 +496,7 @@ nnoremap <Leader>di       <Plug>VimspectorBalloonEval
 xnoremap <Leader>di       <Plug>VimspectorBalloonEval
 
 # ファイル・マネージャー https://github.com/lambdalisue/fern.vim {{{1
-nnoremap <Leader>e <Cmd>Fern $HOME -drawer -reveal=%:p -toggle<CR>
+nnoremap <Leader>e <Cmd>topleft Fern $HOME -drawer -reveal=%:p -toggle<CR>
 augroup loadFern
 	autocmd!
 	autocmd CmdUndefined Fern set_fern#main()
