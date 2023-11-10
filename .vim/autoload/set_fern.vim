@@ -17,8 +17,6 @@ function set_fern#main() abort
 	" }}}
 	" プレビュー  https://github.com/yuki-yano/fern-preview.vim {{{
 	packadd fern-preview.vim " }}}
-	" netfw を入れ替え https://github.com/lambdalisue/fern-hijack.vim {{{
-	packadd fern-hijack.vim "}}}
 	" fzf と連携 https://github.com/LumaKernel/fern-mapping-fzf.vim {{{
 	packadd fern-mapping-fzf.vim
 	let g:fern#mapping#fzf#disable_default_mappings = 1
@@ -89,7 +87,7 @@ def s:init_fern(): void
 	nnoremap <buffer><leader>f       <Plug>(fern-action-fzf-files)
 	nnoremap <buffer>f               <Plug>(fern-action-fzf-files)
 	# ranger like collapse/expand
-	nnoremap <buffer>h               <Plug>(fern-action-collapse)
+	nnoremap <buffer>h               <Plug>(fern-action-focus:parent)
 	nnoremap <buffer>l               <Plug>(fern-action-expand)
 enddef
 
