@@ -17,6 +17,8 @@ scriptencoding utf-8
 # 	- xmap V <Cmd>call set_expand_region#main('(expand_region_shrink)') <bar> delfunction set_expand_region#main<CR>
 # * https://github.com/rbonvall/vim-textobj-css
 #		- CSS をテキストオプジェクト化 ← vim-textobj-fold で代用できるしカーソルの桁位置でも変わるので、使いづらい
+# * netfw を Fern に入れ替え https://github.com/lambdalisue/fern-hijack.vim
+#		- TabEdit でディレクトリなら、Fern を起動するように変更
 
 
 # プラグイン管理 {{{1
