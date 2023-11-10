@@ -454,6 +454,12 @@ nnoremap <silent><Leader>eb <Cmd>call set_eblook#setup() <Bar>call set_eblook#se
 
 # Undo をツリー表示で行き来する https://github.com/mbbill/undotree {{{1
 nnoremap <silent><Leader>u <Cmd>UndotreeToggle<CR>
+g:undotree_CustomUndotreeCmd  = 'vertical 30 new'
+g:undotree_CustomDiffpanelCmd = 'botright 10 new'
+augroup UndoTreeStatus
+	autocmd!
+	autocmd FileType undotree setlocal statusline=%#StatusLineLeft#%{t:undotree.GetStatusLine()}
+augroup END
 augroup loadUndotree
 	autocmd!
 	autocmd CmdUndefined UndotreeToggle packadd undotree
