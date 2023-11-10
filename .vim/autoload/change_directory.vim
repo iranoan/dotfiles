@@ -14,11 +14,14 @@ export def Lcd(): void # カレントディレクトリをファイルのディ�
 		return
 	elseif &filetype ==# 'fugitive' || buf_name =~# '^fugitive://'
 		c_path = expand('%:p:h:h')->substitute('^fugitive://', '', '')
-	elseif &buftype ==# 'terminal' ||
+	elseif &buftype ==# 'nofile' ||
+			&buftype ==# 'quickfix' ||
 			&buftype ==# 'help' ||
-			&buftype ==# 'nofile' ||
+			&buftype ==# 'terminal' ||
+			&buftype ==# 'prompt' ||
+			&buftype ==# 'popup' ||
 			&filetype ==# 'terminal' ||
-			buf_name =~# '^!/' ||
+			&filetype ==# 'qf' ||
 			buf_name =~# '^quickrun://' ||
 			buf_name =~# '^zipfile:///'
 		return
