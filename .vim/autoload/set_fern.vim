@@ -44,7 +44,47 @@ function set_fern#main() abort
 		augroup END
 		" }}}
 	" }}}
+	nnoremap <Leader>e <Cmd>call <SID>FernSync()<CR>
+	" 既存のバッファを使うようにマップ置き換え
 endfunction
+
+def s:FernSync(): void
+	def Sync(b: list<number>, name: string, fern: number): void
+		var fern_win: list<number> = getbufinfo(fern)[0].windows
+		for w in gettabinfo(tabpagenr())[0].windows
+			if count(fern_win, w) >= 1
+				# win_gotoid(w)
+				# execute('FernReveal ' .. substitute(name, expand('$HOME/'), '', ''))
+				win_execute(w, 'FernReveal ' .. name)
+				break
+			endif
+		endfor
+		return
+	enddef
+
+	if &filetype ==# 'fern'
+		return
+	endif
+	var edit: list<number> = getbufinfo(bufnr())[0].windows # 編集中のバッファ
+	var edit_name: string = expand('%:p')
+	var bufnr: number
+	for b in getbufinfo()
+		bufnr = b.bufnr
+		if has_key(b.variables, 'fern')
+			for w in tabpagebuflist()
+				if w == bufnr
+					Sync(edit, edit_name, bufnr)
+					return
+				endif
+			endfor
+			execute 'topleft vsplit | buffer ' .. bufnr
+			Sync(edit, edit_name, bufnr) # 同期が効いていない
+			return
+		endif
+	endfor
+	execute 'topleft Fern $HOME -drawer -reveal=%:p -toggle'
+	return
+enddef
 
 def s:init_fern(): void
 	setlocal nonumber foldcolumn=0 statusline=%#StatusLineLeft#[%{&filetype}]
@@ -97,6 +137,7 @@ def set_fern#open(): string
 	endif
 	var f: string = getline('.')
 	if match(f, '^ \+ .\+[\u001F]') !=# -1
+		|| match(f, '^ \+ .\+[\u001F]') !=# -1
 		feedkeys("\<Plug>(fern-action-expand)")
 	elseif match(f, '^ \+ .\+[\u001F]') !=# -1
 		feedkeys("\<Plug>(fern-action-collapse)")
