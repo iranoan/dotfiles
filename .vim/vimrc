@@ -354,8 +354,11 @@ g:html_indent_style1 = 'inc'
 g:html_indent_autotags = 'html,body,tbody'
 # キー割り当てを除いたその他 {{{1
 set keywordprg=:help
-# ↓grep でスワップファイルとディレクトリ除外←再帰的に行う -r, --recursive オプションと組わせたときのため (なおこの時のファイル絞り込みは、--include='*.txt' 等と使う)
-set grepprg=grep\ --directories=skip\ --line-number\ --binary-files=without-match\ --exclude-dir='.git'\ --exclude={*.asf,*.aux,*.avi,*.bmc,*.bmp,*.cer,*.chm,*.chw,*.class,*.crt,*.cur,*.dll,*.doc,*.docx,*.dvi,*.emf,*.exe,*.fdb_latexmk,*.fls,*.flv,*.gpg,*.hlp,*.hmereg,*.icc,*.icm,*.ico,*.ics,*.jar,*.jp2,*.jpg,*.ltjruby,*.lzh,*.m4a,*.mkv,*.mov,*.mp3,*.mp4,*.mpg,*.nav,*.nvram,*.o,*.obj,*.odb,*.odg,*.odp,*.ods,*.odt,*.oll,*.opf,*.opp,*.out,*.pdf,*.pfa,*.pl3,*.png,*.ppm,*.ppt,*.pptx,*.pyc,*.reg,*.rm,*.rtf,*.snm,*.sqlite,*.swf,*.synctex.gz,*.tfm,*.toc,*.ttf,*.vbox,*.vbox-prev,*.vdi,*.vf,*.webm,*.wmf,*.wmv,*.xls,*.xlsm,*.xlsx,.*.sw?,.viminfo,viminfo,a.out,tags,tags-ja}\ $*\ /dev/null
+# ↓grep カラー出力解除+行番号表示追加
+set grepprg=grep\ --colour=never\ --line-number\ $*\ /dev/null
+# 	* 再帰的に行うには -r, --recursive オプション
+# 	* スワップやバイナリ・ファイルの除外はシェルスクリプトの関数内で対処済み
+# 	* しかし分岐処理を入れているので --include='*.txt' 等とすれば、制限できる
 set modeline
 # set modeline modelineexpr
 $LESS = substitute($LESS, '\(['' " =]\)-\(-quit-if-one-screen\|F\)\>', '\1', 'g') # less 環境変数置き換え
