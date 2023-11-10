@@ -359,6 +359,7 @@ set grepprg=grep\ --colour=never\ --line-number\ $*\ /dev/null
 # 	* 再帰的に行うには -r, --recursive オプション
 # 	* スワップやバイナリ・ファイルの除外はシェルスクリプトの関数内で対処済み
 # 	* しかし分岐処理を入れているので --include='*.txt' 等とすれば、制限できる
+set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m,%f  # grep の出力は -L/--files-without-match, -l/--files-with-matches を付けた時の為ファイル名のみの出力追加
 set modeline
 # set modeline modelineexpr
 $LESS = substitute($LESS, '\(['' " =]\)-\(-quit-if-one-screen\|F\)\>', '\1', 'g') # less 環境変数置き換え
