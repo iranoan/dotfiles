@@ -1,14 +1,14 @@
 scriptencoding utf-8
 
 call ale#linter#Define('html', #{
-			\ name: 'vnu',
+			\ name: 'nu-html-checker',
 			\ output_stream: 'both',
 			\ executable: exepath('java'),
-			\ command: '%e -jar '.. get(g:, 'ale_vnu_use_global', '$HOME/node_modules/vnu-jar/build/dist/vnu.jar') .. ' --vabose --format json -',
-			\ callback: 'ale_linters#html#vnu#HandleVnuJar',
+			\ command: '%e -jar '.. get(g:, 'ale_nu_html_checker_use_global', '$HOME/node_modules/vnu-jar/build/dist/vnu.jar') .. ' --vabose --format json -',
+			\ callback: 'ale_linters#html#nu_html_checker#HandleVnuJar',
 			\ })
 
-def ale_linters#html#vnu#HandleVnuJar(b: number, lines: list<string>): list<dict<any>>
+def ale_linters#html#nu_html_checker#HandleVnuJar(b: number, lines: list<string>): list<dict<any>>
 	var output: list<dict<any>>
 	var obj: dict<any>
 	var type: string
