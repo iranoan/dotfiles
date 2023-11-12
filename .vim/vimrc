@@ -356,11 +356,11 @@ g:html_indent_script1 = 'inc'
 g:html_indent_style1 = 'inc'
 g:html_indent_autotags = 'html,body,tbody'
 # grep {{{1
-set grepprg=grep\ --colour=never\ --line-number\ $*\ /dev/null # grep カラー出力解除+行番号表示追加
+set grepprg=grep.sh\ $*                        # --exclude は --include を使った時に無効にいしたいので、シェルスクリプトを使う
 # 	* 再帰的に行うには -r, --recursive オプション
 # 	* スワップやバイナリ・ファイルの除外はシェルスクリプトの関数内で対処済み
 # 	* しかし分岐処理を入れているので --include='*.txt' 等とすれば、制限できる
-set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m,%f  # grep の出力は -L/--files-without-match, -l/--files-with-matches を付けた時の為ファイル名のみの出力追加
+# set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m,%f  # grep の出力は -L/--files-without-match, -l/--files-with-matches を付けた時の為ファイル名のみを出力追加したいが、binary file matches などの警告もヒットのように扱ってしまう
 # キー割り当てを除いたその他 {{{1
 set keywordprg=:help
 set modeline
