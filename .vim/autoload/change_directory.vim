@@ -7,23 +7,20 @@ export def Lcd(): void # カレントディレクトリをファイルのディ�
 	endif
 	var c_path: string
 	var buf_name: string = bufname()
-	# echomsg '&filetype:' .. &filetype
-	# echomsg '&buftype:' .. &buftype
-	# echomsg 'bufname():' .. buf_name
 	if buf_name ==# ''
 		return
 	elseif &filetype ==# 'fugitive' || buf_name =~# '^fugitive://'
 		c_path = expand('%:p:h:h')->substitute('^fugitive://', '', '')
-	elseif &buftype ==# 'nofile' ||
+	elseif buf_name =~# '^[a-z]\+://'
+			buf_name =~# '^!' ||
+			&buftype ==# 'nofile' ||
 			&buftype ==# 'quickfix' ||
 			&buftype ==# 'help' ||
-			&buftype ==# 'terminal' ||
 			&buftype ==# 'prompt' ||
 			&buftype ==# 'popup' ||
+			&buftype ==# 'terminal' ||
 			&filetype ==# 'terminal' ||
 			&filetype ==# 'qf' ||
-			buf_name =~# '^quickrun://' ||
-			buf_name =~# '^zipfile:///'
 		return
 	elseif &filetype ==# 'tex'
 		if match(getline(1, 10), '^\s*\\documentclass\>') > 0 # 先頭 10 行の \documentclass の有無確認
@@ -40,6 +37,7 @@ export def Lcd(): void # カレントディレクトリをファイルのディ�
 	endif
 	if !isdirectory(c_path)
 		var make: number = confirm("No exist '" .. simplify(c_path)->escape('\')->substitute('^' .. $HOME .. '\ze[/\\]', '~', '')
+			# .. "\nfiletype: " .. &filetype .. " bufname: " .. bufname() .. " buttype: " .. &buftype
 			.. "'\nDo you make?", "(&Y)es\n(&N)o", 1, 'Question')
 		if make == 1
 			mkdir(c_path, 'p', 0o700)
