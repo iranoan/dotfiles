@@ -11,7 +11,7 @@ export def Lcd(): void # カレントディレクトリをファイルのディ�
 		return
 	elseif &filetype ==# 'fugitive' || buf_name =~# '^fugitive://'
 		c_path = expand('%:p:h:h')->substitute('^fugitive://', '', '')
-	elseif buf_name =~# '^[a-z]\+://'
+	elseif buf_name =~# '^[a-z]\+://' ||
 			buf_name =~# '^!' ||
 			&buftype ==# 'nofile' ||
 			&buftype ==# 'quickfix' ||
@@ -20,7 +20,7 @@ export def Lcd(): void # カレントディレクトリをファイルのディ�
 			&buftype ==# 'popup' ||
 			&buftype ==# 'terminal' ||
 			&filetype ==# 'terminal' ||
-			&filetype ==# 'qf' ||
+			&filetype ==# 'qf'
 		return
 	elseif &filetype ==# 'tex'
 		if match(getline(1, 10), '^\s*\\documentclass\>') > 0 # 先頭 10 行の \documentclass の有無確認
