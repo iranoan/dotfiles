@@ -195,7 +195,7 @@ augroup END
 set cursorline cursorcolumn                    # 起動時は、カーソール行桁背景色付ける
 # タブ・ページ/ターミナル環境の時のカーソル形状 {{{2
 set showtabline=0 tabpagemax=500               # 常にタブを非表示+上限 500
-if !has('gui_running')                          # タブページの書式変更
+if !has('gui_running')                         # タブページの書式変更
 # if has('gui_running')                          # タブページの書式変更
 # 	set guitablabel=%!mk_tabline#GUI()
 # else
@@ -219,7 +219,7 @@ set suffixes+=.aux,.log,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.toc,.pdf,.syncte
 set wildignore+=*.dvi,*.o,*.opp,*.obj,*.a,*.so,*.fdb_latexmk,*.fls,*.nav,*.out,*.snm,*.ltjruby,*.swp # 補完候補から完全に除外 (含めると補完候補にも現れなくなる)
 # ステータス・バー {{{2
 set laststatus=2                               # 表示
-set statusline=%#StatusLineLeft#%-19.(%{tabpagenr()}/%{tabpagenr('$')}:%n%{%&buftype=='terminal'?'[terminal]':&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%*\ %<%F%=%#StatusLineRight#\ %c:%v:%{strcharlen(strpart(getline('.'),0,col('.')))}/%{strlen(join(getline(0,line('$')),(&ff=='dos'?'12':'1')))}:%{strcharlen(join(getline(0,line('$')),''))}\ %3l/%L%4{line('w$')*100/line('$')}%%\ 0x%04B\ [%{&fenc!=''?&fenc:&enc}:%{%{'dos':'CR+LF','unix':'LF','mac':'CR'}[&ff]%}]
+set statusline=%#StatusLineLeft#%-19.(%{tabpagenr()}/%{tabpagenr('$')}:%n%{%&buftype=='terminal'?'[terminal]':&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%*\ %<%F%=%#StatusLineRight#\ %c:%v:%{strcharlen(strpart(getline('.'),0,col('.')))}/%{strlen(join(getline(0,line('$')),(&ff=='dos'?'12':'1')))}:%{strcharlen(join(getline(0,line('$')),''))}\ %3l/%L%4p%%\ 0x%04B\ [%{&fenc!=''?&fenc:&enc}:%{%{'dos':'CR+LF','unix':'LF','mac':'CR'}[&ff]%}]
 # 表示しているのを大雑把に↓
 # tabpagenr()/tabpagenr('$') bufnr filetype modified etc. | path | column bytes:number:word-count/file bytes:word-count line current/full % code charset:cr/lf
 def StatusLineLeftRight(): void
@@ -314,6 +314,8 @@ augroup VIMRC
 	# ハイライトはトグル・スイッチ
 	autocmd CmdlineLeave,CmdwinLeave * if (getcmdtype() =~# '[/?]' || getcmdwintype() =~# '[/?]') && pos != getpos('.') | set hlsearch | endif
 	autocmd CmdwinEnter * pos = getpos('.')
+	# ↓~/.vim/ftplugin/qf.vim, ~/.vim/after/ftplugin/qf.vim に書いてみたが効かなかった
+	autocmd FileType qf setlocal statusline=%#StatusLineLeft#%t\ %*%{exists('w:quickfix_title')?substitute(w:quickfix_title,' /dev/null$','',''):''}\ %=%#StatusLineRight#%3l/%L%4p%%
 augroup END
 # 日本語の表示/編集に関わる設定 {{{1
 set backspace=indent,eol,start
