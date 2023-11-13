@@ -30,19 +30,19 @@ function set_fern#main() abort
 	endif
 	" }}}
 	" アイコン表示 {{{
-		" https://github.com/lambdalisue/glyph-palette.vim {{{
-		packadd glyph-palette.vim " }}}
-		" https://github.com/lambdalisue/nerdfont.vim {{{
-		packadd nerdfont.vim " }}}
-		" https://github.com/lambdalisue/fern-renderer-nerdfont.vim {{{
-		packadd fern-renderer-nerdfont.vim
-		let g:fern#renderer = "nerdfont"
-		augroup fern-custom
-			autocmd!
-			autocmd FileType nerdtree,startify call glyph_palette#apply()
-			autocmd FileType fern call s:init_fern()
-		augroup END
-		" }}}
+	" https://github.com/lambdalisue/glyph-palette.vim {{{
+	packadd glyph-palette.vim " }}}
+	" https://github.com/lambdalisue/nerdfont.vim {{{
+	packadd nerdfont.vim " }}}
+	" https://github.com/lambdalisue/fern-renderer-nerdfont.vim {{{
+	packadd fern-renderer-nerdfont.vim
+	let g:fern#renderer = "nerdfont"
+	augroup fern-custom
+		autocmd!
+		autocmd FileType nerdtree,startify call glyph_palette#apply()
+		autocmd FileType fern call s:init_fern()
+	augroup END
+	" }}}
 	" }}}
 	nnoremap <Leader>e <Cmd>call <SID>FernSync()<CR>
 	" 既存のバッファを使うようにマップ置き換え
@@ -109,8 +109,8 @@ def s:init_fern(): void
 	nnoremap <expr><buffer>o         set_fern#open()
 	nnoremap <buffer>r               <Plug>(fern-action-rename)
 	nnoremap <buffer>y               <Plug>(fern-action-yank)
-	nnoremap <buffer>x               <Plug>(fern-action-open:system)
-	nnoremap <buffer><leader>x       <Plug>(fern-action-open:system)
+	nnoremap <buffer>x               <Cmd>call set_fern#open_system()<CR>
+	nnoremap <buffer><leader>x       <Cmd>call set_fern#open_system()<CR>
 	nnoremap <buffer>D               <Plug>(fern-action-clipboard-move)
 	nnoremap <buffer>Y               <Plug>(fern-action-clipboard-copy)
 	nnoremap <buffer>P               <Plug>(fern-action-clipboard-paste)
@@ -135,22 +135,34 @@ def set_fern#open(): string
 	if &filetype != 'fern'
 		return ''
 	endif
-	var f: string = getline('.')
-	if match(f, '^ \+ .\+[\u001F]') !=# -1
-		|| match(f, '^ \+ .\+[\u001F]') !=# -1
-		feedkeys("\<Plug>(fern-action-expand)")
-	elseif match(f, '^ \+ .\+[\u001F]') !=# -1
-		feedkeys("\<Plug>(fern-action-collapse)")
-	elseif match(['asf', 'aux', 'avi', 'bmc', 'bmp', 'cer', 'chm', 'chw', 'class', 'crt', 'cur', 'dll', 'doc', 'docx', 'dvi', 'emf', 'eps', 'exe', 'fdb_latexmk', 'fls', 'flv', 'gif', 'gpg', 'hlp', 'hmereg', 'icc', 'icm', 'ico', 'ics', 'jar', 'jp2', 'jpeg', 'jpg', 'lzh', 'm4a', 'mkv', 'mov', 'mp3', 'mp4', 'mpg', 'nav', 'nvram', 'o', 'obj', 'odb', 'odg', 'odp', 'ods', 'odt', 'oll', 'opf', 'opp', 'out', 'pdf', 'pfa', 'pl3', 'png', 'ppm', 'ppt', 'pptx', 'ps', 'pyc', 'reg', 'rm', 'rtf', 'snm', 'sqlite', 'svg', 'swf', 'swp', 'tfm', 'toc', 'ttf', 'vbox', 'vbox-prev', 'vdi', 'vf', 'webm', 'wmf', 'wmv', 'xls', 'xlsm', 'xlsx'], '^' .. matchstr(f, '^ \+[^ ] .*\.\zs.\+\ze[\u001F]') .. '$') != -1 # バイナリ
-		feedkeys("\<Plug>(fern-action-open:system)")
+	var helper: dict<any> = fern#helper#new()
+	var node: dict<any> = helper.sync.get_cursor_node()
+	var status: number = node.status
+	if status == helper.STATUS_COLLAPSED
+		return "\<Plug>(fern-action-expand)"
+	elseif status == helper.STATUS_EXPANDED
+		return "\<Plug>(fern-action-collapse)"
 	else
-		if len(gettabinfo(tabpagenr())[0].windows) == 1
-			feedkeys("\<Plug>(fern-action-open:right)")
+		var mime: string = systemlist('file --mime-type --brief ' .. node._path)[0]
+		if mime[0 : 4] !=# 'text/'
+			if executable(node._path)
+				execute 'topleft terminal ' .. node._path
+			else
+				system('xdg-open ' .. node._path .. ' &')
+			endif
+			return ''
 		else
-			feedkeys("\<Plug>(fern-action-open:select)")
+			if len(gettabinfo(tabpagenr())[0].windows) == 1
+				return "\<Plug>(fern-action-open:right)"
+			else
+				return "\<Plug>(fern-action-open:select)"
+			endif
 		endif
 	endif
-	return ''
+enddef
+
+def set_fern#open_system(): void # <Plug>(fern-action-open:system) はアプリを閉じるまで Vim が操作不能になる
+	system('xdg-open ' .. fern#helper#new().sync.get_cursor_node()._path .. ' &')
 enddef
 
 def s:fern_fzf(line: list<string>): void
