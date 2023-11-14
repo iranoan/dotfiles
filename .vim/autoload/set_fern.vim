@@ -143,7 +143,7 @@ def set_fern#open(): string
 	elseif status == helper.STATUS_EXPANDED
 		return "\<Plug>(fern-action-collapse)"
 	else
-		var mime: string = systemlist('file --mime-type --brief ' .. node._path)[0]
+		var mime: string = systemlist('file --mime-type --brief ' .. resolve(node._path))[0]
 		if mime[0 : 4] !=# 'text/'
 			if executable(node._path)
 				execute 'topleft terminal ' .. node._path
