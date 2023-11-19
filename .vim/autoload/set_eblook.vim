@@ -37,9 +37,26 @@ function set_eblook#setup() abort
 	" 			\}
 	" }}}
 	" autocmd FuncUndefined eblook#* " ←が何故か動作しないのでマップし直す
+	augroup EblookMAP
+		autocmd!
+		autocmd FileType eblook nnoremap <buffer><F1> <Cmd>call set_eblook#help()<CR>
+	augroup END
 	xnoremap <silent><Leader>eb <Cmd>call set_eblook#searchVisual()<CR>
 	nnoremap <silent><Leader>eb <Cmd>call set_eblook#searchWord()<CR>
 endfunction
+
+def set_eblook#help(): void
+	if &filetype !=# 'eblook'
+		return
+	endif
+	var bufn = bufname()
+	if bufn =~# '_eblook_entry_\d\+'
+		execute('help eblook-usage-entry')
+	elseif bufn =~# '_eblook_content_\d\+'
+		execute('help eblook-usage-content')
+	endif
+	return
+enddef
 
 def set_eblook#search(s: string): void # 使う辞書グループの分岐して検索する
 	var ss: string = s
