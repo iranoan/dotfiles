@@ -45,33 +45,21 @@ AlterCommand gl[og]   Gllog
 AlterCommand gd[iff]  Gdiffsplit
 
 # 2019-03-31 14:51 などの日付や時刻もうまい具合に Ctrl-a/x で加算減算する https://github.com/tpope/vim-speeddating {{{1
-# 遅延読み込みにすると {count}<C-a> とした時に {count} が無視される
-g:speeddating_no_mappings = 1
-packadd vim-speeddating
-SpeedDatingFormat! %H:%M:%S
-SpeedDatingFormat! %a %b %_d %H:%M:%S %Z %Y
-SpeedDatingFormat! %a %h %-d %H:%M:%S %Y %z
-SpeedDatingFormat! %B %o, %Y
-SpeedDatingFormat! %d%[-/ ]%b%1%y
-SpeedDatingFormat! %d%[-/ ]%b%1%Y
-SpeedDatingFormat! %Y %b %d
-SpeedDatingFormat! %b %d, %Y
-SpeedDatingFormat! %-I%?[ ]%^P
-SpeedDatingFormat %Y/%m/%d(%a)%?[ ]%H:%M:%S
-SpeedDatingFormat %Y/%m/%d(%a)%?[ ]%H:%M
-SpeedDatingFormat %Y/%m/%d%[ T_:]%H:%M:%S
-SpeedDatingFormat %Y/%m/%d%[ T_:]%H:%M
-SpeedDatingFormat %Y/%m/%d
-SpeedDatingFormat %m/%d
-SpeedDatingFormat %^P%?[ ]%I:%M
-SpeedDatingFormat %H:%M:%S
-SpeedDatingFormat %H:%M
-nnoremap d<C-X> <Plug>SpeedDatingNowLocal
-nnoremap d<C-A> <Plug>SpeedDatingNowUTC
-xnoremap <C-X>  <Plug>SpeedDatingDown
-xnoremap <C-A>  <Plug>SpeedDatingUp
-nnoremap <C-X>  <Plug>SpeedDatingDown
-nnoremap <C-A>  <Plug>SpeedDatingUp
+# 遅延読み込みにしているので ビジュアルモードの {count}<C-a> とした時、先頭しかカウントアップしない制限が有る
+nnoremap <C-X>  <Cmd>call speeddating#increment(-v:count1)<CR>
+xnoremap <C-X>  <Cmd>call speeddating#incrementvisual(-v:count1)<CR>
+nnoremap <C-A>  <Cmd>call speeddating#increment(v:count1)<CR>
+xnoremap <C-A>  <Cmd>call speeddating#incrementvisual(v:count1)<CR>
+nnoremap d<C-X> <Cmd>call speeddating#timestamp(0,v:count)<CR>
+nnoremap d<C-A> <Cmd>call speeddating#timestamp(1,v:count)<CR>
+augroup loadSpeeding
+	autocmd!
+	autocmd FuncUndefined speeddating#*
+				\ set_speeding#main()
+				| autocmd! loadSpeeding
+				| augroup! loadSpeeding
+				| delfunction set_speeding#main
+augroup END
 
 # https://github.com/junegunn/fzf.vim {{{1
 nnoremap <silent><Leader>fr <Cmd>Files ~<CR>
