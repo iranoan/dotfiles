@@ -1,13 +1,13 @@
 scriptencoding utf-8
 
 function set_asyncomplete#main() abort
-	" packadd asyncomplete.vim " ←asyncomplete.vim 自体は ~/.vim/pack/*/start に置かないと最初に読み込んだバッファで働かないケースが有る
+	packadd asyncomplete.vim " ←asyncomplete.vim 自体は ~/.vim/pack/*/start に置かないと最初に読み込んだバッファで働かないケースが有る
 	" 具体的には notmuch-draft
 	" バッファを開き終わった後に
 	"     call asyncomplete#enable_for_buffer()
 	" をすれば働くが、この関数の最後に追記してもダメだった
+	" → FileType notmuch-draft をトリガーも加える
 	" let g:asyncomplete_auto_completeopt = 1 " ←デフォルト
-	" call asyncomplete#enable_for_buffer()
 	" call asyncomplete#force_refresh()
 	" let g:asyncomplete_min_chars = 1
 	" 以下 plugin {{{3

@@ -185,6 +185,17 @@ augroup loadNotmuchPy
 				| augroup! loadNotmuchPy
 				| delfunction set_notmuchpy#main
 augroup END
+augroup NotmuchDraft
+	autocmd!
+	autocmd FileType notmuch-draft
+				\ set_asyncomplete#main()
+				| call asyncomplete#enable_for_buffer()
+				| autocmd! loadasyncomplete
+				| augroup! loadasyncomplete
+				| delfunction set_asyncomplete#main
+				| autocmd! NotmuchDraft
+				| augroup! NotmuchDraft
+augroup END
 
 # 各種言語の構文チェック https://github.com/dense-analysis/ale {{{1
 augroup loadALE
