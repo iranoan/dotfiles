@@ -124,22 +124,19 @@ set background=dark
 # 2}}}
 # https://github.com/altercation/vim-colors-solarized {{{2
 # 2}}}
-for s in ['solarized8', 'solarized']
-	if glob('~/.vim/**/colors/*.vim', 1, 1, 1)->filter('v:val =~# "/' .. s .. '\.vim$"')->len() > 0
-		change_colorscheme#Before(s)
-		execute 'colorscheme ' .. s
-		break
-	endif
-endfor
-if !exists('g:colors_name')
-	change_colorscheme#Before('habamax')
-	colorscheme habamax
-endif
 augroup ChangeHighlight
 	autocmd!
 	autocmd ColorScheme * change_colorscheme#Highlight()
 	autocmd ColorSchemePre * change_colorscheme#Before(expand('<amatch>'))
 augroup END
+for s in ['solarized8', 'solarized', 'habamax', 'desert', 'default']
+	try # (glob() を使う存在確認は遅い)
+		execute 'colorscheme ' .. s
+		break
+	catch /^Vimcolorscheme:E185:\C/
+		continue
+	endtry
+endfor
 if has('gui_running')
 augroup ColorSchemeKind # colorscheme の種類別
 	autocmd!
@@ -148,8 +145,6 @@ augroup ColorSchemeKind # colorscheme の種類別
 				| highlight SignColumn ctermfg=11 ctermbg=8 guifg=#839496 guibg=NONE
 augroup END
 endif
-change_colorscheme#Highlight()
-syntax enable
 
 # 日本語ヘルプ https://github.com/vim-jp/vimdoc-ja {{{1
 # 1}}}

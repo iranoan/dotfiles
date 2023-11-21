@@ -39,11 +39,10 @@ AlterCommand helpt[ags] call\ manage_pack#Helptags()
 AlterCommand bc         .!bc\ -l\ -q\ ~/.bc\ <Bar>\ sed\ -E\ -e\ 's/^\\\./0./g'\ -e\ 's/(\\\.[0-9]*[1-9])0+/\\\1/g'\ -e\ 's/\\\.$//g'
 AlterCommand bi[nary]   if\ !&binary\ <Bar>\ execute('setlocal\ binary\ <Bar>\ %!xxd')\ <Bar>\ endif
 AlterCommand nob[inary] if\ &binary\ <Bar>\ execute('setlocal\ nobinary\ <Bar>\ %!xxd\ -r')\ <Bar>\ endif
-if glob('~/.vim/pack/*/*/vim-fugitive/plugin/fugitive.vim') !=# ''
-	AlterCommand git      Git
-	AlterCommand gl[og]   Gllog
-	AlterCommand gd[iff]  Gdiffsplit
-endif
+# fugitive.vim 用 (glob() を使う存在確認は遅い)
+AlterCommand git      Git
+AlterCommand gl[og]   Gllog
+AlterCommand gd[iff]  Gdiffsplit
 
 # 2019-03-31 14:51 などの日付や時刻もうまい具合に Ctrl-a/x で加算減算する https://github.com/tpope/vim-speeddating {{{1
 # 遅延読み込みにすると {count}<C-a> とした時に {count} が無視される

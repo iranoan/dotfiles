@@ -28,17 +28,21 @@ set guioptions+=M                              #メニュー設定を読み込�
 filetype plugin indent on                      # ファイルタイプ別プラグインとインデントを ON
 # 標準プラグイン {{{1
 # 一部のプラグインは読み込まない {{{2
+g:skip_loading_mswin = 1
+g:loaded_getscript = 1
 g:loaded_getscriptPlugin = 1
+g:loaded_vimball = 1
 g:loaded_vimballPlugin = 1
 g:loaded_2html_plugin = 1
 g:loaded_logiPat = 1
 g:loaded_rrhelper = 1
 # g:loaded_matchparen = 1
 g:loaded_zipPlugin = 1 # {{{
+g:loaded_zip = 1
 augroup loadZipArchive
 	autocmd!
 	autocmd BufReadPre *.aar,*.apk,*.celzip,*.crtx,*.docm,*.docx,*.dotm,*.dotx,*.ear,*.epub,*.gcsx,*.glox,*.gqsx,*.ja,*.jar,*.kmz,*.odb,*.odc,*.odf,*.odg,*.odi,*.odm,*.odp,*.ods,*.odt,*.otc,*.otf,*.otg,*.oth,*.oti,*.otp,*.ots,*.ott,*.oxt,*.potm,*.potx,*.ppam,*.ppsm,*.ppsx,*.pptm,*.pptx,*.sldx,*.thmx,*.vdw,*.war,*.wsz,*.xap,*.xlam,*.xlam,*.xlsb,*.xlsm,*.xlsx,*.xltm,*.xltx,*.xpi,*.zip
-				\ unlet g:loaded_zipPlugin | source $VIMRUNTIME/plugin/zipPlugin.vim
+				\ unlet g:loaded_zip g:loaded_zipPlugin | source $VIMRUNTIME/plugin/zipPlugin.vim
 	autocmd BufRead *.aar,*.apk,*.celzip,*.crtx,*.docm,*.docx,*.dotm,*.dotx,*.ear,*.epub,*.gcsx,*.glox,*.gqsx,*.ja,*.jar,*.kmz,*.odb,*.odc,*.odf,*.odg,*.odi,*.odm,*.odp,*.ods,*.odt,*.otc,*.otf,*.otg,*.oth,*.oti,*.otp,*.ots,*.ott,*.oxt,*.potm,*.potx,*.ppam,*.ppsm,*.ppsx,*.pptm,*.pptx,*.sldx,*.thmx,*.vdw,*.war,*.wsz,*.xap,*.xlam,*.xlam,*.xlsb,*.xlsm,*.xlsx,*.xltm,*.xltx,*.xpi,*.zip
 				\ ++nested edit!
 				| autocmd! loadZipArchive
@@ -46,8 +50,9 @@ augroup loadZipArchive
 augroup END
 # }}}
 g:loaded_gzip = 1 # {{{ # $VIMRUNTIME/plugin/gzip.vim で exists("#BufReadPre#*.gz") は finish としているので、Vim 起動後に BufReadPre をトリガーとして遅延読み込みできない
+g:loaded_tar                = 1
 g:loaded_tarPlugin = 1
-command GzipEnable unlet g:loaded_tarPlugin g:loaded_gzip
+command GzipEnable unlet g:loaded_tar g:loaded_tarPlugin g:loaded_gzip
 	| source $VIMRUNTIME/plugin/tarPlugin.vim
 	| source $VIMRUNTIME/plugin/gzip.vim
 	| delcommand GzipEnable
@@ -63,6 +68,9 @@ command GzipEnable unlet g:loaded_tarPlugin g:loaded_gzip
 # augroup END
 # # }}}
 # netrw {{{ ↓ fern を使う
+g:loaded_netrw = 1
+g:loaded_netrwSettings = 1
+g:loaded_netrwFileHandlers  = 1
 g:loaded_netrwPlugin = 1
 # g:netrw_banner=0                           # バーナー非表示
 # g:netrw_liststyle = 0                      # ファイル・サイズ/タイム・スタンプも非表示←除外がしにくくなる
@@ -165,7 +173,7 @@ set shortmess+=IWc shortmess-=S                # I 起動時にファイル未�
                                                # W ファイルの書き込み時に "書込み" や "[w]" を表示しない。
                                                # c	補完関連のメッセージを表示しない
                                                # S 検索ヒット件数表示←コマンドラインに検索のヒット位置、総個数を [?/?] で表示し、ファイルの先頭・終端になった時のメッセージが一瞬で消える
-# syntax enable                                  # カラー表示 ON (実際の syntax 設定はカラー・スキーム読み込み後に有効にする)
+syntax enable                                  # カラー表示 ON
 set nomore                                     # メッセージが一杯になっても一旦停止せずそのまま続ける
 set noshowcmd                                  # コマンドラインに選択中の文字数などを表示する
 # set noequalalways                              # ウィンドウ分割/閉じた時に全てのウィンドウを同じ大きさにしない←すでに分割されていると、プラグインが開くウィンドウ高さが狭くなり使いにくい
