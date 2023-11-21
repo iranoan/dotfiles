@@ -21,7 +21,7 @@ function! set_speeding#main() abort
 	SpeedDatingFormat %^P%?[ ]%I:%M
 	SpeedDatingFormat %H:%M:%S
 	SpeedDatingFormat %H:%M
-	nnoremap d<C-X> <Plug>SpeedDatingNowLocal
+	" nnoremap d<C-X> <Plug>SpeedDatingNowLocal←上手く動作していない
 	nnoremap d<C-A> <Plug>SpeedDatingNowUTC
 	xnoremap <C-X>  <Plug>SpeedDatingDown
 	xnoremap <C-A>  <Plug>SpeedDatingUp

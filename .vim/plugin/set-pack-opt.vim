@@ -50,7 +50,7 @@ nnoremap <C-X>  <Cmd>call speeddating#increment(-v:count1)<CR>
 xnoremap <C-X>  <Cmd>call speeddating#incrementvisual(-v:count1)<CR>
 nnoremap <C-A>  <Cmd>call speeddating#increment(v:count1)<CR>
 xnoremap <C-A>  <Cmd>call speeddating#incrementvisual(v:count1)<CR>
-nnoremap d<C-X> <Cmd>call speeddating#timestamp(0,v:count)<CR>
+# nnoremap d<C-X> <Cmd>call speeddating#timestamp(0,v:count)<CR>←上手く動作していない
 nnoremap d<C-A> <Cmd>call speeddating#timestamp(1,v:count)<CR>
 augroup loadSpeeding
 	autocmd!
