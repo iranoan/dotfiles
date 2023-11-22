@@ -28,5 +28,9 @@ fi
 
 # notmuch で日本語検索が出来るように (指定しないとカタカナ検索が出来ない?)
 export XAPIAN_CJK_NGRAM=1
+# IME の設定 qolibri が QT_IM_MODULE の設定がないと日本語入力できない
+# export GTK_IM_MODULE=fcitx5
+export QT_IM_MODULE=fcitx5
+# export XMODIFIERS=@im=fcitx5
 # export TMPDIR=~/.tmp/
 # export GTK_USE_PORTAL=1
