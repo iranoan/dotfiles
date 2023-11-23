@@ -26,6 +26,10 @@ find "$d" -maxdepth 1 -regextype posix-extended -regex '.+/\.[A-Za-z0-9_.-]+$' |
 		continue
 	elif [ "$f" = "$d.git" ]; then
 		continue
+	elif [ "$f" = "$d.gitattributes" ]; then
+		rm -rf "$l"
+		ln "$f" "$l"
+		continue
 	elif [ "$f" = "$d.gitignore" ]; then
 		continue
 	elif [ "$f" = "$d.config" ]; then
