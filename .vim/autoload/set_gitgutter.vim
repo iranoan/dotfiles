@@ -19,4 +19,11 @@ function set_gitgutter#main() abort
 	command! -bang -nargs=? -range=-1 -complete=customlist,fugitive#Complete Git exe fugitive#Command(<line1>, <count>, +"<range>", <bang>0, "<mods>", <q-args>)
 	" ↑vim9script で定義されると「E1126: Vim9 スクリプトでは :let は使用できません」のエラーが出る (autocmd FuncUndefined fugitive#* → packadd vim-fugitve でファイルが読み込まれ、それによってコマンドが再定義されるので問題なく動作はする)
 	" → :help E1231
+	augroup hook_gitgutter " git の warning を無視するように関数をフックする
+		autocmd!
+		autocmd FuncUndefined gitgutter#*
+					\ call hook_function#main('~/.vim/pack/github/start/vim-gitgutter/autoload/gitgutter/utility.vim', '~/.vim/plugin/hook_gitgutter.vim', 'obtain_file_renames')
+					\ | autocmd! hook_gitgutter
+					\ | augroup! hook_gitgutter
+	augroup END
 endfunction
