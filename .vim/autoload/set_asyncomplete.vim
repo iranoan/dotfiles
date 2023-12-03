@@ -1,7 +1,7 @@
 scriptencoding utf-8
 
 function set_asyncomplete#main() abort
-	packadd asyncomplete.vim " ←asyncomplete.vim 自体は ~/.vim/pack/*/start に置かないと最初に読み込んだバッファで働かないケースが有る
+	" packadd asyncomplete.vim " ←asyncomplete.vim 自体は ~/.vim/pack/*/start に置かないと最初に読み込んだバッファで働かないケースが有る
 	" 具体的には notmuch-draft
 	" バッファを開き終わった後に
 	"     call asyncomplete#enable_for_buffer()
