@@ -42,7 +42,7 @@ function set_asyncomplete#main() abort
 		" }}}
 	" }}}
 	" LSP との連携する asyncomplete-lsp.vim は vim-lsp 側で行う ← InsertEnter のタイミングではうまく動作しない
-	" " omni-function https://github.com/yami-beta/asyncomplete-omni.vim {{{
+	" omni-function https://github.com/yami-beta/asyncomplete-omni.vim {{{
 	packadd asyncomplete-omni.vim
 	call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
 				\ 'name': 'omni',
@@ -88,26 +88,11 @@ function set_asyncomplete#main() abort
 				\ 'allowlist': ['notmuch-draft'],
 				\ }))
 	" }}}
-	" spell https://github.com/hiterm/asyncomplete-look {{{
-	call asyncomplete#register_source({
-				\ 'name': 'look',
+	" spell ~/.vim/pack/my-plug/opt/asyncomplete-spell/ {{{
+	packadd asyncomplete-spell
+	call asyncomplete#register_source(asyncomplete#sources#spell#get_source_options({
+				\ 'priority': 5,
 				\ 'allowlist': ['*'],
-				\ 'blocklist': ['lsp-quickpick-filter'],
-				\ 'completor': function('asyncomplete#sources#look#completor'),
-				\ })
-	let g:asc_look_good_words_file = '~/.vim/spell/en.utf-8.add'
-	call asyncomplete#register_source({
-				\ 'name': 'look_good_words',
-				\ 'allowlist': ['*'],
-				\ 'blocklist': ['lsp-quickpick-filter'],
-				\ 'completor': function('asyncomplete#sources#look#good_words'),
-				\ })
+				\ }))
 	" }}}
-	" " spell ~/.vim/pack/my-plug/opt/asyncomplete-spell.vim/ {{{
-	" packadd asyncomplete-spell.vim
-	" call asyncomplete#register_source(asyncomplete#sources#spell#get_source_options({
-	" 			\ 'priority': 5,
-	" 			\ 'allowlist': ['*'],
-	" 			\ }))
-	" " }}}
 endfunction
