@@ -95,4 +95,21 @@ function set_asyncomplete#main() abort
 				\ 'allowlist': ['*'],
 				\ }))
 	" }}}
+	let g:asyncomplete_preprocessor = [function('s:asyncomplete_preprocessor')]
+endfunction
+
+function s:asyncomplete_preprocessor(options, matches) abort
+	let l:visited = {}
+	let l:items = []
+	let l:base = '^\m' .. escape(a:options['base'], '\.$*~')
+	for [l:source_name, l:matches] in items(a:matches)
+		for l:item in l:matches['items']
+			if !has_key(l:visited, l:item['word'])
+						\ && ( l:source_name ==# 'spell' || l:item['word'] =~? l:base )
+				call add(l:items, l:item)
+				let l:visited[l:item['word']] = 1
+			endif
+		endfor
+	endfor
+	call asyncomplete#preprocess_complete(a:options, l:items)
 endfunction
