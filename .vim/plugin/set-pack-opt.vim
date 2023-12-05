@@ -204,11 +204,13 @@ augroup END
 augroup NotmuchDraft
 	autocmd!
 	autocmd FileType notmuch-draft
-				\ set_asyncomplete#main()
+				\ if !manage_pack#IsInstalled('asyncomplete-omni.vim')
+				| 	set_asyncomplete#main()
+				| 	autocmd! loadasyncomplete
+				| 	augroup! loadasyncomplete
+				| 	delfunction set_asyncomplete#main
+				| endif
 				| call asyncomplete#enable_for_buffer()
-				| autocmd! loadasyncomplete
-				| augroup! loadasyncomplete
-				| delfunction set_asyncomplete#main
 				| autocmd! NotmuchDraft
 				| augroup! NotmuchDraft
 augroup END
