@@ -1,4 +1,5 @@
 scriptencoding utf-8
+scriptversion 4
 
 function set_asyncomplete#main() abort
 	" packadd asyncomplete.vim " ←asyncomplete.vim 自体は ~/.vim/pack/*/start に置かないと最初に読み込んだバッファで働かないケースが有る
@@ -98,18 +99,21 @@ function set_asyncomplete#main() abort
 	let g:asyncomplete_preprocessor = [function('s:asyncomplete_preprocessor')]
 endfunction
 
-function s:asyncomplete_preprocessor(options, matches) abort
-	let l:visited = {}
-	let l:items = []
-	let l:base = '^\m' .. escape(a:options['base'], '\.$*~')
-	for [l:source_name, l:matches] in items(a:matches)
-		for l:item in l:matches['items']
-			if !has_key(l:visited, l:item['word'])
-						\ && ( l:source_name ==# 'spell' || l:item['word'] =~? l:base )
-				call add(l:items, l:item)
-				let l:visited[l:item['word']] = 1
+def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>): void
+	var visited = {}
+	var items = []
+	var base = '^\m' .. escape(options['base'], '\.$*~')
+	var word: string
+	for [source_name, matches] in items(a_matches)
+		for item in matches['items']
+			word = item['word']
+			if !has_key(visited, word)
+						\ && ( source_name ==# 'spell' || word =~? base )
+				add(items, item)
+				visited[word] = 1
 			endif
 		endfor
 	endfor
-	call asyncomplete#preprocess_complete(a:options, l:items)
-endfunction
+	asyncomplete#preprocess_complete(options, items)
+	return
+enddef
