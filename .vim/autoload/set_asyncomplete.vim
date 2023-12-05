@@ -25,6 +25,7 @@ function set_asyncomplete#main() abort
 		" asyncomplete.vim で snippet と LSP の連携 https://github.com/hrsh7th/vim-vsnip-integ {{{
 			packadd vim-vsnip-integ
 			call vsnip_integ#integration#attach()
+			call asyncomplete#register_source(extend(asyncomplete#get_source_info('vsnip'), #{priority: 10}))
 		" }}}
 		" snippet のファイル https://github.com/rafamadriz/friendly-snippets {{{
 			packadd friendly-snippets
@@ -92,7 +93,7 @@ function set_asyncomplete#main() abort
 	" spell ~/.vim/pack/my-plug/opt/asyncomplete-spell/ {{{
 	packadd asyncomplete-spell
 	call asyncomplete#register_source(asyncomplete#sources#spell#get_source_options({
-				\ 'priority': 5,
+				\ 'priority': 4,
 				\ 'allowlist': ['*'],
 				\ }))
 	" }}}
@@ -100,20 +101,23 @@ function set_asyncomplete#main() abort
 endfunction
 
 def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>): void
-	var visited = {}
 	var items = []
 	var base = '^\m' .. escape(options['base'], '\.$*~')
 	var word: string
 	for [source_name, matches] in items(a_matches)
 		for item in matches['items']
 			word = item['word']
-			if !has_key(visited, word)
-						\ && ( source_name ==# 'spell' || word =~? base )
+			if source_name ==# 'spell' || word =~? base
+				if source_name =~# '^asyncomplete_lsp_' # LSP は server ごとで異なる
+					item['priority'] = 6
+				else
+					item['priority'] = get(asyncomplete#get_source_info(source_name), 'priority', 0)
+				endif
 				add(items, item)
-				visited[word] = 1
 			endif
 		endfor
 	endfor
+	items = sort(items, (x, y) => y['priority'] - x['priority'])
 	asyncomplete#preprocess_complete(options, items)
 	return
 enddef
