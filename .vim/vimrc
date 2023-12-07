@@ -222,7 +222,7 @@ set formatlistpat=^\\c\\s*\\(\\d\\+[]:.)\\t\ ]\\\|(\\?[0-9a-z]\\+)\\\|[a-z][.\\t
 set breakindentopt=shift:0,min:10,list:0       # 見かけ上のインデント量を formatlistpat にヒットした文字数にする (list:-1はタブ文字も1文字なので、tabstop-1だけずれる)
 # コマンド・バー {{{2
 tabdo set cmdheight=1                          # コマンドバー調整
-set wildmenu wildmode=full wildoptions=pum,fuzzy # 補完が拡張モード+最長展開+ポップアップ
+set wildmenu wildmode=longest:full wildoptions=pum,fuzzy # 補完が拡張モード+最長展開+ポップアップ
 set suffixes+=.aux,.log,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.toc,.pdf,.synctex.gz # 補完の優先度を下げる拡張子
 set wildignore+=*.dvi,*.o,*.opp,*.obj,*.a,*.so,*.fdb_latexmk,*.fls,*.nav,*.out,*.snm,*.ltjruby,*.swp # 補完候補から完全に除外 (含めると補完候補にも現れなくなる)
 # ステータス・バー {{{2
@@ -323,7 +323,7 @@ augroup VIMRC
 	autocmd CmdlineLeave,CmdwinLeave * if (getcmdtype() =~# '[/?]' || getcmdwintype() =~# '[/?]') && pos != getpos('.') | set hlsearch | endif
 	autocmd CmdwinEnter * pos = getpos('.')
 	# ↓~/.vim/ftplugin/qf.vim, ~/.vim/after/ftplugin/qf.vim に書いてみたが効かなかった
-	autocmd FileType qf setlocal statusline=%#StatusLineLeft#%t\ %*%<%{exists('w:quickfix_title')?substitute(w:quickfix_title,'\ /dev/null$','',''):''}\ %=%#StatusLineRight#%3l/%L%4p%%
+	autocmd FileType qf &l:statusline = '%#StatusLineLeft#%t %*%<' .. (exists('w:quickfix_title') ? substitute(w:quickfix_title, '/usr/bin/grep -nHs --color=never -d skip -I --exclude-dir=\.git\( --exclude={[^}]\+}\)\?\(.*\) /dev/null$', 'grep \2', '') : '') .. '%=%#StatusLineRight#%3l/%L%4p%%'
 augroup END
 # 日本語の表示/編集に関わる設定 {{{1
 set backspace=indent,eol,start
@@ -364,10 +364,10 @@ g:html_indent_script1 = 'inc'
 g:html_indent_style1 = 'inc'
 g:html_indent_autotags = 'html,body,tbody'
 # grep {{{1
-set grepprg=grep.sh\ $*                        # --exclude は --include を使った時に無効にいしたいので、シェルスクリプトを使う
+set grepprg=/usr/bin/grep\ $*\ /dev/null       # --exclude は --include を使った時に無効にしたいのでコマンドにして分岐する
+# -nH といったオプションもそちらで指定している
 # 	* 再帰的に行うには -r, --recursive オプション
-# 	* スワップやバイナリ・ファイルの除外はシェルスクリプトの関数内で対処済み
-# 	* しかし分岐処理を入れているので --include='*.txt' 等とすれば、制限できる
+# 	* コマンドで分岐処理を入れているので --include=*.txt 等とすれば、制限できる
 # set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m,%f  # grep の出力は -L/--files-without-match, -l/--files-with-matches を付けた時の為ファイル名のみを出力追加したいが、binary file matches などの警告もヒットのように扱ってしまう
 # キー割り当てを除いたその他 {{{1
 set keywordprg=:help

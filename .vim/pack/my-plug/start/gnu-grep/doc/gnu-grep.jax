@@ -1,0 +1,97 @@
+*gnu-grep* execute gnu grep
+
+Author:  Iranoan <iranoan+vim@gspell.com>
+Repository: https://github.com/iranoan/gnu-grep
+License: GPL Ver.3.
+
+
+==============================================================================
+                                                            *gnu-grep-contents*
+目次~
+
+	* 概要                                                 |gnu-grep-introduction|
+	* 要件                                                 |gnu-grep-require|
+	* 使用方法                                             |gnu-grep-use|
+		- 必ず付けるオプション                               |gnu-grep-option|
+		- 補完                                               |gnu-grep-snippet|
+
+
+==============================================================================
+                                                   *gnu-grep-introduction* *:Grep*
+概要~
+
+- 幾つかのプションをつけて |:silent| |grep|, |:silent| |lgrep| を実行する
+- 標準では --exclude= を使って検索対象から除外する
+	* 現状、除外するファイル種類の設定は用意していない
+		|'wildignore'| の使用も考えたが、これは |i_Ctrl-X_Ctrl-F| のファイル名の入力な
+		ど補完候補にも影響するので、画像などバイナリ・ファイルは含めたくない
+	* --include を使うと --exclude= は使わない
+- 幾つかのオプションを補完できる
+
+==============================================================================
+                                                              *gnu-grep-require*
+要件~
+
+* Vim
+* GNU grep
+	|grepprg| に GNU grep を設定する
+	例: >
+	set grepprg=/usr/bin/grep\ $*\ /dev/null
+<
+==============================================================================
+                                                                  *gnu-grep-use*
+使用方法~
+
+* |:Grep| を使えば、幾つかのオプションを付けて |:silent| |grep| を実行する
+* |:LGrep| を使えば、幾つかのオプションを付けて |:silent| |lgrep| を実行する
+* --include を使わなければ --exclude= を使い主なバイナリ・ファイル等を除外する
+* %, # はバッファ名としてではなく、エスケープして文字列として処理する
+
+                                                               *gnu-grep-option*
+必ず付けるオプション~
+
+	* -H (--with-filename)
+	* -I (--binary-files=without-match)
+	* --color=never
+	* --exclude-dir=.git
+	* -d (--directories=)skip
+	* -n (--line-number)
+	* -s (--no-messages)
+
+                                                               *gnu-grep-snippet*
+補完~
+
+	* -E, --extended-regexp
+	* -F, --fixed-strings
+	* -G, --basic-regexp
+	* -L, --files-without-match
+	* -P, --perl-regexp
+	* -R, --dereference-recursive
+	* -T, --initial-tab
+	* -e, --regexp=
+	* -f, --file=
+	* -i, --ignore-case
+	* -l, --files-with-matches
+	* -m,  --max-count=
+	* -o, --only-matching
+	* -r, --recursive
+	* -s, --no-messages
+	* -v, --invert-match
+	* -w, --word-regexp
+	* -x, --line-regexp
+	* -A, --after-context=
+	* -B, --before-context=
+	* -C, --context=
+	* --include=
+を補完候補として表示する
+
+この内、次のオプションは次の引数ではファイル・ディレクトリ名の補完もできる
+	* -f, --file=
+	* -R, --dereference-recursive
+	* -r, --recursive
+
+ただし`` と $() はその開閉対応をチェックしていないので、上手く補完が働かない
+ケースが有る
+またファイル/ディレクトリ名の補完は空白を含む場合や引用符で囲む場合に未対応
+
+vim:tw=78:ts=2:ft=help:norl:noet:fen:

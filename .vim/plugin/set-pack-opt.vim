@@ -20,8 +20,6 @@ AlterCommand sj[is]     edit\ ++enc=cp932
 AlterCommand cp[932]    edit\ ++enc=cp932
 AlterCommand eu[c]      edit\ ++enc=eucjp-ms
 AlterCommand ji[s]      edit\ ++enc=iso-2022-jp-3
-AlterCommand gr[ep]     silent\ grep
-AlterCommand lgr[ep]    silent\ lgrep
 AlterCommand mak[e]     silent\ make
 AlterCommand lmak[e]    silent\ lmake
 AlterCommand tabd[o]    silent\ tabdo
@@ -43,6 +41,9 @@ AlterCommand nob[inary] if\ &binary\ <Bar>\ execute('setlocal\ nobinary\ <Bar>\ 
 AlterCommand git      Git
 AlterCommand gl[og]   Gllog
 AlterCommand gd[iff]  Gdiffsplit
+# grep, lgpre は gnu-grep に置き換え
+AlterCommand gr[ep]     Grep
+AlterCommand lgr[ep]    LGrep
 
 # 2019-03-31 14:51 などの日付や時刻もうまい具合に Ctrl-a/x で加算減算する https://github.com/tpope/vim-speeddating {{{1
 # 日時フォーマットを追加したいので、start に置かない
