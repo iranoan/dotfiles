@@ -33,7 +33,9 @@ function set_fern#main() abort
 	" https://github.com/lambdalisue/glyph-palette.vim {{{
 	packadd glyph-palette.vim " }}}
 	" https://github.com/lambdalisue/nerdfont.vim {{{
-	packadd nerdfont.vim " }}}
+	packadd nerdfont.vim
+	let g:nerdfont#autofix_cellwidths = 0 " call setcellwidths([[0x03B1, 0x03C9, 1]]) の警告を無くす
+	" }}}
 	" https://github.com/lambdalisue/fern-renderer-nerdfont.vim {{{
 	packadd fern-renderer-nerdfont.vim
 	let g:fern#renderer = "nerdfont"
