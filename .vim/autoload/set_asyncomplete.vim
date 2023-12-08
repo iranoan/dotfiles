@@ -101,23 +101,38 @@ function set_asyncomplete#main() abort
 endfunction
 
 def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>): void
-	var items = []
-	var base = '^\m' .. escape(options['base'], '\.$*~')
-	var word: string
+	var items: list<dict<any>>
+	var src_items: list<dict<any>>
+	var base = options.base
+	var priority: number
+	def FilterSpell(ls: list<dict<any>>): list<dict<any>>
+		if empty(ls)
+			return []
+		endif
+		# var menu = ls[0].menu
+		if ls[0].menu ==# '[Fcc]'
+			return filter(ls, (key, val) => val.word =~? '^\c' .. escape(base, '\.$*~'))
+		endif
+		return ls
+	enddef
 	for [source_name, matches] in items(a_matches)
-		for item in matches['items']
-			word = item['word']
-			if source_name ==# 'spell' || word =~? base
-				if source_name =~# '^asyncomplete_lsp_' # LSP は server ごとで異なる
-					item['priority'] = 6
-				else
-					item['priority'] = get(asyncomplete#get_source_info(source_name), 'priority', 0)
-				endif
-				add(items, item)
-			endif
+		priority = get(asyncomplete#get_source_info(source_name), 'priority', 0)
+		if source_name ==# 'spell'
+			src_items = matches.items
+		elseif source_name ==# 'mail'
+			src_items = FilterSpell(matches.items)
+		elseif source_name =~# '^asyncomplete_lsp_' # LSP は server ごとで異なる
+			priority = 6
+			src_items = matchfuzzy(matches.items, base, {key: 'word'} )
+		else
+			src_items = filter(matches.items, (key, val) => val.word =~# '^' .. escape(base, '\.$*~'))
+		endif
+		for item in src_items
+			item.priority = priority
+			add(items, item)
 		endfor
 	endfor
-	items = sort(items, (x, y) => y['priority'] - x['priority'])
+	items = sort(items, (x, y) => y.priority - x.priority)
 	asyncomplete#preprocess_complete(options, items)
 	return
 enddef
