@@ -323,7 +323,7 @@ augroup VIMRC
 	autocmd CmdlineLeave,CmdwinLeave * if (getcmdtype() =~# '[/?]' || getcmdwintype() =~# '[/?]') && pos != getpos('.') | set hlsearch | endif
 	autocmd CmdwinEnter * pos = getpos('.')
 	# ↓~/.vim/ftplugin/qf.vim, ~/.vim/after/ftplugin/qf.vim に書いてみたが効かなかった
-	autocmd FileType qf &l:statusline = '%#StatusLineLeft#%t %*%<' .. (exists('w:quickfix_title') ? substitute(w:quickfix_title, '/usr/bin/grep -nHs --color=never -d skip -I --exclude-dir=\.git\( --exclude={[^}]\+}\)\?\(.*\) /dev/null$', 'grep \2', '') : '') .. '%=%#StatusLineRight#%3l/%L%4p%%'
+	autocmd FileType qf &l:statusline = '%#StatusLineLeft#%t %*%<' .. (exists('w:quickfix_title') ? substitute(w:quickfix_title, '\(cexpr system("\)\?/usr/bin/grep -nHsI --color=never -d skip --exclude-dir=\.git\( --exclude={[^}]\+}\)\? \(.*\) /dev/null\(")->substitute(''\\ze\\n'', ":1: ", "g")\)\?$', 'grep \3', '') : '') .. '%=%#StatusLineRight#%3l/%L%4p%%'
 augroup END
 # 日本語の表示/編集に関わる設定 {{{1
 set backspace=indent,eol,start

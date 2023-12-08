@@ -11,17 +11,10 @@ enddef
 
 def GrepMain(cmd: string, args: list<string>): void
 	def FileList(arg: string): void
-		var ret: list<string> = systemlist(cmd .. arg)
-		if len(ret) == 0
-			echohl WarningMsg
-			echo 'Empty Result'
-			echohl None
-			return
-		endif
 		if cmd ==# 'grep'
-			cexpr join(map(ret, 'v:val .. ":1: "'), "\n")
+			execute 'cexpr system("/usr/bin/grep' .. arg .. ' /dev/null")->substitute(''\ze\n'', ":1: ", "g")'
 		else
-			lexpr join(map(ret, 'v:val .. ":1: "'), "\n")
+			execute 'lexpr system("/usr/bin/grep' .. arg .. ' /dev/null")->substitute(''\ze\n'', ":1: ", "g")'
 		endif
 		var qf_cmd: list<string> = execute('autocmd QuickFixCmdPost ' .. cmd)->split('\n')
 		if len(qf_cmd) > 2
@@ -29,20 +22,24 @@ def GrepMain(cmd: string, args: list<string>): void
 		endif
 	enddef
 
-	var include: bool = len(filter(copy(args), 'v:val =~# "^--include="')) > 0
-	var file_only: number = count(args, '-L') + count(args, '--files-without-match') + count(args, '-l') + count(args, '--files-with-matches')
-	if include
-		if file_only > 0
-			FileList(' -nHs --color=never -d skip -I --exclude-dir=.git ' .. join(args, ' '))
-		else
-			execute 'silent ' .. cmd .. ' -nHs --color=never -d skip -I --exclude-dir=.git ' .. join(args, ' ')->escape('%#')
-		endif
+	var opt: string
+	if len(filter(copy(args), 'v:val =~# "^--include="')) > 0
+		opt = ' -nHsI --color=never -d skip --exclude-dir=.git '
 	else
-		if file_only > 0
-			FileList(' -nHs --color=never -d skip -I --exclude-dir=.git --exclude={*.asf,*.aux,*.avi,*.bmc,*.bmp,*.cer,*.chm,*.chw,*.class,*.crt,*.cur,*.dll,*.doc,*.docx,*.dvi,*.emf,*.exe,*.fdb_latexmk,*.fls,*.flv,*.gpg,*.hlp,*.hmereg,*.icc,*.icm,*.ico,*.ics,*.jar,*.jp2,*.jpg,*.ltjruby,*.lzh,*.m4a,*.mkv,*.mov,*.mp3,*.mp4,*.mpg,*.nav,*.nvram,*.o,*.obj,*.odb,*.odg,*.odp,*.ods,*.odt,*.oll,*.opf,*.opp,*.out,*.pdf,*.pfa,*.pl3,*.png,*.ppm,*.ppt,*.pptx,*.pyc,*.reg,*.rm,*.rtf,*.snm,*.sqlite,*.swf,*.gz,*.bz2,*.Z,*.lzma,*.xz,*.lz,*.tfm,*.toc,*.ttf,*.vbox,*.vbox-prev,*.vdi,*.vf,*.webm,*.wmf,*.wmv,*.xls,*.xlsm,*.xlsx,.*.sw?,.viminfo,viminfo,a.out,tags,tags-ja} ' .. join(args, ' '))
-		else
-			execute 'silent ' .. cmd .. ' -nHs --color=never -d skip -I --exclude-dir=.git --exclude={*.asf,*.aux,*.avi,*.bmc,*.bmp,*.cer,*.chm,*.chw,*.class,*.crt,*.cur,*.dll,*.doc,*.docx,*.dvi,*.emf,*.exe,*.fdb_latexmk,*.fls,*.flv,*.gpg,*.hlp,*.hmereg,*.icc,*.icm,*.ico,*.ics,*.jar,*.jp2,*.jpg,*.ltjruby,*.lzh,*.m4a,*.mkv,*.mov,*.mp3,*.mp4,*.mpg,*.nav,*.nvram,*.o,*.obj,*.odb,*.odg,*.odp,*.ods,*.odt,*.oll,*.opf,*.opp,*.out,*.pdf,*.pfa,*.pl3,*.png,*.ppm,*.ppt,*.pptx,*.pyc,*.reg,*.rm,*.rtf,*.snm,*.sqlite,*.swf,*.gz,*.bz2,*.Z,*.lzma,*.xz,*.lz,*.tfm,*.toc,*.ttf,*.vbox,*.vbox-prev,*.vdi,*.vf,*.webm,*.wmf,*.wmv,*.xls,*.xlsm,*.xlsx,.*.sw?,.viminfo,viminfo,a.out,tags,tags-ja} ' .. join(args, ' ')->escape('%#')
-		endif
+		opt = ' -nHsI --color=never -d skip --exclude-dir=.git --exclude={*.asf,*.aux,*.avi,*.bmc,*.bmp,*.cer,*.chm,*.chw,*.class,*.crt,*.cur,*.dll,*.doc,*.docx,*.dvi,*.emf,*.exe,*.fdb_latexmk,*.fls,*.flv,*.gpg,*.hlp,*.hmereg,*.icc,*.icm,*.ico,*.ics,*.jar,*.jp2,*.jpg,*.ltjruby,*.lzh,*.m4a,*.mkv,*.mov,*.mp3,*.mp4,*.mpg,*.nav,*.nvram,*.o,*.obj,*.odb,*.odg,*.odp,*.ods,*.odt,*.oll,*.opf,*.opp,*.out,*.pdf,*.pfa,*.pl3,*.png,*.ppm,*.ppt,*.pptx,*.pyc,*.reg,*.rm,*.rtf,*.snm,*.sqlite,*.swf,*.gz,*.bz2,*.Z,*.lzma,*.xz,*.lz,*.tfm,*.toc,*.ttf,*.vbox,*.vbox-prev,*.vdi,*.vf,*.webm,*.wmf,*.wmv,*.xls,*.xlsm,*.xlsx,.*.sw?,.viminfo,viminfo,a.out,tags,tags-ja} '
+	endif
+	if (( index(args, '-L') >= 0 || index(args, '--files-without-match') >= 0 ) && ( index(args, '-v') >= 0 || index(args, '--invert-match') >= 0))
+		|| (( index(args, '-l') >= 0 || index(args, '--files-with-match') >= 0 ) && ( index(args, '-v') == -1 || index(args, '--invert-match') == -1))
+		execute 'silent ' .. cmd .. opt .. '-m 1 ' ..
+			filter(args, (i, v) => v !~# '^\m\C\(-l\|-L\|-v\|--files-with\(out\)\?-match\|--invert-match\)$')
+				->join(' ')->escape('%#')
+	elseif index(args, '-L') >= 0
+		|| index(args, '--files-without-match') >= 0
+		|| index(args, '-l') >= 0
+		|| index(args, '--files-with-matches') >= 0
+		FileList(opt .. join(args, ' '))
+	else
+		execute 'silent ' .. cmd .. opt .. join(args, ' ')->escape('%#')
 	endif
 enddef
 
@@ -172,3 +169,4 @@ export def GrepComp(ArgLead: string, CmdLine: string, CursorPos: number): list<s
 	endif
 	return filter(opt, 'v:val =~# "^' .. args[-1] .. '"')->map((key, val) => substitute(val, '[^=]\zs$', ' ', ''))
 enddef
+defcompile
