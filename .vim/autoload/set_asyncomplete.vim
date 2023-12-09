@@ -111,7 +111,8 @@ def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>):
 		endif
 		# var menu = ls[0].menu
 		if ls[0].menu ==# '[Fcc]'
-			return filter(ls, (key, val) => val.word =~? '^\c' .. escape(base, '\.$*~'))
+			# return filter(ls, (key, val) => val.word =~? '^\c' .. escape(base, '\.$*~'))
+			return matchfuzzy(ls, base, {key: 'word'} )
 		endif
 		return ls
 	enddef
