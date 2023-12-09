@@ -112,6 +112,9 @@ def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>):
 		# var menu = ls[0].menu
 		if ls[0].menu ==# '[Fcc]'
 			# return filter(ls, (key, val) => val.word =~? '^\c' .. escape(base, '\.$*~'))
+			if base =~# '^\s*$'
+				return ls
+			endif
 			return matchfuzzy(ls, base, {key: 'word'} )
 		endif
 		return ls
@@ -124,7 +127,11 @@ def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>):
 			src_items = FilterSpell(matches.items)
 		elseif source_name =~# '^asyncomplete_lsp_' # LSP は server ごとで異なる
 			priority = 6
-			src_items = matchfuzzy(matches.items, base, {key: 'word'} )
+			if base =~# '^\s*$'
+				src_items = matches.items
+			else
+				src_items = matchfuzzy(matches.items, base, {key: 'word'})
+			endif
 		else
 			src_items = filter(matches.items, (key, val) => val.word =~# '^' .. escape(base, '\.$*~'))
 		endif
