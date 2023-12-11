@@ -2,7 +2,7 @@ scriptencoding utf-8
 
 call ale#linter#Define('html', #{
 			\ name: 'nu-html-checker',
-			\ output_stream: 'both',
+			\ output_stream: 'stderr',
 			\ executable: exepath('java'),
 			\ command: '%e -jar '.. get(g:, 'ale_nu_html_checker_use_global', '$HOME/node_modules/vnu-jar/build/dist/vnu.jar') .. ' --vabose --format json -',
 			\ callback: 'ale_linters#html#nu_html_checker#HandleVnuJar',
