@@ -11,7 +11,7 @@ endfunction
 call ale#linter#Define('css', #{
 			\ name: 'stylelint-v16',
 			\ executable: 'stylelint',
-			\ output_stream: 'both',
+			\ output_stream: 'stderr',
 			\ command: s:css_stylelint(bufnr()),
 			\ callback: 'ale_linters#css#stylelint_v16#Handle',
 			\ })

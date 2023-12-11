@@ -17,7 +17,7 @@ endfunction
 
 call ale#linter#Define('css', #{
 			\ name: 'css-validator',
-			\ output_stream: 'both',
+			\ output_stream: 'stdout',
 			\ executable: exepath('java'),
 			\ command: '%e -jar "' ..  get(g:, 'als_css_validator_use_global', '$HOME/bin/jar/css-validator.jar') .. '" --output=json --profile=css3 --lang=ja --vextwarning=true file:%t',
 			\ callback: 'ale_linters#css#ale_css_validator#Handle',
@@ -30,7 +30,7 @@ def ale_linters#css#ale_css_validator#Handle(b: number, lines: list<string>): li
 	var output: list<dict<any>>
 	var obj: dict<any>
 	var type: string
-	var ret: dict<any> = json_decode(lines[1 : ]->join('')).cssvalidation
+	var ret: dict<any> = json_decode(lines->join('')).cssvalidation
 	# 未使用要素
 	# uri file:/home/hiroyuki/downloads/test/sample.css
 	# result {'errorcount': 1, 'warningcount': 2}
