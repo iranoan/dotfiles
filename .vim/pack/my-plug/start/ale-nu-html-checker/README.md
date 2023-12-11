@@ -19,31 +19,34 @@ Add ale linter 'Nu HTML chkecer'
 
 ### install vnu-jar
 
-````sh
+```sh
 npm install vnu-jar
-````
+```
 
 Or
 
-````sh
+```sh
 npm install -g vnu-jar
-````
+```
 
 ### copy plug-in
 
-````sh
+```sh
 cp ale-nu-html-checker $HOME/.vim/pack/HOGE/start/ale-nu-html-checker
-````
+```
 
-### writing $HOME/.vim/vimrc, \~/.vimrc, $HOME/\_vimrc, $HOME/vimfiles/vimrc or $VIM/\_vimrc etc.
+### writing $HOME/.vim/vimrc, \~/.vimrc, $HOME/\_vimrc, $HOME/vimfiles/vimrc or $VIM/\_vimrc etc
 
 if vnu-jar do not save in $HOME/node\_modules, for example
 
-- UNIX 
-  ````vim 
-  let g:ale_nu_html_checker_use_global = "/usr/local/lib/node_modules/" 
-  ````
-- Windows 
-  ````vim 
-  let g:ale_nu_html_checker_use_global = 'C:¥Users¥USER_NAME¥AppData¥Roaming¥npm¥node_modules' 
-  ````
+- UNIX
+
+  ```vim
+  let g:ale_nu_html_checker_use_global = "/usr/local/lib/node_modules/"
+  ```
+
+- Windows
+
+  ```vim
+  let g:ale_nu_html_checker_use_global = 'C:¥Users¥USER_NAME¥AppData¥Roaming¥npm¥node_modules'
+  ```

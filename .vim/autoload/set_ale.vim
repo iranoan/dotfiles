@@ -31,27 +31,28 @@ function set_ale#main()
 	" let g:ale_open_list = 0
 	" let g:ale_keep_list_window_open = 0
 	" 他の Linter のオプションが増えないように限定しておく
-	let g:ale_linters = {
-				\ 'python': ['flake8'],
-				\ 'c'     : ['clang'],
-				\ 'cpp'   : ['clang'],
-				\ 'h'     : ['clangd', 'clang', 'g++'],
-				\ 'html'  : ['nu-html-checker'],
-				\ 'tex'   : ['lacheck', 'chktex'],
-				\ 'json'  : ['jsonlint'],
+	let g:ale_linters = #{
+				\ python: ['flake8'],
+				\ c:      ['clang'],
+				\ cpp:    ['clang'],
+				\ h:      ['clangd', 'clang', 'g++'],
+				\ css:    ['css-validator', 'stylelint-v16'],
+				\ html:   ['nu-html-checker'],
+				\ tex:    ['lacheck', 'chktex'],
+				\ json:   ['jsonlint'],
 				\ }
-				" \ 'tex'   : ['textlint'],
-				" \ 'cpp'   : ['clangd', 'clang', 'g++'], " ←clang 以外は行末の;無しで次の行がエラー扱いになる
-				" \ 'tex'   : ['lacheck', 'alex', 'chktex', 'proselint', 'redpen', 'texlab', 'vale', 'writegood'],
+				" \ tex   : ['textlint'],
+				" \ cpp   : ['clangd', 'clang', 'g++'], " ←clang 以外は行末の;無しで次の行がエラー扱いになる
+				" \ tex   : ['lacheck', 'alex', 'chktex', 'proselint', 'redpen', 'texlab', 'vale', 'writegood'],
 				" , 'proselint' はプログラムの文法チェッカーではなく、英語のチェッカー (日本語の textlint にあたる)→ https://githubja.com/amperser/proselint もたつく要因かもしれないので、一旦除外
 	" 各ツールをFixerとして登録
-	let g:ale_fixers = { 'python': ['autopep8'], }
+	let g:ale_fixers = #{ python: ['autopep8'], }
 	let g:ale_python_flake8_options = '--config=$HOME/.config/flake8'
-	let g:ale_linter_aliases = {
-				\ 'help' : 'markdown',
-				\ 'html' : ['html', 'javascript', 'css'],
+	let g:ale_linter_aliases = #{
+				\ help : 'markdown',
+				\ html : ['html', 'javascript', 'css'],
 				\ }
-				" \ 'xhtml': 'html',
+				" \ xhtml: 'html',
 	" マッピング
 	nnoremap <silent>[a        <Plug>(ale_previous)
 	nnoremap <silent>]a        <Plug>(ale_next)
