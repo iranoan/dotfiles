@@ -31,6 +31,7 @@ def ale_linters#css#ale_css_validator#Handle(b: number, lines: list<string>): li
 	var obj: dict<any>
 	var type: string
 	var ret: dict<any> = json_decode(lines->join('')).cssvalidation
+	var mes: string
 	# 未使用要素
 	# uri file:/home/hiroyuki/downloads/test/sample.css
 	# result {'errorcount': 1, 'warningcount': 2}
@@ -41,13 +42,15 @@ def ale_linters#css#ale_css_validator#Handle(b: number, lines: list<string>): li
 	# validity false
 
 	for i in get(ret, 'errors', [])
+		mes = (has_key(i, 'context') ? i.context .. ': ' : '') .. i.message .. (has_key(i, 'type') ? ' [' .. i.type .. ']' : '')
 		obj = {
 			lnum: i.line,
 			# end_lnum: input.lastLine,
 			# end_lnum: get(input, 'lastLine', input.firstLine)
 			# col: input.firstColumn,
 			# end_col: input.lastColumn,
-			text: (has_key(i, 'context') ? i.context .. ': ' : '') .. i.message .. (has_key(i, 'type') ? ' [' .. i.type .. ']' : ''),
+			text: mes,
+			detail: '[css-validator] '  .. mes,
 			type: 'E',
 		}
 		# 未使用要素
@@ -56,9 +59,11 @@ def ale_linters#css#ale_css_validator#Handle(b: number, lines: list<string>): li
 		add(output, obj)
 	endfor
 	for i in get(ret, 'warnings', [])
+		mes = (has_key(i, 'context') ? i.context .. ': ' : '') .. i.message
 		obj = {
 			lnum: i.line,
-			text: (has_key(i, 'context') ? i.context .. ': ' : '') .. i.message,
+			text: mes,
+			detail: '[css-validator] '  .. mes,
 			type: 'W',
 		}
 		add(output, obj)

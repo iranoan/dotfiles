@@ -36,6 +36,7 @@ def ale_linters#css#stylelint_v16#Handle(b: number, lines: list<string>): list<d
 			end_col: get(i, 'endColumn', i.column),
 			text: i.text,
 			type: i.severity ==# 'error' ? 'E' : 'W',
+			detail: '[stylelint-v16] ' .. i.text,
 		}
 		add(output, obj)
 	endfor
