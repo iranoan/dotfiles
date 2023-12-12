@@ -1,11 +1,18 @@
 scriptencoding utf-8
 
 function set_ale#main()
-	" let g:ale_set_balloons = 1
-	" let g:ale_hover_to_preview=1
 	packadd ale
 	let g:ale_disable_lsp = 1
-	let g:ale_set_balloons = 0                " エラー/警告をバルーン表示しない
+	" let g:ale_set_balloons = 0                " エラー/警告をバルーン表示しない
+	let g:ale_hover_to_preview = 1
+	let g:ale_floating_preview = 1
+	let g:ale_cursor_detail = 1
+	" let g:ale_echo_cursor = 0
+	let g:ale_floating_window_border = ['│', '─', '╭', '╮', '╯', '╰', '│', '─']
+	let g:ale_set_balloons = 1
+	let g:ale_detail_to_floating_preview = 1
+	let g:ale_hover_to_preview = 1
+	let g:ale_hover_to_floating_preview = 1
 	let g:ale_enabled = 0                     " デフォルトでは OFF にして BufWinEnter で ON にする (argdo などで複数のファイルにも使われると遅い)
 	let g:ale_sign_error = '😰'
 	let g:ale_sign_style_error = '😱'
@@ -15,12 +22,12 @@ function set_ale#main()
 	let g:ale_echo_msg_error_str   = '😰'
 	let g:ale_echo_msg_info_str    = '📔'
 	let g:ale_echo_msg_warning_str = '🤔'
-	let g:ale_echo_msg_format = '[%linter%]%severity% %s [%...code...%]'
-	let g:ale_virtualtext_cursor = 0          " virtual text をカーソル位置に表示しない
-	" let g:ale_sign_column_always=1
-	let g:ale_close_preview_on_insert=1
+	let g:ale_echo_msg_format = '[%linter%]%severity% %s'
+	let g:ale_virtualtext_cursor = 0          " エラーなどの内容を virtual text で表示しない
+	" let g:ale_sign_column_always = 1
+	let g:ale_close_preview_on_insert = 1
 	let g:ale_markdown_markdownlint_options = '-c ~/.config/markdownlint.json'
-	" let g:ale_keep_list_window_open=1
+	" let g:ale_keep_list_window_open = 1
 	" let g:ale_lint_on_enter = 1              " ファイルを開いたときにlint実行
 	" let g:ale_lint_on_save = 1               " ファイルを保存したときにlint実行
 	" let g:ale_lint_on_text_changed = 'never' " 編集中のlintはしない
