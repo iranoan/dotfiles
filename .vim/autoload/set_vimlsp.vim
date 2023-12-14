@@ -5,6 +5,7 @@ function set_vimlsp#main() abort
 	packadd vim-lsp
 	" let g:lsp_diagnostics_enabled = 1      " デフォルト
 	let g:lsp_diagnostics_float_cursor = 1 " エラー内容をフローティング表示
+	let g:lsp_diagnostics_float_insert_mode_enabled = 0
 	let g:lsp_diagnostics_float_delay = 200 " 表示の待ち時間
 	" let g:lsp_diagnostics_signs_enabled = 1 " デフォルト
 	let g:lsp_diagnostics_echo_cursor = 1
