@@ -56,6 +56,7 @@ install.sh
 * Python
   * .config/flake8
   * .config/pep8
+  * .pip/
 * ranger
 * sxiv
   * font, color setting → .Xresources
