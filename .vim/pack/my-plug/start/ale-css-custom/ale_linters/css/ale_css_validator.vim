@@ -30,43 +30,36 @@ def ale_linters#css#ale_css_validator#Handle(b: number, lines: list<string>): li
 	var output: list<dict<any>>
 	var obj: dict<any>
 	var type: string
-	var ret: dict<any> = json_decode(lines->join('')).cssvalidation
 	var mes: string
+	var ret: dict<any> = json_decode(lines->join('')).cssvalidation
+	if ret.uri =~# '\.html\?' # HTML ファイルの style 属性には未対応
+		|| ( ret.result.errorcount == 0 && ret.result.warningcount == 0 )
+		return []
+	endif
 	# 未使用要素
-	# uri file:/home/hiroyuki/downloads/test/sample.css
-	# result {'errorcount': 1, 'warningcount': 2}
 	# date 2023-12-10T01:47:27Z
 	# timestamp 1702216047007
 	# csslevel css3
 	# checkedby http://www.w3.org/2005/07/css-validator
 	# validity false
 
-	for i in get(ret, 'errors', [])
-		mes = (has_key(i, 'context') ? i.context .. ': ' : '') .. i.message .. (has_key(i, 'type') ? ' [' .. i.type .. ']' : '')
-		obj = {
-			lnum: i.line,
-			# end_lnum: input.lastLine,
-			# end_lnum: get(input, 'lastLine', input.firstLine)
-			# col: input.firstColumn,
-			# end_col: input.lastColumn,
-			text: mes,
-			detail: '[css-validator] '  .. mes,
-			type: 'E',
-		}
-		# 未使用要素
-		# 'level': 0,
-		# 'source': 'file:/home/hiroyuki/downloads/test/sample.css',
-		add(output, obj)
-	endfor
-	for i in get(ret, 'warnings', [])
-		mes = (has_key(i, 'context') ? i.context .. ': ' : '') .. i.message
-		obj = {
-			lnum: i.line,
-			text: mes,
-			detail: '[css-validator] '  .. mes,
-			type: 'W',
-		}
-		add(output, obj)
+	for [k, v] in items({errors: 'E', warnings: 'W'})
+		for i in get(ret, k, [])
+			mes = (has_key(i, 'context') ? i.context .. ': ' : '') .. i.message .. (has_key(i, 'type') ? ' [' .. i.type .. ']' : '')
+			obj = {
+				lnum: i.line,
+				# end_lnum: ,
+				# col: ,
+				# end_col: ,
+				text: mes,
+				detail: '[css-validator] '  .. mes,
+				type: v,
+			}
+			# 未使用要素
+			# 'level': 0,
+			# 'source': 'file:/home/hiroyuki/downloads/test/sample.css',
+			add(output, obj)
+		endfor
 	endfor
 	return output
 enddef
