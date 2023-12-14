@@ -36,6 +36,11 @@ function set_vimlsp#main() abort
 				\ 'workspace_config': {},
 				\ 'semantic_highlight': {},
 				\ })
+	" call lsp#register_server({
+	" 			\ 'name': 'efm-langserver',
+	" 			\ 'cmd': {server_info->['efm-langserver', '-c=/home/hiroyuki/.config/efm-langserver/config.yaml']},
+	" 			\ 'allowlist': ['json', 'markdown', 'html', 'xhtml', 'css', 'tex'],
+	" 			\ }) " 現状 ALE を浸かったほうが反応が速い
 	" }}}
 	" vim-lsp の自動設定 https://github.com/mattn/vim-lsp-settings {{{
 	packadd vim-lsp-settings
@@ -99,9 +104,10 @@ def s:on_lsp_buffer_enabled(): void
 		nnoremap <buffer>]a        <Plug>(lsp-next-diagnostic)
 		nnoremap <buffer><leader>p <Plug>(lsp-document-diagnostics)
 	elseif &filetype == 'css' || &filetype == 'c' || &filetype == 'cpp' || &filetype == 'html' || &filetype == 'xhtml' || &filetype == 'tex'
+	# elseif &filetype == 'css' || &filetype == 'c' || &filetype == 'cpp' || &filetype == 'tex'
 		b:lsp_diagnostics_enabled = 0
 		# clang 以外で行末の;無しで次の行がエラー扱いになる
-		# HTML, TeX では文法チェックがない
+		# TeX では lacheck, CSS では css-validator が efm-languserver を介しても動かない
 	else # 結果的に b:lsp_diagnostics_enabled != 0 はエラー/警告リスト ALE 優先に
 		nnoremap <buffer><leader>p <Plug>(lsp-document-diagnostics)
 	endif
@@ -165,5 +171,5 @@ def s:check_run_lsp(): bool # 後から同じウィンドウに開いた時以�
 			return false
 		endif
 		endfor
-	return v:true  # 合致する lsp-server が無い
+	return true  # 合致する lsp-server が無い
 enddef
