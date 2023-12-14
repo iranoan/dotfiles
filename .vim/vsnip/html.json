@@ -14,8 +14,7 @@
 			"</body>",
 			"</html>"
 		],
-		"description": "HTML - Defines a template for a html5 document",
-		"scope": "text.html"
+		"description": "HTML - Defines a template for a html5 document"
 	},
 	"figure": {
 		"prefix": "figure",
@@ -180,8 +179,12 @@
 			"\t$1",
 			"</style>"
 		],
-		"description": "HTML - Defines a style definition",
-		"scope": "text.html"
+		"description": "HTML - Defines a style definition"
+	},
+	"style=": {
+		"prefix": "style=",
+		"body": ["style=\"${1}\""],
+		"description": "HTML - style attribution"
 	},
 	"li": {
 		"prefix": "li",

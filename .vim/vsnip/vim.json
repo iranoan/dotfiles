@@ -69,7 +69,7 @@
 			"echomsg",
 			"log"
 		],
-		"body": "echomsg string(${1})"
+		"body": "echomsg ${1}"
 	},
 	"command": {
 		"prefix": "command",
