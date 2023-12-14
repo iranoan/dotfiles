@@ -139,7 +139,7 @@ def s:on_lsp_buffer_enabled(): void
 			break
 		endif
 	endfor
-	while lsp#get_server_status(s_info.name) !=? 'running'
+	while lsp#get_server_status(s_info.name) !=? 'running' && lsp#get_server_status(s_info.name) !=? 'starting'
 		lsp#stop_server(s_info.name)
 		break
 	endwhile
