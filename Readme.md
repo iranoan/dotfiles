@@ -19,6 +19,8 @@ install.sh
 * clang-format
 * colordiff
 * Ctags
+* efm-langserver
+  * .config/efm-langserver
 * FbTerm
 * FZF
   * .fzf/
