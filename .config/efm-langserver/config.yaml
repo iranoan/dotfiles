@@ -231,11 +231,15 @@ tools:
     lint-command: 'yamllint -f parsable -'
     lint-stdin: true
 
-  nu_html_checker: &nu_html_checker
+  vnu-jar: &vnu-jar
     prefix: nu_html
     lint-command: 'java -jar $HOME/node_modules/vnu-jar/build/dist/vnu.jar --vabose --format gnu -'
     lint-stdin: true
     lint-formats:
+      - ':%l.%c-%e.%k: %trror: %m'
+      - ':%l.%c-%e.%k: info %tarning: %m'
+      - ':%l.%c-%e.%k: %tarning: %m'
+      - ':%l.%c-%e.%k: %tnfo: %m'
       - ':%l.%c-%e.%k: %trror: %m'
 
   lacheck: &lacheck
@@ -288,10 +292,10 @@ languages:
 
   html:
     # - <<: *html-prettier
-    - <<:  *nu_html_checker
+    - <<:  *vnu-jar
 
   xhtml:
-    - <<:  *nu_html_checker
+    - <<:  *vnu-jar
 
   javascript:
     - <<: *javascript-eslint
