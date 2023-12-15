@@ -26,7 +26,7 @@ def ale_linters#html#nu_html_checker#HandleVnuJar(b: number, lines: list<string>
 			lnum: get(input, 'firstLine', input.lastLine),
 			end_lnum: input.lastLine,
 			# end_lnum: get(input, 'lastLine', input.firstLine)
-			col: input.firstColumn,
+			col: get(input, 'firstColumn', 1),
 			end_col: input.lastColumn,
 			text: input.message,
 		}
