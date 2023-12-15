@@ -23,6 +23,14 @@ tools:
     lint-formats:
       - 'file:%f:%l:%m'
 
+  css-validator-stdin: &css-validator-stdin
+    prefix: css-validator
+    lint-command: 'css-validator-stdin.sh'
+    lint-stdin: true
+    lint-ignore-exit-code: true
+    lint-formats:
+      - 'file:%f:%l:%m'
+
   stylelint: &stylelint
     prefix: stylelint
     lint-command: 'stylelint -f unix --stdin --stdin-filename ${INPUT}'
@@ -238,6 +246,14 @@ tools:
     lint-formats:
       - '"%f", line %l: %m'
 
+  lacheck-stdin: &lacheck-stdin
+    prefix: lacheck
+    lint-command: 'lacheck-stdin.sh'
+    lint-stdin: true
+    lint-ignore-exit-code: true
+    lint-formats:
+      - '"stdin", line %l: %m'
+
   chktex: &chktex
     prefix: chktex
     lint-command: 'chktex'
@@ -251,7 +267,8 @@ languages:
 
   css:
     - <<: *stylelint
-    - <<: *css-validator
+    # - <<: *css-validator
+    - <<: *css-validator-stdin
     # - <<: *css-prettier
 
   csv:
@@ -321,7 +338,8 @@ languages:
     - <<: *sh-shfmt
 
   tex:
-    - <<: *lacheck
+    - <<: *lacheck-stdin
+    # - <<: *lacheck
     - <<: *chktex
 
   vim:
