@@ -29,7 +29,7 @@ tools:
     lint-stdin: true
     lint-ignore-exit-code: true
     lint-formats:
-      - 'file:%f:%l:%m'
+      - 'file:stdin:%l:%m'
 
   stylelint: &stylelint
     prefix: stylelint
