@@ -17,6 +17,7 @@ function set_ale#main()
 	let g:ale_sign_error = '😰'
 	let g:ale_sign_style_error = '😱'
 	let g:ale_sign_warning = '🤔'
+	let g:ale_sign_info = '📔'
 	let g:ale_sign_style_warning = '🤨'
 	" let g:ale_open_list=1                   " リストを開くがちらつく
 	let g:ale_echo_msg_error_str   = '😰'
