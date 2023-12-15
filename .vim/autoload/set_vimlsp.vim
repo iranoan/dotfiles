@@ -47,7 +47,7 @@ function set_vimlsp#main() abort
 	" 			\ 'name': 'efm-langserver',
 	" 			\ 'cmd': {server_info->['efm-langserver', '-c=/home/hiroyuki/.config/efm-langserver/config.yaml']},
 	" 			\ 'allowlist': ['json', 'markdown', 'html', 'xhtml', 'css', 'tex'],
-	" 			\ }) " 現状 ALE を使ったほうが反応が速い
+	" 			\ }) " 現状 ALE を使ったほうが反応が速い+バッファを開いた時にチェックしてくれない
 	" }}}
 	" vim-lsp の自動設定 https://github.com/mattn/vim-lsp-settings {{{
 	packadd vim-lsp-settings
