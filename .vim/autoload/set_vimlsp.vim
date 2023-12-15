@@ -47,7 +47,7 @@ function set_vimlsp#main() abort
 	" 			\ 'name': 'efm-langserver',
 	" 			\ 'cmd': {server_info->['efm-langserver', '-c=/home/hiroyuki/.config/efm-langserver/config.yaml']},
 	" 			\ 'allowlist': ['json', 'markdown', 'html', 'xhtml', 'css', 'tex'],
-	" 			\ }) " 現状 ALE を浸かったほうが反応が速い
+	" 			\ }) " 現状 ALE を使ったほうが反応が速い
 	" }}}
 	" vim-lsp の自動設定 https://github.com/mattn/vim-lsp-settings {{{
 	packadd vim-lsp-settings
@@ -115,6 +115,7 @@ def s:on_lsp_buffer_enabled(): void
 		b:lsp_diagnostics_enabled = 0
 		# clang 以外で行末の;無しで次の行がエラー扱いになる
 		# TeX では lacheck, CSS では css-validator が標準入力で扱えないので、efm-langserver を介すとファイルを保存のタイミングでしかチェックしない
+		# →シェルスクリプトにすると保存だけでなく、編集に対応できるが css-validator はワーニングだけだと、バッファを開いた直後は表示されない
 	else # 結果的に b:lsp_diagnostics_enabled != 0 はエラー/警告リスト ALE 優先に
 		nnoremap <buffer><leader>p <Plug>(lsp-document-diagnostics)
 	endif
