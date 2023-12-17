@@ -27,7 +27,6 @@ function set_ale#main()
 	let g:ale_virtualtext_cursor = 0          " エラーなどの内容を virtual text で表示しない
 	" let g:ale_sign_column_always = 1
 	let g:ale_close_preview_on_insert = 1
-	let g:ale_markdown_markdownlint_options = '-c ~/.config/markdownlint.json'
 	" let g:ale_keep_list_window_open = 1
 	" let g:ale_lint_on_enter = 1              " ファイルを開いたときにlint実行
 	" let g:ale_lint_on_save = 1               " ファイルを保存したときにlint実行
@@ -55,7 +54,6 @@ function set_ale#main()
 				" , 'proselint' はプログラムの文法チェッカーではなく、英語のチェッカー (日本語の textlint にあたる)→ https://githubja.com/amperser/proselint もたつく要因かもしれないので、一旦除外
 	" 各ツールをFixerとして登録
 	let g:ale_fixers = #{ python: ['autopep8'], }
-	let g:ale_python_flake8_options = '--config=$HOME/.config/flake8'
 	let g:ale_linter_aliases = #{
 				\ help : 'markdown',
 				\ html : ['html', 'javascript', 'css'],
