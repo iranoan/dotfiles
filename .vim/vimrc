@@ -357,7 +357,7 @@ set helplang=ja,en                             # 日本語ヘルプを優先的�
 set spell spelllang+=cjk
 # gf などでファイルとして扱う文字 {{{1
 set isfname+=: isfname-=# isfname-==           # Maildir では : がフラグの前置文字 HTML では # は id+シェルスクリプトなどで = は代入
-# ファイルタイプ別設定 {{{1
+# ファイルタイプ別設定 {{{1 ftplugin/ では設定できない分
 g:tex_flavor = 'latex'                         # *.tex の新規作成などで plainTeX ではなく LaTeX として扱う
 g:markdown_folding = 1                         # Markdown で折りたたみ
 g:html_indent_script1 = 'inc'
@@ -397,7 +397,7 @@ set runtimepath+=/usr/share/vim/addons
 # 設定の切り替え {{{2
 nnoremap <silent><leader>cw <Cmd>setlocal wrap!<CR>
 nnoremap <silent><leader>ct <Cmd>execute 'set showtabline=' .. ( &showtabline ? 0 : 2 )<CR>
-nnoremap <silent><leader>cm <Cmd>execute 'set scrolloff=' .. ( &scrolloff ? 0 : ( &lines > 20 ? &lines / 4 : 5 ) )<CR>
+nnoremap <silent><leader>cm <Cmd>execute 'setlocal scrolloff=' .. ( &scrolloff ? 0 : ( &lines > 20 ? &lines / 4 : 5 ) )<CR>
 # ↑ m は margin のつもり
 nnoremap <silent><leader>cs <Cmd>set showcmd!<CR>
 nnoremap <silent><leader>cd <Cmd>call change_directory#Lcd()<CR>
