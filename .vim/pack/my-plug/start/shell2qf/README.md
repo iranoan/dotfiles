@@ -4,4 +4,4 @@
 
 ``` vim
 :Shell2Qf shell-command arg | shell-command arg ...
-````
+```

@@ -45,7 +45,7 @@ function set_vimlsp#main() abort
 				\ })
 	" call lsp#register_server({
 	" 			\ 'name': 'efm-langserver',
-	" 			\ 'cmd': {server_info->['efm-langserver', '-c=/home/hiroyuki/.config/efm-langserver/config.yaml']},
+	" 			\ 'cmd': {server_info->['efm-langserver']},
 	" 			\ 'allowlist': ['json', 'markdown', 'html', 'xhtml', 'css', 'tex'],
 	" 			\ }) " 現状 ALE を使ったほうが反応が速い+バッファを開いた時にチェックしてくれない
 	" }}}
