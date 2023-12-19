@@ -25,47 +25,61 @@ function set_vimlsp#main() abort
 	let g:lsp_fold_enabled = 0
 	let g:lsp_text_edit_enabled = 1
 	" vim-lsp-settings は &filetype == sh に対応しているが &filetype == bash は未対応 {{{
-	call lsp#register_server({
-				\ 'name': 'bash-language-server',
-				\ 'cmd': {server_info->['bash-language-server', 'start']},
-				\ 'initialization_options': v:null,
-				\ 'allowlist': ['sh', 'bash'],
-				\ 'blocklist': [],
-				\ 'config': {'refresh_pattern': '\([a-zA-Z0-9_-]\+\|\k\+\)$'}
+	call lsp#register_server(#{
+				\ name: 'bash-language-server',
+				\ cmd: {server_info->['bash-language-server', 'start']},
+				\ initialization_options: v:null,
+				\ allowlist: ['sh', 'bash'],
+				\ blocklist: [],
+				\ config: #{refresh_pattern: '\([a-zA-Z0-9_-]\+\|\k\+\)$'}
 				\ })
-	call lsp#register_server({
-				\ 'name': 'vscode-html-language-server',
-				\ 'cmd': {server_info->['vscode-html-language-server', '--stdio']},
-				\ 'initialization_options': {'embeddedLanguages': {'javascript': v:true, 'css': v:true}},
-				\ 'allowlist': ['html', 'xhtml'],
-				\ 'blocklist': [],
-				\ 'config': {'refresh_pattern': '\(/\|\k\+\)$'},
-				\ 'workspace_config': {},
-				\ 'semantic_highlight': {},
+	call lsp#register_server(#{
+				\ name: 'vscode-html-language-server',
+				\ cmd: {server_info->['vscode-html-language-server', '--stdio']},
+				\ initialization_options: #{embeddedLanguages: {'javascript': v:true, 'css': v:true}},
+				\ allowlist: ['html', 'xhtml'],
+				\ blocklist: [],
+				\ config: #{refresh_pattern: '\(/\|\k\+\)$'},
+				\ workspace_config: {},
+				\ semantic_highlight: {},
 				\ })
-	" call lsp#register_server({
-	" 			\ 'name': 'efm-langserver',
-	" 			\ 'cmd': {server_info->['efm-langserver']},
-	" 			\ 'allowlist': ['json', 'markdown', 'html', 'xhtml', 'css', 'tex'],
+	" call lsp#register_server(#{
+	" 			\ name: 'efm-langserver',
+	" 			\ cmd: {server_info->['efm-langserver']},
+	" 			\ allowlist: ['json', 'markdown', 'html', 'xhtml', 'css', 'tex'],
 	" 			\ }) " 現状 ALE を使ったほうが反応が速い+バッファを開いた時にチェックしてくれない
 	" }}}
 	" vim-lsp の自動設定 https://github.com/mattn/vim-lsp-settings {{{
 	packadd vim-lsp-settings
-	let g:lsp_settings = {
-				\ 'pylsp': {
-					\ 'workspace_config': {
-						\ 'pylsp': {
-							\ 'configurationSources': ['flake8']
-						\ }
-					\ }
-				\ },
-			\ }
-			" vim-vsnip で追加したほうが良い設定例 {{{
-				" \ 'gopls': {
-				" 	\ 'initialization_options': {
-				" 		\ 'usePlaceholders': v:true,
-				" 	\ },
-				" \ }
+	let g:lsp_settings = #{
+				\ pylsp: #{
+				\ 	workspace_config: #{
+				\ 		pylsp: #{
+				\ 			configurationSources: ['flake8'],
+				\ 			plugins: #{
+				\ 				flake8: #{
+				\ 					enabled: 1
+				\ 				},
+				\ 				mccabe: #{
+				\ 					enabled: 0
+				\ 				},
+				\ 				pycodestyle: #{
+				\ 					enabled: 0
+				\ 				},
+				\ 				pyflakes: #{
+				\ 					enabled: 0
+				\ 				},
+				\ 			}
+				\ 		}
+				\ 	}
+				\ }
+				\ }
+	" 		" vim-vsnip で追加したほうが良い設定例
+	" 			" \ gopls: #{
+	" 			" 	\ initialization_options: #{
+	" 			" 		\ usePlaceholders: v:true,
+	" 			" 	\ },
+	" 			" \ }
 	" }}}
 	" LSP との連携 https://github.com/prabirshrestha/asyncomplete-lsp.vim {{{
 	if !manage_pack#IsInstalled('asyncomplete-omni.vim') " asyncomplete.vim のプラグインの一つ asyncomplete-omni.vim が導入済みかどうかで、asyncomplete.vim が導入済みかを判断
@@ -105,7 +119,7 @@ def s:on_lsp_buffer_enabled(): void
 		setlocal tagfunc=lsp#tagfunc
 	endif
 	# ALE を優先させるか両方使うか {{{
-	if &filetype == 'vim' || &filetype == 'sh' || &filetype == 'bash'
+	if &filetype == 'vim' || &filetype == 'sh' || &filetype == 'bash' || &filetype == 'python'
 		b:ale_enabled = 0 # ALE 不使用
 		nnoremap <buffer>[a        <Plug>(lsp-previous-diagnostic)
 		nnoremap <buffer>]a        <Plug>(lsp-next-diagnostic)

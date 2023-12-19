@@ -219,7 +219,8 @@ augroup END
 # 各種言語の構文チェック https://github.com/dense-analysis/ale {{{1
 augroup loadALE
 	autocmd!
-	autocmd FileType c,cpp,python,ruby,yaml,markdown,html,xhtml,css,tex,help,json
+	# autocmd FileType c,cpp,python,ruby,yaml,markdown,html,xhtml,css,tex,help,json
+	autocmd FileType c,cpp,ruby,yaml,markdown,html,xhtml,css,tex,help,json
 				\ set_ale#main()
 				| autocmd! loadALE
 				| augroup! loadALE
