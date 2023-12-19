@@ -65,9 +65,29 @@ function set_ale#main()
 	nnoremap <silent><leader>p <Cmd>call set_ale#open_eror_ls()<CR>
 	augroup ALE_ON
 		autocmd!
-		autocmd BufWinEnter * let b:ale_enabled = 1 | ALEEnableBuffer | ALEEnable
+		autocmd BufWinEnter * call set_ale#on()
 	augroup END
 endfunction
+
+def set_ale#on(): void
+	if     &filetype !=# 'c'
+			&& &filetype !=# 'cpp'
+			&& &filetype !=# 'ruby'
+			&& &filetype !=# 'yaml'
+			&& &filetype !=# 'markdown'
+			&& &filetype !=# 'html'
+			&& &filetype !=# 'xhtml'
+			&& &filetype !=# 'css'
+			&& &filetype !=# 'tex'
+			&& &filetype !=# 'help'
+			&& &filetype !=# 'json'
+		return
+	endif
+	b:ale_enabled = 1
+	:ALEEnableBuffer
+	:ALEEnable
+	return
+enddef
 
 def set_ale#open_eror_ls(): void
 	var org_win = bufwinid(bufnr())
