@@ -24,6 +24,11 @@ function set_eblook#setup() abort
 				\},
 				\{
 				\ 'book': expand('~/EPWING/Gakken/'),
+				\ 'name': 'kokugo',
+				\ 'title': '現代新国語辞典',
+				\},
+				\{
+				\ 'book': expand('~/EPWING/Gakken/'),
 				\ 'name': 'kanjigen',
 				\ 'title': '漢字源',
 				\},
