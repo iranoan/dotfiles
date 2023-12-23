@@ -18,6 +18,11 @@ function set_eblook#setup() abort
 				\]
 	let g:eblook_dictlist2 = [
 				\{
+				\ 'book': expand('~/EPWING/Gakken/'),
+				\ 'name': 'kanjigen',
+				\ 'title': '漢字源',
+				\},
+				\{
 				\ 'book': expand('~/EPWING/kohjien/'),
 				\ 'name': 'koujien',
 				\ 'title': '広辞苑　第四版',
@@ -26,11 +31,6 @@ function set_eblook#setup() abort
 				\ 'book': expand('~/EPWING/Gakken/'),
 				\ 'name': 'kokugo',
 				\ 'title': '現代新国語辞典',
-				\},
-				\{
-				\ 'book': expand('~/EPWING/Gakken/'),
-				\ 'name': 'kanjigen',
-				\ 'title': '漢字源',
 				\},
 				\]
 	" let g:eblook_viewers = { " デフォルト {{{
