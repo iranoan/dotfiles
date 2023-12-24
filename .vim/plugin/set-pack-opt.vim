@@ -32,7 +32,11 @@ AlterCommand lfdo       silent\ lfdo
 AlterCommand ter[minal] topleft\ terminal
 AlterCommand man        Man
 AlterCommand p[rint]    PrintBuffer
+AlterCommand p[rint]    PrintBuffer
 # ↑:print は使わないので、印刷に置き換え
+AlterCommand u[pdate]   update
+# ↑:update の短縮形は :up で :u は :undo だがまず使わない
+AlterCommand ua[ll]     bufdo\ update
 AlterCommand helpt[ags] call\ manage_pack#Helptags()
 AlterCommand bc         .!bc\ -l\ -q\ ~/.bc\ <Bar>\ sed\ -E\ -e\ 's/^\\\./0./g'\ -e\ 's/(\\\.[0-9]*[1-9])0+/\\\1/g'\ -e\ 's/\\\.$//g'
 AlterCommand bi[nary]   if\ !&binary\ <Bar>\ execute('setlocal\ binary\ <Bar>\ %!xxd')\ <Bar>\ endif
@@ -659,7 +663,7 @@ augroup SetHidemaru
 	autocmd BufNewFile,BufRead ~/Hidemaru/Macro/{**/,}*.mac setlocal filetype=hidemaru
 augroup END
 
-# タグで挟む ~/.vim/pack/my-plug/opt/hidemaru/ {{{1
+# タグで挟む ~/.vim/pack/my-plug/opt/surroundTag/ {{{1
 # vim-surround では複数のタグを一度につけたり、クラス指定まで含む場合タイプ量が多くなる
 augroup loadSurroundTag
 	autocmd!
