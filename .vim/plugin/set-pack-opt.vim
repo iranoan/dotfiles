@@ -15,7 +15,7 @@ augroup END
 # ↓実質 /start/と同じになるが、単純に /start/ に置くと、このスクリプト読み込み時点では AlterCommand が使えず、エラーになるので読み込み明示形式にする
 packadd vim-altercmd
 AlterCommand e[dit]     TabEdit
-AlterCommand u[tf8]     edit\ ++enc=utf8
+AlterCommand ut[f8]     edit\ ++enc=utf8
 AlterCommand sj[is]     edit\ ++enc=cp932
 AlterCommand cp[932]    edit\ ++enc=cp932
 AlterCommand eu[c]      edit\ ++enc=eucjp-ms
@@ -31,7 +31,6 @@ AlterCommand ld[o]      silent\ ldo
 AlterCommand lfdo       silent\ lfdo
 AlterCommand ter[minal] topleft\ terminal
 AlterCommand man        Man
-AlterCommand p[rint]    PrintBuffer
 AlterCommand p[rint]    PrintBuffer
 # ↑:print は使わないので、印刷に置き換え
 AlterCommand u[pdate]   update
