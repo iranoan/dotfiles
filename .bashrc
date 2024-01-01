@@ -209,3 +209,30 @@ ranger() { # ranger でファイルを less で開いた時にすぐ終わって
 		LESS="$LESS -+F -+X" command ranger "$@"
 	fi
 }
+
+which(){ # 素の which /usr/bin/which ではリンクを辿らず、関数、alias の違いが不明
+	for f in "$@"; do
+		ctype=$( type -t "$f" )
+		case "$ctype" in
+			alias)
+				echo 'alias '"$( /usr/bin/which "$( export LANGUAGE=C ; type "$f" | sed -E 's/^[^ ]+ is aliased to ['\''`"]?([^ ]+) .+/\1/g' )" | xargs readlink -f )"
+				type "$f" | sed -E 's/^[^`]+`(.+)'\''.*/\1/g'
+				;;
+			keyword)
+				echo "keyword $f"
+				;;
+			function)
+				type "$f"
+				;;
+			builtin)
+				echo "builtin $f"
+				;;
+			file)
+				readlink -f "$( /usr/bin/which "$f" )"
+				;;
+			*)
+				/usr/bin/which "$f"
+				;;
+		esac
+	done
+}
