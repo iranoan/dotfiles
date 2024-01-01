@@ -26,7 +26,7 @@ def GrepMain(cmd: string, args: list<string>): void
 	if len(filter(copy(args), 'v:val =~# "^--include="')) > 0
 		opt = ' -nHsI --color=never -d skip --exclude-dir=.git '
 	else
-		opt = ' -nHsI --color=never -d skip --exclude-dir=.git --exclude={*.asf,*.aux,*.avi,*.bmc,*.bmp,*.cer,*.chm,*.chw,*.class,*.crt,*.cur,*.dll,*.doc,*.docx,*.dvi,*.emf,*.exe,*.fdb_latexmk,*.fls,*.flv,*.gpg,*.hlp,*.hmereg,*.icc,*.icm,*.ico,*.ics,*.jar,*.jp2,*.jpg,*.ltjruby,*.lzh,*.m4a,*.mkv,*.mov,*.mp3,*.mp4,*.mpg,*.nav,*.nvram,*.o,*.obj,*.odb,*.odg,*.odp,*.ods,*.odt,*.oll,*.opf,*.opp,*.out,*.pdf,*.pfa,*.pl3,*.png,*.ppm,*.ppt,*.pptx,*.pyc,*.reg,*.rm,*.rtf,*.snm,*.sqlite,*.swf,*.gz,*.bz2,*.Z,*.lzma,*.xz,*.lz,*.tfm,*.toc,*.ttf,*.vbox,*.vbox-prev,*.vdi,*.vf,*.webm,*.wmf,*.wmv,*.xls,*.xlsm,*.xlsx,.*.sw?,.viminfo,viminfo,a.out,tags,tags-ja} '
+		opt = ' -nHsI --color=never -d skip --exclude-dir=.git --exclude={*.asf,*.aux,*.avi,*.bmc,*.bmp,*.cer,*.chm,*.chw,*.class,*.crt,*.cur,*.dll,*.doc,*.docx,*.dvi,*.emf,*.exe,*.fdb_latexmk,*.fls,*.flv,*.gpg,*.hlp,*.hmereg,*.icc,*.icm,*.ico,*.ics,*.jar,*.jp2,*.jpg,*.ltjruby,*.lzh,*.m4a,*.mkv,*.mov,*.mp3,*.mp4,*.mpg,*.nav,*.nvram,*.o,*.obj,*.odb,*.odg,*.odp,*.ods,*.odt,*.oll,*.opp,*.out,*.pdf,*.pfa,*.pl3,*.png,*.ppm,*.ppt,*.pptx,*.pyc,*.reg,*.rm,*.rtf,*.snm,*.sqlite,*.swf,*.gz,*.bz2,*.Z,*.lzma,*.xz,*.lz,*.tfm,*.toc,*.ttf,*.vbox,*.vbox-prev,*.vdi,*.vf,*.webm,*.wmf,*.wmv,*.xls,*.xlsm,*.xlsx,.*.sw?,.viminfo,viminfo,a.out,tags,tags-ja} '
 	endif
 	if (( index(args, '-L') >= 0 || index(args, '--files-without-match') >= 0 ) && ( index(args, '-v') >= 0 || index(args, '--invert-match') >= 0))
 		|| (( index(args, '-l') >= 0 || index(args, '--files-with-match') >= 0 ) && ( index(args, '-v') == -1 || index(args, '--invert-match') == -1))
