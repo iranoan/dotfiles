@@ -215,7 +215,7 @@ which(){ # 素の which /usr/bin/which ではリンクを辿らず、関数、al
 		ctype=$( type -t "$f" )
 		case "$ctype" in
 			alias)
-				echo 'alias '"$( /usr/bin/which "$( export LANGUAGE=C ; type "$f" | sed -E 's/^[^ ]+ is aliased to ['\''`"]?([^ ]+) .+/\1/g' )" | xargs readlink -f )"
+				echo 'alias '"$( command which "$( export LANGUAGE=C ; type "$f" | sed -E 's/^[^ ]+ is aliased to ['\''`"]?([^ ]+) .+/\1/g' )" | xargs readlink -f )"
 				type "$f" | sed -E 's/^[^`]+`(.+)'\''.*/\1/g'
 				;;
 			keyword)
@@ -228,10 +228,10 @@ which(){ # 素の which /usr/bin/which ではリンクを辿らず、関数、al
 				echo "builtin $f"
 				;;
 			file)
-				readlink -f "$( /usr/bin/which "$f" )"
+				readlink -f "$( command which "$f" )"
 				;;
 			*)
-				/usr/bin/which "$f"
+				command which "$f"
 				;;
 		esac
 	done
