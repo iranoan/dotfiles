@@ -12,9 +12,9 @@ b:did_ftplugin_user = 1
 #--------------------------------
 if !exists('g:help_plugin')
 	g:help_plugin = 1
-	# augroup FileTypeHELP autocmd!
-	# 	autocmd BufWinEnter * setlocal foldlevel=99
-	# augroup END
+	augroup FileTypeHELP autocmd!
+		autocmd BufWinEnter * setlocal foldlevel=99
+	augroup END
 
 	def g:HelpFold(): string # 折りたたみ関数
 		if v:lnum == 1
