@@ -40,7 +40,7 @@ word-chars=._-
 screen-rotate=0
 
 # specify the favorite input method program to run
-input-method=uim-fep
+# input-method=uim-fep
 
 # treat ambiguous width characters as wide
 ambiguous-wide=yes
