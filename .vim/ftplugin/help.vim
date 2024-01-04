@@ -33,26 +33,49 @@ if !exists('g:help_plugin')
 			return '='
 		endif
 	endfunction
-	function! HelpFoldText() abort " 折りたたみテキスト
-		let l:line = getline(v:foldstart)
-		let l:i = v:foldstart + 1
-		if match(l:line,  '^[-=]\+$') == 0
-			while l:i < line('$')
-				let l:line = getline(l:i)
-				if match(l:line,  '^[ \t]') == -1
+
+	def g:HelpFoldText(): string # 折りたたみテキスト
+		var line: string = getline(v:foldstart)
+		var i: number = v:foldstart + 1
+		if match(line, '^[-=]\+$') == 0
+			while i <= line('$')
+				line = getline(i)
+				if match(line, '^[ \t]') == -1
 					break
 				endif
-				let l:i = l:i + 1
+				i = i + 1
 			endwhile
 		endif
-		return Foldtext_base(substitute(l:line, '\v^[ \t ]*(.+[^ \t])[ \t]*\~$', '\1', ''))
-	endfunction
+		var line_width: number = winwidth(0) - &foldcolumn
+		var cnt: string = printf('[%' .. len(line('$')) .. 's] ', (v:foldend - v:foldstart + 1))
+		if &number
+			line_width -= max([&numberwidth, len(line('$'))])
+		# sing の表示非表示でずれる分の補正
+		elseif &signcolumn ==# 'number'
+			cnt = cnt .. '  '
+		endif
+		if &signcolumn ==# 'auto'
+			cnt = cnt .. '  '
+		endif
+		line_width -= 2 * (&signcolumn ==# 'yes' ? 1 : 0)
+		line = strcharpart(printf('%-' .. ( &shiftwidth * (v:foldlevel - 1) + 2) .. 's%s', '▸',
+			substitute(line, '\*\(.+\)\*', '\1', 'g')->substitute('|\(.+\)|', '\1', 'g')
+			), 0, line_width - len(cnt))
+		# 全角文字を使っていると、幅でカットすると広すぎる
+		# だからといって strcharpart() の代わりに strpart() を使うと、逆に余分にカットするケースが出てくる
+		# ↓末尾を 1 文字づつカットしていく
+		while strdisplaywidth(line) > line_width - len(cnt)
+			line = slice(line, 0, -1)
+		endwhile
+		return printf('%s%' .. (line_width - strdisplaywidth(line)) .. 'S', line, cnt)
+	enddef
+	defcompile
 endif
 
 "--------------------------------
 "ファイルタイプ別ローカル設定
 "--------------------------------
-setlocal foldmethod=expr foldexpr=HelpFold() foldtext=HelpFoldText()
+setlocal foldmethod=expr foldexpr=HelpFold() foldtext=g:HelpFoldText()
 setlocal makeprg=textlint\ --format\ compact\ \"%\"
 setlocal errorformat=%f:\ line\ %l\\,\ col\ %c\\,\ %trror\ -\ %m
 " ~/.vim/pack/my-plug/opt/notmuch-py-vim/doc/notmuch-python.jax: line 41, col 15, Error - 一文に二回以上利用されている助詞 "が" がみつかりました。 (japanese/no-doubled-joshi)
