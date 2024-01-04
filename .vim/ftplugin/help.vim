@@ -1,30 +1,37 @@
-" Vim help 用の設定
+vim9script
+# Vim help 用の設定
 scriptencoding utf-8
 if exists('b:did_ftplugin_user')
 	finish
 endif
 
-let b:did_ftplugin_user = 1
+b:did_ftplugin_user = 1
 
-"--------------------------------
-"ファイルタイプ別のグローバル設定
-"--------------------------------
+#--------------------------------
+#ファイルタイプ別のグローバル設定
+#--------------------------------
 if !exists('g:help_plugin')
-	let g:help_plugin = 1
-	function! HelpFold() abort " 折りたたみ関数
+	g:help_plugin = 1
+	# augroup FileTypeHELP autocmd!
+	# 	autocmd BufWinEnter * setlocal foldlevel=99
+	# augroup END
+
+	def g:HelpFold(): string # 折りたたみ関数
 		if v:lnum == 1
 			return '>1'
 		endif
-		let l:c_line=getline(v:lnum)
-		if match(l:c_line, '^=\+$') == 0
+		var c_line: string = getline(v:lnum)
+		var p_line1: string
+		var p_line2: string
+		if match(c_line, '^=\+$') == 0
 			return '>1'
-		elseif match(l:c_line, '^-\+$') == 0
+		elseif match(c_line, '^-\+$') == 0
 			return '>2'
-		elseif match(l:c_line, '^[^\t ].\+\~$') == 0
-			let l:p_line1=getline(v:lnum-1)
-			let l:p_line2=getline(v:lnum-2)
-			if match(l:p_line1, '^=\+$') == 0 || match(l:p_line1, '^-\+$') == 0
-						\ || ( match(l:p_line1, '^[^\s]\+') == 0 && ( match(l:p_line2, '^=\+$') == 0 || match(l:p_line2, '^-\+$') == 0 ) )
+		elseif match(c_line, '^[^\t ].\+\~$') == 0
+			p_line1 = getline(v:lnum - 1)
+			p_line2 = getline(v:lnum - 2)
+			if match(p_line1, '^=\+$') == 0 || match(p_line1, '^-\+$') == 0
+						|| ( match(p_line1, '^[^\s]\+') == 0 && ( match(p_line2, '^=\+$') == 0 || match(p_line2, '^-\+$') == 0 ) )
 				return '='
 			else
 					return '>3'
@@ -32,7 +39,7 @@ if !exists('g:help_plugin')
 		else
 			return '='
 		endif
-	endfunction
+	enddef
 
 	def g:HelpFoldText(): string # 折りたたみテキスト
 		var line: string = getline(v:foldstart)
@@ -69,20 +76,19 @@ if !exists('g:help_plugin')
 		endwhile
 		return printf('%s%' .. (line_width - strdisplaywidth(line)) .. 'S', line, cnt)
 	enddef
-	defcompile
 endif
 
-"--------------------------------
-"ファイルタイプ別ローカル設定
-"--------------------------------
-setlocal foldmethod=expr foldexpr=HelpFold() foldtext=g:HelpFoldText()
+#--------------------------------
+#ファイルタイプ別ローカル設定
+#--------------------------------
+setlocal foldmethod=expr foldexpr=g:HelpFold() foldtext=g:HelpFoldText()
 setlocal makeprg=textlint\ --format\ compact\ \"%\"
 setlocal errorformat=%f:\ line\ %l\\,\ col\ %c\\,\ %trror\ -\ %m
-" ~/.vim/pack/my-plug/opt/notmuch-py-vim/doc/notmuch-python.jax: line 41, col 15, Error - 一文に二回以上利用されている助詞 "が" がみつかりました。 (japanese/no-doubled-joshi)
+# ~/.vim/pack/my-plug/opt/notmuch-py-vim/doc/notmuch-python.jax: line 41, col 15, Error - 一文に二回以上利用されている助詞 "が" がみつかりました。 (japanese/no-doubled-joshi)
 setlocal keywordprg=:help
 setlocal commentstring=%s
-" ↑コメント書式がない
-" キーマップ
+# ↑コメント書式がない
+# キーマップ
 nnoremap <buffer><nowait><expr><silent>q  &modifiable ? 'q' : ':bwipeout!<CR>'
 nnoremap <buffer><expr>o          &readonly ? "\<C-]>" : 'o'
 nnoremap <buffer><expr>i          &readonly ? "\<C-]>" : 'i'
