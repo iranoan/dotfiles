@@ -100,7 +100,7 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 # You may want to put all your additions into a separate file like
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
 if [ -f ~/.bash/aliases ]; then
-	. ~/.bash/aliases
+	source "$HOME/.bash/aliases"
 fi
 
 # enable programmable completion features (you don't need to enable
@@ -114,7 +114,7 @@ if ! shopt -oq posix; then
 	fi
 fi
 if [ -f ~/.bash/completion ]; then # /usr/share/bash-completion/bash_completion 内で読み込まれるのは .bash_completion
-	. ~/.bash/completion
+	source "$HOME/.bash/completion"
 fi
 #履歴を複数端末で同期
 share_history(){  # 以下の内容を関数として定義
@@ -208,7 +208,7 @@ stty stop undef
 # set -o vi
 umask 077
 
-[ -f ~/.fzf/bashrc ] && source ~/.fzf/bashrc
+[ -f ~/.fzf/bashrc ] && source "$HOME/.fzf/bashrc"
 
 ranger() { # ranger でファイルを less で開いた時にすぐ終わってしまう問題対処→http://malkalech.com/ranger_filer#org15afd1c
 	if [ -n "$RANGER_LEVEL" ]; then
@@ -223,7 +223,11 @@ which(){ # 素の which /usr/bin/which ではリンクを辿らず、関数、al
 		ctype=$( type -t "$f" )
 		case "$ctype" in
 			alias)
-				echo 'alias '"$( command which "$( export LANGUAGE=C ; type "$f" | sed -E 's/^[^ ]+ is aliased to ['\''`"]?([^ ]+) .+/\1/g' )" | xargs readlink -f )"
+				cmd=$( export LANGUAGE=C ; type "$f" | sed -E 's/^[^ ]+ is aliased to ['\''`"]?([^ ]+) .+/\1/g' )
+				if [ "$cmd" == 'command' ]; then
+					cmd=$( export LANGUAGE=C ; type "$f" | sed -E 's/^[^ ]+ is aliased to ['\''`"]?[^ ]+ ([^ ]+) .+/\1/g' )
+				fi
+				echo 'alias '"$( command which "$cmd" | xargs readlink -f )"
 				type "$f" | sed -E 's/^[^`]+`(.+)'\''.*/\1/g'
 				;;
 			keyword)
