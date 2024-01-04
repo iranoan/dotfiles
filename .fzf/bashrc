@@ -30,6 +30,6 @@ f(){
 	else
 		dir=""
 	fi
-	eval "$( echo "$FZF_DEFAULT_COMMAND" | sed "s: \.$:$dir:" )" |
+	eval "${FZF_DEFAULT_COMMAND% .} $dir" |
 		fzf --preview "$HOME/bin/fzf-preview.sh {}" --bind='enter:become(xdg-open {})'
 }
