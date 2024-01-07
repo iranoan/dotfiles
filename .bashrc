@@ -223,9 +223,9 @@ which(){ # 素の which /usr/bin/which ではリンクを辿らず、関数、al
 		ctype=$( type -t "$f" )
 		case "$ctype" in
 			alias)
-				cmd=$( export LANGUAGE=C ; type "$f" | sed -E 's/^[^ ]+ is aliased to ['\''`"]?([^ ]+) .+/\1/g' )
+				cmd=$( export LANGUAGE=C ; type "$f" | sed -E 's/^[^ ]+ is aliased to ['\''`"]?([^ ]*)( .+)?'\''/\1/g' )
 				if [ "$cmd" == 'command' ]; then
-					cmd=$( export LANGUAGE=C ; type "$f" | sed -E 's/^[^ ]+ is aliased to ['\''`"]?[^ ]+ ([^ ]+) .+/\1/g' )
+					cmd=$( export LANGUAGE=C ; type "$f" | sed -E 's/^[^ ]+ is aliased to ['\''`"]?[^ ]+ ([^ ]+)( .+)?'\''/\1/g' )
 				fi
 				echo 'alias '"$( command which "$cmd" | xargs readlink -f )"
 				type "$f" | sed -E 's/^[^`]+`(.+)'\''.*/\1/g'
