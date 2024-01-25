@@ -25,6 +25,10 @@ endif
 "--------------------------------
 "ファイルタイプ別ローカル設定
 "--------------------------------
+" マップ
+nnoremap p ]p
+"↑p と似ているが、現在行に合わせてインデントが調整される
+"--------------------------------
 " autocmd のダブらせている分
 setlocal tabstop=4 softtabstop=4 expandtab shiftwidth=0 colorcolumn=80
 " setlocal keywordprg=pydoc3 だと os.path などの選択状態で思った動作をしない←コマンドラインに出てしまう
