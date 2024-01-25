@@ -22,6 +22,7 @@ function set_vimlsp#main() abort
 	let g:lsp_diagnostics_signs_warning     = {'text': '🤔', 'icon': l:icon_dir .. 'warning' .. l:icon_ext}
 	let g:lsp_diagnostics_signs_hint        = {'text': '💡', 'icon': l:icon_dir .. 'hint' .. l:icon_ext}
 	let g:lsp_diagnostics_signs_information = {'text': '📔', 'icon': l:icon_dir .. 'information' .. l:icon_ext}
+	" let g:lsp_document_code_action_signs_hint = {'text': '💡', 'icon': l:icon_dir .. 'hint' .. l:icon_ext}
 	let g:lsp_fold_enabled = 0
 	let g:lsp_text_edit_enabled = 1
 	" vim-lsp-settings は &filetype == sh に対応しているが &filetype == bash は未対応 {{{
