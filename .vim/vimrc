@@ -1,5 +1,5 @@
 vim9script
-# 文字コード {{{1
+# character code {{{1
 set encoding=utf-8
 scriptencoding utf-8
 # ファイル・エンコードの自動判定優先順位 fileencodings を決める {{{
