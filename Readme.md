@@ -60,7 +60,7 @@ install.sh
   * .config/pep8
   * .pip/
 * ranger
-* sxiv
+* nsxiv
   * font, color setting → .Xresources
-  * other → .config/sxiv/
+  * other → .config/nsxiv/
 * Zathura
