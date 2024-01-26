@@ -21,6 +21,12 @@
 ! sxiv config
 Sxiv.font: Ricty Diminished Regular:size=14
 Sxiv.background: #000000
+Nsxiv.bar.font: Ricty Diminished Regular:size=14
+Nsxiv.window.background: #000000
+Nsxiv.window.foreground: #EEEEEE
+Nsxiv.bar.background: #EEEEEE
+Nsxiv.bar.foreground: #000000
+Nsxiv.mark.foreground: #FF0000
 ! xterm config
 xterm*termName: xterm-256color
 xterm*scrollBar:  off
