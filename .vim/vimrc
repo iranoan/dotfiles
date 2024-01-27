@@ -329,7 +329,7 @@ augroup END
 set backspace=indent,eol,start
 if exists('&ambiwidth')                        # □とか○の文字があってもカーソル位置がずれないようにする
 	set ambiwidth=double
-	call setcellwidths([                         # 一部を再度半角/全角明示指定
+	setcellwidths([                         # 一部を再度半角/全角明示指定
 		[0xA1, 0xA1, 1], [0xA7, 0xA7, 1], [0xAA, 0xAA, 1], [0xAE, 0xAE, 1], [0xB0, 0xB4, 1], [0xB6, 0xB6, 1], [0xB9, 0xBA, 1], [0xBF, 0xBF, 1], # ¡§®°±´¶¿と上付き
 		[0xC0, 0x01C3, 1], [0x01CD, 0x01F0, 1], [0x01F4, 0x02A2, 1], [0x02AC, 0x02AF, 1], # ASCII 外のラテン文字と ×÷
 		[0x02D0, 0x02D0, 1],                       # ː
@@ -344,6 +344,7 @@ if exists('&ambiwidth')                        # □とか○の文字があっ�
 		])
 	# 半角のデザインが中途半端
 	# [0x2010, 0x2010, 1], ‐
+	# [0x2010, 0x2010, 1],                       # ‐(ハイフン)
 endif
 set formatoptions+=mMj1 formatoptions-=tc      # 日本語の行の連結時には空白を入力しない+textwidth を使った自動折返しをしない
 set display+=lastline                          # 画面最後の行をできる限り表示
