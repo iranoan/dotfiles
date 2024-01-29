@@ -154,6 +154,7 @@ export def GrepComp(ArgLead: string, CmdLine: string, CursorPos: number): list<s
 		elseif count(['-e', '-m', '-A', '-B', '-C'], args[-1]) # ファイル/ディレクトリ+オプション以外の引数が直後に必要
 			return []
 		endif
+		extend(opt, LS('', false))
 		return opt
 	else
 		if args[-1] =~# '^--file='
@@ -167,6 +168,7 @@ export def GrepComp(ArgLead: string, CmdLine: string, CursorPos: number): list<s
 			return LS(args[-1], true)
 		endif
 	endif
+	extend(opt, LS(args[-1], false))
 	return filter(opt, 'v:val =~# "^' .. args[-1] .. '"')->map((key, val) => substitute(val, '[^=]\zs$', ' ', ''))
 enddef
 defcompile
