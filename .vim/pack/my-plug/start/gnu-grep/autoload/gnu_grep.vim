@@ -32,14 +32,14 @@ def GrepMain(cmd: string, args: list<string>): void
 		|| (( index(args, '-l') >= 0 || index(args, '--files-with-match') >= 0 ) && ( index(args, '-v') == -1 || index(args, '--invert-match') == -1))
 		execute 'silent ' .. cmd .. opt .. '-m 1 ' ..
 			filter(args, (i, v) => v !~# '^\m\C\(-l\|-L\|-v\|--files-with\(out\)\?-match\|--invert-match\)$')
-				->join(' ')->escape('%#\')
+				->join(' ')->escape('%#\|')
 	elseif index(args, '-L') >= 0
 		|| index(args, '--files-without-match') >= 0
 		|| index(args, '-l') >= 0
 		|| index(args, '--files-with-matches') >= 0
 		FileList(opt .. join(args, ' '))
 	else
-		execute 'silent ' .. cmd .. opt .. join(args, ' ')->escape('%#\')
+		execute 'silent ' .. cmd .. opt .. join(args, ' ')->escape('%#\|')
 	endif
 enddef
 
