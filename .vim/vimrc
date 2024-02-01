@@ -97,10 +97,10 @@ set foldlevelstart=99                          # ファイル・オープン時�
 set foldcolumn=3                               # 折りたたみ状態を表示する左カラムの数
 g:sh_fold_enabled = 7                          # シェルスクリプトの折りたたみ方法 ~/.vim/ftplugin/sh.vim で指定すると $ vim ~/.bashrc 等引数で開くと設定が反映されない
 # Undo アンドゥ {{{1
-# if has('persistent_undo')
-# 	set undodir=~/.vim/undo
-# 	set undofile
-# endif
+if has('persistent_undo')
+	set undodir=~/.vim/undo
+	set undofile
+endif
 # IME {{{1
 set iminsert=0 imsearch=-1                     # 挿入モード/検索開始時 IME OFF
 # set imdisable                                  # Vim による IM 制御を使わない
@@ -154,7 +154,7 @@ if has('unix') # ノーマル・モードになれば日本語 OFF にするた�
 	# 		execute 'autocmd TextChanged *                          system("' .. g:IME .. '")'
 	# 	augroup END
 	# endif
-	# unlet g:IME }}}
+	# unlet g:IME # }}}
 	augroup IME
 		autocmd!
 		autocmd VimEnter,InsertLeave,CmdwinLeave,CmdlineLeave * system("fcitx5-remote -c")

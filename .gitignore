@@ -25,6 +25,7 @@
 /.vim/autoload/set_notmuchpy.vim
 /.vim/print/
 /.vim/spell/
+/.vim/undo/
 /.vim/viminfo
 # プラグインの設定ファイル
 !/.vim/pack/github/opt/vimspector/configurations/
