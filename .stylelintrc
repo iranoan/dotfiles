@@ -37,7 +37,7 @@
 	},
 	"overrides": [
 		{
-			"files": ["book/epub/*/OEBPS/css/*.css", "bin/kindle/epub.css"],
+			"files": ["book/epub/*/OEBPS/css/*.css", "bin/kindle/*.css"],
 			"rules": {
 				"property-no-vendor-prefix": false
 			}
