@@ -106,7 +106,7 @@ set iminsert=0 imsearch=-1                     # 挿入モード/検索開始時
 # set imdisable                                  # Vim による IM 制御を使わない
 # ↑「VIM - Vi IMproved 9.0 (2022 Jun 28, compiled Oct  8 2023 13:14:12)適用済パッチ: 1-1999」で一切 GVim の IME が ON にできなくなる
 if has('unix') # ノーマル・モードになれば日本語 OFF にするために IM を調べる
-	# if executable('im-config') # 外部プログラムを使うので 0.1〜0.2 [s] と他に比べて時間がかかる
+	# if executable('im-config') # 外部プログラムを使うので 0.1〜0.2 [s] と他に比べて時間がかかる {{{
 	# 	g:IME = systemlist('im-config -m') # 設定後に unlet するためにグローバル変数
 	# 	# 0   active configuration (system)
 	# 	# 1   active configuration (user)
@@ -154,7 +154,7 @@ if has('unix') # ノーマル・モードになれば日本語 OFF にするた�
 	# 		execute 'autocmd TextChanged *                          system("' .. g:IME .. '")'
 	# 	augroup END
 	# endif
-	# unlet g:IME
+	# unlet g:IME }}}
 	augroup IME
 		autocmd!
 		autocmd VimEnter,InsertLeave,CmdwinLeave,CmdlineLeave * system("fcitx5-remote -c")
