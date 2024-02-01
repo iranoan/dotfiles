@@ -167,22 +167,22 @@ def Calculate(bufnr: number): dict<any>
 		ch_lv += PareBracket()
 
 		if ch_lv < 0
-			if next_line =~# '\<el\%[se]\|elseif\=\>' && cur_line =~# close_pat
+			if next_line =~# '^\s*:\?\s*\%(el\%[se]\|elseif\=\>\)' && cur_line =~# close_pat
 				levels[lnum] = '<' .. (cur_lv - 1)
-			elseif next_line =~# '\<cat\%[ch]\|fina\%[lly]\|th\[row]\>'
+			elseif next_line =~# '^\s*:\?\s*\%(cat\%[ch]\|fina\%[lly]\|th\[row]\>\)'
 				levels[lnum] = '<' .. (cur_lv - 1)
 			else
 				levels[lnum] = '<' .. cur_lv
 			endif
 		elseif 0 < ch_lv
 			levels[lnum] = '>' .. (cur_lv + ch_lv)
-		elseif next_line =~# '\<el\%[se]\|elseif\=\>'
+		elseif next_line =~# '^\s*:\?\s*\%(el\%[se]\|elseif\=\>\)'
 			if cur_line =~# close_pat
 				levels[lnum] = '<' .. (cur_lv - 1)
 			else
 				levels[lnum] = '<' .. cur_lv
 			endif
-		elseif next_line =~# '\<cat\%[ch]\|fina\%[lly]\|th\[row]\>'
+		elseif next_line =~# '^\s*:\?\s*\%(cat\%[ch]\|fina\%[lly]\|th\[row]\>\)'
 			levels[lnum] = '<' .. cur_lv
 		else
 			levels[lnum] = cur_lv + ch_lv
