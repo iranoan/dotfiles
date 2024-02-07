@@ -3,9 +3,8 @@ call ale#Set('css_stylelint_options', '')
 call ale#Set('css_stylelint_use_global', get(g:, 'ale_use_global_executables', 0))
 
 function! s:css_stylelint(buffer) abort
-    return '%e ' . ale#Pad(ale#Var(a:buffer, 'css_stylelint_options'))
-    \   . ' -f json --no-color --stdin --'
-    " return '%e --no-color --stdin-filename < %s'
+	return '%e ' .. ale#Pad(ale#Var(a:buffer, 'css_stylelint_options'))
+				\ .. ' -f json --no-color --stdin-filename %s --stdin --'
 endfunction
 
 call ale#linter#Define('css', #{
