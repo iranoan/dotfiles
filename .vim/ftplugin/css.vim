@@ -7,9 +7,13 @@ let b:did_ftplugin_user = 1
 
 "ファイルタイプ別のグローバル設定
 "--------------------------------
-" if !exists("g:css_plugin")
-" 	let g:css_plugin = 1
-" endif
+if !exists("g:css_plugin")
+	let g:css_plugin = 1
+	augroup MyCSS
+		autocmd!
+		autocmd BufEnter ~/bin/kindle/*,~/book/epub/*/OEBPS/css/*.css let b:ale_linters = #{ css: ['stylelint-v16']} | ALEDisableBuffer | ALEEnableBuffer
+	augroup END
+endif
 "--------------------------------
 "ファイルタイプ別ローカル設定
 "--------------------------------
