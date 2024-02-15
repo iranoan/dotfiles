@@ -48,8 +48,6 @@ if !exists("g:mail_draft_plugin")
 			DelBlock('==PR-\+', '-\+==', 0, 1)
 			:silent execute ':1 | :/^＠ITの新着記事をお届けします。$/+1,/^--- NewsInsight -- 今日のニュース --\+$/-2delete | :/^━＠ITソーシャルアカウント━━━━━━━━━━━━━━━━━━━━━━━━━$/,/^発行：アイティメディア株式会社$/-2delete'
 			setline('.', '-- ')
-		elseif from ==? 'e_service@mof.go.jp'
-			:silent execute ':1 | :/^当メールマガジンについてのご意見、ご感想はこちらへお願いします。$/;$delete | :%substitute/^　//g | :%substitute/　/ /g'
 		elseif from ==? 'mailmag@mag2tegami.com'
 			:silent :/\%^/,/^$/s/^From: *mag2 *0000013455 *<mailmag@mag2tegami.com>/From: Liyn-an <info@Liyn-an.com>/
 			DelBlock('──\+\[PR\]─', '─\[PR\]──\+', 0, 1)
@@ -59,6 +57,9 @@ if !exists("g:mail_draft_plugin")
 		elseif from ==? 'xtech-ac@nikkeibp.co.jp'
 			:silent :1 | :/^$/,/^$/+1delete _ | :%s/^　//g
 			DelBlock('◆登録内容の変更や配信停止は', 'Copyright (C)\d\{4}、日経BP', 0, -1)
+		elseif from ==? 'e_service@mof.go.jp'
+			silent execute ':1 | :/^当メールマガジンについてのご意見、ご感想はこちらへお願いします。<br \/>$/;$delete'
+			silent :%s/^　//ge | silent :%s/<\(br \/\|\/div\|\/p\|^　\)>//ge | :1 | :/^$/,$s/<[^>]\+>\n\?//ge | :%s/&nbsp;/ /ge | :%s/&hellip;/…/ge | :%s/　/ /ge | :1 | :/^$/,$s/^\s//e | :/\%^/,/^$/s/text\/\zshtml/plain/e | %s/^\n\zs\n+//e
 		else
 			return
 		endif
