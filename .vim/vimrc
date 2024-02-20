@@ -459,7 +459,7 @@ inoremap <silent><C-Tab>   <C-PageDown>
 noremap  <silent><S-C-Tab> gT
 tnoremap <silent><S-C-Tab> <C-W>gT
 inoremap <silent><S-C-Tab> <C-PageUp>
-# クリップボードのコピー、ペースト、切り取り {{{2
+# クリップボードのコピー、ペースト、切り取り+ポップアップが表示されているときの切り替え {{{2
 vnoremap <C-C> "+y
 vnoremap <C-Y> "+y
 xnoremap Y "+y
@@ -485,7 +485,9 @@ inoremap <expr><C-P> pumvisible() ? '<C-P>' : '<C-R>"'
 cnoremap <S-Insert> <C-R>+
 cnoremap <Insert> <C-R>+
 # cnoremap <S-C-P> <C-R>+                        # Ctrl-pの割当と重なり無効になる
-cnoremap <C-P> <C-R>"
+cnoremap <expr><C-P> pumvisible() ? '<Up>' : '<C-R>"'
+cnoremap <expr><C-J> pumvisible() ? '<Down>' : '<C-J>"'
+#↑ command moode の補完候補の選択にも使っている
 # 選択範囲の貼り付けで、直前のレジスタを連続して貼り付け←vimの連続コピペできない問題 https://baqamore.hatenablog.com/entry/2016/07/07/201856
 xnoremap <expr>p 'pgv"' .. v:register .. 'y`>'
 # 選択モード不明
@@ -512,6 +514,8 @@ cnoremap <S-BS> <Del>
 inoremap <expr><C-N> pumvisible() ? '<C-N>' : '<Down>'
 vnoremap <expr><C-N> pumvisible() ? '<C-N>' : '<Down>'
 #↑ insert moode の補完候補の選択にも使っている
+# コマンドモードで素早くカレント・ディレクトリ入力 {{{2
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h') .. '/' : '%%'
 # コマンドモードの <C-N>, <C-K> を <Up>, <Down> に割当 {{{2
 cnoremap <C-N> <Down>
 cnoremap <C-K> <Up>
