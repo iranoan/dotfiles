@@ -13,11 +13,13 @@ if !exists("g:qf_plugin")
 	augroup QuickFix
 		autocmd!
 		autocmd WinEnter     *
-					\ if ((winnr('$') == 1) && (&filetype ==? 'qf')) |
-					\ 	if (tabpagenr('$') == 1 ) |
-					\ 		execute 'quit' |
+					\ if winnr('$') == 1 && getbufvar(winbufnr(0), '&buftype') == 'quickfix' |
+					\ 	if tabpagenr('$') == 1  |
+					\ 		quit |
 					\ 	else |
-					\ 		execute 'bwipeout!' |
+					\ 		let qfwin = bufnr('') |
+					\ 		:normal! gt |
+					\ 		execute 'bwipeout ' .. qfwin |
 					\ 	endif |
 					\ endif " QuickFix だけなら閉じる
 	augroup END
