@@ -242,14 +242,14 @@
 	"ins": {
 		"prefix": "instime",
 		"body": [
-			"<ins datetime=\"$CURRENT_YEAR/$CURRENT_MONTH/${CURRENT_DATE}T$CURRENT_HOUR:$CURRENT_MINUTE:${CURRENT_SECOND}+09:00\">${1}</ins>",
+			"<ins datetime=\"$CURRENT_YEAR-$CURRENT_MONTH-${CURRENT_DATE}T$CURRENT_HOUR:$CURRENT_MINUTE:${CURRENT_SECOND}+09:00\">${1}</ins>",
 			"${2}"
 		]
 	},
 	"del": {
 		"prefix": "deltime",
 		"body": [
-			"<del datetime=\"$CURRENT_YEAR/$CURRENT_MONTH/${CURRENT_DATE}T$CURRENT_HOUR:$CURRENT_MINUTE:${CURRENT_SECOND}+09:00\">${1}</del>",
+			"<del datetime=\"$CURRENT_YEAR-$CURRENT_MONTH-${CURRENT_DATE}T$CURRENT_HOUR:$CURRENT_MINUTE:${CURRENT_SECOND}+09:00\">${1}</del>",
 			"${2}"
 		]
 	},
