@@ -351,8 +351,7 @@ set display+=lastline                          # 画面最後の行をできる�
 set wrap                                       # 長い行は折り返し表示
 set sidescroll=1                               # 横スクロールでカーソル位置を真ん中にしない
 set linebreak                                  # wrap at 'breakat
-set breakat-=@*-+;:,.                          # break point for linebreak (default " ^I!@*-+;:,./?" )→" ^I!?" になる (日本語は全角文字に空白が余分に表示されてしまう←helpに8bit文字のみとある)
-set breakat+=)}>
+set breakat-=@*-+;:,. breakat+=)}>             # break point for linebreak (default " ^I!@*-+;:,./?" )→" ^I!?" になる (日本語は全角文字に空白が余分に表示されてしまう←helpに8bit文字のみとある)
 set helplang=ja,en                             # 日本語ヘルプを優先的に表示
 # スペル・チェック {{{1
 set spell spelllang+=cjk
@@ -398,9 +397,9 @@ set runtimepath+=/usr/share/vim/addons
 # 設定の切り替え {{{2
 nnoremap <silent><leader>cw <Cmd>setlocal wrap!<CR>
 nnoremap <silent><leader>ct <Cmd>execute 'set showtabline=' .. ( &showtabline ? 0 : 2 )<CR>
-nnoremap <silent><leader>cm <Cmd>execute 'setlocal scrolloff=' .. ( &scrolloff ? 0 : ( &lines > 20 ? &lines / 4 : 5 ) )<CR>
-# ↑ m は margin のつもり
-nnoremap <silent><leader>cs <Cmd>set showcmd!<CR>
+nnoremap <silent><leader>cs <Cmd>execute 'setlocal scrolloff=' .. ( &scrolloff ? 0 : ( &lines > 20 ? &lines / 4 : 5 ) )<CR>
+nnoremap <silent><leader>cc <Cmd>set showcmd!<CR>
+nnoremap <silent><leader>cm <Cmd>set more!<CR>
 nnoremap <silent><leader>cd <Cmd>call change_directory#Lcd()<CR>
 # ↑autocmd が :FZF で効かない
 # |SafeState|		保留中のものはなく、ユーザーの文字入力を待つとき
