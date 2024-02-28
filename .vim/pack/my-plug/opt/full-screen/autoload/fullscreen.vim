@@ -14,9 +14,7 @@ export def Main(): void
 	endif
 	var win = bufnr('')
 	if has('unix')
-		var wmctrl = system('wmctrl -lp')
-		wmctrl = matchstr(wmctrl, '\m\C0x[0-9a-fA-F]\+ \+[0-9-]\+ \+' .. getpid())
-		wmctrl = matchstr(wmctrl, '\m\C0x[0-9a-fA-F]\+')
+		var wmctrl: string = (matchstrlist(systemlist('wmctrl -lp'), '^\(\c0x[0-9a-f]\+\) \+\(-1\|\d\+\) \+' .. getpid(), {submatches: true})[0].submatches)[0]
 		system('wmctrl -ir ' .. wmctrl .. ' -b toggle,fullscreen')
 	# elseif has('win32') || has('win32unix')
 	# 	simalt ~x
