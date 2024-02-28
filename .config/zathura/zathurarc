@@ -16,11 +16,15 @@ set selection-clipboard clipboard
 # key bindings
 #map <PageUp> navigate previous
 #map <PageDown> navigate next
-# j と J, k と K を入れ替え
+# j と J, k と K を入れ替え+sxiv で使う n, p も割当
 map [normal]     k navigate previous
 map [fullscreen] k navigate previous
+map [normal]     p navigate previous
+map [fullscreen] p navigate previous
 map [normal]     j navigate next
 map [fullscreen] j navigate next
+map [normal]     n navigate next
+map [fullscreen] n navigate next
 # map [normal]     BackSpace navigate previous
 # map [fullscreen] BackSpace navigate previous
 # map [normal]     Space navigate next
