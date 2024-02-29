@@ -442,8 +442,10 @@ nnoremap <silent>[b         <Cmd>bprevious<CR>
 nnoremap <silent>]b         <Cmd>bnext<CR>
 nnoremap <silent>[C         <Cmd>cpfile<CR>
 nnoremap <silent>]C         <Cmd>cnfile<CR>
-nnoremap <silent>[e         g;
-nnoremap <silent>]e         g,
+nnoremap <silent>[E         g;
+nnoremap <silent>]E         g,
+nnoremap <silent>[e         <Cmd>call move_changed#Main(0)<CR>
+nnoremap <silent>]e         <Cmd>call move_changed#Main(1)<CR>
 nnoremap <silent>[w         <C-W>W
 nnoremap <silent>]w         <C-W>w
 nnoremap <silent>[T         <Cmd>tprevious<CR>
