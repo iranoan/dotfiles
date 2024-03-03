@@ -10,6 +10,9 @@ export def Lcd(): void # カレントディレクトリをファイルのディ�
 	if buf_name ==# ''
 		return
 	elseif &filetype ==# 'fugitive' || buf_name =~# '^fugitive://'
+		if buf_name !~# '/\.git//'
+			return
+		endif
 		c_path = expand('%:p:h:h')->substitute('^fugitive://', '', '')
 	elseif buf_name =~# '^[a-z]\+://' ||
 			buf_name =~# '^!' ||
