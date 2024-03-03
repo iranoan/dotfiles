@@ -69,10 +69,6 @@ export def GrepComp(ArgLead: string, CmdLine: string, CursorPos: number): list<s
 	var args: list<string>
 	var match_s: list<any> = matchstrpos(cmdline, '^\(\(''[^'']\+''\|"\(\"\|[^"]\)\+"\)\|''\\''''\|''''\|""\|\\\\\|\\ \|[^ ]\)\+\s*', 0)
 	var i: number
-	while match_s[1] != -1
-		add(args, substitute(match_s[0], '\s\+$', '', ''))
-		match_s = matchstrpos(cmdline, '^\(\(''[^'']\+''\|"\(\"\|[^"]\)\+"\)\|''\\''''\|''''\|""\|\\\\\|\\ \|[^ ]\)\+\s*', match_s[2])
-	endwhile
 	var opt: list<string> = [
 		'-E', '--extended-regexp',
 		'-F', '--fixed-strings',
@@ -120,6 +116,11 @@ export def GrepComp(ArgLead: string, CmdLine: string, CursorPos: number): list<s
 		'-B': '--before-context=',       '--before-context=':       '-B',
 		'-C': '--context=',              '--context=':              '-C',
 	}
+
+	while match_s[1] != -1
+		add(args, substitute(match_s[0], '\s\+$', '', ''))
+		match_s = matchstrpos(cmdline, '^\(\(''[^'']\+''\|"\(\"\|[^"]\)\+"\)\|''\\''''\|''''\|""\|\\\\\|\\ \|[^ ]\)\+\s*', match_s[2])
+	endwhile
 	for arg in args # 既に使われているオプション削除
 		if count(['-e', '--regexp=', '-f', '--file='], arg) # 複数回の使用が意味を持つ
 			continue
