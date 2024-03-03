@@ -59,7 +59,7 @@ export def GrepComp(ArgLead: string, CmdLine: string, CursorPos: number): list<s
 		endif
 		if s[0] ==# '~'
 			var home: string = expand('~')
-			map(ls, (key, val) => substitute(val, home, '~', ''))
+			map(ls, (key, val) => substitute(val, home, '\~', ''))
 			# map(ls, 'substitute(v:val, "' .. home .. '", "~", "")')
 		endif
 		return ls
@@ -169,6 +169,6 @@ export def GrepComp(ArgLead: string, CmdLine: string, CursorPos: number): list<s
 		endif
 	endif
 	extend(opt, LS(args[-1], false))
-	return filter(opt, 'v:val =~# "^' .. args[-1] .. '"')->map((key, val) => substitute(val, '[^=]\zs$', ' ', ''))
+	return filter(opt, 'v:val =~# ''^' .. escape(args[-1], '.$*~()\[]') .. '''')->map((key, val) => substitute(val, '[^=]\zs$', ' ', ''))
 enddef
 defcompile
