@@ -19,9 +19,9 @@
 *color14: #93A1A1
 *color15: #FDF6E3
 ! sxiv config
-Sxiv.font: Ricty Diminished Regular:size=14
+Sxiv.font: RictyDiminished NF Regular:size=14
 Sxiv.background: #000000
-Nsxiv.bar.font: Ricty Diminished Regular:size=14
+Nsxiv.bar.font: RictyDiminished NF Regular:size=14
 Nsxiv.window.background: #000000
 Nsxiv.window.foreground: #EEEEEE
 Nsxiv.bar.background: #EEEEEE
