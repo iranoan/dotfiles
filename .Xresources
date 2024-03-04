@@ -40,9 +40,10 @@ xterm*locale: true
 xterm*faceName: Inconsolata:style=regular:antialias=true
 xterm*faceNameDoublesize: RictyDiminished NF:style=regular:antialias=true
 xterm*faceSize: 14
-xterm*ximFont: -misc-fixed-medium-r-normal--14-130-75-75-c-140-jisx0208.1983-0
 ! ↓絵文字が表示されか確認の為試してみたが変化なし
 ! xterm*VT100.font:-misc-fixed-medium-r-normal--18-120-100-100-c-90-iso10646-1
+! xterm*ximFont: -misc-fixed-medium-r-normal--14-130-75-75-c-140-jisx0208.1983-0
+! LANG=ja_JP.utf-8 xterm -u8 -fn -efont-fixed-medium-r-normal--24-240-75-75-c-120-iso10646-1 -fw -efont-fixed-medium-r-normal--24-240-75-75-c-240-iso10646-1
 xterm*cjkWidth: true
 xterm*fontDoublesize: true
 ! sixel 対応
