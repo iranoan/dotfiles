@@ -349,12 +349,24 @@ handle_fallback() {
 }
 
 
-MIMETYPE="$( file --dereference --brief --mime-type -- "${FILE_PATH}" )"
-if [[ "${PV_IMAGE_ENABLED}" == 'True' ]]; then
-	handle_image "${MIMETYPE}"
-fi
-handle_extension
-handle_mime "${MIMETYPE}"
-handle_fallback
+case "${FILE_PATH##*/}" in # ファイル名による分岐
+	vimrc|gvimrc ) source-highlight --failsafe -f esc --lang-def=vim.lang --style-file=esc.style -i "$FILE_PATH" && exit 5;;
+	.bashrc|.bash_history|bashrc|.cshrc|.profile|.xprofile ) source-highlight --failsafe -f esc --lang-def=sh.lang --style-file=esc.style -i "$FILE_PATH" && exit 5;;
+	.*rc|.gitconfig|.gitattributes|.gitignore ) source-highlight --failsafe -f esc --lang-def=conf.lang --style-file=esc.style -i "$FILE_PATH" && exit 5;;
+	*)
+		case "${FILE_PATH%/*}" in # ディレクトリ名による分岐
+			*/.bash ) source-highlight --failsafe -f esc --lang-def=sh.lang --style-file=esc.style -i "$FILE_PATH" && exit 5;;
+			* )
+				MIMETYPE="$( file --dereference --brief --mime-type -- "${FILE_PATH}" )"
+				if [[ "${PV_IMAGE_ENABLED}" == 'True' ]]; then
+					handle_image "${MIMETYPE}"
+				fi
+				handle_extension
+				handle_mime "${MIMETYPE}"
+				handle_fallback
+				;;
+		esac
+		;;
+esac
 
 exit 1
