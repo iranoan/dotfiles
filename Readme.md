@@ -30,6 +30,7 @@ install.sh
 * gnuplot
 * Gromit-MPX
 * LanguageTool
+* mlterm
 * Shell
   * .bashrc
   * .bash/
