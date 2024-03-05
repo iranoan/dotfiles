@@ -29,3 +29,6 @@
 /.vim/viminfo
 # プラグインの設定ファイル
 !/.vim/pack/github/opt/vimspector/configurations/
+
+# シンボリック
+/.mlterm/emoji
