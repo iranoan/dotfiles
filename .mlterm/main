@@ -1,3 +1,4 @@
+# ~/.mlterm/main
 termtype = xterm-256color
 fontsize = 17
 use_variable_column_width = false
