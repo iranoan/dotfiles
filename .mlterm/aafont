@@ -1,11 +1,11 @@
 # ~/.mlterm/aafont
-# JISX0201_KATA = RictyDiminished NF
-# JISX0201_ROMAN = RictyDiminished NF
-# JISX0208_1978 = RictyDiminished NF
-# JISX0208_1983 = RictyDiminished NF
-# JISX0208_1990 = RictyDiminished NF
-# JISX0213_2000_1 = RictyDiminished NF
-# JISX0213_2000_2 = RictyDiminished NF
+# JISX0201_KATA=RictyDiminished NF
+# JISX0201_ROMAN=RictyDiminished NF
+# JISX0208_1978=RictyDiminished NF
+# JISX0208_1983=RictyDiminished NF
+# JISX0208_1990=RictyDiminished NF
+# JISX0213_2000_1=RictyDiminished NF
+# JISX0213_2000_2=RictyDiminished NF
 
-ISO8859_1 = Inconsolata
-DEFAULT = RictyDiminished NF
+ISO8859_1=Inconsolata
+DEFAULT=RictyDiminished NF
