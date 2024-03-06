@@ -30,5 +30,7 @@
 # プラグインの設定ファイル
 !/.vim/pack/github/opt/vimspector/configurations/
 
-# シンボリック
+# シンボリック/履歴/テンポラリ
 /.mlterm/emoji
+/.mlterm/challenge
+/.mlterm/pts_*.six
