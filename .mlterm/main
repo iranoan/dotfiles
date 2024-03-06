@@ -13,3 +13,5 @@ encoding=UTF-8
 console_sixel_colors=full
 geometry=160x50+0+0
 vt_color_mode=true
+fg_color=#DDDDDD
+bg_color=#002b36
