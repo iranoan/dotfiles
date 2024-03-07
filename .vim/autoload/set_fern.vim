@@ -108,7 +108,7 @@ def s:init_fern(): void
 	nnoremap <buffer>d               <Plug>(fern-action-trash=)y<CR>
 	nnoremap <buffer>s               <Plug>(fern-action-open:right)
 	nnoremap <buffer>t               <Plug>(fern-action-open:tabedit)
-	nnoremap <expr><buffer>o         set_fern#open()
+	nnoremap <expr><buffer>o         set_fern#open(1)
 	nnoremap <buffer>r               <Plug>(fern-action-rename)
 	nnoremap <buffer>y               <Plug>(fern-action-yank)
 	nnoremap <buffer>x               <Cmd>call set_fern#open_system()<CR>
@@ -129,16 +129,29 @@ def s:init_fern(): void
 	nnoremap <buffer><leader>f       <Plug>(fern-action-fzf-files)
 	nnoremap <buffer>f               <Plug>(fern-action-fzf-files)
 	# ranger like collapse/expand
-	nnoremap <buffer>h               <Plug>(fern-action-focus:parent)
-	nnoremap <buffer>l               <Plug>(fern-action-expand)
+	nnoremap <expr><buffer>h         set_fern#open(-1)
+	nnoremap <expr><buffer>l         set_fern#open(0)
 enddef
 
-def set_fern#open(): string
+def set_fern#open(cd: number): string
 	if &filetype != 'fern'
 		return ''
 	endif
+
 	var helper: dict<any> = fern#helper#new()
 	var node: dict<any> = helper.sync.get_cursor_node()
+
+	execute('lcd ' .. node._path, 'silent!')
+	if cd == -1
+		execute('lcd ' .. substitute(node._path, '/[^/]\+$', '', ''), 'silent!')
+		return "\<Plug>(fern-action-focus:parent)"
+	elseif cd == 0
+		return "\<Plug>(fern-action-expand)"
+	endif
+	if &filetype != 'fern'
+		return ''
+	endif
+
 	var status: number = node.status
 	if status == helper.STATUS_COLLAPSED
 		return "\<Plug>(fern-action-expand)"
