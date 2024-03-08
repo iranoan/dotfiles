@@ -58,15 +58,13 @@ function set_fzf_vim#main() abort
 					\ )
 				\ )
 	let g:fzf_action = {
-				\ 'ctrl-e': 'edit',
 				\ 'ctrl-t': function('set_fzf_vim#FZF_open'),
 				\ 'ctrl-s': 'split',
 				\ 'ctrl-v': 'vsplit',
+				\ 'enter': function('set_fzf_vim#FZF_open'),
 				\ 'ctrl-o': function('set_fzf_vim#FZF_open')
 				\ } " 他で sink を使うと、この設定は無視されるので注意←:help fzf-global-options-supported-by-fzf#wrap
-				" 次の2つは効かない
-				" \ 'enter': function('set_fzf_vim#FZF_open'),
-				" \ 'ctrl-m': function('set_fzf_vim#FZF_open'),
+				" \ 'ctrl-e': 'edit', カーソルを入力の末尾移動と重なる
 	" [Buffers] Jump to the existing window if possible
 	let g:fzf_buffers_jump = 1
 	" let g:fzf_preview_window = ['right:50%', 'ctrl-]'] " FZF_DEFAULT_OPTS で定義済み
