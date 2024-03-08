@@ -31,5 +31,6 @@ f(){
 		dir=""
 	fi
 	eval "${FZF_DEFAULT_COMMAND% .} $dir" |
-		fzf --preview "$HOME/bin/fzf-preview.sh {}" --bind='enter:become(xdg-open {})'
+		fzf --preview "$HOME/bin/fzf-preview.sh {}" --bind='enter:become(xdg-open {})' ;
+		pkill -u "$USER" -f 'nsxiv --embed '
 }
