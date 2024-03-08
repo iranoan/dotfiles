@@ -59,7 +59,7 @@ if !exists("g:mail_draft_plugin")
 			DelBlock('◆登録内容の変更や配信停止は', 'Copyright (C)\d\{4}、日経BP', 0, -1)
 		elseif from ==? 'e_service@mof.go.jp'
 			silent execute ':1 | :/^当メールマガジンについてのご意見、ご感想はこちらへお願いします。<br \/>$/;$delete'
-			silent :%s/^　//ge | silent :%s/<\(br \/\|\/div\|\/p\|^　\)>//ge | :1 | :/^$/,$s/<[^>]\+>\n\?//ge | :%s/&nbsp;/ /ge | :%s/&hellip;/…/ge | :%s/　/ /ge | :1 | :/^$/,$s/^\s//e | :/\%^/,/^$/s/text\/\zshtml/plain/e | %s/^\n\zs\n+//e
+			silent silent :%s/^　//ge | silent silent :%s/<\(br \/\|\/div\|\/p\|^　\)>//ge | :1 | silent :/^$/,$s/<[^>]\+>\n\?//ge | silent :%s/&nbsp;/ /ge | silent :%s/&hellip;/…/ge | silent :%s/　/ /ge | :1 | silent :/^$/,$s/^\s//e | silent :/\%^/,/^$/s/text\/\zshtml/plain/e | silent :%s/^\n\zs\n+//e
 		else
 			return
 		endif
