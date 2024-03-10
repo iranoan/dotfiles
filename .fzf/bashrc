@@ -1,4 +1,5 @@
 # Setup fzf
+# $FZF_DEFAULT_COMMAND, $FZF_DEFAULT_OPT はランチャーからの起動したアプリでも有効にするために ~/.xprofile で定義
 # ---------
 if [[ ! "$PATH" == */home/hiroyuki/.vim/pack/github/opt/fzf/bin* ]]; then
   export PATH="${PATH:+${PATH}:}/home/hiroyuki/.vim/pack/github/opt/fzf/bin"
@@ -13,24 +14,40 @@ fi
 source "$HOME/.fzf/key-bindings.bash"
 
 f(){
-	# find を使う場合
-	# if [ $# -eq 1 ]; then
-	# 	dir="$1"
-	# else
-	# 	dir=$( pwd )
-	# fi
-	# cmd=${FZF_DEFAULT_COMMAND/find -L ./find -L $dir}
-	# eval "${cmd/ -printf \"%p\\n\"/ -print0}" |
-	# 	xargs --no-run-if-empty -n 1 -P 0 -0 -I{} realpath --no-symlinks --relative-base="$( pwd )" "{}" 2> /dev/null |
-	# 	fzf --preview "$HOME/bin/fzf-preview.sh {}" --bind='enter:become(xdg-open {})'
-
-	# fd (fdfind) を使う場合
-	if [ $# -eq 1 ]; then
-		dir=" . $1"
+	sxiv_ls="^($( cat <<-_EOF_|
+		DUMMY
+		$( pgrep -u "$USER" -f 'nsxiv --embed ' )
+		_EOF_
+			tr '\n' '|' |
+			sed -E 's/\|+$//'
+	)$)"
+	if command -v fdfind > /dev/null ; then
+		if [ $# -eq 0 ]; then
+			dir=""
+		elif [ -d "${@:$#:1}" ]; then
+			dir=" . $@"
+		else
+			dir="$@"
+		fi
+		eval "${FZF_DEFAULT_COMMAND% .} $dir" |
+			fzf --prompt 'Files> ' --preview "$HOME/bin/fzf-preview.sh {}" --bind='enter:become(xdg-open {})'
 	else
-		dir=""
+		if [ $# -eq 0 ]; then
+			dir=$( pwd )
+			args=''
+		elif [ -d "${@:$#:1}" ]; then
+			dir="${@:$#:1}"
+			args="${@%%${@:$#:1}}"
+		else
+			dir=$( pwd )
+			args="$@"
+		fi
+		cmd="${FZF_DEFAULT_COMMAND/find -L ./find -L $dir} $args"
+		eval "${cmd/ -printf \"%P\\n\"/ -print0}" |
+			xargs --no-run-if-empty -n 1 -P 0 -0 -I{} realpath --no-symlinks --relative-base="$( pwd )" "{}" 2> /dev/null |
+			fzf --preview "$HOME/bin/fzf-preview.sh {}" --bind='enter:become(xdg-open {})'
 	fi
-	eval "${FZF_DEFAULT_COMMAND% .} $dir" |
-		fzf --prompt 'Files> ' --preview "$HOME/bin/fzf-preview.sh {}" --bind='enter:become(xdg-open {})' ;
-		pkill -u "$USER" -f 'nsxiv --embed '
+	pgrep -u "$USER" -f 'nsxiv --embed ' |
+		grep -Ev "$sxiv_ls" |
+		xargs --no-run-if-empty -n 1 -P 0 kill
 }
