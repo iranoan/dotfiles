@@ -133,6 +133,16 @@ def s:init_fern(): void
 	nnoremap <expr><buffer>l         set_fern#open(0)
 enddef
 
+def g:Fern_mapping_fzf_customize_option(spec: dict<any>): dict<any>
+	spec.options ..= ' --multi --margin=0% --padding=0% --preview=''~/bin/fzf-preview.sh {}'' --bind=''ctrl-o:execute-silent(xdg-open {})'' --prompt=''Files> '''
+	# Note that fzf#vim#with_preview comes from fzf.vim
+	# if exists('*fzf#vim#with_preview')
+	# 	return fzf#vim#with_preview(a:spec)
+	# else
+		return spec
+	# endif
+enddef
+
 def set_fern#open(cd: number): string
 	if &filetype != 'fern'
 		return ''
