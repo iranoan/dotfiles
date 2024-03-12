@@ -19,7 +19,7 @@ install.sh
 * bin/
   * csv2tsv.awk
   * fzf-preview.sh
-  * rifle\_sxiv.sh
+  * sxiv.sh
   * sh-list.sh
   * ssconvert.sh
   * tsv2table.awk
