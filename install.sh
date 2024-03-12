@@ -5,8 +5,8 @@ d=${d%/*}/
 d="$( eval cd "${d%/*}" 2>/dev/null; pwd )/${d##*/}"
 
 dot_config() {
-	find "$1/" -maxdepth 1 -mindepth 1 | while read -r f ; do
-		l="$HOME/.config/${f##*/}"
+	find "$1$2/" -maxdepth 1 -mindepth 1 | while read -r f ; do
+		l="$HOME/$2/${f##*/}"
 		if [ -L "$l" ]; then
 			if [ "$( readlink -f "$l" )" = "$f" ]; then
 				continue
@@ -19,9 +19,12 @@ dot_config() {
 	done
 }
 
-find "$d" -maxdepth 1 -regextype posix-extended -regex '.+/\.[A-Za-z0-9_.-]+$' | while read -r f ; do
+find "$d" -maxdepth 1 -mindepth 1 | while read -r f ; do
 	f="$( eval cd "${f%/*}" 2>/dev/null; pwd )/${f##*/}"
 	l=$HOME/${f##*/}
+	if [ "${f##*/}" = "${0##*/}" ] || [ "${f##*/}" = "Readme.md" ]; then
+		continue
+	fi
 	if [ "${f##*.}" = "swp" ]; then
 		continue
 	elif [ "$f" = "$d.git" ]; then
@@ -33,7 +36,10 @@ find "$d" -maxdepth 1 -regextype posix-extended -regex '.+/\.[A-Za-z0-9_.-]+$' |
 	elif [ "$f" = "$d.gitignore" ]; then
 		continue
 	elif [ "$f" = "$d.config" ]; then
-		dot_config "$d.config"
+		dot_config "$d" ".config"
+		continue
+	elif [ "$f" = "${d}bin" ]; then
+		dot_config "$d" "bin"
 		continue
 	elif [ -L "$l" ]; then
 		if [ "$( readlink -f "$l" )" = "$f" ]; then
