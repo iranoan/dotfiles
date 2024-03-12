@@ -1,4 +1,4 @@
-#!/bin/gawk -f
+#!/bin/awk -f
 # CSV を TSV に変換
 # セル内改行には未対応
 
