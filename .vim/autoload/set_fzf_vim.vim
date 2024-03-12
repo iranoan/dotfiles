@@ -36,13 +36,13 @@ function set_fzf_vim#main() abort
 	" endif
 	command! -bang -nargs=? -complete=dir Files call fzf#vim#files(
 				\ <q-args>, {
-					\ 'source':
-					\ 'fdfind --hidden --no-ignore --follow -t f -t l -E .texlive2023/ -E .npm/ -E .thumbnails/ -E thumbnails/ -E .log/ -E .tmp/ -E xapian/ -E .git/ -E cache/ -E .cache/ -E .ecryptfs/ -E .Private/ -E kpeoplevcard/ -E %* -E "*.nav" -E "*.synctex.gz" -E "*.asf" -E "*.bmc" -E "*.bmp" -E "*.cer" -E "*.chm" -E "*.chw" -E "*.crt" -E "*.dll" -E "*.doc" -E "*.docx" -E "*.dvi" -E "*.emf" -E "*.exe" -E "*.fdb_latexmk" -E "*.gpg" -E "*.hlp" -E "*.hmereg" -E "*.icc" -E "*.icm" -E "*.ics" -E "*.lzh" -E "*.o" -E "*.obj" -E "*.odb" -E "*.odg" -E "*.odp" -E "*.ods" -E "*.odt" -E "*.oll" -E "*.opp" -E "*.pfa" -E "*.pl3" -E "*.ppm" -E "*.ppt" -E "*.pptx" -E "*.reg" -E "*.rtf" -E "*.sqlite" -E "*.tfm" -E "*.ttf" -E "*.vf" -E "*.xls" -E "*.xlsm" -E "*.xlsx" -E ".*.sw?" -Ea.out -E "*.jar" -E "*.pyc" -E "*.vbox" -E "*.nvram" -E "*.cur" -E "*.class" -E "*.vbox-prev" -E "*.fls" -E .viminfo -E viminfo -E "*.ltjruby" -E "Mail/.*/{cur,new,tmp}/*" . ',
+					\ 'source': exepath('fdfind') !=# ''
+						\ ? 'fdfind --hidden --no-ignore --follow -t f -t l --ignore-file ~/.fdignore -E "*.cer" -E "*.chm" -E "*.chw" -E "*.class" -E "*.crt" -E "*.cur" -E "*.dll" -E "*.dvi" -E "*.exe" -E "*.fdb_latexmk" -E "*.fls" -E "*.gpg" -E "*.hlp" -E "*.hmereg" -E "*.jar" -E "*.ltjruby" -E "*.nav" -E "*.nvram" -E "*.o" -E "*.obj" -E "*.oll" -E "*.opp" -E "*.pfa" -E "*.pl3" -E "*.ppm" -E "*.pyc" -E "*.reg" -E "*.sqlite" -E "*.synctex.gz" -E "*.tfm" -E "*.ttf" -E "*.vbox" -E "*.vbox-prev" -E "*.vf" -E a.out . '
+						\ : 'find -L . -type d \( -name .texlive2023 -o -name .npm -o -name .thumbnails -o -name thumbnails -o -name .log -o -name .tmp -o -name xapian -o -name .git -o -name cache -o -name .cache -o -name .Trash -o -name .ecryptfs -o -name .Private \) -prune -o \( -type f -o -type l \) ! -name "*.nav" ! -name "*.synctex.gz" ! -name "*.cer" ! -name "*.chm" ! -name "*.chw" ! -name "*.crt" ! -name "*.dll" ! -name "*.dvi" ! -name "*.exe" ! -name "*.fdb_latexmk" ! -name "*.gpg" ! -name "*.hlp" ! -name "*.hmereg" ! -name "*.o" ! -name "*.obj" ! -name "*.oll" ! -name "*.opp" ! -name "*.pfa" ! -name "*.pl3" ! -name "*.ppm" ! -name "*.reg" ! -name "*.sqlite" ! -name "*.tfm" ! -name "*.ttf" ! -name "*.vf" ! -name ".*.sw?" ! -name a.out ! -name "*.jar" ! -name "*.pyc" ! -name "*.vbox" ! -name "*.nvram" ! -name "*.cur" ! -name "*.class" ! -name "*.vbox-prev" ! -name "*.fls" ! -name .viminfo ! -name viminfo ! -name "*.ltjruby" ! -name ".~lock.*#" -regextype posix-extended ! -regex "\./Mail/(\.[^/]+/)+(cur|new|tmp)/[^/]+$" -printf "%P\n"',
 					\ 'options': s:fzf_options + ['--prompt', 'Files> '],
 					\ },
 					\ <bang>0
 				\ )
-					" \ 'find -L . -type d \( -name .texlive2023 -o -name .npm -o -name .thumbnails -o -name thumbnails -o -name .log -o -name .tmp -o -name xapian -o -name .git -o -name cache -o -name .cache -o -name .Trash -o -name .ecryptfs -o -name .Private \) -prune -o \( -type f -o -type l \) ! -name "*.nav" ! -name "*.synctex.gz" ! -name "*.asf" ! -name "*.bmc" ! -name "*.bmp" ! -name "*.cer" ! -name "*.chm" ! -name "*.chw" ! -name "*.crt" ! -name "*.dll" ! -name "*.doc" ! -name "*.docx" ! -name "*.dvi" ! -name "*.emf" ! -name "*.exe" ! -name "*.fdb_latexmk" ! -name "*.gpg" ! -name "*.hlp" ! -name "*.hmereg" ! -name "*.icc" ! -name "*.icm" ! -name "*.ics" ! -name "*.lzh" ! -name "*.o" ! -name "*.obj" ! -name "*.odb" ! -name "*.odg" ! -name "*.odp" ! -name "*.ods" ! -name "*.odt" ! -name "*.oll" ! -name "*.opp" ! -name "*.pfa" ! -name "*.pl3" ! -name "*.ppm" ! -name "*.ppt" ! -name "*.pptx" ! -name "*.reg" ! -name "*.rtf" ! -name "*.sqlite" ! -name "*.tfm" ! -name "*.ttf" ! -name "*.vf" ! -name "*.xls" ! -name "*.xlsm" ! -name "*.xlsx" ! -name ".*.sw?" ! -name a.out ! -name "*.jar" ! -name "*.pyc" ! -name "*.vbox" ! -name "*.nvram" ! -name "*.cur" ! -name "*.class" ! -name "*.vbox-prev" ! -name "*.fls" ! -name .viminfo ! -name viminfo ! -name "*.ltjruby" -regextype posix-extended ! -regex "\./Mail/(\.[^/]+/)+(cur|new|tmp)/[^/]+$" -printf "%P\n"', " {{{
 					" バイナリ・ファイルとメールを除外 (メールはファイル名だけ見ても分らない) " }}}
 	" TabEdit が --multi に対応したつもり History そのものは、コマンドや検索履歴で使うので、上書きしない
 	command! -bang -nargs=* HISTORY call fzf#run(
@@ -58,6 +58,7 @@ function set_fzf_vim#main() abort
 					\ )
 				\ )
 	let g:fzf_action = {
+				\ 'ctrl-g': 'edit',
 				\ 'ctrl-t': function('set_fzf_vim#FZF_open'),
 				\ 'ctrl-s': 'split',
 				\ 'ctrl-v': 'vsplit',
