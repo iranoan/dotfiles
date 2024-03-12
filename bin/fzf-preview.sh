@@ -64,8 +64,8 @@ case "${f##*/}" in # ファイル名による分岐
 					application/pdf )              pdftotext "$f" - ;;
 					application/vnd.sqlite3)       echo .dump|sqlite3 "$f" ;;
 					audio/* )                      ffmpeg -hide_banner -i "$f" -f metadata - | tail -n +2 ;;
-					text/csv)                      nkf "$f" | ~/bin/csv2tsv.awk | tsv2table.awk ;;
-					text/tab-separated-values|text/tsv) nkf "$f" | ~/bin/tsv2table.awk ;;
+					text/csv)                      nkf -wd "$f" | ~/bin/csv2tsv.awk | tsv2table.awk ;;
+					text/tab-separated-values|text/tsv) nkf -wd "$f" | ~/bin/tsv2table.awk ;;
 					text/*|application/xhtml+xml|application/javascript|application/rdf+xml|application/toml|application/x-awk|application/x-desktop|application/x-gnuplot|application/x-perl|application/x-php|application/x-ruby|application/x-shellscript|application/x-troff-man|application/x-yaml|application/xml )
 						/usr/share/source-highlight/src-hilite-lesspipe.sh "$f" ;;
 					application/vnd.openxmlformats-officedocument.wordprocessingml.document|application/vnd.oasis.opendocument.text )
