@@ -16,12 +16,22 @@ install.sh
 ## include
 
 * bc
+* bin/
+  * csv2tsv.awk
+  * fzf-preview.sh
+  * rifle\_sxiv.sh
+  * sh-list.sh
+  * ssconvert.sh
+  * tsv2table.awk
+  * xlsx2table.sh
 * clang-format
 * colordiff
 * Ctags
 * efm-langserver
   * .config/efm-langserver
 * FbTerm
+* fd (fdfind) ignore list (--ignore-file)
+  * .fdignore
 * FZF
   * .fzf/
     * bashrc
