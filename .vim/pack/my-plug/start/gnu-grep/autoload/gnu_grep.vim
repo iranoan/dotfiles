@@ -9,6 +9,22 @@ export def Lgrep(...args: list<string>): void
 	GrepMain('lgrep', args)
 enddef
 
+def Escape(org: string): string
+	var ret: string
+	var s: string = org
+	var match_ret: list<any>
+
+	while true
+		match_ret = matchstrpos(s, '''\(\\''\|[^'']\)\+''')
+		if match_ret[1] == -1
+			break
+		endif
+		ret ..= strpart(s, 0, match_ret[1])->escape('%#\|') .. escape(match_ret[0], '%#|')
+		s = strpart(s, match_ret[2])
+	endwhile
+	return ret .. s->escape('%#\|')
+enddef
+
 def GrepMain(cmd: string, args: list<string>): void
 	def FileList(arg: string): void
 		if cmd ==# 'grep'
@@ -32,13 +48,13 @@ def GrepMain(cmd: string, args: list<string>): void
 		|| (( index(args, '-l') >= 0 || index(args, '--files-with-match') >= 0 ) && ( index(args, '-v') == -1 || index(args, '--invert-match') == -1))
 		execute 'silent ' .. cmd .. opt .. '-m 1 ' ..
 			filter(args, (i, v) => v !~# '^\m\C\(-l\|-L\|-v\|--files-with\(out\)\?-match\|--invert-match\)$')
-				->join(' ')->escape('%#\|')
+				->join(' ')->Escape()
 	elseif ' ' .. join(args, ' ') .. ' ' =~# ' -[ABCDEFGHIPRTUVZabcdefhimnoqrsuvwxyz]*[lL][ABCDEFGHILPRTUVZabcdefhilmnoqrsuvwxyz]* '
 		|| index(args, '--files-without-match') >= 0
 		|| index(args, '--files-with-matches') >= 0
 		FileList(opt .. join(args, ' '))
 	else
-		execute 'silent ' .. cmd .. opt .. join(args, ' ')->escape('%#\|')
+		execute 'silent ' .. cmd .. opt .. join(args, ' ')->Escape()
 	endif
 enddef
 
@@ -171,4 +187,3 @@ export def GrepComp(ArgLead: string, CmdLine: string, CursorPos: number): list<s
 	extend(opt, LS(args[-1], false))
 	return filter(opt, 'v:val =~# ''^' .. escape(args[-1], '.$*~()\[]') .. '''')->map((key, val) => substitute(val, '[^=]\zs$', ' ', ''))
 enddef
-defcompile
