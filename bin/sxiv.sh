@@ -35,44 +35,15 @@ open_img () {
 	else
 		case "$( file --brief --mime-type "$1" )" in
 			image/*|application/postscript) # 画像ファイルでは、それを表示しつつ、カレント・ディレクトリ内の画像ファイルをサムネイルとして用意
-				list=$( find -L "${1%/*}" -maxdepth 1 -type f \( \
-					   -iname '*.bmp' \
-					-o -iname '*.cgm' \
-					-o -iname '*.cr2' \
-					-o -iname '*.dl' \
-					-o -iname '*.emf' \
-					-o -iname '*.eps' \
-					-o -iname '*.gif' \
-					-o -iname '*.ico' \
-					-o -iname '*.j2c' \
-					-o -iname '*.j2k' \
-					-o -iname '*.jp2' \
-					-o -iname '*.jpeg' \
-					-o -iname '*.jpf' \
-					-o -iname '*.jpg' \
-					-o -iname '*.jpg' \
-					-o -iname '*.jpx' \
-					-o -iname '*.mng' \
-					-o -iname '*.nef' \
-					-o -iname '*.nef' \
-					-o -iname '*.pbm' \
-					-o -iname '*.pcx' \
-					-o -iname '*.pgm' \
-					-o -iname '*.png' \
-					-o -iname '*.png' \
-					-o -iname '*.ppm' \
-					-o -iname '*.svg' \
-					-o -iname '*.svgz' \
-					-o -iname '*.tga' \
-					-o -iname '*.tif' \
-					-o -iname '*.tiff' \
-					-o -iname '*.webp' \
-					-o -iname '*.xbm' \
-					-o -iname '*.xcf' \
-					-o -iname '*.xpm' \
-					-o -iname '*.xwd' \
-					-o -iname '*.yuv' \
-					\) -print | sort --ignore-case )
+				if command -v fdfind > /dev/null ; then
+					list=$( fdfind -L --max-depth 1 --ignore-file ~/.fdignore \
+						-e bmp -e cgm -e cr2 -e dll -e ico -e j2c -e j2k -e jp2 -e jpeg -e jpx -e mng -e nef -e nef -e pbm -e pcx -e pgm -e png -e png -e ppm -e svg -e svgz -e tga -e tif -e tiff -e webp -e xbm -e xcf -e xpm -e xwd -e yuv \
+						. "${1%/*}" | sort --ignore-case )
+				else
+					list=$( find -L "${1%/*}" -maxdepth 1 -type f \( \
+						-iname '*.bmp' -o -iname '*.cgm' -o -iname '*.cr2' -o -iname '*.dll' -o -iname '*.emf' -o -iname '*.eps' -o -iname '*.gif' -o -iname '*.ico' -o -iname '*.j2c' -o -iname '*.j2k' -o -iname '*.jp2' -o -iname '*.jpeg' -o -iname '*.jpf' -o -iname '*.jpg' -o -iname '*.jpg' -o -iname '*.jpx' -o -iname '*.mng' -o -iname '*.nef' -o -iname '*.nef' -o -iname '*.pbm' -o -iname '*.pcx' -o -iname '*.pgm' -o -iname '*.png' -o -iname '*.png' -o -iname '*.ppm' -o -iname '*.svg' -o -iname '*.svgz' -o -iname '*.tga' -o -iname '*.tif' -o -iname '*.tiff' -o -iname '*.webp' -o -iname '*.xbm' -o -iname '*.xcf' -o -iname '*.xpm' -o -iname '*.xwd' -o -iname '*.yuv' \
+						\) -print 2> /dev/null | sort --ignore-case )
+				fi
 				count=$( grep --line-number --fixed-strings "$1" <<-_EOF_
 				$list
 				_EOF_
