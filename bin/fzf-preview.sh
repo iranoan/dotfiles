@@ -10,6 +10,21 @@ f=$( echo "$@"| sed -e "s>^~>$HOME>" -e "s/'/\\\'/g" -e 's/"/\\"/g' | xargs -I{}
 mime=$( mimetype --brief "$f" ) # file --dereference --brief --mime-type だと CSV の判定で間違えるケースが有る
 
 sxiv_preview(){
+	if command -v nsxiv > /dev/null ; then
+		sxiv=nsxiv
+	elif command -v sxiv > /dev/null ; then
+		sxiv=sxiv
+	else
+		case "$( ps xo pid,comm | awk -F ' ' '/^\s*\<'$PPID'\>/{ print $2 }' )" in
+			sh|ksh|ash|dash|bash|csh|tcsh|zsh|fish) echo 'require nsxiv or sxiv for preview' ;;
+			*)
+				if command -v zenity > /dev/null ; then
+					zenity --warning --title="$sxiv" --text="require nsxiv or sxiv for preview" 2>/dev/null
+				fi
+				;;
+		esac
+		return 1
+	fi
 	ppid=$PPID
 	ps_xo=$( ps xo pid,ppid,comm )
 	wmctrl_lGp=$( wmctrl -lGp |
@@ -35,7 +50,7 @@ sxiv_preview(){
 	done
 
 	echo '' # 前に表示していたプレヴューをクリア
-	nsxiv --embed "$win_id" -g "${width}x${height}+${width}+0" --no-bar --scale-mode f --private "$1" & # & をなくしてもプロセスが残る点は変わらない+絞り込み入力側にフォーカスが戻らないことが増える印象
+	$sxiv -e "$win_id" -g "${width}x${height}+${width}+0" --no-bar --scale-mode f --private "$1" & # & をなくしてもプロセスが残る点は変わらない+絞り込み入力側にフォーカスが戻らないことが増える印象
 	wmctrl -ia "$win_id"
 	return 1
 }

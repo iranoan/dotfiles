@@ -14,9 +14,24 @@ fi
 source "$HOME/.fzf/key-bindings.bash"
 
 f(){
+	if command -v nsxiv > /dev/null ; then
+		sxiv=nsxiv
+	elif command -v sxiv > /dev/null ; then
+		sxiv=sxiv
+	else
+		case "$( ps xo pid,comm | awk -F ' ' '/^\s*\<'$PPID'\>/{ print $2 }' )" in
+			sh|ksh|ash|dash|bash|csh|tcsh|zsh|fish) echo 'require nsxiv or sxiv' ;;
+			*)
+				if command -v zenity > /dev/null ; then
+					zenity --warning --title="$sxiv" --text="require nsxiv or sxiv" 2>/dev/null
+				fi
+				;;
+		esac
+		exit 1
+	fi
 	sxiv_ls="^($( cat <<-_EOF_|
 		DUMMY
-		$( pgrep -u "$USER" -f 'nsxiv --embed ' )
+		$( pgrep -u "$USER" -f "$sxiv -e " )
 		_EOF_
 			tr '\n' '|' |
 			sed -E 's/\|+$//'
@@ -47,7 +62,7 @@ f(){
 			xargs --no-run-if-empty -n 1 -P 0 -0 -I{} realpath --no-symlinks --relative-base="$( pwd )" "{}" 2> /dev/null |
 			fzf --preview "$HOME/bin/fzf-preview.sh {}" --bind='enter:become(xdg-open {})'
 	fi
-	pgrep -u "$USER" -f 'nsxiv --embed ' |
+	pgrep -u "$USER" -f "$sxiv -e " |
 		grep -Ev "$sxiv_ls" |
 		xargs --no-run-if-empty -n 1 -P 0 kill
 }
