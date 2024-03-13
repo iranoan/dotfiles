@@ -23,7 +23,7 @@ fi
 if command -v fdfind > /dev/null ; then
 	export FZF_DEFAULT_COMMAND='fdfind --hidden --no-ignore --follow -t f -t l -t d --ignore-file ~/.fdignore .'
 else
-	export FZF_DEFAULT_COMMAND='find -L . -type d \( -name .texlive2023 -o -name .npm -o -name .thumbnails -o -name thumbnails -o -name .log -o -name .tmp -o -name xapian -o -name .git -o -name cache -o -name .cache -o -name .Trash -o -name .ecryptfs -o -name .Private -o -name kpeoplevcard \) -prune -o \( -type f -o -type l \) ! -name %* ! -name ".~lock.*#" ! -name ".*.sw?" -printf "%P\n"'
+	export FZF_DEFAULT_COMMAND='find -L . -type d \( -name .texlive2023 -o -name .npm -o -name .thumbnails -o -name thumbnails -o -name .log -o -name .tmp -o -path "Mail/.*/new" -o -path "Mail/.*/cur" -o -path "Mail/.*/tmp" -o -path "Mail/.notmuch/xapian" -o -path .local/share/Trash -o -path node_modules -o -path go/pkg -o -name .git -o -name cache -o -name .cache -o -name .Trash -o -name .ecryptfs -o -name .Private -o -name kpeoplevcard \) -prune -o \( -type f -o -type l \) ! -name %* ! -name ".~lock.*#" ! -name ".*.sw?" -printf "%P\n"'
 fi
 export FZF_DEFAULT_OPTS='--layout=reverse --info=inline --multi --color=border:7 --preview-window=border-left --bind="ctrl-]:change-preview-window(hidden|),ctrl-h:backward-char,ctrl-l:forward-char,ctrl-f:page-down,ctrl-b:page-up,ctrl-g:execute-silent(~/bin/rifle_sxiv.sh {}),ctrl-o:become(xdg-open {}),ctrl-v:execute-silent(~/bin/gvim.sh {})"'
 if [ -d "$HOME/.vim/pack/github/opt/fzf/man" ] && echo "$MANPATH" | grep -qvE "(^|:)$HOME/.vim/pack/github/opt/fzf/man($|:)"; then
