@@ -1,8 +1,24 @@
 #!/bin/sh
-# nsxiv の起動補助
+# nsxiv/sxiv  の起動補助
 # ・引数が無い時はカレント・ディレクトリ、引数がディレクトリならその直下の画像をサムネイル
 # ・引数が画像のときも、同じフォルダの画像ファイルをサムネイルとして準備しおく
-# ・ターミナルの fzf からの起動で Embed nsxiv’s window が残るが、呼び出し元のシェル関数で対処している
+# ・ターミナルの fzf からの起動で Embed nsxiv/sxiv window が残るが、呼び出し元のシェル関数で対処する
+
+if command -v nsxiv > /dev/null ; then
+	sxiv=nsxiv
+elif command -v sxiv > /dev/null ; then
+	sxiv=sxiv
+else
+	case "$( ps xo pid,comm | awk -F ' ' '/^\s*\<'$PPID'\>/{ print $2 }' )" in
+		sh|ksh|ash|dash|bash|csh|tcsh|zsh|fish) echo 'require nsxiv or sxiv' ;;
+		*)
+			if command -v zenity > /dev/null ; then
+				zenity --warning --title="$sxiv" --text="require nsxiv or sxiv" 2>/dev/null
+			fi
+			;;
+	esac
+	exit 1
+fi
 
 open_img () {
 	geometry=$(
@@ -31,7 +47,7 @@ open_img () {
 		}'
 	)
 	if [ -d "$1" ]; then # ディレクトリではサブディレクトリまで含めてサムネイル表示
-		nsxiv -g "$geometry" --no-bar --thumbnail --scale-mode f --recursive "$1" &
+		$sxiv -g "$geometry" --no-bar --thumbnail --scale-mode f --recursive "$1" &
 	else
 		case "$( file --brief --mime-type "$1" )" in
 			image/*|application/postscript) # 画像ファイルでは、それを表示しつつ、カレント・ディレクトリ内の画像ファイルをサムネイルとして用意
@@ -49,11 +65,11 @@ open_img () {
 				_EOF_
 				)
 				if [ -n "$count" ]; then
-					nsxiv -g "$geometry" --no-bar --scale-mode f --stdin --start-at "${count%%:*}" -- <<-_EOF_ &
+					$sxiv -g "$geometry" --no-bar --scale-mode f --stdin --start-at "${count%%:*}" -- <<-_EOF_ &
 					$list
 					_EOF_
 				else
-					nsxiv -g "$geometry" --no-bar --scale-mode f -- "$@" & # fallback
+					$sxiv -g "$geometry" --no-bar --scale-mode f -- "$@" & # fallback
 				fi
 			;;
 			*) # 他はメッセージを表示して終了
