@@ -1,8 +1,11 @@
 #!/bin/sh
 # nsxiv/sxiv  の起動補助
-# ・引数が無い時はカレント・ディレクトリ、引数がディレクトリならその直下の画像をサムネイル
-# ・引数が画像のときも、同じフォルダの画像ファイルをサムネイルとして準備しおく
-# ・ターミナルの fzf からの起動で Embed nsxiv/sxiv window が残るが、呼び出し元のシェル関数で対処する
+# * 引数がディレクトリならその直下の画像をサムネイル
+# * 引数が画像のときも、同じフォルダの画像ファイルをサムネイルとして準備しおく
+# * 引数が無い時
+# 	* シェルからはカレント・ディレクトリ
+# 	* GUI のメニューからは PICTURES ディレクトリ
+# * ターミナルの fzf からの起動で Embed nsxiv/sxiv window が残るが、呼び出し元のシェル関数で対処する
 
 if command -v nsxiv > /dev/null ; then
 	sxiv=nsxiv
@@ -72,9 +75,15 @@ open_img () {
 					$sxiv -g "$geometry" --no-bar --scale-mode f -- "$@" & # fallback
 				fi
 			;;
-			*) # 他はメッセージを表示して終了
-				# echo 'Not Image!' >&2
-				zenity --warning --title=nsxiv --text="Not Image!" 2>/dev/null
+			*) # 画像ファイルがなければ
+				case "$( ps xo pid,comm | awk -F ' ' '/^\s*\<'$PPID'\>/{ print $2 }' )" in
+					sh|ksh|ash|dash|bash|csh|tcsh|zsh|fish) echo $sxiv': no more files to display, aborting' ;;
+					*)
+						if command -v zenity > /dev/null ; then
+							zenity --warning --title=$sxiv --text="no more files to display, aborting" 2> /dev/null
+						fi
+						;;
+				esac
 				exit 1
 				;;
 		esac
@@ -83,8 +92,12 @@ open_img () {
 
 [ "$1" = '--' ] && shift
 case "$1" in
-	# "") echo "Usage: ${0##*/} PICTURES" >&2; exit 1 ;;
-	"") open_img "$PWD" ;;
+	"")
+		case "$( ps xo pid,comm | awk -F ' ' '/^\s*\<'$PPID'\>/{ print $2 }' )" in
+			sh|ksh|ash|dash|bash|csh|tcsh|zsh|fish) open_img "$PWD" ;;
+			*) open_img "$( xdg-user-dir PICTURES )" ;;
+		esac
+		;;
 	/*) open_img "$1" ;;
 	"~"/*) open_img "$HOME/${1#"~"/}" ;;
 	*) open_img "$PWD/$1" ;;
