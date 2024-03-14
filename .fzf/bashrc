@@ -40,22 +40,24 @@ f(){
 		if [ $# -eq 0 ]; then
 			dir=""
 		elif [ -d "${@:$#:1}" ]; then
-			dir=" . $@"
+			dir=" . ${@// /\\ }"
 		else
-			dir="$@"
+			dir="${@// /\\ }"
 		fi
 		eval "${FZF_DEFAULT_COMMAND% .} $dir" |
 			fzf --prompt 'Files> ' --preview "$HOME/bin/fzf-preview.sh {}" --bind='enter:become(xdg-open {})'
 	else
 		if [ $# -eq 0 ]; then
 			dir=$( pwd )
+			dir="${dir// /\\ }"
 			args=''
 		elif [ -d "${@:$#:1}" ]; then
 			dir="${@:$#:1}"
+			dir="${dir// /\\ }"
 			args="${@%%${@:$#:1}}"
 		else
 			dir=$( pwd )
-			args="$@"
+			dir="${@// /\\ }"
 		fi
 		cmd="${FZF_DEFAULT_COMMAND/find -L ./find -L $dir} $args"
 		eval "${cmd/ -printf \"%P\\n\"/ -print0}" |
