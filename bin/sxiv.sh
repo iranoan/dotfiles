@@ -91,7 +91,14 @@ open_img(){
 			*) cmd0="${cmd0}-maxdepth 1 $dir " ;;
 		esac
 	fi
-	list=$( eval "$cmd0$cmd1" )
+	list=$( (
+		eval "$cmd0$cmd1"
+		if file --brief --mime-type "$1" |
+			grep -Eq '^(image/|application/postscript\>)' ; then # 引数が画像ファイルなら無条件でリストに追加 (拡張子の検索で含まれない可能性が有る)
+			echo "$1"
+		fi
+		) |
+			sort --uniq --ignore-case )
 	if [ -z "$list" ]; then
 		error_msg
 	fi
