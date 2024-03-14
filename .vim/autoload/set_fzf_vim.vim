@@ -76,8 +76,13 @@ function set_fzf_vim#main() abort
 endfunction
 
 def set_fzf_vim#FZF_open(arg: list<string>): void
+	var dir: string = getcwd() .. '/'
 	for f in arg
-		tabedit#Tabedit(f)
+		if match(f, '^[~/]') != 0
+			tabedit#Tabedit(dir .. f)
+		else
+			tabedit#Tabedit(f)
+		endif
 	endfor
 enddef
 defcompile
