@@ -1,5 +1,5 @@
 #!/bin/sh
-# nsxiv/sxiv  の起動補助
+# nsxiv/sxiv の起動補助
 # * 引数がディレクトリならその直下の画像をサムネイル
 # * 引数が画像のときも、同じフォルダの画像ファイルをサムネイルとして準備しおく
 # * 引数が無い時は次のサブ・ディレクトリも含めたサムネイル表示
@@ -66,7 +66,7 @@ xrandr --current |
 	}'
 }
 
-open_img () {
+open_img(){
 	geometry=$( get_geometry )
 	if command -v fdfind > /dev/null ; then
 		cmd0="fdfind --follow --base-directory "
@@ -86,7 +86,6 @@ open_img () {
 	else
 		opt='-n'
 		dir="$( echo "${1%/*}" | sed -e 's/ /\\ /g' -e 's/"/\\"/g' )"
-		echo "$dir"
 		case "$cmd0" in
 			fd*) cmd0="${cmd0} $dir --max-depth 1 " ;;
 			*) cmd0="${cmd0}-maxdepth 1 $dir " ;;
