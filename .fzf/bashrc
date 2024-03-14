@@ -36,14 +36,16 @@ f(){
 			tr '\n' '|' |
 			sed -E 's/\|+$//'
 	)$)"
+	dir="$( echo "${@:$#:1}" | sed -E "s>^~>$HOME>" )"
 	if command -v fdfind > /dev/null ; then
 		if [ $# -eq 0 ]; then
 			dir=""
-		elif [ -d "${@:$#:1}" ]; then
+		elif [ -d "$dir" ]; then
 			dir=" . ${@// /\\ }"
 		else
 			dir="${@// /\\ }"
 		fi
+		dir="${dir//\"/\\\"}"
 		eval "${FZF_DEFAULT_COMMAND% .} $dir" |
 			fzf --prompt 'Files> ' --preview "$HOME/bin/fzf-preview.sh {}" --bind='enter:become(xdg-open {})'
 	else
@@ -51,7 +53,7 @@ f(){
 			dir=$( pwd )
 			dir="${dir// /\\ }"
 			args=''
-		elif [ -d "${@:$#:1}" ]; then
+		elif [ -d "$dir" ]; then
 			dir="${@:$#:1}"
 			dir="${dir// /\\ }"
 			args="${@%%${@:$#:1}}"
@@ -59,6 +61,7 @@ f(){
 			dir=$( pwd )
 			dir="${@// /\\ }"
 		fi
+		dir="${dir//\"/\\\"}"
 		cmd="${FZF_DEFAULT_COMMAND/find -L ./find -L $dir} $args"
 		eval "${cmd/ -printf \"%P\\n\"/ -print0}" |
 			xargs --no-run-if-empty -n 1 -P 0 -0 -I{} realpath --no-symlinks --relative-base="$( pwd )" "{}" 2> /dev/null |
