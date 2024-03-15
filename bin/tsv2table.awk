@@ -59,12 +59,11 @@ function output(){
 
 BEGIN{
 	FS = "\t"
-	OFS = "|"
 	line = 1
 	column = 1
 }
 {
-	if( $0 == ""){
+	if( $0 ~ /^[ \t]*$/ ){
 		output()
 		line = 1
 		column = 1
