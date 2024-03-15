@@ -17,5 +17,6 @@ BEGIN{ OFS = "\t" }
 		$i = x
 		i++
 	}
+	$i = l
 	print $0
 }
