@@ -44,14 +44,14 @@ function output(){
 	for( i = 1; i < line; i++){
 		x = line_str[i, 1]
 		match(x, /^[+-]?[0-9.,]+([Ee][-+][0-9]+)?$/ )
-		if( RLENGTH != -1 )str = sprintf( "%"( max_c[1] - wides[i, 1] )"s", x )
-		else str = sprintf( "%-"( max_c[1] - wides[i, 1] )"s", x )
+		if( RLENGTH != -1 )str = sprintf( "|%"( max_c[1] - wides[i, 1] )"s|", x )
+		else str = sprintf( "|%-"( max_c[1] - wides[i, 1] )"s|", x )
 		for( j = 2; j <= column; j++ ){
 			x = line_str[i, j]
-			if( x == "")continue
+			if( x == "" )continue
 			match(x, /^[+-]?[0-9.,]+([Ee][-+][0-9]+)?$/ )
-			if( RLENGTH != -1 )str = str"|"sprintf( "%"( max_c[j] - wides[i, j] )"s", x )
-			else str = str"|"sprintf( "%-"( max_c[j] - wides[i, j] )"s", x )
+			if( RLENGTH != -1 )str = str sprintf( "%"( max_c[j] - wides[i, j] )"s|", x )
+			else str = str sprintf( "%-"( max_c[j] - wides[i, j] )"s|", x )
 		}
 		print str
 	}
