@@ -1,7 +1,7 @@
 #!/bin/gawk -f
-# TSV を | で列の揃った形式で出力
+# TSV を | で列の揃った形式・固定長で出力
 # セル内改行には未対応
-# 空のセルは左と結合して扱う
+# 空のセルは列幅よりセル幅が大きければ、左との結合として扱う
 
 function get_wide( x ){ # 全角扱いの文字数を得る
 		gsub(/[ -~]/, "", x)
@@ -37,21 +37,26 @@ function output(){
 				if( char_num[i, k] != 0 )break
 				width += max_c[k] + 1
 			}
-			line_str[i, j] = sprintf( "%-"( width - wides[i, j] )"s", line_str[i, j] )
+			if( wides[i, j] <= max_x[j]){
+				match(line_str[i, j], /^[+-]?[0-9.,]+([Ee][-+][0-9]+)?$/ )
+				if( RLENGTH != -1 )line_str[i, j] = sprintf( "%"( max_c[j] - wides[i, j] )"s|%"( width - max_c[j] - 1 )"s", line_str[i, j], "" )
+				else line_str[i, j] = sprintf( "%-"( max_c[j] - wides[i, j] )"s|%"( width - max_c[j] - 1 )"s", line_str[i, j], "" )
+			}
+			else line_str[i, j] = sprintf( "%-"( width - wides[i, j] )"s", line_str[i, j] )
 			j = k - 1
 		}
 	}
 	for( i = 1; i < line; i++){
 		x = line_str[i, 1]
 		match(x, /^[+-]?[0-9.,]+([Ee][-+][0-9]+)?$/ )
-		if( RLENGTH != -1 )str = sprintf( "|%"( max_c[1] - wides[i, 1] )"s|", x )
-		else str = sprintf( "|%-"( max_c[1] - wides[i, 1] )"s|", x )
-		for( j = 2; j <= column; j++ ){
+		if( RLENGTH != -1 )str = sprintf( "%"( max_c[1] - wides[i, 1] )"s", x )
+		else str = sprintf( "%-"( max_c[1] - wides[i, 1] )"s", x )
+		for( j = 2; j <= col_num[i]; j++ ){
 			x = line_str[i, j]
 			if( x == "" )continue
 			match(x, /^[+-]?[0-9.,]+([Ee][-+][0-9]+)?$/ )
-			if( RLENGTH != -1 )str = str sprintf( "%"( max_c[j] - wides[i, j] )"s|", x )
-			else str = str sprintf( "%-"( max_c[j] - wides[i, j] )"s|", x )
+			if( RLENGTH != -1 )str = str sprintf( "|%"( max_c[j] - wides[i, j] )"s", x )
+			else str = str sprintf( "|%-"( max_c[j] - wides[i, j] )"s", x )
 		}
 		print str
 	}
@@ -65,18 +70,19 @@ BEGIN{
 {
 	if( $0 ~ /^[ \t]*$/ ){
 		output()
-		line = 1
-		column = 1
+		line = 1   # 空行で区切った表の行数
+		column = 1 # 空行で区切った表の桁数
 		print ""
 	}
 	else{
 		for( i = 1; i <= NF; i++ ){
-			line_str[line, i] = $i
-			char_num[line, i] = length( $i )
-			wides[line, i] = get_wide( $i )
-			ascii[line, i] = char_num[line, i] - wides[line, i]
+			line_str[line, i] = $i                              # セルの内容
+			char_num[line, i] = length( $i )                    # セルの文字数
+			wides[line, i] = get_wide( $i )                     # セルの全角文字数
+			ascii[line, i] = char_num[line, i] - wides[line, i] # セルの ASCII 文字数
 		}
 		line++
+		col_num[NR] = NF # 行ごとのセル数
 		if( column < NF )column = NF
 	}
 }
