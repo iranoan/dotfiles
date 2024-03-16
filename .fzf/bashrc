@@ -36,7 +36,7 @@ f(){
 			tr '\n' '|' |
 			sed -E 's/\|+$//'
 	)$)"
-	dir="$( echo "${@:$#:1}" | sed -E "s>^~>$HOME>" )"
+	dir="$( echo "${@:$#:1}" | sed -E "s>^~/>$HOME/>" )"
 	if command -v fdfind > /dev/null ; then
 		if [ $# -eq 0 ]; then
 			dir=""
