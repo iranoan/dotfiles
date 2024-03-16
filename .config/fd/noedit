@@ -1,0 +1,48 @@
+# 直接編集の対象にしないので無視するファイル
+
+# C/C++
+a.out
+*.o
+*.obj
+*.oll
+*.opp
+*.exe
+
+# TeX
+*.aux
+*.class
+*.dvi
+*.fdb_latexmk
+*.fls
+*.log
+*.nav
+*.out
+*.snm
+*.synctex.gz
+*.tfm
+*.toc
+*.vf
+
+# VirtualBox
+*.nvram
+*.vbox
+*.vbox-prev
+
+*.cer
+*.chm
+*.chw
+*.crt
+*.cur
+*.dll
+*.gpg
+*.hlp
+*.hmereg
+*.jar
+*.ltjruby
+*.pfa
+*.pl3
+*.ppm
+*.pyc
+*.reg
+*.sqlite
+*.ttf
