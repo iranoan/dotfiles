@@ -13,6 +13,8 @@ fi
 # ------------
 source "$HOME/.fzf/key-bindings.bash"
 
+alias fd='fdfind --hidden --follow --no-ignore --ignore-file ~/.config/fd/ignore '
+
 f(){
 	if command -v nsxiv > /dev/null ; then
 		sxiv=nsxiv
