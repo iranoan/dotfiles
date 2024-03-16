@@ -1,33 +1,47 @@
 # 直接編集の対象にしないので無視するファイル
 
 # C/C++
-a.out
+*.a
 *.o
 *.obj
 *.oll
 *.opp
-*.exe
+*.ro
+a.out
+tags
 
 # TeX
 *.aux
+*.bb
+*.bbl
+*.blg
 *.class
 *.dvi
 *.fdb_latexmk
 *.fls
+*.glo
+*.gls
+*.gz(busy)
+*.idx
+*.ilg
+*.ind
 *.log
+*.ltjruby
 *.nav
 *.out
 *.snm
+*.synctex(busy)
 *.synctex.gz
 *.tfm
 *.toc
 *.vf
+*.xbb
+ls-R
 
 # VirtualBox
 *.nvram
 *.vbox
 *.vbox-prev
-
 *.cer
 *.chm
 *.chw
@@ -38,7 +52,6 @@ a.out
 *.hlp
 *.hmereg
 *.jar
-*.ltjruby
 *.pfa
 *.pl3
 *.ppm
