@@ -25,6 +25,8 @@
 /.cache/
 /_cache/
 /.Trash/
+/img/スクリーンショット/
+/PDF/
 %*
 .~lock.*#
 *.sw?
