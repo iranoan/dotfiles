@@ -1,0 +1,74 @@
+[core]
+	editor = vim -c \"set fileencoding=utf-8\"
+	symlinks = true
+	autocrlf = false
+	pager = nkf | less
+	; 日本語ファイル名をそのまま表示
+	quotepath = false
+	precomposeunicode = true
+	; packedGitLimit = 1g
+	; packedGitWindowSize = 1g
+[http]
+	; プッシュするときに許容するバッファサイズを大きく
+	postBuffer = 524288000
+; [pack]
+; 	; 利用メモリサイズを大きくする
+; 	windowMemory = 1g
+; 	; packファイルの最大サイズを制限
+; 	; packSizeLimit = 4g
+; 	; スレッド数を減らす→処理は遅くなりるが、一度に確保するメモリ領域を抑える
+; 	; threads = 2
+[color]
+	ui = auto
+[gui]
+	; GUI の文字コード指定
+	encoding = utf-8
+[diff]
+	tool = gvimdiff
+	algorithm = patience
+[difftool]
+	prompt = false
+[merge]
+	tool = gvimdiff
+	ff = false
+[mergetool]
+	prompt = false
+
+;アプリごとのdiff設定
+[diff "word"]
+	binary = true
+	textconv = ~/bin/office2text.sh
+[diff "odt"]
+	binary = true
+	textconv = ~/bin/office2text.sh
+[diff "excel"]
+	binary = true
+	textconv = ~/bin/xlsx2table.sh
+[diff "ods"]
+	binary = true
+	textconv = ~/bin/xlsx2table.sh
+[diff "powerpoint"]
+	binary = true
+	textconv = ~/bin/office2text.sh
+[diff "odp"]
+	binary = true
+	textconv = ~/bin/office2text.sh
+[diff "img"]
+	binary = true
+	textconv = exiftool
+[diff "sqlite3"]
+	binary = true
+	textconv = echo .dump|sqlite3
+[diff "json"]
+	binary = true
+	textconv = jq -S .
+[diff "video"]
+	binary = true
+	textconv = ~/bin/media_metadata.sh
+[diff "audio"] # もっと良い方法が有るかも知れないので、video とは分けておく
+	binary = true
+	textconv = ~/bin/media_metadata.sh
+[pull]
+	rebase = true
+	ff = only
+

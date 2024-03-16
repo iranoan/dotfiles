@@ -36,6 +36,8 @@ install.sh
   * .fzf/
     * bashrc
     * key-bindings.bash
+* Git
+  * .config/git
 * GDB
 * gnuplot
 * Gromit-MPX

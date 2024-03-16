@@ -17,8 +17,8 @@
 *.doc           diff=word
 *.docx          diff=word
 *.odt           diff=odt
-*.xlsx          diff=xlsx
-*.xls           diff=xls
+*.xlsx          diff=excel
+*.xls           diff=excel
 *.ods           diff=ods
 *.pptx          diff=powerpoint
 *.ppt           diff=powerpoint
@@ -32,12 +32,12 @@
 *.json          diff=json
 *.json.override diff=json
 #exif利用
-*.png           diff=exif
-*.PNG           diff=exif
-*.jpg           diff=exif
-*.JPG           diff=exif
-*.gif           diff=exif
-*.GIF           diff=exif
+*.png           diff=img
+*.PNG           diff=img
+*.jpg           diff=img
+*.JPG           diff=img
+*.gif           diff=img
+*.GIF           diff=img
 # 動画差分ではffmpeg を使ってメタデータ等を表示
 *.asf           diff=video
 *.avi           diff=video
