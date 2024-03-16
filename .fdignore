@@ -11,6 +11,7 @@
 /Mail/.*/{new,cur,tmp}/
 /.ecryptfs/
 /.Private/
+/.local/share/geeqie/metadata/
 /.local/share/kpeoplevcard/
 /.local/share/Trash/
 /.thumbnails/
@@ -24,9 +25,9 @@
 /cache/
 /.cache/
 /_cache/
-/.Trash/
 /img/スクリーンショット/
 /PDF/
+.Trash/
 %*
 .~lock.*#
 *.sw?
