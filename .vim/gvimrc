@@ -32,33 +32,5 @@ xnoremap <ScrollWheelUp>     <C-U>
 xnoremap <ScrollWheelDown>   <C-D>
 # }}}
 
-def GuiOptionM(): void
-	if &guioptions =~# 'M'
-		silent set guioptions-=M
-		if exists('g:did_install_default_menus')
-			unlet g:did_install_default_menus
-		endif
-		if exists('g:did_install_syntax_menu')
-			unlet g:did_install_syntax_menu
-		endif
-		execute 'source ' .. resolve(globpath(&runtimepath, 'menu.vim', 1, 1)[0])
-	endif
-enddef
-def Toggle_menu()
-	call GuiOptionM()
-	if &guioptions =~# 'm'
-		set guioptions-=m
-	else
-		set guioptions+=m
-	endif
-enddef
-def Toggle_Toolbar()
-	call GuiOptionM()
-	if &guioptions =~# 'T'
-		set guioptions-=T
-	else
-		set guioptions+=T
-	endif
-enddef
-nnoremap <leader>cM <Cmd>call <SID>Toggle_menu()<CR>
-nnoremap <leader>cT <Cmd>call <SID>Toggle_Toolbar()<CR>
+nnoremap <leader>cM <Cmd>call toggle#Menu()<CR>
+nnoremap <leader>cT <Cmd>call toggle#Toolbar()<CR>

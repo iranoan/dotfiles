@@ -395,18 +395,19 @@ set history=500                                # コマンド履歴の保存数 
 set runtimepath+=/usr/share/vim/addons
 # 個人的なキー割り当て keymap キーマップ {{{1
 # 設定の切り替え {{{2
-nnoremap <silent><leader>cw <Cmd>setlocal wrap!<CR>
-nnoremap <silent><leader>ct <Cmd>execute 'set showtabline=' .. ( &showtabline ? 0 : 2 )<CR>
-nnoremap <silent><leader>cs <Cmd>execute 'setlocal scrolloff=' .. ( &scrolloff ? 0 : ( &lines > 20 ? &lines / 4 : 5 ) )<CR>
+nnoremap <silent><leader>cb <Cmd>call toggle#Breakat()<CR>
 nnoremap <silent><leader>cc <Cmd>set showcmd!<CR>
-nnoremap <silent><leader>cm <Cmd>set more!<CR>
 nnoremap <silent><leader>cd <Cmd>call change_directory#Lcd()<CR>
+nnoremap <silent><leader>cm <Cmd>set more!<CR>
+nnoremap <silent><leader>cs <Cmd>let &l:scrolloff = ( &scrolloff ? 0 : ( &lines > 20 ? &lines / 4 : 5 ) )<CR>
+nnoremap <silent><leader>ct <Cmd>let &showtabline = ( &showtabline ? 0 : 2 )<CR>
+nnoremap <silent><leader>cw <Cmd>setlocal wrap!<CR>
 # ↑autocmd が :FZF で効かない
 # |SafeState|		保留中のものはなく、ユーザーの文字入力を待つとき
 # |SafeStateAgain|	繰り返された SafeState
 # gvimrc に書かれた分 {{{3
-# nnoremap <leader>cM <Cmd>call <SID>Toggle_menu()<CR>
-# nnoremap <leader>cT <Cmd>call <SID>Toggle_Toolbar()<CR>
+# nnoremap <leader>cM <Cmd>call toggle#Menu()<CR>
+# nnoremap <leader>cT <Cmd>call toggle#Toolbar()<CR>
 # 日付と時刻入力 {{{2
 inoremap <silent><expr><C-X><C-D> strftime('%Y/%m/%d')
 inoremap <silent><expr><C-X><C-T> strftime('%H:%M:%S')
