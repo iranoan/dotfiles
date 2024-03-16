@@ -21,7 +21,7 @@ fi
 
 # Fzf
 if command -v fdfind > /dev/null ; then
-	export FZF_DEFAULT_COMMAND='fdfind --hidden --follow -t f -t l -t d .'
+	export FZF_DEFAULT_COMMAND='fdfind --hidden --follow --no-ignore --ignore-file ~/.config/fd/ignore --type file --type symlink --type directory .'
 else
 	export FZF_DEFAULT_COMMAND='find -L . -type d \( -name .texlive2023 -o -name .npm -o -name .thumbnails -o -name thumbnails -o -name .log -o -name .tmp -o -path "$HOME/Mail/.*/new" -o -path "$HOME/Mail/.*/cur" -o -path "$HOME/Mail/.*/tmp" -o -path "$HOME/Mail/.notmuch/xapian" -o -path .local/share/Trash -o -path node_modules -o -path go/pkg -o -path "$HOME/PDF" -o -path "$HOME/img/スクリーンショット" -o -name .git -o -name cache -o -name .cache -o -name .Trash -o -name .ecryptfs -o -name .Private -o -name kpeoplevcard \) -prune -o \( -type f -o -type l \) ! -name %* ! -name ".~lock.*#" ! -name ".*.sw?" -printf "%P\n" 2> /dev/null'
 fi
