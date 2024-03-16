@@ -30,8 +30,8 @@ install.sh
 * efm-langserver
   * .config/efm-langserver
 * FbTerm
-* fd (fdfind) ignore list (--ignore-file)
-  * .fdignore
+* fd
+  * .config/fd/
 * FZF
   * .fzf/
     * bashrc
