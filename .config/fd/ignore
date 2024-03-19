@@ -15,6 +15,7 @@
 /.local/share/kpeoplevcard/
 /.local/share/Trash/
 /.lftp/
+/.vscode/extensions/
 /go/pkg/
 .thumbnails/
 thumbnails/
