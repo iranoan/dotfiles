@@ -49,10 +49,10 @@
 	textconv = ~/bin/xlsx2table.sh
 [diff "powerpoint"]
 	binary = true
-	textconv = ~/bin/office2text.sh
+	textconv = ~/bin/pptx2text.sh
 [diff "odp"]
 	binary = true
-	textconv = ~/bin/office2text.sh
+	textconv = ~/bin/odp2text.sh
 [diff "img"]
 	binary = true
 	textconv = exiftool

@@ -83,10 +83,14 @@ case "${f##*/}" in # ファイル名による分岐
 					text/tab-separated-values|text/tsv) nkf -wd "$f" | ~/bin/tsv2table.awk ;;
 					text/*|application/xhtml+xml|application/javascript|application/rdf+xml|application/toml|application/x-awk|application/x-desktop|application/x-gnuplot|application/x-perl|application/x-php|application/x-ruby|application/x-shellscript|application/x-troff-man|application/x-yaml|application/xml )
 						/usr/share/source-highlight/src-hilite-lesspipe.sh "$f" ;;
-					application/vnd.openxmlformats-officedocument.wordprocessingml.document|application/vnd.oasis.opendocument.text )
-						soffice --convert-to "txt:Text (encoded):UTF8" --cat "$f" ;;
+					application/msword|application/vnd.openxmlformats-officedocument.wordprocessingml.document|application/vnd.oasis.opendocument.text )
+						soffice --convert-to "txt:Text (encoded):UTF8" --cat "$f" 2> /dev/null ;;
+					application/vnd.openxmlformats-officedocument.presentationml.presentation )
+						~/bin/pptx2text.sh "$f" ;;
+					application/vnd.oasis.opendocument.presentation )
+						~/bin/odp2text.sh "$f" ;;
 					application/vnd.ms-excel|application/vnd.openxmlformats-officedocument.spreadsheetml.sheet|application/vnd.oasis.opendocument.spreadsheet )
-						~/bin/xlsx2table.sh "$f" ;;
+						xlsx2table.sh "$f" ;;
 					image/* )
 						if sxiv_preview "$f"; then
 							exiftool "$f"
