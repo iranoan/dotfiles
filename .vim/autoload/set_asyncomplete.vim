@@ -53,8 +53,8 @@ function set_asyncomplete#main() abort
 				\ 'blocklist': ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'css', 'tex', 'sh', 'go','notmuch-draft'],
 				\ 'completor': function('asyncomplete#sources#omni#completor'),
 				\ 'config': {
-					\   'show_source_kind': 1,
-					\ },
+					\   'show_source_kind': 1
+					\ }
 				\ }))
 				" \ 'blocklist': ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'html', 'css', 'tex', 'sh', 'go','notmuch-draft'],
 				" LSP を優先させたいので、ブロックしているが、HTML も含めると inoremap <buffer> </ </<C-x><C-o> が効かなくなる
@@ -75,11 +75,11 @@ function set_asyncomplete#main() abort
 				\ 'name': 'buffer',
 				\ 'priority': 1,
 				\ 'allowlist': ['*'],
-				\ 'blocklist': ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'html', 'css', 'tex', 'sh', 'go','notmuch-draft'],
+				\ 'blocklist': ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'css', 'tex', 'sh', 'go','notmuch-draft'],
 				\ 'completor': function('asyncomplete#sources#buffer#completor'),
 				\ 'config': {
-					\    'max_buffer_size': 500000,
-					\  },
+					\    'max_buffer_size': 500000
+					\  }
 					\ }))
 				" とりあえず LSP がある filetype は blocklist にしている
 	" }}}
@@ -87,14 +87,22 @@ function set_asyncomplete#main() abort
 	packadd asyncomplete-mail
 	call asyncomplete#register_source(asyncomplete#sources#mail#get_source_options({
 				\ 'priority': 5,
-				\ 'allowlist': ['notmuch-draft'],
+				\ 'allowlist': ['notmuch-draft']
 				\ }))
 	" }}}
 	" spell ~/.vim/pack/my-plug/opt/asyncomplete-spell/ {{{
 	packadd asyncomplete-spell
 	call asyncomplete#register_source(asyncomplete#sources#spell#get_source_options({
 				\ 'priority': 4,
-				\ 'allowlist': ['*'],
+				\ 'allowlist': ['*']
+				\ }))
+	" }}}
+	" ~/.vim/pack/my-plug/opt/asyncomplete-html-class {{{
+	packadd asyncomplete-html-class
+	call asyncomplete#register_source(asyncomplete#sources#html_class#get_source_options({
+				\ 'priority': 11,
+				\ 'allowlist': ['html', 'xhtml'],
+				\ 'completor': function('asyncomplete#sources#html_class#completor')
 				\ }))
 	" }}}
 	" 2}}}
