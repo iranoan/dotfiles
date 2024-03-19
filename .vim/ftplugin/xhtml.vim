@@ -20,6 +20,7 @@ let b:did_ftplugin_user = 1
 "--------------------------------
 "ファイルタイプ別ローカル設定
 "--------------------------------
+setlocal iskeyword=a-z,A-Z,48-57,_,- " class, id 名に - が使える
 execute 'source ' .. expand('<sfile>:p:h') .. '/../macros/html-xhtml-common.vim'
 inoremap <expr><buffer><S-Enter>   pumvisible#Insert('<li></li><Left><Left><Left><Left><Left><C-G>u')
 inoremap <expr><buffer><S-C-Enter> pumvisible#Insert_after('<br />') .. '<C-G>u'
