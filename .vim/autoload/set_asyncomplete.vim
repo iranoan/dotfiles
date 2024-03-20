@@ -48,7 +48,7 @@ function set_asyncomplete#main() abort
 	packadd asyncomplete-omni.vim
 	call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
 				\ 'name': 'omni',
-				\ 'priority': 7,
+				\ 'priority': 11,
 				\ 'allowlist': ['*'],
 				\ 'blocklist': ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'css', 'tex', 'sh', 'go','notmuch-draft'],
 				\ 'completor': function('asyncomplete#sources#omni#completor'),
@@ -57,7 +57,7 @@ function set_asyncomplete#main() abort
 					\ }
 				\ }))
 				" \ 'blocklist': ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'html', 'css', 'tex', 'sh', 'go','notmuch-draft'],
-				" LSP を優先させたいので、ブロックしているが、HTML も含めると inoremap <buffer> </ </<C-x><C-o> が効かなくなる
+				" LSP を優先させたいので、ブロックしているが、HTML も含めると class/id 名の補完や inoremap <buffer> </ </<C-x><C-o> が効かなくなる
 	" }}}
 	" path https://github.com/prabirshrestha/asyncomplete-file.vim {{{
 	packadd asyncomplete-file.vim
@@ -97,14 +97,10 @@ function set_asyncomplete#main() abort
 				\ 'allowlist': ['*']
 				\ }))
 	" }}}
-	" ~/.vim/pack/my-plug/opt/asyncomplete-html-class {{{
-	packadd asyncomplete-html-class
-	call asyncomplete#register_source(asyncomplete#sources#html_class#get_source_options({
-				\ 'priority': 11,
-				\ 'allowlist': ['html', 'xhtml'],
-				\ 'completor': function('asyncomplete#sources#html_class#completor')
-				\ }))
-	" }}}
+	" " ~/.vim/pack/my-plug/opt/asyncomplete-html-class {{{
+	" packadd asyncomplete-html-class
+	" call asyncomplete#register_source(asyncomplete#sources#html_class#GetSourceOptions({'priority': 12}))
+	" " }}}
 	" 2}}}
 	let g:asyncomplete_preprocessor = [function('s:asyncomplete_preprocessor')]
 endfunction
@@ -141,8 +137,23 @@ def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>):
 			else
 				src_items = matchfuzzy(matches.items, base, {key: 'word'})
 			endif
+		elseif source_name == 'omni'
+			if !!base
+				src_items = filter(matches.items, (_, v) => v.word =~# '^' .. escape(base, '\.$*~'))
+			else
+				src_items = matches.items
+			endif
+			# 候補最後とカーソル次の文字が同じ引用符なら候補最後の引用符を取り除く
+			var c: string = getline('.')[col('.') - 1]
+			if c ==# "'" || c ==# '"'
+				for v in src_items
+					if v.word[-1] ==# c
+						v.word = v.word[0 : -2]
+					endif
+				endfor
+			endif
 		else
-			src_items = filter(matches.items, (key, val) => val.word =~# '^' .. escape(base, '\.$*~'))
+			src_items = filter(matches.items, (_, v) => v.word =~# '^' .. escape(base, '\.$*~'))
 		endif
 		for item in src_items
 			item.priority = priority
