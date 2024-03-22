@@ -100,10 +100,11 @@ function set_asyncomplete#main() abort
 				\ 'allowlist': ['*']
 				\ }))
 	" }}}
-	" " ~/.vim/pack/my-plug/opt/asyncomplete-html-class {{{
-	" packadd asyncomplete-html-class
-	" call asyncomplete#register_source(asyncomplete#sources#html_class#GetSourceOptions({'priority': 12}))
-	" " }}}
+	" ~/.vim/pack/my-plug/opt/asyncomplete-html {{{
+	packadd asyncomplete-html
+	call asyncomplete#register_source(asyncomplete#sources#html_id#GetSourceOptions({'priority': 12}))
+	call asyncomplete#register_source(asyncomplete#sources#html_url#GetSourceOptions({'priority': 12}))
+	" }}}
 	" 2}}}
 	let g:asyncomplete_preprocessor = [function('s:asyncomplete_preprocessor')]
 endfunction
@@ -129,7 +130,7 @@ def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>):
 	enddef
 	for [source_name, matches] in items(a_matches)
 		priority = get(asyncomplete#get_source_info(source_name), 'priority', 0)
-		if source_name ==# 'spell'
+		if source_name ==# 'spell' || source_name ==# 'html-url'
 			src_items = matches.items
 		elseif source_name ==# 'mail'
 			src_items = FilterSpell(matches.items)
