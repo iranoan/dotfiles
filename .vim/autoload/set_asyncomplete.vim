@@ -65,10 +65,13 @@ function set_asyncomplete#main() abort
 				\ 'name': 'file',
 				\ 'priority': 5,
 				\ 'allowlist': ['*'],
-				\ 'blocklist': ['notmuch-draft'],
+				\ 'blocklist': ['notmuch-draft', 'html', 'xhtml'],
 				\ 'completor': function('asyncomplete#sources#file#completor')
 				\ }))
-	" }}}
+			" 補完の開始位置が変えられてしまう場合が有る lsp のファイル名補完や html_url
+			" <link rel="stylesheet" type="text/css" href="../../public_html/iranoan/default.css">
+			" の href などで
+			" }}}
 	" buffer https://github.com/prabirshrestha/asyncomplete-buffer.vim {{{
 	packadd asyncomplete-buffer.vim
 	call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
