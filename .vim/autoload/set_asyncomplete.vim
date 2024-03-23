@@ -48,6 +48,7 @@ function set_asyncomplete#main() abort
 	packadd asyncomplete-omni.vim
 	call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options(#{
 				\ name: 'omni',
+				\ filter: function('FilterOmni'),
 				\ priority: 11,
 				\ allowlist: ['*'],
 				\ blocklist: ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'css', 'tex', 'sh', 'go','notmuch-draft'],
@@ -65,12 +66,9 @@ function set_asyncomplete#main() abort
 				\ name: 'file',
 				\ priority: 5,
 				\ allowlist: ['*'],
-				\ blocklist: ['notmuch-draft', 'html', 'xhtml'],
+				\ blocklist: ['notmuch-draft'],
 				\ completor: function('asyncomplete#sources#file#completor')
 				\ }))
-			" 補完の開始位置が変えられてしまう場合が有る lsp のファイル名補完や html_url
-			" <link rel="stylesheet" type="text/css" href="../../public_html/iranoan/default.css">
-			" の href などで
 			" }}}
 	" buffer https://github.com/prabirshrestha/asyncomplete-buffer.vim {{{
 	packadd asyncomplete-buffer.vim
@@ -176,7 +174,6 @@ def s:asyncomplete_preprocessor(a_options: dict<any>, a_matches: dict<dict<any>>
 	options.startcol = min(startcols)
 	asyncomplete#preprocess_complete(options, l_items)
 enddef
-defcompile
 
 def FilterMail(org: dict<any>, col: number, base: string): list<any>
 	var matches_org: list<dict<any>> = org.items
@@ -191,6 +188,36 @@ def FilterMail(org: dict<any>, col: number, base: string): list<any>
 			if base !~# '^\s*$' && m.word =~? '^' .. base
 				add(matches, m)
 			endif
+		endif
+	endfor
+	return [matches, [col]]
+enddef
+
+def FilterOmni(org: dict<any>, col: number, base: string): list<any>
+	var matches: list<dict<any>> = org.items
+	var priority: number = get(asyncomplete#get_source_info('omni'), 'priority', 5)
+
+	# 候補候補とカーソル前の文字が同じ引用符もしくは#なら候補前の引用符/#を取り除く
+	# 候補最後とカーソル次の文字が同じ引用符なら候補最後の引用符を取り除く
+	var c_beg: string = getline('.')[col('.') - len(base) - 2]
+	var c_end: string = getline('.')[col('.') - 1]
+	var quot_beg: bool = c_beg ==# "'" || c_beg ==# '"' || c_beg ==# '#'
+	var quot_end: bool = c_end ==# "'" || c_end ==# '"'
+	var same_beg: bool
+	var same_end: bool
+
+	for m in matches
+		m.priority = priority
+		same_beg = m.word[0] ==# c_beg
+		same_end = m.word[len(m.word) - 1] ==# c_end
+		if quot_beg && same_beg
+			if quot_end && same_end
+				m.word = m.word[1 : -2]
+			else
+				m.word = m.word[1 : ]
+			endif
+		elseif quot_end && same_end
+			m.word = m.word[0 : -2]
 		endif
 	endfor
 	return [matches, [col]]
