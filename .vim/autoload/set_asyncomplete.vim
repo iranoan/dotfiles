@@ -46,27 +46,27 @@ function set_asyncomplete#main() abort
 	" LSP との連携する asyncomplete-lsp.vim は vim-lsp 側で行う ← InsertEnter のタイミングではうまく動作しない
 	" omni-function https://github.com/yami-beta/asyncomplete-omni.vim {{{
 	packadd asyncomplete-omni.vim
-	call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options({
-				\ 'name': 'omni',
-				\ 'priority': 11,
-				\ 'allowlist': ['*'],
-				\ 'blocklist': ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'css', 'tex', 'sh', 'go','notmuch-draft'],
-				\ 'completor': function('asyncomplete#sources#omni#completor'),
-				\ 'config': {
-					\   'show_source_kind': 1
-					\ }
+	call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options(#{
+				\ name: 'omni',
+				\ priority: 11,
+				\ allowlist: ['*'],
+				\ blocklist: ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'css', 'tex', 'sh', 'go','notmuch-draft'],
+				\ completor: function('asyncomplete#sources#omni#completor'),
+				\ config: #{
+				\ 	show_source_kind: 1
+				\ }
 				\ }))
 				" \ 'blocklist': ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'html', 'css', 'tex', 'sh', 'go','notmuch-draft'],
 				" LSP を優先させたいので、ブロックしているが、HTML も含めると class/id 名の補完や inoremap <buffer> </ </<C-x><C-o> が効かなくなる
 	" }}}
 	" path https://github.com/prabirshrestha/asyncomplete-file.vim {{{
 	packadd asyncomplete-file.vim
-	call asyncomplete#register_source(asyncomplete#sources#file#get_source_options({
-				\ 'name': 'file',
-				\ 'priority': 5,
-				\ 'allowlist': ['*'],
-				\ 'blocklist': ['notmuch-draft', 'html', 'xhtml'],
-				\ 'completor': function('asyncomplete#sources#file#completor')
+	call asyncomplete#register_source(asyncomplete#sources#file#get_source_options(#{
+				\ name: 'file',
+				\ priority: 5,
+				\ allowlist: ['*'],
+				\ blocklist: ['notmuch-draft', 'html', 'xhtml'],
+				\ completor: function('asyncomplete#sources#file#completor')
 				\ }))
 			" 補完の開始位置が変えられてしまう場合が有る lsp のファイル名補完や html_url
 			" <link rel="stylesheet" type="text/css" href="../../public_html/iranoan/default.css">
@@ -74,97 +74,124 @@ function set_asyncomplete#main() abort
 			" }}}
 	" buffer https://github.com/prabirshrestha/asyncomplete-buffer.vim {{{
 	packadd asyncomplete-buffer.vim
-	call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options({
-				\ 'name': 'buffer',
-				\ 'priority': 1,
-				\ 'allowlist': ['*'],
-				\ 'blocklist': ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'css', 'tex', 'sh', 'go','notmuch-draft'],
-				\ 'completor': function('asyncomplete#sources#buffer#completor'),
-				\ 'config': {
-					\    'max_buffer_size': 500000
-					\  }
-					\ }))
+	call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options(#{
+				\ name: 'buffer',
+				\ priority: 1,
+				\ allowlist: ['*'],
+				\ blocklist: ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'css', 'tex', 'sh', 'go','notmuch-draft'],
+				\ completor: function('asyncomplete#sources#buffer#completor'),
+				\ config: #{
+				\ 	max_buffer_size: 500000
+				\ }
+				\ }))
 				" とりあえず LSP がある filetype は blocklist にしている
 	" }}}
 	" mail ~/.vim/pack/my-plug/opt/asyncomplete-mail/ {{{
 	packadd asyncomplete-mail
-	call asyncomplete#register_source(asyncomplete#sources#mail#get_source_options({
-				\ 'priority': 5,
-				\ 'allowlist': ['notmuch-draft']
+	call asyncomplete#register_source(asyncomplete#sources#mail#get_source_options(#{
+				\ filter: function('FilterMail'),
+				\ priority: 5,
+				\ allowlist: ['notmuch-draft']
 				\ }))
 	" }}}
 	" spell ~/.vim/pack/my-plug/opt/asyncomplete-spell/ {{{
 	packadd asyncomplete-spell
-	call asyncomplete#register_source(asyncomplete#sources#spell#get_source_options({
-				\ 'priority': 4,
-				\ 'allowlist': ['*']
+	call asyncomplete#register_source(asyncomplete#sources#spell#get_source_options(#{
+				\ priority: 4,
+				\ allowlist: ['*']
 				\ }))
 	" }}}
 	" ~/.vim/pack/my-plug/opt/asyncomplete-html {{{
 	packadd asyncomplete-html
-	call asyncomplete#register_source(asyncomplete#sources#html_id#GetSourceOptions({'priority': 12}))
-	call asyncomplete#register_source(asyncomplete#sources#html_url#GetSourceOptions({'priority': 12}))
+	call asyncomplete#register_source(asyncomplete#sources#html_id#GetSourceOptions(#{priority: 12}))
+	call asyncomplete#register_source(asyncomplete#sources#html_url#GetSourceOptions(#{priority: 12}))
 	" }}}
 	" 2}}}
 	let g:asyncomplete_preprocessor = [function('s:asyncomplete_preprocessor')]
 endfunction
 
-def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>): void
-	var items: list<dict<any>>
-	var src_items: list<dict<any>>
-	var base = options.base
-	var priority: number
-	def FilterSpell(ls: list<dict<any>>): list<dict<any>>
-		if empty(ls)
-			return []
-		endif
-		# var menu = ls[0].menu
-		if ls[0].menu ==# '[Fcc]'
-			# return filter(ls, (key, val) => val.word =~? '^\c' .. escape(base, '\.$*~'))
-			if base =~# '^\s*$'
-				return ls
+def s:asyncomplete_preprocessor(a_options: dict<any>, a_matches: dict<dict<any>>): void
+	var base: string
+	def StripPairCharacters(org: dict<any>): dict<any>
+		var item: dict<any> = org
+		var lhs: string
+		var rhs: string
+		var str: string
+		if has_key({'"':  '"', '''':  ''''}, base[0])
+			[lhs, rhs, str] = [base[0], {'"':  '"', '''':  ''''}[base[0]], item.word]
+			if len(str) > 1 && str[0] ==# lhs && str[-1 : ] ==# rhs
+				item = extend({}, item)
+				item.word = str[ : -2]
 			endif
-			return matchfuzzy(ls, base, {key: 'word'} )
 		endif
-		return ls
+		return item
 	enddef
+
+	var l_items: list<dict<any>>
+	var startcols: list<number>
+	var has_matchfuzzypos: bool = exists('*matchfuzzypos')
+	var options: dict<any> = a_options
+	var sources: dict<any>
+	var result: list<any>
+	var startcol: number
+	var priority: number
 	for [source_name, matches] in items(a_matches)
-		priority = get(asyncomplete#get_source_info(source_name), 'priority', 0)
-		if source_name ==# 'spell' || source_name ==# 'html-url'
-			src_items = matches.items
-		elseif source_name ==# 'mail'
-			src_items = FilterSpell(matches.items)
-		elseif source_name =~# '^asyncomplete_lsp_' # LSP は server ごとで異なる
+		sources = asyncomplete#get_source_info(source_name)
+		startcol = matches.startcol
+		base = a_options.typed[startcol - 1 : ]
+		if source_name =~# '^asyncomplete_lsp_' # LSP は server ごとで異なる
 			priority = 6
-			if base =~# '^\s*$'
-				src_items = matches.items
+		else
+			priority = get(asyncomplete#get_source_info(source_name), 'priority', 0)
+		endif
+		if has_key(sources, 'filter')
+			result = sources.filter(matches, startcol, base)
+			l_items += result[0]
+			startcols += result[1]
+		else
+			if empty(base)
+				for item in matches.items
+					item.priority = priority
+					add(l_items, StripPairCharacters(item))
+					startcols += [startcol]
+				endfor
+			elseif has_matchfuzzypos && g:asyncomplete_matchfuzzy
+				for item in matchfuzzypos(matches.items, base, {key: 'word'})[0]
+					item.priority = priority
+					add(l_items, StripPairCharacters(item))
+					startcols += [startcol]
+				endfor
 			else
-				src_items = matchfuzzy(matches.items, base, {key: 'word'})
-			endif
-		elseif source_name == 'omni'
-			if !!base
-				src_items = filter(matches.items, (_, v) => v.word =~# '^' .. escape(base, '\.$*~'))
-			else
-				src_items = matches.items
-			endif
-			# 候補最後とカーソル次の文字が同じ引用符なら候補最後の引用符を取り除く
-			var c: string = getline('.')[col('.') - 1]
-			if c ==# "'" || c ==# '"'
-				for v in src_items
-					if v.word[-1] ==# c
-						v.word = v.word[0 : -2]
+				for item in matches.items
+					if stridx(item.word, base) == 0
+						item.priority = priority
+						add(l_items, StripPairCharacters(item))
+						startcols += [startcol]
 					endif
 				endfor
 			endif
-		else
-			src_items = filter(matches.items, (_, v) => v.word =~# '^' .. escape(base, '\.$*~'))
 		endif
-		for item in src_items
-			item.priority = priority
-			add(items, item)
-		endfor
 	endfor
-	items = sort(items, (x, y) => y.priority - x.priority)
-	asyncomplete#preprocess_complete(options, items)
-	return
+	l_items = sort(l_items, (x, y) => y.priority - x.priority)
+	options.startcol = min(startcols)
+	asyncomplete#preprocess_complete(options, l_items)
+enddef
+defcompile
+
+def FilterMail(org: dict<any>, col: number, base: string): list<any>
+	var matches_org: list<dict<any>> = org.items
+	var matches: list<dict<any>>
+	var priority: number = get(asyncomplete#get_source_info('mail'), 'priority', 5)
+
+	for m in matches_org
+		m.priority = priority
+		if m.menu !=# '[Fcc]'
+			add(matches, m)
+		else
+			if base !~# '^\s*$' && m.word =~? '^' .. base
+				add(matches, m)
+			endif
+		endif
+	endfor
+	return [matches, [col]]
 enddef
