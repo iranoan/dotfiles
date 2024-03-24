@@ -70,7 +70,7 @@ open_img(){
 	geometry=$( get_geometry )
 	if command -v fdfind > /dev/null ; then
 		cmd0="fdfind --follow --base-directory "
-		cmd1=" --absolute-path --ignore-file ~/.fdignore \
+		cmd1=" --absolute-path --ignore-file ~/.config/fd/ignore \
 			-e bmp -e cgm -e cgm -e cr2 -e cr2 -e dl -e dl -e emf -e eps -e gif -e ico -e ico -e j2c -e j2c -e j2k -e j2k -e jp2 -e jp2 -e jpeg -e jpeg -e jpf -e jpg -e jpx -e jpx -e mng -e mng -e nef -e nef -e pbm -e pbm -e pcx -e pcx -e pgm -e pgm -e png -e png -e ppm -e ppm -e svg -e svg -e svgz -e svgz -e tga -e tga -e tif -e tif -e tiff -e tiff -e webp -e webp -e xbm -e xbm -e xcf -e xcf -e xpm -e xpm -e xwd -e xwd -e yuv"
 	else
 		cmd0="find -L "
