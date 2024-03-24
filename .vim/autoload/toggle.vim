@@ -2,9 +2,14 @@ vim9script
 # 設定を ON/OFF トグルの関数群
 scriptencoding utf-8
 
-var breakat: string = &breakat
+var breakat: string = &breakat == '' ? ' ^I!@*-+;:,./?' : &breakat
 export def Breakat()
-	&breakat = &breakat == '' ? breakat : ''
+	if &breakat == ''
+		&breakat = breakat
+	else
+		breakat = &breakat
+		&breakat = ''
+	endif
 enddef
 
 def GuiOptionM(): void
