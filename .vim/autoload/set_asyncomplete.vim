@@ -2,7 +2,7 @@ scriptencoding utf-8
 scriptversion 4
 
 function set_asyncomplete#main() abort
-	packadd asyncomplete.vim
+	" packadd asyncomplete.vim " start に置かないと、最初のバッファの最初の入力で補完が効かない
 	" let g:asyncomplete_auto_completeopt = 1 " ←デフォルト
 	" call asyncomplete#force_refresh()
 	" let g:asyncomplete_min_chars = 1
@@ -101,7 +101,7 @@ function set_asyncomplete#main() abort
 	" }}}
 	" 2}}}
 	let g:asyncomplete_preprocessor = [function('s:asyncomplete_preprocessor')]
-	call asyncomplete#enable_for_buffer() " 最初に読み込んだバッファで有効に
+	" call asyncomplete#enable_for_buffer() " 最初に読み込んだバッファで働かないケースが有る
 endfunction
 
 def s:asyncomplete_preprocessor(a_options: dict<any>, a_matches: dict<dict<any>>): void
