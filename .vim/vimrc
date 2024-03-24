@@ -377,7 +377,7 @@ $LESS = substitute($LESS, '\(['' " =]\)-\(-quit-if-one-screen\|F\)\>', '\1', 'g'
 # ↑alias は外部フィルタ無効+選択状態でうまく処理してくれない
 set textwidth=0                                # 自動改行させない
 set shellslash                                 # Windowsでもパス区切りにスラッシュを使える
-set diffopt=filler,context:2,iwhite,vertical,internal,algorithm:histogram,indent-heuristic # 差分表示オプション
+set diffopt=filler,context:2,iwhite,vertical,closeoff,internal,algorithm:histogram,indent-heuristic # 差分表示オプション
 set path+=~/bin,~/Templates,
 set conceallevel=0                             # 個々のファイルタイプごとで、文字を省略したり置き換える機能は使わない
 if has('path_extra')                           # tags ファイルは $HOME まで辿る :help file-searching
