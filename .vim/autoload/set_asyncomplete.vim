@@ -2,12 +2,7 @@ scriptencoding utf-8
 scriptversion 4
 
 function set_asyncomplete#main() abort
-	" packadd asyncomplete.vim " ←asyncomplete.vim 自体は ~/.vim/pack/*/start に置かないと最初に読み込んだバッファで働かないケースが有る
-	" 具体的には notmuch-draft
-	" バッファを開き終わった後に
-	"     call asyncomplete#enable_for_buffer()
-	" をすれば働くが、この関数の最後に追記してもダメだった
-	" → FileType notmuch-draft をトリガーも加える
+	packadd asyncomplete.vim
 	" let g:asyncomplete_auto_completeopt = 1 " ←デフォルト
 	" call asyncomplete#force_refresh()
 	" let g:asyncomplete_min_chars = 1
@@ -44,7 +39,7 @@ function set_asyncomplete#main() abort
 		" }}}
 	" }}}
 	" LSP との連携する asyncomplete-lsp.vim は vim-lsp 側で行う ← InsertEnter のタイミングではうまく動作しない
-	" omni-function https://github.com/yami-beta/asyncomplete-omni.vim {{{
+	" omni https://github.com/yami-beta/asyncomplete-omni.vim {{{
 	packadd asyncomplete-omni.vim
 	call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options(#{
 				\ name: 'omni',
@@ -99,13 +94,14 @@ function set_asyncomplete#main() abort
 				\ allowlist: ['*']
 				\ }))
 	" }}}
-	" ~/.vim/pack/my-plug/opt/asyncomplete-html {{{
+	" html ~/.vim/pack/my-plug/opt/asyncomplete-html {{{
 	packadd asyncomplete-html
 	call asyncomplete#register_source(asyncomplete#sources#html_id#GetSourceOptions(#{priority: 100}))
 	call asyncomplete#register_source(asyncomplete#sources#html_url#GetSourceOptions(#{priority: 100}))
 	" }}}
 	" 2}}}
 	let g:asyncomplete_preprocessor = [function('s:asyncomplete_preprocessor')]
+	call asyncomplete#enable_for_buffer() " 最初に読み込んだバッファで有効に
 endfunction
 
 def s:asyncomplete_preprocessor(a_options: dict<any>, a_matches: dict<dict<any>>): void

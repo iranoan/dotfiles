@@ -205,19 +205,19 @@ augroup loadNotmuchPy
 				| augroup! loadNotmuchPy
 				| delfunction set_notmuchpy#main
 augroup END
-augroup NotmuchDraft
-	autocmd!
-	autocmd FileType notmuch-draft
-				\ if !manage_pack#IsInstalled('asyncomplete-omni.vim')
-				| 	set_asyncomplete#main()
-				| 	autocmd! loadasyncomplete
-				| 	augroup! loadasyncomplete
-				| 	delfunction set_asyncomplete#main
-				| endif
-				| call asyncomplete#enable_for_buffer()
-				| autocmd! NotmuchDraft
-				| augroup! NotmuchDraft
-augroup END
+# augroup NotmuchDraft # バッファを開き終わった後に asyncomplete が効かない
+# 	autocmd!
+# 	autocmd FileType notmuch-draft
+# 				\ if !manage_pack#IsInstalled('asyncomplete.vim')
+# 				| 	set_asyncomplete#main()
+# 				| 	autocmd! loadasyncomplete
+# 				| 	augroup! loadasyncomplete
+# 				| 	delfunction set_asyncomplete#main
+# 				| endif
+# 				| call asyncomplete#enable_for_buffer()
+# 				| autocmd! NotmuchDraft
+# 				| augroup! NotmuchDraft
+# augroup END
 
 # 各種言語の構文チェック https://github.com/dense-analysis/ale {{{1
 augroup loadALE
