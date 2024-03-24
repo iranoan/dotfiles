@@ -25,7 +25,7 @@ function set_asyncomplete#main() abort
 		" asyncomplete.vim で snippet と LSP の連携 https://github.com/hrsh7th/vim-vsnip-integ {{{
 			packadd vim-vsnip-integ
 			call vsnip_integ#integration#attach()
-			call asyncomplete#register_source(extend(asyncomplete#get_source_info('vsnip'), #{priority: 10}))
+			call asyncomplete#register_source(extend(asyncomplete#get_source_info('vsnip'), #{priority: 80}))
 		" }}}
 		" snippet のファイル https://github.com/rafamadriz/friendly-snippets {{{
 			packadd friendly-snippets
@@ -49,7 +49,7 @@ function set_asyncomplete#main() abort
 	call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options(#{
 				\ name: 'omni',
 				\ filter: function('FilterOmni'),
-				\ priority: 11,
+				\ priority: 60,
 				\ allowlist: ['*'],
 				\ blocklist: ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'css', 'tex', 'sh', 'go','notmuch-draft'],
 				\ completor: function('asyncomplete#sources#omni#completor'),
@@ -64,7 +64,7 @@ function set_asyncomplete#main() abort
 	packadd asyncomplete-file.vim
 	call asyncomplete#register_source(asyncomplete#sources#file#get_source_options(#{
 				\ name: 'file',
-				\ priority: 5,
+				\ priority: 50,
 				\ allowlist: ['*'],
 				\ blocklist: ['notmuch-draft'],
 				\ completor: function('asyncomplete#sources#file#completor')
@@ -74,7 +74,7 @@ function set_asyncomplete#main() abort
 	packadd asyncomplete-buffer.vim
 	call asyncomplete#register_source(asyncomplete#sources#buffer#get_source_options(#{
 				\ name: 'buffer',
-				\ priority: 1,
+				\ priority: 30,
 				\ allowlist: ['*'],
 				\ blocklist: ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'css', 'tex', 'sh', 'go','notmuch-draft'],
 				\ completor: function('asyncomplete#sources#buffer#completor'),
@@ -88,21 +88,21 @@ function set_asyncomplete#main() abort
 	packadd asyncomplete-mail
 	call asyncomplete#register_source(asyncomplete#sources#mail#get_source_options(#{
 				\ filter: function('FilterMail'),
-				\ priority: 5,
+				\ priority: 100,
 				\ allowlist: ['notmuch-draft']
 				\ }))
 	" }}}
 	" spell ~/.vim/pack/my-plug/opt/asyncomplete-spell/ {{{
 	packadd asyncomplete-spell
 	call asyncomplete#register_source(asyncomplete#sources#spell#get_source_options(#{
-				\ priority: 4,
+				\ priority: 20,
 				\ allowlist: ['*']
 				\ }))
 	" }}}
 	" ~/.vim/pack/my-plug/opt/asyncomplete-html {{{
 	packadd asyncomplete-html
-	call asyncomplete#register_source(asyncomplete#sources#html_id#GetSourceOptions(#{priority: 12}))
-	call asyncomplete#register_source(asyncomplete#sources#html_url#GetSourceOptions(#{priority: 12}))
+	call asyncomplete#register_source(asyncomplete#sources#html_id#GetSourceOptions(#{priority: 100}))
+	call asyncomplete#register_source(asyncomplete#sources#html_url#GetSourceOptions(#{priority: 100}))
 	" }}}
 	" 2}}}
 	let g:asyncomplete_preprocessor = [function('s:asyncomplete_preprocessor')]
@@ -133,36 +133,58 @@ def s:asyncomplete_preprocessor(a_options: dict<any>, a_matches: dict<dict<any>>
 	var result: list<any>
 	var startcol: number
 	var priority: number
+	var matche_score: list<number>
 	for [source_name, matches] in items(a_matches)
 		sources = asyncomplete#get_source_info(source_name)
 		startcol = matches.startcol
-		base = a_options.typed[startcol - 1 : ]
+		base = options.typed[startcol - 1 : ]
 		if source_name =~# '^asyncomplete_lsp_' # LSP は server ごとで異なる
-			priority = 6
+			priority = 70
 		else
-			priority = get(asyncomplete#get_source_info(source_name), 'priority', 0)
+			priority = get(asyncomplete#get_source_info(source_name), 'priority', 50)
 		endif
 		if has_key(sources, 'filter')
 			result = sources.filter(matches, startcol, base)
-			l_items += result[0]
+			for m in result[0]
+				m.priority = priority
+				if !base
+					m.matche_score = 50
+				else
+					matche_score = matchfuzzypos([m.word], base)[2]
+					if !matche_score
+						m.matche_score = 50
+					else
+						m.matche_score = matche_score[0]
+					endif
+				endif
+				add(l_items, m)
+			endfor
 			startcols += result[1]
 		else
 			if empty(base)
 				for item in matches.items
 					item.priority = priority
+					item.matche_score = 50
 					add(l_items, StripPairCharacters(item))
 					startcols += [startcol]
 				endfor
 			elseif has_matchfuzzypos && g:asyncomplete_matchfuzzy
-				for item in matchfuzzypos(matches.items, base, {key: 'word'})[0]
-					item.priority = priority
-					add(l_items, StripPairCharacters(item))
-					startcols += [startcol]
+				for m in [matchfuzzypos(matches.items, base, {key: 'word'})]
+					if !m[0]
+						continue
+					endif
+					for item in m[0]
+						item.priority = priority
+						item.matche_score = m[2][0]
+						add(l_items, StripPairCharacters(item))
+						startcols += [startcol]
+					endfor
 				endfor
 			else
 				for item in matches.items
 					if stridx(item.word, base) == 0
 						item.priority = priority
+						item.matche_score = 50
 						add(l_items, StripPairCharacters(item))
 						startcols += [startcol]
 					endif
@@ -170,7 +192,8 @@ def s:asyncomplete_preprocessor(a_options: dict<any>, a_matches: dict<dict<any>>
 			endif
 		endif
 	endfor
-	l_items = sort(l_items, (x, y) => y.priority - x.priority)
+	# l_items = sort(l_items, (x, y) => x.matche_score > y.matche_score ? -1 : ( x.matche_score < y.matche_score ? 1 : y.priority - x.priority ))
+	l_items = sort(l_items, (x, y) => (y.priority + y.matche_score) - (x.priority + x.matche_score))
 	options.startcol = min(startcols)
 	asyncomplete#preprocess_complete(options, l_items)
 enddef
@@ -178,10 +201,9 @@ enddef
 def FilterMail(org: dict<any>, col: number, base: string): list<any>
 	var matches_org: list<dict<any>> = org.items
 	var matches: list<dict<any>>
-	var priority: number = get(asyncomplete#get_source_info('mail'), 'priority', 5)
+	var matche_score: list<number>
 
 	for m in matches_org
-		m.priority = priority
 		if m.menu !=# '[Fcc]'
 			add(matches, m)
 		else
@@ -195,7 +217,7 @@ enddef
 
 def FilterOmni(org: dict<any>, col: number, base: string): list<any>
 	var matches: list<dict<any>> = org.items
-	var priority: number = get(asyncomplete#get_source_info('omni'), 'priority', 5)
+	var matche_score: list<number>
 
 	# 候補候補とカーソル前の文字が同じ引用符もしくは#なら候補前の引用符/#を取り除く
 	# 候補最後とカーソル次の文字が同じ引用符なら候補最後の引用符を取り除く
@@ -203,20 +225,17 @@ def FilterOmni(org: dict<any>, col: number, base: string): list<any>
 	var c_end: string = getline('.')[col('.') - 1]
 	var quot_beg: bool = c_beg ==# "'" || c_beg ==# '"' || c_beg ==# '#'
 	var quot_end: bool = c_end ==# "'" || c_end ==# '"'
-	var same_beg: bool
-	var same_end: bool
 
 	for m in matches
-		m.priority = priority
-		same_beg = m.word[0] ==# c_beg
-		same_end = m.word[len(m.word) - 1] ==# c_end
-		if quot_beg && same_beg
-			if quot_end && same_end
+		quot_beg = quot_beg && ( m.word[0] ==# c_beg )
+		quot_end = quot_end && ( m.word[len(m.word) - 1] ==# c_end )
+		if quot_beg
+			if quot_end
 				m.word = m.word[1 : -2]
 			else
 				m.word = m.word[1 : ]
 			endif
-		elseif quot_end && same_end
+		elseif quot_end
 			m.word = m.word[0 : -2]
 		endif
 	endfor
