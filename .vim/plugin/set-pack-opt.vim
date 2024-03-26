@@ -587,10 +587,10 @@ nmap cs9 cs)
 nmap cs@ cs`
 
 # getmail syntax https://github.com/vim-scripts/getmail.vim {{{1
-augroup Gatmail
-	autocmd!
-	autocmd BufRead ~/.getmail/*,~/.config/getmail/* set_getmail_vim#main()
-augroup END
+# augroup Gatmail
+# 	autocmd!
+# 	autocmd BufRead ~/.getmail/*,~/.config/getmail/* set_getmail_vim#main()
+# augroup END
 
 # dog と cat の入れ替えなどサイクリックに置換する関数などの定義 ~/.vim/pack/my-plug/opt/replace-cyclic {{{1
 augroup loadReplaceCyclic
