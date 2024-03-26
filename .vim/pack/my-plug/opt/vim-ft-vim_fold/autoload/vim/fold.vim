@@ -37,8 +37,10 @@ def Calculate(bufnr: number): dict<any>
 	var endl: number = line('$')
 	var open_marker: string
 	var close_marker: string
-	var om_pos: number
-	var cm_pos: number
+	var o_pos: number
+	var c_pos: number
+	var oe_pos: number
+	var ce_pos: number
 	var om_len: number
 	var cm_len: number
 	var end_marker: string
@@ -46,14 +48,14 @@ def Calculate(bufnr: number): dict<any>
 	var col: number
 	var marker_lv: number
 	var s_marker_lv: string
+	var synid: string
 
-	var open_pat: string = '^\s*:\?\s*\%(\(export\s\+\)\?fu\%[nction][! \t]\|\(exe\%[cute]\s\+["'']\|execute(["'']\)\?aug\%[roup]\s\|if\>\|for\>\|wh\%[ile]\>\|\(export\s\+\)\?def\>\|try\>\)'
-	var close_pat: string = '^\s*:\?\s*\%(endf\%[unction]\>\|aug\%[roup]\s\+END\|endfo\%[r]\|endw\%[hile]\|enddef\|en\%[dif]\|endt\%[ry]\)\>'
+	var open_pat: string = '\<\%(\(export\s\+\)\?fu\%[nction][! \t]\|aug\%[roup]\>\|if\>\|for\>\|wh\%[ile]\>\|\(export\s\+\)\?def\>\|try\>\)'
+	var close_pat: string = '\<\%(endf\%[unction]\|aug\%[roup]\s\+END\|endfo\%[r]\|endw\%[hile]\|enddef\|en\%[dif]\|endt\%[ry]\)\>'
 
 	def PareBracket(): number # ペアで存在しない (), [], {}
 		var i: number
 		var no_match: number
-		var synid: string
 		var regex: string
 		for s in [ ['[', 'vimFuncBody'], ['(', 'Special'], ['{', 'Special'] ]
 			regex = '^\("\([^"]\|\"\)*"\|''\([^'']\|''''\)*''\|[^' .. s[0] .. '"'']\)*' .. s[0]
@@ -120,21 +122,21 @@ def Calculate(bufnr: number): dict<any>
 		# marker
 		col = 0
 		while true
-			om_pos = stridx(cur_line, open_marker, col)
-			cm_pos = stridx(cur_line, close_marker, col)
-			if om_pos >= 0
-				if synIDattr(synIDtrans(synID(lnum, om_pos, 1)), 'name') !=# 'Comment'
+			o_pos = stridx(cur_line, open_marker, col)
+			c_pos = stridx(cur_line, close_marker, col)
+			if o_pos >= 0
+				if synIDattr(synIDtrans(synID(lnum, o_pos, 1)), 'name') !=# 'Comment'
 					break
 				endif
-			elseif cm_pos >= 0
-				if synIDattr(synIDtrans(synID(lnum, cm_pos, 1)), 'name') !=# 'Comment'
+			elseif c_pos >= 0
+				if synIDattr(synIDtrans(synID(lnum, c_pos, 1)), 'name') !=# 'Comment'
 					break
 				endif
 			else
 				break
 			endif
-			is_open = (cm_pos < 0 || (0 <= om_pos && om_pos < cm_pos))
-			col = is_open ? om_pos + om_len : cm_pos + cm_len
+			is_open = (c_pos < 0 || (0 <= o_pos && o_pos < c_pos))
+			col = is_open ? o_pos + om_len : c_pos + cm_len
 			s_marker_lv = matchstr(cur_line, '\m^\d\+', col)
 			col += len(s_marker_lv)
 			marker_lv = str2nr(s_marker_lv)
@@ -159,11 +161,25 @@ def Calculate(bufnr: number): dict<any>
 			cur_lv = max([cur_lv + ch_lv, 0])
 			continue
 		endif
-		if cur_line =~# close_pat # if/end など対になる文字列
-			ch_lv -= 1
-		elseif cur_line =~# open_pat
-			ch_lv += 1
-		endif
+		col = 0
+		while true # if/end など対になる文字列
+			[o_pos, oe_pos] = matchstrpos(cur_line, open_pat, col)[1 : ]
+			[c_pos, ce_pos] = matchstrpos(cur_line, close_pat, col)[1 : ]
+			if o_pos < 0 && c_pos < 0
+				break
+			endif
+			if o_pos >= 0 && ( c_pos < 0 || o_pos < c_pos )
+				if synIDattr(synIDtrans(synID(lnum, o_pos + 1, 1)), 'name') ==# 'vimCommand'
+					ch_lv += 1
+				endif
+				col = oe_pos + 1
+			elseif c_pos >= 0
+				if synIDattr(synIDtrans(synID(lnum, c_pos + 1, 1)), 'name') ==# 'vimCommand'
+					ch_lv -= 1
+				endif
+				col = ce_pos + 1
+			endif
+		endwhile
 		ch_lv += PareBracket()
 
 		if ch_lv < 0
@@ -191,4 +207,3 @@ def Calculate(bufnr: number): dict<any>
 	endwhile
 	return levels
 enddef
-defcompile
