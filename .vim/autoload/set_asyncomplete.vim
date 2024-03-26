@@ -14,7 +14,6 @@ function set_asyncomplete#main() abort
 			let g:vsnip_filetypes = {}
 		endif
 		let g:vsnip_filetypes.xhtml = ['html']
-		" let g:vsnip_snippet_dirs = [expand('~/.vim/vsnip')]
 		let g:vsnip_snippet_dir = resolve(expand('~/.vim/vsnip'))
 		" vim-vsnip/plugin/vsnip.vim s:expand_or_jump() を置き換え←補完後挿入モードにならないケースが有る
 		" asyncomplete.vim で snippet と LSP の連携 https://github.com/hrsh7th/vim-vsnip-integ {{{
@@ -59,6 +58,7 @@ function set_asyncomplete#main() abort
 	packadd asyncomplete-file.vim
 	call asyncomplete#register_source(asyncomplete#sources#file#get_source_options(#{
 				\ name: 'file',
+				\ filter: function('FilterFile'),
 				\ priority: 50,
 				\ allowlist: ['*'],
 				\ blocklist: ['notmuch-draft'],
@@ -97,14 +97,13 @@ function set_asyncomplete#main() abort
 	" html ~/.vim/pack/my-plug/opt/asyncomplete-html {{{
 	packadd asyncomplete-html
 	call asyncomplete#register_source(asyncomplete#sources#html_id#GetSourceOptions(#{priority: 100}))
-	call asyncomplete#register_source(asyncomplete#sources#html_url#GetSourceOptions(#{priority: 100}))
 	" }}}
 	" 2}}}
 	let g:asyncomplete_preprocessor = [function('s:asyncomplete_preprocessor')]
 	" call asyncomplete#enable_for_buffer() " 最初に読み込んだバッファで働かないケースが有る
 endfunction
 
-def s:asyncomplete_preprocessor(a_options: dict<any>, a_matches: dict<dict<any>>): void
+def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>): void
 	var base: string
 	def StripPairCharacters(org: dict<any>): dict<any>
 		var item: dict<any> = org
@@ -124,7 +123,6 @@ def s:asyncomplete_preprocessor(a_options: dict<any>, a_matches: dict<dict<any>>
 	var l_items: list<dict<any>>
 	var startcols: list<number>
 	var has_matchfuzzypos: bool = exists('*matchfuzzypos')
-	var options: dict<any> = a_options
 	var sources: dict<any>
 	var result: list<any>
 	var startcol: number
@@ -197,9 +195,8 @@ enddef
 def FilterMail(org: dict<any>, col: number, base: string): list<any>
 	var matches_org: list<dict<any>> = org.items
 	var matches: list<dict<any>>
-	var matche_score: list<number>
 
-	for m in matches_org
+	for m in matches_org # Fcc のみ fuzzy match を使わない
 		if m.menu !=# '[Fcc]'
 			add(matches, m)
 		else
@@ -213,7 +210,6 @@ enddef
 
 def FilterOmni(org: dict<any>, col: number, base: string): list<any>
 	var matches: list<dict<any>> = org.items
-	var matche_score: list<number>
 
 	# 候補候補とカーソル前の文字が同じ引用符もしくは#なら候補前の引用符/#を取り除く
 	# 候補最後とカーソル次の文字が同じ引用符なら候補最後の引用符を取り除く
@@ -236,4 +232,23 @@ def FilterOmni(org: dict<any>, col: number, base: string): list<any>
 		endif
 	endfor
 	return [matches, [col]]
+enddef
+
+def FilterFile(org: dict<any>, col: number, base: string): list<any>
+	var matches: list<dict<any>> = org.items
+	var dir: string = fnamemodify(base, ':h')
+	var cols: list<number>
+
+	if !org.items
+		return [[], [col]]
+	endif
+	for m in matches # path の先頭から変換対象だと、他のパス補完系のアドインと相性が悪い
+		if fnamemodify(m.word, ':h') =~# dir
+			m.word = fnamemodify(m.word, ':t')
+			add(cols, col + len(dir) + 1)
+		else
+			add(cols, col)
+		endif
+	endfor
+	return [matches, cols]
 enddef
