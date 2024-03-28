@@ -55,6 +55,7 @@ export def Highlight(): void
 	highlight SpellRare term=underline cterm=underline ctermfg=NONE ctermul=6 guifg=NONE guisp=#2aa198
 	highlight MatchParen term=bold,reverse cterm=bold,reverse gui=bold,reverse ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
 	execute 'highlight QuickFixLine term=NONE cterm=NONE gui=NONE ctermfg=NONE ctermbg=0 guifg=NONE guibg=' .. bg
+	execute 'highlight PmenuSel term=NONE cterm=NONE gui=NONE ctermfg=NONE ctermbg=0 guifg=NONE guibg=' .. bg
 	bg = execute('highlight Terminal', 'silent!')->substitute('[\r\n]', '', 'g')
 	if bg ==# '' || match(bg, '\<cleared\>') != -1 # Terminal 未定義は Normal
 		highlight link Terminal Normal
