@@ -353,8 +353,6 @@ set sidescroll=1                               # 横スクロールでカーソ�
 set linebreak                                  # wrap at 'breakat
 set breakat-=@*-+;:,. breakat+=)}>             # break point for linebreak (default " ^I!@*-+;:,./?" )→" ^I!?" になる (日本語は全角文字に空白が余分に表示されてしまう←helpに8bit文字のみとある)
 set helplang=ja,en                             # 日本語ヘルプを優先的に表示
-# スペル・チェック {{{1
-set spell spelllang+=cjk
 # gf などでファイルとして扱う文字 {{{1
 set isfname+=: isfname-=# isfname-==           # Maildir では : がフラグの前置文字 HTML では # は id+シェルスクリプトなどで = は代入
 # ファイルタイプ別設定 {{{1 ftplugin/ では設定できない分
@@ -393,6 +391,8 @@ set viminfo+=n~/.vim/viminfo                   # viminfo の保存先
 set history=500                                # コマンド履歴の保存数 (あまり大きくすると q: 等で時間がかかるようになる)
 # set runtimepath+=/usr/share/vim/addons,/usr/share/vim/vimfiles
 set runtimepath+=/usr/share/vim/addons
+set spell spelllang+=cjk                        # スペル・チェック
+set completeopt=menuone,noinsert,noselect,popup # 補完
 # 個人的なキー割り当て keymap キーマップ {{{1
 # 設定の切り替え {{{2
 nnoremap <silent><leader>cb <Cmd>call toggle#Breakat()<CR>
