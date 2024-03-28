@@ -241,13 +241,8 @@ def FilterFile(org: dict<any>, col: number, base: string): list<any>
 	if !matches
 		return []
 	endif
-	for m in matches # path の先頭から変換対象だと、他のパス補完系のアドインと相性が悪い
-		if fnamemodify(m.word, ':h') =~# dir
-			m.word = fnamemodify(m.word, ':t')
-			add(cols, col + len(dir) + 1)
-		else
-			add(cols, col)
-		endif
+	for m in matches
+		m.word = simplify(m.word)
 	endfor
 	return matches
 enddef
