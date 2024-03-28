@@ -145,6 +145,7 @@ def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>):
 		if has_key(sources, 'filter')
 			for m in matches.items
 				m.priority = priority
+				m.startcol = startcol
 				if !base
 					m.matche_score = 50
 				else
@@ -162,6 +163,7 @@ def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>):
 			if empty(base)
 				for item in matches.items
 					item.priority = priority
+					item.startcol = startcol
 					item.matche_score = 50
 					add(l_items, StripPairCharacters(item))
 				endfor
@@ -172,6 +174,7 @@ def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>):
 					endif
 					for item in m[0]
 						item.priority = priority
+						item.startcol = startcol
 						item.matche_score = m[2][0]
 						add(l_items, StripPairCharacters(item))
 					endfor
@@ -180,6 +183,7 @@ def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>):
 				for item in matches.items
 					if stridx(item.word, base) == 0
 						item.priority = priority
+						item.startcol = startcol
 						item.matche_score = 50
 						add(l_items, StripPairCharacters(item))
 					endif
@@ -187,9 +191,23 @@ def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>):
 			endif
 		endif
 	endfor
-	# l_items = sort(l_items, (x, y) => x.matche_score > y.matche_score ? -1 : ( x.matche_score < y.matche_score ? 1 : y.priority - x.priority ))
-	l_items = sort(l_items, (x, y) => (y.priority + y.matche_score) - (x.priority + x.matche_score))
+	sort(startcols)->uniq()
+	sort(l_items, (x, y) => (y.priority + y.matche_score) - (x.priority + x.matche_score))
 	options.startcol = min(startcols)
+	if len(startcols) > 1 # source によって補完開始位置が違う
+		map(l_items, (_, v) => ({
+			word: options.startcol == v.startcol ? v.word : options.typed[options.startcol - 1 : v.startcol - 2] .. v.word,
+			abbr: get(v, 'abbr', v.word),
+			menu: get(v, 'menu', ''),
+			info: get(v, 'info', ''),
+			kind: get(v, 'kind', ''),
+			icase: get(v, 'icase', 0),
+			equal: get(v, 'equal', 0),
+			dup: get(v, 'dup', 0),
+			empty: get(v, 'empty', 0),
+			user_data: get(v, 'user_data', '')
+		}))
+	endif
 	asyncomplete#preprocess_complete(options, l_items)
 enddef
 
