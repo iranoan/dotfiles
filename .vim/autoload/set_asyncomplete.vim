@@ -6,6 +6,7 @@ function set_asyncomplete#main() abort
 	" let g:asyncomplete_auto_completeopt = 1 " ←デフォルト
 	" call asyncomplete#force_refresh()
 	" let g:asyncomplete_min_chars = 1
+	let g:asyncomplete_auto_completeopt = 0
 	" 以下 plugin {{{2
 	" また 'allowlist': ['*'] を使うと、直ぐ消えてしまうケースが出てくる←vim のコメントで再現
 	" snippet https://github.com/hrsh7th/vim-vsnip {{{
