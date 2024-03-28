@@ -96,7 +96,10 @@ function set_asyncomplete#main() abort
 	" }}}
 	" html ~/.vim/pack/my-plug/opt/asyncomplete-html {{{
 	packadd asyncomplete-html
-	call asyncomplete#register_source(asyncomplete#sources#html_id#GetSourceOptions(#{priority: 100}))
+	call asyncomplete#register_source(asyncomplete#sources#html_id#GetSourceOptions(#{
+				\ filter: function('FilterFile'),
+				\ priority: 100
+				\ }))
 	" }}}
 	" 2}}}
 	let g:asyncomplete_preprocessor = [function('s:asyncomplete_preprocessor')]
