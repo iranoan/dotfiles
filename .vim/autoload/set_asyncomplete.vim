@@ -124,13 +124,16 @@ def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>):
 	var startcols: list<number>
 	var has_matchfuzzypos: bool = exists('*matchfuzzypos')
 	var sources: dict<any>
-	var result: list<any>
 	var startcol: number
 	var priority: number
 	var matche_score: list<number>
 	for [source_name, matches] in items(a_matches)
+		if !matches.items
+			continue
+		endif
 		sources = asyncomplete#get_source_info(source_name)
 		startcol = matches.startcol
+		startcols += [startcol]
 		base = options.typed[startcol - 1 : ]
 		if source_name =~# '^asyncomplete_lsp_' # LSP は server ごとで異なる
 			priority = 70
@@ -138,29 +141,27 @@ def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>):
 			priority = get(asyncomplete#get_source_info(source_name), 'priority', 50)
 		endif
 		if has_key(sources, 'filter')
-			result = sources.filter(matches, startcol, base)
-			for m in result[0]
+			for m in matches.items
 				m.priority = priority
 				if !base
 					m.matche_score = 50
 				else
 					matche_score = matchfuzzypos([m.word], base)[2]
 					if !matche_score
-						m.matche_score = 50
+						m.word = ''
+						m.matche_score = -100
 					else
 						m.matche_score = matche_score[0]
 					endif
 				endif
-				add(l_items, m)
 			endfor
-			startcols += result[1]
+			l_items += sources.filter(matches, startcol, base)
 		else
 			if empty(base)
 				for item in matches.items
 					item.priority = priority
 					item.matche_score = 50
 					add(l_items, StripPairCharacters(item))
-					startcols += [startcol]
 				endfor
 			elseif has_matchfuzzypos && g:asyncomplete_matchfuzzy
 				for m in [matchfuzzypos(matches.items, base, {key: 'word'})]
@@ -171,7 +172,6 @@ def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>):
 						item.priority = priority
 						item.matche_score = m[2][0]
 						add(l_items, StripPairCharacters(item))
-						startcols += [startcol]
 					endfor
 				endfor
 			else
@@ -180,7 +180,6 @@ def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>):
 						item.priority = priority
 						item.matche_score = 50
 						add(l_items, StripPairCharacters(item))
-						startcols += [startcol]
 					endif
 				endfor
 			endif
@@ -205,7 +204,7 @@ def FilterMail(org: dict<any>, col: number, base: string): list<any>
 			endif
 		endif
 	endfor
-	return [matches, [col]]
+	return matches
 enddef
 
 def FilterOmni(org: dict<any>, col: number, base: string): list<any>
@@ -231,16 +230,14 @@ def FilterOmni(org: dict<any>, col: number, base: string): list<any>
 			m.word = m.word[0 : -2]
 		endif
 	endfor
-	return [matches, [col]]
+	return matches
 enddef
 
 def FilterFile(org: dict<any>, col: number, base: string): list<any>
 	var matches: list<dict<any>> = org.items
-	var dir: string = fnamemodify(base, ':h')
-	var cols: list<number>
 
-	if !org.items
-		return [[], [col]]
+	if !matches
+		return []
 	endif
 	for m in matches # path の先頭から変換対象だと、他のパス補完系のアドインと相性が悪い
 		if fnamemodify(m.word, ':h') =~# dir
@@ -250,5 +247,5 @@ def FilterFile(org: dict<any>, col: number, base: string): list<any>
 			add(cols, col)
 		endif
 	endfor
-	return [matches, cols]
+	return matches
 enddef
