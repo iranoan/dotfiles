@@ -100,10 +100,12 @@ function set_asyncomplete#main() abort
 	" }}}
 	" 2}}}
 	let g:asyncomplete_preprocessor = [function('s:asyncomplete_preprocessor')]
-	" call asyncomplete#enable_for_buffer() " 最初に読み込んだバッファで働かないケースが有る
+	" call asyncomplete#enable_for_buffer() " asyncomplete.vim 自体の遅延読み込みこおろ見のために試みたがだめだった
 endfunction
 
 def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>): void
+	# sort by matchfuzzypos score+priority
+	# source によって補完開始位置が違う場合、補完文字列を調整する
 	var base: string
 	def StripPairCharacters(org: dict<any>): dict<any>
 		var item: dict<any> = org
