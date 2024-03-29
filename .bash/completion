@@ -6,7 +6,7 @@ _install_xspec()  # /usr/share/bash-completion/bash_completion
     local xspec=$1 cmd
     shift
     for cmd in "$@"; do
-        _xspecs[$cmd]=$xspec
+        _xspecs[${cmd}]=$xspec
     done
 }
 _install_xspec '!*.tex' latexmk tex2page.sh cut-slide-pdf.sh
@@ -74,3 +74,19 @@ _pip(){ # pip completion
 	fi
 }
 complete -F _pip pip3
+
+_fdfind(){ # fd/fdfind completion
+	local cur
+	cur=${COMP_WORDS[COMP_CWORD]}
+	commands=$(LANGUAGE=C fdfind --help 2> /dev/null |
+		grep -Ei -o '^\s{,6}--?[0-9a-z-]+(, --[0-9a-z-]+)?' --color=never |
+		awk -F'[,]' '{gsub(/ +/, "", $1); gsub(/ +/, "", $2); print $0}')
+	if [[ "$cur" == -* ]]; then
+		COMPREPLY=( $( compgen -o default -W "${commands}" -- "$cur" ) )
+	else
+		local IFS=$'\n'
+		compopt -o filenames
+		COMPREPLY=( $( compgen -d -- "$cur" ) )
+	fi
+}
+complete -F _fdfind fd fdfind
