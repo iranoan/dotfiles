@@ -38,7 +38,7 @@ function set_quickrun#main() abort
 	" }}}
 	"gnuplot 成功時は出力しない {{{
 	let g:quickrun_config.gnuplot = {
-				\ 'outputter/error/success' : 'null',
+				\ 'outputter/error/success' : 'quickfix',
 				\ 'command'                 : 'gnuplot.sh',
 				\ 'cmdopt'                  : '--persist',
 				\ 'exec'                    : ['%c %s']
