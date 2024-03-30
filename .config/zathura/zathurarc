@@ -40,6 +40,9 @@ map - zoom out
 #map <C-q> quit
 map [normal]     f toggle_fullscreen
 map [fullscreen] f toggle_fullscreen
+# 元の f は潰している(↑)ので、リンク移動を定義し直し [l] はスクロールで使っている
+map [normal]     a follow
+map [fullscreen] a follow
 map [normal]     x adjust_window best-fit
 map [fullscreen] x adjust_window best-fit
 # h は左スクロール
