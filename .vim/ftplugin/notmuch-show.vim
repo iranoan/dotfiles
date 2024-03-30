@@ -18,5 +18,9 @@ vim9script
 # に割り当てられているのが notmuch-show は Google 検索に割当し直し
 nnoremap <buffer><silent><Leader>s :SearchByGoogle<CR>
 xnoremap <buffer><silent><Leader>s :SearchByGoogle<CR>
+setlocal tabstop=8
+if &breakat !=# ''
+	toggle#Breakat()
+endif
 # :NoMatchParen " 対応するカッコの ON/OFF
 # 1}}}
