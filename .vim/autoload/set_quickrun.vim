@@ -40,9 +40,11 @@ function set_quickrun#main() abort
 	let g:quickrun_config.gnuplot = {
 				\ 'outputter/error/success' : 'quickfix',
 				\ 'command'                 : 'gnuplot.sh',
-				\ 'cmdopt'                  : '--persist',
 				\ 'exec'                    : ['%c %s']
 				\}
+				" --persist はシェル・スクリプト内でつけている
+				" \ 'exec'                    : ['%c %o %s']
+				" \ 'cmdopt'                  : '--persist',
 	" }}}
 	" HTML 使用しているスクリプトは元々エラー以外は何も出力しない {{{
 	let g:quickrun_config.html = {
