@@ -30,3 +30,7 @@ rmext(path)=strstrt(path, ".")==0 ? basename(path) : \
 	basename(substr(path,1,strstrlt(path, ".")-1))
 # path から拡張子に変換
 extname(path)=substr(path,strstrlt(path,".")+1,strlen(path))
+# 先頭が $HOME なら ~ に置き換える
+homepath(path)=(strstrt(path, "`echo $HOME`/")==1 ? \
+	sprintf("~/%s", path[strlen("`echo $HOME`/") + 1:strlen(path)]) : \
+	path)
