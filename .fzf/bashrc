@@ -1,9 +1,5 @@
 # Setup fzf
 # $FZF_DEFAULT_COMMAND, $FZF_DEFAULT_OPT はランチャーからの起動したアプリでも有効にするために ~/.xprofile で定義
-# ---------
-if [[ ! "$PATH" == */home/hiroyuki/.vim/pack/github/opt/fzf/bin* ]]; then
-  export PATH="${PATH:+${PATH}:}/home/hiroyuki/.vim/pack/github/opt/fzf/bin"
-fi
 
 # Auto-completion
 # ---------------
