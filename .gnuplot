@@ -34,3 +34,4 @@ extname(path)=substr(path,strstrlt(path,".")+1,strlen(path))
 homepath(path)=(strstrt(path, "`echo $HOME`/")==1 ? \
 	sprintf("~/%s", path[strlen("`echo $HOME`/") + 1:strlen(path)]) : \
 	path)
+fullpath(path)=(strstrt(substr(path, 0, 1), '/')==1 ? path : sprintf("%s/%s", system('pwd'), path))
