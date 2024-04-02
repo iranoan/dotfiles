@@ -25,8 +25,8 @@ map [fullscreen] j navigate next
 # map [fullscreen] n navigate next
 map [normal]     <BackSpace> navigate previous
 map [fullscreen] <BackSpace> navigate previous
-map [normal]     <ShiftSpace> navigate previous
-map [fullscreen] <ShiftSpace> navigate previous
+map [normal]     <S-Space> navigate previous
+map [fullscreen] <S-Space> navigate previous
 # map [normal]     Space navigate next
 # map [fullscreen] Space navigate next
 map [normal]     K scroll up
