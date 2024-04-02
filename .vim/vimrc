@@ -395,7 +395,7 @@ set spell spelllang+=cjk                        # スペル・チェック
 set completeopt=menuone,noinsert,noselect,popup # 補完
 # 個人的なキー割り当て keymap キーマップ {{{1
 # 設定の切り替え {{{2
-nnoremap <silent><leader>cb <Cmd>call toggle#Breakat()<CR>
+nnoremap <silent><leader>cb <Cmd>setlocal linebreak!<CR>
 nnoremap <silent><leader>cc <Cmd>set showcmd!<CR>
 nnoremap <silent><leader>cd <Cmd>call change_directory#Lcd()<CR>
 nnoremap <silent><leader>cm <Cmd>set more!<CR>

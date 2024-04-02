@@ -19,8 +19,6 @@ vim9script
 nnoremap <buffer><silent><Leader>s :SearchByGoogle<CR>
 xnoremap <buffer><silent><Leader>s :SearchByGoogle<CR>
 setlocal tabstop=8
-if &breakat !=# ''
-	toggle#Breakat()
-endif
+setlocal nolinebreak
 # :NoMatchParen " 対応するカッコの ON/OFF
 # 1}}}

@@ -3,14 +3,6 @@ vim9script
 scriptencoding utf-8
 
 var breakat: string = &breakat == '' ? ' ^I!@*-+;:,./?' : &breakat
-export def Breakat()
-	if &breakat == ''
-		&breakat = breakat
-	else
-		breakat = &breakat
-		&breakat = ''
-	endif
-enddef
 
 def GuiOptionM(): void
 	if &guioptions =~# 'M'
