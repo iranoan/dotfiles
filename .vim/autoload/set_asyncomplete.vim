@@ -140,7 +140,7 @@ def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>):
 		sources = asyncomplete#get_source_info(source_name)
 		startcol = matches.startcol
 		startcols += [startcol]
-		base = options.typed[startcol - 1 : ]
+		base = strpart(options.typed, startcol - 1) # ←:help vim9-string-index
 		if source_name =~# '^asyncomplete_lsp_' # LSP は server ごとで異なる
 			priority = 70
 		else
@@ -200,7 +200,7 @@ def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>):
 	options.startcol = min(startcols)
 	if len(startcols) > 1 # source によって補完開始位置が違う
 		map(l_items, (_, v) => ({
-			word: options.startcol == v.startcol ? v.word : options.typed[options.startcol - 1 : v.startcol - 2] .. v.word,
+			word: options.startcol == v.startcol ? v.word : strpart(options.typed, options.startcol - 1, v.startcol - 2) .. v.word, # ←:help vim9-string-index
 			abbr: get(v, 'abbr', v.word),
 			menu: get(v, 'menu', ''),
 			info: get(v, 'info', ''),
@@ -215,7 +215,7 @@ def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>):
 	asyncomplete#preprocess_complete(options, l_items)
 enddef
 
-def FilterMail(org: dict<any>, col: number, base: string): list<any>
+def FilterMail(org: dict<any>, col: number, base: string): list<dict<any>>
 	var matches_org: list<dict<any>> = org.items
 	var matches: list<dict<any>>
 
@@ -231,7 +231,7 @@ def FilterMail(org: dict<any>, col: number, base: string): list<any>
 	return matches
 enddef
 
-def FilterOmni(org: dict<any>, col: number, base: string): list<any>
+def FilterOmni(org: dict<any>, col: number, base: string): list<dict<any>>
 	var matches: list<dict<any>> = org.items
 
 	# 候補候補とカーソル前の文字が同じ引用符もしくは#なら候補前の引用符/#を取り除く
@@ -257,7 +257,7 @@ def FilterOmni(org: dict<any>, col: number, base: string): list<any>
 	return matches
 enddef
 
-def FilterFile(org: dict<any>, col: number, base: string): list<any>
+def FilterFile(org: dict<any>, col: number, base: string): list<dict<any>>
 	var matches: list<dict<any>> = org.items
 
 	if !matches
