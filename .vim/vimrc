@@ -346,12 +346,12 @@ if exists('&ambiwidth')                        # □とか○の文字があっ�
 	# [0x2010, 0x2010, 1],                       # ‐は全角ハイフン
 	# 半角のデザインが中途半端
 endif
-set formatoptions+=mMj1 formatoptions-=tc      # 日本語の行の連結時には空白を入力しない+textwidth を使った自動折返しをしない
+set formatoptions+=mMj1 formatoptions-=t formatoptions-=c # 日本語の行の連結時には空白を入力しない+textwidth を使った自動折返しをしない
 set display+=lastline                          # 画面最後の行をできる限り表示
 set wrap                                       # 長い行は折り返し表示
 set sidescroll=1                               # 横スクロールでカーソル位置を真ん中にしない
 set linebreak                                  # wrap at 'breakat
-set breakat-=@*-+;:,. breakat+=)}>             # break point for linebreak (default " ^I!@*-+;:,./?" )→" ^I!?" になる (日本語は全角文字に空白が余分に表示されてしまう←helpに8bit文字のみとある)
+set breakat=\ \	!/?)}>                         # break point for linebreak (set breakat-=*-+;:,. breakat+=)}>) (日本語は全角文字に空白が余分に表示されてしまう←helpに8bit文字のみとある)
 set helplang=ja,en                             # 日本語ヘルプを優先的に表示
 # gf などでファイルとして扱う文字 {{{1
 set isfname+=: isfname-=# isfname-==           # Maildir では : がフラグの前置文字 HTML では # は id+シェルスクリプトなどで = は代入
