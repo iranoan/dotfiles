@@ -30,7 +30,7 @@ install.sh
 * efm-langserver
   * .config/efm-langserver
 * FbTerm
-* fd
+* fd (fdfind)
   * .config/fd/
 * FZF
   * .fzf/
@@ -46,7 +46,7 @@ install.sh
 * Shell
   * .bashrc
   * .bash/
-    * aliases  
+    * aliases
     * completion
   * .cshrc
   * .dircolors/
