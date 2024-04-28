@@ -34,13 +34,6 @@
 				"max" : 5
 			}
 		},
-		"prh": "prh で技術系の単語をチェック",
-		"prh": {
-			"rulePaths": [
-				"~/textlint/prh.yml"
-			]
-		},
-		"prh": "半角括弧がチェックされ邪魔",
 		"no-doubled-joshi": "文中に同じ助詞が複数出てくるのをチェック",
 		"no-doubled-joshi": {
 			"min_interval" : 1,
@@ -49,7 +42,7 @@
 		},
 		"no-dropping-the-ra": "ら抜き言葉チェック",
 		"no-dropping-the-ra": true,
-		"no-doubled-conjunction":  "同じ接続詞が連続して出現していないかどうかをチェック",
+		"no-doubled-conjunction":	"同じ接続詞が連続して出現していないかどうかをチェック",
 		"no-doubled-conjunction": true,
 		"no-mix-dearu-desumasu": "「である」「です」が混在していないか?",
 		"no-mix-dearu-desumasu": true,
@@ -60,11 +53,12 @@
 			"2.1.5.カタカナ": true,
 			"2.2.1.ひらがなと漢字の使い分け": true,
 			"3.1.1.全角文字と半角文字の間": false,
-			"4.2.1.感嘆符（！）": false,
-			"4.2.2.疑問符（？）": false,
+			"3.3.かっこ類と隣接する文字の間のスペースの有無": false,
+			"4.2.1.感嘆符(！)": false,
+			"4.2.2.疑問符(？)": false,
 			"4.2.7.コロン(：)": false,
-			"4.2.8.セミコロン（；）": false,
-			"4.2.9.ダッシュ（－）": false,
+			"4.2.8.セミコロン(；)": false,
+			"4.2.9.ダッシュ(－)": false,
 			"4.3.1.丸かっこ（）": false,
 			"4.3.2.大かっこ［］": false,
 			"4.3.5.二重引用符\" \"": false,
