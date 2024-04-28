@@ -11,7 +11,7 @@ $latex_silent  = 'uplatex -src-specials -synctex=1 -file-line-error -interaction
 # -interaction=nonstopmode     エラーが有っても止まらない
 # $bibtex = 'upbibtex';
 $dvipdf  = 'dvipdfmx %O -o %D %S';
-$makeindex  = 'mendex %O -o %D %S';
+$makeindex  = 'upmendex %O -o %D %S';
 #$dvi_previewer ='start dviout';
 $dvips  = 'dvipsk';
 # $pdf_previewer = '/usr/bin/zathura -s -x "gvim -p --remote-tab-silent +%{line} %{input}" %S';
