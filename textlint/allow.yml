@@ -1,0 +1,10 @@
+# textlint で textlint-filter-rule-allowlist を用いて無視するキーワード設定
+# 以下のように行頭+空白に続いて無視したいキーワードを書く
+# - "keyword"
+# とすれば、keyword が無視される
+# - /regulus-expression/
+# とすれば、正規表現が使える
+# ただし ja-yahoo-kousei の分は無理っぽい
+- /web/i
+- /html/i
+
