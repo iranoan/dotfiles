@@ -44,7 +44,8 @@ function set_eblook#setup() abort
 	" autocmd FuncUndefined eblook#* " ←が何故か動作しないのでマップし直す
 	augroup EblookMAP
 		autocmd!
-		autocmd FileType eblook nnoremap <buffer><F1> <Cmd>call set_eblook#help()<CR>
+		autocmd FileType eblook set list | setlocal nospell nolist | nnoremap <buffer><F1> <Cmd>call set_eblook#help()<CR>
+		" ↑プラグインで nolist に設定されるので list に指定し直し setlocal で指定し直す
 	augroup END
 	xnoremap <silent><Leader>eb <Cmd>call set_eblook#searchVisual()<CR>
 	nnoremap <silent><Leader>eb <Cmd>call set_eblook#searchWord()<CR>
