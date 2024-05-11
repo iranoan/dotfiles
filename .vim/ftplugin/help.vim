@@ -97,4 +97,3 @@ nnoremap <buffer><expr>p          &readonly ? "\<C-o>" : 'p'
 nnoremap <buffer><tab>            <Cmd>call search('\|\zs.\{-}\|', 'w')<CR>:nohlsearch<CR>
 nnoremap <buffer><S-tab>          <Cmd>call search('\|\zs.\{-}\|', 'wb')<CR>:nohlsearch<CR>
 nnoremap <buffer><CR>             <C-]>
-nnoremap <buffer><BS>             <C-t>
