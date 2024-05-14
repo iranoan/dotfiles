@@ -184,9 +184,8 @@ set noexpandtab                                # 通常はタブ文字入力可�
 set number signcolumn=yes                      # 行番号、sign (マーク表示桁) 表示
 augroup CoursolLineColumn # 挿入モードでは、カーソール行桁背景色無し、ノーマル・モードでは付ける
 	autocmd!
-	autocmd WinEnter,TabEnter     *              set cursorline cursorcolumn
-	autocmd WinLeave,InsertEnter  *              set nocursorline nocursorcolumn
-	autocmd InsertLeave  *                       set cursorline cursorcolumn
+	autocmd WinEnter,InsertLeave,TabEnter * set cursorline cursorcolumn
+	autocmd WinLeave,InsertEnter          * set nocursorline nocursorcolumn
 augroup END
 set cursorline cursorcolumn                    # 起動時は、カーソール行桁背景色付ける
 # タブ・ページ/ターミナル環境の時のカーソル形状 {{{2
@@ -228,6 +227,8 @@ augroup StatusLineLeftRight
 				# | autocmd! StatusLineRight
 				# | augroup! StatusLineLeft
 				# 削除すると colorscheme を変更すると Normal 色になる
+	# ↓~/.vim/ftplugin/qf.vim, ~/.vim/after/ftplugin/qf.vim に書いてみたが効かなかった
+	autocmd FileType qf &l:statusline = '%#StatusLineLeft#%t %*%<' .. (exists('w:quickfix_title') ? substitute(w:quickfix_title, '\(cexpr system("\)\?/usr/bin/grep -nHsI --color=never -d skip --exclude-dir=\.git\( --exclude={[^}]\+}\)\? \(.*\) /dev/null\(")->substitute(''\\ze\\n'', ":1: ", "g")\)\?$', 'grep \3', '') : '') .. '%=%#StatusLineRight#%3l/%L%4p%%'
 augroup END
 # # 全角スペースをハイライト表示←フォントで対応したのですべてコメント・アウト {{{2
 # function s:ZenkakuSpace()
