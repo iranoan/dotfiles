@@ -30,6 +30,8 @@ nnoremap <ScrollWheelDown>   <S-ScrollWheelDown>
 nnoremap <S-ScrollWheelDown> <ScrollWheelDown>
 xnoremap <ScrollWheelUp>     <C-U>
 xnoremap <ScrollWheelDown>   <C-D>
+nnoremap <C-ScrollWheelUp>   <Cmd>call font_size#UpDown(1)<CR>
+nnoremap <C-ScrollWheelDown> <Cmd>call font_size#UpDown(-1)<CR>
 # }}}
 
 nnoremap <leader>cM <Cmd>call toggle#Menu()<CR>
