@@ -8,15 +8,16 @@ let b:did_ftplugin_user = 1
 "--------------------------------
 "ファイルタイプ別のグローバル設定
 "--------------------------------
-" if !exists('g:html_plugin')
-" 	let g:html_plugin = 1
-" 	"--------------------------------
-" 	" augroup myHTML
-" 	" 	autocmd!
-" 	" 	" 以下プラグインに変えた
-" 	" 	" autocmd FileType markdown      inoremap <buffer> </ </<C-x><C-o>
-" 	" augroup END
-" endif
+if !exists('g:html_plugin')
+	let g:html_plugin = 1
+	"--------------------------------
+	augroup myHTML
+		autocmd!
+		" 以下プラグインに変えた
+		autocmd FileType css  setlocal equalprg=stylelint\ --fix\ --stdin\ --no-color\|prettier\ --write\ --parser\ css
+		autocmd FileType html setlocal equalprg=""
+	augroup END
+endif
 "--------------------------------
 "ファイルタイプ別ローカル設定
 "--------------------------------
