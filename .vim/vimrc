@@ -228,7 +228,7 @@ augroup StatusLineLeftRight
 				# | augroup! StatusLineLeft
 				# 削除すると colorscheme を変更すると Normal 色になる
 	# ↓~/.vim/ftplugin/qf.vim, ~/.vim/after/ftplugin/qf.vim に書いてみたが効かなかった
-	autocmd FileType qf &l:statusline = '%#StatusLineLeft#%t %*%<' .. (exists('w:quickfix_title') ? substitute(w:quickfix_title, '\(cexpr system("\)\?/usr/bin/grep -nHsI --color=never -d skip --exclude-dir=\.git\( --exclude={[^}]\+}\)\? \(.*\) /dev/null\(")->substitute(''\\ze\\n'', ":1: ", "g")\)\?$', 'grep \3', '') : '') .. '%=%#StatusLineRight#%3l/%L%4p%%'
+	autocmd FileType qf &l:statusline = '%#StatusLineLeft#%t %*%<' .. (exists('w:quickfix_title') ? substitute(w:quickfix_title, '\(cexpr system("\)\?/usr/bin/grep -nHsI --color=never -d skip --exclude-dir=\.git\( --exclude={[^}]\+}\)\? \(.*\) /dev/null\(")->substitute(''\\ze\\n'', ":1: ", "g")\)\?$', 'grep \3', '')->substitute('%', '%%', 'g') : '') .. '%=%#StatusLineRight#%3l/%L%4p%%'
 augroup END
 # # 全角スペースをハイライト表示←フォントで対応したのですべてコメント・アウト {{{2
 # function s:ZenkakuSpace()
