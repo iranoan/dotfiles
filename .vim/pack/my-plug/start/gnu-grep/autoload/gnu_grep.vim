@@ -31,7 +31,7 @@ def GrepMain(cmd: string, args: list<string>): void
 			sep = matchstrpos(s, ' *\zs\(''\(\\''\|[^'']\)\+''\|"\(\\"\|[^"]\)\+"\|[^ ]\+\)')
 			add(args_ls, sep[0])
 			s = strpart(s, sep[2])
-			if s ==# '' || s ~=# '^\s\+$'
+			if s ==# '' || s =~# '^\s\+$'
 				break
 			endif
 		endwhile
