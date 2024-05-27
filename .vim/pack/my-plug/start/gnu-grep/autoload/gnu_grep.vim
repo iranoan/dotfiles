@@ -23,31 +23,17 @@ def GrepMain(cmd: string, args: list<string>): void
 	enddef
 
 	def Str2ls(str: string): list<string>
-		def GetPos(s: string, pat: string, len: number): number
-			l: number =  match(s, pat)
-			if l == -1
-				return len
-			endif
-			return l
-		enddef
-
 		var args_ls: list<string>
 		var s: string = str
-		var s_len: number
-		var pos: list<number>
-		var sep: number
+		var sep: list<any>
 
 		while true
-			s_len = strlen(s)
-			if s_len == 0
+			sep = matchstrpos(s, ' *\zs\(''\(\\''\|[^'']\)\+''\|"\(\\"\|[^"]\)\+"\|[^ ]\+\)')
+			add(args_ls, sep[0])
+			s = strpart(s, sep[2])
+			if s == ''
 				break
 			endif
-			pos[0] = GetPos(s, '''\(\\''\|[^'']\)\+''', s_len)
-			pos[1] = GetPos(s, '"\(\\"\|[^"]\)\+"', s_len)
-			pos[2] = GetPos(s, ' ', s_len)
-			sep = min(pos)
-			add(args_ls, strpart(s, 0, sep))
-			s = strpart(s, sep + 1)
 		endwhile
 		return args_ls
 	enddef
