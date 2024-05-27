@@ -22,23 +22,56 @@ def GrepMain(cmd: string, args: list<string>): void
 		endif
 	enddef
 
+	def Str2ls(str: string): list<string>
+		def GetPos(s: string, pat: string, len: number): number
+			l: number =  match(s, pat)
+			if l == -1
+				return len
+			endif
+			return l
+		enddef
+
+		var args_ls: list<string>
+		var s: string = str
+		var s_len: number
+		var pos: list<number>
+		var sep: number
+
+		while true
+			s_len = strlen(s)
+			if s_len == 0
+				add(args_ls, s)
+				break
+			endif
+			pos[0] = GetPos(s, '''\(\\''\|[^'']\)\+''', s_len)
+			pos[1] = GetPos(s, '"\(\\"\|[^"]\)\+"', s_len)
+			pos[2] = GetPos(s, ' ', s_len)
+			sep = min(pos)
+			add(args_ls, strpart(s, 0, sep))
+			s = strpart(s, sep + 1)
+		endwhile
+		return args_ls
+	enddef
+
+	var arg_str: string = args[0]
+	var args_ls: list<string> = Str2ls(arg_str)
 	var opt: string
-	if len(filter(copy(args), 'v:val =~# "^--include="')) > 0
+	if len(filter(copy(args_ls), 'v:val =~# "^--include="')) > 0
 		opt = ' -nHsI --color=never -d skip --exclude-dir=.git '
 	else
 		opt = ' -nHsI --color=never -d skip --exclude-dir=.git --exclude={*.asf,*.aux,*.avi,*.bmc,*.bmp,*.cer,*.chm,*.chw,*.class,*.crt,*.cur,*.dll,*.doc,*.docx,*.dvi,*.emf,*.exe,*.fdb_latexmk,*.fls,*.flv,*.gpg,*.hlp,*.hmereg,*.icc,*.icm,*.ico,*.ics,*.jar,*.jp2,*.jpg,*.ltjruby,*.lzh,*.m4a,*.mkv,*.mov,*.mp3,*.mp4,*.mpg,*.nav,*.nvram,*.o,*.obj,*.odb,*.odg,*.odp,*.ods,*.odt,*.oll,*.opp,*.out,*.pdf,*.pfa,*.pl3,*.png,*.ppm,*.ppt,*.pptx,*.pyc,*.reg,*.rm,*.rtf,*.snm,*.sqlite,*.swf,*.gz,*.bz2,*.Z,*.lzma,*.xz,*.lz,*.tfm,*.toc,*.ttf,*.vbox,*.vbox-prev,*.vdi,*.vf,*.webm,*.wmf,*.wmv,*.xls,*.xlsm,*.xlsx,.*.sw?,.viminfo,viminfo,a.out,tags,tags-ja} '
 	endif
-	if (( index(args, '-L') >= 0 || index(args, '--files-without-match') >= 0 ) && ( index(args, '-v') >= 0 || index(args, '--invert-match') >= 0))
-		|| (( index(args, '-l') >= 0 || index(args, '--files-with-match') >= 0 ) && ( index(args, '-v') == -1 || index(args, '--invert-match') == -1))
+	if (( index(args_ls, '-L') >= 0 || index(args_ls, '--files-without-match') >= 0 ) && ( index(args_ls, '-v') >= 0 || index(args_ls, '--invert-match') >= 0))
+		|| (( index(args_ls, '-l') >= 0 || index(args_ls, '--files-with-match') >= 0 ) && ( index(args_ls, '-v') == -1 || index(args_ls, '--invert-match') == -1))
 		execute 'silent ' .. cmd .. opt .. '-m 1 ' ..
-			filter(args, (i, v) => v !~# '^\m\C\(-l\|-L\|-v\|--files-with\(out\)\?-match\|--invert-match\)$')
+			filter(args_ls, (i, v) => v !~# '^\m\C\(-l\|-L\|-v\|--files-with\(out\)\?-match\|--invert-match\)$')
 				->join(' ')->escape('%#|')
-	elseif ' ' .. join(args, ' ') .. ' ' =~# ' -[ABCDEFGHIPRTUVZabcdefhimnoqrsuvwxyz]*[lL][ABCDEFGHILPRTUVZabcdefhilmnoqrsuvwxyz]* '
-		|| index(args, '--files-without-match') >= 0
-		|| index(args, '--files-with-matches') >= 0
-		FileList(opt .. join(args, ' '))
+	elseif ' ' .. arg_str .. ' ' =~# ' -[ABCDEFGHIPRTUVZabcdefhimnoqrsuvwxyz]*[lL][ABCDEFGHILPRTUVZabcdefhilmnoqrsuvwxyz]* '
+		|| index(args_ls, '--files-without-match') >= 0
+		|| index(args_ls, '--files-with-matches') >= 0
+		FileList(opt .. arg_str)
 	else
-		execute 'silent ' .. cmd .. opt .. join(args, ' ')->escape('%#|')
+		execute 'silent ' .. cmd .. opt .. arg_str->escape('%#|')
 	endif
 enddef
 
