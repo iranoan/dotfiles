@@ -40,7 +40,6 @@ def GrepMain(cmd: string, args: list<string>): void
 		while true
 			s_len = strlen(s)
 			if s_len == 0
-				add(args_ls, s)
 				break
 			endif
 			pos[0] = GetPos(s, '''\(\\''\|[^'']\)\+''', s_len)
