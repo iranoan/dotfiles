@@ -39,9 +39,9 @@ f(){
 		if [ $# -eq 0 ]; then
 			dir=""
 		elif [ -d "$dir" ]; then
-			dir=" . ${@// /\\ }"
+			dir=" . ${*// /\\ }"
 		else
-			dir="${@// /\\ }"
+			dir="${*// /\\ }"
 		fi
 		dir="${dir//\"/\\\"}"
 		eval "${FZF_DEFAULT_COMMAND% .} $dir" |
@@ -50,17 +50,17 @@ f(){
 		if [ $# -eq 0 ]; then
 			dir=$( pwd )
 			dir="${dir// /\\ }"
-			args=''
+			arg=''
 		elif [ -d "$dir" ]; then
-			dir="${@:$#:1}"
+			dir="${*:$#:1}"
 			dir="${dir// /\\ }"
-			args="${@%%${@:$#:1}}"
+			arg=${*%%"$dir"}
 		else
 			dir=$( pwd )
-			dir="${@// /\\ }"
+			dir="${*// /\\ }"
 		fi
 		dir="${dir//\"/\\\"}"
-		cmd="${FZF_DEFAULT_COMMAND/find -L ./find -L $dir} $args"
+		cmd="${FZF_DEFAULT_COMMAND/find -L ./find -L $dir} $arg"
 		eval "${cmd/ -printf \"%P\\n\"/ -print0}" |
 			xargs --no-run-if-empty -n 1 -P 0 -0 -I{} realpath --no-symlinks --relative-base="$( pwd )" "{}" 2> /dev/null |
 			fzf --preview "$HOME/bin/fzf-preview.sh {}" --bind='enter:become(xdg-open {})'
