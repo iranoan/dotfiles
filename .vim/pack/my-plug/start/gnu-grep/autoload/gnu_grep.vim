@@ -10,11 +10,12 @@ export def Lgrep(...args: list<string>): void
 enddef
 
 def GrepMain(cmd: string, args: list<string>): void
-	def FileList(arg: string): void
+	def FileList(s: string): void
+		var arg: string = substitute(s, "'", "''", 'g')
 		if cmd ==# 'grep'
-			execute 'cexpr system("/usr/bin/grep' .. arg .. ' /dev/null")->substitute(''\ze\n'', ":1: ", "g")'
+			execute 'cexpr system(''/usr/bin/grep' .. arg .. ''')->substitute(''\ze\n'', ":1: ", "g")'
 		else
-			execute 'lexpr system("/usr/bin/grep' .. arg .. ' /dev/null")->substitute(''\ze\n'', ":1: ", "g")'
+			execute 'lexpr system(''/usr/bin/grep' .. arg .. ''')->substitute(''\ze\n'', ":1: ", "g")'
 		endif
 		var qf_cmd: list<string> = execute('autocmd QuickFixCmdPost ' .. cmd)->split('\n')
 		if len(qf_cmd) > 2
