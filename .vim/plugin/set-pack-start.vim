@@ -97,11 +97,11 @@ nnoremap <silent>mm <Cmd>SignatureRefresh<CR>
 augroup VimSignature # SignColumn デフォルトの色が使われるので他の設定に合わせて変更
 	autocmd!
 	autocmd ColorScheme * if &background ==? 'light' |
-				\ highlight SignatureMarkText cterm=bold gui=bold ctermbg=NONE guibg=NONE guifg=#111111 ctermfg=0 | else |
-				\ highlight SignatureMarkText cterm=bold gui=bold ctermbg=NONE guibg=NONE guifg=#dddddd ctermfg=15 | endif |
-				\ highlight GitGutterAdd      cterm=bold gui=bold ctermbg=NONE guibg=NONE |
-				\ highlight GitGutterChange   cterm=bold gui=bold ctermbg=NONE guibg=NONE |
-				\ highlight GitGutterDelete   cterm=bold gui=bold ctermbg=NONE guibg=NONE
+				\ highlight SignatureMarkText term=bold cterm=bold gui=bold ctermbg=NONE guibg=NONE guifg=#111111 ctermfg=0 | else |
+				\ highlight SignatureMarkText term=bold cterm=bold gui=bold ctermbg=NONE guibg=NONE guifg=#dddddd ctermfg=15 | endif |
+				\ highlight GitGutterAdd      term=bold cterm=bold gui=bold ctermbg=NONE guibg=NONE |
+				\ highlight GitGutterChange   term=bold cterm=bold gui=bold ctermbg=NONE guibg=NONE |
+				\ highlight GitGutterDelete   term=bold cterm=bold gui=bold ctermbg=NONE guibg=NONE
 augroup END
 
 # :Tabedit ~/.vim/pack/my-plug/start/tabedit/ {{{1
