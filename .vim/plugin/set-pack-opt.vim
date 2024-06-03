@@ -571,44 +571,23 @@ nmap cs  <Cmd>call set_surround#main('Csurround') <bar> delfunction set_surround
 nmap ds  <Cmd>call set_surround#main('Dsurround') <bar> delfunction set_surround#main<CR>
 # <Shift> を押すのが面倒
 nmap ys4 ys$
-nmap ysaw2 ysaw"
-nmap ysaw7 ysaw'
-nmap ysaw8 ysaw(
-nmap ysaw9 ysaw)
-nmap ysaw, ysaw<
-nmap ysaw. ysaw>
-nmap ysiw2 ysiw"
-nmap ysiw7 ysiw'
-nmap ysiw8 ysiw(
-nmap ysiw9 ysiw)
-nmap ysiw, ysiw<
-nmap ysiw. ysiw>
-nmap ysa2 ysa"
-nmap ysa7 ysa'
-nmap ysa8 ysa(
-nmap ysa9 ysa)
-nmap ysa, ysa<
-nmap ysa. ysa>
-nmap ysi2 ysi"
-nmap ysi7 ysi'
-nmap ysi8 ysi(
-nmap ysi9 ysi)
-nmap ysi, ysi<
-nmap ysi. ysi>
-nmap ds, ds<
-nmap ds. ds>
-nmap ds2 ds"
-nmap ds7 ds'
-nmap ds8 ds(
-nmap ds9 ds)
-nmap ds@ ds`
-nmap cs, cs<
-nmap cs. cs>
-nmap cs2 cs"
-nmap cs7 cs'
-nmap cs8 cs(
-nmap cs9 cs)
-nmap cs@ cs`
+for [n, q] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '[': '[', '{': '{', ']': ']', '}': '}' })
+	execute 'nmap ys4' .. n .. ' ys$' .. q
+endfor
+for k in ['ysaw', 'ysiw', 'ysa', 'ysi', 'cs', 'ds']
+	for [n, q] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>' })
+		execute 'nmap ' .. k .. n .. ' ' .. k .. q
+	endfor
+endfor
+for k in ['ysa', 'ysi', 'cs']
+	for [n1, q1] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '[': '[', '{': '{', ']': ']', '}': '}' })
+		for [n2, q2] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '[': '[', '{': '{', ']': ']', '}': '}' })
+			if n1 !=# n2
+				execute 'nmap ' .. k .. n1 .. n2 .. ' ' .. k .. q1 .. q2
+			endif
+		endfor
+	endfor
+endfor
 
 # getmail syntax https://github.com/vim-scripts/getmail.vim {{{1
 # augroup Gatmail
