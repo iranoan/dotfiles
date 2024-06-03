@@ -11,6 +11,7 @@ export def Lcd(): void # カレントディレクトリをファイルのディ�
 		return
 	elseif &filetype ==# 'fugitive' || buf_name =~# '^fugitive://'
 		if buf_name !~# '/\.git//'
+				|| buf_name =~# '/\.git//[^/]\+/[^/]\+' # Gdiffsplit のウィンドウ
 			return
 		endif
 		c_path = expand('%:p:h:h')->substitute('^fugitive://', '', '')
