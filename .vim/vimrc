@@ -214,12 +214,13 @@ set suffixes+=.aux,.log,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.toc,.pdf,.syncte
 set wildignore+=*.dvi,*.o,*.opp,*.obj,*.a,*.so,*.fdb_latexmk,*.fls,*.nav,*.out,*.snm,*.ltjruby,*.swp # 補完候補から完全に除外 (含めると補完候補にも現れなくなる)
 # ステータス・バー {{{2
 set laststatus=2                               # 表示
-set statusline=%#StatusLineLeft#%-19.(%{tabpagenr()}/%{tabpagenr('$')}:%n%{%&buftype=='terminal'?'[terminal]':&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%*\ %<%F%=%#StatusLineRight#\ %c:%v:%{strcharlen(strpart(getline('.'),0,col('.')))}/%{strlen(join(getline(0,line('$')),(&ff=='dos'?'12':'1')))}:%{strcharlen(join(getline(0,line('$')),''))}\ %3l/%L%4p%%\ 0x%04B\ [%{&fenc!=''?&fenc:&enc}:%{%{'dos':'CR+LF','unix':'LF','mac':'CR'}[&ff]%}]
+set statusline=%#StatusLineLeft#%-19.(%{tabpagenr()}/%{tabpagenr('$')}:%n%{%&buftype=='terminal'?'[terminal]':&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%#StatusGit#\ %{fugitive#statusline()[5:-3]->substitute('(','\ ','')}\ %*\ %<%F%=%#StatusLineRight#\ %c:%v:%{strcharlen(strpart(getline('.'),0,col('.')))}/%{strlen(join(getline(0,line('$')),(&ff=='dos'?'12':'1')))}:%{strcharlen(join(getline(0,line('$')),''))}\ %3l/%L%4p%%\ 0x%04B\ [%{&fenc!=''?&fenc:&enc}:%{%{'dos':'CR+LF','unix':'LF','mac':'CR'}[&ff]%}]
 # 表示しているのを大雑把に↓
 # tabpagenr()/tabpagenr('$') bufnr filetype modified etc. | path | column bytes:number:word-count/file bytes:word-count line current/full % code charset:cr/lf
 def StatusLineLeftRight(): void
-	highlight StatusLineLeft gui=bold term=bold guifg=white guibg=SeaGreen ctermfg=white ctermbg=2
-	highlight StatusLineRight gui=bold term=bold guifg=white guibg=DarkYellow ctermfg=white ctermbg=3
+	highlight StatusLineLeft  term=bold cterm=bold gui=bold ctermfg=White ctermbg=2 guifg=White guibg=SeaGreen
+	highlight StatusLineRight term=bold cterm=bold gui=bold ctermfg=White ctermbg=3 guifg=White guibg=DarkYellow
+	highlight StatusGit       term=bold cterm=bold gui=bold ctermfg=White ctermbg=6 guifg=White guibg=DarkCyan
 enddef
 augroup StatusLineLeftRight
 	autocmd!
