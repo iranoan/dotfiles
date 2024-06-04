@@ -27,6 +27,8 @@ set makeencoding=char                          # 外部コマンドの出力を�
 set guioptions+=M                              #メニュー設定を読み込まない GUI だが vimrc で filetype on, syntax on より前に書く必要がある→:help go-M
 filetype plugin indent on                      # ファイルタイプ別プラグインとインデントを ON
 # 標準プラグイン {{{1
+# set runtimepath+=/usr/share/vim/addons,/usr/share/vim/vimfiles
+# set runtimepath+=/usr/share/vim/addons         # conkyrc 等の syntax
 # 一部のプラグインは読み込まない {{{2
 g:skip_loading_mswin = 1
 g:loaded_getscript = 1
@@ -157,14 +159,16 @@ else
 	inoremap <silent><Esc> <Esc><Cmd>setlocal iminsert=0<CR>
 endif
 # 表示関係 {{{1
+syntax enable                                  # カラー表示 ON
+set conceallevel=0                             # 個々のファイルタイプごとで、文字を省略したり置き換える機能は使わない
+set nomore                                     # メッセージが一杯になっても一旦停止せずそのまま続ける
+set noshowcmd                                  # コマンドラインに選択中の文字数などを表示する
+# set noequalalways                              # ウィンドウ分割/閉じた時に全てのウィンドウを同じ大きさにしない←すでに分割されていると、プラグインが開くウィンドウ高さが狭くなり使いにくい
 set shortmess+=IWc shortmess-=S                # I 起動時にファイル未指定時に表示される紹介文を表示しない
                                                # W ファイルの書き込み時に "書込み" や "[w]" を表示しない。
                                                # c	補完関連のメッセージを表示しない
                                                # S 検索ヒット件数表示←コマンドラインに検索のヒット位置、総個数を [?/?] で表示し、ファイルの先頭・終端になった時のメッセージが一瞬で消える
-syntax enable                                  # カラー表示 ON
-set nomore                                     # メッセージが一杯になっても一旦停止せずそのまま続ける
-set noshowcmd                                  # コマンドラインに選択中の文字数などを表示する
-# set noequalalways                              # ウィンドウ分割/閉じた時に全てのウィンドウを同じ大きさにしない←すでに分割されていると、プラグインが開くウィンドウ高さが狭くなり使いにくい
+set textwidth=0                                # 自動改行させない
 # 対応するカッコ {{{2
 set cpoptions+=MI                              # 対応するカッコで、\によるエスケープを除外+インデントの自動削除なしに
 if $LANG !=# 'C'                               # LANG=C では全角文字が使えない
@@ -246,6 +250,13 @@ augroup END
 # 	augroup END
 # 	s:ZenkakuSpace()
 # endif
+# 編集関係 {{{1
+set completeopt=menuone,noinsert,noselect,popup # 補完
+set delcombine                                 # 結合文字を別々に削除する
+# set maxcombine=2                               # 結合文字の最大個数
+set nrformats=bin,hex,alpha                    # アルファベットでもインクリメント、ディクリメント←8進数,octalは除外
+set spell spelllang+=cjk                       # スペル・チェック
+set clipboard=exclude:cons\|linux              # クリップボードの扱い
 # カーソル・キー {{{1
 set keymodel=startsel,stopsel                  # シフトキー+矢印キーで選択が出来る
 set whichwrap=b,s,h,l,<,>,[,]                  # カーソルを行頭、行末で止まらないようにする
@@ -349,38 +360,29 @@ g:markdown_folding = 1                         # Markdown で折りたたみ
 g:html_indent_script1 = 'inc'
 g:html_indent_style1 = 'inc'
 g:html_indent_autotags = 'html,body,tbody'
-# grep {{{1
+# 外部プログラム関係 {{{1
 set grepprg=/usr/bin/grep\ $*\ /dev/null       # --exclude は --include を使った時に無効にしたいのでコマンドにして分岐する
 # -nH といったオプションもそちらで指定している
 # 	* 再帰的に行うには -r, --recursive オプション
 # 	* コマンドで分岐処理を入れているので --include=*.txt 等とすれば、制限できる
 # set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m,%f  # grep の出力は -L/--files-without-match, -l/--files-with-matches を付けた時の為ファイル名のみを出力追加したいが、binary file matches などの警告もヒットのように扱ってしまう
-# キー割り当てを除いたその他 {{{1
 set keywordprg=:help
-set modeline
-# set modeline modelineexpr
 $LESS = substitute($LESS, '\(['' " =]\)-\(-quit-if-one-screen\|F\)\>', '\1', 'g') # less 環境変数置き換え
 # ↑alias は外部フィルタ無効+選択状態でうまく処理してくれない
-set textwidth=0                                # 自動改行させない
+# キー割り当てを除いたその他 {{{1
+set modeline
+# set modeline modelineexpr
 set shellslash                                 # Windowsでもパス区切りにスラッシュを使える
 set diffopt=filler,context:2,iwhite,vertical,closeoff,internal,algorithm:histogram,indent-heuristic # 差分表示オプション
 set path+=~/bin,~/Templates,
-set conceallevel=0                             # 個々のファイルタイプごとで、文字を省略したり置き換える機能は使わない
 if has('path_extra')                           # tags ファイルは $HOME まで辿る :help file-searching
 	set tags+=tags;$HOME/
 endif
 set belloff=all                                # 音を消す
 # set visualbell                                 # 多くの colorscheme や tmux, Gvim で効かない
 # set mouse=a                                  # マウスの設定全てのモードで有効に:デフォルトでそうなっていた
-set delcombine                                 # 結合文字を別々に削除する
-# set maxcombine=2                               # 結合文字の最大個数
-set clipboard=exclude:cons\|linux              # クリップボードの扱い
 set viminfo+=n~/.vim/viminfo                   # viminfo の保存先
 set history=500                                # コマンド履歴の保存数 (あまり大きくすると q: 等で時間がかかるようになる)
-# set runtimepath+=/usr/share/vim/addons,/usr/share/vim/vimfiles
-set runtimepath+=/usr/share/vim/addons
-set spell spelllang+=cjk                        # スペル・チェック
-set completeopt=menuone,noinsert,noselect,popup # 補完
 # 個人的なキー割り当て keymap キーマップ {{{1
 # 設定の切り替え {{{2
 nnoremap <silent><leader>cb <Cmd>setlocal linebreak!<CR>
@@ -536,7 +538,6 @@ xnoremap <Leader>/ <Esc>/\%V
 # vim-speeddating の組み合わせでうまくいかない
 # vnoremap <C-A> <C-A>gv
 # vnoremap <C-X> <C-X>gv
-set nrformats=bin,hex,alpha                      # アルファベットでもインクリメント、ディクリメント←8進数,octalは除外
 # j, gj, k, gk の入れ替え {{{2
 nnoremap j gj
 nnoremap k gk
