@@ -155,7 +155,7 @@ def s:on_lsp_buffer_enabled(): void
 	# 次の条件の時、うまく動かない (running で起動しているのに Diagnostic 系が動作しない) ケースが有るので、一度止めてから再度有効にする
 	# * まだ LSP が動作していない
 	# * 空のバッファに LSP を使用するファイルを開く
-	# 例えば、空のバッファで起動後 :edit ~/.bash_history した時
+	# 例えば、空のバッファで起動後 :edit ~/.bash/history した時
 	var s_info: dict<any>
 	for s in lsp#get_server_names()
 		s_info = lsp#get_server_info(s)

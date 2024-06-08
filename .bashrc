@@ -148,7 +148,7 @@ share_history(){  # 以下の内容を関数として定義
 				}
 				while( k > 0 )print a[--k] # 逆順出力
 			}' ~/.bash/history > ~/.tmp/bash_history && mv ~/.tmp/bash_history ~/.bash/history
-		history -r ~/.bash/history # .bash_historyから履歴を読み込み直す
+		history -r ~/.bash/history # .bash/historyから履歴を読み込み直す
 	# fi
 }
 PROMPT_COMMAND='share_history'  # 上記関数をプロンプト毎に自動実施

@@ -23,14 +23,14 @@ export max_print_line=1000
 # man コマンドに Vim を使いたいが、Man コマンドとの両使いでは使いづらい
 # export MANPAGER="vim -M +MANPAGER +'setlocal nolist nospell foldmethod=indent foldenable | %foldopen! ' -"
 
-if [ -f "$HOME/.bash_history" ]; then # bash の一部の履歴を削除
-	tac ~/.bash_history |
+if [ -f "$HOME/.bash/history" ]; then # bash の一部の履歴を削除
+	tac ~/.bash/history |
 		sed -E -e 's/\s+$//g' -e '/^$/d' \
 		-e '/^(which|kill|killall|ls|less|cd|man|texdoc|help|info|ps|pgrep|whatis)( [\.A-Za-z0-9_ -]+\/?)?$/d' \
 		-e "/ -(v|-version|h|-help) ?$/d" \
 		-e "/^(cd|cd (-|\$_)|ls|history|pwd|exit) ?$/d" |
 		awk '!a[$0]++' |
-		tac > ~/.tmp/bash_history && mv ~/.tmp/bash_history ~/.bash_history
+		tac > ~/.tmp/bash_history && mv ~/.tmp/bash_history ~/.bash/history
 fi
 # 仮想コンソールで使い分け
 case "$TERM" in
