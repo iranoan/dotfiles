@@ -30,6 +30,10 @@
 /.vim/spell/
 /.vim/undo/
 /.vim/viminfo
+
+# 履歴
+/.bash/history
+
 # プラグインの設定ファイル
 !/.vim/pack/github/opt/vimspector/configurations/
 

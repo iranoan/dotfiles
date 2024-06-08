@@ -147,14 +147,15 @@ share_history(){  # 以下の内容を関数として定義
 					if( !c[b[i]]++ )a[k++] = b[i] # 重複でない
 				}
 				while( k > 0 )print a[--k] # 逆順出力
-			}' ~/.bash_history > ~/.tmp/bash_history && mv ~/.tmp/bash_history ~/.bash_history
-		history -r  # .bash_historyから履歴を読み込み直す
+			}' ~/.bash/history > ~/.tmp/bash_history && mv ~/.tmp/bash_history ~/.bash/history
+		history -r ~/.bash/history # .bash_historyから履歴を読み込み直す
 	# fi
 }
 PROMPT_COMMAND='share_history'  # 上記関数をプロンプト毎に自動実施
 shopt -u histappend   # .bash_history追記モードは不要なのでOFFに
 export HISTSIZE=9999  # 履歴のMAX保存数を指定
 export HISTCONTROL=erasedups #重複歴を記録しない
+export HISTFILE=~/.bash/history
 
 if command -v vim > /dev/null ; then
 	if [[ $( tty ) =~ /dev/tty.* ]] || ps x | awk '{print $5}' | grep -qE '\<[f]bterm\>' ; then # 仮想コンソール→非 GUI
