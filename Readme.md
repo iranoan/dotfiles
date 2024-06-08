@@ -40,6 +40,7 @@ install.sh
   * .config/git
 * GDB
 * gnuplot
+  * .config/gnuplot
 * Gromit-MPX
 * LanguageTool
 * mlterm
