@@ -30,6 +30,8 @@ export FZF_DEFAULT_OPTS='--layout=reverse --info=inline --multi --color=border:7
 # 	export MANPATH=${HOME}/.local/share/man:
 # fi
 
+# LESS のカラー表示
+export LESS='--no-init --quit-if-one-screen --RAW-CONTROL-CHARS --IGNORE-CASE --LONG-PROMPT --jump-target=5 --ignore-case'
 # notmuch で日本語検索が出来るように (指定しないとカタカナ検索が出来ない?)
 export XAPIAN_CJK_NGRAM=1
 # IME の設定 qolibri が QT_IM_MODULE の設定がないと日本語入力できない

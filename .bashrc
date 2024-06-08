@@ -171,8 +171,6 @@ else
 	export TEXEDIT='vi +%d "%s"'
 fi
 #export HISTIGNORE=cd:history:ls:which:pwd:exit:*\ -v:*\ --version:*\ -h:*\ --help:cd\ -:kill\ *:killall\ *:man\ * #一部のコマンドは履歴を残さない
-# LESS のカラー表示
-export LESS='--no-init --quit-if-one-screen --RAW-CONTROL-CHARS --IGNORE-CASE --LONG-PROMPT --jump-target=5 --ignore-case'
 if [ -e /usr/share/source-highlight/src-hilite-lesspipe.sh ]; then
 	export LESSOPEN='| /usr/share/source-highlight/src-hilite-lesspipe.sh %s'
 fi
