@@ -47,9 +47,9 @@ function set_ale#main()
 				\ tex:    ['lacheck', 'chktex'],
 				\ json:   ['jsonlint'],
 				\ }
-				" \ python: ['flake8'], " LSP に任せる
+				" \ python: ['flake8'], " LSP に任せる (加えて ~/.config/flake8, ~/.flake8 の設定が無視される)
 				" \ tex   : ['textlint'],
-				" \ cpp   : ['clangd', 'clang', 'g++'], " ←clang 以外は行末の;無しで次の行がエラー扱いになる
+				" \ cpp   : ['clangd', 'clang', 'g++'], " ←clang 以外は行末の;無しで該当行でなく次行がエラー扱いになる
 				" \ tex   : ['lacheck', 'alex', 'chktex', 'proselint', 'redpen', 'texlab', 'vale', 'writegood'],
 				" , 'proselint' はプログラムの文法チェッカーではなく、英語のチェッカー (日本語の textlint にあたる)→ https://githubja.com/amperser/proselint もたつく要因かもしれないので、一旦除外
 	" 各ツールをFixerとして登録
