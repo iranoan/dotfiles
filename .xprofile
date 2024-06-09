@@ -31,7 +31,7 @@ export FZF_DEFAULT_OPTS='--layout=reverse --info=inline --multi --color=border:7
 # fi
 
 # LESS の設定
-export LESSCHARSET=utf-8
+# ~/.lesskey だと、$HOME などの環境変数や ~ が効かない。条件分岐が出来ななどの理由で一部はこちらで設定
 export LESSHISTFILE=$HOME/.log/lesshist
 export LESS='--no-init --quit-if-one-screen --RAW-CONTROL-CHARS --IGNORE-CASE --LONG-PROMPT --jump-target=5 --ignore-case'
 if [ -e /usr/share/source-highlight/src-hilite-lesspipe.sh ]; then

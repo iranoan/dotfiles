@@ -1,0 +1,7 @@
+#command
+\b back-screen
+^H back-screen
+\177 back-screen
+#line-edit
+#env
+LESSCHARSET = utf-8

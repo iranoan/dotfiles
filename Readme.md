@@ -43,6 +43,7 @@ install.sh
   * .config/gnuplot
 * Gromit-MPX
 * LanguageTool
+* less
 * mlterm
 * Shell
   * .bashrc
