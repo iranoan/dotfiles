@@ -85,8 +85,8 @@ unset color_prompt
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
-	if [ -r ~/.dircolors/solarized/256dark  ]; then
-		eval "$(dircolors -b ~/.dircolors/solarized/256dark)"
+	if [ -r "$HOME/.dircolors/solarized/256dark"  ]; then
+		eval "$(dircolors -b "$HOME/.dircolors/solarized/256dark")"
 	else
 		eval "$(dircolors -b)"
 	fi
@@ -99,7 +99,7 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
-if [ -f ~/.bash/aliases ]; then
+if [ -f "$HOME/.bash/aliases" ]; then
 	source "$HOME/.bash/aliases"
 fi
 
@@ -113,7 +113,7 @@ if ! shopt -oq posix; then
 		. /etc/bash_completion
 	fi
 fi
-if [ -f ~/.bash/completion ]; then # /usr/share/bash-completion/bash_completion 内で読み込まれるのは .bash_completion
+if [ -f "$HOME/.bash/completion" ]; then # /usr/share/bash-completion/bash_completion 内で読み込まれるのは .bash_completion
 	source "$HOME/.bash/completion"
 fi
 #履歴を複数端末で同期
@@ -147,15 +147,15 @@ share_history(){  # 以下の内容を関数として定義
 					if( !c[b[i]]++ )a[k++] = b[i] # 重複でない
 				}
 				while( k > 0 )print a[--k] # 逆順出力
-			}' ~/.bash/history > ~/.tmp/bash_history && mv ~/.tmp/bash_history ~/.bash/history
-		history -r ~/.bash/history # .bash/historyから履歴を読み込み直す
+			}' "$HISTFILE" > "$HOME/.bash/history.tmp" && mv "$HOME/.bash/history.tmp" "$HISTFILE"
+		history -r # $HISTFILE から履歴を読み込み直す
 	# fi
 }
 PROMPT_COMMAND='share_history'  # 上記関数をプロンプト毎に自動実施
 shopt -u histappend   # .bash_history追記モードは不要なのでOFFに
 export HISTSIZE=9999  # 履歴のMAX保存数を指定
 export HISTCONTROL=erasedups #重複歴を記録しない
-export HISTFILE=~/.bash/history
+export HISTFILE="$HOME/.bash/history"
 
 if command -v vim > /dev/null ; then
 	if [[ $( tty ) =~ /dev/tty.* ]] || ps x | awk '{print $5}' | grep -qE '\<[f]bterm\>' ; then # 仮想コンソール→非 GUI
@@ -205,7 +205,7 @@ stty stop undef
 # set -o vi
 umask 077
 
-[ -f ~/.fzf/bashrc ] && source "$HOME/.fzf/bashrc"
+[ -f "$HOME/.fzf/bashrc" ] && source "$HOME/.fzf/bashrc"
 
 ranger() { # ranger でファイルを less で開いた時にすぐ終わってしまう問題対処→http://malkalech.com/ranger_filer#org15afd1c
 	if [ -n "$RANGER_LEVEL" ]; then
