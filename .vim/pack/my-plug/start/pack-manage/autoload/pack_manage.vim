@@ -127,7 +127,7 @@ def GrepList(s: string, file: string, nosuf: bool): list<string> # 外部プロ�
 	var ret: list<string>
 	for f in glob(file, false, true, true)
 		extend(ret, readfile(resolve(expand(f))))
-			->filter('v:val =~? ''' .. substitute(s, "'", "''", '') .. '''')
+			->filter((_, v) => v =~? s)
 	endfor
 	return ret
 enddef
@@ -140,11 +140,11 @@ enddef
 def Get_pack_ls(): list<dict<string>> # プラグインの名称、リポジトリ、インストール先取得
 	var Packadd_ls: func(string): list<any> = (f: string) => # packadd plugin で書かれたプラグイン読み込みを探す
 		GrepList('\<packadd\>', f, false)
-			->filter('v:val !~# ''^[\t ]*["#]''') # 行頭コメント削除
-			->map('substitute(v:val, ''\("\(\"\|[^"]\)*"\|''''\(''''\|[^'''']\)*''''\)'', "", "")') # 文字列削除
-			->map('substitute(v:val, ''["#].*'', "", "")') # コメント削除
-			->filter('v:val =~# ''\<packadd\>''')
-			->map('substitute(v:val, ''\c^.*\<packadd[ \t]\+\([a-z0-9_.-]\+\).*'', ''\1'', "")')
+			->filter((_, v) => v !~# '^[\t ]*["#]') # 行頭コメント削除
+			->map((_, v) => substitute(v, '\("\(\"\|[^"]\)*"\|''\(''\|[^'']\)*''\)', '', '')) # 文字列削除
+			->map((_, v) => substitute(v, '["#].*', '', '')) # コメント削除
+			->filter((_, v) => v =~# '\<packadd\>')
+			->map((_, v) => substitute(v, '\c^.*\<packadd[ \t]\+\([a-z0-9_.-]\+\).*', '\1', ''))
 
 	def Get_packages(f: string, p: list<string>): list<dict<string>> # ファイル f に書かれたプラグインの名称、リポジトリ、インストール先取得
 		var packages: list<dict<string>>
@@ -162,9 +162,9 @@ def Get_pack_ls(): list<dict<string>> # プラグインの名称、リポジト�
 		return packages
 	enddef
 
-	var Map_ls: func(string): list<string> = (f: string) => # manage_pack#SetMAP(plugin, ...) で書かれたプラグイン読み込みを探す
-		GrepList('^[^#"]*\<manage_pack#SetMAP([ \t]*[''"]', f, false)
-			->map('substitute(v:val, ''\c^[^#"]*\<manage_pack#SetMAP([ \t]*["'''']\([^"'''']\+\).*'', ''\1'', "")')
+	var Map_ls: func(string): list<string> = (f: string) => # pack_manage#SetMAP(plugin, ...) で書かれたプラグイン読み込みを探す
+		GrepList('^[^#"]*\<pack_manage#SetMAP([ \t]*[''"]', f, false)
+			->map((_, v) => substitute(v, '\c^[^#"]*\<pack_manage#SetMAP([ \t]*["'']\([^"'']\+\).*', '\1', ''))
 
 	var packadds: list<string> = Packadd_ls('~/.vim/plugin/*.vim')
 	extend(packadds, Packadd_ls('~/.vim/autoload/*.vim'))
