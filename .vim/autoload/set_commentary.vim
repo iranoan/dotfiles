@@ -1,7 +1,7 @@
 scriptencoding utf-8
 
 function set_commentary#main(cmd) abort
-	call manage_pack#SetMAP('vim-commentary', a:cmd, [
+	call pack_manage#SetMAP('vim-commentary', a:cmd, [
 				\ {'mode': 'n', 'key': 'gcu', 'cmd': 'Commentary<Plug>Commentary'},
 				\ {'mode': 'n', 'key': 'gcc', 'cmd': 'CommentaryLine'},
 				\ {'mode': 'o', 'key': 'gc',  'cmd': 'Commentary'},

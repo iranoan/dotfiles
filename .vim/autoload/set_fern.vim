@@ -22,7 +22,7 @@ function set_fern#main() abort
 	let g:fern#mapping#fzf#disable_default_mappings = 1
 	" g:fern#mapping#fzf#fzf_options を指定すると、b:fzf_action, g:fzf_action が無視され開けなくなる
 	" let g:fern#mapping#fzf#fzf_options = {'options': '--multi --no-unicode --margin=0% --padding=0% --preview=''~/bin/fzf-preview.sh {}'' --bind=''ctrl-]:change-preview-window(hidden|)'''}
-	if !manage_pack#IsInstalled('fzf.vim')
+	if !pack_manage#IsInstalled('fzf.vim')
 		call set_fzf_vim#main()
 		autocmd! loadFZF_Vim
 		augroup! loadFZF_Vim

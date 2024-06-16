@@ -1,7 +1,7 @@
 scriptencoding utf-8
 
 function set_easy_align#main() abort
-	call manage_pack#SetMAP('vim-easy-align',  '(EasyAlign)', [
+	call pack_manage#SetMAP('vim-easy-align',  '(EasyAlign)', [
 			\ {'mode': 'n', 'key': '<Leader>ea', 'cmd': '(EasyAlign)'},
 			\ {'mode': 'x', 'key': '<Enter>',    'cmd': '(EasyAlign)'},
 			\ {'mode': 'x', 'key': '<Leader>ea', 'cmd': '(EasyAlign)'}

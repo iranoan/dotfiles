@@ -36,7 +36,7 @@ AlterCommand p[rint]    PrintBuffer
 AlterCommand u[pdate]   update
 # ↑:update の短縮形は :up で :u は :undo だがまず使わない
 AlterCommand ua[ll]     bufdo\ update
-AlterCommand helpt[ags] call\ manage_pack#Helptags()
+AlterCommand helpt[ags] pack_manage#Helptags()
 AlterCommand bc         .!bc\ -l\ -q\ ~/.bc\ <Bar>\ sed\ -E\ -e\ 's/^\\\./0./g'\ -e\ 's/(\\\.[0-9]*[1-9])0+/\\\1/g'\ -e\ 's/\\\.$//g'
 AlterCommand bi[nary]   if\ !&binary\ <Bar>\ execute('setlocal\ binary\ <Bar>\ %!xxd')\ <Bar>\ endif
 AlterCommand nob[inary] if\ &binary\ <Bar>\ execute('setlocal\ nobinary\ <Bar>\ %!xxd\ -r')\ <Bar>\ endif
@@ -208,7 +208,7 @@ augroup END
 # augroup NotmuchDraft # バッファを開き終わった後に asyncomplete が効かない
 # 	autocmd!
 # 	autocmd FileType notmuch-draft
-# 				\ if !manage_pack#IsInstalled('asyncomplete.vim')
+# 				\ if !pack_manage#IsInstalled('asyncomplete.vim')
 # 				| 	set_asyncomplete#main()
 # 				| 	autocmd! loadasyncomplete
 # 				| 	augroup! loadasyncomplete

@@ -1,7 +1,7 @@
 scriptencoding utf-8
 
 function set_fzf_vim#main() abort
-	" if manage_pack#IsInstalled('fzf.vim')
+	" if pack_manage#IsInstalled('fzf.vim')
 	" 	return
 	" endif
 	" https://github.com/junegunn/fzf {{{

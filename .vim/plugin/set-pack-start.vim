@@ -217,14 +217,14 @@ g:pairquote = {
 	# '"""': {},
 	}
 
-# ~/.vim/pack/*/{stat,opt}/* でプラグインを管理する上で、便利な関数 ~/.vim/pack/my-plug/start/manage-pack {{{1
+# ~/.vim/pack/*/{stat,opt}/* でプラグインを管理する上で、便利な関数 ~/.vim/pack/my-plug/start/pack-manage {{{1
 # 遅延読み込みにすると、補完が使えない
-# augroup loadManagePack
+# augroup loadPackManage
 # 	autocmd!
-# 	autocmd FuncUndefined manage_pack#* packadd manage-pack
-# 		| autocmd! loadManagePack
-# 		| augroup! loadManagePack
-# 	autocmd CmdUndefined ReinstallPack packadd manage-pack
-# 		| autocmd! loadManagePack
-# 		| augroup! loadManagePack
+# 	autocmd FuncUndefined pack_manage#* packadd pack-manage
+# 		| autocmd! loadPackManage
+# 		| augroup! loadPackManage
+# 	autocmd CmdUndefined ReinstallPack packadd pack-manage
+# 		| autocmd! loadPackManage
+# 		| augroup! loadPackManage
 # augroup END

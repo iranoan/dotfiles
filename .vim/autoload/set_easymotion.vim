@@ -3,7 +3,7 @@ scriptencoding utf-8
 function set_easymotion#main(cmd) abort
 	let g:EasyMotion_smartcase = 1   " 検索による移動で大文字小文字の区別をしない
 	let g:EasyMotion_use_migemo = 1  " 検索による移動でローマ字入力も移動対象にする
-	call manage_pack#SetMAP('vim-easymotion', a:cmd, [
+	call pack_manage#SetMAP('vim-easymotion', a:cmd, [
 				\ {'mode': 'n', 'key': '<Leader><Leader>f',  'cmd': '(easymotion-f)'},
 				\ {'mode': 'n', 'key': '<Leader><Leader>F',  'cmd': '(easymotion-F)'},
 				\ {'mode': 'n', 'key': '<Leader><Leader>t',  'cmd': '(easymotion-t)'},
