@@ -132,9 +132,52 @@ def GrepList(s: string, file: string, nosuf: bool): list<string> # 外部プロ�
 	return ret
 enddef
 
-def Pack_ls(f: string): list<string> # f に書かれた # OR 「" (comment) で始まり https://github.com/user/plugin {{{ (foldmaker)」の記載をリスト・アップ"
-	return GrepList('^["#\t ]\+.*https://github\.com/[a-z0-9._/-]\+ *{{{[0-9]*', f, false)
-		->map('substitute(v:val, ''\c^[#"\t ]\+.*\(https:\/\/github\.com\/[a-z0-9._/-]\+\/[a-z0-9._-]\+\)\s*{{{\d*.*'', ''\1'', "")')
+def List(): void
+	var packs: dict<any> = Get_pack_ls()
+	var ls: list<string>
+	var pkg: dict<any>
+	var out: list<dict<any>>
+	var format: string = printf("%%s %%s %%-%ds %%s",
+		keys(packs)
+		->map((_, v) => len(v))
+		->max()
+	)
+
+	for k in keys(packs)->sort('i')
+		pkg = packs[k]
+		add(ls, printf(format,
+			isdirectory(pkg.dir) ? 'I ' : '  ',
+			pkg.dir =~# '/start/' .. k ? 'S ' : 'O ',
+			k,
+			pkg.info[0].url
+		))
+	endfor
+	if has('popupwin')
+		popup_menu(ls, {
+			border: [1, 1, 1, 1],
+			borderchars: ['─', '│', '─', '│', '┌', '┐', '┘', '└'],
+			close: 'click',
+			pos: 'center',
+			maxheight: &lines - 2,
+			moved: 'any',
+			padding: [0, 1, 0, 1],
+			scrollbar: true,
+			wrap: false,
+			filter: (id, key) => {
+				if key ==? 'x' || key ==? 'q' || key ==? 'c' || key ==? "\<Esc>"
+					popup_close(id, 1)
+					return true
+				# elseif key ==? 'j'
+				# 	normal! ("\<ScrollWheelUp>")
+				# 	normal! "\<ScrollWheelUp>"
+				else
+					return popup_filter_menu(id, key)
+				endif
+			}
+		})
+	else
+		echo join(ls, "\n")
+	endif
 enddef
 
 def Get_pack_ls(): list<dict<string>> # プラグインの名称、リポジトリ、インストール先取得
