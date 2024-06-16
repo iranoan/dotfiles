@@ -65,13 +65,6 @@ export def Tabedit(...arg: list<string>): void
 					return
 				endif
 				AssociateCore(subsubf)
-				# app = systemlist('xdg-mime query default ' .. app)[0]
-				# var desktop = expand('$HOME') .. '/.local/share/applications/' .. app
-				# if !filereadable(desktop)
-				# 	desktop = '/usr/share/applications/' .. app
-				# endif
-				# app = matchstr(manage_pack#Grep('^Exec=', desktop )[0], 'Exec=\zs.\+\ze%')
-				# system(app .. ' ' .. subsubf .. ' &')
 			enddef
 
 			if SubOpenFile(subf)
@@ -126,23 +119,12 @@ export def Tabedit(...arg: list<string>): void
 			return false
 		enddef
 
-		def PackedFern(): bool
-			# if manage_pack#GetPackLs()->map('v:val["package"]')->count('fern.vim') >= 1
-			# が使えないので関数に
-			for p in manage_pack#GetPackLs()
-				if p.package == 'fern.vim'
-					return true
-				endif
-			endfor
-			return false
-		enddef
-
 		var full: string = ToFullpath(f, pwd)
 		var ftype: string = getftype(full)
 		if ftype ==# 'file' || ftype ==# 'link'  # ファイルが存在するなら無条件で開く
 			OpenFile(full)
 		elseif ftype ==# 'dir'  # ディレクトリなら Fern で開く
-			if PackedFern()
+			if has_key(pack_manage#GetPackLs(), 'fern.vim')
 				execute 'tabedit | Fern ' .. full
 			else
 				AssociateCore(full)

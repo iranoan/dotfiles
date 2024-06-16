@@ -180,7 +180,7 @@ def List(): void
 	endif
 enddef
 
-def Get_pack_ls(): list<dict<string>> # プラグインの名称、リポジトリ、インストール先取得
+def Get_pack_ls(): dict<any> # プラグインの名称、リポジトリ、インストール先取得
 	var Packadd_ls: func(string): list<any> = (f: string) => # packadd plugin で書かれたプラグイン読み込みを探す
 		GrepList('\<packadd\>', f, false)
 			->filter((_, v) => v !~# '^[\t ]*["#]') # 行頭コメント削除
@@ -189,18 +189,42 @@ def Get_pack_ls(): list<dict<string>> # プラグインの名称、リポジト�
 			->filter((_, v) => v =~# '\<packadd\>')
 			->map((_, v) => substitute(v, '\c^.*\<packadd[ \t]\+\([a-z0-9_.-]\+\).*', '\1', ''))
 
-	def Get_packages(f: string, p: list<string>): list<dict<string>> # ファイル f に書かれたプラグインの名称、リポジトリ、インストール先取得
-		var packages: list<dict<string>>
+	def Get_packages(f: string, p: list<string>): dict<any> # ファイル f に書かれたプラグインの名称、リポジトリ、インストール先取得
+		def GetPack(file: string): list<dict<any>> # 外部プログラム無しの grep もどき
+			var ret: list<dict<any>>
+			var d: dict<any>
+			for i in glob(file, false, true, true)
+				for j in readfile(resolve(expand(i)))
+									->matchstrlist('^["#\t ]\+.*\zshttps://github\.com/[a-z0-9._/-]\+/\([a-z0-9._-]\+\)\ze *{{{[0-9]*', {submatches: true})
+					d = {
+						file: i,
+						line: j.idx + 1,
+						url: j.text,
+						pack: j.submatches[0]
+					}
+					add(ret, d)
+				endfor
+			endfor
+			return ret
+		enddef
+
+		var pkgs: dict<any>
 		var pack: string
 		var pack_dir: string = resolve(expand('~/.vim/pack/github/')) .. '/'
 
-		for url in Pack_ls(f)
-			pack = substitute(url, '.\+/', '', '')
-			add(packages, {
-				'rep': url,
-				'package': pack,
-				'dir': pack_dir .. ( index(p, pack) == -1 ? 'start' : 'opt' ) .. '/' .. pack
-				})
+		for i in GetPack(f)
+			pack = i.pack
+			if !has_key(pkgs, pack)
+				pkgs[pack] = {
+					info: [],
+					dir: pack_dir .. ( index(p, pack) == -1 ? 'start' : 'opt' ) .. '/' .. pack
+				}
+			endif
+			add(pkgs[pack].info, {
+				url:  i.url,
+				file: i.file,
+				line: i.line
+			})
 		endfor
 		return packages
 	enddef
@@ -209,13 +233,30 @@ def Get_pack_ls(): list<dict<string>> # プラグインの名称、リポジト�
 		GrepList('^[^#"]*\<pack_manage#SetMAP([ \t]*[''"]', f, false)
 			->map((_, v) => substitute(v, '\c^[^#"]*\<pack_manage#SetMAP([ \t]*["'']\([^"'']\+\).*', '\1', ''))
 
+	def ExtendDic(p: dict<any>, ls: dict<any>): void
+		for [k, v] in items(ls)
+			if has_key(p, k)
+				p[k].info += v.info
+			else
+				p[k] = {
+					info: v.info,
+					dir: v.dir
+				}
+			endif
+		endfor
+	enddef
+
+	var packages: dict<any>
 	var packadds: list<string> = Packadd_ls('~/.vim/plugin/*.vim')
 	extend(packadds, Packadd_ls('~/.vim/autoload/*.vim'))
 		->extend(Map_ls('~/.vim/plugin/*.vim'))
 		->extend(Map_ls('~/.vim/autoload/*.vim'))
 		->uniq()
-	return extendnew(Get_packages('~/.vim/plugin/*.vim', packadds), Get_packages('~/.vim/autoload/*.vim', packadds))
-		->sort((lhs, rhs) => lhs.package >? rhs.package ? 1 : -1)
+	ExtendDic(packages, Get_packages('~/.vim/vimrc', packadds))
+	ExtendDic(packages, Get_packages('~/.vim/gvimrc', packadds))
+	ExtendDic(packages, Get_packages('~/.vim/autoload/*.vim', packadds))
+	ExtendDic(packages, Get_packages('~/.vim/plugin/*.vim', packadds))
+	return packages
 enddef
 
 export def Setup(): void # プラグインのインストール、設定のないものの削除
