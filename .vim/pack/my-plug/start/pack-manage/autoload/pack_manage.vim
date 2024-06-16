@@ -107,20 +107,8 @@ def Helptags(remake: number): void
 	endfor
 enddef
 
-export function CompPackList(arg, cmd, pos) abort " ~/.vim/plugin/set-pack-{start,opt}.vim, ~/.vim/autoload/*.vim で設定されたプラグインの補完関数
-	return extendnew(s:Pack_ls('~/.vim/plugin/*.vim'), s:Pack_ls('~/.vim/autoload/*.vim'))
-				\ ->uniq()
-				\ ->map('substitute(v:val, ''.\+/'', "", "")')
-				\ ->sort('i')
-				\ ->filter('v:val =~ "^' .. a:arg .. '"')
-endfunction
-
 export def IsInstalled(plugin: string): bool
 	return (match(substitute(&runtimepath, ',', '\n', 'g'), '/' .. plugin .. '\n') != -1)
-enddef
-
-export def Grep(s: string, file: string): list<string> # 外部プログラム無しの grep もどき
-	return GrepList(s, file, true)
 enddef
 
 def GrepList(s: string, file: string, nosuf: bool): list<string> # 外部プログラム無しの grep もどき
@@ -226,7 +214,7 @@ def Get_pack_ls(): dict<any> # プラグインの名称、リポジトリ、イ�
 				line: i.line
 			})
 		endfor
-		return packages
+		return pkgs
 	enddef
 
 	var Map_ls: func(string): list<string> = (f: string) => # pack_manage#SetMAP(plugin, ...) で書かれたプラグイン読み込みを探す
@@ -259,39 +247,72 @@ def Get_pack_ls(): dict<any> # プラグインの名称、リポジトリ、イ�
 	return packages
 enddef
 
-export def Setup(): void # プラグインのインストール、設定のないものの削除
-	var swap_dir: string
-	var pack_info: list<dict<string>> = Get_pack_ls()
-	var packs: list<string>
-	var dirs: list<string> = glob(resolve(expand('~/.vim/pack/github/opt')) .. '/*', false, true, true)
-	extend(dirs, glob(resolve(expand('~/.vim/pack/github/start')) .. '/*', false, true, true))
-	def GetDirs(l: list<dict<string>>): list<string>
-		var p: list<string>
-		for i in l
-			add(p, i.dir)
+def IsMulti(k: string, info: dict<any>, out: list<dict<any>>): bool # 多重設定があり、リポジトリ URL も複数の時 ture を返す
+	var urls: list<string>
+	if len(info.info) > 1
+		set more
+		echohl WarningMsg
+		echo 'multi defin: ' .. k
+		for i in info.info
+			add(out, {filename: i.file, lnum: i.line, text: i.url})
+			add(urls, i.url)
 		endfor
-		return p
-	enddef
+		if len(uniq(urls)) > 1
+			echohl ErrorMsg
+			echo 'Do not install ' .. k .. "\nmulti url: " .. join(urls)
+			echohl None
+		return true
+		endif
+	endif
+	echohl None
+	return false
+enddef
 
-	for s in pack_info
-		if match(dirs, '^' .. s.dir .. '$') != -1
-			echo 'Installed: ' .. s.package
+def OutMulti(out: list<dict<any>>): void # 多重設定を QuickFix に出力して開く
+	if len(out) > 0
+		setqflist([], ' ', {title: 'Multi define plug-in', items: out})
+		copen
+	endif
+enddef
+
+def Setup(): void # プラグインのインストール、設定のないものの削除
+	var swap_dir: string
+	var pack_info: dict<any> = Get_pack_ls()
+	var packs: list<string>
+	var dirs: list<string>
+	var info: dict<any>
+	var more: bool = &more
+	var out: list<dict<any>>
+
+	dirs = glob(resolve(expand('~/.vim/pack/github/opt')) .. '/*', false, true, true)
+	extend(dirs, glob(resolve(expand('~/.vim/pack/github/start')) .. '/*', false, true, true))
+	for k in keys(pack_info)->sort('i')
+		info = pack_info[k]
+		if IsMulti(k, info, out)
+			continue
+		endif
+		if match(dirs, '^' .. info.dir .. '$') != -1
+			echo 'Installed: ' .. k
 		else # 未インストール/ディレクトリ違い
-			swap_dir = substitute(s.dir, resolve(expand('~/.vim/pack/github')) .. '/\zs\(start\|opt\)\ze/', '\={"opt": "start", "start": "opt"}[submatch(0)]', '')
+			swap_dir = substitute(info.dir, resolve(expand('~/.vim/pack/github')) .. '/\zs\(start\|opt\)\ze/', '\={"opt": "start", "start": "opt"}[submatch(0)]', '')
+			set more
 			echohl WarningMsg
 			if match(dirs, '^' .. swap_dir .. '$') != -1 # ディレクトリ違い
-				echo 'mv ' .. swap_dir .. ' ' s.dir
-				rename(swap_dir, s.dir)
+				echo 'mv ' .. swap_dir .. ' ' info.dir
+				rename(swap_dir, info.dir)
 			else # 未インストール
-				echo system('git clone ' .. s.rep .. ' ' .. s.dir)
+				echo system('git clone ' .. info.info[0].url .. ' ' .. info.dir)
 			endif
 			echohl None
 		endif
 	endfor
-	# 設定なしを削除
-	# packs = map(pack_info, 'v:val.dir')
-	packs = GetDirs(pack_info)
+	OutMulti(out)
+	# 設定なしを削除↓移動済みの場合が有るので再度リストアップ
+	dirs = glob(resolve(expand('~/.vim/pack/github/opt')) .. '/*', false, true, true)
+	extend(dirs, glob(resolve(expand('~/.vim/pack/github/start')) .. '/*', false, true, true))
+	packs = values(pack_info)->map((_, v) => v.dir)
 	echohl WarningMsg
+	set more
 	for s in dirs
 		if match(packs, '^' .. s .. '$') != -1
 			continue
@@ -301,31 +322,44 @@ export def Setup(): void # プラグインのインストール、設定のな�
 		endif
 	endfor
 	echohl None
+	if !more
+		set nomore
+	endif
 enddef
 
-export def Reinstall(...packs: list<string>): void # プラグインの強制再インストール
-	var all_packs: list<dict<string>> = Get_pack_ls()
-	var pack_ls: list<dict<string>>
-	for p in packs
-		pack_ls = all_packs->deepcopy()->filter('v:val.package ==# "' .. p .. '"')
-		if !len(pack_ls)
+def Reinstall(packs: list<string>): void # プラグインの強制再インストール
+	var pack_info: dict<any> = Get_pack_ls()
+	var p: dict<any>
+	var out: list<dict<any>>
+	var more: bool = &more
+
+	set more
+	for i in packs
+		if !has_key(pack_info, i)
 			echohl WarningMsg
-			echo 'no setting: ' .. p
+			echo 'no setting: ' .. i
 			echohl None
 			continue
 		endif
-		for l in pack_ls
-			if isdirectory(l.dir)
-				delete(l.dir, 'rf')
-			endif
-			echo system('git clone ' .. l.rep .. ' ' .. l.dir)
-		endfor
+		p = pack_info[i]
+		if IsMulti(i, p, out)
+			continue
+		endif
+		if isdirectory(p.dir)
+			delete(p.dir, 'rf')
+		endif
+		echo system('git clone ' .. p.info[0].url .. ' ' .. p.dir)
 	endfor
+	OutMulti(out)
+	if !more
+		set nomore
+	endif
 enddef
 
 export def SetMAP(plug: string, cmd: string, map_ls: list<dict<string>>): void # キーマップにによる遅延読み込み用関数
 	var extra: string
 	var c: number
+
 	while 1
 		c = getchar(0)
 		if c == 0
@@ -341,6 +375,6 @@ export def SetMAP(plug: string, cmd: string, map_ls: list<dict<string>>): void #
 	feedkeys("\<Plug>" .. exe_cmd .. extra)
 enddef
 
-export def GetPackLs(): list<dict<string>> # プラグインの名称、リポジトリ、インストール先取得
+export def GetPackLs(): dict<any> # プラグインの名称、リポジトリ、インストール先取得
 	return Get_pack_ls()
 enddef
