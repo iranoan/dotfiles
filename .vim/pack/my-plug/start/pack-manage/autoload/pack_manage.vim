@@ -1,7 +1,46 @@
 vim9script
 scriptencoding utf-8
 
-export def Helptags(remake: bool = false): void
+export def PackManage(...arg: list<string>): void
+	if len(arg) < 1
+		help pack_manage-sub_help
+		echohl WarningMsg | echomsg 'Requires argument (subcommand).' | echomsg 'open help.' | echohl None
+	else
+		var sub_cmd: string = remove(arg, 0)
+		if index(['help', 'list', 'reinstall', 'set', 'tags'], sub_cmd) == -1
+			help pack_manage-sub_help
+			echohl WarningMsg | echomsg 'Not exist ' .. sub_cmd .. ' subcommand.' | echomsg 'open help.' | echohl None
+		elseif sub_cmd ==# 'help'
+			help pack_manage-sub_help
+		elseif sub_cmd ==# 'list'
+			List()
+		elseif sub_cmd ==# 'reinstall'
+			Reinstall(arg)
+		elseif sub_cmd ==# 'tags'
+			if len(arg) == 0
+				Helptags(0)
+			else
+				Helptags(str2nr(arg[0]))
+			endif
+		elseif sub_cmd ==# 'set'
+			Setup()
+		endif
+	endif
+enddef
+
+export def CompPack(arg: string, cmd: string, pos: number): list<string>
+	var cmd_ls: list<string> = split(cmd)
+	if len(cmd_ls) >= 2 && cmd_ls[1] == 'reinstall'
+		return keys(Get_pack_ls())
+					->sort('i')
+					->filter((_, v) => v =~ '^' .. arg)
+	elseif len(cmd_ls) <= 2
+		return filter(['help', 'list', 'reinstall ', 'set', 'tags'], (_, v) => v =~# '^' .. arg)
+	endif
+	return []
+enddef
+
+def Helptags(remake: number): void
 	# ~/.vim/pack/*/{stat,opt}/*/doc に有るヘルプのタグを ~/.vim/doc/tags{,??x} に出力 (packadd しなくても、help が開けるようになる)
 	# ~/.vim/pack/*/{stat,opt}/*/doc に有る tags{,-??} が古ければ再作成
 	# コンパイル済みの Python スクリプトにしても大して速度は変わらない
@@ -45,7 +84,7 @@ export def Helptags(remake: bool = false): void
 	if !isdirectory(docdir)
 		mkdir(docdir, 'p', 0o700)
 	endif
-	if remake
+	if remake != 0
 		MkHelpTags(h)
 		return
 	endif

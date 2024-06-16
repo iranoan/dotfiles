@@ -36,7 +36,7 @@ AlterCommand p[rint]    PrintBuffer
 AlterCommand u[pdate]   update
 # ↑:update の短縮形は :up で :u は :undo だがまず使わない
 AlterCommand ua[ll]     bufdo\ update
-AlterCommand helpt[ags] pack_manage#Helptags()
+AlterCommand helpt[ags] PackManage\ tags
 AlterCommand bc         .!bc\ -l\ -q\ ~/.bc\ <Bar>\ sed\ -E\ -e\ 's/^\\\./0./g'\ -e\ 's/(\\\.[0-9]*[1-9])0+/\\\1/g'\ -e\ 's/\\\.$//g'
 AlterCommand bi[nary]   if\ !&binary\ <Bar>\ execute('setlocal\ binary\ <Bar>\ %!xxd')\ <Bar>\ endif
 AlterCommand nob[inary] if\ &binary\ <Bar>\ execute('setlocal\ nobinary\ <Bar>\ %!xxd\ -r')\ <Bar>\ endif
