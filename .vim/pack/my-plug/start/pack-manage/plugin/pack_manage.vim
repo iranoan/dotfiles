@@ -1,8 +1,8 @@
 vim9script
 
-if exists('g:manage_pack')
+if exists('g:pack_manage')
 	finish
 endif
-g:manage_pack = 1
+g:pack_manage = 1
 
-command -complete=customlist,manage_pack#CompPackList -nargs=+ ReinstallPack call manage_pack#Reinstall(<f-args>)
+command -complete=customlist,pack_manage#CompPack -nargs=* PackManage call pack_manage#PackManage(<f-args>)
