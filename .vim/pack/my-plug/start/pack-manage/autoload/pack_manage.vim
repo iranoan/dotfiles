@@ -135,7 +135,7 @@ def List(): void
 		pkg = packs[k]
 		add(ls, printf(format,
 			isdirectory(pkg.dir) ? 'I ' : '  ',
-			pkg.dir =~# '/start/' .. k ? 'S ' : 'O ',
+			pkg.dir =~# '/start/' .. k ? '  ' : 'O ',
 			k,
 			pkg.info[0].url
 		))
