@@ -19,9 +19,9 @@
 *color14: #93A1A1
 *color15: #FDF6E3
 ! sxiv config
-Sxiv.font: RictyDiminished NF Regular:size=14
+Sxiv.font: UDEVGothicNF-Regular:size=14
 Sxiv.background: #000000
-Nsxiv.bar.font: RictyDiminished NF Regular:size=14
+Nsxiv.bar.font: UDEVGothicNF-Regular:size=14
 Nsxiv.window.background: #000000
 Nsxiv.window.foreground: #EEEEEE
 Nsxiv.bar.background: #EEEEEE
@@ -37,8 +37,8 @@ xterm*eightBitInput: false
 ! xTerm*fontDoublesize: true
 xterm*utf8: 1
 xterm*locale: true
-xterm*faceName: Inconsolata:style=regular:antialias=true
-xterm*faceNameDoublesize: RictyDiminished NF:style=regular:antialias=true
+xterm*faceName: JetBrainsMono-Rebular:style=regular:antialias=true
+xterm*faceNameDoublesize: UDEVGothicNF-Regular:style=regular:antialias=true
 xterm*faceSize: 14
 ! ↓絵文字が表示されか確認の為試してみたが変化なし
 ! xterm*VT100.font:-misc-fixed-medium-r-normal--18-120-100-100-c-90-iso10646-1
