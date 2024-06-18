@@ -278,9 +278,35 @@ def IsMulti(k: string, info: dict<any>, out: list<dict<any>>, msg: bool): bool #
 enddef
 
 def OutMulti(out: list<dict<any>>): void # 多重設定を QuickFix に出力して開く
+	var qf_nr: number = getqflist({nr: '$'}).nr
+	var qf_info: dict<any>
 	if len(out) > 0
-		setqflist([], ' ', {title: 'Multi define plug-in', items: out})
+		if qf_nr != 0
+			for i in range(1, qf_nr)
+				qf_info = getqflist({nr: i, title: 0, id: 0})
+				if qf_info.title ==# 'pack-manage: Multiple define plug-in'
+					setqflist([], 'r', {title: 'pack-manage: Multiple define plug-in', items: out, id: qf_info.id})
+					copen
+					return
+				endif
+			endfor
+		endif
+		setqflist([], ' ', {title: 'pack-manage: Multiple define plug-in', items: out})
 		copen
+	elseif qf_nr != 0 # 多重設定が既に無くても、もし多重定義の Quickfix が有ればクリア
+		for i in range(1, qf_nr)
+			qf_info = getqflist({nr: i, title: 0, id: 0})
+			if qf_info.title ==# 'pack-manage: Multiple define plug-in'
+				if qf_nr == 1
+					setqflist([], 'f')
+					close
+				else
+					setqflist([], 'r', {title: 'pack-manage: Multiple define plug-in', items: [], id: qf_info.id})
+					colder
+				endif
+				return
+			endif
+		endfor
 	endif
 enddef
 
