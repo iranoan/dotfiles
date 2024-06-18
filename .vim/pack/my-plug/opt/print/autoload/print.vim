@@ -7,13 +7,14 @@ set printmbcharset=UniJIS2004 " ln -s /usr/share/fonts/cmap/adobe-japan1/UniJIS2
 " set printfont=Japanese-Mincho-Regular:h11 printmbfont=r:Japanese-Mincho-Regular
 " 印刷 hardcopy で Japanese-Mincho-Regular など標準的なフォントが使えない時は、{{{
 " sudo apt install fonts-ipafont
-" set printfont=Japanese-Gothic-Regular:h11 printmbfont=r:Japanese-Gothic-Regular " ←ゴチック体
+set printfont=Japanese-Gothic-Regular:h11 printmbfont=r:Japanese-Gothic-Regular " ←ゴチック体
 " /var/lib/ghostscript/fonts/cidfmap に
 " /RictyDiminished-Regular << /FileType /TrueType /Path (/usr/share/fonts/truetype/ricty-diminished/RictyDiminished-Regular.ttf) /SubfontID 0 /CSI [(Japan1) 4] >> ;
 " を使えば、↓で Ricty Diminished も使える
-set printfont=RictyDiminished-Regular:h11 printmbfont=r:RictyDiminished-Regular,b:RictyDiminished-Bold,i:RictyDiminished-Oblique,o:RictyDiminished-Oblique
+" set printfont=RictyDiminished-Regular:h11 printmbfont=r:RictyDiminished-Regular,b:RictyDiminished-Bold,i:RictyDiminished-Oblique,o:RictyDiminished-Oblique
+" set printfont=UDEVGothicNF-Regular:h11  printmbfont=r:UDEVGothicNF-Regular,b:UDEVGothicNF-Bold,i:UDEVGothicNF-Oblique,o:UDEVGothicNF-Oblique
 " }}}
-set printmbfont+=,c:no,a:yes                   " ASCII 文字の扱い
+set printmbfont+=,c:yes,a:yes                   " ASCII 文字の扱い (これ以外の組み合わせは~が化ける)
 set printheader=%y%F%m%=%N
 set printoptions+=number:y,formfeed:y,left:5mm,right:5mm,top:5mm,bottom:5mm " 行番号印刷、改ページ文字を処理し、現在の行を新しいページに印刷
 
