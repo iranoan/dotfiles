@@ -139,18 +139,21 @@ def List(): void
 			k,
 			pkg.info[0].url
 		))
+		IsMulti(k, packs[k], out, false)
 	endfor
 	if has('popupwin')
 		popup_menu(ls, {
 			border: [1, 1, 1, 1],
 			borderchars: ['─', '│', '─', '│', '┌', '┐', '┘', '└'],
 			close: 'click',
-			pos: 'center',
+			cursorline: true,
 			maxheight: &lines - 2,
 			moved: 'any',
 			padding: [0, 1, 0, 1],
+			pos: 'center',
 			scrollbar: true,
 			wrap: false,
+			zindex: 1000,
 			filter: (id, key) => {
 				if key ==? 'x' || key ==? 'q' || key ==? 'c' || key ==? "\<Esc>"
 					popup_close(id, 1)
@@ -166,6 +169,7 @@ def List(): void
 	else
 		echo join(ls, "\n")
 	endif
+	OutMulti(out)
 enddef
 
 def Get_pack_ls(): dict<any> # プラグインの名称、リポジトリ、インストール先取得
@@ -247,24 +251,29 @@ def Get_pack_ls(): dict<any> # プラグインの名称、リポジトリ、イ�
 	return packages
 enddef
 
-def IsMulti(k: string, info: dict<any>, out: list<dict<any>>): bool # 多重設定があり、リポジトリ URL も複数の時 ture を返す
+def IsMulti(k: string, info: dict<any>, out: list<dict<any>>, msg: bool): bool # 多重設定があり、リポジトリ URL も複数の時 ture を返す
 	var urls: list<string>
-	if len(info.info) > 1
-		set more
-		echohl WarningMsg
-		echo 'multi defin: ' .. k
-		for i in info.info
-			add(out, {filename: i.file, lnum: i.line, text: i.url})
-			add(urls, i.url)
-		endfor
+	if len(info.info) == 1
+		return false
+	endif
+	add(out, {module: k})
+	for i in info.info
+		add(out, {filename: i.file, lnum: i.line, text: i.url})
+		add(urls, i.url)
+	endfor
+	set more
+	if msg
 		if len(uniq(urls)) > 1
 			echohl ErrorMsg
 			echo 'Do not install ' .. k .. "\nmulti url: " .. join(urls)
 			echohl None
-		return true
+			return true
+		else
+			echohl WarningMsg
+			echo 'multi defin: ' .. k
+			echohl None
 		endif
 	endif
-	echohl None
 	return false
 enddef
 
@@ -288,9 +297,6 @@ def Setup(): void # プラグインのインストール、設定のないもの
 	extend(dirs, glob(resolve(expand('~/.vim/pack/github/start')) .. '/*', false, true, true))
 	for k in keys(pack_info)->sort('i')
 		info = pack_info[k]
-		if IsMulti(k, info, out)
-			continue
-		endif
 		if match(dirs, '^' .. info.dir .. '$') != -1
 			echo 'Installed: ' .. k
 		else # 未インストール/ディレクトリ違い
@@ -305,6 +311,7 @@ def Setup(): void # プラグインのインストール、設定のないもの
 			endif
 			echohl None
 		endif
+		IsMulti(k, info, out, true)
 	endfor
 	OutMulti(out)
 	# 設定なしを削除↓移動済みの場合が有るので再度リストアップ
@@ -342,9 +349,10 @@ def Reinstall(packs: list<string>): void # プラグインの強制再インス�
 			continue
 		endif
 		p = pack_info[i]
-		if IsMulti(i, p, out)
+		if IsMulti(i, p, out, true)
 			continue
 		endif
+			echomsg i
 		if isdirectory(p.dir)
 			delete(p.dir, 'rf')
 		endif
