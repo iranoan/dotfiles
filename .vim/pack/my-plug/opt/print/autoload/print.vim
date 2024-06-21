@@ -10,9 +10,10 @@ set printmbcharset=UniJIS2004 " ln -s /usr/share/fonts/cmap/adobe-japan1/UniJIS2
 set printfont=Japanese-Gothic-Regular:h11 printmbfont=r:Japanese-Gothic-Regular " ←ゴチック体
 " /var/lib/ghostscript/fonts/cidfmap に
 " /RictyDiminished-Regular << /FileType /TrueType /Path (/usr/share/fonts/truetype/ricty-diminished/RictyDiminished-Regular.ttf) /SubfontID 0 /CSI [(Japan1) 4] >> ;
-" を使えば、↓で Ricty Diminished も使える
+" などの設定をすれば、↓で Ricty Diminished 等も使える
 " set printfont=RictyDiminished-Regular:h11 printmbfont=r:RictyDiminished-Regular,b:RictyDiminished-Bold,i:RictyDiminished-Oblique,o:RictyDiminished-Oblique
 " set printfont=UDEVGothicNF-Regular:h11  printmbfont=r:UDEVGothicNF-Regular,b:UDEVGothicNF-Bold,i:UDEVGothicNF-Oblique,o:UDEVGothicNF-Oblique
+" set printfont=JetBrainsMono-Regular:h11  printmbfont=r:BIZUDPGothic-Regular,b:BIZUDPGothic-Bold,i:BIZUDPGothic-Oblique,o:BIZUDPGothic-Oblique
 " }}}
 set printmbfont+=,c:yes,a:yes                   " ASCII 文字の扱い (これ以外の組み合わせは~が化ける)
 set printheader=%y%F%m%=%N
