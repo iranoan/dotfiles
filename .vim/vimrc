@@ -194,11 +194,13 @@ augroup END
 set cursorline cursorcolumn                    # 起動時は、カーソール行桁背景色付ける
 # タブ・ページ/ターミナル環境の時のカーソル形状 {{{2
 set showtabline=0 tabpagemax=500               # 常にタブを非表示+上限 500
-if !has('gui_running')                         # タブページの書式変更
-# if has('gui_running')                          # タブページの書式変更
-# 	set guitablabel=%!mk_tabline#GUI()
-# else
-# 	set tabline=%!mk_tabline#CUI()
+if has('gui_running')
+	if $XDG_SESSION_TYPE ==# 'wayland'           # gvimrc では遅く、これがないとウィンドウ・サイズ変更などでウィンドウ描画が乱れる→:help gui-wayland
+		$GVIM_ENABLE_WAYLAND = 1
+	endif
+	# set guitablabel=%!mk_tabline#GUI()           # タブページの書式変更
+else
+	# set tabline=%!mk_tabline#CUI()
 	# CUI のカーソル形状
 	&t_SI ..= "\e[5 q"                           # 挿入:    縦棒
 	&t_EI ..= "\e[1 q"                           # ノーマル:箱型
