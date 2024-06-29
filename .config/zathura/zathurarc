@@ -55,7 +55,7 @@ map              b toggle_statusbar
 map [normal]     D set page-right-to-left
 map [fullscreen] D set page-right-to-left
 
-set font "UDEVGothicNF-Regular normal 13"
+set font "UDEVGothicNF-Regular normal 11"
 set guioptions ""
 
 # SyncTeX
