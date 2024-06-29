@@ -15,7 +15,7 @@ endif
 # 	set ambiwidth=double
 # endif
 set guioptions-=T guioptions-=m guioptions-=r guioptions-=L guioptions+=k # ツール・バー/メニュー/スクロール・バー表示を OFF、lines, columns を維持
-if $GVIM_ENABLE_WAYLAND != 1 # ←winpos 等が効かなくなる (無いと描画が乱れる)
+if $GVIM_ENABLE_WAYLAND !=# '1' # ←winpos 等が効かなくなる (無いと描画が乱れる)
 	augroup GVIMRC
 		autocmd!
 		# 画面左上に表示 (help に有る通り autocmd を使わないと環境によって gvimrc の記載では無効)
