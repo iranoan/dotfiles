@@ -51,6 +51,10 @@ map [fullscreen] w adjust_window width
 
 map              b toggle_statusbar
 
+# 回転、リロードを Geeqie, や sxiv に合わせる
+map              r reload
+map              \] rotate
+
 # [d] で 2 ページ表示なるが、ページ配置を縦/横書きの左/右送り用にトグルで切り替える (逆) にする
 map [normal]     D set page-right-to-left
 map [fullscreen] D set page-right-to-left
