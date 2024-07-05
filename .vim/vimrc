@@ -197,7 +197,7 @@ set showtabline=0 tabpagemax=500               # 常にタブを非表示+上限
 # if has('gui_running')
 # 	if $XDG_SESSION_TYPE ==# 'wayland'           # gvimrc では遅く、これがないとウィンドウ・サイズ変更などでウィンドウ描画が乱れる
 # 		$GVIM_ENABLE_WAYLAND = 1                   # 一方幾つかの関数・コマンドが使えなくなる→:help gui-wayland
-# 	endif                                        # それ以外にも vim --serverlist が使えなくなる+Mozc の変換で変換中の文節とそれ以外の文節の区別がつかない
+# 	endif                                        # それ以外にも vim --serverlist が使えなくなる
 # 	# set guitablabel=%!mk_tabline#GUI()           # タブページの書式変更
 # else
 if !has('gui_running')
