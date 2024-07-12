@@ -30,6 +30,7 @@
 /.vim/spell/
 /.vim/undo/
 /.vim/viminfo
+/.config/tmux/plugins/
 
 # 履歴
 /.bash/history
