@@ -85,7 +85,7 @@ unset color_prompt
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
-	if [ -r "$HOME/.dircolors/solarized/256dark"  ]; then
+	if [ -r "$HOME/.dircolors/solarized/256dark" ]; then
 		eval "$(dircolors -b "$HOME/.dircolors/solarized/256dark")"
 	else
 		eval "$(dircolors -b)"
@@ -117,15 +117,15 @@ if [ -f "$HOME/.bash/completion" ]; then # /usr/share/bash-completion/bash_compl
 	source "$HOME/.bash/completion"
 fi
 #履歴を複数端末で同期
-share_history(){  # 以下の内容を関数として定義
+share_history(){ # 以下の内容を関数として定義
 	# if [ $? -ne 0 ]; then
 	# 	# コマンド失敗時は履歴を残さず読み込み直すのみ
-	# 	history -c  # 端末ローカルの履歴を一旦消去
-	# 	history -r  # .bash_historyから履歴を読み込み直す
+	# 	history -c # 端末ローカルの履歴を一旦消去
+	# 	history -r # .bash_historyから履歴を読み込み直す
 	# else
 		# コマンド成功時は、重複履歴を削除
-		history -a  # .bash_historyに前回コマンドを1行追記
-		history -c  # 端末ローカルの履歴を一旦消去
+		history -a # .bash_historyに前回コマンドを1行追記
+		history -c # 端末ローカルの履歴を一旦消去
 		awk 'BEGIN {i=0}
 			{
 				sub("^[ \t]+", "") # 行頭空白削除
@@ -151,9 +151,9 @@ share_history(){  # 以下の内容を関数として定義
 		history -r # $HISTFILE から履歴を読み込み直す
 	# fi
 }
-PROMPT_COMMAND='share_history'  # 上記関数をプロンプト毎に自動実施
-shopt -u histappend   # .bash_history追記モードは不要なのでOFFに
-export HISTSIZE=9999  # 履歴のMAX保存数を指定
+PROMPT_COMMAND='share_history' # 上記関数をプロンプト毎に自動実施
+shopt -u histappend  # .bash_history追記モードは不要なのでOFFに
+export HISTSIZE=9999 # 履歴のMAX保存数を指定
 export HISTCONTROL=erasedups #重複歴を記録しない
 export HISTFILE="$HOME/.bash/history"
 
