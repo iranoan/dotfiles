@@ -20,6 +20,15 @@ export def Highlight(): void
 			str2nr(strpart(bg, 4, 2), 16) - b0 + b1  # Blue
 		)
 	enddef
+	def ChangeVert(): void
+		c: string = execute('highlight VertSplit')
+			->substitute('[\n\r]\+', '', 'g')
+			->substitute('^VertSplit \+xxx', '', '')
+		execute c =~# '\<links\s\+to\>'
+					\ ? 'highlight link VertSplit ' .. substitute(c, '.\+\<links\s\+to\s\+\(\S\+\)', '\1', '')
+					\ : 'highlight VertSplit' .. substitute(c, 'ctermfg=\S\+ ctermbg=\(\S\+\) guifg=\S\+ guibg=\(\S\+\)', 'ctermfg=\1 ctermbg=\1 guifg=\2 guibg=\2', '')
+		return
+	enddef
 	var nbg: string = matchstr(execute('highlight Normal'), '\<guibg=\zs\S\+')
 	var bg: string
 	if &background ==? 'light'
@@ -59,11 +68,7 @@ export def Highlight(): void
 	if bg ==# '' || match(bg, '\<cleared\>') != -1 # Terminal 未定義は Normal
 		highlight link Terminal Normal
 	endif
-	execute 'highlight VertSplit' ..
-		execute('highlight VertSplit')
-			->substitute('[\n\r]\+', '', 'g')
-			->substitute('^VertSplit \+xxx', '', '')
-			->substitute('ctermfg=\S\+ ctermbg=\(\S\+\) guifg=\S\+ guibg=\(\S\+\)', 'ctermfg=\1 ctermbg=\1 guifg=\2 guibg=\2', '')
+	ChangeVert()
 enddef
 
 export def Before(color: string): void # t_Co, termguicolors 等 colorscheme 切り替え前に必要な設定をする
