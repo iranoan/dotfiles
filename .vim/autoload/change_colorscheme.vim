@@ -28,8 +28,8 @@ export def Highlight(): void
 		endif
 		bg = GetCursorLine(0xfd, 0xf6, 0xe3, 0xee, 0xe8, 0xd5)
 		         # 黒背景端末を使っているので背景色を明示する←端末も背景に NONE を使わない
-		execute 'highlight Normal       ctermfg=8 ctermbg=15 guifg=#111111 guibg=' .. nbg
-		execute 'highlight NormalDefault ctermfg=8 ctermbg=15 guifg=#111111 guibg=' .. nbg
+		execute 'highlight Normal        ctermfg=8 ctermbg=15 guifg=#073642 guibg=' .. nbg
+		execute 'highlight NormalDefault ctermfg=8 ctermbg=15 guifg=#073642 guibg=' .. nbg
 		         highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=15 guifg=#b58900 guibg=NONE
 		# execute 'highlight TabLineSel   term=bold,underline cterm=bold,underline gui=bold,underline ctermfg=0 ctermbg=7 guifg=#111111 guibg=' .. bg
 		#          highlight TabLine      term=underline cterm=underline gui=underline ctermfg=8 ctermbg=NONE guifg=#839496 guibg=NONE
@@ -39,8 +39,8 @@ export def Highlight(): void
 			nbg = '#002b36'
 		endif
 		bg = GetCursorLine(0x00, 0x2b, 0x36, 0x07, 0x36, 0x42)
-		execute 'highlight Normal       ctermfg=15 ctermbg=NONE guifg=#dddddd guibg=' .. (!has('gui_running') && g:colors_name ==# 'solarized8' ? 'NONE' : nbg)
-		execute 'highlight NormalDefault ctermfg=15 ctermbg=8 guifg=#dddddd guibg=' .. nbg
+		execute 'highlight Normal        ctermfg=15 ctermbg=NONE guifg=#eee8d5 guibg=' .. (!has('gui_running') && g:colors_name ==# 'solarized8' ? 'NONE' : nbg)
+		execute 'highlight NormalDefault ctermfg=15 ctermbg=8 guifg=#eee8d5 guibg=' .. nbg
 		         highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=8 guifg=#b58900 guibg=NONE
 		# execute 'highlight TabLineSel   term=bold,underline cterm=bold,underline gui=bold,underline ctermfg=15 ctermbg=0 guifg=#dddddd guibg=' .. bg
 		#          highlight TabLine      term=underline cterm=underline gui=underline ctermfg=14 ctermbg=NONE guifg=#93a1a1 guibg=NONE
