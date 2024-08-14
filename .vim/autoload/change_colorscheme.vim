@@ -56,7 +56,7 @@ export def Highlight(): void
 		#          highlight TabLineFill  term=underline cterm=underline gui=underline ctermfg=14 ctermbg=NONE guifg=#93a1a1 guibg=NONE
 	endif
 	# light/dark で同設定
-	highlight Comment    cterm=NONE gui=NONE guifg=#859900 ctermfg=2
+	highlight Comment    cterm=NONE gui=NONE
 	highlight SpellBad   term=underline cterm=underline ctermfg=NONE ctermul=9 guifg=NONE guisp=#cb4b16
 	highlight SpellCap   term=underline cterm=underline ctermfg=NONE ctermul=13 guifg=NONE guisp=#6c71c4
 	highlight SpellLocal term=underline cterm=underline ctermfg=NONE ctermul=3 guifg=NONE guisp=#b58900
