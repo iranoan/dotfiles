@@ -389,13 +389,13 @@ set viminfo+=n~/.vim/viminfo                   # viminfo の保存先
 set history=500                                # コマンド履歴の保存数 (あまり大きくすると q: 等で時間がかかるようになる)
 # 個人的なキー割り当て keymap キーマップ {{{1
 # 設定の切り替え {{{2
-nnoremap <silent><leader>cb <Cmd>setlocal linebreak!<CR>
-nnoremap <silent><leader>cc <Cmd>set showcmd!<CR>
-nnoremap <silent><leader>cd <Cmd>call change_directory#Lcd()<CR>
-nnoremap <silent><leader>cm <Cmd>set more!<CR>
-nnoremap <silent><leader>cs <Cmd>let &l:scrolloff = ( &scrolloff ? 0 : ( &lines > 20 ? &lines / 4 : 5 ) )<CR>
+nnoremap <silent><leader>cb <Cmd>setlocal linebreak! linebreak?<CR>
+nnoremap <silent><leader>cc <Cmd>set showcmd! showcmd?<CR>
+nnoremap <silent><leader>cd <Cmd>call change_directory#Lcd() <Bar>pwd<CR>
+nnoremap <silent><leader>cm <Cmd>set more! more?<CR>
+nnoremap <silent><leader>cs <Cmd>let &l:scrolloff = ( &scrolloff ? 0 : ( &lines > 20 ? &lines / 4 : 5 ) ) <Bar> setlocal scrolloff?<CR>
 nnoremap <silent><leader>ct <Cmd>let &showtabline = ( &showtabline ? 0 : 2 )<CR>
-nnoremap <silent><leader>cw <Cmd>setlocal wrap!<CR>
+nnoremap <silent><leader>cw <Cmd>setlocal wrap! wrap?<CR>
 # gvimrc に書かれた分 {{{3
 # nnoremap <leader>cM <Cmd>call toggle#Menu()<CR>
 # nnoremap <leader>cT <Cmd>call toggle#Toolbar()<CR>
