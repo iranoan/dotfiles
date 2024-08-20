@@ -35,6 +35,9 @@ export def Highlight(): void
 		if nbg ==# ''
 			nbg = '#fdf6e3'
 		endif
+		if g:colors_name =~# '^solarized'
+			       highlight Comment      cterm=NONE gui=NONE ctermfg=10 guifg=#586e75
+		endif
 		bg = GetCursorLine(0xfd, 0xf6, 0xe3, 0xee, 0xe8, 0xd5)
 		         # 黒背景端末を使っているので背景色を明示する←端末も背景に NONE を使わない
 		execute 'highlight Normal        ctermfg=8 ctermbg=15 guifg=#073642 guibg=' .. nbg
@@ -47,6 +50,9 @@ export def Highlight(): void
 		if nbg ==# ''
 			nbg = '#002b36'
 		endif
+		if g:colors_name =~# '^solarized'
+			       highlight Comment      cterm=NONE gui=NONE ctermfg=14 guifg=#93a1a1
+		endif
 		bg = GetCursorLine(0x00, 0x2b, 0x36, 0x07, 0x36, 0x42)
 		execute 'highlight Normal        ctermfg=15 ctermbg=NONE guifg=#eee8d5 guibg=' .. (!has('gui_running') && g:colors_name ==# 'solarized8' ? 'NONE' : nbg)
 		execute 'highlight NormalDefault ctermfg=15 ctermbg=8 guifg=#eee8d5 guibg=' .. nbg
@@ -56,7 +62,6 @@ export def Highlight(): void
 		#          highlight TabLineFill  term=underline cterm=underline gui=underline ctermfg=14 ctermbg=NONE guifg=#93a1a1 guibg=NONE
 	endif
 	# light/dark で同設定
-	highlight Comment    cterm=NONE gui=NONE
 	highlight SpellBad   term=underline cterm=underline ctermfg=NONE ctermul=9 guifg=NONE guisp=#cb4b16
 	highlight SpellCap   term=underline cterm=underline ctermfg=NONE ctermul=13 guifg=NONE guisp=#6c71c4
 	highlight SpellLocal term=underline cterm=underline ctermfg=NONE ctermul=3 guifg=NONE guisp=#b58900
