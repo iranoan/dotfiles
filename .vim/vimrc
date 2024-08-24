@@ -384,9 +384,10 @@ if has('path_extra')                           # tags ファイルは $HOME ま�
 endif
 set belloff=all                                # 音を消す
 # set visualbell                                 # 多くの colorscheme や tmux, Gvim で効かない
-# set mouse=a                                  # マウスの設定全てのモードで有効に:デフォルトでそうなっていた
+set mouse=a                                    # マウスの設定全てのモードで有効に
 set viminfo+=n~/.vim/viminfo                   # viminfo の保存先
 set history=500                                # コマンド履歴の保存数 (あまり大きくすると q: 等で時間がかかるようになる)
+set termwinscroll=30000                        # ターミナルで遡れる行数
 # 個人的なキー割り当て keymap キーマップ {{{1
 # 設定の切り替え {{{2
 nnoremap <silent><leader>cb <Cmd>setlocal linebreak! linebreak?<CR>
@@ -410,7 +411,6 @@ xnoremap <Space> <C-D>
 xnoremap <S-Space> <C-U>
 xnoremap <BS> <C-U>
 # ターミナル・モード {{{2
-set termwinscroll=30000                         # ターミナルで遡れる行数
 # tmux で <prefix> を <C-J> に合わせてると端末で使えない
 tnoremap <silent><C-W><C-[> <C-W>N
 tnoremap <silent><C-W><Esc> <C-W>N
