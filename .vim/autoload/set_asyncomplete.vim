@@ -104,7 +104,7 @@ function set_asyncomplete#main() abort
 	" }}}
 	" 2}}}
 	let g:asyncomplete_preprocessor = [function('s:asyncomplete_preprocessor')]
-	" call asyncomplete#enable_for_buffer() " asyncomplete.vim 自体の遅延読み込みこおろ見のために試みたがだめだった
+	" call asyncomplete#enable_for_buffer() " asyncomplete.vim 自体の遅延読み込みを試みたがだめだった
 endfunction
 
 def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>): void
