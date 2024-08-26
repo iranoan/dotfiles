@@ -16,14 +16,16 @@ if !exists("g:mail_draft_plugin")
 		def DelBlock(s: string, e: string, i: number, j: number): void # s, e 両方の文字列 (行) が有ったときのみ、その範囲を削除
 			var buf = getline(1, '$')
 			var start = match(buf, '^$')
-			var s_pos = match(buf, '^' .. s .. '$', start) + 1 + i
+			var s_pos = match(buf, '^' .. s .. '$', start) + 1
 			if !s_pos
 				return
 			endif
-			var e_pos = match(buf, '^' .. e .. '$', s_pos) + 1 + j
-			if !e_pos
+			var e_pos = match(buf, '^' .. e .. '$', s_pos)
+			if e_pos == -1
 				return
 			endif
+			s_pos = s_pos + 1 + i
+			e_pos = e_pos + 1 + j
 			:silent execute ':' .. s_pos .. ',' .. e_pos .. 'delete _'
 			return
 		enddef
@@ -55,8 +57,12 @@ if !exists("g:mail_draft_plugin")
 		elseif from ==? 'ndh-news@nikkeibp.co.jp'
 			DelBlock('', '◇日経デジタルヘルスNEWS', 0, -3)
 		elseif from ==? 'xtech-ac@nikkeibp.co.jp'
-			:silent :1 | :/^$/,/^$/+1delete _ | :%s/^　//g
+			:silent :1 | :/^$/,/^$/+1delete | :%s/^　//g
 			DelBlock('◆登録内容の変更や配信停止は', 'Copyright (C)\d\{4}、日経BP', 0, -1)
+		elseif from ==? 'xtech-pcmobile@nikkeibp.co.jp'
+			DelBlock('-PR-', '-PR-', -1, 1)
+			DelBlock('★リスキリングに効く！日経クロステック法人向け特別プラン', 'Copyright(C) \d\{4}　日経BP', -1, -2)
+			:silent :1 | :/^$/,/^$/+1delete | :%s/^　//g
 		elseif from ==? 'e_service@mof.go.jp'
 			silent execute ':1 | :/当メールマガジンについてのご意見、ご感想はこちらへお願いします。/;$delete'
 			silent silent :%s/^　//ge | silent silent :%s/<\(br \/\|\/div\|\/p\|^　\)>//ge | :1 | silent :/^$/,$s/<[^>]\+>\n\?//ge | silent :%s/&nbsp;/ /ge | silent :%s/&hellip;/…/ge | silent :%s/　/ /ge | :1 | silent :/^$/,$s/^\s//e | silent :/\%^/,/^$/s/text\/\zshtml/plain/e | silent :%s/^\n\zs\n+//e | silent :%s/&ldquo;/“/ge | silent :%s/&rdquo;/”/ge
