@@ -14,20 +14,24 @@ if !exists("g:mail_draft_plugin")
 	packadd transform
 	def g:ReformMail(): void # ML の広告を削除する個人的な関数
 		def DelBlock(s: string, e: string, i: number, j: number): void # s, e 両方の文字列 (行) が有ったときのみ、その範囲を削除
-			var buf = getline(1, '$')
-			var start = match(buf, '^$')
-			var s_pos = match(buf, '^' .. s .. '$', start) + 1
-			if !s_pos
-				return
-			endif
-			var e_pos = match(buf, '^' .. e .. '$', s_pos)
-			if e_pos == -1
-				return
-			endif
-			s_pos = s_pos + 1 + i
-			e_pos = e_pos + 1 + j
-			:silent execute ':' .. s_pos .. ',' .. e_pos .. 'delete _'
-			return
+			var buf: list<string>
+			var start: number
+			var s_pos: number
+			while true
+				buf = getline(1, '$')
+				start = match(buf, '^$')
+				s_pos = match(buf, '^' .. s .. '$', start)
+				if s_pos == -1
+					return
+				endif
+				var e_pos = match(buf, '^' .. e .. '$', s_pos)
+				if e_pos == -1
+					return
+				endif
+				s_pos = s_pos + 1 + i
+				e_pos = e_pos + 1 + j
+				:silent execute ':' .. s_pos .. ',' .. e_pos .. 'delete _'
+			endwhile
 		enddef
 
 		var msg = readfile(fnameescape(systemlist('notmuch search --output=files id:' .. b:notmuch.msg_id)[0]))
@@ -45,7 +49,7 @@ if !exists("g:mail_draft_plugin")
 		var pos = getpos('.')
 		var search = @/
 		if from ==? 'nikkei-news@mx.nikkei.com'
-			:silent execute ':1 | :/^$/+10delete | :$-27,$-15delete'
+			DelBlock('■このメールは送信専用メールアドレスから配信されています。', '■配信元：日本経済新聞社', 0, -1)
 		elseif from ==? 'atmarkit_newarrivals@noreply.itmedia.co.jp'
 			DelBlock('==PR-\+', '-\+==', 0, 1)
 			:silent execute ':1 | :/^＠ITの新着記事をお届けします。$/+1,/^--- NewsInsight -- 今日のニュース --\+$/-2delete | :/^━＠ITソーシャルアカウント━━━━━━━━━━━━━━━━━━━━━━━━━$/,/^発行：アイティメディア株式会社$/-2delete'
@@ -58,6 +62,8 @@ if !exists("g:mail_draft_plugin")
 			DelBlock('', '◇日経デジタルヘルスNEWS', 0, -3)
 		elseif from ==? 'xtech-ac@nikkeibp.co.jp'
 			:silent :1 | :/^$/,/^$/+1delete | :%s/^　//g
+			DelBlock('□■　注目のセミナー', '', 0, -1)
+			DelBlock('□■　.\+ランキング　\d\{1,2}/\d\{1,2}', '', 0, -1)
 			DelBlock('◆登録内容の変更や配信停止は', 'Copyright (C)\d\{4}、日経BP', 0, -1)
 		elseif from ==? 'xtech-pcmobile@nikkeibp.co.jp'
 			DelBlock('-PR-', '-PR-', -1, 1)
