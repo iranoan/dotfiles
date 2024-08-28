@@ -20,15 +20,15 @@ if !exists("g:mail_draft_plugin")
 			while true
 				buf = getline(1, '$')
 				start = match(buf, '^$')
-				s_pos = match(buf, '^' .. s .. '$', start)
-				if s_pos == -1
+				s_pos = match(buf, '^' .. s .. '$', start) + 1
+				if !s_pos
 					return
 				endif
 				var e_pos = match(buf, '^' .. e .. '$', s_pos)
 				if e_pos == -1
 					return
 				endif
-				s_pos = s_pos + 1 + i
+				s_pos = s_pos + i
 				e_pos = e_pos + 1 + j
 				:silent execute ':' .. s_pos .. ',' .. e_pos .. 'delete _'
 			endwhile
