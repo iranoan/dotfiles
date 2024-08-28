@@ -29,9 +29,9 @@ sxiv_preview(){
 	ps_xo=$( ps xo pid,ppid,comm )
 	wmctrl_lGp=$( wmctrl -lGp |
 		grep -E '^0x[0-9a-f]+' |
-		sed -E 's/(0x[0-9a-f]+) +-?[0-9]+ ([0-9]+) +-?[0-9]+ +-?[0-9]+ +([0-9]+) +([0-9]+) .+/\1\t\2\t\3\t\4/' )
+		sed -E 's/(0x[0-9a-f]+) +-?[0-9]+ ([0-9]+) +-?[0-9]+ +-?[0-9]+ +([0-9]+) +([0-9]+) (.+)/\1\t\2\t\3\t\4\t\5/' )
 	while true ; do # 呼び出し元の PID, WINID などを取得する
-		win_id=$( echo "$wmctrl_lGp" | grep -Ei "^0x[0-9a-f]+[[:space:]]$ppid([[:space:]][0-9]+){2}$" )
+		win_id=$( echo "$wmctrl_lGp" | grep -Ei "^0x[0-9a-f]+[[:space:]]$ppid([[:space:]][0-9]+){2}" )
 		if [ -n "$win_id" ]; then
 			width=$(( $( echo "$win_id" | cut -f3 ) / 2 ))
 			height=$( echo "$win_id" | cut -f4 )
@@ -49,6 +49,18 @@ sxiv_preview(){
 		fi
 	done
 
+	case "$( echo "$wmctrl_lGp" |
+						grep -Ei "^0x[0-9a-f]+[[:space:]]$ppid([[:space:]][0-9]+){2}[[:space:]].+" |
+						sed -E 's/.+ (\w+)/\1/' )" in
+		xterm|mlterm|rlogin|tanasinn|yaft) # sixel 対応ターミナル
+			if command -v img2sixel > /dev/null ; then
+				img2sixel "$1"
+				return 1
+			fi
+			;;
+		*)
+			;;
+	esac
 	echo '' # 前に表示していたプレヴューをクリア
 	$sxiv -e "$win_id" -g "${width}x${height}+${width}+0" --no-bar --scale-mode f --private "$1" & # & をなくしてもプロセスが残る点は変わらない+絞り込み入力側にフォーカスが戻らないことが増える印象
 	wmctrl -ia "$win_id"
