@@ -45,7 +45,8 @@ f(){
 		fi
 		dir="${dir//\"/\\\"}"
 		eval "${FZF_DEFAULT_COMMAND% .} $dir" |
-			fzf --prompt 'Files> ' --preview "$HOME/bin/fzf-preview.sh {}" --bind='enter:become(xdg-open {})'
+			fzf --prompt 'Files> ' --preview "$HOME/bin/fzf-preview.sh {}" --multi |
+			xargs -I{} xdg-open "{}"
 	else
 		if [ $# -eq 0 ]; then
 			dir=$( pwd )
@@ -63,7 +64,8 @@ f(){
 		cmd="${FZF_DEFAULT_COMMAND/find -L ./find -L $dir} $arg"
 		eval "${cmd/ -printf \"%P\\n\"/ -print0}" |
 			xargs --no-run-if-empty -n 1 -P 0 -0 -I{} realpath --no-symlinks --relative-base="$( pwd )" "{}" 2> /dev/null |
-			fzf --preview "$HOME/bin/fzf-preview.sh {}" --bind='enter:become(xdg-open {})'
+			fzf --preview "$HOME/bin/fzf-preview.sh {}" --multi |
+			xargs -I{} xdg-open "{}"
 	fi
 	pgrep -u "$USER" -f "$sxiv -e " |
 		grep -Ev "$sxiv_ls" |
