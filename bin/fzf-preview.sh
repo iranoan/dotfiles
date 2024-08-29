@@ -51,10 +51,10 @@ sxiv_preview(){
 
 	case "$( echo "$wmctrl_lGp" |
 						grep -Ei "^0x[0-9a-f]+[[:space:]]$ppid([[:space:]][0-9]+){2}[[:space:]].+" |
-						sed -E 's/.+ (\w+)/\1/' )" in
-		xterm|mlterm|rlogin|tanasinn|yaft) # sixel 対応ターミナル
+						sed -E 's/.+\<(\w+)/\1/' )" in
+		Konsole|xterm|mlterm|rlogin|tanasinn|yaft) # sixel 対応ターミナル
 			if command -v img2sixel > /dev/null ; then
-				img2sixel "$1"
+				img2sixel -w "$width" "$1"
 				return 1
 			fi
 			;;
