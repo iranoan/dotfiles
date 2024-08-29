@@ -17,8 +17,9 @@ if !exists("g:mail_draft_plugin")
 			var buf: list<string>
 			var start: number
 			var s_pos: number
+			var l: number = 1
 			while true
-				buf = getline(1, '$')
+				buf = getline(l, '$')
 				start = match(buf, '^$')
 				s_pos = match(buf, '^' .. s .. '$', start) + 1
 				if !s_pos
@@ -31,6 +32,7 @@ if !exists("g:mail_draft_plugin")
 				s_pos = s_pos + i
 				e_pos = e_pos + 1 + j
 				:silent execute ':' .. s_pos .. ',' .. e_pos .. 'delete _'
+				l = e_pos
 			endwhile
 		enddef
 
@@ -49,6 +51,7 @@ if !exists("g:mail_draft_plugin")
 		var pos = getpos('.')
 		var search = @/
 		if from ==? 'nikkei-news@mx.nikkei.com'
+			DelBlock('日経ニュースメール　\d\+/\d\+ [朝昼夕]版', '━　注目ニュース　━━━━━━━', 2, -2)
 			DelBlock('■このメールは送信専用メールアドレスから配信されています。', '■配信元：日本経済新聞社', 0, -1)
 		elseif from ==? 'atmarkit_newarrivals@noreply.itmedia.co.jp'
 			DelBlock('==PR-\+', '-\+==', 0, 1)
