@@ -29,10 +29,10 @@ if !exists("g:mail_draft_plugin")
 				if e_pos == -1
 					return
 				endif
+				l = s_pos
 				s_pos = s_pos + i
 				e_pos = e_pos + 1 + j
-				:silent execute ':' .. s_pos .. ',' .. e_pos .. 'delete _'
-				l = e_pos
+				silent execute ':' .. s_pos .. ',' .. e_pos .. 'delete _'
 			endwhile
 		enddef
 
@@ -55,26 +55,27 @@ if !exists("g:mail_draft_plugin")
 			DelBlock('■このメールは送信専用メールアドレスから配信されています。', '■配信元：日本経済新聞社', 0, -1)
 		elseif from ==? 'atmarkit_newarrivals@noreply.itmedia.co.jp'
 			DelBlock('==PR-\+', '-\+==', 0, 1)
-			:silent execute ':1 | :/^＠ITの新着記事をお届けします。$/+1,/^--- NewsInsight -- 今日のニュース --\+$/-2delete | :/^━＠ITソーシャルアカウント━━━━━━━━━━━━━━━━━━━━━━━━━$/,/^発行：アイティメディア株式会社$/-2delete'
+			silent execute ':1 | :/^＠ITの新着記事をお届けします。$/+1,/^--- NewsInsight -- 今日のニュース --\+$/-2delete | :/^━＠ITソーシャルアカウント━━━━━━━━━━━━━━━━━━━━━━━━━$/,/^発行：アイティメディア株式会社$/-2delete'
 			setline('.', '-- ')
 		elseif from ==? 'mailmag@mag2tegami.com'
-			:silent :/\%^/,/^$/s/^From: *mag2 *0000013455 *<mailmag@mag2tegami.com>/From: Liyn-an <info@Liyn-an.com>/
+			silent :/\%^/,/^$/s/^From: *mag2 *0000013455 *<mailmag@mag2tegami.com>/From: Liyn-an <info@Liyn-an.com>/
 			DelBlock('──\+\[PR\]─', '─\[PR\]──\+', 0, 1)
-			:silent :/^☆Ｏｏｏｏ.... 紅 茶 通 信 ☆ Liyn-an Tea TIMES ....ｏｏＯ☆/+2;$delete _
+			silent :/^☆Ｏｏｏｏ.... 紅 茶 通 信 ☆ Liyn-an Tea TIMES ....ｏｏＯ☆/+2;$delete _
 		elseif from ==? 'ndh-news@nikkeibp.co.jp'
 			DelBlock('', '◇日経デジタルヘルスNEWS', 0, -3)
 		elseif from ==? 'xtech-ac@nikkeibp.co.jp'
-			:silent :1 | :/^$/,/^$/+1delete | :%s/^　//g
+			silent :1 | :/^$/,/^$/+1delete | silent :%s/^　//ge
 			DelBlock('□■　注目のセミナー', '', 0, -1)
 			DelBlock('□■　.\+ランキング　\d\{1,2}/\d\{1,2}', '', 0, -1)
+			DelBlock('□■　お知らせ', '', 0, -1)
 			DelBlock('◆登録内容の変更や配信停止は', 'Copyright (C)\d\{4}、日経BP', 0, -1)
 		elseif from ==? 'xtech-pcmobile@nikkeibp.co.jp'
 			DelBlock('-PR-', '-PR-', -1, 1)
 			DelBlock('★リスキリングに効く！日経クロステック法人向け特別プラン', 'Copyright(C) \d\{4}　日経BP', -1, -2)
-			:silent :1 | :/^$/,/^$/+1delete | :%s/^　//g
+			silent :1 | :/^$/,/^$/+1delete | silent :%s/^　//g
 		elseif from ==? 'e_service@mof.go.jp'
 			silent execute ':1 | :/当メールマガジンについてのご意見、ご感想はこちらへお願いします。/;$delete'
-			silent silent :%s/^　//ge | silent silent :%s/<\(br \/\|\/div\|\/p\|^　\)>//ge | :1 | silent :/^$/,$s/<[^>]\+>\n\?//ge | silent :%s/&nbsp;/ /ge | silent :%s/&hellip;/…/ge | silent :%s/　/ /ge | :1 | silent :/^$/,$s/^\s//e | silent :/\%^/,/^$/s/text\/\zshtml/plain/e | silent :%s/^\n\zs\n+//e | silent :%s/&ldquo;/“/ge | silent :%s/&rdquo;/”/ge
+			silent silent :%s/^　//ge | silent :%s/<\(br \/\|\/div\|\/p\|^　\)>//ge | :1 | silent :/^$/,$s/<[^>]\+>\n\?//ge | silent :%s/&nbsp;/ /ge | silent :%s/&hellip;/…/ge | silent :%s/　/ /ge | :1 | silent :/^$/,$s/^\s//e | silent :/\%^/,/^$/s/text\/\zshtml/plain/e | silent :%s/^\n\zs\n+//e | silent :%s/&ldquo;/“/ge | silent :%s/&rdquo;/”/ge
 		else
 			return
 		endif
