@@ -571,8 +571,10 @@ nmap cs  <Cmd>call set_surround#main('Csurround') <bar> delfunction set_surround
 nmap ds  <Cmd>call set_surround#main('Dsurround') <bar> delfunction set_surround#main<CR>
 # <Shift> を押すのが面倒
 nmap ys4 ys$
-for [n, q] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '[': '[', '{': '{', ']': ']', '}': '}' })
-	execute 'nmap ys4' .. n .. ' ys$' .. q
+for [n, q] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>' })
+	for [k, v] in items({ 4: '$', 's': 's', 'S': 'S' })
+		execute 'nmap ys' .. k .. n .. ' ys' .. v .. q
+	endfor
 endfor
 for k in ['ysaw', 'ysiw', 'ysa', 'ysi', 'cs', 'ds']
 	for [n, q] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>' })
@@ -580,8 +582,8 @@ for k in ['ysaw', 'ysiw', 'ysa', 'ysi', 'cs', 'ds']
 	endfor
 endfor
 for k in ['ysa', 'ysi', 'cs']
-	for [n1, q1] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '[': '[', '{': '{', ']': ']', '}': '}' })
-		for [n2, q2] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '[': '[', '{': '{', ']': ']', '}': '}' })
+	for [n1, q1] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>' })
+		for [n2, q2] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>' })
 			if n1 !=# n2
 				execute 'nmap ' .. k .. n1 .. n2 .. ' ' .. k .. q1 .. q2
 			endif
