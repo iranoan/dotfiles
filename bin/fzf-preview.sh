@@ -49,18 +49,19 @@ sxiv_preview(){
 		fi
 	done
 
-	case "$( echo "$wmctrl_lGp" |
-						grep -Ei "^0x[0-9a-f]+[[:space:]]$ppid([[:space:]][0-9]+){2}[[:space:]].+" |
-						sed -E 's/.+\<(\w+)/\1/' )" in
-		Konsole|xterm|mlterm|rlogin|tanasinn|yaft) # sixel 対応ターミナル
-			if command -v img2sixel > /dev/null ; then
-				img2sixel -w "$width" "$1"
-				return 1
-			fi
-			;;
-		*)
-			;;
-	esac
+	# Sixel 対応ターミナル←ファイル・サイズ大きいと表示に時間がかかる
+	# case "$( echo "$wmctrl_lGp" |
+	# 					grep -Ei "^0x[0-9a-f]+[[:space:]]$ppid([[:space:]][0-9]+){2}[[:space:]].+" |
+	# 					sed -E 's/.+\<(\w+)/\1/' )" in
+	# 	Konsole|xterm|mlterm|rlogin|tanasinn|yaft) # sixel 対応ターミナル
+	# 		if command -v img2sixel > /dev/null ; then
+	# 			img2sixel -w "$width" "$1"
+	# 			return 1
+	# 		fi
+	# 		;;
+	# 	*)
+	# 		;;
+	# esac
 	echo '' # 前に表示していたプレヴューをクリア
 	$sxiv -e "$win_id" -g "${width}x${height}+${width}+0" --no-bar --scale-mode f --private "$1" & # & をなくしてもプロセスが残る点は変わらない+絞り込み入力側にフォーカスが戻らないことが増える印象
 	wmctrl -ia "$win_id"
