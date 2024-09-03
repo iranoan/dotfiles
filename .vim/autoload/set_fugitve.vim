@@ -22,5 +22,6 @@ function set_fugitve#main() abort
 	augroup fugitive_keymap
 		autocmd!
 		autocmd FileType fugitive,fugitiveblame,git nnoremap <buffer><nowait><silent>q :bwipeout<CR>
+		autocmd FileType fugitive,git               setlocal foldmethod=syntax
 	augroup END
 endfunction
