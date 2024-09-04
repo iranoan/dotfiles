@@ -21,7 +21,7 @@
 /.vim/pack/src/
 /.vim/pack/my-plug/opt/asyncomplete-mail/
 /.vim/pack/my-plug/opt/asyncomplete-spell/
-/.vim/pack/my-plug/opt/asyncomplete-html-class/
+/.vim/pack/my-plug/opt/asyncomplete-html/
 /.vim/pack/my-plug/opt/notmuch-py-vim/
 /.vim/pack/my-plug/opt/docx2xhtml/
 /.vim/pack/my-plug/start/pair_bracket/
