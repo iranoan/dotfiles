@@ -21,6 +21,9 @@ endif
 # に割り当てられているのが notmuch-show は Google 検索に割当し直し
 nnoremap <buffer><silent><Leader>s :SearchByGoogle<CR>
 xnoremap <buffer><silent><Leader>s :SearchByGoogle<CR>
+nmap <buffer><silent>K \eb
+xmap <buffer><silent>K \eb
+# setlocal keywordprg=:call\ set_eblook#searchWord()
 setlocal tabstop=8
 setlocal nolinebreak
 # :NoMatchParen " 対応するカッコの ON/OFF
