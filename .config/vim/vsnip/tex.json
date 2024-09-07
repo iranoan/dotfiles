@@ -3,7 +3,6 @@
 		"prefix": "section",
 		"body": "\\section{${1:${TM_SELECTED_TEXT}}}",
 		"description": "section"
-
 	},
 	"subsection": {
 		"prefix": "subsection",
