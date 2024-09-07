@@ -97,10 +97,10 @@ set mousemodel=popup                           # マウス右クリックは Win
 # set foldmethod=manual                          # 標準では手動←改めて設定する必要がない
 set foldlevelstart=99                          # ファイル・オープン時は折りたたみは開いたまま
 set foldcolumn=3                               # 折りたたみ状態を表示する左カラムの数
-g:sh_fold_enabled = 7                          # シェルスクリプトの折りたたみ方法 ~/.vim/ftplugin/sh.vim で指定すると $ vim ~/.bashrc 等引数で開くと設定が反映されない
+g:sh_fold_enabled = 7                          # シェルスクリプトの折りたたみ方法 ~/.config/vim/ftplugin/sh.vim で指定すると $ vim ~/.bashrc 等引数で開くと設定が反映されない
 # Undo アンドゥ {{{1
 if has('persistent_undo')
-	set undodir=~/.vim/undo
+	set undodir=~/.config/vim/undo
 	set undofile
 endif
 # IME {{{1
@@ -236,7 +236,7 @@ augroup StatusLineLeftRight
 				# | autocmd! StatusLineRight
 				# | augroup! StatusLineLeft
 				# 削除すると colorscheme を変更すると Normal 色になる
-	# ↓~/.vim/ftplugin/qf.vim, ~/.vim/after/ftplugin/qf.vim に書いてみたが効かなかった
+	# ↓~/.config/vim/ftplugin/qf.vim, ~/.config/vim/after/ftplugin/qf.vim に書いてみたが効かなかった
 	autocmd FileType qf &l:statusline = '%#StatusLineLeft#%t %*%<' .. (exists('w:quickfix_title') ? substitute(w:quickfix_title, '\(cexpr system("\)\?/usr/bin/grep -nHsI --color=never -d skip --exclude-dir=\.git\( --exclude={[^}]\+}\)\? \(.*\) /dev/null\(")->substitute(''\\ze\\n'', ":1: ", "g")\)\?$', 'grep \3', '')->substitute('%', '%%', 'g') : '') .. '%=%#StatusLineRight#%3l/%L%4p%%'
 augroup END
 # # 全角スペースをハイライト表示←フォントで対応したのですべてコメント・アウト {{{2
@@ -385,7 +385,7 @@ endif
 set belloff=all                                # 音を消す
 # set visualbell                                 # 多くの colorscheme や tmux, Gvim で効かない
 set mouse=a                                    # マウスの設定全てのモードで有効に
-set viminfo+=n~/.vim/viminfo                   # viminfo の保存先
+set viminfo+=n~/.config/vim/viminfo            # viminfo の保存先
 set history=500                                # コマンド履歴の保存数 (あまり大きくすると q: 等で時間がかかるようになる)
 set termwinscroll=30000                        # ターミナルで遡れる行数
 # 個人的なキー割り当て keymap キーマップ {{{1
@@ -404,7 +404,7 @@ nnoremap <silent><leader>cw <Cmd>setlocal wrap! wrap?<CR>
 inoremap <silent><expr><C-X><C-D> strftime('%Y/%m/%d')
 inoremap <silent><expr><C-X><C-T> strftime('%H:%M:%S')
 # スクロール {{{2
-# nnoremap <Space> <PageDown> # → ~/.vim/pack/my-plug/opt/page-down
+# nnoremap <Space> <PageDown> # → ~/.config/vim/pack/my-plug/opt/page-down
 nnoremap <S-Space> <PageUp>
 nnoremap <BS> <PageUp>
 xnoremap <Space> <C-D>

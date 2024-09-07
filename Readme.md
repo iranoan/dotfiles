@@ -64,6 +64,7 @@ install.sh
 * uim
 * urlview
 * Vim
+  * .config/vim/
 * X
   * .xinputrc
   * .xprofile

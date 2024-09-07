@@ -90,8 +90,8 @@ nnoremap <silent><Leader>fu <Cmd>Files ..<CR>
 xnoremap <silent><Leader>fu <Cmd>Files ..<CR>
 nnoremap <silent><Leader>f. <Cmd>Files ~/dotfiles<CR>
 xnoremap <silent><Leader>f. <Cmd>Files ~/dotfiles<CR>
-nnoremap <silent><Leader>fv <Cmd>Files ~/.vim<CR>
-xnoremap <silent><Leader>fv <Cmd>Files ~/.vim<CR>
+nnoremap <silent><Leader>fv <Cmd>Files ~/.config/vim<CR>
+xnoremap <silent><Leader>fv <Cmd>Files ~/.config/vim<CR>
 nnoremap <silent><Leader>fs <Cmd>Files ~/src<CR>
 xnoremap <silent><Leader>fs <Cmd>Files ~/src<CR>
 nnoremap <silent><Leader>fx <Cmd>Files ~/bin<CR>
