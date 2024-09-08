@@ -581,3 +581,5 @@ onoremap a. a>
 xnoremap a. a>
 onoremap i. i>
 xnoremap i. i>
+# abbreviate の代わり {{2
+cnoremap <expr>~vim &runtimepath->split(',')[0] .. '/'
