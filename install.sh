@@ -53,7 +53,7 @@ find "$d" -maxdepth 1 -mindepth 1 | while read -r f ; do
 done
 
 if command -v tmux > /dev/null ; then # make tmux plugin directory
-	mkdir -p ~/.tmux/plugins/
+	mkdir -p ~/.config/tmux/plugins/
 fi
 
 
