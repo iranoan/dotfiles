@@ -1,4 +1,4 @@
-~/.vim/pack/*/opt と ~/.vim/vimrc で
+~/.config/vim/pack/*/opt と ~/.config/vim/vimrc で
 ・呼び出し関数スクリプト (set_*.vim)
 ・及びそこから呼ばれる関数 (殆どは↑以外)
 ・キーマップによって呼ぼれる関数

@@ -80,7 +80,7 @@ function set_asyncomplete#main() abort
 				\ }))
 				" とりあえず LSP がある filetype は blocklist にしている
 	" }}}
-	" mail ~/.vim/pack/my-plug/opt/asyncomplete-mail/ {{{
+	" mail ~/.config/vim/pack/my-plug/opt/asyncomplete-mail/ {{{
 	packadd asyncomplete-mail
 	call asyncomplete#register_source(asyncomplete#sources#mail#get_source_options(#{
 				\ filter: function('FilterMail'),
@@ -88,14 +88,14 @@ function set_asyncomplete#main() abort
 				\ allowlist: ['notmuch-draft']
 				\ }))
 	" }}}
-	" spell ~/.vim/pack/my-plug/opt/asyncomplete-spell/ {{{
+	" spell ~/.config/vim/pack/my-plug/opt/asyncomplete-spell/ {{{
 	packadd asyncomplete-spell
 	call asyncomplete#register_source(asyncomplete#sources#spell#get_source_options(#{
 				\ priority: 20,
 				\ allowlist: ['*']
 				\ }))
 	" }}}
-	" html ~/.vim/pack/my-plug/opt/asyncomplete-html {{{
+	" html ~/.config/vim/pack/my-plug/opt/asyncomplete-html {{{
 	packadd asyncomplete-html
 	call asyncomplete#register_source(asyncomplete#sources#html_id#GetSourceOptions(#{
 				\ filter: function('FilterFile'),
