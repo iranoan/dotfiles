@@ -1,4 +1,4 @@
-*pack_manage* ~/.vim/pack/ のプラグイン管理用プラグイン
+*pack_manage* ~/.vim/pack/, ~/.config/vim/pack/ のプラグイン管理用プラグイン
 
 Author:  Iranoan <iranoan+vim@gmail.com>
 License: GPL Ver.3.
@@ -6,7 +6,8 @@ License: GPL Ver.3.
 
 ==============================================================================
                                                       *pack_manage-introduction*
-~/.vim/pack でプラグインを管理を少しでも便利にする関数・コマンド群
+~/.vim/pack や ~/.config/vim/pack (以下 ~/.vim/pack とだけ記す) でプラグインを
+管理を少しでも便利にする関数・コマンド群
 
                                                       *pack_manage-configration*
 概要~

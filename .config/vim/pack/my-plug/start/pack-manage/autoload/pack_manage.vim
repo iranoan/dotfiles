@@ -114,7 +114,7 @@ enddef
 def GrepList(s: string, file: string, nosuf: bool): list<string> # 外部プログラム無しの grep もどき
 	var ret: list<string>
 	for f in glob(file, false, true, true)
-		extend(ret, readfile(resolve(expand(f))))
+		extend(ret, readfile(resolve(f)))
 			->filter((_, v) => v =~? s)
 	endfor
 	return ret
@@ -186,7 +186,7 @@ def Get_pack_ls(): dict<any> # プラグインの名称、リポジトリ、イ�
 			var ret: list<dict<any>>
 			var d: dict<any>
 			for i in glob(file, false, true, true)
-				for j in readfile(resolve(expand(i)))
+				for j in readfile(resolve(i))
 									->matchstrlist('^["#\t ]\+.*\zshttps://github\.com/[a-z0-9._/-]\+/\([a-z0-9._-]\+\)\ze *{{{[0-9]*', {submatches: true})
 					d = {
 						file: i,
@@ -202,7 +202,7 @@ def Get_pack_ls(): dict<any> # プラグインの名称、リポジトリ、イ�
 
 		var pkgs: dict<any>
 		var pack: string
-		var pack_dir: string = resolve(expand('~/.vim/pack/github/')) .. '/'
+		var pack_dir: string = resolve(&runtimepath->split(',')[0] .. '/pack/github/') .. '/'
 
 		for i in GetPack(f)
 			pack = i.pack
@@ -239,15 +239,16 @@ def Get_pack_ls(): dict<any> # プラグインの名称、リポジトリ、イ�
 	enddef
 
 	var packages: dict<any>
-	var packadds: list<string> = Packadd_ls('~/.vim/plugin/*.vim')
-	extend(packadds, Packadd_ls('~/.vim/autoload/*.vim'))
-		->extend(Map_ls('~/.vim/plugin/*.vim'))
-		->extend(Map_ls('~/.vim/autoload/*.vim'))
+	var vim_dir: string = &runtimepath->split(',')[0]
+	var packadds: list<string> = Packadd_ls(vim_dir .. '/plugin/*.vim')
+	extend(packadds, Packadd_ls(vim_dir .. '/autoload/*.vim'))
+		->extend(Map_ls(vim_dir .. '/plugin/*.vim'))
+		->extend(Map_ls(vim_dir .. '/autoload/*.vim'))
 		->uniq()
-	ExtendDic(packages, Get_packages('~/.vim/vimrc', packadds))
-	ExtendDic(packages, Get_packages('~/.vim/gvimrc', packadds))
-	ExtendDic(packages, Get_packages('~/.vim/autoload/*.vim', packadds))
-	ExtendDic(packages, Get_packages('~/.vim/plugin/*.vim', packadds))
+	ExtendDic(packages, Get_packages(vim_dir .. '/vimrc', packadds))
+	ExtendDic(packages, Get_packages(vim_dir .. '/gvimrc', packadds))
+	ExtendDic(packages, Get_packages(vim_dir .. '/autoload/*.vim', packadds))
+	ExtendDic(packages, Get_packages(vim_dir .. '/plugin/*.vim', packadds))
 	return packages
 enddef
 
@@ -318,15 +319,16 @@ def Setup(): void # プラグインのインストール、設定のないもの
 	var info: dict<any>
 	var more: bool = &more
 	var out: list<dict<any>>
+	var vim_dir: string = &runtimepath->split(',')[0]
 
-	dirs = glob(resolve(expand('~/.vim/pack/github/opt')) .. '/*', false, true, true)
-	extend(dirs, glob(resolve(expand('~/.vim/pack/github/start')) .. '/*', false, true, true))
+	dirs = glob(resolve(vim_dir .. '/pack/github/opt') .. '/*', false, true, true)
+	extend(dirs, glob(resolve(vim_dir .. '/pack/github/start') .. '/*', false, true, true))
 	for k in keys(pack_info)->sort('i')
 		info = pack_info[k]
 		if match(dirs, '^' .. info.dir .. '$') != -1
 			echo 'Installed: ' .. k
 		else # 未インストール/ディレクトリ違い
-			swap_dir = substitute(info.dir, resolve(expand('~/.vim/pack/github')) .. '/\zs\(start\|opt\)\ze/', '\={"opt": "start", "start": "opt"}[submatch(0)]', '')
+			swap_dir = substitute(info.dir, resolve(vim_dir .. '/pack/github') .. '/\zs\(start\|opt\)\ze/', '\={"opt": "start", "start": "opt"}[submatch(0)]', '')
 			set more
 			echohl WarningMsg
 			if match(dirs, '^' .. swap_dir .. '$') != -1 # ディレクトリ違い
@@ -341,8 +343,8 @@ def Setup(): void # プラグインのインストール、設定のないもの
 	endfor
 	OutMulti(out)
 	# 設定なしを削除↓移動済みの場合が有るので再度リストアップ
-	dirs = glob(resolve(expand('~/.vim/pack/github/opt')) .. '/*', false, true, true)
-	extend(dirs, glob(resolve(expand('~/.vim/pack/github/start')) .. '/*', false, true, true))
+	dirs = glob(resolve(vim_dir .. '/pack/github/opt') .. '/*', false, true, true)
+	extend(dirs, glob(resolve(vim_dir .. '/pack/github/start') .. '/*', false, true, true))
 	packs = values(pack_info)->map((_, v) => v.dir)
 	echohl WarningMsg
 	set more

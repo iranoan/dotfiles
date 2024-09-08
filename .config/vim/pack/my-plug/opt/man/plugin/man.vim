@@ -11,9 +11,10 @@ if exists('g:man_plugin')
 endif
 g:man_plugin = 1
 
+var vim_dir: string = &runtimepath->split(',')[0]
 # ユーザごとでなく、システムに有る /ftplugin/man.vim を読み込む
 for h in split(&runtimepath, ',')
-	if match(h, expand('~/.vim')) != -1
+	if match(h, vim_dir) != -1
 		continue
 	endif
 	if getftype(h .. '/ftplugin/man.vim') !=# ''

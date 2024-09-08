@@ -15,7 +15,7 @@ function set_asyncomplete#main() abort
 			let g:vsnip_filetypes = {}
 		endif
 		let g:vsnip_filetypes.xhtml = ['html']
-		let g:vsnip_snippet_dir = resolve(expand('~/.vim/vsnip'))
+		let g:vsnip_snippet_dir = resolve(&runtimepath->split(',')[0] .. '/vsnip')
 		" vim-vsnip/plugin/vsnip.vim s:expand_or_jump() を置き換え←補完後挿入モードにならないケースが有る
 		" asyncomplete.vim で snippet と LSP の連携 https://github.com/hrsh7th/vim-vsnip-integ {{{
 			packadd vim-vsnip-integ
