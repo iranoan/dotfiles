@@ -33,7 +33,7 @@ install.sh
 * fd (fdfind)
   * .config/fd/
 * FZF
-  * .fzf/
+  * .config/fzf/
     * bashrc
     * key-bindings.bash
 * Git

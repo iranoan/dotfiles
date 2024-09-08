@@ -14,7 +14,7 @@
 /.config/**/.*.sw?
 
 # プラグイン管理下ファイル (いつでもダウンロードできる)+履歴ファイルは無視
-/.fzf/completion.bash
+/.config/fzf/completion.bash
 /.config/vim/.netrwhist
 /.config/vim/doc/
 /.config/vim/pack/github/

@@ -205,7 +205,7 @@ stty stop undef
 # set -o vi
 umask 077
 
-[ -f "$HOME/.fzf/bashrc" ] && source "$HOME/.fzf/bashrc"
+[ -f "$HOME/.config/fzf/bashrc" ] && source "$HOME/.config/fzf/bashrc"
 
 ranger() { # ranger でファイルを less で開いた時にすぐ終わってしまう問題対処→http://malkalech.com/ranger_filer#org15afd1c
 	if [ -n "$RANGER_LEVEL" ]; then
