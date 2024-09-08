@@ -1,4 +1,4 @@
-function set_previm#main() abort
+function set_preview#main() abort
 	packadd previm
 	execute 'set filetype=' .. &filetype
 	let g:previm_open_cmd='firefox'

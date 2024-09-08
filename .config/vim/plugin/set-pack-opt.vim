@@ -455,10 +455,10 @@ augroup END
 augroup loadPreview
 	autocmd!
 	autocmd CmdUndefined PrevimOpen
-				\ set_previm#main()
+				\ set_preview#main()
 				| autocmd! loadPreview
 				| augroup! loadPreview
-				| delfunction set_previm#main
+				| delfunction set_preview#main
 augroup END
 
 # EPWING の辞書を呼び出す https://github.com/deton/eblook.vim {{{1
