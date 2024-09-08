@@ -57,7 +57,7 @@ install.sh
   * .profile
 * stylelint
 * TeX
-  * .latexmkrc
+  * .config/latexmkrc
   * .chktexrc
 * textlint
 * tmux
