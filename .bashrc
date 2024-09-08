@@ -85,8 +85,8 @@ unset color_prompt
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
-	if [ -r "$HOME/.dircolors/solarized/256dark" ]; then
-		eval "$(dircolors -b "$HOME/.dircolors/solarized/256dark")"
+	if [ -r "$HOME/.config/dircolors/solarized/256dark" ]; then
+		eval "$(dircolors -b "$HOME/.config/dircolors/solarized/256dark")"
 	else
 		eval "$(dircolors -b)"
 	fi
