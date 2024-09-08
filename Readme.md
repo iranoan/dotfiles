@@ -61,6 +61,7 @@ install.sh
   * .chktexrc
 * textlint
 * tmux
+  * .config/tmux/
 * uim
 * urlview
 * Vim
@@ -76,7 +77,9 @@ install.sh
   * .config/pep8
   * .pip/
 * ranger
+  * .config/ranger/
 * nsxiv
   * font, color setting → .Xresources
   * other → .config/nsxiv/
 * Zathura
+  * .config/zathura/
