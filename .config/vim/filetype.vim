@@ -9,7 +9,7 @@ var did_load_filetypes = 1
 augroup filetypedetect
 	autocmd!
 	autocmd BufNewFile,BufRead *.plt          setfiletype gnuplot # *.plt は mimetypeが設定されていないことも有り得る
-	autocmd BufNewFile,BufRead .bash_history,.bashrc,~/dotfiles/.bash/*,~/.bash/* setfiletype bash
+	autocmd BufNewFile,BufRead .bash_history,.bashrc,~/dotfiles/.config/bash/*,~/.config/bash/* setfiletype bash
 	autocmd BufNewFile,BufRead .xprofile      setfiletype sh
 	autocmd BufNewFile,BufRead .textlintrc,.stylelintrc,.htmlhintrc setfiletype json
 	autocmd BufNewFile,BufRead .msmtprc       setfiletype msmtp

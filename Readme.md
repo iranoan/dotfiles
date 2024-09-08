@@ -47,7 +47,7 @@ install.sh
 * mlterm
 * Shell
   * .bashrc
-  * .bash/
+  * .config/bash/
     * aliases
     * completion
   * .cshrc

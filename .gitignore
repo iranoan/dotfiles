@@ -33,7 +33,7 @@
 /.config/tmux/plugins/
 
 # 履歴
-/.bash/history
+/.config/bash/history
 
 # プラグインの設定ファイル
 !/.vim/pack/github/opt/vimspector/configurations/

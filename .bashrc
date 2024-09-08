@@ -99,8 +99,8 @@ export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quo
 # Alias definitions.
 # You may want to put all your additions into a separate file like
 # See /usr/share/doc/bash-doc/examples in the bash-doc package.
-if [ -f "$HOME/.bash/aliases" ]; then
-	source "$HOME/.bash/aliases"
+if [ -f "$HOME/.config/bash/aliases" ]; then
+	source "$HOME/.config/bash/aliases"
 fi
 
 # enable programmable completion features (you don't need to enable
@@ -113,8 +113,8 @@ if ! shopt -oq posix; then
 		. /etc/bash_completion
 	fi
 fi
-if [ -f "$HOME/.bash/completion" ]; then # /usr/share/bash-completion/bash_completion 内で読み込まれるのは .bash_completion
-	source "$HOME/.bash/completion"
+if [ -f "$HOME/.config/bash/completion" ]; then # /usr/share/bash-completion/bash_completion 内で読み込まれるのは .bash_completion
+	source "$HOME/.config/bash/completion"
 fi
 #履歴を複数端末で同期
 share_history(){ # 以下の内容を関数として定義
@@ -147,7 +147,7 @@ share_history(){ # 以下の内容を関数として定義
 					if( !c[b[i]]++ )a[k++] = b[i] # 重複でない
 				}
 				while( k > 0 )print a[--k] # 逆順出力
-			}' "$HISTFILE" > "$HOME/.bash/history.tmp" && mv "$HOME/.bash/history.tmp" "$HISTFILE"
+			}' "$HISTFILE" > "$HOME/.config/bash/history.tmp" && mv "$HOME/.config/bash/history.tmp" "$HISTFILE"
 		history -r # $HISTFILE から履歴を読み込み直す
 	# fi
 }
@@ -155,7 +155,7 @@ PROMPT_COMMAND='share_history' # 上記関数をプロンプト毎に自動実�
 shopt -u histappend  # .bash_history追記モードは不要なのでOFFに
 export HISTSIZE=9999 # 履歴のMAX保存数を指定
 export HISTCONTROL=erasedups #重複歴を記録しない
-export HISTFILE="$HOME/.bash/history"
+export HISTFILE="$HOME/.config/bash/history"
 
 if command -v vim > /dev/null ; then
 	if [[ $( tty ) =~ /dev/tty.* ]] || ps x | awk '{print $5}' | grep -qE '\<[f]bterm\>' ; then # 仮想コンソール→非 GUI
