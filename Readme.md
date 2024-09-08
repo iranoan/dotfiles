@@ -75,7 +75,7 @@ install.sh
 * Python
   * .config/flake8
   * .config/pep8
-  * .pip/
+  * .config/pip/
 * ranger
   * .config/ranger/
 * nsxiv
