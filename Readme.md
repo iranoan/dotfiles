@@ -39,6 +39,7 @@ install.sh
 * Git
   * .config/git
 * GDB
+  * .config/gdb
 * gnuplot
   * .config/gnuplot
 * Gromit-MPX
