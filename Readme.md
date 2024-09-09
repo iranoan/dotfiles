@@ -29,7 +29,7 @@ install.sh
 * colordiff
 * Ctags
 * efm-langserver
-  * .config/efm-langserver
+  * .config/efm-langserver/
 * FbTerm
 * fd (fdfind)
   * .config/fd/
@@ -38,16 +38,16 @@ install.sh
     * bashrc
     * key-bindings.bash
 * Git
-  * .config/git
+  * .config/git/
 * GDB
-  * .config/gdb
+  * .config/gdb/
 * gnuplot
-  * .config/gnuplot
+  * .config/gnuplot/
 * Gromit-MPX
 * LanguageTool
 * less
 * mlterm
-  * .config/mlterm
+  * .config/mlterm/
 * Shell
   * .bashrc
   * .config/bash/
@@ -60,7 +60,7 @@ install.sh
   * .profile
 * stylelint
 * TeX
-  * .config/latexmkrc
+  * .config/latexmk/latexmkrc
   * .chktexrc
 * textlint
 * tmux
