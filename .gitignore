@@ -39,6 +39,6 @@
 !/.vim/pack/github/opt/vimspector/configurations/
 
 # シンボリック/履歴/テンポラリ
-/.mlterm/emoji
-/.mlterm/challenge
-/.mlterm/pts_*.six
+/.config/mlterm/emoji
+/.config/mlterm/challenge
+/.config/mlterm/pts_*.six

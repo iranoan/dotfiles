@@ -46,6 +46,7 @@ install.sh
 * LanguageTool
 * less
 * mlterm
+  * .config/mlterm
 * Shell
   * .bashrc
   * .config/bash/
