@@ -117,8 +117,8 @@ case "${f##*/}" in # ファイル名による分岐
 							}'
 						)
 						time=$(( time / 2 ))
-						ffmpeg -ss $time -i "$f" -frames:v 1 -y "$HOME/.tmp/tmp-move-sixv.jpg" 2> /dev/null
-						if sxiv_preview "$HOME/.tmp/tmp-move-sixv.jpg" ; then
+						ffmpeg -ss $time -i "$f" -frames:v 1 -y "$HOME/.cache/tmp-move-sixv.jpg" 2> /dev/null
+						if sxiv_preview "$HOME/.cache/tmp-move-sixv.jpg" ; then
 							ffmpeg -hide_banner -i "$f" -f metadata - | tail -n +2
 						fi
 						;;

@@ -30,7 +30,7 @@ if [ -f "$HOME/.bash/history" ]; then # bash の一部の履歴を削除
 		-e "/ -(v|-version|h|-help) ?$/d" \
 		-e "/^(cd|cd (-|\$_)|ls|history|pwd|exit) ?$/d" |
 		awk '!a[$0]++' |
-		tac > ~/.tmp/bash_history && mv ~/.tmp/bash_history ~/.bash/history
+		tac > "$HOME/.config/bash/history.tmp" && mv "$HOME/.config/bash/history.tmp" ~/.bash/history
 fi
 # 仮想コンソールで使い分け
 case "$TERM" in

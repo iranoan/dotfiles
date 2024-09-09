@@ -27,7 +27,7 @@
 --exclude=/home/hiroyuki/.kde
 --exclude=/home/hiroyuki/.lftp
 --exclude=/home/hiroyuki/.local
---exclude=/home/hiroyuki/.log
+--exclude=/home/hiroyuki/.local/share/log
 --exclude=/home/hiroyuki/.macromedia
 --exclude=/home/hiroyuki/.mozc
 --exclude=/home/hiroyuki/.mozilla
@@ -41,7 +41,7 @@
 --exclude=/home/hiroyuki/.ssh
 --exclude=/home/hiroyuki/.ssr
 --exclude=/home/hiroyuki/.themes
---exclude=/home/hiroyuki/.tmp
+--exclude=/home/hiroyuki/.local/state/tmp
 --exclude=/home/hiroyuki/.w3m
 --exclude=/home/hiroyuki/.xkb
 --exclude=/home/hiroyuki/texmf/tex
