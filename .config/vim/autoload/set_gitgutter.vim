@@ -22,7 +22,7 @@ function set_gitgutter#main() abort
 	" augroup hook_gitgutter " git の warning を無視するように関数をフックする
 	" 	autocmd!
 	" 	autocmd FuncUndefined gitgutter#*
-	" 				\ call hook_function#main(&runtimepath->split(',')[0] .. '/pack/github/start/vim-gitgutter/autoload/gitgutter/utility.vim', &runtimepath->split(',')[0] .. '/plugin/hook_gitgutter.vim', 'obtain_file_renames')
+	" 				\ call hook_function#main($MYVIMDIR .. 'pack/github/start/vim-gitgutter/autoload/gitgutter/utility.vim', $MYVIMDIR .. 'plugin/hook_gitgutter.vim', 'obtain_file_renames')
 	" 				\ | autocmd! hook_gitgutter
 	" 				\ | augroup! hook_gitgutter
 	" augroup END
