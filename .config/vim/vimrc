@@ -258,7 +258,7 @@ augroup END
 set completeopt=menuone,noinsert,noselect,popup # 補完
 set delcombine                                 # 結合文字を別々に削除する
 # set maxcombine=2                               # 結合文字の最大個数
-set nrformats=bin,hex,alpha                    # アルファベットでもインクリメント、ディクリメント←8進数,octalは除外
+set nrformats=bin,hex,alpha,blank              # アルファベットでもインクリメント、ディクリメント←8進数,octalは除外、-の前が空白でない場合はハイフン扱いで負数扱いにしない
 set spell spelllang+=cjk                       # スペル・チェック
 set clipboard=exclude:cons\|linux              # クリップボードの扱い
 # カーソル・キー {{{1
