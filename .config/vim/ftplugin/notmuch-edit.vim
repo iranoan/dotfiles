@@ -72,7 +72,7 @@ if !exists("g:mail_draft_plugin")
 		elseif from ==? 'xtech-pcmobile@nikkeibp.co.jp'
 			DelBlock('-PR-', '-PR-', -1, 1)
 			DelBlock('★リスキリングに効く！日経クロステック法人向け特別プラン', 'Copyright(C) \d\{4}　日経BP', -1, -2)
-			silent :1 | :/^$/,/^$/+1delete | silent :%s/^　//g
+			silent :1 | :/^$/,/^$/+1delete | silent :%s/^　//ge
 		elseif from ==? 'e_service@mof.go.jp'
 			silent execute ':1 | :/当メールマガジンについてのご意見、ご感想はこちらへお願いします。/;$delete'
 			silent silent :%s/^　//ge | silent :%s/<\(br \/\|\/div\|\/p\|^　\)>//ge | :1 | silent :/^$/,$s/<[^>]\+>\n\?//ge | silent :%s/&nbsp;/ /ge | silent :%s/&hellip;/…/ge | silent :%s/　/ /ge | :1 | silent :/^$/,$s/^\s//e | silent :/\%^/,/^$/s/text\/\zshtml/plain/e | silent :%s/^\n\zs\n+//e | silent :%s/&ldquo;/“/ge | silent :%s/&rdquo;/”/ge
