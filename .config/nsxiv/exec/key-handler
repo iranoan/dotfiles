@@ -59,6 +59,13 @@ case "$(uname)" in
 		xclipboard ;;
 esac
 
+edit () {
+	case "$(file -b -i "$1")" in
+		image/svg*) inkscape "$1" &;;
+		*)          gimp "$1" & ;;
+	esac
+}
+
 while read -r file ; do
 	case "$1" in
 		"c")        echo "$file" | $xcopy ;;
@@ -67,8 +74,8 @@ while read -r file ; do
 		"C-d")      trash-put "$file" ;;
 		"g")        geeqie "$file" & ;;
 		"C-g")      geeqie "$file" & ;;
-		"e")        gimp "$file" & ;;
-		"C-e")      gimp "$file" & ;;
+		"e")        edit "$file" ;;
+		"C-e")      edit "$file" ;;
 		"s")        sushi "$file" & ;;
 		"C-s")      sushi "$file" & ;;
 		"r")
