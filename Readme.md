@@ -72,7 +72,7 @@ install.sh
 * X
   * .xinputrc
   * .xprofile
-  * .config/Xresources
+  * .Xresources
 * Conky
   * .config/conky/
 * Python
@@ -82,7 +82,7 @@ install.sh
 * ranger
   * .config/ranger/
 * nsxiv
-  * font, color setting → .config/Xresources
+  * font, color setting → .Xresources
   * other → .config/nsxiv/
 * Zathura
   * .config/zathura/
