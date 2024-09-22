@@ -25,4 +25,7 @@ if !exists("g:qf_plugin")
 	augroup END
 endif
 " }}}
-nnoremap <buffer><silent>q :close<CR> | setlocal signcolumn=auto foldcolumn=0
+setlocal signcolumn=auto foldcolumn=0
+nnoremap <buffer>q <CMD>close<CR>
+nnoremap <buffer><C-O> <CMD>colder<CR>
+nnoremap <buffer><C-I> <CMD>cnewer<CR>
