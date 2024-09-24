@@ -86,8 +86,7 @@ g:loaded_netrwPlugin = 1
 # }}}
 # 読み込み明示が必要な分 {{{2
 packadd! editexisting                          # 既に開いていれば、そちらをアクティブに
-packadd! matchit                               # 対応するカッコ移動%を拡張→ファイルタイプ別設定でb:match_words {{{
-# }}}
+packadd! matchit                               # 対応するカッコ移動%を拡張→ファイルタイプ別設定でb:match_words
 # packadd termdebug                              # デバッガ ←vimspector を使う
 # マウス {{{2
 set mouse=a                                    # マウス有効化
@@ -166,7 +165,7 @@ set noshowcmd                                  # コマンドラインに選択�
 # set noequalalways                              # ウィンドウ分割/閉じた時に全てのウィンドウを同じ大きさにしない←すでに分割されていると、プラグインが開くウィンドウ高さが狭くなり使いにくい
 set shortmess+=IWc shortmess-=S                # I 起動時にファイル未指定時に表示される紹介文を表示しない
                                                # W ファイルの書き込み時に "書込み" や "[w]" を表示しない。
-                                               # c	補完関連のメッセージを表示しない
+                                               # c 補完関連のメッセージを表示しない
                                                # S 検索ヒット件数表示←コマンドラインに検索のヒット位置、総個数を [?/?] で表示し、ファイルの先頭・終端になった時のメッセージが一瞬で消える
 set textwidth=0                                # 自動改行させない
 # 対応するカッコ {{{2
