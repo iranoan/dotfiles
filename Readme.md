@@ -16,7 +16,7 @@ install.sh
 ## include
 
 * bc
-  * .config/bc
+  * [.config/bc](.config/bc)
 * bin/
   * csv2tsv.awk
   * fzf-preview.sh
