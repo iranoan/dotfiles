@@ -26,15 +26,19 @@ install.sh
   * tsv2table.awk
   * xlsx2table.sh
 * clang-format
+  * .clang-format
 * colordiff
+  * .colordiffrc
 * Ctags
+  * .ctags
 * efm-langserver
   * .config/efm-langserver/
 * FbTerm
+  * .fbtermrc
 * fd (fdfind)
   * .config/fd/
 * FZF
-  * .config/fzf/
+  * .config/fzf/ ← read from .bashrc
     * bashrc
     * key-bindings.bash
 * Git
@@ -44,8 +48,11 @@ install.sh
 * gnuplot
   * .config/gnuplot/
 * Gromit-MPX
+  * .config/gromit-mpx.cfg
 * LanguageTool
+  * .languagetool-ooo.cfg
 * less
+  * .lesskey
 * mlterm
   * .config/mlterm/
 * Shell
@@ -54,19 +61,23 @@ install.sh
     * aliases
     * completion
   * .cshrc
-  * .dircolors/
+  * .config/dircolors/ ← use in .bashrc
     * solarized
   * .inputrc
   * .profile
 * stylelint
+  * .stylelintrc
 * TeX
   * .config/latexmk/latexmkrc
   * .chktexrc
 * textlint
+  * .textlintrc
 * tmux
   * .config/tmux/
 * uim
+  * .uim
 * urlview
+  * .urlview
 * Vim
   * .config/vim/
 * X
