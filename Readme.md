@@ -20,11 +20,18 @@ install.sh
 * bin/
   * [csv2tsv.awk](bin/csv2tsv.awk)
   * [fzf-preview.sh](bin/fzf-preview.sh)
+    * use any tool
+  * [media\_metadata.sh](bin/media_metadata.sh)
+    * use [FFmpeg](https://www.ffmpeg.org/)
+  * [office2text.sh](bin/office2text.sh)
+    * use soffice ([LibreOffice](https://www.libreoffice.org/)/[OpenOffice](https://www.openoffice.org/))
   * [sxiv.sh](bin/sxiv.sh)
   * [sh-list.sh](bin/sh-list.sh)
   * [ssconvert.sh](bin/ssconvert.sh)
+    * use [ssconvert](https://help.gnome.org/users/gnumeric/stable/sect-files-ssconvert.html.en)
   * [tsv2table.awk](bin/tsv2table.awk)
   * [xlsx2table.sh](bin/xlsx2table.sh)
+    * use [ssconvert](https://help.gnome.org/users/gnumeric/stable/sect-files-ssconvert.html.en)
 * clang-format
   * [.clang-format](.clang-format)
 * colordiff
