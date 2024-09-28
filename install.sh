@@ -1,5 +1,5 @@
 #!/bin/sh
-# set -x
+# make symbolic link
 d=${0}
 d=${d%/*}/
 d="$( eval cd "${d%/*}" 2>/dev/null; pwd )/${d##*/}"
