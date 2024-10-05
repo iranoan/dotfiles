@@ -1,5 +1,5 @@
 vim9script
-# Voom に未対応は Vista を使う様に分岐関数とキーマップ
+# Voom に未対応は Vista を使う様に分岐
 
 export def Main(): void
 	# 対応しているファイルが存在するか? を使って、次のコマンドでリスト化
