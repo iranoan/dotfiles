@@ -155,7 +155,7 @@ if has('unix') # ノーマル・モードになれば日本語 OFF にするた�
 		autocmd TextChanged *                          system("fcitx5-remote -c")
 	augroup END
 else
-	inoremap <silent><Esc> <Esc><Cmd>setlocal iminsert=0<CR>
+	inoremap <silent><Esc> <Esc><Cmd>set iminsert=0<CR>
 endif
 # 表示関係 {{{1
 syntax enable                                  # カラー表示 ON

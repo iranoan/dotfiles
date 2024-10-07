@@ -51,19 +51,6 @@ unlet g:packe_setting_ext g:packe_setting_s
 # vim-surround などのプラグインでも . リピートを可能にする https://github.com/tpope/vim-repeat {{{1
 # 1}}}
 
-# Git の変更のあった signcolumn にマークをつける https://github.com/airblade/vim-gitgutter {{{1
-# 遅延読み込みをすると vim-signature との連携機能が使えない←連携できないだけ
-# augroup loadGitgutter
-# 	autocmd!
-# 	autocmd FileType c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,css,tex,sh,bash set_gitgutter#main()
-# 				| autocmd! loadGitgutter
-# 				| augroup! loadGitgutter
-# 				| delfunction set_gitgutter#main
-# augroup END
-# packadd vim-gitgutter
-set_gitgutter#main()
-delfunction set_gitgutter#main
-
 # マークを可視化 visial mark https://github.com/kshenoy/vim-signature {{{1
 # 遅延読み込みだと、開いた時に以前開いた時に付いていたマークが可視化されない
 g:SignatureMap = { # こちらで設定しないとデフォルト指定されてしまう
