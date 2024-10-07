@@ -2,11 +2,9 @@ vim9script
 # Voom に未対応は Vista を使う様に分岐
 
 export def Main(): void
-	# 対応しているファイルが存在するか? を使って、次のコマンドでリスト化
-	# r!find "$HOME/.vim/pack/github/opt/VOoM/autoload/voom/" -type d | xargs --no-run-if-empty -I{} find "{}" -type f -name "voom_mode_*.py" | sed -r -e 's:.+/voom_mode_:'\'':g' -e 's:\.py:'\'':g' | tr '\n' ','| sed -e 's/,/, /g' -e 's/, $//g'
-	var voom_support_list = [
-				\ 'asciidoc', 'cwiki', 'dokuwiki', 'fmr', 'fmr1', 'fmr2', 'fmr3', 'hashes', 'html', 'xhtml', 'inverseAtx', 'latex', 'latexDtx', 'markdown', 'org', 'pandoc', 'paragraphBlank', 'paragraphIndent', 'paragraphNoIndent', 'python', 'rest', 'taskpaper', 'thevimoutliner', 'txt2tags', 'viki', 'vimoutliner', 'vimwiki', 'wiki'
-				\ ]
+	var voom_support_list: list<string> = glob('$MYVIMDIR' .. '/pack/*/opt/VOoM/autoload/voom/voom_vimplugin*/voom_mode_*.py', true, true)
+	var s: number = matchend(voom_support_list[0], '.\+/voom_mode_')
+	map(voom_support_list, (_, v) => v[s : -4 ])
 	var name: string = bufname()
 	if &filetype ==? 'tex'
 		execute 'Voom latex'
