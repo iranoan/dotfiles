@@ -1,14 +1,14 @@
 vim9script
 scriptencoding utf-8
-if has('osx')
-	set antialias           # アンチエイリアス
-endif
 set columns=168           # columns width of the display
 set lines=999             # lines number of lines in the display
 if has('unix')            # 使用フォント(最初に見つかったフォントを使う)
 	set guifont=UDEV\ Gothic\ NF\ Regular\ 13,Noto\ Mono\ 13,Monospace\ 12
 else
 	set guifont=UDEV\ Gothic\ NF\ Regular:h13,MS_Gothic:h13,Monaco:h10
+	if has('osx')
+		set antialias         # アンチエイリアス
+	endif
 endif
 # set linespace=-1         # 縦罫線がつながるが問題が出る可能性もあるとの事なので止めておく
 # if exists('&ambiwidth')  # guifont を指定すると auto にされるらしい←勘違い?
