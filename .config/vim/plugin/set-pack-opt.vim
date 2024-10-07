@@ -90,8 +90,8 @@ nnoremap <silent><Leader>fu <Cmd>Files ..<CR>
 xnoremap <silent><Leader>fu <Cmd>Files ..<CR>
 nnoremap <silent><Leader>f. <Cmd>Files ~/dotfiles<CR>
 xnoremap <silent><Leader>f. <Cmd>Files ~/dotfiles<CR>
-nnoremap <silent><Leader>fv <Cmd>Files ~/.config/vim<CR>
-xnoremap <silent><Leader>fv <Cmd>Files ~/.config/vim<CR>
+nnoremap <silent><Leader>fv <Cmd>Files $MYVIMDIR<CR>
+xnoremap <silent><Leader>fv <Cmd>Files $MYVIMDIR<CR>
 nnoremap <silent><Leader>fs <Cmd>Files ~/src<CR>
 xnoremap <silent><Leader>fs <Cmd>Files ~/src<CR>
 nnoremap <silent><Leader>fx <Cmd>Files ~/bin<CR>
@@ -156,7 +156,7 @@ augroup loadfzf_neoyank
 				| delfunction set_fzf_neoyank#main
 augroup END
 
-# fzf を使ってタブ・ページの切り替え ~/.config/vim/pack/my-plug/opt/fzf-tabs/ {{{1
+# fzf を使ってタブ・ページの切り替え $MYVIMDIR/pack/my-plug/opt/fzf-tabs/ {{{1
 nnoremap <Leader>ft <Cmd>FZFTabOpen<CR>
 vnoremap <Leader>ft <Cmd>FZFTabOpen<CR>
 nnoremap <Leader>fb <Cmd>FZFTabOpen<CR>
@@ -179,7 +179,7 @@ augroup loadautofmt
 				| delfunction set_autofmt#main
 augroup END
 
-# vim 折りたたみ fold https://github.com/thinca/vim-ft-vim_fold を組み合わせ追加のため ~/.config/vim/pack/my-plug/opt/vim-ft-vim_fold/ に置き換え {{{1
+# vim 折りたたみ fold https://github.com/thinca/vim-ft-vim_fold を組み合わせ追加のため $MYVIMDIR/pack/my-plug/opt/vim-ft-vim_fold/ に置き換え {{{1
 augroup loadvim_ft_vim_fold
 	autocmd!
 	autocmd FileType vim packadd vim-ft-vim_fold
@@ -195,7 +195,7 @@ augroup loadDirDiff
 	| augroup! loadDirDiff
 augroup END
 
-# notmuch-python-Vim ~/.config/vim/pack/my-plug/opt/notmuch-py-vim/ {{{1
+# notmuch-python-Vim $MYVIMDIR/pack/my-plug/opt/notmuch-py-vim/ {{{1
 nnoremap <silent><Leader>m :Notmuch start<CR>
 augroup loadNotmuchPy
 	autocmd!
@@ -393,7 +393,7 @@ if executable('git')
 	delfunction set_gitgutter#main
 endif
 
-# カーソル位置の Syntax の情報を表示する ~/.config/vim/pack/my-plug/opt/syntax_info/ http://cohama.hateblo.jp/entry/2013/08/11/020849 から {{{1
+# カーソル位置の Syntax の情報を表示する $MYVIMDIR/pack/my-plug/opt/syntax_info/ http://cohama.hateblo.jp/entry/2013/08/11/020849 から {{{1
 augroup loadSyntaxInfo
 	autocmd!
 	autocmd CmdUndefined SyntaxInfo packadd syntax_info
@@ -401,7 +401,7 @@ augroup loadSyntaxInfo
 	| augroup! loadSyntaxInfo
 augroup END
 
-# Linux では wmctrl を使ってフル・スクリーンをトグル ~/.config/vim/pack/my-plug/opt/full-screen {{{1
+# Linux では wmctrl を使ってフル・スクリーンをトグル $MYVIMDIR/pack/my-plug/opt/full-screen {{{1
 # noremap <silent><F11> :Fullscreen<CR>
 # augroup loadFullScreen
 # 	autocmd!
@@ -410,7 +410,7 @@ augroup END
 # 	| augroup! loadFullScreen
 # augroup END
 
-# Man コマンドを使用可能にする ~/.config/vim/pack/my-plug/opt/man {{{1
+# Man コマンドを使用可能にする $MYVIMDIR/pack/my-plug/opt/man {{{1
 augroup ManCommand
 	autocmd!
 	autocmd CmdUndefined Man packadd man
@@ -418,7 +418,7 @@ augroup ManCommand
 	| augroup! ManCommand
 augroup END
 
-# カレント・タブ・ページ内では同じターミナルを閉じる ~/.config/vim/pack/my-plug/opt/kill-terminal {{{1
+# カレント・タブ・ページ内では同じターミナルを閉じる $MYVIMDIR/pack/my-plug/opt/kill-terminal {{{1
 augroup KillTerminal
 	autocmd!
 	autocmd TerminalOpen * kill_terminal#Main()
@@ -430,7 +430,7 @@ augroup loadKillTerminal
 	| augroup! loadKillTerminal
 augroup END
 
-# ページ送りに ~/.config/vim/pack/my-plug/opt/page-down {{{1
+# ページ送りに $MYVIMDIR/pack/my-plug/opt/page-down {{{1
 nnoremap <silent><space> :call page_down#Main()<CR>
 augroup loadPageDown
 	autocmd!
@@ -439,7 +439,7 @@ augroup loadPageDown
 	| augroup! loadPageDown
 augroup END
 
-# カーソル位置の単語を Google で検索 ~/.config/vim/pack/my-plug/opt/google-search/ https://www.rasukarusan.com/entry/2019/03/09/011630 を参考にした {{{1
+# カーソル位置の単語を Google で検索 $MYVIMDIR/pack/my-plug/opt/google-search/ https://www.rasukarusan.com/entry/2019/03/09/011630 を参考にした {{{1
 nnoremap <silent><Leader>s :SearchByGoogle<CR>
 xnoremap <silent><Leader>s :SearchByGoogle<CR>
 augroup loadSearchByGoogle
@@ -612,7 +612,7 @@ endfor
 # 	autocmd BufRead ~/.getmail/*,~/.config/getmail/* set_getmail_vim#main()
 # augroup END
 
-# dog と cat の入れ替えなどサイクリックに置換する関数などの定義 ~/.config/vim/pack/my-plug/opt/replace-cyclic {{{1
+# dog と cat の入れ替えなどサイクリックに置換する関数などの定義 $MYVIMDIR/pack/my-plug/opt/replace-cyclic {{{1
 augroup loadReplaceCyclic
 	autocmd!
 	autocmd FuncUndefined replace#* packadd replace-cyclic
@@ -620,7 +620,7 @@ augroup loadReplaceCyclic
 	| augroup! loadReplaceCyclic
 augroup END
 
-# *.docx をまとめて epub 用のファイルに変換 ~/.config/vim/pack/my-plug/opt/docx2xhtml {{{1
+# *.docx をまとめて epub 用のファイルに変換 $MYVIMDIR/pack/my-plug/opt/docx2xhtml {{{1
 # カレント・ディレクトリに有る Google Document を使って OCR したファイルを前提とし、自作シェル・スクリプトや LibreOffice も呼び出しているごく個人的なスクリプト
 augroup loadDocx2xhtml
 	autocmd!
@@ -629,7 +629,7 @@ augroup loadDocx2xhtml
 	| augroup! loadDocx2xhtml
 augroup END
 
-# 文字の変換 ~/.config/vim/pack/my-plug/opt/transform/ {{{1
+# 文字の変換 $MYVIMDIR/pack/my-plug/opt/transform/ {{{1
 augroup loadtransform
 	autocmd!
 	autocmd FuncUndefined transform#* packadd transform
@@ -651,7 +651,7 @@ nnoremap <Leader>hH :Kata2hira<CR>
 xnoremap <Leader>hH :Kata2hira<CR>
 # nnoremap <Leader>hb :Base64<CR>
 
-# Vim の環境を出力する ~/.config/vim/pack/my-plug/opt/vim-system/ {{{1
+# Vim の環境を出力する $MYVIMDIR/pack/my-plug/opt/vim-system/ {{{1
 augroup loadVimSystem
 	autocmd!
 	autocmd FuncUndefined vim_system#* packadd vim-system
@@ -662,7 +662,7 @@ augroup loadVimSystem
 	| augroup! loadVimSystem
 augroup END
 
-# 印刷 ~/.config/vim/pack/my-plug/opt/print/ {{{1
+# 印刷 $MYVIMDIR/pack/my-plug/opt/print/ {{{1
 augroup loadPrint
 	autocmd!
 	autocmd CmdUndefined PrintBuffer packadd print
@@ -670,7 +670,7 @@ augroup loadPrint
 				| augroup! loadPrint
 augroup END
 
-# 秀丸マクロ ~/.config/vim/pack/my-plug/opt/hidemaru/ {{{1
+# 秀丸マクロ $MYVIMDIR/pack/my-plug/opt/hidemaru/ {{{1
 augroup loadHidemaru
 	autocmd!
 	autocmd BufNewFile,BufRead ~/Hidemaru/Macro/{**/,}*.mac packadd hidemaru
@@ -682,7 +682,7 @@ augroup SetHidemaru
 	autocmd BufNewFile,BufRead ~/Hidemaru/Macro/{**/,}*.mac setlocal filetype=hidemaru
 augroup END
 
-# タグで挟む ~/.config/vim/pack/my-plug/opt/surroundTag/ {{{1
+# タグで挟む $MYVIMDIR/pack/my-plug/opt/surroundTag/ {{{1
 # vim-surround では複数のタグを一度につけたり、クラス指定まで含む場合タイプ量が多くなる
 augroup loadSurroundTag
 	autocmd!

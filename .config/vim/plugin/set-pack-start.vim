@@ -1,6 +1,6 @@
 vim9script
 scriptencoding utf-8
-# ~/.config/vim/pack/*/{start,opt} 管理用スクリプト
+# $MYVIMDIR/pack/*/{start,opt} 管理用スクリプト
 # パッケージの入手は
 # git clone https://github.com/<author>/<package> <package>
 
@@ -8,9 +8,9 @@ scriptencoding utf-8
 # * Markdown のシンタックス https://github.com/preservim/vim-markdown
 # 	- vim-precious と相性が悪く、一度コード例内にカーソル移動すると、コード内シンタックスが働かなくなる
 # * goobook (Google Contacts) を使ったメールアドレス補完 https://github.com/afwlehmann/vim-goobook
-# 	- → ~/.config/vim/pack/my-plug/opt/asyncomplete-mail/ に置き換え
+# 	- → $MYVIMDIR/pack/my-plug/opt/asyncomplete-mail/ に置き換え
 # * https://github.com/cohama/lexima.vim は、対応括弧を追加設定して使うと CmdlineLeave が働いてしまう+他は全角未対応
-# 	- → ~/.config/vim/pack/my-plug/start/pair_bracket/ に置き換え
+# 	- → $MYVIMDIR/pack/my-plug/start/pair_bracket/ に置き換え
 # * 選択範囲をテキストオブジェクトで広げたり、狭めたり https://github.com/terryma/vim-expand-region
 #		- 反応が遅く、なれると直接テキスト・オブジェクトを使うように変わった
 #		- xmap v <Cmd>call set_expand_region#main('(expand_region_expand)') <bar> delfunction set_expand_region#main<CR>
@@ -22,7 +22,7 @@ scriptencoding utf-8
 
 
 # プラグイン管理 {{{1
-# ~/.config/vim/pack でプラグインを管理する上で、FileType で読み込んだプラグインを再設定するために、再度 setfiletype して、そのイベント・トリガーを削除 {{{2
+# $MYVIMDIR/pack でプラグインを管理する上で、FileType で読み込んだプラグインを再設定するために、再度 setfiletype して、そのイベント・トリガーを削除 {{{2
 for g:packe_setting_s in ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'html', 'xhtml', 'css', 'tex', 'sh', 'bash', 'markdown', 'go', 'help']
 	if g:packe_setting_s ==# 'python'
 		g:packe_setting_ext = '*.py'
@@ -91,18 +91,18 @@ augroup VimSignature # SignColumn デフォルトの色が使われるので他�
 				\ highlight GitGutterDelete   term=bold cterm=bold gui=bold ctermbg=NONE guibg=NONE
 augroup END
 
-# :Tabedit ~/.config/vim/pack/my-plug/start/tabedit/ {{{1
+# :Tabedit $MYVIMDIR/pack/my-plug/start/tabedit/ {{{1
 # ↑opt/ に入れて呼び出すようにすると、最初の使用時に補完が働かない
 nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 # nnoremap <silent>gf :TabEdit <cfile><CR> " ← 存在しなくても開く <C-R><C-F> と同じ
 
-# https://github.com/t9md/vim-foldtext を ~/.config/vim/pack/my-plug/start/vim-foldtext/ で書き換え {{{1
+# https://github.com/t9md/vim-foldtext を $MYVIMDIR/pack/my-plug/start/vim-foldtext/ で書き換え {{{1
 # 1}}}
 
-# shell program を用いてバッファにフィルタを掛ける ~/.config/vim/pack/my-plug/start/shell-filter/ {{{1
+# shell program を用いてバッファにフィルタを掛ける $MYVIMDIR/pack/my-plug/start/shell-filter/ {{{1
 # 1}}}
 
-# カーソル行の URL やファイルを開く ~/.config/vim/pack/my-plug/start/open_uri/ {{{1
+# カーソル行の URL やファイルを開く $MYVIMDIR/pack/my-plug/start/open_uri/ {{{1
 # 1}}}
 
 # カラースキム {{{1
@@ -136,7 +136,7 @@ endif
 # 日本語ヘルプ https://github.com/vim-jp/vimdoc-ja {{{1
 # 1}}}
 
-# 挿入モード時、ステータスラインの色を変更 ~/.config/vim/pack/my-plug/start/insert-status {{{1
+# 挿入モード時、ステータスラインの色を変更 $MYVIMDIR/pack/my-plug/start/insert-status {{{1
 g:hi_insert = 'highlight StatusLine term=reverse cterm=bold,reverse gui=bold,reverse ctermbg=White ctermfg=1 guibg=#dddddd guifg=#dc322f'
 # ↑インサート・モード時の highlight 指定
 
@@ -174,7 +174,7 @@ g:textobj_multiblock_blocks = [
 			[ '[', ']' ],
 			]
 
-# 括弧や引用符をペアで入力/削除 ~/.config/vim/pack/my-plug/start/pair_bracket/ {{{1
+# 括弧や引用符をペアで入力/削除 $MYVIMDIR/pack/my-plug/start/pair_bracket/ {{{1
 # ドット・リピートは考慮していない
 g:pairbracket = {
 	'(': {'pair': ')', 'space': 1, 'escape': {'tex': 2, 'vim': 1},
@@ -204,7 +204,7 @@ g:pairquote = {
 	# '"""': {},
 	}
 
-# ~/.config/vim/pack/*/{stat,opt}/* でプラグインを管理する上で、便利な関数 ~/.config/vim/pack/my-plug/start/pack-manage {{{1
+# $MYVIMDIR/pack/*/{stat,opt}/* でプラグインを管理する上で、便利な関数 $MYVIMDIR/pack/my-plug/start/pack-manage {{{1
 # 遅延読み込みにすると、補完が使えない
 # augroup loadPackManage
 # 	autocmd!
