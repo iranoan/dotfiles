@@ -4,7 +4,7 @@ scriptencoding utf-8
 
 setlocal makeprg=html-check.sh\ \"%\"
 setlocal errorformat=%f:%l:%c:\ %trror:\ %m,%f:%l:%c:\ info\ %tarning:\ %m,%f:%l:%c:\ %tnfo\ warning:\ %m,%f:%l:%c:\ %m,%f:%l:%m
-setlocal formatlistpat=^\\s*<\\(li\\\|dt\\\|dd\\)>
+setlocal formatlistpat=^\\s*<\\(li\\\|dt\\\|dd\\)\\(>\\\|\\s\\+\\ze[^>]\\+\\)
 setlocal breakindentopt=list:4
 "--------------------------------
 " オムニ補完関数指定
