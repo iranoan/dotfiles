@@ -23,6 +23,9 @@ endif
 set fileformats=unix,dos,mac
 set termencoding=utf-8
 set makeencoding=char                          # 外部コマンドの出力を読むときに使用されるエンコーディングにシステムロケール使用
+# スクリプト・ローカル変数の宣言 {{{1
+var pos: list<number>                          # getpos()
+var fileencodings: string = &fileencodings
 # 初期化 {{{1
 set guioptions+=M                              #メニュー設定を読み込まない GUI だが vimrc で filetype on, syntax on より前に書く必要がある→:help go-M
 filetype plugin indent on                      # ファイルタイプ別プラグインとインデントを ON
@@ -291,8 +294,6 @@ set switchbuf=usetab                           # 新しく開く代わりにす�
 set hidden                                     # 未保存ファイルがあってもファイルが開けるようにする
 # set updatetime=500                             # .viminfoの更新時間 (プラグインの機能の更新時間にも使われる)
 set browsedir=buffer                           # ファイルブラウザーの開始時、バッファで開いているファイルのディレクトリ
-# スクリプト・ローカル変数の宣言 {{{1
-var pos: list<number>                          # getpos()
 # 分類のない autocmd {{{1
 augroup VIMRC
 	autocmd!
