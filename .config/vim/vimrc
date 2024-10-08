@@ -463,7 +463,7 @@ vnoremap <S-Insert> "+gp
 nnoremap <C-P> "+gp
 nnoremap <Insert> "+gp
 nnoremap <S-Insert> "+gp
-# vnoremap <C-X> "+x                            # デフォルトでカーソル位置の数字減算にマップ (ctrl-aとペア)
+# vnoremap <C-X> "+x                            # デフォルトでカーソル位置の数字減算にマップ (Ctrl-Aとペア)
 # vnoremap <C-D> "+x                            # デフォルトで下方スクロールにマップ
 xnoremap <S-Del> "+x
 xnoremap X "+x
@@ -477,7 +477,7 @@ inoremap <expr><C-P> pumvisible() ? '<C-P>' : '<C-R>"'
 # inoremap <S-C-V> <C-R>+                        # 素の Ctrl-V が使えなくなる
 cnoremap <S-Insert> <C-R>+
 cnoremap <Insert> <C-R>+
-# cnoremap <S-C-P> <C-R>+                        # Ctrl-pの割当と重なり無効になる
+# cnoremap <S-C-P> <C-R>+                        # Ctrl-Pの割当と重なり無効になる
 cnoremap <expr><C-P> pumvisible() ? '<Up>' : '<C-R>"'
 cnoremap <expr><C-J> pumvisible() ? '<Down>' : '<C-J>"'
 #↑ command moode の補完候補の選択にも使っている
