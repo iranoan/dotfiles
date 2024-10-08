@@ -284,6 +284,11 @@ xnoremap #  #<Cmd>set hlsearch<CR>
 # xnoremap n  n<Cmd>set hlsearch<CR>
 # nnoremap N  N<Cmd>set hlsearch<CR>
 # xnoremap N  N<Cmd>set hlsearch<CR>
+augroup HighlightSearch # ハイライトはトグル・スイッチ
+	autocmd!
+	autocmd CmdlineLeave,CmdwinLeave * if (getcmdtype() =~# '[/?]' || getcmdwintype() =~# '[/?]') && pos != getpos('.') | set hlsearch | endif
+	autocmd CmdwinEnter * pos = getpos('.')
+augroup END
 # ファイルの扱い {{{1
 # 読み込み、保存関係
 # 保存時の末尾空白削除は、autocmd なので別場所
@@ -297,20 +302,20 @@ set browsedir=buffer                           # ファイルブラウザーの�
 # 分類のない autocmd {{{1
 augroup VIMRC
 	autocmd!
+	# autocmd VimEnter    * if exists(':Explore') | delcommand Explore | endif # netrw の使用自体取りやめ
+	# 見かけ上のインデント量を formatlistpat にヒットした文字数にする
+	autocmd BufEnter,BufFilePost,BufNewFile,BufRead *
+				\ if index(['', 'text', 'markdown'], &filetype) != -1
+				| setlocal breakindentopt=shift:0,min:10,list:-1
+				| endif
+	# ファイルを開いた/閉じた/保存時
 	autocmd BufReadPost * if &modifiable && search('[^\t -~]', 'cnw') == 0 | set fileencoding=utf-8 | endif # ASCII のみの時も utf-8 を使う
 	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,vimgrepadd topleft copen # cwindow を使うと、make で使用されるプログラムによってカーソル位置がずれる
 	autocmd QuickfixCmdPost lmake,lgrep,lgrepadd,lvimgrep,lvimgrepadd topleft lopen
 	autocmd BufEnter,BufFilePost,BufNewFile,BufRead * change_directory#Lcd()
-	# autocmd VimEnter    * if exists(':Explore') | delcommand Explore | endif # netrw の使用自体取りやめ
-	# 見かけ上のインデント量を formatlistpat にヒットした文字数にする
-	autocmd BufEnter,BufFilePost,BufNewFile,BufRead *
-				\ if &filetype ==# '' || &filetype ==# 'text' || &filetype ==# 'markdown'
-				| setlocal breakindentopt=shift:0,min:10,list:-1
-				| endif
 	autocmd BufWritePre * if &filetype != 'markdown' | pos = getpos('.') | :%s/\(^--\|^>.*\)\@<![ \u000B\t\r　]\+$//e | setpos('.', pos) | endif # メール署名の区切りと引用行以外の行末空白を保存時に削除
-	# autocmd TerminalOpen *                       nnoremap <silent><buffer>q :bwipeout<CR>
+	# autocmd TerminalOpen * nnoremap <silent><buffer>q :bwipeout<CR>
 	# ↑ターミナルで効いていないし、fzf を使ったバッファで q で閉じる意図しない動きになってしまう
-	# ウィンドウ切り替えでもとの位置に戻ってしまう
 	# autocmd BufEnter,BufWinEnter *
 	# 			\ silent if &diff |
 	# 			\ execute 'normal! gg]c[c' |
@@ -318,21 +323,20 @@ augroup VIMRC
 	# 			ウィンドウ切り替えで最初に戻ってしまう
 	# 			↓と上手く両立しない
 	autocmd BufReadPost *
-				\ silent if &filetype !~# 'commit' && line("'\"") > 1 && line("'\"") <= line("$")
+				\ silent if &filetype !~# 'commit' && line("'\"") > 1 && line("'\"") <= line("$") && index(['xxd', 'gitrebase'], &filetype) == -1
 				| 	execute 'normal! g`"'
 				| endif #前回閉じた時のカーソル位置に移動← $VIMRUNTIME/defaults.vim
-	autocmd BufEnter * if getftype(expand('%')) ==# 'link' | symbolic_link#Normalize() | endif # シンボリック・リンクは展開
-	autocmd BufEnter           *.sw?          bwipeout!             # スワップファイルは閉じる
-	autocmd BufEnter           tags           edit ++encoding=utf-8 # tags ファイルは UTF-8 強制←開き直しているが他にもっと良い方法が解らない
-	# ハイライトはトグル・スイッチ
-	autocmd CmdlineLeave,CmdwinLeave * if (getcmdtype() =~# '[/?]' || getcmdwintype() =~# '[/?]') && pos != getpos('.') | set hlsearch | endif
-	autocmd CmdwinEnter * pos = getpos('.')
+	autocmd BufEnter   *     if getftype(expand('%')) ==# 'link' | symbolic_link#Normalize() | endif # シンボリック・リンクは展開
+	autocmd BufEnter   *.sw? bwipeout!           # スワップファイルは閉じる
+	# tags ファイルは UTF-8 強制 (開く前に utf-8 に固定し開いた後元に戻す)
+	autocmd BufReadPre tags  set fileencodings=utf-8
+	autocmd BufRead    tags  &fileencodings = fileencodings
 augroup END
 # 日本語の表示/編集に関わる設定 {{{1
 set backspace=indent,eol,start
 if exists('&ambiwidth')                        # □とか○の文字があってもカーソル位置がずれないようにする
 	set ambiwidth=double
-	setcellwidths([                         # 一部を再度半角/全角明示指定
+	setcellwidths([                              # 一部を再度半角/全角明示指定
 		[0xA1, 0xA1, 1], [0xA7, 0xA7, 1], [0xAA, 0xAA, 1], [0xAE, 0xAE, 1], [0xB0, 0xB4, 1], [0xB6, 0xB6, 1], [0xB9, 0xBA, 1], [0xBF, 0xBF, 1], # ¡§®°±´¶¿と上付き
 		[0xC0, 0x01C3, 1], [0x01CD, 0x01F0, 1], [0x01F4, 0x02A2, 1], [0x02AC, 0x02AF, 1], # ASCII 外のラテン文字と ×÷
 		[0x02D0, 0x02D0, 1],                       # ː
