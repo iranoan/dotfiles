@@ -11,9 +11,6 @@ else
 	endif
 endif
 # set linespace=-1         # 縦罫線がつながるが問題が出る可能性もあるとの事なので止めておく
-# if exists('&ambiwidth')  # guifont を指定すると auto にされるらしい←勘違い?
-# 	set ambiwidth=double
-# endif
 set guioptions-=T guioptions-=m guioptions-=r guioptions-=L guioptions+=k # ツール・バー/メニュー/スクロール・バー表示を OFF、lines, columns を維持
 if $GVIM_ENABLE_WAYLAND !=# '1' # ←winpos 等が効かなくなる (無いと描画が乱れる)
 	augroup GVIMRC
