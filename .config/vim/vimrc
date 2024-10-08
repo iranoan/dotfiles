@@ -405,8 +405,14 @@ nnoremap <silent><leader>cw <Cmd>setlocal wrap! wrap?<CR>
 # nnoremap <leader>cM <Cmd>call toggle#Menu()<CR>
 # nnoremap <leader>cT <Cmd>call toggle#Toolbar()<CR>
 # 日付と時刻入力 {{{2
-inoremap <silent><expr><C-X><C-D> strftime('%Y/%m/%d')
-inoremap <silent><expr><C-X><C-T> strftime('%H:%M:%S')
+inoremap <silent><expr><C-J><C-D> strftime('%Y/%m/%d')
+inoremap <silent><expr><C-J><C-T> strftime('%H:%M:%S')
+inoremap <silent><expr><C-J>d     strftime('%Y/%m/%d')
+inoremap <silent><expr><C-J>t     strftime('%H:%M:%S')
+nnoremap <silent><expr><C-J><C-D> 'i' .. strftime('%Y/%m/%d') .. '<Esc>'
+nnoremap <silent><expr><C-J><C-T> 'i' .. strftime('%H:%M:%S') .. '<Esc>'
+nnoremap <silent><expr><C-J>d     'i' .. strftime('%Y/%m/%d') .. '<Esc>'
+nnoremap <silent><expr><C-J>t     'i' .. strftime('%H:%M:%S') .. '<Esc>'
 # スクロール {{{2
 # nnoremap <Space> <PageDown> # → $MYVIMDIR/pack/my-plug/opt/page-down
 nnoremap <S-Space> <PageUp>
