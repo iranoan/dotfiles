@@ -1,5 +1,4 @@
 scriptencoding utf-8
-" 今の所デフォルトの再設定に用いている
 
 if exists('b:did_reset')
 	finish
@@ -10,6 +9,6 @@ if !exists('g:vim_after_plugin')
 	let g:vim_after_plugin = 1
 	augroup myAfterVIM
 		autocmd!
-		autocmd FileType vim set formatoptions-=c " textwidth を使った自動折返しをしない←vim で再設定されている
+		autocmd FileType vim setlocal formatoptions-=c textwidth=0 iskeyword-=# " デフォルト設定から好みに変更
 	augroup END
 endif
