@@ -54,7 +54,7 @@ def s:FernSync(): void
 	def Sync(b: list<number>, name: string, fern: number): void
 		var fern_win: list<number> = getbufinfo(fern)[0].windows
 		for w in gettabinfo(tabpagenr())[0].windows
-			if count(fern_win, w) >= 1
+			if index(fern_win, w) != -1
 				# win_gotoid(w)
 				# execute('FernReveal ' .. substitute(name, expand('$HOME/'), '', ''))
 				win_execute(w, 'FernReveal ' .. name)

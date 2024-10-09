@@ -141,7 +141,7 @@ export def GrepComp(ArgLead: string, CmdLine: string, CursorPos: number): list<s
 		match_s = matchstrpos(cmdline, '^\(\(''[^'']\+''\|"\(\"\|[^"]\)\+"\)\|''\\''''\|''''\|""\|\\\\\|\\ \|[^ ]\)\+\s*', match_s[2])
 	endwhile
 	for arg in args # 既に使われているオプション削除
-		if count(['-e', '--regexp=', '-f', '--file='], arg) # 複数回の使用が意味を持つ
+		if index(['-e', '--regexp=', '-f', '--file='], arg) != -1 # 複数回の使用が意味を持つ
 			continue
 		endif
 		i = index(opt, arg)
@@ -168,9 +168,9 @@ export def GrepComp(ArgLead: string, CmdLine: string, CursorPos: number): list<s
 	if cmd_space_end
 		if args[-1] ==# '-f'
 			return LS('', false)
-		elseif count(['-r', '--recursive', '-R', '--dereference-recursive'], args[-1])
+		elseif index(['-r', '--recursive', '-R', '--dereference-recursive'], args[-1]) != -1
 			return LS('', true)
-		elseif count(['-e', '-m', '-A', '-B', '-C'], args[-1]) # ファイル/ディレクトリ+オプション以外の引数が直後に必要
+		elseif index(['-e', '-m', '-A', '-B', '-C'], args[-1]) != -1 # ファイル/ディレクトリ+オプション以外の引数が直後に必要
 			return []
 		endif
 		extend(opt, LS('', false))

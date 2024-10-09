@@ -20,7 +20,7 @@ function open_uri#main()
 		elseif url =~# '\v^(www|web|w3)[a-z0-9_-]*\.[a-z0-9._-]+\.[^][{}()'' \t<>"]+[a-z0-9/]'
 			let url = 'https://' .. url
 		endif
-		if count(l:only_urls, l:url) == 0
+		if index(l:only_urls, l:url) == -1
 			call add(l:only_urls, l:url)
 			call add(l:urls, [l:url, l:end])
 		endif
