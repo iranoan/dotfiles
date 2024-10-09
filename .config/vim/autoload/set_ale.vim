@@ -70,17 +70,7 @@ function set_ale#main()
 endfunction
 
 def set_ale#on(): void
-	if     &filetype !=# 'c'
-			&& &filetype !=# 'cpp'
-			&& &filetype !=# 'ruby'
-			&& &filetype !=# 'yaml'
-			&& &filetype !=# 'markdown'
-			&& &filetype !=# 'html'
-			&& &filetype !=# 'xhtml'
-			&& &filetype !=# 'css'
-			&& &filetype !=# 'tex'
-			&& &filetype !=# 'help'
-			&& &filetype !=# 'json'
+	if index(['c', 'cpp', 'ruby', 'yaml', 'markdown', 'html', 'xhtml', 'css', 'tex', 'help', 'json'], &filetype) == -1
 		return
 	endif
 	b:ale_enabled = 1

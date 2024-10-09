@@ -7,7 +7,7 @@ export def Insert_template(s: string): void # ~/Templates/ からテンプレー
 	:-join
 	if &filetype ==# 'css' || &filetype ==# 'python'
 		execute ':$'
-	elseif &filetype ==# 'sh' || &filetype ==# 'tex' || &filetype ==# 'gnuplot'
+	elseif index(['sh', 'tex', 'gnuplot'], &filetype) != -1
 		execute ':' .. (line('$') - 1)
 	elseif &filetype ==# 'html'
 		execute ':' .. (line('$') - 2)

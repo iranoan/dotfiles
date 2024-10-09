@@ -5,13 +5,12 @@ if !exists('g:notmuch_show_plugin')
 	g:notmuch_show_plugin = 1
 	augroup Notmuch_Show # 対応するカッコの ON/OFF
 		autocmd!
-		autocmd WinLeave,TabLeave * if &filetype ==# 'notmuch-folders' || &filetype ==# 'notmuch-thread' || &filetype ==# 'notmuch-show'
+		autocmd WinLeave,TabLeave * if index(['notmuch-folders', 'notmuch-thread', 'notmuch-show'], &filetype) != -1
 					\ | call execute('DoMatchParen') | endif
-		autocmd WinEnter * if &filetype ==# 'notmuch-folders' || &filetype ==# 'notmuch-thread' || &filetype ==# 'notmuch-show'
+		autocmd WinEnter * if index(['notmuch-folders', 'notmuch-thread', 'notmuch-show'], &filetype) != -1
 					\ | call execute('NoMatchParen') | endif
-		autocmd BufWinEnter * if &filetype !=# 'notmuch-folders' && &filetype !=# 'notmuch-thread' && &filetype !=# 'notmuch-show'
-					\ && &filetype !=# 'qf' # ←同一条件 grep でエラー
-					\ | call execute('DoMatchParen') | endif
+		autocmd BufWinEnter * if index(['notmuch-folders', 'notmuch-thread', 'notmuch-show', 'qf'], &filetype) == -1
+					\ | call execute('DoMatchParen') | endif # ←同一条件 grep でエラー
 	augroup END
 endif
 # --------------------------------

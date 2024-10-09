@@ -114,19 +114,19 @@ function set_vimlsp#main() abort
 endfunction
 
 def s:on_lsp_buffer_enabled(): void
-	if &filetype !=# 'html' && &filetype !=# 'xhtml' && &filetype !=# 'css'
+	if index(['html', 'xhtml', 'css'], &filetype) == -1
 		setlocal omnifunc=lsp#complete
 	endif
 	if exists('+tagfunc')
 		setlocal tagfunc=lsp#tagfunc
 	endif
 	# ALE を優先させるか両方使うか {{{
-	if &filetype == 'vim' || &filetype == 'sh' || &filetype == 'bash' || &filetype == 'python'
+	if index(['vim', 'sh', 'bash', 'python'], &filetype) != -1
 		b:ale_enabled = 0 # ALE 不使用
 		nnoremap <buffer>[a        <Plug>(lsp-previous-diagnostic)
 		nnoremap <buffer>]a        <Plug>(lsp-next-diagnostic)
 		nnoremap <buffer><leader>p <Plug>(lsp-document-diagnostics)
-	elseif &filetype == 'css' || &filetype == 'c' || &filetype == 'cpp' || &filetype == 'html' || &filetype == 'xhtml' || &filetype == 'tex'
+	elseif index(['css', 'c', 'cpp', 'html', 'xhtml', 'tex'], &filetype) != -1
 	# elseif &filetype == 'c' || &filetype == 'cpp'
 		b:lsp_diagnostics_enabled = 0
 		# clang 以外で行末の;無しで次の行がエラー扱いになる

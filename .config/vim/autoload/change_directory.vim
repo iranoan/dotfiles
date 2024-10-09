@@ -17,12 +17,7 @@ export def Lcd(): void # カレントディレクトリをファイルのディ�
 		c_path = expand('%:p:h:h')->substitute('^fugitive://', '', '')
 	elseif buf_name =~# '^[a-z]\+://' ||
 			buf_name =~# '^!' ||
-			&buftype ==# 'nofile' ||
-			&buftype ==# 'quickfix' ||
-			&buftype ==# 'help' ||
-			&buftype ==# 'prompt' ||
-			&buftype ==# 'popup' ||
-			&buftype ==# 'terminal' ||
+			index(['nofile', 'quickfix', 'help', 'prompt', 'popup', 'terminal'], &buftype) != -1 ||
 			&filetype ==# 'terminal' ||
 			&filetype ==# 'qf'
 		return
