@@ -89,3 +89,9 @@ endif
 #ファイルタイプ別ローカル設定
 #--------------------------------
 nnoremap <Leader>r <Cmd>call g:ReformMail()<CR>
+
+if exists('b:undo_ftplugin')
+	b:undo_ftplugin ..= '| setlocal foldlevel<'
+else
+	b:undo_ftplugin = 'setlocal foldlevel<'
+endif

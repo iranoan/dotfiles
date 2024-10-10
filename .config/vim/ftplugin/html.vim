@@ -13,7 +13,6 @@ if !exists('g:html_plugin')
 	"--------------------------------
 	augroup myHTML
 		autocmd!
-		" 以下プラグインに変えた
 		autocmd FileType css  setlocal equalprg=stylelint\ --fix\ --stdin\ --no-color\|prettier\ --write\ --parser\ css
 		autocmd FileType html setlocal equalprg=""
 	augroup END
