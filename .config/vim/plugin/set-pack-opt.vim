@@ -453,11 +453,11 @@ augroup END
 augroup loadVimHelpGenerator
 	autocmd!
 	autocmd CmdUndefined VimHelpGenerator packadd vimhelpgenerator
-	| set filetype=help
+	| if &filetype !=# 'help' | setlocal filetype=help | endif
 	| autocmd! loadVimHelpGenerator
 	| augroup! loadVimHelpGenerator
 	autocmd BufWinEnter *.jax packadd vimhelpgenerator
-	| set filetype=help |
+	| if &filetype !=# 'help' | setlocal filetype=help | endif
 	| autocmd! loadVimHelpGenerator
 	| augroup! loadVimHelpGenerator
 augroup END

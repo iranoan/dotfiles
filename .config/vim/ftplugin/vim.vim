@@ -20,7 +20,7 @@ if !exists('g:vim_plugin')
 					\ keywordprg=:help
 					\ tabstop=2 softtabstop=0 noexpandtab shiftwidth=2
 					\ colorcolumn=""
-					\ iskeyword+=? " is?, isnot? の syntax highlight を効かせるため
+					\ iskeyword+=? iskeyword+=: " is?, isnot? の syntax highlight を効かせるため
 	augroup END
 
 	def s:get_comment_string(): void # vim9script/def/function によって適切な commentstring を設定する

@@ -12,7 +12,8 @@ b:did_ftplugin_user = 1
 #--------------------------------
 if !exists('g:help_plugin')
 	g:help_plugin = 1
-	augroup FileTypeHELP autocmd!
+	augroup FileTypeHELP
+		autocmd!
 		autocmd BufWinEnter * setlocal foldlevel=99
 	augroup END
 

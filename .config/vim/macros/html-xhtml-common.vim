@@ -2,6 +2,19 @@ scriptencoding utf-8
 " HTML/XHTML 共通設定
 " 一部の参照表記や閉じるタグをつける/省略を変えているため
 
+if !exists('UndoFTPluginHTMLXHTML')
+	def g:UndoFTPluginHTMLXHTML(): void
+		iunmap <buffer></
+		nunmap <buffer><Leader>v
+		iunmap <buffer><C-Enter>
+		iunmap <buffer><<
+		iunmap <buffer>>>
+		iunmap <buffer>&&
+		iunmap <buffer>--
+		iunmap <buffer>---
+	enddef
+endif
+
 setlocal makeprg=html-check.sh\ \"%\"
 setlocal errorformat=%f:%l:%c:\ %trror:\ %m,%f:%l:%c:\ info\ %tarning:\ %m,%f:%l:%c:\ %tnfo\ warning:\ %m,%f:%l:%c:\ %m,%f:%l:%m
 setlocal formatlistpat=^\\s*<\\(li\\\|dt\\\|dd\\)\\(>\\\|\\s\\+\\ze[^>]\\+\\)
@@ -24,3 +37,9 @@ inoremap <buffer>---               ―
 setlocal spelloptions=camel
 "折りたたみ
 setlocal foldmethod=syntax
+
+if exists('b:undo_ftplugin')
+	b:undo_ftplugin ..= '| setlocal signcolumn< foldcolumn< | call UndoFTPluginHTMLXHTML()'
+else
+	b:undo_ftplugin = 'setlocal signcolumn< foldcolumn< | call UndoFTPluginHTMLXHTML()'
+endif

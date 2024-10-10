@@ -1,9 +1,9 @@
 scriptencoding utf-8
-" /usr/share/vim/vim82/indent/html.vim からコピーして、<dt>, <dd>, <li> も閉じるタグ不要のインデントに
+" /usr/local/share/vim/vim91/indent/html.vim からコピーして、<dt>, <dd>, <li> も閉じるタグ不要のインデントに
 " Vim indent script for HTML
-" Maintainer:	Bram Moolenaar
+" Maintainer:	The Vim Project <https://github.com/vim/vim>
 " Original Author: Andy Wokula <anwoku@yahoo.de>
-" Last Change:	2020 Dec 11
+" Last Change:	2023 Aug 13
 " Version:	1.0 "{{{
 " Description:	HTML indent script with cached state for faster indenting on a
 "		range of lines.
@@ -151,6 +151,15 @@ func! HtmlIndent_CheckUserSettings()
       let b:html_indent_line_limit = 200
     endif
   endif
+
+  if exists('b:html_indent_attribute')
+    let b:hi_attr_indent = b:html_indent_attribute
+  elseif exists('g:html_indent_attribute')
+    let b:hi_attr_indent = g:html_indent_attribute
+  else
+    let b:hi_attr_indent = 2
+  endif
+
 endfunc "}}}
 
 " Init Script Vars
@@ -583,12 +592,17 @@ func! s:Alien3()
     " Skip over comments to avoid that cindent() aligns with the <script> tag
     let lnum = prevnonblank(lnum - 1)
   endwhile
+  if lnum < b:hi_indent.blocklnr
+    " indent for <script> itself
+    return b:hi_indent.blocktagind
+  endif
   if lnum == b:hi_indent.blocklnr
     " indent for the first line after <script>
     return eval(b:hi_js1indent)
   endif
-  if b:hi_indent.scripttype ==? 'javascript'
-    return eval(b:hi_js1indent) + GetJavascriptIndent()
+  if b:hi_indent.scripttype == "javascript"
+    " indent for further lines
+    return GetJavascriptIndent()
   else
     return -1
   endif
