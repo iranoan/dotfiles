@@ -73,4 +73,4 @@ endif
 "ファイルタイプ別のローカル設定
 "--------------------------------
 setlocal spelloptions=camel
-" let b:undo_ftplugin ..= "| setlocal spelloptions="
+" let b:undo_ftplugin ..= "| setlocal spelloptions=" " syntax がなくなる

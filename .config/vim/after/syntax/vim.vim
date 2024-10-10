@@ -5,7 +5,6 @@ if exists('b:current_syntax_user')
 	finish
 endif
 let b:current_syntax_user = 1
-let b:undo_ftplugin = 'unlet b:current_syntax_user'
 
 syntax match vimOper /\%#=1\%(==\|!=\|>=\|<=\|=\~\|!\~\|>\|<\|=\)[?#]\{0,2}/  nextgroup=vimString,vimSpecFile skipwhite
 syntax case ignore
