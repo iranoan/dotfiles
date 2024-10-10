@@ -1,4 +1,4 @@
-"VIM スクリプト用の設定
+" VIM スクリプト用の設定
 scriptencoding utf-8
 if exists('b:did_ftplugin_user')
 	finish
@@ -10,16 +10,17 @@ let b:did_ftplugin_user = 1
 "--------------------------------
 if !exists('g:vim_plugin')
 	let g:vim_plugin = 1
-	"--------------------------------
-	" let g:vimsyn_folding = 'afP'
+
 	augroup myVIM
 		autocmd!
-		autocmd CursorMoved,InsertLeave * call s:get_comment_string()
-		 " 通常はローカル設定で良いが、vim スクリプト内で ruby/python スクリプトが有ると変わる可能性のあるものも含める
-		autocmd FileType vim setlocal keywordprg=:help
+		autocmd CursorMoved,InsertLeave * if &filetype ==# 'vim' | call s:get_comment_string() | endif
+		" 通常はローカル設定で良いが、vim スクリプト内で ruby/python スクリプトが有ると変わる可能性のあるものも含める
+		" 最初の行のみデフォルト設定から好みに変更
+		autocmd FileType vim setlocal formatoptions-=c textwidth=0 iskeyword-=#
+					\ keywordprg=:help
 					\ tabstop=2 softtabstop=0 noexpandtab shiftwidth=2
 					\ colorcolumn=""
-					\ iskeyword+=?,:
+					\ iskeyword+=? " is?, isnot? の syntax highlight を効かせるため
 	augroup END
 
 	def s:get_comment_string(): void # vim9script/def/function によって適切な commentstring を設定する
@@ -55,10 +56,10 @@ if !exists('g:vim_plugin')
 		else
 			f_kind0 = defs[i]
 			if f_kind0 ==# 'fu'
-				&commentstring = '"%s'
+				&commentstring = '" %s'
 				return
 			elseif f_kind0 ==# 'def'
-				&commentstring = '#%s'
+				&commentstring = '# %s'
 				return
 			else # endf%[unction] || enddef
 				&commentstring = getline(1) =~# '^\s*vim9script\>' ? '#%s' : '"%s'
@@ -71,9 +72,5 @@ endif
 "--------------------------------
 "ファイルタイプ別のローカル設定
 "--------------------------------
-setlocal keywordprg=:help
-setlocal iskeyword+=?   " is?, isnot? の syntax highlight を効かせるため
-setlocal isfname-=,     " ファイルの区切り
-" setlocal foldmethod=syntax
-call s:get_comment_string()
 setlocal spelloptions=camel
+" let b:undo_ftplugin ..= "| setlocal spelloptions="
