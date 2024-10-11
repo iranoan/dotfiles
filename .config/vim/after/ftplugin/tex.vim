@@ -6,20 +6,8 @@ if exists('b:did_ftplugin_user_after')
 endif
  b:did_ftplugin_user_after = 1
 
-if !exists('UndoFTPluginTeX')
-	def g:UndoFTPluginTeX(): void
-		nunmap <buffer><Leader>v
-		iunmap <buffer><S-Enter>
-		iunmap <buffer><S-C-Enter>
-		iunmap <buffer><C-Enter>
-		nunmap <buffer><leader>bb
-		unlet! b:did_ftplugin_user_after b:did_ftplugin_user
-		setlocal breakindentopt< errorformat< formatlistpat< iskeyword< iskeyword< iskeyword< makeprg< suffixesadd<
-	enddef
-endif
-
 if exists('b:undo_ftplugin')
-	b:undo_ftplugin ..= '| call UndoFTPluginTeX()'
+	b:undo_ftplugin ..= ' | call undo_ftplugin#TeX()'
 else
-	b:undo_ftplugin = 'call UndoFTPluginTeX()'
+	b:undo_ftplugin = 'call undo_ftplugin#TeX()'
 endif

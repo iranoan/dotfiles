@@ -31,4 +31,3 @@ inoremap <buffer>&<space>          &nbsp;
 inoremap <buffer>\\                &yen;
 inoremap <buffer>+-                &plusmn;
 inoremap <buffer>==                &equiv;
-inoremap <buffer><!                <!DOCTYPE html>

@@ -3,19 +3,6 @@ scriptencoding utf-8
 # HTML/XHTML 共通設定
 # 一部の参照表記や閉じるタグをつける/省略を変えているため
 
-if !exists('UndoFTPluginHTMLXHTML')
-	def g:UndoFTPluginHTMLXHTML(): void
-		iunmap <buffer></
-		nunmap <buffer><Leader>v
-		iunmap <buffer><C-Enter>
-		iunmap <buffer><<
-		iunmap <buffer>>>
-		iunmap <buffer>&&
-		iunmap <buffer>--
-		iunmap <buffer>---
-	enddef
-endif
-
 if !exists('g:did_ftplugin_html')
 	def g:CloseTag(): string # completeopt 次第で候補が一つでも確定しない
 		var cmpop: string = &completeopt
@@ -61,12 +48,13 @@ inoremap <buffer>>>                &gt;
 inoremap <buffer>&&                &amp;
 inoremap <buffer>--                ‐
 inoremap <buffer>---               ―
+inoremap <buffer><!                <!DOCTYPE html>
 setlocal spelloptions=camel
 # 折りたたみ
 setlocal foldmethod=syntax
 
 if exists('b:undo_ftplugin')
-	b:undo_ftplugin ..= '| setlocal signcolumn< foldcolumn< | call UndoFTPluginHTMLXHTML()'
+	b:undo_ftplugin ..= '| setlocal signcolumn< foldcolumn< | call undo_ftplugin#HTML()'
 else
-	b:undo_ftplugin = 'setlocal signcolumn< foldcolumn< | call UndoFTPluginHTMLXHTML()'
+	b:undo_ftplugin = 'setlocal signcolumn< foldcolumn< | call undo_ftplugin#HTML()'
 endif

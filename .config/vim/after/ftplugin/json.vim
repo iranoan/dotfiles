@@ -6,15 +6,8 @@ if exists('b:did_ftplugin_user_after')
 endif
  b:did_ftplugin_user_after = 1
 
-if !exists('UndoFTPluginJSON')
-	def g:UndoFTPluginHTML(): void
-		unlet! b:did_ftplugin_user_after b:did_ftplugin_user
-		setlocal errorformat< makeprg< equalprg< commentstring< foldmethod<
-	enddef
-endif
-
 if exists('b:undo_ftplugin')
-	b:undo_ftplugin ..= '| call UndoFTPluginJSON()'
+	b:undo_ftplugin ..= ' | call undo_ftplugin#JSON()'
 else
-	b:undo_ftplugin = 'call UndoFTPluginJSON()'
+	b:undo_ftplugin = 'call undo_ftplugin#JSON()'
 endif
