@@ -73,7 +73,7 @@ export def Tabedit(...arg: list<string>): void
 			if getftype(subf) ==# 'link' && SubOpenFile(resolve(subf))
 				return
 			endif
-			if wordcount().bytes == 0 && &modified == false
+			if wordcount().bytes == 0 && &modified == false && len(tabpagebuflist()) == 1
 				Associate('edit', subf)
 			else
 				Associate('tabedit', subf)
@@ -130,7 +130,7 @@ export def Tabedit(...arg: list<string>): void
 				AssociateCore(full)
 			endif
 		else
-			if wordcount().bytes == 0 && &modified == false
+			if wordcount().bytes == 0 && &modified == false && len(tabpagebuflist()) == 1
 				execute 'silent edit ' .. f
 			else
 				execute 'silent tabedit ' .. f
