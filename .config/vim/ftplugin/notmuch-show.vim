@@ -7,10 +7,10 @@ if !exists('g:notmuch_show_plugin')
 		autocmd!
 		autocmd WinLeave,TabLeave * if index(['notmuch-folders', 'notmuch-thread', 'notmuch-show'], &filetype) != -1
 					\ | call execute('DoMatchParen') | endif
-		autocmd WinEnter * if index(['notmuch-folders', 'notmuch-thread', 'notmuch-show'], &filetype) != -1
-					\ | call execute('NoMatchParen') | endif
-		autocmd BufWinEnter * if index(['notmuch-folders', 'notmuch-thread', 'notmuch-show', 'qf'], &filetype) == -1
-					\ | call execute('DoMatchParen') | endif # ←同一条件 grep でエラー
+		autocmd WinEnter * if index(['notmuch-folders', 'notmuch-thread', 'notmuch-show'], &filetype) != -1 && getcmdwintype() ==# ''
+					\ | execute 'NoMatchParen' | endif
+		autocmd BufWinEnter * if index(['notmuch-folders', 'notmuch-thread', 'notmuch-show', 'qf'], &filetype) == -1 && getcmdwintype() ==# ''
+					\ | execute 'DoMatchParen' | endif # ←同一条件 grep でエラー
 	augroup END
 endif
 # --------------------------------
