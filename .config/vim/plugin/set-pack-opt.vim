@@ -597,13 +597,16 @@ for k in ['ysaw', 'ysiw', 'ysa', 'ysi', 'cs', 'ds']
 	endfor
 endfor
 for k in ['ysa', 'ysi', 'cs']
-	for [n1, q1] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>' })
-		for [n2, q2] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>' })
+	for [n1, q1] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '[': '[', ']': ']', '{': '{', '}': '}' })
+		for [n2, q2] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '[': '[', ']': ']', '{': '{', '}': '}' })
 			if n1 !=# n2
 				execute 'nmap ' .. k .. n1 .. n2 .. ' ' .. k .. q1 .. q2
 			endif
 		endfor
 	endfor
+endfor
+for [n, q] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>' })
+	execute 'xmap s' .. n .. ' s' .. q
 endfor
 
 # getmail syntax https://github.com/vim-scripts/getmail.vim {{{1
