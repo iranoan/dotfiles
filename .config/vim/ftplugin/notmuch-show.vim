@@ -1,5 +1,5 @@
 vim9script
-scriptencoding=utf-8
+scriptencoding utf-8
 # ファイルタイプ別のグローバル設定 {{{1
 if !exists('g:notmuch_show_plugin')
 	g:notmuch_show_plugin = 1
