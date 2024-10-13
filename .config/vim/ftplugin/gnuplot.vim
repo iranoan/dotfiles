@@ -5,15 +5,12 @@ if exists('b:did_ftplugin_user')
 endif
 let b:did_ftplugin_user = 1
 
-"--------------------------------
-"ファイルタイプ別のグローバル設定
-"--------------------------------
+" ファイルタイプ別のグローバル設定 {{{1
 " if !exists("g:gnuplot_plugin")
 " 	let g:gnuplot_plugin = 1
 " endif
-"--------------------------------
-"ファイルタイプ別ローカル設定
-"--------------------------------
+
+" ファイルタイプ別ローカル設定 {{{1
 setlocal commentstring=#%s
 setlocal makeprg=gnuplot.sh\ %
 setlocal errorformat=%E%p^,%C\"%f\"\\,\ line\ %l:\ %m

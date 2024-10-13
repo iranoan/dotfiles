@@ -7,7 +7,6 @@ endif
 let b:did_ftplugin_user = 1
 
 "ファイルタイプ別のグローバル設定 {{{1
-"--------------------------------
 if !exists("g:qf_plugin")
 	let g:qf_plugin = 1
 	augroup QuickFix
@@ -24,7 +23,8 @@ if !exists("g:qf_plugin")
 					\ endif " QuickFix だけなら閉じる
 	augroup END
 endif
-" }}}
+
+"ファイルタイプ別のローカル設定 {{{1
 setlocal signcolumn=auto foldcolumn=0
 nnoremap <buffer>q <CMD>close<CR>
 nnoremap <buffer><C-O> <CMD>colder<CR>

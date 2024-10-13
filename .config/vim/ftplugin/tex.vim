@@ -5,9 +5,7 @@ if exists('b:did_ftplugin_user')
 endif
 let b:did_ftplugin_user = 1
 
-"--------------------------------
-"ファイルタイプ別のグローバル設定
-"--------------------------------
+" ファイルタイプ別のグローバル設定 {{{1
 " if !exists('g:tex_plugin')
 " 	let g:tex_plugin = 1
 " 	" let g:tex_conceal=''                    " TeXのキーワード置き換えはかえって見難いのでキャンセル
@@ -17,9 +15,7 @@ let b:did_ftplugin_user = 1
 " 		autocmd FileType tex setlocal termwinsize=5x0
 " 	augroup END
 " endif
-"--------------------------------
-"ファイルタイプ別ローカル設定
-"--------------------------------
+" ファイルタイプ別ローカル設定 {{{1
 "find コマンドが使えることは前提で、~/texmf/ やシステム配下にある個人用のファイルを gf で開けるようにする
 " r!find $HOME/texmf/ -type f -name "*.ty" -o -name "*.tex" -o -name "*.cls" -o -name "*.bst" -o -name "*.bib" | sed -r 's/\/[^\/]+$//g' | sort | uniq | sed -e 's/^/\t\t\t\\ .. '\''/g' -e 's/$/,'\''/g'
 " r!find /usr/local/texlive/*/texmf-dist -type f -name "*.sty" -o -name "*.cls" -o -name "*.bst" -o -name "*.bib" | sed -r 's/\/[^\/]+$//g' | sort | uniq |  sed -e 's/^/\t\t\t\\ .. '\''/g' -e 's/$/,'\''/g'

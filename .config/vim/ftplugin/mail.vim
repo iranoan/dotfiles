@@ -5,9 +5,7 @@ if exists('b:did_ftplugin_user')
 endif
 let b:did_ftplugin_user = 1
 
-"--------------------------------
-"ファイルタイプ別のグローバル設定
-"--------------------------------
+" ファイルタイプ別のグローバル設定 {{{1
 " if !exists('g:vim_plugin')
 " 	let g:vim_plugin = 1
 " 	augroup MailType
@@ -17,7 +15,5 @@ let b:did_ftplugin_user = 1
 " 	augroup END
 " endif
 
-"--------------------------------
-"ファイルタイプ別のローカル設定
-"--------------------------------
+" ファイルタイプ別のローカル設定 {{{1
 setlocal foldmethod=syntax commentstring=>%s

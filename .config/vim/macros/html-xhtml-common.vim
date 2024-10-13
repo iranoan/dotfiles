@@ -3,7 +3,14 @@ scriptencoding utf-8
 # HTML/XHTML 共通設定
 # 一部の参照表記や閉じるタグをつける/省略を変えているため
 
-if !exists('g:did_ftplugin_html')
+# ファイルタイプ別のグローバル設定 {{{1
+if !exists('g:did_ftplugin_htmlxhtml')
+	g:did_ftplugin_htmlxhtml = 1
+	augroup myHTML
+		autocmd!
+		autocmd FileType css  setlocal equalprg=stylelint\ --fix\ --stdin\ --no-color\|prettier\ --write\ --parser\ css
+		autocmd FileType html setlocal equalprg=""
+	augroup END
 	def g:CloseTag(): string # completeopt 次第で候補が一つでも確定しない
 		var cmpop: string = &completeopt
 		var tmpop: string = substitute(cmpop, '\(menuone\|noinsert\|noselect\),', '', 'g')
@@ -26,17 +33,16 @@ if !exists('g:did_ftplugin_html')
 		return ''
 	enddef
 endif
-g:did_ftplugin_html = 1
 
+# ファイルタイプ別のローカル設定 {{{1
+setlocal omnifunc=htmlcomplete#CompleteTags
+setlocal equalprg=""
+#ファイルタイプ別 map {{{
+setlocal iskeyword=a-z,A-Z,48-57,_,-,<,> # class, id 名に - が使える。タグのため <, > を加える (タグ補完でこちらのほうが都合が良い)
 setlocal makeprg=html-check.sh\ \"%\"
 setlocal errorformat=%f:%l:%c:\ %trror:\ %m,%f:%l:%c:\ info\ %tarning:\ %m,%f:%l:%c:\ %tnfo\ warning:\ %m,%f:%l:%c:\ %m,%f:%l:%m
 setlocal formatlistpat=^\\s*<\\(li\\\|dt\\\|dd\\)\\(>\\\|\\s\\+\\ze[^>]\\+\\)
 setlocal breakindentopt=list:4
-#--------------------------------
-# オムニ補完関数指定
-setlocal omnifunc=htmlcomplete#CompleteTags
-#--------------------------------
-#ファイルタイプ別 map
 # inoremap <buffer> </ </<C-x><C-o>
 inoremap <expr><buffer> </         g:CloseTag()
 # ↑オムニ補完を利用して閉じタグ自動補完
@@ -50,9 +56,8 @@ inoremap <buffer>--                ‐
 inoremap <buffer>---               ―
 inoremap <buffer><!                <!DOCTYPE html>
 setlocal spelloptions=camel
-# 折りたたみ
-setlocal foldmethod=syntax
 
+# Undo {{{1
 if exists('b:undo_ftplugin')
 	b:undo_ftplugin ..= '| setlocal signcolumn< foldcolumn< | call undo_ftplugin#HTML()'
 else

@@ -7,9 +7,7 @@ endif
 
 b:did_ftplugin_user = 1
 
-#--------------------------------
-#ファイルタイプ別のグローバル設定
-#--------------------------------
+# ファイルタイプ別のグローバル設定 {{{1
 if !exists('g:help_plugin')
 	g:help_plugin = 1
 	augroup FileTypeHELP
@@ -79,9 +77,7 @@ if !exists('g:help_plugin')
 	enddef
 endif
 
-#--------------------------------
-#ファイルタイプ別ローカル設定
-#--------------------------------
+# ファイルタイプ別ローカル設定 {{{1
 setlocal foldmethod=expr foldexpr=g:HelpFold() foldtext=g:HelpFoldText()
 setlocal makeprg=textlint\ --format\ compact\ \"%\"
 setlocal errorformat=%f:\ line\ %l\\,\ col\ %c\\,\ %trror\ -\ %m

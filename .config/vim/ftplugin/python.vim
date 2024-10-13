@@ -5,9 +5,7 @@ if exists('b:did_ftplugin_user')
 endif
 let b:did_ftplugin_user = 1
 
-"--------------------------------
-"ファイルタイプ別のグローバル設定
-"--------------------------------
+" ファイルタイプ別のグローバル設定 {{{1
 if !exists('g:py_plugin')
 	let g:py_plugin = 1
 	augroup myPython " 通常はローカル設定で良いが、vim スクリプト内で書かれていた時/逆に python スクリプト内の vim スクリプトにカーソル移動して設定が変更後に改めてカーソル移動した時に元に戻すため
@@ -22,10 +20,8 @@ if !exists('g:py_plugin')
 		" autocmd FileType python setlocal keywordprg=:terminal\ ++close\ pydoc3
 	augroup END
 endif
-"--------------------------------
-"ファイルタイプ別ローカル設定
-"--------------------------------
-" マップ
+
+" ファイルタイプ別ローカル設定 {{{1
 nnoremap p ]p
 "↑p と似ているが、現在行に合わせてインデントが調整される
 "--------------------------------
@@ -37,8 +33,7 @@ setlocal spelloptions=camel
 "--------------------------------
 " setlocal makeprg=python3\ \"%\"
 " ↑標準入力からの入力待ちが有る場合いつまで経っても終わらない←素直に QuickRun を使えば良い
-"--------------------------------
-" デバッガ
+" デバッガ {{{2
 " nnoremap <silent><buffer><Leader>db :terminal pdb3 "%"<CR><C-w>x
 " ひとつ下にターミナルで起動する
 " ↓Web ページをヘルプ使うバージョン上の keywordprg の設定とペア
@@ -46,7 +41,7 @@ setlocal spelloptions=camel
 " 	execute 'terminal ++close w3m -o confirm_qq=0 https://docs.python.org/ja/3/library/functions.html\#' . a:word
 " endfunction
 " command! -nargs=1 PyHelp call <SID>pyhelp(<f-args>)
-" 整形
+" 整形 {{{2
 " nnoremap <buffer>= :call Autopep8(0)<CR>
 " vnoremap <buffer>= :call Autopep8(1)<CR>
 " function Autopep8( select ) range abort " autopep8 format
@@ -72,8 +67,7 @@ setlocal formatprg=autopep8\ -
 " 		let g:context_filetype#filetypes.python = []
 " 	endif
 " endfunction
-"--------------------------------
-" fold 折り畳み
+" fold 折り畳み {{{2
 " autocmd FileType python set foldmethod=indent
 " https://habamax.github.io/2020/02/03/vim-folding-for-python.html
 setlocal foldexpr=PythonFold() foldmethod=expr

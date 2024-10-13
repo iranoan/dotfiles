@@ -5,13 +5,10 @@ if exists('b:did_ftplugin_user')
 endif
 let b:did_ftplugin_user = 1
 
-"--------------------------------
-"ファイルタイプ別のグローバル設定
-"--------------------------------
+" ファイルタイプ別のグローバル設定 {{{1
 " 特殊な読み込みをしているので、~/.config/vim/pack/my-plug/opt/man/plugin/man.vim で指定しないと無効
-"--------------------------------
-"ファイルタイプ別ローカル設定
-"--------------------------------
+
+" ファイルタイプ別ローカル設定 {{{1
 setlocal nolist
 setlocal nospell
 setlocal foldmethod=indent foldenable foldlevelstart=99 foldcolumn=3

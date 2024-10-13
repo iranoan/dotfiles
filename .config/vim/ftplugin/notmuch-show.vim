@@ -1,6 +1,6 @@
 vim9script
+scriptencoding=utf-8
 # ファイルタイプ別のグローバル設定 {{{1
-# --------------------------------
 if !exists('g:notmuch_show_plugin')
 	g:notmuch_show_plugin = 1
 	augroup Notmuch_Show # 対応するカッコの ON/OFF
@@ -13,9 +13,8 @@ if !exists('g:notmuch_show_plugin')
 					\ | execute 'DoMatchParen' | endif # ←同一条件 grep でエラー
 	augroup END
 endif
-# --------------------------------
-# ファイルタイプ別ローカル設定 {{{1
-# --------------------------------
+
+# ファイルタイプ別ローカル設定 {{{1 {{{1
 # nnoremap <buffer><silent><Leader>s :Notmuch mail-send<CR>
 # に割り当てられているのが notmuch-show は Google 検索に割当し直し
 nnoremap <buffer><silent><Leader>s :SearchByGoogle<CR>
@@ -26,6 +25,7 @@ setlocal nolinebreak
 # :NoMatchParen " 対応するカッコの ON/OFF
 # 1}}}
 
+# Undo {{{1
 if exists('b:undo_ftplugin')
 	b:undo_ftplugin ..= '| setlocal linebreak< tabstop<'
 else

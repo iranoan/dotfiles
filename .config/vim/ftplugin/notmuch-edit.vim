@@ -6,9 +6,7 @@ if exists('b:did_ftplugin_user')
 endif
 b:did_ftplugin_user = 1
 
-#--------------------------------
-#ファイルタイプ別のグローバル設定
-#--------------------------------
+# ファイルタイプ別のグローバル設定 {{{1
 if !exists("g:mail_draft_plugin")
 	g:mail_draft_plugin = 1
 	packadd transform
@@ -85,11 +83,11 @@ if !exists("g:mail_draft_plugin")
 		setpos('.', pos)
 	enddef
 endif
-#--------------------------------
-#ファイルタイプ別ローカル設定
-#--------------------------------
+
+# ファイルタイプ別ローカル設定 {{{1
 nnoremap <Leader>r <Cmd>call g:ReformMail()<CR>
 
+# Undo {{{1
 if exists('b:undo_ftplugin')
 	b:undo_ftplugin ..= '| setlocal foldlevel<'
 else
