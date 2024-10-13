@@ -6,20 +6,12 @@ endif
 let b:did_ftplugin_user = 1
 
 " ファイルタイプ別のグローバル設定 {{{1
-if !exists('g:py_plugin')
-	let g:py_plugin = 1
-	augroup myPython " 通常はローカル設定で良いが、vim スクリプト内で書かれていた時/逆に python スクリプト内の vim スクリプトにカーソル移動して設定が変更後に改めてカーソル移動した時に元に戻すため
-		autocmd!
-		" 本当にタブ文字が有れば2文字幅、それ以外では4文字空白の扱い 80桁に線を入れる
-		autocmd FileType python setlocal tabstop=4 softtabstop=0 expandtab shiftwidth=4 colorcolumn=80
-					\ errorformat=%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
-					\ foldexpr=PythonFold() foldmethod=expr
-					\ iskeyword-=? " Vim スクリプト の is?, isnot? を syntax highlight で有効にするために追加した ? を除く
-		" --------------------------------
-		" ヘルプ
-		" autocmd FileType python setlocal keywordprg=:terminal\ ++close\ pydoc3
-	augroup END
-endif
+" if !exists('g:py_plugin')
+" 	let g:py_plugin = 1
+" 	augroup myPython
+" 		autocmd!
+" 	augroup END
+" endif
 
 " ファイルタイプ別ローカル設定 {{{1
 nnoremap p ]p
@@ -52,21 +44,6 @@ setlocal equalprg=autopep8\ -
 setlocal formatprg=autopep8\ -
 " --max-line-length\ 100 " ~/.config/pep8
 " setlocal formatexpr=
-"--------------------------------
-" context_filetype を使っていて、setfiletype=vim の切り替えをするをするか
-" if exists('g:context_filetype#filetypes.python')
-" 	let b:context_filetype = g:context_filetype#filetypes.python
-" else
-" 	let b:context_filetype = []
-" endif
-" nnoremap <silent><buffer><leader><leader>c :call <SID>change_context_filetype()<CR>
-" function s:change_context_filetype() abort
-" 	if g:context_filetype#filetypes.python == []
-" 		let g:context_filetype#filetypes.python = b:context_filetype
-" 	else
-" 		let g:context_filetype#filetypes.python = []
-" 	endif
-" endfunction
 " fold 折り畳み {{{2
 " autocmd FileType python set foldmethod=indent
 " https://habamax.github.io/2020/02/03/vim-folding-for-python.html

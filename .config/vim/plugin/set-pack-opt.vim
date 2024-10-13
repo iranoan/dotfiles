@@ -550,7 +550,7 @@ augroup END
 # カーソル位置に合わせて filetype を判定←各種プラグインが依存 https://github.com/Shougo/context_filetype.vim {{{1
 augroup loadcontext_filetype
 	autocmd!
-	autocmd FileType sh,bash,vim,html,markdown,lua set_context_filetype#main()
+	autocmd FileType sh,bash,vim,html,xhtml,markdown,lua set_context_filetype#main()
 				| autocmd! loadcontext_filetype
 				| augroup! loadcontext_filetype
 				| delfunction set_context_filetype#main

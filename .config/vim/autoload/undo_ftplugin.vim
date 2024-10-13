@@ -23,7 +23,7 @@ export def HTML(): void # XHTML と共用
 	iunmap <buffer>\\
 	nunmap <buffer><Leader>v
 	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
-	setlocal breakindentopt< equalprg< errorformat< foldmethod< formatlistpat< iskeyword< makeprg< omnifunc< spelloptions<
+	setlocal breakindentopt< errorformat< foldmethod< formatlistpat< iskeyword< makeprg< omnifunc< spelloptions<
 enddef
 
 export def Vim(): void

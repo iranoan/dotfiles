@@ -12,14 +12,18 @@ if !exists('g:vim_plugin')
 	augroup myVIM
 		autocmd!
 		autocmd CursorMoved,InsertLeave * if &filetype ==# 'vim' | call s:get_comment_string() | endif
-		" 通常はローカル設定で良いが、vim スクリプト内で ruby/python スクリプトが有ると変わる可能性のあるものも含める
-		" 最初の行のみデフォルト設定から好みに変更
-		autocmd FileType vim setlocal formatoptions-=c textwidth=0 iskeyword-=#
-					\ keywordprg=:help
-					\ tabstop=2 softtabstop=0 noexpandtab shiftwidth=2
-					\ colorcolumn=""
-					\ iskeyword+=? iskeyword+=: " is?, isnot? の syntax highlight を効かせるため
-	augroup END
+		" 通常はローカル設定で良いが、vim スクリプト内で ruby/python スクリプトで切り替える
+		" Vim の最初の行のみデフォルト設定から好みに変更
+		" autocmd FileType vim setlocal formatoptions-=c textwidth=0 iskeyword-=#
+		" 			\ keywordprg=:help
+		" 			\ tabstop=2 softtabstop=0 noexpandtab shiftwidth=2
+		" 			\ colorcolumn=""
+		" 			\ iskeyword+=? iskeyword+=: " is?, isnot? の syntax highlight を効かせるため
+		" autocmd FileType python setlocal tabstop=4 softtabstop=0 expandtab shiftwidth=4 colorcolumn=80
+		" 			\ errorformat=%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
+		" 			\ foldexpr=PythonFold() foldmethod=expr
+		" 			\ iskeyword-=? iskeyword-=:
+	" augroup END
 
 	def s:get_comment_string(): void # vim9script/def/function によって適切な commentstring を設定する
 		# function ... | ... | endfunction の様に | で連結した関数が有るとうまく判定できない

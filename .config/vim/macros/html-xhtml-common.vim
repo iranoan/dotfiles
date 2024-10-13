@@ -6,11 +6,11 @@ scriptencoding utf-8
 # ファイルタイプ別のグローバル設定 {{{1
 if !exists('g:did_ftplugin_htmlxhtml')
 	g:did_ftplugin_htmlxhtml = 1
-	augroup myHTML
-		autocmd!
-		autocmd FileType css  setlocal equalprg=stylelint\ --fix\ --stdin\ --no-color\|prettier\ --write\ --parser\ css
-		autocmd FileType html setlocal equalprg=""
-	augroup END
+	# augroup myHTMLXHTML
+	# 	autocmd!
+	# 	autocmd FileType css  setlocal equalprg=stylelint\ --fix\ --stdin\ --no-color\|prettier\ --write\ --parser\ css
+	# 	autocmd FileType html setlocal equalprg<
+	# augroup END
 	def g:CloseTag(): string # completeopt 次第で候補が一つでも確定しない
 		var cmpop: string = &completeopt
 		var tmpop: string = substitute(cmpop, '\(menuone\|noinsert\|noselect\),', '', 'g')
@@ -36,7 +36,6 @@ endif
 
 # ファイルタイプ別のローカル設定 {{{1
 setlocal omnifunc=htmlcomplete#CompleteTags
-setlocal equalprg=""
 #ファイルタイプ別 map {{{
 setlocal iskeyword=a-z,A-Z,48-57,_,-,<,> # class, id 名に - が使える。タグのため <, > を加える (タグ補完でこちらのほうが都合が良い)
 setlocal makeprg=html-check.sh\ \"%\"
@@ -52,14 +51,12 @@ inoremap <expr><buffer><C-Enter>   (getline('.') =~# '^\s*$' ?  '' : '<CR>') .. 
 inoremap <buffer><<                &lt;
 inoremap <buffer>>>                &gt;
 inoremap <buffer>&&                &amp;
-inoremap <buffer>--                ‐
-inoremap <buffer>---               ―
 inoremap <buffer><!                <!DOCTYPE html>
 setlocal spelloptions=camel
 
 # Undo {{{1
 if exists('b:undo_ftplugin')
-	b:undo_ftplugin ..= '| setlocal signcolumn< foldcolumn< | call undo_ftplugin#HTML()'
+	b:undo_ftplugin ..= '| call undo_ftplugin#HTML()'
 else
-	b:undo_ftplugin = 'setlocal signcolumn< foldcolumn< | call undo_ftplugin#HTML()'
+	b:undo_ftplugin = 'call undo_ftplugin#HTML()'
 endif

@@ -42,6 +42,33 @@ function set_context_filetype#main() abort
 			\ 	'end': '</script>'
 		\ },
 		\ ],
+		\ 'xhtml': [
+			\ {
+			\ 	'filetype': 'css',
+			\ 	'start': '<[^>]\+\s\+style="',
+			\ 	'end': '"'
+		\ },
+		\ {
+			\ 	'filetype': 'css',
+			\ 	'start': '<[^>]\+\s\+style=''',
+			\ 	'end': ''''
+		\ },
+		\ {
+			\ 	'filetype': 'css',
+			\ 	'start': '<style>',
+			\ 	'end': '</style>'
+		\ },
+		\ {
+			\ 	'filetype': 'css',
+			\ 	'start': '<style type=\([''"]\)text/css\1>',
+			\ 	'end': '</style>'
+		\ },
+		\ {
+			\ 	'filetype': 'javascript',
+			\ 	'start': '<script>',
+			\ 	'end': '</script>'
+		\ },
+		\ ],
 		\ 'sh': [
 		\ {
 			\ 	'filetype': 'awk',

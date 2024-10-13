@@ -14,13 +14,15 @@ let b:did_ftplugin_user = 1
 " endif
 
 " ファイルタイプ別ローカル設定 {{{1
-execute 'source ' .. expand('<sfile>:p:h') .. '/../macros/html-xhtml-common.vim'
+source $MYVIMDIR/macros/html-xhtml-common.vim
 inoremap <expr><buffer><S-Enter>   pumvisible#Insert('<li></li><Left><Left><Left><Left><Left><C-G>u')
 inoremap <expr><buffer><S-C-Enter> pumvisible#Insert_after('<br />') .. '<C-G>u'
 inoremap <buffer><=                &#8804;
 inoremap <buffer>>=                &#8805;
 imap     <expr><buffer><C-Space>   pumvisible() ? asyncomplete#close_popup() : '&#160;'
 inoremap <buffer>&<space>          &#160;
+inoremap <buffer>--                &#8211;
+inoremap <buffer>---               &#8212;
 inoremap <buffer>\\                &#165;
 inoremap <buffer>+-                &#177;
 inoremap <buffer>**                &#215;
