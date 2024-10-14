@@ -30,10 +30,13 @@ function set_quickrun#main() abort
 	"C コンパイラは clang 優先 (*.cpp に対しては、おそらく既にそうなっている) {{{
 	let g:quickrun_config.c = {
 				\ 'type':
-				\   executable('cl')    ? 'c/vc'  :
 				\   executable('clang') ? 'c/clang' :
-				\   executable('gcc')   ? 'c/gcc' :'',
-				\ 'cmdopt'                  : '-lm',
+				\   executable('gcc')   ? 'c/gcc' :
+				\                         ' ',
+				\ 'cmdopt':
+				\   executable('clang') ? '-lm -W -Wall' :
+				\   executable('gcc')   ? '-lm -Wall' :
+				\                         ' ',
 				\}
 	" }}}
 	"gnuplot 成功時は出力しない {{{
@@ -54,90 +57,22 @@ function set_quickrun#main() abort
 				\ 'exec'                    : ['%c %s']
 				\}
 	" }}}
-	" TeX 設定 成功時は出力しない←途中エラーが有っても止めない等のオプション追加 {{{
+	" TeX 設定 途中エラーが有っても止めない+zathura が複数起動するので、-pv 無しオプション{{{
 	" zathura_sync.sh 内部で処理をしようとすると、非同期処理ができないので止めた
-	" TeX を素直に latexmk を使う時の設定
 	let g:quickrun_config.tex = {
-				\ 'outputter'                        : 'multi:buffer:quickfix',
-				\ 'outputter/buffer/bufname'         : 'quickrun://TeX-log',
-				\ 'outputter/buffer/opener'          : 'rightbelow 4split',
-				\ 'outputter/quickfix/open_cmd'      : 'call set_quickrun#Quickrn2qf()',
-				\ 'hook/close_buffer/enable_failure' : 0,
-				\ 'command'                          : 'latexmk',
-				\ 'cmdopt'                           : '-synctex=1 -file-line-error -interaction=nonstopmode',
-				\ 'hook/cd/directory'                : '%S:h',
-				\ 'arg'                              : '',
-				\ 'exec'                             : ['%c %o %s'],
+				\ 'outputter/error/success'     : 'quickfix',
+				\ 'outputter/quickfix/open_cmd' : 'botright copen 8',
+				\ 'command'                     : 'latexmk',
+				\ 'cmdopt'                      : '-synctex=1 -file-line-error -interaction=nonstopmode',
+				\ 'hook/cd/directory'           : '%S:h',
+				\ 'arg'                         : '',
+				\ 'exec'                        : ['%c %o %s'],
+				\ 'srcfile'                     : substitute(system('texmother.sh ' .. expand('%')), '\n', '', '')
 				\}
 				" \ 'outputter/error/success': 'null', " ←これだと非同期 vimproc との組み合わせで失敗時も開かない
 				" \ 'hook/close_quickfix/enable_success' : 1, 上と同じ
-				" \ 'cmdopt'                           : '-pv -src-specials -synctex=1 -file-line-error -interaction=nonstopmode', " zathura が複数起動するので、-pv を無くしたものを使う
-	augroup QuickRnnTeXKeymap
 		autocmd!
 		" srcfile は最初に QuickRun を使ったときだけに指定されるので、バッファごとの指定にしないと、最初に実行したファイルに固定されてしまう
-		autocmd FileType tex let b:quickrun_config.tex = {'srcfile' : substitute(system('texmother.sh ' .. expand('%')), '\n', '', ''),}
-					\ | nnoremap <silent><buffer><Leader>qr       :call set_quickrun#Qf2qucikrun()<CR>
+		autocmd FileType tex let b:quickrun_config.tex = {'srcfile' : substitute(system('texmother.sh ' .. expand('%')), '\n', '', '')}
 	augroup END
-	if &filetype ==# 'tex' " 開いたファイル自身の設定
-		nnoremap <silent><buffer><Leader>qr       :call set_quickrun#Qf2qucikrun()<CR>
-		let b:quickrun_config.tex = {'srcfile' : substitute(system('texmother.sh ' .. expand('%')), '\n', '', ''),}
-	endif
 endfunction
-
-def set_quickrun#Qf2qucikrun(): void
-	var qf_b: number = 0
-	var qr_b: number = 0
-	var b_i: number
-	var c_b: number
-	for i in getwininfo()
-		b_i = i.bufnr
-		if i.quickfix
-			qf_b = b_i
-		elseif bufname(b_i) ==# 'quickrun://TeX-log'
-			qr_b = b_i
-		endif
-	endfor
-	if qf_b == 0
-		QuickRun
-		return
-	elseif qr_b != 0
-		cclose
-		QuickRun
-		return
-	endif
-	for i in getbufinfo()
-		if i.name ==# 'quickrun://TeX-log'
-			c_b = bufnr()
-			win_gotoid(bufwinid(qf_b))
-			execute 'buffer! ' .. i.bufnr
-			win_gotoid(bufwinid(c_b))
-			QuickRun
-			return
-		endif
-	endfor
-	cclose
-	QuickRun
-enddef
-
-def set_quickrun#Quickrn2qf(): void
-	var qr_b: number = 0
-	var c_b: number = bufnr()
-	for i in getwininfo()
-		if bufname(i.bufnr) ==# 'quickrun://TeX-log'
-			qr_b = i.bufnr
-		endif
-	endfor
-	win_gotoid(bufwinid(qr_b))
-	for i in getbufinfo()
-		if has_key(i.variables, 'current_syntax')
-			if i.variables.current_syntax ==# 'qf'
-				execute 'buffer! ' .. i.bufnr
-				win_gotoid(bufwinid(c_b))
-				return
-			endif
-		endif
-	endfor
-	# qf が無かった
-	quit
-	execute substitute(g:quickrun_config.tex['outputter/buffer/opener'], '\v(\d+)v?split', 'copen \1', '')
-enddef
