@@ -61,7 +61,7 @@ function set_quickrun#main() abort
 				\ 'outputter'                        : 'multi:buffer:quickfix',
 				\ 'outputter/buffer/bufname'         : 'quickrun://TeX-log',
 				\ 'outputter/buffer/opener'          : 'rightbelow 4split',
-				\ 'outputter/quickfix/open_cmd'      : 'call Quickrn2qf()',
+				\ 'outputter/quickfix/open_cmd'      : 'call set_quickrun#Quickrn2qf()',
 				\ 'hook/close_buffer/enable_failure' : 0,
 				\ 'command'                          : 'latexmk',
 				\ 'cmdopt'                           : '-synctex=1 -file-line-error -interaction=nonstopmode',
@@ -72,70 +72,72 @@ function set_quickrun#main() abort
 				" \ 'outputter/error/success': 'null', " ←これだと非同期 vimproc との組み合わせで失敗時も開かない
 				" \ 'hook/close_quickfix/enable_success' : 1, 上と同じ
 				" \ 'cmdopt'                           : '-pv -src-specials -synctex=1 -file-line-error -interaction=nonstopmode', " zathura が複数起動するので、-pv を無くしたものを使う
-	" srcfile は最初に QuickRun を使ったときだけに指定されるので、バッファごとの指定にしないと、最初に実行したファイルに固定されてしまう
-	let b:quickrun_config.tex = {'srcfile' : substitute(system('texmother.sh ' . expand('%')), '\n', '', ''),}
-	function Qf2qucikrun() abort
-		let l:qf_b = 0
-		let l:qr_b = 0
-		for l:i in getwininfo()
-			let l:b_i = l:i.bufnr
-			if l:i.quickfix
-				let l:qf_b = l:b_i
-			elseif bufname(l:b_i) ==# 'quickrun://TeX-log'
-				let l:qr_b = l:b_i
-			endif
-		endfor
-		if l:qf_b == 0
-			QuickRun
-			return
-		elseif l:qr_b != 0
-			cclose
+	augroup QuickRnnTeXKeymap
+		autocmd!
+		" srcfile は最初に QuickRun を使ったときだけに指定されるので、バッファごとの指定にしないと、最初に実行したファイルに固定されてしまう
+		autocmd FileType tex let b:quickrun_config.tex = {'srcfile' : substitute(system('texmother.sh ' .. expand('%')), '\n', '', ''),}
+					\ | nnoremap <silent><buffer><Leader>qr       :call set_quickrun#Qf2qucikrun()<CR>
+	augroup END
+	if &filetype ==# 'tex' " 開いたファイル自身の設定
+		nnoremap <silent><buffer><Leader>qr       :call set_quickrun#Qf2qucikrun()<CR>
+		let b:quickrun_config.tex = {'srcfile' : substitute(system('texmother.sh ' .. expand('%')), '\n', '', ''),}
+	endif
+endfunction
+
+def set_quickrun#Qf2qucikrun(): void
+	var qf_b: number = 0
+	var qr_b: number = 0
+	var b_i: number
+	var c_b: number
+	for i in getwininfo()
+		b_i = i.bufnr
+		if i.quickfix
+			qf_b = b_i
+		elseif bufname(b_i) ==# 'quickrun://TeX-log'
+			qr_b = b_i
+		endif
+	endfor
+	if qf_b == 0
+		QuickRun
+		return
+	elseif qr_b != 0
+		cclose
+		QuickRun
+		return
+	endif
+	for i in getbufinfo()
+		if i.name ==# 'quickrun://TeX-log'
+			c_b = bufnr()
+			win_gotoid(bufwinid(qf_b))
+			execute 'buffer! ' .. i.bufnr
+			win_gotoid(bufwinid(c_b))
 			QuickRun
 			return
 		endif
-		for l:i in getbufinfo()
-			if l:i.name ==# 'quickrun://TeX-log'
-				let l:c_b = bufnr()
-				call win_gotoid(bufwinid(l:qf_b))
-				execute 'buffer! ' . l:i.bufnr
-				call win_gotoid(bufwinid(l:c_b))
-				QuickRun
+	endfor
+	cclose
+	QuickRun
+enddef
+
+def set_quickrun#Quickrn2qf(): void
+	var qr_b: number = 0
+	var c_b: number = bufnr()
+	for i in getwininfo()
+		if bufname(i.bufnr) ==# 'quickrun://TeX-log'
+			qr_b = i.bufnr
+		endif
+	endfor
+	win_gotoid(bufwinid(qr_b))
+	for i in getbufinfo()
+		if has_key(i.variables, 'current_syntax')
+			if i.variables.current_syntax ==# 'qf'
+				execute 'buffer! ' .. i.bufnr
+				win_gotoid(bufwinid(c_b))
 				return
 			endif
-		endfor
-		cclose
-		QuickRun
-	endfunction
-	function Quickrn2qf() abort
-		let l:c_b = bufnr()
-		for l:i in getwininfo()
-			if bufname(l:i.bufnr) ==# 'quickrun://TeX-log'
-				let l:qr_b =  l:i.bufnr
-			endif
-		endfor
-		call win_gotoid(bufwinid(l:qr_b))
-		for l:i in getbufinfo()
-			if has_key(l:i.variables, 'current_syntax')
-				if l:i.variables.current_syntax ==# 'qf'
-					execute 'buffer! ' . l:i.bufnr
-					call win_gotoid(bufwinid(l:c_b))
-					return
-				endif
-			endif
-		endfor
-		" qf が無かった
-		quit
-		execute substitute(g:quickrun_config.tex['outputter/buffer/opener'], '\v(\d+)v?split', 'copen \1', '')
-	endfunction
-	augroup QuickRnnTeXKeymap
-		autocmd!
-		autocmd FileType tex nnoremap <silent><buffer><Leader>qr       :call Qf2qucikrun()<CR>
-	augroup END
-	if &filetype ==# 'tex' " 開いたファイル自身の設定
-		nnoremap <silent><buffer><Leader>qr       :call Qf2qucikrun()<CR>
-	endif
-	" }}}
-	" Python は python3 を使う←Ubuntu 21.04 では python コマンドは、python3
-	" let g:quickrun_config.python = { 'command'                : 'python3'}
-	" vim help
-endfunction
+		endif
+	endfor
+	# qf が無かった
+	quit
+	execute substitute(g:quickrun_config.tex['outputter/buffer/opener'], '\v(\d+)v?split', 'copen \1', '')
+enddef
