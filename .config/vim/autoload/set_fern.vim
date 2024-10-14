@@ -88,6 +88,44 @@ def s:FernSync(): void
 	return
 enddef
 
+def set_fern#undo_ftplugin(): void
+	setlocal number< foldcolumn<
+	nunmap <buffer><C-K>
+	nunmap <buffer><C-C>
+	nunmap <buffer><C-L>
+	nunmap <buffer><F5>
+	nunmap <buffer>!
+	nunmap <buffer><C-H>
+	nunmap <buffer>-
+	nunmap <buffer>.
+	nunmap <buffer>?
+	nunmap <buffer>a
+	nunmap <buffer>c
+	nunmap <buffer>d
+	nunmap <buffer>s
+	nunmap <buffer>t
+	nunmap <buffer>o
+	nunmap <buffer>r
+	nunmap <buffer>y
+	nunmap <buffer>x
+	nunmap <buffer><leader>x
+	nunmap <buffer>D
+	nunmap <buffer>Y
+	nunmap <buffer>P
+	nunmap <buffer>i
+	nunmap <buffer><C-L>
+	nunmap <buffer>/
+	nunmap <buffer>p
+	nunmap <buffer>q
+	nunmap <buffer><Space>
+	nunmap <buffer><S-Space>
+	nunmap <buffer><leader>f
+	nunmap <buffer>f
+	nunmap <buffer>h
+	nunmap <buffer>l
+	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
+enddef
+
 def s:init_fern(): void
 	setlocal nonumber foldcolumn=0 statusline=%#StatusLineLeft#[%{&filetype}]
 	glyph_palette#apply()     # バッファ毎に呼ばないと効かない
@@ -131,6 +169,11 @@ def s:init_fern(): void
 	# ranger like collapse/expand
 	nnoremap <expr><buffer>h         set_fern#open(-1)
 	nnoremap <expr><buffer>l         set_fern#open(0)
+	if exists('b:undo_ftplugin')
+		b:undo_ftplugin ..= ' | call set_fern#undo_ftplugin()'
+	else
+		b:undo_ftplugin = 'call set_fern#undo_ftplugin()'
+	endif
 enddef
 
 def g:Fern_mapping_fzf_customize_option(spec: dict<any>): dict<any>

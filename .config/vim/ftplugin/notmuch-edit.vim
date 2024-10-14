@@ -89,7 +89,7 @@ nnoremap <Leader>r <Cmd>call g:ReformMail()<CR>
 
 # Undo {{{1
 if exists('b:undo_ftplugin')
-	b:undo_ftplugin ..= '| setlocal foldlevel<'
+	b:undo_ftplugin ..= '| setlocal foldlevel< formatexpr<'
 else
-	b:undo_ftplugin = 'setlocal foldlevel<'
+	b:undo_ftplugin = 'setlocal foldlevel< formatexpr<'
 endif

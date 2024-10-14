@@ -26,6 +26,6 @@ endif
 
 "ファイルタイプ別のローカル設定 {{{1
 setlocal signcolumn=auto foldcolumn=0
-nnoremap <buffer>q <CMD>close<CR>
+nnoremap <buffer><nowait><silent>q <CMD>bwipeout!<CR>
 nnoremap <buffer><C-O> <CMD>colder<CR>
 nnoremap <buffer><C-I> <CMD>cnewer<CR>

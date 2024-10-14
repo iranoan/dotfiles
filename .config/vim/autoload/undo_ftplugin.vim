@@ -2,6 +2,10 @@ vim9script
 scriptencoding utf-8
 # b:undo_ftplugin に使う関数を纏めてある
 
+export def Sh(): void
+	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
+enddef
+
 export def HTML(): void # XHTML と共用
 	iunmap <buffer>&&
 	iunmap <buffer>&<space>
@@ -22,6 +26,18 @@ export def HTML(): void # XHTML と共用
 	iunmap <buffer>>>
 	iunmap <buffer>\\
 	nunmap <buffer><Leader>v
+	if hasmapto('<leader>tt', 'n')
+		nunmap <buffer><leader>tt
+	endif
+	if hasmapto('<leader>tt', 'x')
+		xunmap <buffer><leader>tt
+	endif
+	if hasmapto('<leader>tr', 'n')
+		nunmap <buffer><leader>tr
+	endif
+	if hasmapto('<leader>tr ', 'x')
+		xunmap <buffer><leader>tr
+	endif
 	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
 	setlocal breakindentopt< errorformat< foldmethod< formatlistpat< iskeyword< makeprg< omnifunc< spelloptions<
 enddef
@@ -66,7 +82,7 @@ enddef
 
 export def Mail(): void
 	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
-	setlocal textwidth< expandtab<
+	setlocal textwidth< expandtab< formatexpr<
 enddef
 
 export def Man(): void
@@ -75,6 +91,9 @@ export def Man(): void
 enddef
 
 export def Markdown(): void
+	if hasmapto('<leader>v', 'n')
+			nunmap <silent><buffer><Leader>v
+		endif
 	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
 	setlocal expandtab< tabstop< shiftwidth< softtabstop<
 enddef

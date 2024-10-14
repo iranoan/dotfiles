@@ -21,7 +21,23 @@ function set_fugitve#main() abort
 	" delcommand Gstatus
 	augroup fugitive_keymap
 		autocmd!
-		autocmd FileType fugitive,fugitiveblame,git nnoremap <buffer><nowait><silent>q :bwipeout<CR>
-		autocmd FileType fugitive,git               setlocal foldmethod=syntax
+		autocmd FileType fugitive,fugitiveblame,git call set_fugitve#filetype()
 	augroup END
 endfunction
+
+def set_fugitve#undo_ftplugin(): void
+	nunmap <buffer><nowait><silent>q
+	setlocal foldmethod<
+enddef
+
+def set_fugitve#filetype(): void
+	nnoremap <buffer><nowait><silent>q :bwipeout<CR>
+	if &filetype ==# 'fugitive' || &filetype ==# 'git'
+		setlocal foldmethod=syntax
+	endif
+	if exists('b:undo_ftplugin')
+		b:undo_ftplugin ..= '| call set_fugitve#undo_ftplugin()'
+	else
+		b:undo_ftplugin = 'call set_fugitve#undo_ftplugin()'
+	endif
+enddef

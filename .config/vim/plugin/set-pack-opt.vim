@@ -348,12 +348,6 @@ augroup END
 nnoremap <silent><Leader>qr       :QuickRun<CR>
 xnoremap <silent><Leader>qr       :QuickRun<CR>
 inoremap <silent><C-\>qr     <ESC>:QuickRun<CR>a
-augroup QuickRnnKeymap
-	autocmd!
-	autocmd FileType quickrun nnoremap <buffer><nowait><silent>q :bwipeout!<CR>
-	autocmd FileType quickrun setlocal signcolumn=auto foldcolumn=0
-	# autocmd FileType tex nnoremap <silent><buffer><Leader>qr       :cclose \| QuickRun<CR>
-augroup END
 augroup loadQuickRun
 	autocmd!
 	autocmd CmdUndefined QuickRun
@@ -477,8 +471,8 @@ augroup loadPreview
 augroup END
 
 # EPWING の辞書を呼び出す https://github.com/deton/eblook.vim {{{1
-xnoremap <silent><Leader>eb <Cmd>call set_eblook#setup() <Bar>call set_eblook#searchVisual()<CR>
-nnoremap <silent><Leader>eb <Cmd>call set_eblook#setup() <Bar>call set_eblook#searchWord()<CR>
+xnoremap <silent><Leader>eb <Cmd>call set_eblook#setup() <Bar>delfunction set_eblook#setup <Bar>call set_eblook#searchVisual()<CR>
+nnoremap <silent><Leader>eb <Cmd>call set_eblook#setup() <Bar>delfunction set_eblook#setup <Bar>call set_eblook#searchWord()<CR>
 # augroup loadeblook
 # 	autocmd!
 # 	autocmd FuncUndefined eblook#* # 何故か動作しない

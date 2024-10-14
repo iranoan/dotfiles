@@ -44,12 +44,29 @@ function set_eblook#setup() abort
 	" autocmd FuncUndefined eblook#* " ←が何故か動作しないのでマップし直す
 	augroup EblookMAP
 		autocmd!
-		autocmd FileType eblook set list | setlocal nospell nolist | nnoremap <buffer><F1> <Cmd>call set_eblook#help()<CR>
-		" ↑プラグインで nolist に設定されるので list に指定し直し setlocal で指定し直す
+		autocmd FileType eblook call set_eblook#filetype()
 	augroup END
 	xnoremap <silent><Leader>eb <Cmd>call set_eblook#searchVisual()<CR>
 	nnoremap <silent><Leader>eb <Cmd>call set_eblook#searchWord()<CR>
 endfunction
+
+def set_eblook#undo_ftplugin(): void
+	setlocal spell< list<
+	nunmap <buffer><F1>
+	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
+enddef
+
+def set_eblook#filetype(): void
+	set list
+	setlocal nospell nolist
+	nnoremap <buffer><F1> <Cmd>call set_eblook#help()<CR>
+	# ↑プラグインで nolist に設定されるので list に指定し直し setlocal で指定し直す
+	if exists('b:undo_ftplugin')
+		b:undo_ftplugin ..= ' | call set_eblook#undo_ftplugin()'
+	else
+		b:undo_ftplugin = 'call set_eblook#undo_ftplugin()'
+	endif
+enddef
 
 def set_eblook#help(): void
 	if &filetype !=# 'eblook'
@@ -64,7 +81,7 @@ def set_eblook#help(): void
 	return
 enddef
 
-def set_eblook#search(s: string): void # 使う辞書グループの分岐して検索する
+def s:search(s: string): void # 使う辞書グループの分岐して検索する
 	var ss: string = s
 	if ss ==# ''
 		ss = input('Input search word: ')
@@ -81,14 +98,14 @@ def set_eblook#search(s: string): void # 使う辞書グループの分岐して
 enddef
 
 def set_eblook#searchWord(): void
-	set_eblook#search(expand('<cword>'))
+	s:search(expand('<cword>'))
 enddef
 
 def set_eblook#searchVisual(): void
 	var save_reg: dict<any> = getreginfo('a')
 	silent execute "normal! \<Esc>"
 	silent execute 'normal! `<' .. visualmode() .. '`>"ay'
-	set_eblook#search(
+	s:search(
 		substitute(@a, '\a\zs\s*\n\s*\ze\a', ' ', 'g')
 			->substitute('\s*\n\s*', '', 'g')
 			->substitute('^\s\+', '', 'g')
