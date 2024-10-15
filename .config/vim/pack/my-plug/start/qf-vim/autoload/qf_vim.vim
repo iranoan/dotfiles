@@ -2,6 +2,7 @@ vim9script
 scriptencoding utf-8
 # Vim script のエラー内容を Quickfix に取り込む
 # https://qiita.com/tmsanrinsha/items/0787352360997c387e84 を参考にした
+# Python Interface 不完全
 
 export def QfMessages(): void
 	function VerboseFunc(s) " {53} といった辞書関数だと def 関数内で処理できない
@@ -19,16 +20,18 @@ export def QfMessages(): void
 		var func_lines: list<string>      # スクリプト・ローカルなどの関数内容確認用
 		var max_line: number              # 関数の行数
 		var lnum: number                  # 関数内行番号
-		var offset: number                # 行番号
+		var offset: string                # 行番号
 		# var find_dic_func: number
 		var regex_error_detect: string    # エラー検索文字列
 		var script_error_detect: string   # message でエラーがない時このスクリプトからカレント・バッファを source した時の付加部分を削除する為の検索文字列
 		var regex_line: string            # エラーから得る行癌号
 		var regex_last_set: string
-		var nr: any                       # エラー番号
+		var nr: string                    # エラー番号
 		var text: string                  # エラー内容
 		var ii: number
 		var matched: string               # 検索のヒット部分文字列
+		# var interface: bool = false
+		var error: bool = false
 
 		if v:lang =~# 'ja_JP'
 			regex_error_detect = '^.\+\ze の処理中にエラーが検出されました:$'
@@ -45,6 +48,7 @@ export def QfMessages(): void
 		for line in split(msgs, "\n")
 			->map((_, v) => substitute(v, script_error_detect, '', ''))
 			if line =~# regex_error_detect
+				error = false
 				# ... の処理中にエラーが検出されました:'
 				matched = matchstr(line, regex_error_detect)
 				if matched =~# '\.\.function'
@@ -52,7 +56,7 @@ export def QfMessages(): void
 					# function <SNR>253_piyo[1]..<SNR>253_fuga の処理中にエラーが検出されました:
 					matched = matchstr(matched, '^.\+\.\.function \zs\S*')
 					for stack in reverse(split(matched, '\.\.'))
-						[func_name, offset] = (stack =~# '\S\+\[\d') ? matchlist(stack, '\(\S\+\)\[\(\d\+\)\]')[1 : 2] : [stack, 0]
+						[func_name, offset] = (stack =~# '\S\+\[\d') ? matchlist(stack, '\(\S\+\)\[\(\d\+\)\]')[1 : 2] : [stack, '0']
 						func_name = (func_name =~# '^\d\+$') ? '{' .. func_name .. '}' : func_name # 辞書関数の数字は{}で囲む
 						verbose_func = VerboseFunc(func_name)
 						if verbose_func ==# '' # endfunction/enddef がない
@@ -93,10 +97,10 @@ export def QfMessages(): void
 							# ↑何のためか分らない
 							lnum = match(files[filename], func_lines[0], lnum)
 							func_name = matchstr(files[filename][lnum], func_lines[0])
-							lnum += 1 + offset
+							lnum += 1 + str2nr(offset)
 						else
 							func_name  = substitute(func_name, '<SNR>\d\+_', 's:', '')
-							lnum = match(files[filename], '^\s*\(fu\%[nction]!\=\s\|def\)\+' .. func_name) + 1 + offset
+							lnum = match(files[filename], '^\s*\(fu\%[nction]!\=\s\|def\)\+' .. func_name) + 1 + str2nr(offset)
 						endif
 						add(qf_info_list, {
 									'filename': filename,
@@ -111,6 +115,7 @@ export def QfMessages(): void
 				endif
 			elseif line =~# regex_line
 				# 行    1:
+				error = true
 				lnum = str2nr(matchstr(line, regex_line))
 				if len(qf_info_list) > 0
 					qf_info_list[0].lnum += lnum
@@ -140,17 +145,37 @@ export def QfMessages(): void
 				endif
 				qf_info = {}
 				qf_info_list = []
+			elseif error # Python Interface
+				if line =~# '^  File "[^"]\+", line \d\+$'
+					[filename, nr] = matchlist(line, '^  File "\([^"]\+\)", line \(\d\+\)$')[1 : 2]
+					qf_info_list = []
+					ii = 0
+				elseif line =~# '^    '
+					qf_info_list = add(qf_info_list, {
+													lnum: str2nr(nr) + ii,
+													text: '| ' .. line[4 : ]
+												})
+					ii += 1
+				elseif line =~# '^[A-Za-z]\+Error: '
+					add(qflist, {
+											filename: filename,
+											lnum: str2nr(nr),
+											text: line
+							})
+					qflist += qf_info_list
+					qf_info_list = []
+					error = false
+				endif
 			endif
 		endfor
 		return qflist
 	enddef
 
 	var qflist: list<dict<any>> = ParseErrorMessages(execute('silent! messages'))
-	setqflist(qflist, 'r')
 	if qflist == [] # エラーがないので、開いているファイルを source
-		qflist = ParseErrorMessages(execute('source %'))
+		qflist = ParseErrorMessages(execute('source ' .. expand('%:p')))
 		feedkeys("G\<Enter>")
-		setqflist(qflist, 'r')
 	endif
+	setqflist(qflist, 'r')
 	cwindow
 enddef
