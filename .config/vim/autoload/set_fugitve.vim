@@ -36,7 +36,9 @@ def set_fugitve#filetype(): void
 		setlocal foldmethod=syntax
 	endif
 	if exists('b:undo_ftplugin')
-		b:undo_ftplugin ..= '| call set_fugitve#undo_ftplugin()'
+		if b:undo_ftplugin !~#  '\<call set_fugitve#undo_ftplugin()'
+			b:undo_ftplugin ..= '| call set_fugitve#undo_ftplugin()'
+		endif
 	else
 		b:undo_ftplugin = 'call set_fugitve#undo_ftplugin()'
 	endif

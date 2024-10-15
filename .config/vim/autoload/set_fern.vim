@@ -170,7 +170,9 @@ def s:init_fern(): void
 	nnoremap <expr><buffer>h         set_fern#open(-1)
 	nnoremap <expr><buffer>l         set_fern#open(0)
 	if exists('b:undo_ftplugin')
-		b:undo_ftplugin ..= ' | call set_fern#undo_ftplugin()'
+		if b:undo_ftplugin !~#  '\<call set_fern#undo_ftplugin()'
+			b:undo_ftplugin ..= ' | call set_fern#undo_ftplugin()'
+	endif
 	else
 		b:undo_ftplugin = 'call set_fern#undo_ftplugin()'
 	endif

@@ -113,7 +113,7 @@ function set_vimlsp#main() abort
 	augroup END
 endfunction
 
-def set_vimlsp#undo_ftplugin(): void # sh,bash,go,conf
+def set_vimlsp#undo_ftplugin(): void
 	nunmap <buffer><C-]>
 	nunmap <buffer><Leader>lo
 	nunmap <buffer><expr>K
@@ -185,7 +185,9 @@ def s:on_lsp_buffer_enabled(): void
 	endwhile
 	lsp#enable()
 	if exists('b:undo_ftplugin')
-		b:undo_ftplugin ..= '| call set_vimlsp#undo_ftplugin()'
+		if b:undo_ftplugin !~#  '\<call set_vimlsp#undo_ftplugin()'
+			b:undo_ftplugin ..= '| call set_vimlsp#undo_ftplugin()'
+		endif
 	else
 		b:undo_ftplugin = 'call set_vimlsp#undo_ftplugin()'
 	endif
