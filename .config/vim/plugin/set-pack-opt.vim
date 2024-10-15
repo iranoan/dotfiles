@@ -585,7 +585,7 @@ for [n, q] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '
 		execute 'nmap ys' .. k .. n .. ' ys' .. v .. q
 	endfor
 endfor
-for k in ['ysaw', 'ysiw', 'ysa', 'ysi', 'cs', 'ds']
+for k in ['ysaw', 'ysiw', 'ds']
 	for [n, q] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>' })
 		execute 'nmap ' .. k .. n .. ' ' .. k .. q
 	endfor
