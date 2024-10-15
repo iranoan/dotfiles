@@ -232,14 +232,9 @@ def StatusLineLeftRight(): void
 	highlight StatusLineRight term=bold cterm=bold gui=bold ctermfg=White ctermbg=3 guifg=White guibg=DarkYellow
 	highlight StatusGit       term=bold cterm=bold gui=bold ctermfg=White ctermbg=6 guifg=White guibg=DarkCyan
 enddef
-augroup StatusLineLeftRight
+augroup StatusLine
 	autocmd!
 	autocmd ColorScheme * StatusLineLeftRight()
-				# | autocmd! StatusLineRight
-				# | augroup! StatusLineLeft
-				# 削除すると colorscheme を変更すると Normal 色になる
-	# ↓$MYVIMDIR/ftplugin/qf.vim, $MYVIMDIR/after/ftplugin/qf.vim に書いてみたが効かなかった
-	autocmd FileType qf &l:statusline = '%#StatusLineLeft#%t %*%<' .. (exists('w:quickfix_title') ? substitute(w:quickfix_title, '\(cexpr system("\)\?/usr/bin/grep -nHsI --color=never -d skip --exclude-dir=\.git\( --exclude={[^}]\+}\)\? \(.*\) /dev/null\(")->substitute(''\\ze\\n'', ":1: ", "g")\)\?$', 'grep \3', '')->substitute('%', '%%', 'g') : '') .. '%=%#StatusLineRight#%3l/%L%4p%%'
 augroup END
 # # 全角スペースをハイライト表示←フォントで対応したのですべてコメント・アウト {{{2
 # function s:ZenkakuSpace()

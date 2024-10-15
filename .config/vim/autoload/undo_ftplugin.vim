@@ -114,7 +114,7 @@ export def Qf(): void
 	nunmap <buffer><C-O>
 	nunmap <buffer><C-I>
 	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
-	setlocal foldcolumn<
+	setlocal foldcolumn< statusline<
 enddef
 
 export def TeX(): void
