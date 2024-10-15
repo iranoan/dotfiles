@@ -9,6 +9,24 @@ export def Lgrep(...args: list<string>): void
 	GrepMain('lgrep', args)
 enddef
 
+export def SetQfTitle(): void
+	var i: dict<any>
+	var title: string
+	var win_id: number
+	for b in tabpagebuflist()
+		i = getbufinfo(b)[0]
+		if getbufvar(i.bufnr, '&filetype') ==# 'qf'
+			win_id = bufwinid(i.bufnr)
+			title = getwinvar(win_id, 'quickfix_title')
+			if title =~# '^:/usr/bin/grep'
+				title = substitute(title, '\(cexpr system("\)\?/usr/bin/grep -nHsI --color=never -d skip --exclude-dir=\.git\( --exclude={[^}]\+}\)\? \(.*\) /dev/null\(")->substitute(''\\ze\\n'', ":1: ", "g")\)\?$', 'grep \3', '')->substitute('%', '%%', 'g')
+				setwinvar(win_id, 'quickfix_title', title)
+			endif
+			return
+		endif
+	endfor
+enddef
+
 def GrepMain(cmd: string, args: list<string>): void
 	def FileList(s: string): void
 		var arg: string = substitute(s, "'", "''", 'g')

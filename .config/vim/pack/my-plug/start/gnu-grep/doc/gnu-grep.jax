@@ -46,11 +46,14 @@ License: GPL Ver.3.
 * |:LGrep| を使えば、幾つかのオプションを付けて |:silent| |lgrep| を実行する
 * --include を使わなければ --exclude= を使い主なバイナリ・ファイル等を除外する
 * %, # はバッファ名としてではなく、エスケープして文字列として処理する
-* 次の組み合わせは -m (--max-count=)1 に置き換える
-	* -l (--files-with-matches) が有り -v (--invert-match) のない時
-	* -L (--files-without-match) と -v (--invert-match) の両方が有る時
-* -L (--files-without-match) の結果にも行番号を付けて出力
-	* |'errorformat'| にマッチさせるため
+* |'errorformat'| にマッチさせるため
+	* 次の組み合わせは -m (--max-count=)1 に置き換える
+		* -l (--files-with-matches) が有り -v (--invert-match) のない時
+		* -L (--files-without-match) と -v (--invert-match) の両方が有る時
+	* -L (--files-without-match) の結果にも行番号を付けて出力
+	* $MYVIMDIR/after/ftplugin/qf.vim 等で gnu_grep#SetQfTitle() を使うと必ず付
+		けるオプション (|gnu-grep-option|) や --exclude= を |w:quickfix_title| から除
+		外する
 
                                                                *gnu-grep-option*
 必ず付けるオプション~
