@@ -59,6 +59,7 @@ function set_quickrun#main() abort
 	" }}}
 	" TeX 設定 途中エラーが有っても止めない+zathura が複数起動するので、-pv 無しオプション{{{
 	" zathura_sync.sh 内部で処理をしようとすると、非同期処理ができないので止めた
+	" 設定が煩雑になるので成功時も失敗時も QuickFix で開いたままにする
 	let g:quickrun_config.tex = {
 				\ 'outputter/error/success'     : 'quickfix',
 				\ 'outputter/quickfix/open_cmd' : 'botright copen 8',
@@ -67,12 +68,35 @@ function set_quickrun#main() abort
 				\ 'hook/cd/directory'           : '%S:h',
 				\ 'arg'                         : '',
 				\ 'exec'                        : ['%c %o %s'],
-				\ 'srcfile'                     : substitute(system('texmother.sh ' .. expand('%')), '\n', '', '')
 				\}
-				" \ 'outputter/error/success': 'null', " ←これだと非同期 vimproc との組み合わせで失敗時も開かない
-				" \ 'hook/close_quickfix/enable_success' : 1, 上と同じ
+				" ↓以下は非同期 vimproc との組み合わせで失敗時も開かない
+				" \ 'outputter/error/success': 'null',
+				" \ 'hook/close_quickfix/enable_success' :
+	augroup QuickRunTeX
 		autocmd!
 		" srcfile は最初に QuickRun を使ったときだけに指定されるので、バッファごとの指定にしないと、最初に実行したファイルに固定されてしまう
-		autocmd FileType tex let b:quickrun_config.tex = {'srcfile' : substitute(system('texmother.sh ' .. expand('%')), '\n', '', '')}
+		autocmd FileType tex let b:quickrun_config= {'srcfile' : s:GetTeXfile(expand('%:p'))}
 	augroup END
+	for b in getbufinfo() " 既に開かれている TeX の srcfile を設定する
+		let nr = b.bufnr
+		let name = b.name
+		if name !=# ''
+			if getbufvar(nr, '&filetype') ==# 'tex'
+				call setbufvar(nr, 'quickrun_config', {'srcfile' : s:GetTeXfile(name)})
+			endif
+		endif
+	endfor
 endfunction
+
+def s:GetTeXfile(f: string): string
+	# TeX では \documentclass のないファイルはタイプセットしても意味がない
+	# \input によって読み込まれるファイルで、ファイルのカレント・ディレクトリにも \documentclass の書かれたファイルの場合、change_directory#Lcd() によって機械的にバッファのカレント・ディレクトリを親ディレクトリにしている
+	# ↑\input や \includegraphics はあくまで読み込み元ファイルを基準に書く必要がるため
+	# →シェル・スクリプトと組み合わせてタイプセット対象のフルパスを得る
+	# arg f: full path
+	var dir: string
+	var name: string
+	[dir, name] = matchlist(f, '\(.\+/\)\([^/]\+\)')[1 : 2]
+	return substitute(dir .. system('cd "' .. dir .. '" && texmother.sh "' .. name .. '"')[ : -2 ], '[^/]\+/\.\./', '', 'g')
+					->substitute('/\zs\./', '', 'g')
+enddef
