@@ -6,7 +6,11 @@ scriptencoding utf-8
 
 export def QfMessages(): void
 	function VerboseFunc(s) " {53} といった辞書関数だと def 関数内で処理できない
-		return execute('verbose function ' .. a:s)
+		try
+			return execute('verbose function ' .. a:s)
+		catch /^Vim\%((\a\+)\)\=:E123:/
+			return ''
+		endtry
 	endfunction
 
 	def ParseErrorMessages(msgs: string): list<dict<any>>
@@ -149,13 +153,11 @@ export def QfMessages(): void
 				if line =~# '^  File "[^"]\+", line \d\+$'
 					[filename, nr] = matchlist(line, '^  File "\([^"]\+\)", line \(\d\+\)$')[1 : 2]
 					qf_info_list = []
-					ii = 0
 				elseif line =~# '^    '
 					qf_info_list = add(qf_info_list, {
-													lnum: str2nr(nr) + ii,
+													lnum: str2nr(nr),
 													text: '| ' .. line[4 : ]
 												})
-					ii += 1
 				elseif line =~# '^[A-Za-z]\+Error: '
 					add(qflist, {
 											filename: filename,
