@@ -23,7 +23,7 @@ if !exists('g:vim_plugin')
 		" 			\ errorformat=%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
 		" 			\ foldexpr=PythonFold() foldmethod=expr
 		" 			\ iskeyword-=? iskeyword-=:
-	" augroup END
+	augroup END
 
 	def s:get_comment_string(): void # vim9script/def/function によって適切な commentstring を設定する
 		# function ... | ... | endfunction の様に | で連結した関数が有るとうまく判定できない
