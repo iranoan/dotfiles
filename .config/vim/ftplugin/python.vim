@@ -79,7 +79,7 @@ function PythonFold() abort
 				return '>1'
 			else
 				return '0'
-			end
+			endif
 		elseif match(getline(v:lnum-1), '^\s*#') == -1 " 前行非コメント
 			if match(l:next, '^\s*#') != -1              " 次行コメント行
 				return '>' . (l:indent+1)                  " コメントの始まり

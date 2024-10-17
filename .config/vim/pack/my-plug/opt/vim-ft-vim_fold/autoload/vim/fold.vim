@@ -162,7 +162,7 @@ def Calculate(bufnr: number): dict<any>
 			continue
 		endif
 		col = 0
-		while true # if/end など対になる文字列
+		while true # if/endif など対になる文字列
 			[o_pos, oe_pos] = matchstrpos(cur_line, open_pat, col)[1 : ]
 			[c_pos, ce_pos] = matchstrpos(cur_line, close_pat, col)[1 : ]
 			if o_pos < 0 && c_pos < 0
