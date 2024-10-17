@@ -38,13 +38,13 @@ export def QfMessages(): void
 		var error: bool = false
 
 		if v:lang =~# 'ja_JP'
-			regex_error_detect = '^.\+\ze の処理中にエラーが検出されました:$'
-			script_error_detect = '^.\+\[\d\+]\.\.script \ze.\+ の処理中にエラーが検出されました:$'
+			regex_error_detect = '^.\+\ze の\(処理\|コンパイル\)中にエラーが検出されました:$'
+			script_error_detect = '^.\+\[\d\+]\.\.script \ze.\+ の\(処理\|コンパイル\)中にエラーが検出されました:$'
 			regex_line = '^行\s\+\zs\d\+\ze:$'
 			regex_last_set = '最後にセットしたスクリプト: \zs\f\+'
 		else
-			regex_error_detect = '^Error detected while processing \zs.\+\ze:$'
-			script_error_detect = '^Error detected while processing \zs.\+\[\d\+]\.\.script \ze.\+:$'
+			regex_error_detect = '^Error detected while \(process\|compil\)ing \zs.\+\ze:$'
+			script_error_detect = '^Error detected while \(process\|compil\)ing \zs.\+\[\d\+]\.\.script \ze.\+:$'
 			regex_line = '^line\s\+\zs\d\+\ze:$'
 			regex_last_set = 'Last set from \zs\f\+'
 		endif
