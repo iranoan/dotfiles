@@ -10,6 +10,7 @@ b:did_ftplugin_user = 1
 if !exists("g:mail_draft_plugin")
 	g:mail_draft_plugin = 1
 	packadd transform
+
 	def g:ReformMail(): void # ML の広告を削除する個人的な関数
 		def DelBlock(s: string, e: string, i: number, j: number): void # s, e 両方の文字列 (行) が有ったときのみ、その範囲を削除
 			var buf: list<string>
