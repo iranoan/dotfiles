@@ -91,28 +91,28 @@ if !exists('g:vim_plugin')
 		enddef
 
 		var line: string = getline('.')
-		var col: number = col('.')
+		var column: number = col('.')
 		var i: number = 0
 		var keyword: string # = expand('<cword>')
-		var start: number
-		var end: number
+		var m_start: number
+		var m_end: number
 		var name: string
 
 		# if mode(1) =~# '^c'
 		# 	Help(tmp)
 		# 	return
 		# endif
-		[keyword, start, end] = matchstrpos(line, '^\c\v\s*\zs[a-z]+')
-		if start != -1 && col <= end && col >= start # 行頭→コマンド
+		[keyword, m_start, m_end] = matchstrpos(line, '^\c\v\s*\zs[a-z]+')
+		if m_start != -1 && column <= m_end && column >= m_start # 行頭→コマンド
 			Help(':' .. keyword)
 			return
 		endif
 		while true
-			[keyword, start, end] = matchstrpos(line, '\c\v(\s*\zs((\<bar\>|\|)\s*|<[bgv]:|\&)?[a-z0-9_]+(\(|\=)?|\<[-0-9a-z]+\>)', i)
-			if start == -1
+			[keyword, m_start, m_end] = matchstrpos(line, '\c\v(\s*\zs((\<bar\>|\|)\s*|<[bgv]:|\&)?[a-z0-9_]+(\(|\=)?|\<[-0-9a-z]+\>)', i)
+			if m_start == -1
 				Help('' .. "\<C-r>\<C-w>")
 				break
-			elseif (col <= end && col >= start)
+			elseif column <= m_end && column >= m_start
 				if keyword =~# '^\v\<[-a-z]+\>$' # 特殊キー
 					Help('' .. keyword)
 				elseif keyword =~# '^(\<bar\>|\|)' # コマンド
@@ -131,7 +131,7 @@ if !exists('g:vim_plugin')
 				endif
 				break
 			endif
-			i = end + 1
+			i = m_end + 1
 		endwhile
 		return
 	enddef

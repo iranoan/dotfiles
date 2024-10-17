@@ -37,11 +37,11 @@ export def Cyclic(args: string, word: number = 0): string
 	# , 区切り文字列をリストに変換
 	var s_ls: list<string>
 	var s_while: string
-	var start: number
-	var end = -1
+	var m_start: number
+	var m_end = -1
 	while 1
-		[s_while, start, end] = matchstrpos(args, '\m\(\\\\\|\\,\|[^,]\)\+', end + 1)
-		if start == -1
+		[s_while, m_start, m_end] = matchstrpos(args, '\m\(\\\\\|\\,\|[^,]\)\+', m_end + 1)
+		if m_start == -1
 			break
 		endif
 		add(s_ls, substitute(s_while, '\\\(\\\|,\)', '\1', 'g'))

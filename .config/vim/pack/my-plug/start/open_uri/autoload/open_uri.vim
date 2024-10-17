@@ -4,13 +4,13 @@ let s:save_cpo = &cpoptions
 set cpoptions&vim
 
 function open_uri#main()
-	let l:line_str = getline('.')
-	let l:end = 0
-	let l:urls = []
-	let l:only_urls = []
+	let line_str = getline('.')
+	let m_end = 0
+	let urls = []
+	let only_urls = []
 	while 1
-		let [url, start, end] = matchstrpos(line_str, '\v<(((https?|ftp|gopher)://|(mailto|file|news):)[^][{}()'' \t<>"]+|(www|web|w3)[a-z0-9_-]*\.[a-z0-9._-]+\.[^][{}()'' \t<>"]+)[a-z0-9/]|(\~?/)?([-A-Za-z._0-9]+/)*[-A-Za-z._0-9]+(\.\a([A-Za-z0-9]{,3})|/)', end)
-		if l:start == -1
+		let [url, m_start, m_end] = matchstrpos(line_str, '\v<(((https?|ftp|gopher)://|(mailto|file|news):)[^][{}()'' \t<>"]+|(www|web|w3)[a-z0-9_-]*\.[a-z0-9._-]+\.[^][{}()'' \t<>"]+)[a-z0-9/]|(\~?/)?([-A-Za-z._0-9]+/)*[-A-Za-z._0-9]+(\.\a([A-Za-z0-9]{,3})|/)', m_end)
+		if m_start == -1
 			break
 		endif
 		if url !~# '\v^(((https?|ftp|gopher)://|(mailto|file|news):)[^][{}()'' \t<>"]+|(www|web|w3)[a-z0-9_-]*\.[a-z0-9._-]+\.[^][{}()'' \t<>"]+)[a-z0-9/]'
@@ -20,63 +20,63 @@ function open_uri#main()
 		elseif url =~# '\v^(www|web|w3)[a-z0-9_-]*\.[a-z0-9._-]+\.[^][{}()'' \t<>"]+[a-z0-9/]'
 			let url = 'https://' .. url
 		endif
-		if index(l:only_urls, l:url) == -1
-			call add(l:only_urls, l:url)
-			call add(l:urls, [l:url, l:end])
+		if index(only_urls, url) == -1
+			call add(only_urls, url)
+			call add(urls, [url, m_end])
 		endif
 	endwhile
-	let l:i = len(l:urls)
-	if l:i == 0
+	let i = len(urls)
+	if i == 0
 		echohl WarningMsg
 		echo 'No URI found in line.'
 		echohl None
 		return
 	endif
-	let l:col = col('.')
-	if l:i == 1
-		let l:url = l:urls[0][0]
-	elseif l:col != 1 && ( l:urls[len(l:urls)-1][1] > l:col )
+	let column = col('.')
+	if i == 1
+		let url = urls[0][0]
+	elseif column != 1 && ( urls[len(urls)-1][1] > column )
 		" カーソルが先頭ではなく、最後の URL/ファイル名より前に有る
 		" カーソル位置か、すぐ後ろを開く
-		for l:url in l:urls
-			if l:url[1] > l:col
-				let l:url = l:url[0]
+		for urls_i in urls
+			if urls_i[1] > column
+				let url = urls_i[0]
 				break
 			endif
 		endfor
 	else " メニュー表示で選択
-		let l:index = 1
-		let l:msg = ''
-		for l:url in l:urls
-			let l:msg = l:msg .  l:index . ' ' . l:url[0]. "\n"
-			let l:index += 1
+		let item = 1
+		let msg = ''
+		for urls_i in urls
+			let msg = msg .  item . ' ' . urls_i[0]. "\n"
+			let item += 1
 		endfor
-		let l:index = input(l:msg . 'Select open URL/File [1-' . (l:index-1) . '] ')
-		if l:index ==? ''
+		let item = input(msg . 'Select open URL/File [1-' . (item-1) . '] ')
+		if item ==? ''
 			return
 		endif
-		let l:url = l:urls[l:index - 1][0]
+		let url = urls[item - 1][0]
 		redraw
 	endif
-	if l:url[0:1] ==? '~/'
-		let l:url = expand(l:url)
+	if url[0:1] ==? '~/'
+		let url = expand(url)
 	endif
-	if getftype(l:url) ==# ''
-		if match(l:url, '^[A-Za-z0-9_.+-]\+@[A-Za-z0-9.-]\+[a-z]\{2,\}$') == 0
-			let l:url = 'mailto:' . l:url
+	if getftype(url) ==# ''
+		if match(url, '^[A-Za-z0-9_.+-]\+@[A-Za-z0-9.-]\+[a-z]\{2,\}$') == 0
+			let url = 'mailto:' . url
 		endif
 	endif
 	if has('unix')
-		let l:result = system('xdg-open "' . l:url . '"')
+		let result = system('xdg-open "' . url . '"')
 	elseif has('win32') || has('win32unix')
-		let l:result = system('start "' . l:url . '"')
+		let result = system('start "' . url . '"')
 	elseif has('mac')
-		let l:result = system('open "' . l:url . '"')
+		let result = system('open "' . url . '"')
 	endif
-	if l:result !=? ''
-		echo l:result
+	if result !=? ''
+		echo result
 	else
-		echo 'open ' . l:url
+		echo 'open ' . url
 	endif
 	return
 endfunction

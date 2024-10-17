@@ -60,16 +60,16 @@ augroup END
 
 def s:xbb(): void # カーソル位置のパスの ebb -x -O の出力の一部 (ファイル名と HiResBoundingBox) を書き込む
 	var line_str = getline('.')
-	var end = 0
+	var m_end = 0
 	var urls: list<any>
 	var url: string
-	var start: number
+	var m_start: number
 	while 1
-		[url, start, end] = matchstrpos(line_str, '\m\C\(\~\=/\)\=\([A-Za-z\.\-_0-9]\+/\)*[A-Za-z\.\-_0-9]\+\.[A-Za-z]\{1,4\}', end)
-		if start == -1
+		[url, m_start, m_end] = matchstrpos(line_str, '\m\C\(\~\=/\)\=\([A-Za-z\.\-_0-9]\+/\)*[A-Za-z\.\-_0-9]\+\.[A-Za-z]\{1,4\}', m_end)
+		if m_start == -1
 			break
 		endif
-		add(urls, [url, start, end])
+		add(urls, [url, m_start, m_end])
 	endwhile
 	var col = col('.')
 	for i in urls
