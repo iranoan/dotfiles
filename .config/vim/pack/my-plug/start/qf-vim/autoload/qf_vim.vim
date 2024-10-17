@@ -45,7 +45,7 @@ export def QfMessages(): void
 		else
 			regex_error_detect = '^Error detected while processing \zs.\+\ze:$'
 			script_error_detect = '^Error detected while processing \zs.\+\[\d\+]\.\.script \ze.\+:$'
-			regex_line = '^line\s\+\zs\d\+\e:$'
+			regex_line = '^line\s\+\zs\d\+\ze:$'
 			regex_last_set = 'Last set from \zs\f\+'
 		endif
 
