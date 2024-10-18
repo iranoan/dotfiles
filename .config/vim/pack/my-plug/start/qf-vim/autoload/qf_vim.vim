@@ -7,113 +7,68 @@ scriptencoding utf-8
 export def QfMessages(): void
 	function VerboseFunc(s) " {53} といった辞書関数だと def 関数内で処理できない
 		try
-			return execute('verbose function ' .. a:s)
+			return execute('verbose function ' .. a:s)->split("[\n\r]")[1]
 		catch /^Vim\%((\a\+)\)\=:E123:/
 			return ''
 		endtry
 	endfunction
 
 	def ParseErrorMessages(msgs: string): list<dict<any>>
-		var qflist: list<dict<any>>       # 戻り値。setqflistの引数に使う配列
-		var qf_info: dict<any>            # qflistの要素になる辞書
-		var qf_info_list: list<dict<any>> # qflistの要素となる辞書の配列。エラー内容がスタックトレースのときに使用
-		var files: dict<list<string>>     # 読み込んだファイルの内容をキャッシュしておくための辞書
-		var func_name: string             # 関数名
-		var verbose_func: string          # スクリプト・ローカルなどの関数内容
-		var filename: string              # スクリプト・ファイル名
-		var func_lines: list<string>      # スクリプト・ローカルなどの関数内容確認用
-		var max_line: number              # 関数の行数
-		var lnum: number                  # 関数内行番号
-		var offset: string                # 行番号
-		# var find_dic_func: number
-		var regex_error_detect: string    # エラー検索文字列
-		var script_error_detect: string   # message でエラーがない時このスクリプトからカレント・バッファを source した時の付加部分を削除する為の検索文字列
-		var regex_line: string            # エラーから得る行癌号
+		var qflist: list<dict<any>>        # 戻り値。setqflistの引数に使う配列
+		var qf_info: dict<any>             # qflistの要素になる辞書
+		var qf_info_list: list<dict<any>>  # qflistの要素となる辞書の配列。エラー内容がスタックトレースのときに使用
+		var file_cache: dict<list<string>> # 読み込んだファイルの内容をキャッシュしておくための辞書
+		var func_name: string              # 関数名
+		var filename: string               # スクリプト・ファイル名
+		var func_info: string              # 関数の情報 (記載ファイル名と行番号)
+		var func_lnum: string              # 関数の宣言行
+		var lnum: number                   # 関数内行番号
+		var regex_error_detect: string     # エラー検索文字列
+		var regex_line: string             # エラーから得る行癌号
 		var regex_last_set: string
-		var nr: string                    # エラー番号
-		var text: string                  # エラー内容
+		var nr: string                     # エラー番号
+		var text: string                   # エラー内容
 		var ii: number
-		var matched: string               # 検索のヒット部分文字列
-		# var interface: bool = false
+		var matched: string                # 検索のヒット部分文字列
 		var error: bool = false
 
 		if v:lang =~# 'ja_JP'
 			regex_error_detect = '^.\+\ze の\(処理\|コンパイル\)中にエラーが検出されました:$'
-			script_error_detect = '^.\+\[\d\+]\.\.script \ze.\+ の\(処理\|コンパイル\)中にエラーが検出されました:$'
 			regex_line = '^行\s\+\zs\d\+\ze:$'
-			regex_last_set = '最後にセットしたスクリプト: \zs\f\+'
+			regex_last_set = '最後にセットしたスクリプト: \(\f\+\) 行 \(\d\+\)$'
 		else
 			regex_error_detect = '^Error detected while \(process\|compil\)ing \zs.\+\ze:$'
-			script_error_detect = '^Error detected while \(process\|compil\)ing \zs.\+\[\d\+]\.\.script \ze.\+:$'
 			regex_line = '^line\s\+\zs\d\+\ze:$'
-			regex_last_set = 'Last set from \zs\f\+'
+			regex_last_set = 'Last set from \(\f\+\) Line \(\d\+\)$'
 		endif
 
 		for line in split(msgs, "\n")
-			->map((_, v) => substitute(v, script_error_detect, '', ''))
-			if line =~# regex_error_detect
+									->map((_, v) => substitute(v, '^command line\.\.', '', ''))
+									->map((_, v) => substitute(v, '^function \S\+\[\d\+]\.\.script ', '', ''))
+			if line =~# regex_error_detect # ... の処理中にエラーが検出されました:'
 				error = false
-				# ... の処理中にエラーが検出されました:'
 				matched = matchstr(line, regex_error_detect)
 				if matched =~# '\.\.function'
-					# function <SNR>253_fuga の処理中にエラーが検出されました:
-					# function <SNR>253_piyo[1]..<SNR>253_fuga の処理中にエラーが検出されました:
-					matched = matchstr(matched, '^.\+\.\.function \zs\S*')
-					for stack in reverse(split(matched, '\.\.'))
-						[func_name, offset] = (stack =~# '\S\+\[\d') ? matchlist(stack, '\(\S\+\)\[\(\d\+\)\]')[1 : 2] : [stack, '0']
+					func_name = matchstr(matched, '^.\+\.\.function \zs\S*')
+					for stack in reverse(split(matched, '\.\.')[1 : ])
 						func_name = (func_name =~# '^\d\+$') ? '{' .. func_name .. '}' : func_name # 辞書関数の数字は{}で囲む
-						verbose_func = VerboseFunc(func_name)
-						if verbose_func ==# '' # endfunction/enddef がない
+						func_info = VerboseFunc(func_name)
+						if func_info ==# '' # endfunction/enddef がない
 							continue
 						endif
-						filename = matchstr(verbose_func, regex_last_set)
+						[filename, func_lnum] = matchlist(func_info, regex_last_set)[1 : 2 ]
 						filename = expand(filename)
-						if !has_key(files, filename)
-							files[filename] = readfile(filename)
+						if !has_key(file_cache, filename)
+							file_cache[filename] = readfile(filename)
 						endif
-						if func_name =~# '{\d\+}'
-							func_lines = split(verbose_func, "\n")
-							unlet func_lines[1]
-							max_line = len(func_lines)
-							func_lines[0] = '^\s*\(fu\%[nction]!\=\s\+\zs\S\+\.\S\+\|def\s\+\zs[^)]\+):\s\+[a-z<>]\+\)'
-							for i in range(1, max_line - 2)
-								func_lines[i] = '^\s*' .. matchstr(func_lines[i], '^\d\+\s*\zs.*')
-							endfor
-							func_lines[max_line - 1] = '^\s*end\(f[unction]\|def)'
-							# lnum = 0
-							# while 1
-							# 	lnum = match(files[filename], func_lines[0], lnum)
-							# 	if lnum < 0
-							# 		throw 'No dictionary function'
-							# 	endif
-							# 	find_dic_func = 1
-							# 	for i in range(1, max_line - 1)
-							# 		if files[filename][lnum + i] !~# func_lines[i]
-							# 			lnum = lnum + i
-							# 			find_dic_func = 0
-							# 			break
-							# 		endif
-							# 	endfor
-							# 	if find_dic_func
-							# 		break
-							# 	endif
-							# endwhile
-							# ↑何のためか分らない
-							lnum = match(files[filename], func_lines[0], lnum)
-							func_name = matchstr(files[filename][lnum], func_lines[0])
-							lnum += 1 + str2nr(offset)
-						else
-							func_name  = substitute(func_name, '<SNR>\d\+_', 's:', '')
-							lnum = match(files[filename], '^\s*\(fu\%[nction]!\=\s\|def\)\+' .. func_name) + 1 + str2nr(offset)
-						endif
+						lnum = str2nr(func_lnum)
 						add(qf_info_list, {
 									'filename': filename,
 									'lnum': lnum,
-									'text': func_name,
+									'text': matchstr(file_cache[filename][lnum - 1], '^\s*\(fu\%[nction]!\=\s\+\|def\s\+\)\zs[^(]\+')
 								})
 					endfor
-				else
-					# <filename> の処理中にエラーが検出されました:
+				else # <filename> の処理中にエラーが検出されました:
 					filename = expand(matchstr(line, regex_error_detect))
 					qf_info.filename = expand(filename)
 				endif
@@ -137,7 +92,7 @@ export def QfMessages(): void
 						ii = 0
 						for val in qf_info_list
 							val.nr = str2nr(nr)
-							val.text = '#' .. ii .. ' in ' .. val.text .. (ii == 0 ? (' | ' .. text) : '')
+							val.text = ' in ' .. val.text .. (ii == 0 ? (' | ' .. text) : '')
 							ii += 1
 						endfor
 					endif
