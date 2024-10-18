@@ -82,9 +82,19 @@ if !exists('g:vim_plugin')
 		# keywordprg=:call\ g:Help() ではカーソル一の単語が引数扱いで無駄なエラーになるため、コマンドにして使う
 		def Help(s: string): void
 			try
-			execute('help ' .. s)
-			catch /^Vim\%((\a\+)\)\=:E149:/ # 綴り違いで ( が付いているなどヘルプが損じしない
-				echohl ErrorMsg | echo 'Not find keyword: ' .. s | echohl None
+				execute('help ' .. s)
+			catch /^Vim\%((\a\+)\)\=:E149:/ # 綴り違いで ( が付いているなどヘルプに見つからないので、先頭の ':、最後の ( を削除してもう一度試す
+				try
+					if s =~# '($'
+						execute('help ' .. s[ : -2 ])
+					elseif s =~# '^['':]'
+						execute('help ' .. s[ 1 : ])
+					else
+						echohl ErrorMsg | echo 'Not find keyword: ' .. s | echohl None
+					endif
+				catch /^Vim\%((\a\+)\)\=:E149:/ # ヘルプが存在しない
+					echohl ErrorMsg | echo 'Not find keyword: ' .. s | echohl None
+				endtry
 				return
 			endtry
 			return
