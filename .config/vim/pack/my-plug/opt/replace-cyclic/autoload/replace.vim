@@ -14,26 +14,6 @@ export def Escape_replace(s: string): string
 enddef
 
 export def Cyclic(args: string, word: number = 0): string
-	# dog と cat の入れ替えのように、再クリックに文字を置換するために
-	# dog,cat
-	# といった , 区切りの文字列を
-	# s/\(dog|cat\)/\={'dog':'cat', 'cat':'dog'}[submatch(1)]/g
-	# といった文字列に変換する
-	# コマンドで
-	# <C-R>=replace#Cyclic('dog,cat')
-	# などと使う
-	# args: dog,cat
-	#       次の様に入れ替えたい文字列自身に , と \ を含む場合は \ でエスケープするして渡す
-	#       1-1,2\,2,3\\3
-	#       '/?!#%-+,_]``' が全て使われいると対応できない
-	# word: 単語扱いで検索するか?
-	#       0 単語扱いしない (デフォルト)
-	#       1 先頭を単語扱い
-	#       2 最後を単語扱い
-	#       3 前後とも単語扱い
-	# 検索・置換時に特別な意味を持つ \, ~, & はエスケープした結果が返される
-	# 正規表現も想定していないので、^, $, [, ., * もエスケープ
-
 	# , 区切り文字列をリストに変換
 	var s_ls: list<string>
 	var s_while: string
