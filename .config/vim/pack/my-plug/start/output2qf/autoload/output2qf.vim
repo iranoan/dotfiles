@@ -157,7 +157,7 @@ export def Vim(): void # Vim script のエラー内容を Quickfix に取り込�
 					# 		text: text
 					# 	}
 					# )
-				else # 直前エラー行
+				elseif and(output_flag, 0b010) == 0b010 # 直前エラー行
 					qflist[-1].text = text
 					qflist[-1].nr = str2nr(nr)
 				endif
