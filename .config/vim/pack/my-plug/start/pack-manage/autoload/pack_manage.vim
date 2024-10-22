@@ -108,7 +108,7 @@ def Helptags(remake: number): void
 enddef
 
 export def IsInstalled(plugin: string): bool
-	return (match(substitute(&runtimepath, ',', '\n', 'g'), '/' .. plugin .. '\n') != -1)
+	return (match(split(&runtimepath, ','), '/' .. plugin .. '$') != -1)
 enddef
 
 def GrepList(s: string, file: string, nosuf: bool): list<string> # 外部プログラム無しの grep もどき
