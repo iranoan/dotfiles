@@ -95,3 +95,62 @@ def set_fzf_vim#solarized(): void
 					]
 	endif
 enddef
+
+" オリジナルの Helptags を置き換える←ヘルプのタグ付近をプレビューできるが、英語以外のタグがリスト・アップされない {{{
+def s:Helptags(): list<dict<any>>
+	def GetLang(): dict<number>
+		var d: dict<number>
+		var i: number
+
+		if &g:helplang == ''
+			return {en: 0}
+		endif
+		for l in split(&g:helplang, ',')
+			d[l] = i
+			i += 1
+		endfor
+		return d
+	enddef
+
+	var helplang: dict<number> = GetLang()
+
+	def ListupTags(f: string): list<dict<any>>
+		var dir: string
+		var ls: list<dict<any>>
+		var lang_n: number
+
+		for t in globpath($MYVIMDIR, '**/doc/' .. f, true, true)
+			lang_n = (f ==# 'tags' ? get(helplang, 'en', 1000) : get(helplang, t[-2 : -1], 1000))
+			dir = substitute(t, '/[^/]\+$', '', '')
+			ls += readfile(t)
+							->filter((_, v) => v =~# '^[^\t]\+\t[^\t]\+\t[^\t]\+$')
+							->filter((_, v) => v !~# '!_TAG_FILE_ENCODING')
+							->map((_, v) => split(v, "\t"))
+							->map((_, v) => ({tag: v[0], path: simplify(dir .. '/' .. v[1]), lang: lang_n}))
+		endfor
+		return ls
+	enddef
+
+	var tags_file: list<dict<any>> = ListupTags('tags')
+	var tags: list<any>
+
+	tags_file += ListupTags('tags-[a-z][a-z]')
+	return tags_file->sort((d1, d2) => d1.tag >? d2.tag ? 1 : ( d1.tag <? d2.tag ? -1 : d1.lang - d2.lang ) )
+enddef
+
+def s:HelpTag(): list<string>
+	return deepcopy(s:Helptags())->map((_, v) => v.tag)->sort('i')->uniq()
+enddef
+
+def s:HelptagsSink(line: string): void
+	execute('help ' .. line)
+enddef
+
+command! -bar -bang Helptags call fzf#run(#{
+			\ source:  s:HelpTag(),
+			\ sink:    function('s:HelptagsSink'),
+			\ options: ['--no-multi', '--prompt', "help> "],
+			\ window:  get(g:, 'fzf_layout', #{window: #{width: 0.9, height: 0.6}})->get('window', #{width: 0.9, height: 0.6})
+			\ }
+			\ )
+" call fzf#vim#helptags(fzf#vim#with_preview({ "placeholder": "--tag {2}:{3}:{4}" }), <bang>0)
