@@ -28,11 +28,26 @@ export def Vim(): void # Vim script のエラー内容を Quickfix に取り込�
 		var regex_compile: string          # コンパイル中エラー検索文字列
 		var regex_line: string             # エラーから得る行番号
 		var regex_last_set: string         # verbose function で表示されるファイル名と行番号の検索文字列
+		var Undefined_func: string         # verbose function で未定義関数のエラー文字列
 		var nr: string                     # エラー番号
 		var text: string                   # エラー内容
 		var output_flag: number            # 直前のアウトプットの種類 0b001: エラー検出行あり 0b010 エラー行あり 0b100 エラー内容あり
 		var error_index: number            # エラー処理の書き換えが必要になる qflist に入れた順序
 		var error_iindex: number           # 外部 interface のエラー処理の書き換えが必要になる qflist に入れた順序
+
+		if v:lang =~# 'ja_JP'
+			regex_process = '^\(\S.\+\) の処理中にエラーが検出されました:$'
+			regex_compile = '^\(\S.\+\) のコンパイル中にエラーが検出されました:$'
+			regex_line = '^行\s\+\zs\d\+\ze:$'
+			regex_last_set = '^\t最後にセットしたスクリプト: \(\f\+\) 行 \(\d\+\)$'
+			Undefined_func = 'E123: 未定義の関数です: '
+		else
+			regex_process = '^Error detected while processing \(\S.\+\):$'
+			regex_compile = '^Error detected while compiling \(\S.\+\):$'
+			regex_line = '^line\s\+\zs\d\+\ze:$'
+			regex_last_set = '^\tLast set from \(\f\+\) Line \(\d\+\)$'
+			Undefined_func = 'E123: Undefined function: '
+		endif
 
 		def BeginError(o: string, s: string): void
 			var l: string = substitute(o, s, '\1', '')
@@ -56,7 +71,17 @@ export def Vim(): void # Vim script のエラー内容を Quickfix に取り込�
 				var f = (O =~# '^\d\+$') ? '{' .. O .. '}' : O # 辞書/ラムダ関数の数字は {} で囲む
 				var fname: string # ファイル名
 
-				[fname, lnum_s] = matchlist(VerboseFunc(f), regex_last_set)[1 : 2]
+				fname = VerboseFunc(f)
+				if fname =~# '' # 未定義の関数
+					return {
+							filename: filename,
+							lnum: 0,
+							text: Undefined_func .. f,
+							type: 'E',
+							nr: 123
+						}
+				endif
+				[fname, lnum_s] = matchlist(fname, regex_last_set)[1 : 2]
 				fname = expand(fname)
 				if !has_key(file_cache, fname)
 					file_cache[fname] = readfile(fname)
@@ -80,10 +105,10 @@ export def Vim(): void # Vim script のエラー内容を Quickfix に取り込�
 			qf_list = []
 			for i in split(l, '\.\.')
 				func_file = i
-				if func_file =~# 'function '
+				if func_file =~# '^function '
 					func_file = func_file[9 : ]
 					is_file = false
-				elseif func_file =~# 'script '
+				elseif func_file =~# '^script '
 					func_file = func_file[7 : ]
 					is_file = true
 				endif
@@ -105,18 +130,6 @@ export def Vim(): void # Vim script のエラー内容を Quickfix に取り込�
 			endfor
 			qflist += reverse(qf_list)
 		enddef
-
-		if v:lang =~# 'ja_JP'
-			regex_process = '^\(\S.\+\) の処理中にエラーが検出されました:$'
-			regex_compile = '^\(\S.\+\) のコンパイル中にエラーが検出されました:$'
-			regex_line = '^行\s\+\zs\d\+\ze:$'
-			regex_last_set = '^\t最後にセットしたスクリプト: \(\f\+\) 行 \(\d\+\)$'
-		else
-			regex_process = '^Error detected while processing \(\S.\+\):$'
-			regex_compile = '^Error detected while compiling \(\S.\+\):$'
-			regex_line = '^line\s\+\zs\d\+\ze:$'
-			regex_last_set = '^\tLast set from \(\f\+\) Line \(\d\+\)$'
-		endif
 
 		for line in split(msgs, "\n")
 			if line =~# regex_process # ... の処理中にエラーが検出されました:'
