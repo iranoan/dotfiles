@@ -34,6 +34,7 @@ export def Vim(): void # Vim script のエラー内容を Quickfix に取り込�
 		var output_flag: number            # 直前のアウトプットの種類 0b001: エラー検出行あり 0b010 エラー行あり 0b100 エラー内容あり
 		var error_index: number            # エラー処理の書き換えが必要になる qflist に入れた順序
 		var error_iindex: number           # 外部 interface のエラー処理の書き換えが必要になる qflist に入れた順序
+		var dummy: string                  # matchlist() の返り値の内、使わない分のダミー
 
 		if v:lang =~# 'ja_JP'
 			regex_process = '^\(\S.\+\) の処理中にエラーが検出されました:$'
@@ -57,7 +58,6 @@ export def Vim(): void # Vim script のエラー内容を Quickfix に取り込�
 			var func_file: string    # 関数/ファイル名+行番号
 			var func_name: string    # 関数名
 			var offset: string       # 呼び出し元の行番号
-			var dummy: string        # matchlist() の返り値の内、使わない分のダミー
 
 			def GetFuncInfo(O: string, n: string, t: string): dict<any>
 				function VerboseFunc(s) " {53} といった辞書関数だと def 関数内で処理できない
@@ -131,6 +131,20 @@ export def Vim(): void # Vim script のエラー内容を Quickfix に取り込�
 			qflist += reverse(qf_list)
 		enddef
 
+		def ChangeQfItem(i_v: number, s: string, i_i: number, n: string, t: string): void
+			qflist[i_i].nr = str2nr(n)
+			qflist[i_i].type = t
+			if i_i != i_v
+				qflist[i_v].nr = str2nr(n)
+				qflist[i_v].type = t
+			endif
+			if qflist[i_v].text !=# ''
+				qflist[i_v].text ..= ' | ' .. s
+			else
+				qflist[i_v].text = s
+			endif
+		enddef
+
 		for line in split(msgs, "\n")
 			if line =~# regex_process # ... の処理中にエラーが検出されました:'
 				BeginError(line, regex_process)
@@ -148,67 +162,47 @@ export def Vim(): void # Vim script のエラー内容を Quickfix に取り込�
 				endif
 				output_flag = or(output_flag, 0b010)
 				ifilename = ''
-				qf_list = []
 			elseif line =~# '^[EW]' # E492: エディタのコマンドではありません: ... 等
 				[nr, text] = matchlist(line, '^E\(\d\+\): \(.\+\)')[1 : 2]
 				if and(output_flag, 0b001) == 0b001 # エラー検出行あり
-					qflist[error_index].nr = str2nr(nr)
-					if qflist[error_index].text !=# ''
-						qflist[error_index].text ..= ' | ' .. text
-					else
-						qflist[error_index].text = text
-					endif
-					if line =~# '^W'
-						qflist[error_index].type = 'W'
-					endif
+					ChangeQfItem(error_index, text, error_index, nr, (line =~# '^W' ? 'W' : 'E'))
 				elseif output_flag == 0b100 # 直前もエラー内容行
 					continue # エラー処理もエラー行もないのでエラー箇所を特定できない←大抵同じエラーの繰り返し?
-					# add(qflist, {
-					# 		filename: filename,
-					# 		lnum: lnum,
-					# 		nr: str2nr(nr),
-					# 		text: text
-					# 	}
-					# )
+					# add(qflist, { filename: filename, lnum: lnum, nr: str2nr(nr), text: text })
 				elseif and(output_flag, 0b010) == 0b010 # 直前エラー行
 					qflist[-1].text = text
 					qflist[-1].nr = str2nr(nr)
 				endif
 				output_flag = 0b100
 				ifilename = ''
-				qf_list = []
 			elseif and(output_flag, 0b011) != 0 # 外部 interface 等エラー処理の開始や行番号出力とエラー内容行の間
-				if line =~# '^  File "[^"]\+", line \d\+$' # Python interface の外部ファイル
-					[ifilename, lnum_s] = matchlist(line, '^  File "\([^"]\+\)", line \(\d\+\)$')[1 : 2]
+				if line =~# '^  File "[^"]\+", line \d\+\(, in \w\+\)\?$'
+					[ifilename, lnum_s, dummy, text] = matchlist(line, '^  File "\([^"]\+\)", line \(\d\+\)\(, \(in \w\+\)\)\?$')[1 : 4]
 					error_iindex = len(qflist)
-				elseif ifilename == '' && line =~# '^    ' # Python interface のエラー箇所の出力
-					add(qf_list, {
-							text: line[4 : ]
-						}
-					)
-				elseif line =~# '^[A-Za-z]\+Error: ' # Python interface のエラー内容
-					if len(qf_list) != 0
-						qflist += qf_list
-						qf_list = []
-					endif
+					add(qflist, {
+						filename: expand(ifilename),
+						lnum: str2nr(lnum_s),
+						text: text,
+						type: 'I',
+						nr: 1
+					})
+				elseif line =~# '^[A-Za-z]\+Error: ' # Python interface の内部エラー内容
 					if ifilename == ''
 						add(qflist, {text: line})
 					else
-						qflist[error_index].nr = 169
-						qflist[error_index].type = 'I'
-						insert(qflist, {
-							filename: expand(ifilename),
-							lnum: str2nr(lnum_s),
-							text: line,
-							nr: 169 # 外部interfaceなので似たことを意味する E169 にしておく
-						}, error_iindex)
+						ChangeQfItem(error_iindex, line, error_index, '169', 'E')
+					endif
+					ifilename = ''
+				elseif line =~# 'vim.error: Vim(\w\+):E\d\+: ' # 外部インターフェースで vim.command() を使い Vim のエラーが起きた時
+					if ifilename == ''
+						add(qflist, {text: line})
+					else
+						[text, nr] = matchlist(line, 'vim.error: Vim(\w\+):E\(\d\+\): .\+' )[ : 1]
+						ChangeQfItem(error_iindex, text, error_iindex, nr, 'E')
 					endif
 					ifilename = ''
 				else # それ以外はそのまま加える
-					add(qf_list, {
-							text: line
-						}
-					)
+					add(qflist, { text: line })
 				endif
 			endif
 		endfor
