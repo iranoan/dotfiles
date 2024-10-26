@@ -308,7 +308,7 @@ augroup VIMRC
 	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,vimgrepadd topleft copen # cwindow を使うと、make で使用されるプログラムによってカーソル位置がずれる
 	autocmd QuickfixCmdPost lmake,lgrep,lgrepadd,lvimgrep,lvimgrepadd topleft lopen
 	autocmd BufEnter,BufFilePost,BufNewFile,BufRead * change_directory#Lcd()
-	autocmd BufWritePre * if &filetype != 'markdown' | pos = getpos('.') | :%s/\(^--\|^>.*\)\@<![ \u000B\t\r　]\+$//e | setpos('.', pos) | endif # メール署名の区切りと引用行以外の行末空白を保存時に削除
+	autocmd BufWritePre * if &modified == true && &filetype != 'markdown' | pos = getpos('.') | :%s/\(^--\|^>.*\)\@<![ \u000B\t\r　]\+$//e | setpos('.', pos) | endif # メール署名の区切りと引用行以外の行末空白を保存時に削除
 	# autocmd TerminalOpen * nnoremap <silent><buffer>q :bwipeout<CR>
 	# ↑ターミナルで効いていないし、fzf を使ったバッファで q で閉じる意図しない動きになってしまう
 	# autocmd BufEnter,BufWinEnter *
