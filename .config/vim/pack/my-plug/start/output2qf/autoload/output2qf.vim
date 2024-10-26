@@ -72,7 +72,7 @@ export def Vim(): void # Vim script のエラー内容を Quickfix に取り込�
 				var fname: string # ファイル名
 
 				fname = VerboseFunc(f)
-				if fname =~# '' # 未定義の関数
+				if fname ==# '' # 未定義の関数
 					return {
 							filename: filename,
 							lnum: 0,
