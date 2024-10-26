@@ -114,8 +114,8 @@ nnoremap <silent><Leader>fg <Cmd>GFiles?<CR>
 xnoremap <silent><Leader>fg <Cmd>GFiles?<CR>
 nnoremap <silent><Leader>fh <Cmd>HISTORY<CR>
 xnoremap <silent><Leader>fh <Cmd>HISTORY<CR>
-nnoremap <silent><Leader>fH <Cmd>Helptags<CR>
-xnoremap <silent><Leader>fH <Cmd>Helptags<CR>
+nnoremap <silent><Leader>fH <Cmd>HelpTags<CR>
+xnoremap <silent><Leader>fH <Cmd>HelpTags<CR>
 nnoremap <silent><Leader>fl <Cmd>BLines<CR>
 xnoremap <silent><Leader>fl <Cmd>BLines<CR>
 nnoremap <silent><Leader>fm <Cmd>Marks<CR>
@@ -133,7 +133,7 @@ nnoremap <silent><Leader>f/ <Cmd>History/<CR>
 xnoremap <silent><Leader>f/ <Cmd>History/<CR>
 augroup loadFZF_Vim
 	autocmd!
-	autocmd CmdUndefined Files,Buffers,Tags,Marks,History,HISTORY,GFiles,Windows,Helptags,Commands,BLines
+	autocmd CmdUndefined Files,Buffers,Tags,Marks,History,HISTORY,GFiles,Windows,Helptags,Commands,BLines,HelpTags
 				\ set_fzf_vim#main()
 				| autocmd! loadFZF_Vim
 				| augroup! loadFZF_Vim
