@@ -52,7 +52,7 @@ export def Vim(): void # Vim script のエラー内容を Quickfix に取り込�
 		def BeginError(o: string, s: string): void
 			var l: string = substitute(o, s, '\1', '')
 												->substitute('^command line\.\.', '', '')
-												->substitute('\.\.\a\+\s\+Autocommands\s\+for\s\+\S\+\ze\.\.', '', '')
+												->substitute('\(\.\.\)\?\a\+\s\+Autocommands\s\+for\s\+\S\+\ze\.\.', '', '')
 			var is_file: bool = true # 処理の対象が true: file, false: function
 			var func_file: string    # 関数/ファイル名+行番号
 			var func_name: string    # 関数名
@@ -124,7 +124,7 @@ export def Vim(): void # Vim script のエラー内容を Quickfix に取り込�
 						nr: 1
 					})
 				else
-					[func_name, dummy, offset] = matchlist(func_file, '\c\([a-z0-9#<>_]\+\)\(\[\(\d+\)\]\)\?')[1 : 3]
+					[func_name, dummy, offset] = matchlist(func_file, '\c\([a-z0-9#<>_]\+\)\(\[\(\d\+\)\]\)\?')[1 : 3]
 					add(qf_list, GetFuncInfo(func_name, offset, offset ==# '' ? '' : 'calling location: '))
 				endif
 			endfor
