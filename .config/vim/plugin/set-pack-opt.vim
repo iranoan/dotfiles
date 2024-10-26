@@ -582,7 +582,9 @@ nmap ds  <Cmd>call set_surround#main('Dsurround') <bar> delfunction set_surround
 nmap ys4 ys$
 for [k, v] in items({ 4: '$', 's': 's', 'S': 'S' })
 	for [n, q] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '[': '[', ']': ']', '{': '{', '}': '}'})
-		execute 'nmap ys' .. k .. n .. ' ys' .. v .. q
+		if 'ys' .. k .. n !=# 'ys' .. v .. q
+			execute 'nmap ys' .. k .. n .. ' ys' .. v .. q
+		endif
 	endfor
 endfor
 for k in ['ysaw', 'ysiw', 'ds']
