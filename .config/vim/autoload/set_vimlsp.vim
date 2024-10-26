@@ -50,6 +50,11 @@ function set_vimlsp#main() abort
 	" 			\ allowlist: ['json', 'markdown', 'html', 'xhtml', 'css', 'tex'],
 	" 			\ }) " 現状 ALE を使ったほうが反応が速い+バッファを開いた時にチェックしてくれない
 	" }}}
+	call lsp#register_server({
+				\ 'name': 'awk-language-server',
+				\ 'cmd': {server_info->['awk-language-server']},
+				\ 'allowlist': ['awk'],
+				\ })
 	" vim-lsp の自動設定 https://github.com/mattn/vim-lsp-settings {{{
 	packadd vim-lsp-settings
 	let g:lsp_settings = #{
