@@ -40,6 +40,7 @@ if !exists('g:did_ftplugin_htmlxhtml')
 endif
 
 # ファイルタイプ別のローカル設定 {{{1
+setlocal foldmethod=syntax
 setlocal omnifunc=htmlcomplete#CompleteTags
 #ファイルタイプ別 map {{{
 setlocal iskeyword=a-z,A-Z,48-57,_,- # class, id 名に - が使える。タグの補完では <, > を加えたほうが都合が良いが、加えると = による整形で上手くインデントできなくなる
