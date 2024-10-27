@@ -32,6 +32,11 @@ if !exists('g:did_ftplugin_htmlxhtml')
 		feedkeys("\<C-\>\<C-o>:set completeopt=" .. tmpop .. "\<Enter></\<C-X>\<C-O>\<C-\>\<C-o>:set completeopt=" .. cmpop .. "\<Enter>", 'n')
 		return ''
 	enddef
+	# :help html-indent
+	g:html_indent_script1 = 'inc'
+	g:html_indent_style1 = 'inc'
+	g:html_indent_autotags = 'html,body,tbody'
+	g:html_syntax_folding = 1 # :help html-folding
 endif
 
 # ファイルタイプ別のローカル設定 {{{1
