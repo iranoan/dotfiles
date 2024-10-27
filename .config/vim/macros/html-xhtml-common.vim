@@ -42,7 +42,7 @@ endif
 # ファイルタイプ別のローカル設定 {{{1
 setlocal omnifunc=htmlcomplete#CompleteTags
 #ファイルタイプ別 map {{{
-setlocal iskeyword=a-z,A-Z,48-57,_,-,<,> # class, id 名に - が使える。タグのため <, > を加える (タグ補完でこちらのほうが都合が良い)
+setlocal iskeyword=a-z,A-Z,48-57,_,- # class, id 名に - が使える。タグの補完では <, > を加えたほうが都合が良いが、加えると = による整形で上手くインデントできなくなる
 setlocal makeprg=html-check.sh\ \"%\"
 setlocal errorformat=%f:%l:%c:\ %trror:\ %m,%f:%l:%c:\ info\ %tarning:\ %m,%f:%l:%c:\ %tnfo\ warning:\ %m,%f:%l:%c:\ %m,%f:%l:%m
 setlocal formatlistpat=^\\s*<\\(li\\\|dt\\\|dd\\)\\(>\\\|\\s\\+\\ze[^>]\\+\\)
