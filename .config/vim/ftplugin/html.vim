@@ -16,8 +16,11 @@ let b:did_ftplugin_user = 1
 " ファイルタイプ別ローカル設定 {{{1
 source $MYVIMDIR/macros/html-xhtml-common.vim
 "html <S,C-Enter> の組み合わせは GUI のみ有効
-inoremap <expr><buffer><S-Enter>   pumvisible#Insert('<li>') .. '<C-G>u'
-inoremap <expr><buffer><S-C-Enter> pumvisible#Insert_after('<br>') .. '<C-G>u'
+if &filetype !=# 'markdown'
+	inoremap <buffer>**              &times;
+	inoremap <expr><buffer><S-Enter>   pumvisible#Insert('<li>') .. '<C-G>u'
+	inoremap <expr><buffer><S-C-Enter> pumvisible#Insert_after('<br>') .. '<C-G>u'
+endif
 inoremap <buffer><=                &le;
 inoremap <buffer>>=                &ge;
 imap     <expr><buffer><C-Space>   pumvisible() ? asyncomplete#close_popup() : '&nbsp;'
@@ -26,5 +29,4 @@ inoremap <buffer>--                ‐
 inoremap <buffer>---               ―
 inoremap <buffer>\\                &yen;
 inoremap <buffer>+-                &plusmn;
-inoremap <buffer>**                &times;
 inoremap <buffer>==                &equiv;

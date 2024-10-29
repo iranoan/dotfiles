@@ -703,3 +703,12 @@ augroup loadSurroundTagMap
 	autocmd FileType html,xhtml nnoremap <silent><buffer><leader>tr <Cmd>SurroundTag <ruby> <rp>(</rp><rt></rt><rp>)</rp><CR>
 	autocmd FileType html,xhtml xnoremap <silent><buffer><leader>tr <Cmd>SurroundTag <ruby> <rp>(</rp><rt></rt><rp>)</rp><CR>
 augroup END
+
+# Markdown マッピング $MYVIMDIR/pack/my-plug/opt/map-markdown/ {{{1
+augroup MapMarkdown
+	autocmd!
+	autocmd FileType markdown
+				\ packadd map-markdown
+				| autocmd! MapMarkdown
+				| augroup! MapMarkdown
+augroup END

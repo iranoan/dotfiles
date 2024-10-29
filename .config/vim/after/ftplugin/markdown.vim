@@ -13,4 +13,3 @@ if exists('b:undo_ftplugin')
 else
 	b:undo_ftplugin = 'call undo_ftplugin#Markdown()'
 endif
-

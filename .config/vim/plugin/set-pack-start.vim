@@ -32,6 +32,9 @@ for g:packe_setting_s in ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'html', '
 		g:packe_setting_ext = '*.yml'
 	elseif g:packe_setting_s ==# 'html'
 		g:packe_setting_ext = '*.htm,*.html'
+	# '_': {'type': ['markdown'], 'cmap': 0}, # * は箇条書きで使う
+	# '~': {'type': ['markdown'], 'cmap': 0}, # 下付き添字
+	# '^': {'type': ['markdown'], 'cmap': 0}, # 上付き添字
 	elseif g:packe_setting_s ==# 'vim'
 		g:packe_setting_ext = '*.vim,.vimrc,vimrc,_vimrc,.gvimrc,gvimrc,_gvimrc'
 	elseif g:packe_setting_s ==# 'markdown'
@@ -194,9 +197,9 @@ g:pairquote = {
 	'''': {},
 	'`': {},
 	'$': {'type': ['tex']},
-	'*': {'type': ['help'], 'cmap': 0},     # tag
+	'*': {'type': ['help', 'markdown'], 'cmap': 0}, # tag と強調
 	'|': {'type': ['help'], 'cmap': 0},     # link
-	'_': {'type': ['markdown'], 'cmap': 0}, # * は箇条書きで使う
+	'_': {'type': ['markdown'], 'cmap': 0}, # 強調
 	'~': {'type': ['markdown'], 'cmap': 0}, # 下付き添字
 	'^': {'type': ['markdown'], 'cmap': 0}, # 上付き添字
 	# ↓ ', " 自体の反応が遅くなる

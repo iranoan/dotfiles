@@ -41,24 +41,29 @@ endif
 
 # ファイルタイプ別のローカル設定 {{{1
 setlocal foldmethod=syntax
-setlocal omnifunc=htmlcomplete#CompleteTags
+if &filetype !=# 'markdown'
+	setlocal omnifunc=htmlcomplete#CompleteTags
+	setlocal iskeyword=a-z,A-Z,48-57,_,- # class, id 名に - が使える。タグの補完では <, > を加えたほうが都合が良いが、加えると = による整形で上手くインデントできなくなる
+	#ファイルタイプ別 map {{{
+	setlocal makeprg=html-check.sh\ \"%\"
+	setlocal errorformat=%f:%l:%c:\ %trror:\ %m,%f:%l:%c:\ info\ %tarning:\ %m,%f:%l:%c:\ %tnfo\ warning:\ %m,%f:%l:%c:\ %m,%f:%l:%m
+	setlocal formatlistpat=^\\s*<\\(li\\\|dt\\\|dd\\)\\(>\\\|\\s\\+\\ze[^>]\\+\\)
+	setlocal breakindentopt=list:4
+	# inoremap <buffer> </ </<C-x><C-o>
+	nnoremap <silent><buffer><Leader>v :update<Bar>silent !firefox %<CR>
+	# <S,C-Enter> の組み合わせは GUI のみ有効
+	inoremap <expr><buffer><C-Enter>   (getline('.') =~# '^\s*$' ?  '' : '<CR>') .. '<End><p></p><Left><Left><Left><Left><C-G>u'
+	inoremap <expr><buffer> </         g:CloseTag()
+	# ↑オムニ補完を利用して閉じタグ自動補完
+	inoremap <buffer><!                <!DOCTYPE html>
+	# }}}
+endif
 #ファイルタイプ別 map {{{
-setlocal iskeyword=a-z,A-Z,48-57,_,- # class, id 名に - が使える。タグの補完では <, > を加えたほうが都合が良いが、加えると = による整形で上手くインデントできなくなる
-setlocal makeprg=html-check.sh\ \"%\"
-setlocal errorformat=%f:%l:%c:\ %trror:\ %m,%f:%l:%c:\ info\ %tarning:\ %m,%f:%l:%c:\ %tnfo\ warning:\ %m,%f:%l:%c:\ %m,%f:%l:%m
-setlocal formatlistpat=^\\s*<\\(li\\\|dt\\\|dd\\)\\(>\\\|\\s\\+\\ze[^>]\\+\\)
-setlocal breakindentopt=list:4
-# inoremap <buffer> </ </<C-x><C-o>
-inoremap <expr><buffer> </         g:CloseTag()
-# ↑オムニ補完を利用して閉じタグ自動補完
-nnoremap <silent><buffer><Leader>v :update<Bar>silent !firefox %<CR>
-# <S,C-Enter> の組み合わせは GUI のみ有効
-inoremap <expr><buffer><C-Enter>   (getline('.') =~# '^\s*$' ?  '' : '<CR>') .. '<End><p></p><Left><Left><Left><Left><C-G>u'
 inoremap <buffer><<                &lt;
 inoremap <buffer>>>                &gt;
 inoremap <buffer>&&                &amp;
-inoremap <buffer><!                <!DOCTYPE html>
 setlocal spelloptions=camel
+# }}}
 
 # Undo {{{1
 if exists('b:undo_ftplugin')
