@@ -108,9 +108,9 @@ function set_vimlsp#main() abort
 		" 			\ foldexpr=lsp#ui#vim#folding#foldexpr()
 		" 			\ foldtext=lsp#ui#vim#folding#foldtext()
 		" ↓packadd を使う場合、これがないと開いた既存のウィンドウでバッファを開いた時に有効にならない
-		autocmd FileType c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,tex,css,sh,bash,go,conf if !s:check_run_lsp() | call lsp#activate() | endif
+		autocmd FileType awk,c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,tex,css,sh,bash,go,conf if !s:check_run_lsp() | call lsp#activate() | endif
 		autocmd BufAdd *
-					\ if index(['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'html', 'xhtml', 'tex', 'css', 'sh', 'bash', 'go', 'conf'], &filetype) != -1
+					\ if index(['awk','c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'html', 'xhtml', 'tex', 'css', 'sh', 'bash', 'go', 'conf'], &filetype) != -1
 					\ | if !s:check_run_lsp()
 					\ | 	call lsp#activate()
 					\ | endif

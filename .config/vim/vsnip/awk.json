@@ -1,0 +1,132 @@
+{
+	"int": {
+		"prfix": "int",
+		"body": "int(${1:arg})${0}",
+		"description": "convert integer"
+	},
+	"sqrt": {
+		"prfix": "sqrt",
+		"body": "sqrt(${1:arg})${0}",
+		"description": "square root"
+	},
+	"exp": {
+		"prfix": "exp",
+		"body": "exp(${1:arg})${0}",
+		"description": "exponential"
+	},
+	"log": {
+		"prfix": "log",
+		"body": "log(${1:arg})${0}",
+		"description": "natural logarithm function"
+	},
+	"sin": {
+		"prfix": "sin",
+		"body": "sin(${1:theta})${0}",
+		"description": "sin mathematical function"
+	},
+	"cos": {
+		"prfix": "cos",
+		"body": "cos(${1:theta})${0}",
+		"description": "co-sin mathematical function"
+	},
+	"srand": {
+		"prfix": "srand",
+		"body": "srand(${1:arg})${0}",
+		"description": "set seed of random function"
+	},
+	"rand": {
+		"prfix": "rand",
+		"body": "rand()${0}",
+		"description": "generate random number 0-1"
+	},
+	"exit": {
+		"prfix": "exit",
+		"body": "exit()${0}"
+	},
+	"length": {
+		"prfix": "length",
+		"body": "length(${1:string})${0}",
+		"description": "length of string"
+	},
+	"tolower": {
+		"prfix": "tolower",
+		"body": "tolower(${1:string})${0}"
+	},
+	"toupper": {
+		"prfix": "toupper",
+		"body": "toupper(${1:string})${0}"
+	},
+	"close": {
+		"prfix": "close",
+		"body": "close(${1:filename})${0}",
+		"description": "close file/pipe"
+	},
+	"system": {
+		"prfix": "system",
+		"body": "system(${1:command})${0}",
+		"description": "run system command"
+	},
+	"atan2": {
+		"prfix": "atan2",
+		"body": "atan2(${1:y}, ${2:x})${0}",
+		"description": [
+			"arc tangent mathmatical function"
+		]
+	},
+	"index": {
+		"prfix": "index",
+		"body": "index(${1:string}, ${2:search_word)}${0}",
+		"description": [
+			"return index of search_worad in string"
+		]
+	},
+	"match": {
+		"prfix": "match",
+		"body": "match(${1:string}, /${2:regex}/)${0}",
+		"description": [
+			"search regex in string\n",
+			"return 0: not found, 1: found\n",
+			"set RSART, RLENGTH"
+		]
+	},
+	"split": {
+		"prfix": "split",
+		"body": "split(${1:string}, ${2:array}, ${3:sep})${0}",
+		"description": [
+			"split string to array with sep"
+		]
+	},
+	"sprintf": {
+		"prfix": "sprintf",
+		"body": "sprintf(\"${1:format}\", ${2:expression})${0}"
+	},
+	"sub": {
+		"prfix": "sub",
+		"body": "sub(/${1:regexp}/, \"${2:replacement}\", ${3:target})${0}",
+		"description": [
+			"substitute"
+		]
+	},
+	"gsub": {
+		"prfix": "gsub",
+		"body": "gsub(/${1:regexp}/, \"${2:replacement}\", ${3:target})${0}",
+		"description": [
+			"global substitute"
+		]
+	},
+	"substr": {
+		"prfix": "substr",
+		"body": "substr(${1:string}, ${2:start}, ${3:length})${0}",
+		"description": [
+			"return part of string"
+		]
+	},
+	"BEGIN": {
+		"prfix": "begin",
+		"body": "BEGIN {\n$1\n}"
+	},
+	"END": {
+		"prfix": "end",
+		"body": "END {\n$1\n}"
+	}
+}

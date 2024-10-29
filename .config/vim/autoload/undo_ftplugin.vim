@@ -2,6 +2,10 @@ vim9script
 scriptencoding utf-8
 # b:undo_ftplugin に使う関数を纏めてある
 
+export def AWK(): void
+	setlocal cindent< smartindent< foldmethod< errorformat< makeprg<
+enddef
+
 export def Sh(): void
 	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
 enddef
