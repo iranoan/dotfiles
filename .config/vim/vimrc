@@ -252,7 +252,7 @@ augroup END
 # 	s:ZenkakuSpace()
 # endif
 # 編集関係 {{{1
-set completeopt=menuone,noinsert,noselect,popup # 補完
+set completeopt=menuone,noinsert,popup,noinsert,noselect # 補完の挙動
 set delcombine                                 # 結合文字を別々に削除する
 # set maxcombine=2                               # 結合文字の最大個数
 set nrformats=bin,hex,alpha,blank              # アルファベットでもインクリメント、ディクリメント←8進数,octalは除外、-の前が空白でない場合はハイフン扱いで負数扱いにしない
