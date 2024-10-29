@@ -6,12 +6,15 @@ endif
 let b:did_ftplugin_user = 1
 
 " ファイルタイプ別のグローバル設定 {{{1
-" if !exists('g:did_ftplugin_html')
-" 	let g:did_ftplugin_html = 1
-" 	augroup MyHTML
-" 		autocmd!
-" 	augroup END
-" endif
+if !exists('g:did_ftplugin_html')
+	let g:did_ftplugin_html = 1
+	augroup MyHTML
+		autocmd!
+		autocmd BufWinEnter *.html,*.htm syntax clear htmlFold
+					\ | syntax region htmlFold start="<\z(\<\%(li\|dt\|dd\|area\|base\|br\|col\|command\|embed\|hr\|img\|input\|keygen\|link\|meta\|param\|source\|track\|wbr\>\)\@![a-z-]\+\>\)\%(\_s*\_[^/]\?>\|\_s\_[^>]*\_[^>/]>\)" end="</\z1\_s*>" fold transparent keepend extend containedin=htmlHead,htmlH\d
+					" $MYVIMDIR/after/syntax/html.vim にも書いてみたが効果がなかった
+	augroup END
+endif
 
 " ファイルタイプ別ローカル設定 {{{1
 source $MYVIMDIR/macros/html-xhtml-common.vim
