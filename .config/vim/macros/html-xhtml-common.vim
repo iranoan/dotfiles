@@ -15,7 +15,7 @@ if !exists('g:did_ftplugin_htmlxhtml')
 		var cmpop: string = &completeopt
 		var tmpop: string = substitute(cmpop, '\(menuone\|noinsert\|noselect\),', '', 'g')
 			->substitute('\(menuone\|noinsert\|noselect\)$', '', 'g')
-		var ls: list<string>
+		# var ls: list<string>
 		# ↓上手くいかない
 		# set completeopt&vim
 		# feedkeys("</\<C-X>\<C-O>", 'n')
