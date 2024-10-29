@@ -384,6 +384,7 @@ set mouse=a                                    # マウスの設定全てのモ�
 set history=500                                # コマンド履歴の保存数 (あまり大きくすると q: 等で時間がかかるようになる)
 set termwinscroll=30000                        # ターミナルで遡れる行数
 # 個人的なキー割り当て keymap キーマップ {{{1
+# tmux で <prefix> が重なると端末で使えないので注意
 # 設定の切り替え {{{2
 nnoremap <silent><leader>cb <Cmd>setlocal linebreak! linebreak?<CR>
 nnoremap <silent><leader>cc <Cmd>set showcmd! showcmd?<CR>
@@ -396,14 +397,11 @@ nnoremap <silent><leader>cw <Cmd>setlocal wrap! wrap?<CR>
 # nnoremap <leader>cM <Cmd>call toggle#Menu()<CR>
 # nnoremap <leader>cT <Cmd>call toggle#Toolbar()<CR>
 # 日付と時刻入力 {{{2
-inoremap <silent><expr><C-J><C-D> strftime('%Y/%m/%d')
-inoremap <silent><expr><C-J><C-T> strftime('%H:%M:%S')
-inoremap <silent><expr><C-J>d     strftime('%Y/%m/%d')
-inoremap <silent><expr><C-J>t     strftime('%H:%M:%S')
-nnoremap <silent><expr><C-J><C-D> 'i' .. strftime('%Y/%m/%d') .. '<Esc>'
-nnoremap <silent><expr><C-J><C-T> 'i' .. strftime('%H:%M:%S') .. '<Esc>'
-nnoremap <silent><expr><C-J>d     'i' .. strftime('%Y/%m/%d') .. '<Esc>'
-nnoremap <silent><expr><C-J>t     'i' .. strftime('%H:%M:%S') .. '<Esc>'
+# 一度プレフィックスに<C-J>にしたが、補完の移動でタイムラグが有り上手く動作しなくなる
+inoremap <silent><expr><C-\>d     strftime('%Y/%m/%d')
+inoremap <silent><expr><C-\>t     strftime('%H:%M:%S')
+nnoremap <silent><expr><C-\>d     'i' .. strftime('%Y/%m/%d') .. '<Esc>'
+nnoremap <silent><expr><C-\>t     'i' .. strftime('%H:%M:%S') .. '<Esc>'
 # スクロール {{{2
 # nnoremap <Space> <PageDown> # → $MYVIMDIR/pack/my-plug/opt/page-down
 nnoremap <S-Space> <PageUp>
@@ -412,7 +410,6 @@ xnoremap <Space> <C-D>
 xnoremap <S-Space> <C-U>
 xnoremap <BS> <C-U>
 # ターミナル・モード {{{2
-# tmux で <prefix> を <C-J> に合わせてると端末で使えない
 tnoremap <silent><C-W><C-[> <C-W>N
 tnoremap <silent><C-W><Esc> <C-W>N
 # ↑端末ノーマル・モードに移行

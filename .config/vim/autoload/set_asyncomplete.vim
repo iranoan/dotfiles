@@ -27,7 +27,7 @@ function set_asyncomplete#main() abort
 		" }}}
 		" キーマップ {{{
 			" <C-j> はポップアップ候補の移動に使っている
-			" inoremap <expr><C-j>   vsnip#expandable() ? '<Plug>(vsnip-expand)'         : '<C-j>'
+			" inoremap <expr><C-j>   vsnip#expandable() ? '<Plug>(vsnip-expand)'         : <C-G>u'<C-j>'
 			" snoremap <expr><C-j>   vsnip#expandable() ? '<Plug>(vsnip-expand)'         : '<C-j>'
 			inoremap <expr><C-Y>   vsnip#available(1) ? (pumvisible() ? '<Plug>(vsnip-expand-or-jump)' : '<Plug>(vsnip-jump-next)') : '<C-Y>'
 			snoremap <expr><C-Y>   vsnip#available(1) ? (pumvisible() ? '<Plug>(vsnip-expand-or-jump)' : '<Plug>(vsnip-jump-next)') : '<C-Y>'
