@@ -46,6 +46,10 @@ def Helptags(remake: number): void
 	# コンパイル済みの Python スクリプトにしても大して速度は変わらない
 	def MkHelpTags(h: string): void
 		var docdir: string = h .. '/doc'
+		var dir: string
+		var existfile: bool
+		var tags: string
+
 		if len(glob(docdir .. '/*.{txt,??x}', 1, 1))
 			execute 'helptags ' .. docdir
 		else
@@ -54,13 +58,12 @@ def Helptags(remake: number): void
 			endfor
 		endif
 		for d in glob(h .. '/pack/*/{start,opt}/*/doc', 1, 1)
-			var dir: string = fnamemodify(d, ':p:h:h:s?.\+/??')
-			if dir ==# 'vimdoc' || dir =~# '^vimdoc-..$' # ヘルプは除外 tags,tags-ja は作成済み
-				continue
-			endif
+			dir = fnamemodify(d, ':p:h:h:s?.\+/??')
 			if isdirectory(d)
-				execute 'helptags ' .. d
-				var tags: string
+				existfile = glob(d .. 'tags{,-??}', 1, 1) == []
+				if existfile
+					execute 'helptags ' .. d
+				endif
 				for f in glob(d .. 'tags{,-??}', 1, 1)
 					tags = substitute(f, '[-_/A-Za-z0-9.]\+\/\zetags\(-..\)\?$', '', '')
 					dir = substitute(substitute(f, 'tags\(-..\)\?$', '', ''), h, '..', '')
@@ -68,7 +71,9 @@ def Helptags(remake: number): void
 					execute 'silent :%s;^[^\t]\+\t;&' .. dir .. '; '
 					execute 'silent noautocmd write! >> ' .. docdir .. '/' .. tags
 					bwipeout!
-					delete(f)
+					if existfile
+						delete(f)
+					endif
 				endfor
 			endif
 		endfor
