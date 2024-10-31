@@ -8,7 +8,7 @@
 
 function syntax_vim(a_line){ # Vim Help の色付け
 	s_line = ""
-	while( match(a_line, /(\|([^|]{2,})\||`([^`]{2,})`|(<[A-Za-z0-9-]{2,}>)|\y(CTRL-.)\y|\*([^*]+)\*|'\w{2,}'|\{\w{2,}\}|\[\w{2,}\])/) != 0 ){
+	while( match(a_line, /(\|([^|]{2,})\||`([^`]+)`|(<[A-Za-z0-9-]{2,}>)|\y(CTRL-.)\y|\*([^*]+)\*|'\w{2,}'|\{\w{2,}\}|\[\w{2,}\])/) != 0 ){
 		s_line = s_line substr(a_line, 1, RSTART - 1)
 		match_word = substr(a_line, RSTART, RLENGTH)
 		match_top = substr(match_word, 1, 1)
