@@ -8,9 +8,10 @@ command! HelpTags call fzf#run({
 			\ 	'--tiebreak=begin',
 			\ 	'--no-multi',
 			\ 	'--separator', "\t",
-			\ 	'--with-nth', '..4',
-			\ 	'--prompt', "help> ",
-			\ 	'--tabstop', '1',
+			\ 	'--nth', '..4',
+			\ 	'--with-nth', '..5',
+			\ 	'--prompt', 'help> ',
+			\ 	'--tabstop', '4',
 			\ 	'--no-scrollbar',
 			\ 	'--preview', awk
 			\ 		.. ' cline=' .. (float2nr(get(g:, 'fzf_layout', {window: {width: 0.9, height: 0.6}})->get('window', {width: 0.9, height: 0.6}).height * &lines / 2) - 1)
