@@ -61,11 +61,12 @@ export def HelpTags(): list<string>
 		tags_list += ListupTags(i, 'pack/*/*/*/doc/tags')
 		tags_list += ListupTags(i, 'pack/*/*/*/doc/tags-[a-z][a-z]')
 	endfor
-	tag_width = min([20, max(deepcopy(tags_list)->map((_, v) => strdisplaywidth(v.tag)))])
-	file_width = min([20, max(deepcopy(tags_list)->map((_, v) => strdisplaywidth(v.file)))])
+	tag_width = min([23, max(deepcopy(tags_list)->map((_, v) => strdisplaywidth(v.tag)))])
+	# file_width = min([20, max(deepcopy(tags_list)->map((_, v) => strdisplaywidth(v.file)))])
 	return deepcopy(tags_list)
 		->sort((d1, d2) => d1.tag >? d2.tag ? 1 : ( d1.tag <? d2.tag ? -1 : d1.priority - d2.priority ))
-		->map((_, v) => printf("\x1B[32m%-" .. tag_width .. "S\x1B[0m\t%2S\t%-" .. file_width .. "S\t%S\t%S\t%s",
+		->uniq((d1, d2) => d1.tag !=# d2.tag || d1.path !=# d2.path ? 1 : 0)
+		->map((_, v) => printf("\x1B[32m%-" .. tag_width .. "S\x1B[0m\t%2S\t%-15S\t%S\t%S\t%s",
 		                	v.tag, v.lang, v.file, v.dir, v.path, v.search))
 enddef
 
