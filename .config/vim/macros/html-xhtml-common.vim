@@ -33,9 +33,8 @@ if !exists('g:did_ftplugin_htmlxhtml')
 		return ''
 	enddef
 	# :help html-indent
-	g:html_indent_script1 = 'inc'
-	g:html_indent_style1 = 'inc'
-	g:html_indent_autotags = 'html,body,tbody,dt,dd,li'
+	g:html_indent_script1 = 'auto'
+	g:html_indent_style1 = 'auto'
 	g:html_syntax_folding = 1 # :help html-folding
 endif
 

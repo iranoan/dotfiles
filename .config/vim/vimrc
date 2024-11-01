@@ -359,6 +359,7 @@ set helplang=ja,en                             # 日本語ヘルプを優先的�
 set isfname+=: isfname-=# isfname-==           # Maildir では : がフラグの前置文字 HTML では # は id+シェルスクリプトなどで = は代入
 # ファイルタイプ別設定 {{{1 ftplugin/ では遅い分
 g:tex_flavor = 'latex'                         # *.tex の新規作成などで plainTeX ではなく LaTeX として扱う
+g:html_indent_autotags = 'html,body,tbody,dt,dd,li'
 # 外部プログラム関係 {{{1
 set grepprg=/usr/bin/grep\ $*\ /dev/null       # --exclude は --include を使った時に無効にしたいのでコマンドにして分岐する
 # -nH といったオプションもそちらで指定している
