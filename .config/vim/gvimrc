@@ -12,11 +12,16 @@ else
 endif
 # set linespace=-1         # 縦罫線がつながるが問題が出る可能性もあるとの事なので止めておく
 set guioptions-=T guioptions-=m guioptions-=r guioptions-=L guioptions+=k # ツール・バー/メニュー/スクロール・バー表示を OFF、lines, columns を維持
-if $GVIM_ENABLE_WAYLAND !=# '1' # ←winpos 等が効かなくなる (無いと描画が乱れる)
-	augroup GVIMRC
+if $GVIM_ENABLE_WAYLAND !=# '1' # ←winpos 等が効かなくなる (Ubuntu 24.10で改善され無くて描画は乱れないが、変換文字列の色設定が無視される)
+	augroup GVIMR
 		autocmd!
 		# 画面左上に表示 (help に有る通り autocmd を使わないと環境によって gvimrc の記載では無効)
-		autocmd GUIEnter * winpos 0 0 | autocmd! GVIMRC | augroup! GVIMRC
+		autocmd GUIEnter * winpos 0 0
+			| if $XDG_SESSION_TYPE !=# 'wayland'
+			| 	autocmd! GVIMRC
+			| 	augroup! GVIMRC
+			| endif
+		# Wayland では autocmd/augroup の削除をしていると 2 つ目の別ウィンドウでエラーになる (別プロセスなのになぜ???)
 		# autocmd VimEnter,GUIEnter * if &lines != 48 | set lines=48 | endif
 		# ↑GTK でズレが生じるため再設定 https://github.com/vim-jp/issues/issues/1374
 		# lines=999 としたのでコメントに
