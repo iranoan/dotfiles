@@ -31,12 +31,15 @@ export def Highlight(): void
 	enddef
 	var nbg: string = matchstr(execute('highlight Normal'), '\<guibg=\zs\S\+')
 	var bg: string
-	if &background ==? 'light'
+	if &background ==# 'light'
 		if nbg ==# ''
 			nbg = '#fdf6e3'
 		endif
 		if g:colors_name =~# '^solarized'
 			       highlight Comment      cterm=NONE gui=NONE ctermfg=10 guifg=#586e75
+		endif
+		if g:colors_name ==# 'solarized8'
+			highlight CursorColumn term=reverse ctermbg=254 guibg=#F5F2DC
 		endif
 		bg = GetCursorLine(0xfd, 0xf6, 0xe3, 0xee, 0xe8, 0xd5)
 		         # 黒背景端末を使っているので背景色を明示する←端末も背景に NONE を使わない
@@ -52,6 +55,9 @@ export def Highlight(): void
 		endif
 		if g:colors_name =~# '^solarized'
 			       highlight Comment      cterm=NONE gui=NONE ctermfg=14 guifg=#93a1a1
+		endif
+		if g:colors_name ==# 'solarized8'
+			highlight CursorColumn term=reverse ctermbg=236 guibg=#0E414E
 		endif
 		bg = GetCursorLine(0x00, 0x2b, 0x36, 0x07, 0x36, 0x42)
 		execute 'highlight Normal        ctermfg=15 ctermbg=NONE guifg=#eee8d5 guibg=' .. (!has('gui_running') && g:colors_name ==# 'solarized8' ? 'NONE' : nbg)
