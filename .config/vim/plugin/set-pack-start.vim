@@ -130,7 +130,7 @@ endfor
 if has('gui_running')
 augroup ColorSchemeKind # colorscheme の種類別
 	autocmd!
-	 # Solarized で GUI が CUI と異なる色になっている
+	# Solarized で GUI が CUI と異なる色になっている
 	autocmd ColorScheme solarized highlight Pmenu term=reverse ctermfg=0 ctermbg=13 gui=reverse guifg=#073642 guibg=#839496
 				| highlight SignColumn ctermfg=11 ctermbg=8 guifg=#839496 guibg=NONE
 augroup END

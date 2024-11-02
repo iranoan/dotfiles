@@ -359,7 +359,7 @@ set helplang=ja,en                             # 日本語ヘルプを優先的�
 set isfname+=: isfname-=# isfname-==           # Maildir では : がフラグの前置文字 HTML では # は id+シェルスクリプトなどで = は代入
 # ファイルタイプ別設定 {{{1 ftplugin/ では遅い分
 g:tex_flavor = 'latex'                         # *.tex の新規作成などで plainTeX ではなく LaTeX として扱う
-g:html_indent_autotags = 'html,body,tbody,dt,dd,li'
+g:html_indent_autotags = 'html,body,tbody,dt,dd,li' # HTML でインデント量を変えない $MYVIMDIR/ftplugin/html.vim に書くと、他を開いてからだと反映されない
 # 外部プログラム関係 {{{1
 set grepprg=/usr/bin/grep\ $*\ /dev/null       # --exclude は --include を使った時に無効にしたいのでコマンドにして分岐する
 # -nH といったオプションもそちらで指定している
@@ -368,7 +368,7 @@ set grepprg=/usr/bin/grep\ $*\ /dev/null       # --exclude は --include を使�
 # set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m,%f  # grep の出力は -L/--files-without-match, -l/--files-with-matches を付けた時の為ファイル名のみを出力追加したいが、binary file matches などの警告もヒットのように扱ってしまう
 set keywordprg=:help
 $LESS = substitute($LESS, '['' " =]\zs-\(-quit-if-one-screen\|F\)\>', '', 'g') # less 環境変数置き換え
-# ↑alias は外部フィルタ無効+選択状態でうまく処理してくれない
+# ↑--quit-if-one-screen, -F が残っていると、プラグインのプレビューに使われていると、内容が画面に収まる場合に直ちに閉じられる (alias は外部フィルタ無効+選択状態でうまく処理してくれない)
 # キー割り当てを除いたその他 {{{1
 set modeline
 # set modeline modelineexpr
