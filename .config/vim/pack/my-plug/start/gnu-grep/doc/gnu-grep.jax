@@ -1,4 +1,4 @@
-*gnu-grep* execute gnu grep
+-gnu-grep* execute gnu grep
 
 Author:  Iranoan <iranoan+vim@gspell.com>
 Repository: https://github.com/iranoan/gnu-grep
@@ -14,6 +14,7 @@ License: GPL Ver.3.
 	* 使用方法                                             |gnu-grep-use|
 		- 必ず付けるオプション                               |gnu-grep-option|
 		- 補完                                               |gnu-grep-snippet|
+		- 関数                                               |gnu-grep-function|
 
 
 ==============================================================================
@@ -32,8 +33,8 @@ License: GPL Ver.3.
                                                               *gnu-grep-require*
 要件~
 
-* Vim
-* GNU grep
+- Vim
+- GNU grep
 	|grepprg| に GNU grep を設定する
 	例: >
 	set grepprg=/usr/bin/grep\ $*\ /dev/null
@@ -42,18 +43,23 @@ License: GPL Ver.3.
                                                                   *gnu-grep-use*
 使用方法~
 
-* |:Grep| を使えば、幾つかのオプションを付けて |:silent| |grep| を実行する
-* |:LGrep| を使えば、幾つかのオプションを付けて |:silent| |lgrep| を実行する
-* --include を使わなければ --exclude= を使い主なバイナリ・ファイル等を除外する
-* %, # はバッファ名としてではなく、エスケープして文字列として処理する
-* |'errorformat'| にマッチさせるため
-	* 次の組み合わせは -m (--max-count=)1 に置き換える
-		* -l (--files-with-matches) が有り -v (--invert-match) のない時
-		* -L (--files-without-match) と -v (--invert-match) の両方が有る時
-	* -L (--files-without-match) の結果にも行番号を付けて出力
-	* $MYVIMDIR/after/ftplugin/qf.vim 等で gnu_grep#SetQfTitle() を使うと必ず付
-		けるオプション (|gnu-grep-option|) や --exclude= を |w:quickfix_title| から除
-		外する
+                                               *:Grep* *:LGrep* *:Grepadd* *:LGrepadd*
+- |:Grep| を使えば、幾つかのオプションを付けて |:silent| |grep| を実行する
+- |:LGrep| を使えば、幾つかのオプションを付けて |:silent| |lgrep| を実行する
+- |:Grepadd| を使えば、幾つかのオプションを付けて |:silent| |grepadd| を実行する
+- |:LGrepadd| を使えば、幾つかのオプションを付けて |:silent| |lgrepadd| を実行する
+- --include を使わなければ --exclude= を使い主なバイナリ・ファイル等を除外する
+- %, # はバッファ名としてではなく、エスケープして文字列として処理する
+- |'errorformat'| にマッチさせるため
+	* 次の組み合わせは -m (--max-count=)1 に置き換える場合が有る
+		+ -l (--files-with-matches) が有り -v (--invert-match) のない時
+		+ -L (--files-without-match) と -v (--invert-match) の両方が有る時
+	* -L (--files-without-match) の結果にも行番号を付けて出力 *gnu_grep#SetQfTitle()*
+	* $MYVIMDIR/after/ftplugin/qf.vim 等で >
+			call gnu_grep#SetQfTitle()
+<		と記載すると、必ず付けるオプション (|gnu-grep-option|) を |w:quickfix_title| か
+		ら除外する
+		結果として |status-line| の表示内容を変えられる
 
                                                                *gnu-grep-option*
 必ず付けるオプション~
@@ -65,6 +71,9 @@ License: GPL Ver.3.
 	* -d (--directories=)skip
 	* -n (--line-number)
 	* -s (--no-messages)
+	* --exclude
+		+ --include を使ってない時に追加し、画像などの代表的なバイナリファイルを除外
+		+ 速度を上げるためでも有る
 
                                                                *gnu-grep-snippet*
 補完~
@@ -91,15 +100,17 @@ License: GPL Ver.3.
 	* -B, --before-context=
 	* -C, --context=
 	* --include=
-を補完候補として表示する
+	を補完候補として表示する
 
-この内、次のオプションは次の引数ではファイル・ディレクトリ名の補完もできる
-	* -f, --file=
-	* -R, --dereference-recursive
-	* -r, --recursive
+	この内、次のオプションは次の引数ではファイル・ディレクトリ名の補完もできる
+		+ -f, --file=
+		+ -R, --dereference-recursive
+		+ -r, --recursive
 
-ただし`` と $() はその開閉対応をチェックしていないので、上手く補完が働かない
-ケースが有る
-またファイル/ディレクトリ名の補完は空白を含む場合や引用符で囲む場合に未対応
+	ただし
+		* 最後の引数でしか補完できない
+		* `` と $() はその開閉対応をチェックしていないので、上手く補完が働かない
+			ケースが有る
+		* ファイル/ディレクトリ名の補完は空白を含む場合や引用符で囲む場合に未対応
 
 vim:tw=78:ts=2:ft=help:norl:noet:fen:

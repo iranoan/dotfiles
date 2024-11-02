@@ -1,14 +1,6 @@
 vim9script
 scriptencoding utf-8
 
-export def Grep(...args: list<string>): void
-	GrepMain('grep', args)
-enddef
-
-export def Lgrep(...args: list<string>): void
-	GrepMain('lgrep', args)
-enddef
-
 export def SetQfTitle(): void
 	var i: dict<any>
 	var title: string
@@ -18,23 +10,35 @@ export def SetQfTitle(): void
 		if getbufvar(i.bufnr, '&filetype') ==# 'qf'
 			win_id = bufwinid(i.bufnr)
 			title = getwinvar(win_id, 'quickfix_title')
-			if title =~# '^:/usr/bin/grep'
-				title = substitute(title, '\(cexpr system("\)\?/usr/bin/grep -nHsI --color=never -d skip --exclude-dir=\.git\( --exclude={[^}]\+}\)\? \(.*\) /dev/null\(")->substitute(''\\ze\\n'', ":1: ", "g")\)\?$', 'grep \3', '')->substitute('%', '%%', 'g')
+			if title =~# '^:\([lc]\(add\|get\)\?expr system("\)\?/usr/bin/grep -nHsI --color=never -d skip --exclude-dir=\.git'
+				title = substitute(title, ':\([lc]\(add\|get\)\?expr system("\)\?/usr/bin/grep -nHsI --color=never -d skip --exclude-dir=\.git\( --exclude={[^}]\+}\)\? \(.*\) \+/dev/null\(")->substitute(''\\ze\\n'', ":1: ", "g")\)\?$', 'grep \4', '')->substitute('%', '%%', 'g')
 				setwinvar(win_id, 'quickfix_title', title)
 			endif
-			return
 		endif
 	endfor
 enddef
 
-def GrepMain(cmd: string, args: list<string>): void
+export def Grep(kind: bool, add: bool, ...args: list<string>): void
 	def FileList(s: string): void
 		var arg: string = substitute(s, "'", "''", 'g')
-		if cmd ==# 'grep'
-			execute 'cexpr system(''/usr/bin/grep' .. arg .. ''')->substitute(''\ze\n'', ":1: ", "g")'
+		var exe_cmd: string
+		var cmd: string
+		if kind
+			if add
+				exe_cmd = 'caddexpr'
+			else
+				exe_cmd = 'cexpr'
+			endif
+			cmd = 'grep'
 		else
-			execute 'lexpr system(''/usr/bin/grep' .. arg .. ''')->substitute(''\ze\n'', ":1: ", "g")'
+			if add
+				exe_cmd = 'laddexpr'
+			else
+				exe_cmd = 'lexpr'
+			endif
+			cmd = 'lgrep'
 		endif
+		execute exe_cmd .. ' system("/usr/bin/grep' .. arg .. ' /dev/null")->substitute(''\ze\n'', ":1: ", "g")'
 		var qf_cmd: list<string> = execute('autocmd QuickFixCmdPost ' .. cmd)->split('\n')
 		if len(qf_cmd) > 2
 			execute qf_cmd[2]->substitute('["#].*', '', '')->split('\s\+')[1 : ]->join()
@@ -60,14 +64,26 @@ def GrepMain(cmd: string, args: list<string>): void
 	var arg_str: string = args[0]
 	var args_ls: list<string> = Str2ls(arg_str)
 	var opt: string
+	var exe_cmd: string
 	if len(filter(copy(args_ls), 'v:val =~# "^--include="')) > 0
 		opt = ' -nHsI --color=never -d skip --exclude-dir=.git '
 	else
 		opt = ' -nHsI --color=never -d skip --exclude-dir=.git --exclude={*.asf,*.aux,*.avi,*.bmc,*.bmp,*.cer,*.chm,*.chw,*.class,*.crt,*.cur,*.dll,*.doc,*.docx,*.dvi,*.emf,*.exe,*.fdb_latexmk,*.fls,*.flv,*.gpg,*.hlp,*.hmereg,*.icc,*.icm,*.ico,*.ics,*.jar,*.jp2,*.jpg,*.ltjruby,*.lzh,*.m4a,*.mkv,*.mov,*.mp3,*.mp4,*.mpg,*.nav,*.nvram,*.o,*.obj,*.odb,*.odg,*.odp,*.ods,*.odt,*.oll,*.opp,*.out,*.pdf,*.pfa,*.pl3,*.png,*.ppm,*.ppt,*.pptx,*.pyc,*.reg,*.rm,*.rtf,*.snm,*.sqlite,*.swf,*.gz,*.bz2,*.Z,*.lzma,*.xz,*.lz,*.tfm,*.toc,*.ttf,*.vbox,*.vbox-prev,*.vdi,*.vf,*.webm,*.wmf,*.wmv,*.xls,*.xlsm,*.xlsx,.*.sw?,.viminfo,viminfo,a.out,tags,tags-ja} '
 	endif
+	if kind
+		if add
+			exe_cmd = 'grepadd'
+		else
+			exe_cmd = 'grep'
+		endif
+	elseif add
+		exe_cmd = 'lgrepadd'
+	else
+		exe_cmd = 'lgrep'
+	endif
 	if (( index(args_ls, '-L') >= 0 || index(args_ls, '--files-without-match') >= 0 ) && ( index(args_ls, '-v') >= 0 || index(args_ls, '--invert-match') >= 0))
 		|| (( index(args_ls, '-l') >= 0 || index(args_ls, '--files-with-match') >= 0 ) && ( index(args_ls, '-v') == -1 || index(args_ls, '--invert-match') == -1))
-		execute 'silent ' .. cmd .. opt .. '-m 1 ' ..
+		execute 'silent ' .. exe_cmd .. opt .. '-m 1 ' ..
 			filter(args_ls, (i, v) => v !~# '^\m\C\(-l\|-L\|-v\|--files-with\(out\)\?-match\|--invert-match\)$')
 				->join(' ')->escape('%#|')
 	elseif ' ' .. arg_str .. ' ' =~# ' -[ABCDEFGHIPRTUVZabcdefhimnoqrsuvwxyz]*[lL][ABCDEFGHILPRTUVZabcdefhilmnoqrsuvwxyz]* '
@@ -75,7 +91,7 @@ def GrepMain(cmd: string, args: list<string>): void
 		|| index(args_ls, '--files-with-matches') >= 0
 		FileList(opt .. arg_str)
 	else
-		execute 'silent ' .. cmd .. opt .. arg_str->escape('%#|')
+		execute 'silent ' .. exe_cmd .. opt .. arg_str->escape('%#|')
 	endif
 enddef
 
@@ -170,8 +186,8 @@ export def GrepComp(ArgLead: string, CmdLine: string, CursorPos: number): list<s
 			endif
 		endif
 	endfor
-	for arg in args # 既に使われている --option= の形で使用するオプション削除
-		for o in ['--include=', '--max-count=', '--after-context=', '--before-context=', '--context='] # '--regexp=', '--file=', は複数回が意味を持つので除外
+	for arg in args # 既に使われている --option= の形で使用するオプション削除 (--include は複数指定があり得るので除外対象から外す)
+		for o in ['--max-count=', '--after-context=', '--before-context=', '--context='] # '--regexp=', '--file=', は複数回が意味を持つので除外
 			if arg =~# '^' .. o
 				i = index(opt, o)
 				if i != -1
