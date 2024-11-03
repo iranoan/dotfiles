@@ -71,15 +71,19 @@ sxiv_preview(){
 echo "$f"
 case "${f##*/}" in # ファイル名による分岐
 	vimrc|gvimrc )
-		source-highlight --failsafe -f esc --lang-def=vim.lang --style-file=esc.style -i "$f" ;;
+		source-highlight --tab=2 --failsafe -f esc --lang-def=vim.lang --style-file=esc.style -i "$f" ;;
 	.bashrc|.bash_history|bashrc|.cshrc|.profile|.xprofile|.zshrc|.kshrc )
-		source-highlight --failsafe -f esc --lang-def=sh.lang --style-file=esc.style -i "$f" ;;
+		source-highlight --tab=2 --failsafe -f esc --lang-def=sh.lang --style-file=esc.style -i "$f" ;;
 	.*rc|.gitconfig|.gitattributes|.gitignore )
-		source-highlight --failsafe -f esc --lang-def=conf.lang --style-file=esc.style -i "$f" ;;
+		source-highlight --tab=2 --failsafe -f esc --lang-def=conf.lang --style-file=esc.style -i "$f" ;;
+	*ChangeLog|*changelog)
+		source-highlight --failsafe -f esc --lang-def=changelog.lang --style-file=esc.style -i "$source" ;;
+	*Makefile|*makefile)
+		source-highlight --failsafe -f esc --lang-def=makefile.lang --style-file=esc.style -i "$source" ;;
 	*)
 		case "${f%/*}" in # ディレクトリ名による分岐
 			*/.bash|*/.csh|*/.ksh|*/.zsh )
-				source-highlight --failsafe -f esc --lang-def=sh.lang --style-file=esc.style -i "$f" ;;
+				source-highlight --tab=2 --failsafe -f esc --lang-def=sh.lang --style-file=esc.style -i "$f" ;;
 			*)
 				case "$mime" in # mimetype による分岐
 					inode/directory )              tree -L 1 -C "$f" ;;
@@ -95,7 +99,7 @@ case "${f##*/}" in # ファイル名による分岐
 					text/csv)                      nkf -wd "$f" | ~/bin/csv2tsv.awk | tsv2table.awk ;;
 					text/tab-separated-values|text/tsv) nkf -wd "$f" | ~/bin/tsv2table.awk ;;
 					text/*|application/xhtml+xml|application/javascript|application/rdf+xml|application/toml|application/x-awk|application/x-desktop|application/x-gnuplot|application/x-perl|application/x-php|application/x-ruby|application/x-shellscript|application/x-troff-man|application/x-yaml|application/xml )
-						/usr/share/source-highlight/src-hilite-lesspipe.sh "$f" ;;
+						source-highlight --tab=2 --failsafe --infer-lang -f esc --style-file=esc.style -i "$f" ;;
 					application/msword|application/vnd.openxmlformats-officedocument.wordprocessingml.document|application/vnd.oasis.opendocument.text )
 						soffice --convert-to "txt:Text (encoded):UTF8" --cat "$f" 2> /dev/null ;;
 					application/vnd.openxmlformats-officedocument.presentationml.presentation )
