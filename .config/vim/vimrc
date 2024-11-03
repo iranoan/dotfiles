@@ -482,7 +482,7 @@ cnoremap <expr><C-J> pumvisible() ? '<Down>' : '<C-J>"'
 #↑ command moode の補完候補の選択にも使っている
 # 選択範囲の貼り付けで、直前のレジスタを連続して貼り付け←vimの連続コピペできない問題 https://baqamore.hatenablog.com/entry/2016/07/07/201856
 xnoremap <expr>p 'pgv"' .. v:register .. 'y`>'
-snoremap <expr><C-P> '<C-G>pgv"' .. v:register .. 'y`>'a
+snoremap <expr><C-P> '<C-G>pgv"' .. v:register .. 'y`>a'
 # 2つを入れ替えたい時は、書き換わったほうが都合が良いので、大文字側はデフォルトのままにしておく
 # 挿入/コマンドモード時のカーソル移動 {{{2
 # [Henkan] を [BS] に割り当てているので、<C-H> は他に割り当てる
