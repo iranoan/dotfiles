@@ -29,8 +29,8 @@ if !exists("g:mail_draft_plugin")
 					return
 				endif
 				l = s_pos
-				s_pos = s_pos + i
-				e_pos = e_pos + 1 + j
+				s_pos += i
+				e_pos += 1 + j
 				silent execute ':' .. s_pos .. ',' .. e_pos .. 'delete _'
 			endwhile
 		enddef

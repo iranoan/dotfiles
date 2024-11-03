@@ -24,7 +24,7 @@ def ItemInfo(line_s: string, le: number): dict<any> # 現在行と上に辿る�
 		if diff > le
 			break
 		endif
-		i = i - 1
+		i -= 1
 	endwhile
 	info.topTab = item[1]
 	info.diff = diff

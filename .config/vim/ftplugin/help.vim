@@ -49,7 +49,7 @@ if !exists('g:help_plugin')
 				if match(line, '^[ \t]') == -1
 					break
 				endif
-				i = i + 1
+				i += 1
 			endwhile
 		endif
 		var line_width: number = winwidth(0) - &foldcolumn
@@ -58,10 +58,10 @@ if !exists('g:help_plugin')
 			line_width -= max([&numberwidth, len(line('$'))])
 		# sing の表示非表示でずれる分の補正
 		elseif &signcolumn ==# 'number'
-			cnt = cnt .. '  '
+			cnt ..= '  '
 		endif
 		if &signcolumn ==# 'auto'
-			cnt = cnt .. '  '
+			cnt ..= '  '
 		endif
 		line_width -= 2 * (&signcolumn ==# 'yes' ? 1 : 0)
 		line = strcharpart(printf('%-' .. ( &shiftwidth * (v:foldlevel - 1) + 2) .. 's%s', '▸',
