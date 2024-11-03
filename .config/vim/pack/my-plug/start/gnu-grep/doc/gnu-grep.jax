@@ -1,4 +1,4 @@
--gnu-grep* execute gnu grep
+*gnu-grep* execute gnu grep
 
 Author:  Iranoan <iranoan+vim@gspell.com>
 Repository: https://github.com/iranoan/gnu-grep
