@@ -18,7 +18,7 @@ export def SetQfTitle(): void
 	endfor
 enddef
 
-export def Grep(kind: bool, add: bool, ...args: list<string>): void
+export def Grep(kind: bool, add: bool, bang: string, ...args: list<string>): void
 	def FileList(s: string): void
 		var arg: string = substitute(s, "'", "''", 'g')
 		var exe_cmd: string
@@ -27,14 +27,14 @@ export def Grep(kind: bool, add: bool, ...args: list<string>): void
 			if add
 				exe_cmd = 'caddexpr'
 			else
-				exe_cmd = 'cexpr'
+				exe_cmd = 'cexpr' .. bang
 			endif
 			cmd = 'grep'
 		else
 			if add
 				exe_cmd = 'laddexpr'
 			else
-				exe_cmd = 'lexpr'
+				exe_cmd = 'lexpr' .. bang
 			endif
 			cmd = 'lgrep'
 		endif
@@ -42,6 +42,14 @@ export def Grep(kind: bool, add: bool, ...args: list<string>): void
 		var qf_cmd: list<string> = execute('autocmd QuickFixCmdPost ' .. cmd)->split('\n')
 		if len(qf_cmd) > 2
 			execute qf_cmd[2]->substitute('["#].*', '', '')->split('\s\+')[1 : ]->join()
+		endif
+		if add && bang !=# '!'
+			if exe_cmd ==# 'caddexpr'
+				:cc 1
+			else
+				exe_cmd = 'laddexpr'
+				:ll 1
+			endif
 		endif
 	enddef
 
@@ -72,14 +80,14 @@ export def Grep(kind: bool, add: bool, ...args: list<string>): void
 	endif
 	if kind
 		if add
-			exe_cmd = 'grepadd'
+			exe_cmd = 'grepadd' .. bang
 		else
-			exe_cmd = 'grep'
+			exe_cmd = 'grep' .. bang
 		endif
 	elseif add
-		exe_cmd = 'lgrepadd'
+		exe_cmd = 'lgrepadd' .. bang
 	else
-		exe_cmd = 'lgrep'
+		exe_cmd = 'lgrep' .. bang
 	endif
 	if (( index(args_ls, '-L') >= 0 || index(args_ls, '--files-without-match') >= 0 ) && ( index(args_ls, '-v') >= 0 || index(args_ls, '--invert-match') >= 0))
 		|| (( index(args_ls, '-l') >= 0 || index(args_ls, '--files-with-match') >= 0 ) && ( index(args_ls, '-v') == -1 || index(args_ls, '--invert-match') == -1))
@@ -96,7 +104,7 @@ export def Grep(kind: bool, add: bool, ...args: list<string>): void
 enddef
 
 export def GrepComp(ArgLead: string, CmdLine: string, CursorPos: number): list<string>
-	def LS(s: string, isdir: bool): list<string>
+	def LS(s: string, isdir: bool): list<string> # パス・リストを取得
 		var ls: list<string>
 		if s ==# ''
 			ls = glob('{,.}*')->split('\n')
@@ -117,34 +125,53 @@ export def GrepComp(ArgLead: string, CmdLine: string, CursorPos: number): list<s
 		endif
 		return ls
 	enddef
-	var cmdline: string = substitute(CmdLine, '[\n\r]\+', ' ', 'g')->substitute('^Grep\s\+', '', '')
-	var cmd_space_end: bool = cmdline =~# '\s$'
-	var args: list<string>
-	var match_s: list<any> = matchstrpos(cmdline, '^\(\(''[^'']\+''\|"\(\"\|[^"]\)\+"\)\|''\\''''\|''''\|""\|\\\\\|\\ \|[^ ]\)\+\s*', 0)
+	def SplitArg(s: string): list<string> # 引数をリストに変換
+		var match_s: list<any> = matchstrpos(s, '^\(\(''[^'']\+''\|"\(\"\|[^"]\)\+"\)\|''\\''''\|''''\|""\|\\\\\|\\ \|[^ ]\)\+\s*', 0)
+		var args: list<string>
+		while match_s[1] != -1
+			add(args, substitute(match_s[0], '\s\+$', '', ''))
+			match_s = matchstrpos(s, '^\(\(''[^'']\+''\|"\(\"\|[^"]\)\+"\)\|''\\''''\|''''\|""\|\\\\\|\\ \|[^ ]\)\+\s*', match_s[2])
+		endwhile
+		return args
+	enddef
+	def SetedPattern(args: list<string>): number # 検索文字列が設定されているか?
+		var kind_option: number = 0
+		for arg in args
+			if arg =~# '^--regexp=.' # 検索パターンがある
+				return 2
+			elseif kind_option == 1 # 直前が -e オプション
+				return 2
+			elseif kind_option != -1 && arg =~# '^[^-]' # 直前が引数必須のオプションでもなくオプションそのものでもない
+				return 1
+			elseif arg ==# '-e' || arg =~# '^--regexp=' # 検索パターン指定予定
+				kind_option = 1
+				continue
+			elseif index(['-m', '-A', '-B', '-C'], arg) != -1
+				kind_option = -1
+			else
+				kind_option = 0
+			endif
+		endfor
+		return kind_option
+	enddef
+	var cmd_space_end: bool = CmdLine[ : CursorPos - 1] =~# '\s$'
+	var args_all: list<string> = SplitArg(substitute(CmdLine, '[\n\r]\+', ' ', 'g')
+		->substitute('^Grep\s\+', '', '')) # コマンドライン全体の引数
+	var args_cursor: list<string> = SplitArg(substitute(CmdLine[ : CursorPos - 1], '[\n\r]\+', ' ', 'g')
+		->substitute('^Grep\s\+', '', '')) # コマンドラインのカーソルまでの引数
 	var i: number
 	var opt: list<string> = [
-		'-E', '--extended-regexp',
-		'-F', '--fixed-strings',
-		'-G', '--basic-regexp',
-		'-L', '--files-without-match',
-		'-P', '--perl-regexp',
-		'-R', '--dereference-recursive',
-		'-T', '--initial-tab',
-		'-e', '--regexp=',
-		'-f', '--file=',
-		'-i', '--ignore-case',
-		'-l', '--files-with-matches',
-		'-m',  '--max-count=',
-		'-o', '--only-matching',
-		'-r', '--recursive',
-		'-s', '--no-messages',
-		'-v', '--invert-match',
-		'-w', '--word-regexp',
-		'-x', '--line-regexp',
-		'-A', '--after-context=',
-		'-B', '--before-context=',
-		'-C', '--context=',
-		'--include='
+		'-E', '--extended-regexp',       '-m',  '--max-count=',
+		'-F', '--fixed-strings',         '-o', '--only-matching',
+		'-G', '--basic-regexp',          '-r', '--recursive',
+		'-L', '--files-without-match',   '-s', '--no-messages',
+		'-P', '--perl-regexp',           '-v', '--invert-match',
+		'-R', '--dereference-recursive', '-w', '--word-regexp',
+		'-T', '--initial-tab',           '-x', '--line-regexp',
+		'-e', '--regexp=',               '-A', '--after-context=',
+		'-f', '--file=',                 '-B', '--before-context=',
+		'-i', '--ignore-case',           '-C', '--context=',
+		'-l', '--files-with-matches',    '--include='
 	]
 	var opt_pair: dict<string> = {
 		'-E': '--extended-regexp',       '--extended-regexp':       '-E',
@@ -169,12 +196,19 @@ export def GrepComp(ArgLead: string, CmdLine: string, CursorPos: number): list<s
 		'-B': '--before-context=',       '--before-context=':       '-B',
 		'-C': '--context=',              '--context=':              '-C',
 	}
-
-	while match_s[1] != -1
-		add(args, substitute(match_s[0], '\s\+$', '', ''))
-		match_s = matchstrpos(cmdline, '^\(\(''[^'']\+''\|"\(\"\|[^"]\)\+"\)\|''\\''''\|''''\|""\|\\\\\|\\ \|[^ ]\)\+\s*', match_s[2])
-	endwhile
-	for arg in args # 既に使われているオプション削除
+	def AddLS(cmd: string): void # 検索文字列未指定、ディレクトリ指定オプション未指定ならパスを補完候補に加える
+		for o in ['-r', '--recursive', '-R', '--dereference-recursive']
+			if index(args_all, o) != -1
+				return
+			endif
+		endfor
+		if SetedPattern(args_cursor) > 0
+			extend(opt, LS(cmd, false))
+		elseif SetedPattern(args_cursor) == 2
+			extend(opt, LS(cmd, false))
+		endif
+	enddef
+	for arg in args_all # 既に使われているオプション削除
 		if index(['-e', '--regexp=', '-f', '--file='], arg) != -1 # 複数回の使用が意味を持つ
 			continue
 		endif
@@ -186,7 +220,7 @@ export def GrepComp(ArgLead: string, CmdLine: string, CursorPos: number): list<s
 			endif
 		endif
 	endfor
-	for arg in args # 既に使われている --option= の形で使用するオプション削除 (--include は複数指定があり得るので除外対象から外す)
+	for arg in args_all # 既に使われている --option= の形で使用するオプション削除 (--include は複数指定があり得るので除外対象から外す)
 		for o in ['--max-count=', '--after-context=', '--before-context=', '--context='] # '--regexp=', '--file=', は複数回が意味を持つので除外
 			if arg =~# '^' .. o
 				i = index(opt, o)
@@ -199,28 +233,28 @@ export def GrepComp(ArgLead: string, CmdLine: string, CursorPos: number): list<s
 			endif
 		endfor
 	endfor
-	if cmd_space_end
-		if args[-1] ==# '-f'
+	if !(!!args_cursor) # 引数なしなので、オプションのみ
+		return map(opt, (key, val) => substitute(val, '^-[-A-Za-z]\+[^=]\zs$', ' ', ''))
+	elseif cmd_space_end
+		if args_cursor[-1] ==# '-f'
 			return LS('', false)
-		elseif index(['-r', '--recursive', '-R', '--dereference-recursive'], args[-1]) != -1
+		elseif index(['-r', '--recursive', '-R', '--dereference-recursive'], args_cursor[-1]) != -1
 			return LS('', true)
-		elseif index(['-e', '-m', '-A', '-B', '-C'], args[-1]) != -1 # ファイル/ディレクトリ+オプション以外の引数が直後に必要
+		elseif index(['-e', '-m', '-A', '-B', '-C'], args_cursor[-1]) != -1 # ファイル/ディレクトリ+オプション以外の引数が直後に必要
 			return []
 		endif
-		extend(opt, LS('', false))
+		AddLS('')
 		return opt
 	else
-		if args[-1] =~# '^--file='
-			return map(LS(args[-1][7 : ], false), '"--file=" .. v:val')
+		if args_cursor[-1] =~# '^--file='
+			return map(LS(args_cursor[-1][7 : ], false), '"--file=" .. v:val')
+		elseif len(args_cursor) >= 2
+			if args_cursor[-2] ==# '-r' || args_cursor[-2] ==# '--recursive'
+				|| args_cursor[-2] ==# '-R' || args_cursor[-2] ==# '--dereference-recursive'
+				return LS(args_cursor[-1], true)
+			endif
 		endif
-		if len(args) >= 2
-				&& (
-					args[-2] ==# '-r' || args[-2] ==# '--recursive'
-					|| args[-2] ==# '-R' || args[-2] ==# '--dereference-recursive'
-				)
-			return LS(args[-1], true)
-		endif
+		AddLS(args_cursor[-1])
+		return filter(opt, 'v:val =~# ''^' .. escape(args_cursor[-1], '.$*~()\[]') .. '''')->map((key, val) => substitute(val, '^-[-A-Za-z]\+[^=]\zs$', ' ', ''))
 	endif
-	extend(opt, LS(args[-1], false))
-	return filter(opt, 'v:val =~# ''^' .. escape(args[-1], '.$*~()\[]') .. '''')->map((key, val) => substitute(val, '[^=]\zs$', ' ', ''))
 enddef

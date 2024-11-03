@@ -47,6 +47,8 @@ AlterCommand gd[iff]  Gdiffsplit
 # grep, lgpre は gnu-grep に置き換え
 AlterCommand gr[ep]     Grep
 AlterCommand lgr[ep]    LGrep
+AlterCommand grepa[dd]  Grepadd
+AlterCommand lgrepa[dd] LGrepadd
 
 # 2019-03-31 14:51 などの日付や時刻もうまい具合に Ctrl-a/x で加算減算する https://github.com/tpope/vim-speeddating {{{1
 # 日時フォーマットを追加したいので、start に置かない
