@@ -72,17 +72,17 @@ echo "$f"
 case "${f##*/}" in # ファイル名による分岐
 	vimrc|gvimrc )
 		source-highlight --tab=2 --failsafe -f esc --lang-def=vim.lang --style-file=esc.style -i "$f" ;;
-	.bashrc|.bash_history|bashrc|.cshrc|.profile|.xprofile|.zshrc|.kshrc )
+	.bashrc|.bash_history|.cshrc|.profile|.xprofile|.zshrc|.kshrc )
 		source-highlight --tab=2 --failsafe -f esc --lang-def=sh.lang --style-file=esc.style -i "$f" ;;
 	.*rc|.gitconfig|.gitattributes|.gitignore )
 		source-highlight --tab=2 --failsafe -f esc --lang-def=conf.lang --style-file=esc.style -i "$f" ;;
 	*ChangeLog|*changelog)
-		source-highlight --failsafe -f esc --lang-def=changelog.lang --style-file=esc.style -i "$source" ;;
+		source-highlight --failsafe -f esc --lang-def=changelog.lang --style-file=esc.style -i "$f" ;;
 	*Makefile|*makefile)
-		source-highlight --failsafe -f esc --lang-def=makefile.lang --style-file=esc.style -i "$source" ;;
+		source-highlight --failsafe -f esc --lang-def=makefile.lang --style-file=esc.style -i "$f" ;;
 	*)
 		case "${f%/*}" in # ディレクトリ名による分岐
-			*/.bash|*/.csh|*/.ksh|*/.zsh )
+			*/.bash|*/.csh|*/.ksh|*/.zsh|*/.config/bash|*/.config/csh|*/.config/ksh|*/.config/zsh )
 				source-highlight --tab=2 --failsafe -f esc --lang-def=sh.lang --style-file=esc.style -i "$f" ;;
 			*)
 				case "$mime" in # mimetype による分岐
