@@ -2,6 +2,7 @@ vim9script
 scriptencoding utf-8
 # https://github.com/thinca/vim-ft-vim_fold がオリジナル
 # if/endif, for/endfor, while/endwhile, try/endtry を追加
+# 対応していないカッコを追加←syntax on が前提
 
 export def Level(): any
 	if b:changedtick != get(b:, 'vim_fold_last_changedtick', -1)
@@ -54,37 +55,24 @@ def Calculate(bufnr: number): dict<any>
 	var close_pat: string = '\<\%(endf\%[unction]\|aug\%[roup]\s\+END\|endfo\%[r]\|endw\%[hile]\|enddef\|en\%[dif]\|endt\%[ry]\)\>'
 
 	def PareBracket(): number # ペアで存在しない (), [], {}
-		var i: number
+		var i: number = 0
 		var no_match: number
-		var regex: string
-		for s in [ ['[', 'vimFuncBody'], ['(', 'Special'], ['{', 'Special'] ]
-			regex = '^\("\([^"]\|\"\)*"\|''\([^'']\|''''\)*''\|[^' .. s[0] .. '"'']\)*' .. s[0]
-			i = 0
-			while true
-				i = matchend(cur_line, regex, i)
-				synid = synIDattr(synIDtrans(synID(lnum, i, 1)), 'name')
-				if i == -1 || synid ==# 'Comment'
-					break
-				endif
-				if synid ==# s[1]
-					no_match += 1
-				endif
-			endwhile
-		endfor
-		for s in [ [']', 'vimFuncBody'], [')', 'Special'], ['}', 'Special'] ]
-			regex = '^\("\([^"]\|\"\)*"\|''\([^'']\|''''\)*''\|[^' .. s[0] .. '"'']\)*' .. s[0]
-			i = 0
-			while true
-				i = matchend(cur_line, regex, i)
-				synid = synIDattr(synIDtrans(synID(lnum, i, 1)), 'name')
-				if i == -1 || synid ==# 'Comment'
-					break
-				endif
-				if synid ==# s[1]
-					no_match -= 1
-				endif
-			endwhile
-		endfor
+		var match_b: number
+		var s: string
+		while true
+			[s, match_b, i] = matchstrpos(cur_line, '[][{}()]', i)
+			if i == -1
+				break
+			endif
+			synid = synIDattr(synIDtrans(synID(lnum, i, 1)), 'name')
+			if synid ==# 'Comment' || synid ==# 'Constant'
+				continue
+			elseif index(['{', '[', '('], s) != -1
+				no_match += 1
+			else
+				no_match -= 1
+			endif
+		endwhile
 		return no_match
 	enddef
 
