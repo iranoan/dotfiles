@@ -123,7 +123,7 @@ export def GrepComp(ArgLead: string, CmdLine: string, CursorPos: number): list<s
 			map(ls, (key, val) => substitute(val, home, '\~', ''))
 			# map(ls, 'substitute(v:val, "' .. home .. '", "~", "")')
 		endif
-		return ls
+		return ls->sort('i')
 	enddef
 	def SplitArg(s: string): list<string> # 引数をリストに変換
 		var match_s: list<any> = matchstrpos(s, '^\(\(''[^'']\+''\|"\(\"\|[^"]\)\+"\)\|''\\''''\|''''\|""\|\\\\\|\\ \|[^ ]\)\+\s*', 0)
@@ -161,17 +161,17 @@ export def GrepComp(ArgLead: string, CmdLine: string, CursorPos: number): list<s
 		->substitute('^Grep\s\+', '', '')) # コマンドラインのカーソルまでの引数
 	var i: number
 	var opt: list<string> = [
-		'-E', '--extended-regexp',       '-m',  '--max-count=',
-		'-F', '--fixed-strings',         '-o', '--only-matching',
-		'-G', '--basic-regexp',          '-r', '--recursive',
-		'-L', '--files-without-match',   '-s', '--no-messages',
-		'-P', '--perl-regexp',           '-v', '--invert-match',
-		'-R', '--dereference-recursive', '-w', '--word-regexp',
-		'-T', '--initial-tab',           '-x', '--line-regexp',
-		'-e', '--regexp=',               '-A', '--after-context=',
-		'-f', '--file=',                 '-B', '--before-context=',
-		'-i', '--ignore-case',           '-C', '--context=',
-		'-l', '--files-with-matches',    '--include='
+		'-A', '--after-context=',     '-B',         '--before-context=',
+		'-C', '--context=',           '-E',         '--extended-regexp',
+		'-e', '--regexp=',            '-f',         '--file=',
+		'-F', '--fixed-strings',      '-G',         '--basic-regexp',
+		'-i', '--ignore-case',        '--include=',
+		'-l', '--files-with-matches', '-L',         '--files-without-match',
+		'-m', '--max-count=',         '-o',         '--only-matching',
+		'-P', '--perl-regexp',        '-R',         '--dereference-recursive',
+		'-r', '--recursive',          '-s',         '--no-messages',
+		'-T', '--initial-tab',        '-v',         '--invert-match',
+		'-w', '--word-regexp',        '-x',         '--line-regexp',
 	]
 	var opt_pair: dict<string> = {
 		'-E': '--extended-regexp',       '--extended-regexp':       '-E',

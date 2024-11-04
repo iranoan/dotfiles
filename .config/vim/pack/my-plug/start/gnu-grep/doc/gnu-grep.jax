@@ -79,28 +79,28 @@ License: GPL Ver.3.
                                                                *gnu-grep-snippet*
 補完~
 
-	* -E, --extended-regexp
-	* -F, --fixed-strings
-	* -G, --basic-regexp
-	* -L, --files-without-match
-	* -P, --perl-regexp
-	* -R, --dereference-recursive
-	* -T, --initial-tab
-	* -e, --regexp=
-	* -f, --file=
-	* -i, --ignore-case
-	* -l, --files-with-matches
-	* -m,  --max-count=
-	* -o, --only-matching
-	* -r, --recursive
-	* -s, --no-messages
-	* -v, --invert-match
-	* -w, --word-regexp
-	* -x, --line-regexp
 	* -A, --after-context=
 	* -B, --before-context=
 	* -C, --context=
+	* -E, --extended-regexp
+	* -e, --regexp=
+	* -f, --file=
+	* -F, --fixed-strings
+	* -G, --basic-regexp
+	* -i, --ignore-case
 	* --include=
+	* -l, --files-with-matches
+	* -L, --files-without-match
+	* -m,  --max-count=
+	* -o, --only-matching
+	* -P, --perl-regexp
+	* -R, --dereference-recursive
+	* -r, --recursive
+	* -s, --no-messages
+	* -T, --initial-tab
+	* -v, --invert-match
+	* -w, --word-regexp
+	* -x, --line-regexp
 	を補完候補として表示する
 
 	この内、次のオプションは次の引数ではファイル・ディレクトリ名の補完もできる
