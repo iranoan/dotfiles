@@ -62,7 +62,7 @@ function set_ale#main()
 	" マッピング
 	nnoremap <silent>[a        <Plug>(ale_previous)
 	nnoremap <silent>]a        <Plug>(ale_next)
-	nnoremap <silent><leader>p <Cmd>call set_ale#open_eror_ls()<CR>
+	nnoremap <silent><leader>p <Cmd>call <SID>OpenErorLs()<CR>
 	augroup ALE_ON
 		autocmd!
 		autocmd BufWinEnter * call set_ale#on()
@@ -79,7 +79,7 @@ def set_ale#on(): void
 	return
 enddef
 
-def set_ale#open_eror_ls(): void
+def s:OpenErorLs(): void
 	var org_win = bufwinid(bufnr())
 	botright lwindow 5
 	win_gotoid(org_win)

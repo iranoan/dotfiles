@@ -147,8 +147,8 @@ def s:init_fern(): void
 	nnoremap <expr><buffer>o         set_fern#open(1)
 	nnoremap <buffer>r               <Plug>(fern-action-rename)
 	nnoremap <buffer>y               <Plug>(fern-action-yank)
-	nnoremap <buffer>x               <Cmd>call set_fern#open_system()<CR>
-	nnoremap <buffer><leader>x       <Cmd>call set_fern#open_system()<CR>
+	nnoremap <buffer>x               <Cmd>call <SID>OpenSystem()<CR>
+	nnoremap <buffer><leader>x       <Cmd>call <SID>OpenSystem()<CR>
 	nnoremap <buffer>D               <Plug>(fern-action-clipboard-move)
 	nnoremap <buffer>Y               <Plug>(fern-action-clipboard-copy)
 	nnoremap <buffer>P               <Plug>(fern-action-clipboard-paste)
@@ -229,7 +229,7 @@ def set_fern#open(cd: number): string
 	endif
 enddef
 
-def set_fern#open_system(): void # <Plug>(fern-action-open:system) はアプリを閉じるまで Vim が操作不能になる
+def s:OpenSystem(): void # <Plug>(fern-action-open:system) はアプリを閉じるまで Vim が操作不能になる
 	system('xdg-open ' .. fern#helper#new().sync.get_cursor_node()._path .. ' &')
 enddef
 
