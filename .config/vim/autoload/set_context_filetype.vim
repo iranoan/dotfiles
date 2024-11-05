@@ -135,4 +135,8 @@ function s:set_precious() abort
 				\ 	'setfiletype': 0
 				\ },
 				\}
+	augroup VimPrecious
+	autocmd!
+		autocmd User PreciousFileType :if &diff && &foldmethod !=# 'diff' | setlocal foldmethod=diff | end
+	augroup END
 endfunction
