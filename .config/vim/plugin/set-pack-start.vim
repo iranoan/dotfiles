@@ -218,3 +218,6 @@ g:pairquote = {
 # 		| autocmd! loadPackManage
 # 		| augroup! loadPackManage
 # augroup END
+
+# grep で幾つかのオプションをデフォルトで付けたり、補完を可能にする $MYVIMDIR/pack/my-plug/start/gnu-grep/ {{{1
+g:gnu_grep = {'exclude-dir': '{.git,.cache,.thumbnail,cache,thumbnail,undo}'}

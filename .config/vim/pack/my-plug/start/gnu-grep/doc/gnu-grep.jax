@@ -14,7 +14,6 @@ License: GPL Ver.3.
 	* 使用方法                                             |gnu-grep-use|
 		- 必ず付けるオプション                               |gnu-grep-option|
 		- 補完                                               |gnu-grep-snippet|
-		- 関数                                               |gnu-grep-function|
 
 
 ==============================================================================
@@ -55,8 +54,10 @@ License: GPL Ver.3.
 	* 次の組み合わせは -m (--max-count=)1 に置き換える場合が有る
 		+ -l (--files-with-matches) が有り -v (--invert-match) のない時
 		+ -L (--files-without-match) と -v (--invert-match) の両方が有る時
-	* -L (--files-without-match) の結果にも行番号を付けて出力 *gnu_grep#SetQfTitle()*
-	* $MYVIMDIR/after/ftplugin/qf.vim 等で >
+	* -L (--files-without-match) の結果にも行番号を付けて出力
+	* $VIMRC 等で                                           *gnu_grep#SetQfTitle()*  >
+			set grepprg=/usr/bin/grep\ $*\ /dev/null
+<		とした上で $MYVIMDIR/after/ftplugin/qf.vim 等で >
 			call gnu_grep#SetQfTitle()
 <		と記載すると、必ず付けるオプション (|gnu-grep-option|) を |w:quickfix_title| か
 		ら除外する
@@ -68,11 +69,11 @@ License: GPL Ver.3.
 	* -H (--with-filename)
 	* -I (--binary-files=without-match)
 	* --color=never
-	* --exclude-dir=.git
 	* -d (--directories=)skip
 	* -n (--line-number)
 	* -s (--no-messages)
-	* --exclude
+	* --exclude-dir= (|g:gnu_grep| 参照)
+	* --exclude= (|g:gnu_grep| 参照)
 		+ --include を使ってない時に追加し、画像などの代表的なバイナリファイルを除外
 		+ 速度を上げるためでも有る
 
@@ -111,6 +112,19 @@ License: GPL Ver.3.
 	ただし
 		* `` と $() はその対応/開閉をチェックしていないので、上手く補完が働かない
 			ケースが有る
-		* ファイル/ディレクトリ名の補完は空白を含む場合や引用符で囲む場合に未対応
+		* ファイル/ディレクトリ名の補完は空白を含む場合や引用符で囲む場合は未対応
+
+変数~
+
+	g:gnu_grep                                                       *g:gnu_grep*
+	Type: |Dictionary|
+	Default: `{`
+					`'exclude-dir': '{.git,.svn,.cvs,.cache,.thumbnail}',`
+					`'exclude': '{*.asf,*.aux,*.avi,*.bmc,*.bmp,*.cer,*.chm,*.chw,*.class,*.crt,*.cur,*.db,*.db-*,*..db:encryptable,*.dll,*.doc,*.docx,*.dvi,*.emf,*.epub,*.exe,*.fdb_latexmk,*.fls,*.flv,*.gpg,*.hlp,*.hmereg,*.icc,*.icm,*.ico,*.ics,*.jar,*.jp2,*.jpg,*.kbx,*.ltjruby,*.lz4,*.lzh,*.m4a,*.mkv,*.mov,*.mozlz4,*.mp3,*.mp4,*.mpg,*.nav,*.nvram,*.o,*.obj,*.odb,*.odg,*.odp,*.ods,*.odt,*.oll,*.opp,*.out,*.pdf,*.pfa,*.pl3,*.png,*.ppm,*.ppt,*.pptx,*.pyc,*.reg,*.rm,*.rtf,*.snm,*.sqlite,*.sqlite-*,*.sqlite3,*.sqlite3-*,*.swf,*.gz,*.bz2,*.Z,*.lzma,*.xz,*.lz,*.tfm,*.toc,*.ttf,*.vbox,*.vbox-prev,*.vdi,*.vf,*.webm,*.wmf,*.wmv,*.xls,*.xlsm,*.xlsx,.*.sw?,.viminfo,viminfo,a.out,tags,tags-ja}'``
+
+	* --exclude=, --exclude-dir= を辞書で指定する
+	* 次の様に全キーの値を指定していない場合、他のキーの値はデフォルトが使われる >
+			let g:gnu_grep = {'exclude-dir':  '{.git,.cache,.thumbnail,undo,swap}'}
+<	* どのキーの値も空にすると上手く動作しない
 
 vim:tw=78:ts=2:ft=help:norl:noet:fen:
