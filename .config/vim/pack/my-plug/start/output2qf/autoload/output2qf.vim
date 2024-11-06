@@ -60,18 +60,14 @@ export def Vim(): void # Vim script のエラー内容を Quickfix に取り込�
 			var offset: string       # 呼び出し元の行番号
 
 			def GetFuncInfo(O: string, n: string, t: string): dict<any>
-				function VerboseFunc(s) " {53} といった辞書関数だと def 関数内で処理できない
-					try
-						return execute('verbose function ' .. a:s)->split("[\n\r]")[1]
-					catch /^Vim\%((\a\+)\)\=:E123:/
-						return ''
-					endtry
-				endfunction
-
 				var f = (O =~# '^\d\+$') ? '{' .. O .. '}' : O # 辞書/ラムダ関数の数字は {} で囲む
 				var fname: string # ファイル名
 
-				fname = VerboseFunc(f)
+				try
+					fname = execute('legacy verbose function ' .. f)->split("[\n\r]")[1] # {53} といった辞書関数だと vim9script で処理できない
+				catch /^Vim\%((\a\+)\)\=:E123:/
+					fname = ''
+				endtry
 				if fname ==# '' # 未定義の関数
 					return {
 							filename: filename,
