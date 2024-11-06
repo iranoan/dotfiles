@@ -43,6 +43,14 @@
 					}
 				]
 			}
+		},
+		{
+			"files": [".mozilla/firefox/*/chrome/userContent.css", ".mozilla/firefox/*/chrome/userChrome.css"],
+			"rules": {
+				"selector-class-pattern": "^[A-Za-z0-9_-]+$",
+				"selector-id-pattern": "^[A-Za-z0-9_-]+$",
+				"at-rule-no-vendor-prefix": false
+			}
 		}
 	]
 }
