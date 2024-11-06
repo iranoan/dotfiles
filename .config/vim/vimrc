@@ -149,12 +149,10 @@ if has('unix') # ノーマル・モードになれば日本語 OFF にするた�
 	# # }}}
 	augroup IME
 		autocmd!
-		autocmd VimEnter,InsertLeave,CmdwinLeave,CmdlineLeave * system("fcitx5-remote -c")
 		autocmd FocusGained * if mode(1) !~# "^[iR]" | system("fcitx5-remote -c") | endif
-		autocmd ModeChanged R*:n*                      system("fcitx5-remote -c")
-		# ↑R (置換モード) ReplaceLeave は無い
-		# ModeChanged *:n* に纏められれば良いが、inoremap <expr><buffer><S-Enter>   pumvisible#Insert('<li>') でも変わってしまう
-		# (r{char} に対応する他の方法がわからない
+		autocmd ModeChanged *:n,*:ni*                  system("fcitx5-remote -c")
+		# ModeChanged *:n* に纏めると inoremap <expr><S-Enter> pumvisible#Insert('<li>') でも変わる
+		# ↓ (r{char} は *:n* でもダメなので
 		autocmd TextChanged *                          system("fcitx5-remote -c")
 	augroup END
 else
