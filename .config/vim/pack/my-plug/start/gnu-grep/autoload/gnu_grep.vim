@@ -7,6 +7,7 @@ export def SetQfTitle(): void
 	var win_id: number
 	var exclude_dir: string = '{.git,.svn,.cvs,.cache,.thumbnail}'
 	var exclude: string = '{*.asf,*.aux,*.avi,*.bmc,*.bmp,*.cer,*.chm,*.chw,*.class,*.crt,*.cur,*.db,*.db-*,*..db:encryptable,*.dll,*.doc,*.docx,*.dvi,*.emf,*.epub,*.exe,*.fdb_latexmk,*.fls,*.flv,*.gpg,*.hlp,*.hmereg,*.icc,*.icm,*.ico,*.ics,*.jar,*.jp2,*.jpg,*.kbx,*.ltjruby,*.lz4,*.lzh,*.m4a,*.mkv,*.mov,*.mozlz4,*.mp3,*.mp4,*.mpg,*.nav,*.nvram,*.o,*.obj,*.odb,*.odg,*.odp,*.ods,*.odt,*.oll,*.opp,*.out,*.pdf,*.pfa,*.pl3,*.png,*.ppm,*.ppt,*.pptx,*.pyc,*.reg,*.rm,*.rtf,*.snm,*.sqlite,*.sqlite-*,*.sqlite3,*.sqlite3-*,*.swf,*.gz,*.bz2,*.Z,*.lzma,*.xz,*.lz,*.tfm,*.toc,*.ttf,*.vbox,*.vbox-prev,*.vdi,*.vf,*.webm,*.wmf,*.wmv,*.xls,*.xlsm,*.xlsx,.*.sw?,.viminfo,viminfo,a.out,tags,tags-ja}'
+	var grepprg: string = split(&grepprg)[0]
 	exclude_dir = get(g:, 'gnu_grep', {'exclude-dir': exclude_dir})->get('exclude-dir', exclude_dir)->escape('.*$~[]')
 	if exclude_dir !=# ''
 		exclude_dir = '--exclude-dir=' .. exclude_dir
@@ -22,16 +23,16 @@ export def SetQfTitle(): void
 		if getbufvar(i.bufnr, '&filetype') ==# 'qf'
 			win_id = bufwinid(i.bufnr)
 			title = getwinvar(win_id, 'quickfix_title')
-			if title =~# '^:[lc]\(add\|get\)\?expr system(''/usr/bin/grep -nHsI --color=never -d skip ' .. exclude_dir
-				title = substitute(title, '^:[lc]\(add\|get\)\?expr system(''/usr/bin/grep -nHsI --color=never -d skip '
+			if title =~# '^:[lc]\(add\|get\)\?expr system(''' .. grepprg .. ' -nHsI --color=never -d skip ' .. exclude_dir
+				title = substitute(title, '^:[lc]\(add\|get\)\?expr system(''' .. grepprg .. ' -nHsI --color=never -d skip '
 								            .. exclude_dir
 								            .. exclude
 								            .. '\(.*\) \+/dev/null'')->substitute(''\\ze\\n'', '':1: '', ''g'')$', 'grep \3', '')
 								->substitute("''", "'", 'g')
 								->substitute('%', '%%', 'g')
 				setwinvar(win_id, 'quickfix_title', ' ' .. title)
-			elseif title =~# '^:/usr/bin/grep -nHsI --color=never -d skip ' .. exclude_dir
-				title = substitute(title, '^:/usr/bin/grep -nHsI --color=never -d skip '
+			elseif title =~# '^:' .. grepprg .. ' -nHsI --color=never -d skip ' .. exclude_dir
+				title = substitute(title, '^:' .. grepprg .. ' -nHsI --color=never -d skip '
 								            .. exclude_dir
 								            .. exclude .. '\(.*\) \+/dev/null$', 'grep \2', '')
 								->substitute('%', '%%', 'g')
@@ -61,7 +62,7 @@ export def Grep(kind: bool, add: bool, bang: string, ...args: list<string>): voi
 			endif
 			cmd = 'lgrep'
 		endif
-		execute exe_cmd .. ' system(''/usr/bin/grep' .. arg .. ' /dev/null'')->substitute(''\ze\n'', '':1: '', ''g'')'
+		execute exe_cmd .. ' system(''' .. split(&grepprg)[0] .. arg .. ' /dev/null'')->substitute(''\ze\n'', '':1: '', ''g'')'
 		var qf_cmd: list<string> = execute('autocmd QuickFixCmdPost ' .. cmd)->split('\n')
 		if len(qf_cmd) > 2
 			execute qf_cmd[2]->substitute('["#].*', '', '')->split('\s\+')[1 : ]->join()

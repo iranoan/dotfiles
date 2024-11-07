@@ -34,7 +34,7 @@ License: GPL Ver.3.
 - GNU grep
 	|grepprg| に GNU grep を設定する
 	例: >
-	set grepprg=/usr/bin/grep\ $*\ /dev/null
+	set grepprg=grep\ $*\ /dev/null
 <
 ==============================================================================
                                                                   *gnu-grep-use*
