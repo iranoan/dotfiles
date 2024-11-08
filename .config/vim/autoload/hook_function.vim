@@ -1,5 +1,6 @@
 scriptencoding utf-8
 " スクリプト・ローカルな関数を置き換える
+" 元ネタ https://thinca.hatenablog.com/entry/20111228/1325077104
 
 function hook_function#main(from_f, to_f, func)
 	" from_f:   置き換え元の関数が書かれたファイル・パス
