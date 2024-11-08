@@ -574,26 +574,8 @@ nmap cs  <Cmd>call set_surround#main('Csurround') <bar> delfunction set_surround
 nmap ds  <Cmd>call set_surround#main('Dsurround') <bar> delfunction set_surround#main<CR>
 # <Shift> を押すのが面倒
 nmap ys4 ys$
-for [k, v] in items({ 4: '$', 's': 's', 'S': 'S' })
-	for [n, q] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '[': '[', ']': ']', '{': '{', '}': '}'})
-		if 'ys' .. k .. n !=# 'ys' .. v .. q
-			execute 'nmap ys' .. k .. n .. ' ys' .. v .. q
-		endif
-	endfor
-endfor
-for k in ['ysaw', 'ysiw', 'ds']
-	for [n, q] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>'})
-		execute 'nmap ' .. k .. n .. ' ' .. k .. q
-	endfor
-endfor
-for k in ['ysa', 'ysi']
-	for [n1, q1] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '"': '"', "'": "'", '(': '(', ')': ')', '`': '`', '<': '<', '>': '>', '[': '[', ']': ']', '{': '{', '}': '}' })
-		for [n2, q2] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '"': '"', "'": "'", '(': '(', ')': ')', '`': '`', '<': '<', '>': '>', '[': '[', ']': ']', '{': '{', '}': '}' })
-			if k .. n1 .. n2 !=# k .. q1 .. q2
-				execute 'nmap ' .. k .. n1 .. n2 .. ' ' .. k .. q1 .. q2
-			endif
-		endfor
-	endfor
+for [n, q] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>'})
+	execute 'nmap ds' .. n .. ' ds' .. q
 endfor
 for [n1, q1] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '"': '"', "'": "'", '(': '(', ')': ')', '`': '`', '<': '<', '>': '>', '[': '[', ']': ']', '{': '{', '}': '}' })
 	for [n2, q2] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '"': '"', "'": "'", '(': '(', ')': ')', '`': '`', '<': '<', '>': '>', '[': '[', ']': ']', '{': '{', '}': '}' })
@@ -601,9 +583,6 @@ for [n1, q1] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.':
 			execute 'nmap cs' .. n1 .. n2 .. ' cs' .. q1 .. q2
 		endif
 	endfor
-endfor
-for [n, q] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>' })
-	execute 'xmap s' .. n .. ' s' .. q
 endfor
 
 # getmail syntax https://github.com/vim-scripts/getmail.vim {{{1
