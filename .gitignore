@@ -9,6 +9,10 @@
 !/bin/
 !/textlint/
 
+# 個人的なファイル
+/.config/vim/ftplugin/notmuch-edit.vim
+/.config/vim/autoload/set_notmuchpy.vim
+
 # スワップ・ファイルを再度除外
 /.*.sw?
 /.sw?
@@ -27,7 +31,6 @@
 /.config/vim/pack/my-plug/opt/notmuch-py-vim/
 /.config/vim/pack/my-plug/opt/docx2xhtml/
 /.config/vim/pack/my-plug/start/pair_bracket/
-/.config/vim/autoload/set_notmuchpy.vim
 /.config/vim/print/
 /.config/vim/spell/
 /.config/vim/undo/
