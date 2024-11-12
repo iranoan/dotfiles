@@ -15,7 +15,7 @@
 f=$( echo "$@"| sed -e "s>^~>$HOME>" -e "s/'/\\\'/g" -e 's/"/\\"/g' | xargs -I{} readlink -f "{}")
 mime=$( mimetype --brief "$f" ) # file --dereference --brief --mime-type だと CSV の判定で間違えるケースが有る
 
-sxiv_sixel(){ # 環境によって nsxiv と Sixel を使い分ける
+sxiv_sixel(){ # 環境によって sxiv と Sixel を使い分ける
 	# if [ "$2" = "wezterm" ] || [ "$2" = "wezterm-gui" ] ; then # fzf が 未対応のようで imgcat が使えない
 	# 	if ! ps xo pid,comm | grep -E "^ *$( pgrep -P "$1" ) " | grep -q 'tmux: client' ; then
 	# 		wezterm imgcat "$3"
@@ -33,15 +33,12 @@ sxiv_sixel(){ # 環境によって nsxiv と Sixel を使い分ける
 			*)                                sixel=0 ;;
 		esac
 	fi
-	win_id=$( wmctrl -lGp |
-		grep -E '^0x[0-9a-f]+' |
-		sed -E 's/(0x[0-9a-f]+) +-?[0-9]+ ([0-9]+) +-?[0-9]+ +-?[0-9]+ +([0-9]+) +([0-9]+) (.+)/\1\t\2\t\3\t\4\t\5/' |
-		grep -Ei "^0x[0-9a-f]+[[:space:]]$1([[:space:]][0-9]+){2}" )
+	win_id=$( wmctrl -lGp | grep -E "^0x[0-9a-f]+ +-?[0-9]+ +$1 " )
 	if [ -n "$win_id" ]; then
-		width=$(( $( echo "$win_id" | cut -f3 ) / 2 ))
+		width=$(( $( echo "$win_id" | awk '{print $6}' ) / 2 ))
 		d_height=$(( 14 * 2 * 2 * 72 / 96 )) # フォント・サイズ 14pt を基準としたオフセット
-		height=$(($( echo "$win_id" | cut -f4 ) - d_height))
-		win_id=$( echo "$win_id" | cut -f1 )
+		height=$(($( echo "$win_id" | awk '{print $7}') - d_height))
+		win_id=$( echo "$win_id" | awk '{print $1}' )
 		if [ -n "$sxiv" ]; then
 			$sxiv -e "$win_id" -g "${width}x${height}+${width}+$d_height" --no-bar --scale-mode f --private "$3" & # & をなくしてもプロセスが残る点は変わらない+絞り込み入力側にフォーカスが戻らないことが増える印象
 			return 1
