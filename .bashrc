@@ -217,8 +217,7 @@ ranger() { # ranger でファイルを less で開いた時にすぐ終わって
 
 which(){ # 素の which /usr/bin/which ではリンクを辿らず、関数、alias の違いが不明
 	for f in "$@"; do
-		ctype=$( type -t "$f" )
-		case "$ctype" in
+		case $( type -t "$f" ) in
 			alias)
 				cmd=$( export LANGUAGE=C ; type "$f" | sed -E 's/^[^ ]+ is aliased to ['\''`"]?([^ ]*)( .+)?'\''/\1/g' )
 				if [ "$cmd" == 'command' ]; then

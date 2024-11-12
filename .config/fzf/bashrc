@@ -11,21 +11,11 @@ source "$HOME/.config/fzf/key-bindings.bash"
 
 alias fd='fdfind --hidden --follow --no-ignore --ignore-file ~/.config/fd/ignore '
 
-f(){
+f(){ # ファイル検索して fzf (本当は fzf-tmux を使いたいが、それだと sixel 非対応)
 	if command -v nsxiv > /dev/null ; then
 		sxiv=nsxiv
 	elif command -v sxiv > /dev/null ; then
 		sxiv=sxiv
-	else
-		case "$( ps xo pid,comm | awk -F ' ' '/^\s*\<'$PPID'\>/{ print $2 }' )" in
-			sh|ksh|ash|dash|bash|csh|tcsh|zsh|fish) echo 'require nsxiv or sxiv' ;;
-			*)
-				if command -v zenity > /dev/null ; then
-					zenity --warning --title="$sxiv" --text="require nsxiv or sxiv" 2>/dev/null
-				fi
-				;;
-		esac
-		exit 1
 	fi
 	sxiv_ls="^($( cat <<-_EOF_|
 		DUMMY
