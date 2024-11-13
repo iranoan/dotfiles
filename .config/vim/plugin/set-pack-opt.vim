@@ -192,7 +192,8 @@ augroup END
 # ディレクトリを再帰的に diff https://github.com/will133/vim-dirdiff {{{1
 augroup loadDirDiff
 	autocmd!
-	autocmd CmdUndefined DirDiff packadd vim-dirdiff
+	autocmd CmdUndefined DirDiff g:DirDiffForceLang = 'C LC_MESSAGES=C'
+	| packadd vim-dirdiff
 	| autocmd! loadDirDiff
 	| augroup! loadDirDiff
 augroup END
