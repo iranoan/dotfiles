@@ -129,7 +129,12 @@ if !exists('g:vim_plugin')
 					Help('' .. matchstr(keyword, '[a-z0-9_]\+$'))
 				elseif keyword =~# '^&' || keyword =~# '=$' # オプション
 					Help('''' .. matchstr(keyword, '[a-z0-9_]\+'))
-				else # 後に(が付く場合も含めて上記以外は syntax を考慮する→関数以外は option-list とそれ以外を区別すれば良い
+				elseif keyword =~# '($' # 関数
+					# syntax だけで行おうとすると、
+					# inoremap <expr><C-P> pumvisible() ? '<C-P>' : '<C-R>"'
+					# といったマップ中の関数はうまくいかない
+					Help('' .. keyword)
+				else # 上記以外は syntax を考慮する→関数以外は option-list とそれ以外を区別すれば良い
 					name = synIDattr(synID(line('.'), col('.'), 1), 'name')
 					if name ==# 'vimOption'
 						Help('''' .. keyword)
