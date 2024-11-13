@@ -1,7 +1,8 @@
 vim9script
 scriptencoding utf-8
 # ポップアップしているときの入力
-# どうやら1つ目の \n が確定の扱いになる
+# 1つ目の \n が確定の扱いになる
+# completeopt に noinsert を含まない時は、おそらく意図しない動きになる
 
 export def Insert(str: string): string # str 入力前に改行
 	if pumvisible()

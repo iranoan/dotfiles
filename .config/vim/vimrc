@@ -250,7 +250,7 @@ augroup END
 # 	s:ZenkakuSpace()
 # endif
 # 編集関係 {{{1
-set completeopt=menuone,noinsert,popup,noinsert,noselect # 補完の挙動
+set completeopt=menuone,noinsert,popup,noselect # 補完の挙動
 set delcombine                                 # 結合文字を別々に削除する
 # set maxcombine=2                               # 結合文字の最大個数
 set nrformats=bin,hex,alpha,blank              # アルファベットでもインクリメント、ディクリメント←8進数,octalは除外、-の前が空白でない場合はハイフン扱いで負数扱いにしない
@@ -305,7 +305,7 @@ augroup VIMRC
 	autocmd BufReadPost * if &modifiable && search('[^\t -~]', 'cnw') == 0 | set fileencoding=utf-8 | endif # ASCII のみの時も utf-8 を使う
 	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,vimgrepadd topleft copen # cwindow を使うと、make で使用されるプログラムによってカーソル位置がずれる
 	autocmd QuickfixCmdPost lmake,lgrep,lgrepadd,lvimgrep,lvimgrepadd topleft lopen
-	autocmd BufEnter,BufFilePost,BufNewFile,BufRead * change_directory#Lcd()
+	autocmd BufEnter,BufFilePost,BufNewFile,BufRead * vimrc#Lcd()
 	autocmd BufWritePre * if &modified == true && &filetype != 'markdown' | pos = getpos('.') | :%s/\(^--\|^>.*\)\@<![ \u000B\t\r　]\+$//e | setpos('.', pos) | endif # メール署名の区切りと引用行以外の行末空白を保存時に削除
 	# autocmd TerminalOpen * nnoremap <silent><buffer>q :bwipeout<CR>
 	# ↑ターミナルで効いていないし、fzf を使ったバッファで q で閉じる意図しない動きになってしまう
@@ -319,7 +319,7 @@ augroup VIMRC
 				\ silent if &filetype !~# 'commit' && line("'\"") > 1 && line("'\"") <= line("$") && index(['xxd', 'gitrebase'], &filetype) == -1
 				| 	execute 'normal! g`"'
 				| endif #前回閉じた時のカーソル位置に移動← $VIMRUNTIME/defaults.vim
-	autocmd BufEnter   *     if getftype(expand('%')) ==# 'link' | symbolic_link#Normalize() | endif # シンボリック・リンクは展開
+	autocmd BufEnter   *     if getftype(expand('%')) ==# 'link' | vimrc#Resolve() | endif # シンボリック・リンクは展開
 	autocmd BufEnter   *.sw? bwipeout!           # スワップファイルは閉じる
 	# tags ファイルは UTF-8 強制 (開く前に utf-8 に固定し開いた後元に戻す)
 	autocmd BufReadPre tags  set fileencodings=utf-8
@@ -387,7 +387,7 @@ set termwinscroll=30000                        # ターミナルで遡れる行�
 # 設定の切り替え {{{2
 nnoremap <silent><leader>cb <Cmd>setlocal linebreak! linebreak?<CR>
 nnoremap <silent><leader>cc <Cmd>set showcmd! showcmd?<CR>
-nnoremap <silent><leader>cd <Cmd>call change_directory#Lcd() <Bar>pwd<CR>
+nnoremap <silent><leader>cd <Cmd>call vimrc#Lcd() <Bar>pwd<CR>
 nnoremap <silent><leader>cm <Cmd>set more! more?<CR>
 nnoremap <silent><leader>cs <Cmd>let &l:scrolloff = ( &scrolloff ? 0 : ( &lines > 20 ? &lines / 4 : 5 ) ) <Bar> setlocal scrolloff?<CR>
 nnoremap <silent><leader>ct <Cmd>let &showtabline = ( &showtabline ? 0 : 2 )<CR>
@@ -433,8 +433,8 @@ nnoremap <silent>[C         <Cmd>cpfile<CR>
 nnoremap <silent>]C         <Cmd>cnfile<CR>
 nnoremap <silent>[E         g;
 nnoremap <silent>]E         g,
-nnoremap <silent>[e         <Cmd>call move_changed#Main(0)<CR>
-nnoremap <silent>]e         <Cmd>call move_changed#Main(1)<CR>
+nnoremap <silent>[e         <Cmd>call vimrc#MoveChanged(0)<CR>
+nnoremap <silent>]e         <Cmd>call vimrc#MoveChanged(1)<CR>
 nnoremap <silent>[w         <C-W>W
 nnoremap <silent>]w         <C-W>w
 nnoremap <silent>[T         <Cmd>tprevious<CR>

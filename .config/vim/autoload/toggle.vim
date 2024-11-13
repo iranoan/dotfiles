@@ -1,8 +1,6 @@
 vim9script
-# 設定を ON/OFF トグルの関数群
+# GUI 環境の設定を ON/OFF トグルの関数群
 scriptencoding utf-8
-
-var breakat: string = &breakat == '' ? ' ^I!@*-+;:,./?' : &breakat
 
 def GuiOptionM(): void
 	if &guioptions =~# 'M'

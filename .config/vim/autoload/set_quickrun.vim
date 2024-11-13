@@ -90,7 +90,7 @@ endfunction
 
 def s:GetTeXfile(f: string): string
 	# TeX では \documentclass のないファイルはタイプセットしても意味がない
-	# \input によって読み込まれるファイルで、ファイルのカレント・ディレクトリにも \documentclass の書かれたファイルの場合、change_directory#Lcd() によって機械的にバッファのカレント・ディレクトリを親ディレクトリにしている
+	# \input によって読み込まれるファイルで、ファイルのカレント・ディレクトリにも \documentclass の書かれたファイルの場合、vimrc#Lcd() によって機械的にバッファのカレント・ディレクトリを親ディレクトリにしている
 	# ↑\input や \includegraphics はあくまで読み込み元ファイルを基準に書く必要がるため
 	# →シェル・スクリプトと組み合わせてタイプセット対象のフルパスを得る
 	# arg f: full path

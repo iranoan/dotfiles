@@ -12,7 +12,7 @@ else
 endif
 # set linespace=-1         # 縦罫線がつながるが問題が出る可能性もあるとの事なので止めておく
 set guioptions-=T guioptions-=m guioptions-=r guioptions-=L guioptions+=k # ツール・バー/メニュー/スクロール・バー表示を OFF、lines, columns を維持
-if $GVIM_ENABLE_WAYLAND !=# '1' # ←winpos 等が効かなくなる (Ubuntu 24.10で改善され無くて描画は乱れないが、変換文字列の色設定が無視される)
+if $GVIM_ENABLE_WAYLAND !=# '1' # ←winpos 等が効かなくなる (Ubuntu 24.10で改善され無くて描画は乱れない)
 	augroup GVIMR
 		autocmd!
 		# 画面左上に表示 (help に有る通り autocmd を使わないと環境によって gvimrc の記載では無効)

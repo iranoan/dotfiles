@@ -1,5 +1,6 @@
 vim9script
 scriptencoding utf-8
+# $MYVIMRC で書かれた/使う関数
 
 export def Lcd(): void # カレントディレクトリをファイルのディレクトリに移動
 	if get(b:, 'lcd_worked', false)
@@ -46,4 +47,47 @@ export def Lcd(): void # カレントディレクトリをファイルのディ�
 		endif
 	endif
 	execute 'lcd ' .. c_path
+enddef
+
+export def Resolve(): void # シンボリック・リンク先を開く
+	var bufname = bufname('%')
+	var pos = getpos('.')
+	var filetype = &filetype
+	var full_path = resolve(expand('%'))
+	enew
+	execute 'bwipeout ' .. bufname .. ' | edit ' .. full_path
+	setpos('.', pos)
+	execute 'setlocal filetype=' .. filetype
+enddef
+
+export def MoveChanged(move_rear: bool): void # カーソルリストの前後に有る変更箇所に移動
+	# g;, g, は時間軸で移動するが、これは位置を軸として移動
+	var BigSmall = (a, b) => ( a.lnum == b.lnum ?
+		( a.col > b.col ? 1 : ( a.col < b.col ? -1 : 0) )
+		: (a.lnum > b.lnum ? 1 : -1 ) )
+
+	var change: list<dict<number>> = getchangelist()[0]
+	var pos: dict<number>
+	var l: number = line('.')
+
+	if move_rear
+		change = filter(change, (idx, val) => ( val.lnum == l && val.col > col('.') && val.col < col('$') - 1 )
+																			 || ( val.lnum > l && val.lnum <= getbufinfo(bufnr())[0].linecount)
+		)
+	else
+		change = filter(change, (idx, val) => ( val.lnum == l && val.col < col('.') - 1 )
+																			 ||   val.lnum < l
+		)
+	endif
+	if len(change) == 0
+		echo 'No Change in ' .. (move_rear ? 'rear' : 'front')
+		return
+	endif
+	if move_rear
+		pos = sort(change, BigSmall)[0]
+	else
+		pos = sort(change, BigSmall)[-1]
+	endif
+	setpos('.', [bufnr(), pos.lnum, pos.col, 0])
+	echo ''
 enddef
