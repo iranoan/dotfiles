@@ -363,7 +363,6 @@ set grepprg=/usr/bin/grep\ $*\ /dev/null       # --exclude は --include を使�
 # 	* 再帰的に行うには -r, --recursive オプション
 # 	* コマンドで分岐処理を入れているので --include=*.txt 等とすれば、制限できる
 # set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m,%f  # grep の出力は -L/--files-without-match, -l/--files-with-matches を付けた時の為ファイル名のみを出力追加したいが、binary file matches などの警告もヒットのように扱ってしまう
-set keywordprg=:help
 $LESS = substitute($LESS, '['' " =]\zs-\(-quit-if-one-screen\|F\)\>', '', 'g') # less 環境変数置き換え
 # ↑--quit-if-one-screen, -F が残っていると、プラグインのプレビューに使われていると、内容が画面に収まる場合に直ちに閉じられる (alias は外部フィルタ無効+選択状態でうまく処理してくれない)
 # キー割り当てを除いたその他 {{{1

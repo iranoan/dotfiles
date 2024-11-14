@@ -8,7 +8,7 @@ endif
 
 setlocal formatoptions-=c textwidth=0 iskeyword-=# iskeyword+=? # デフォルト設定から好みに変更
 # ? は is?, isnot? の syntax highlight を効かせるため
-setlocal keywordprg=:VimHelp
+# setlocal keywordprg=:VimHelp
 
 if exists('b:undo_ftplugin')
 	b:undo_ftplugin ..= ' | call undo_ftplugin#Vim()'

@@ -78,8 +78,7 @@ if !exists('g:vim_plugin')
 		endif
 	enddef
 
-	def g:Help(tmp: string): void # keywordprg 専用で tmp は無視される
-		# keywordprg=:call\ g:Help() ではカーソル一の単語が引数扱いで無駄なエラーになるため、コマンドにして使う
+	def g:VimHelp(): void
 		def Help(s: string): void
 			try
 				execute('help ' .. s)
@@ -155,11 +154,10 @@ if !exists('g:vim_plugin')
 		autocmd!
 		autocmd CursorMoved,InsertLeave * if &filetype ==# 'vim' | call g:ChangeVim9VimL() | endif
 	augroup END
-
-	command -nargs=1 -complete=help VimHelp call g:Help(<q-args>)
 endif
 
 # ファイルタイプ別のローカル設定 {{{1
 # b:isVim9script = getline(1) =~# '^\s*vim9script\>'
 g:ChangeVim9VimL()
 setlocal spelloptions=camel
+nnoremap <silent><buffer>K <ScriptCmd>call g:VimHelp()<CR>
