@@ -20,7 +20,7 @@ g:eblook_dictlist1 = [
 				title: 'ジーニアス英和大辞典',
 			}
 			]
-g:blook_dictlist2 = [
+g:eblook_dictlist2 = [
 			{
 				book: expand('~/EPWING/Gakken/'),
 				name: 'kanjigen',
@@ -99,7 +99,7 @@ export def SearchWord(): void
 	Search(expand('<cword>'))
 enddef
 
-def SearchVisual(): void
+export def SearchVisual(): void
 	var save_reg: dict<any> = getreginfo('a')
 	silent execute "normal! \<Esc>"
 	silent execute 'normal! `<' .. visualmode() .. '`>"ay'

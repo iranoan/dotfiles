@@ -476,6 +476,8 @@ augroup END
 # EPWING の辞書を呼び出す https://github.com/deton/eblook.vim {{{1
 xnoremap <silent><Leader>eb <Cmd>call set_eblook#SearchVisual()<CR>
 nnoremap <silent><Leader>eb <Cmd>call set_eblook#SearchWord()<CR>
+xnoremap <silent>K          <Cmd>call set_eblook#SearchVisual()<CR>
+nnoremap <silent>K          <Cmd>call set_eblook#SearchWord()<CR>
 
 # Undo をツリー表示で行き来する https://github.com/mbbill/undotree {{{1
 nnoremap <silent><Leader>u <Cmd>UndotreeToggle<CR>
