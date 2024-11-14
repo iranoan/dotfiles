@@ -217,7 +217,7 @@ ranger() { # ranger でファイルを less で開いた時にすぐ終わって
 
 which(){ # 素の which /usr/bin/which ではリンクを辿らず、関数、alias の違いが不明
 	for f in "$@"; do
-		case $( type -t "$f" ) in
+		case "$( type -t "$f" )" in
 			alias)
 				cmd=$( export LANGUAGE=C ; type "$f" | sed -E 's/^[^ ]+ is aliased to ['\''`"]?([^ ]*)( .+)?'\''/\1/g' )
 				if [ "$cmd" == 'command' ]; then
@@ -236,7 +236,10 @@ which(){ # 素の which /usr/bin/which ではリンクを辿らず、関数、al
 				echo "builtin $f"
 				;;
 			file)
-				readlink -f "$( command which "$f" )"
+				case "$( command which "$f" )" in
+					/snap/bin/*) command which "$f" ;;
+					*) readlink -f "$( command which "$f" )" ;;
+				esac
 				;;
 			*)
 				command which "$f"
