@@ -1,7 +1,4 @@
-vim9script
-# Voom に未対応は Vista を使う様に分岐
-
-export def Main(): void
+def set_vista_voom#Switch(): void # Voom に未対応は Vista を使う様に分岐
 	var voom_support_list: list<string> = glob('$MYVIMDIR' .. '/pack/*/opt/VOoM/autoload/voom/voom_vimplugin*/voom_mode_*.py', true, true)
 	var s: number = matchend(voom_support_list[0], '.\+/voom_mode_')
 	map(voom_support_list, (_, v) => v[s : -4 ])
@@ -30,3 +27,44 @@ export def Main(): void
 	endif
 	execute 'setlocal statusline=%#StatusLineRight#[%{&filetype}]\ ' .. name
 enddef
+
+function set_vista_voom#VOom() abort
+	set modelineexpr " ヘルプファイルで使っている
+	let g:voom_tree_placement = 'right'
+	let g:voom_tree_width = 40
+	packadd VOoM
+endfunction
+
+function set_vista_voom#Vista() abort
+	if !pack_manage#IsInstalled('vim-lsp')
+		call set_vimlsp#main()
+		autocmd! loadvimlsp
+		augroup! loadvimlsp
+		delfunction set_vimlsp#main
+	endif
+	" if !pack_manage#IsInstalled('ale') " 通常不要
+	" 	call set_ale#main()
+	" 	autocmd! loadALE
+	" 	augroup! loadALE
+	" 	delfunction set_ale#main
+	" endif
+	packadd vista.vim
+	let g:vista_executive_for = {
+		\ 'c'     : 'vim_lsp',
+		\ 'cpp'   : 'vim_lsp',
+		\ 'php'   : 'vim_lsp',
+		\ 'python': 'vim_lsp',
+		\ 'sh'    : 'vim_lsp',
+		\ 'vim'   : 'ale',
+		\ }
+		let g:vista_fzf_preview = ['right:50%']
+		let g:vista#renderer#enable_icon = 1
+		" let g:vista#renderer#icons = {
+		" 	\   "function": "\uf794",
+		" 	\   "variable": "\uf71b",
+		" 	\  }
+	let g:vista_icon_indent = ['╰─▸ ', '├─▸ ']
+	" let g:vista_finder_alternative_executives=['Voom']
+	" let g:vista_echo_cursor_strategy='floating_win'
+	" let g:vista_fzf_preview = ['right:50%']
+endfunction

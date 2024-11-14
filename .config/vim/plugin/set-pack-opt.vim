@@ -319,22 +319,22 @@ nmap <Leader>ea <Cmd>call set_easy_align#main()<CR>
 augroup loadVista
 	autocmd!
 	autocmd CmdUndefined Vista
-				\ set_vista#main()
+				\ set_vista_voom#Vista()
 				| autocmd! loadVista
 				| augroup! loadVista
-				| delfunction set_vista#main
+				| delfunction set_vista_voom#Vista
 augroup END
 # 次の Voom に未対応は Vista を使う様に分岐関数とキーマップ
-nnoremap <silent><Leader>o :call switch_voom_vista#Main()<CR>
+nnoremap <silent><Leader>o :call set_vista_voom#Switch()<CR>
 
 # アウトライン https://github.com/vim-voom/VOoM {{{1
 augroup loadVOoM
 	autocmd!
 	autocmd CmdUndefined Voom
-				\ set_voom#main()
+				\ set_vista_voom#VOom()
 				| autocmd! loadVOoM
 				| augroup! loadVOoM
-				| delfunction set_voom#main
+				| delfunction set_vista_voom#VOom
 augroup END
 
 # LaTeX fold 折りたたみ https://github.com/matze/vim-tex-fold {{{1
