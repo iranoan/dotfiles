@@ -23,6 +23,9 @@ endif
 set fileformats=unix,dos,mac
 set termencoding=utf-8
 set makeencoding=char                          # 外部コマンドの出力を読むときに使用されるエンコーディングにシステムロケール使用
+if $LANG ==# 'C'                               # LANG=C では全角文字が使えない
+	$LANG = 'ja_JP.UTF-8'
+endif
 # スクリプト・ローカル変数の宣言 {{{1
 var pos: list<number>                          # getpos()
 var fileencodings: string = &fileencodings
@@ -171,11 +174,7 @@ set shortmess+=IWc shortmess-=S                # I 起動時にファイル未�
 set textwidth=0                                # 自動改行させない
 # 対応するカッコ {{{2
 set cpoptions+=MI                              # 対応するカッコで、\によるエスケープを除外+インデントの自動削除なしに
-if $LANG !=# 'C'                               # LANG=C では全角文字が使えない
-	set matchpairs+=<:>,「:」,（:）,『:』,【:】,‘:’,“:” # 対応括弧に<と>のペアやカギカッコを追加
-else
-	set matchpairs+=<:>                          # 対応括弧に<と>のペアを追加←日本語含まず
-endif
+set matchpairs+=<:>,「:」,（:）,『:』,【:】,‘:’,“:” # 対応括弧に<と>のペアやカギカッコを追加
 # タブ、空白、改行の可視化 {{{2
 set list                                       # 通常は空白文字表示↓代わりに表示する記号
 set listchars=tab:»\ ,trail:␣,eol:⏎,extends:»,precedes:«,space:␣,nbsp:%
@@ -337,7 +336,7 @@ if exists('&ambiwidth')                        # □とか○の文字があっ�
 		[0x2B0, 0x2B3, 1], [0x2B7, 0x2B8, 1], [0x2E1, 0x2E3, 1], [0x1D2C, 0x1D61, 1], [0x1D9B, 0x1DBF, 1], [0x2070, 0x2071, 1], [0x2074, 0x2075, 1], [0x207F, 0x207F, 1], [0x2C7D, 0x2C7F, 1], # 上付き文字
 		[0x1D62, 0x1D6A, 1], [0x2080, 0x209C, 1], [0x2C7C, 0x2C7C, 1], # 下付き文字
 		[0x2012, 0x2013, 1],                       # ダッシュ ‒ (数字と同じ幅のFigure dash), – (二分ダッシュ)
-		[0x2018, 0x201F, 1], [0x2032, 0x2037, 1],  # 引用符と分・
+		[0x2032, 0x2037, 1],                       # 分・ (引用符 [0x2018, 0x201F, 1] " 特別が付きにくくなるのでやめる)
 		[0x20A0, 0x20A6, 1], [0x20A7, 0x20A8, 2], [0x20A9, 0x20AE, 1], [0x20AF, 0x20AF, 2], [0x20B0, 0x20C0, 1], # 通貨記号 (2 文字結合以外は半角)
 		[0x2102, 0x22FF, 2],                       # ℃などの文字様記号+ローマ数字 (3 以上は欠けるので全て全角幅に)+数式記号
 		[0x401, 0x401, 1], [0x410, 0x4F9, 1],      # キリル文字 (フォントの関係か上手く半角にならない文字も有る)
