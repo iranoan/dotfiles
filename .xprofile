@@ -40,6 +40,8 @@ elif [ -x /usr/bin/lesspipe ]; then
 	eval "$(SHELL=/bin/sh lesspipe)"
 fi
 
+# flatpak --user override --talk-name=org.fcitx.Fcitx --talk-name=org.freedesktop.portal.Fcitx org.wezfurlong.wezterm
+
 # notmuch で日本語検索が出来るように (指定しないとカタカナ検索が出来ない?)
 export XAPIAN_CJK_NGRAM=1
 # export TMPDIR=~/.local/state/tmp/
