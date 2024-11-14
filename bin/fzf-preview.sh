@@ -17,7 +17,7 @@ mime=$( mimetype --brief "$f" ) # file --dereference --brief --mime-type だと 
 
 sxiv_sixel(){ # 環境によって sxiv と Sixel を使い分ける
 	# if [ "$2" = "wezterm" ] || [ "$2" = "wezterm-gui" ] ; then # fzf が 未対応のようで imgcat が使えない
-	# 	if ! ps xo pid,comm | grep -E "^ *$( pgrep -P "$1" ) " | grep -q 'tmux: client' ; then
+	# 	if ! ps --cols 1000 xo pid,comm | grep -E "^ *$( pgrep -P "$1" ) " | grep -q 'tmux: client' ; then
 	# 		wezterm imgcat "$3"
 	# 		return 1
 	# 	fi
@@ -58,7 +58,7 @@ sxiv_sixel(){ # 環境によって sxiv と Sixel を使い分ける
 
 preview_img(){ # 呼び出し元アプリ名の取得し画像プレビューを呼び出す
 	ppid=$PPID
-	ps_xo=$( ps xo pid,ppid,comm | tail -n +2 )
+	ps_xo=$( ps --cols 1000 xo pid,ppid,comm | tail -n +2 )
 	while true ; do # 呼び出し元の PID, WINID などを取得する
 		pid=$( echo "$ps_xo" | grep -E "^ *$ppid " )
 		app=$( echo "$pid" | awk '{print $3$4}')
@@ -70,7 +70,7 @@ preview_img(){ # 呼び出し元アプリ名の取得し画像プレビューを
 				return $?
 				;;
 			vim|nvim)
-				if ps xo pid,comm,args | grep -E "^ *$pid +n?vim " | grep -qE ' -g\>' ; then # -g オプション付きで起動した Vim→GVim
+				if ps --cols 1000 xo pid,comm,args | grep -E "^ *$pid +n?vim " | grep -qE ' -g\>' ; then # -g オプション付きで起動した Vim→GVim
 					sxiv_sixel "$pid" "$app" "$1"
 					return $?
 				else
@@ -79,6 +79,10 @@ preview_img(){ # 呼び出し元アプリ名の取得し画像プレビューを
 				;;
 			tmux:server)
 				ppid=$( tmux list-clients -F '#{session_activity}:#{client_pid}' | sort | tail -n 1 | cut -d: -f2 )
+				continue
+				;;
+			flatpak-session)
+				ppid=$( ps --cols 1000 xo ppid,args | grep -E '^ *[0-9]+ +flatpak-spawn .+ --env=TERM_PROGRAM=' | awk '{print $1}')
 				continue
 				;;
 			*) continue ;;
