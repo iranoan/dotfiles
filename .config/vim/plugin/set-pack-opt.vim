@@ -552,6 +552,8 @@ for key in ['f', 'F', 't', 'T', 'w', 'W', 'b', 'B', 'e', 'E', 'ge', 'gE', 'j', '
 	execute 'nmap <Leader><Leader>' .. key .. '  <Cmd>call set_easymotion#main(''(easymotion-' .. key .. ')'') <bar> delfunction set_easymotion#main<CR>'
 	execute 'xmap <Leader><Leader>' .. key .. '  <Cmd>call set_easymotion#main(''(easymotion-' .. key .. ')'') <bar> delfunction set_easymotion#main<CR>'
 endfor
+nmap <Leader><Leader>; <Cmd>call set_easymotion#main('(easymotion-next)') <bar> delfunction set_easymotion#main<CR>
+nmap <Leader><Leader>, <Cmd>call set_easymotion#main('(easymotion-prev)') <bar> delfunction set_easymotion#main<CR>
 
 # 各種言語のコメントの追加/削除 gc{motion} https://github.com/tpope/vim-commentary {{{1
 # マッピングは gc{motion}
