@@ -6,7 +6,7 @@
   スクリプト・ローカルな関数を簡単に置き換えるための関数
 * mk\_tabline.vim  
   タブライン設定
-* pumvisible.vim
+* pumvisible.vim  
   \<S-Enter\> 等にキーマップするために補完候補が表示されていても文字列を入力して改行する
 * set\_\*.vim  
   $MYVIMDIR/pack/\*/opt のプラグインごとの設定スクリプト
