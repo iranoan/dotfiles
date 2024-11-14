@@ -28,7 +28,7 @@ if $LANG ==# 'C'                               # LANG=C では全角文字が使
 endif
 # スクリプト・ローカル変数の宣言 {{{1
 var pos: list<number>                          # getpos()
-var fileencodings: string = &fileencodings
+var fileencodings: string = &fileencodings     # tags ファイルの時に一時的に置き換えるので、スクリプト・ローカルな変数に保存しておく
 # 初期化 {{{1
 set guioptions+=M                              #メニュー設定を読み込まない GUI だが vimrc で filetype on, syntax on より前に書く必要がある→:help go-M
 filetype plugin indent on                      # ファイルタイプ別プラグインとインデントを ON
@@ -315,7 +315,7 @@ augroup VIMRC
 	# 			ウィンドウ切り替えで最初に戻ってしまう
 	# 			↓と上手く両立しない
 	autocmd BufReadPost *
-				\ silent if &filetype !~# 'commit' && line("'\"") > 1 && line("'\"") <= line("$") && index(['xxd', 'gitrebase'], &filetype) == -1
+				\ silent if index(['xxd', 'gitrebase', 'commit'], &filetype) == -1 && line("'\"") > 1 && line("'\"") <= line("$")
 				| 	execute 'normal! g`"'
 				| endif #前回閉じた時のカーソル位置に移動← $VIMRUNTIME/defaults.vim
 	autocmd BufEnter   *     if getftype(expand('%')) ==# 'link' | vimrc#Resolve() | endif # シンボリック・リンクは展開
