@@ -1,5 +1,5 @@
 vim9script
-# GUI 環境の設定を ON/OFF トグルの関数群
+# GUI 環境の設定を ON/OFF トグルとフォント・サイズ変更の関数
 scriptencoding utf-8
 
 def GuiOptionM(): void
@@ -31,4 +31,12 @@ export def Toolbar()
 	else
 		set guioptions+=T
 	endif
+enddef
+
+export def FontSize(size: number): void # フォント・サイズを増減
+	# size: 増減させる数値
+	# var columns: number = &columns
+	# var lines: number = &lines
+	execute 'set guifont=' .. substitute(&guifont, '\(\d\+\ze,\|\d\+$\)', '\=(str2nr(submatch(0)) + size)', 'g' )
+		->substitute(' ', '\\ ', 'g')
 enddef

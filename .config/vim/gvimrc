@@ -34,9 +34,9 @@ nnoremap <ScrollWheelDown>   <S-ScrollWheelDown>
 nnoremap <S-ScrollWheelDown> <ScrollWheelDown>
 xnoremap <ScrollWheelUp>     <C-U>
 xnoremap <ScrollWheelDown>   <C-D>
-nnoremap <C-ScrollWheelUp>   <Cmd>call font_size#UpDown(1)<CR>
-nnoremap <C-ScrollWheelDown> <Cmd>call font_size#UpDown(-1)<CR>
+nnoremap <C-ScrollWheelUp>   <Cmd>call gvimrc#FontSize(1)<CR>
+nnoremap <C-ScrollWheelDown> <Cmd>call gvimrc#FontSize(-1)<CR>
 # }}}
 
-nnoremap <leader>cM <Cmd>call toggle#Menu()<CR>
-nnoremap <leader>cT <Cmd>call toggle#Toolbar()<CR>
+nnoremap <leader>cM <Cmd>call gvimrc#Menu()<CR>
+nnoremap <leader>cT <Cmd>call gvimrc#Toolbar()<CR>
