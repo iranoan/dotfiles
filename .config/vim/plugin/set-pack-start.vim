@@ -227,6 +227,7 @@ augroup ChangeColorScheme
 	# Solarized で GUI が CUI と異なる色になっている
 	autocmd ColorScheme solarized highlight Pmenu term=reverse ctermfg=0 ctermbg=13 gui=reverse guifg=#073642 guibg=#839496
 				| highlight SignColumn ctermfg=11 ctermbg=8 guifg=#839496 guibg=NONE
+				| highlight link vimSet vimCommand
 augroup END
 for s in ['solarized8', 'solarized', 'habamax', 'desert', 'default']
 	try # (glob() を使う存在確認は遅い)
