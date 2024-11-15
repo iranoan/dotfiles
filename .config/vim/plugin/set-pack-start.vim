@@ -86,7 +86,7 @@ g:SignatureMarkerTextHLDynamic = 1
 nnoremap <silent>mm <Cmd>SignatureRefresh<CR>
 augroup VimSignature # SignColumn デフォルトの色が使われるので他の設定に合わせて変更
 	autocmd!
-	autocmd ColorScheme * if &background ==? 'light' |
+	autocmd ColorScheme * if &background ==# 'light' |
 				\ highlight SignatureMarkText term=bold cterm=bold gui=bold ctermbg=NONE guibg=NONE guifg=#111111 ctermfg=0 | else |
 				\ highlight SignatureMarkText term=bold cterm=bold gui=bold ctermbg=NONE guibg=NONE guifg=#dddddd ctermfg=15 | endif |
 				\ highlight GitGutterAdd      term=bold cterm=bold gui=bold ctermbg=NONE guibg=NONE |
