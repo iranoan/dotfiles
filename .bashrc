@@ -224,7 +224,7 @@ which(){ # 素の which /usr/bin/which ではリンクを辿らず、関数、al
 					cmd=$( export LANGUAGE=C ; type "$f" | sed -E 's/^[^ ]+ is aliased to ['\''`"]?[^ ]+ ([^ ]+)( .+)?'\''/\1/g' )
 				fi
 				echo 'alias '"$( command which "$cmd" | xargs readlink -f )"
-				type "$f" | sed -E 's/^[^`]+`(.+)'\''.*/\1/g'
+				type "$f" | sed -E "s/^[^\`]+\`(.+)'.*/\1/g"
 				;;
 			keyword)
 				echo "keyword $f"
