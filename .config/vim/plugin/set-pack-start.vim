@@ -105,9 +105,6 @@ nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 # shell program を用いてバッファにフィルタを掛ける $MYVIMDIR/pack/my-plug/start/shell-filter/ {{{1
 # 1}}}
 
-# カーソル行の URL やファイルを開く $MYVIMDIR/pack/my-plug/start/open_uri/ {{{1
-# 1}}}
-
 # カラースキム {{{1
 # background によって一部の highlight を変える関数 (Solarized を基本としている) {{{2
 def ColorschemeHighlight(): void

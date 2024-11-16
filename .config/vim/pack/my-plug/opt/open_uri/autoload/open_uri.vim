@@ -1,4 +1,5 @@
 scriptencoding utf-8
+" カーソル行に書かれたフォルダや関連付けられたアプリケーションで開く (URL またはフォルダは最後が/、ファイルは拡張子があること)
 
 let s:save_cpo = &cpoptions
 set cpoptions&vim

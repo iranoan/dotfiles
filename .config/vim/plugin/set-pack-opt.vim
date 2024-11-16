@@ -690,3 +690,15 @@ augroup MapMarkdown
 				| autocmd! MapMarkdown
 				| augroup! MapMarkdown
 augroup END
+
+# カーソル行の URL やファイルを開く $MYVIMDIR/pack/my-plug/start/open_uri/ {{{1
+nnoremap <silent><Leader>x :call open_uri#main()<CR>
+nnoremap <2-LeftMouse> :call open_uri#main()<CR>
+augroup OpenURI
+	autocmd!
+	autocmd FuncUndefined open_uri#* packadd open_uri
+		| autocmd! OpenURI
+		| augroup! OpenURI
+augroup END
+# 1}}}
+
