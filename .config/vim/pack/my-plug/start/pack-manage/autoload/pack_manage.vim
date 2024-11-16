@@ -7,7 +7,7 @@ export def PackManage(...arg: list<string>): void
 		echohl WarningMsg | echomsg 'Requires argument (subcommand).' | echomsg 'open help.' | echohl None
 	else
 		var sub_cmd: string = remove(arg, 0)
-		if index(['help', 'list', 'reinstall', 'set', 'tags'], sub_cmd) == -1
+		if index(['help', 'list', 'reinstall', 'setup', 'tags'], sub_cmd) == -1
 			help pack_manage-sub_help
 			echohl WarningMsg | echomsg 'Not exist ' .. sub_cmd .. ' subcommand.' | echomsg 'open help.' | echohl None
 		elseif sub_cmd ==# 'help'
@@ -22,7 +22,7 @@ export def PackManage(...arg: list<string>): void
 			else
 				Helptags(str2nr(arg[0]))
 			endif
-		elseif sub_cmd ==# 'set'
+		elseif sub_cmd ==# 'setup'
 			Setup()
 		endif
 	endif
@@ -35,7 +35,7 @@ export def CompPack(arg: string, cmd: string, pos: number): list<string>
 					->sort('i')
 					->filter((_, v) => v =~ '^' .. arg)
 	elseif len(cmd_ls) <= 2
-		return filter(['help', 'list', 'reinstall ', 'set', 'tags'], (_, v) => v =~# '^' .. arg)
+		return filter(['help', 'list', 'reinstall ', 'setup', 'tags'], (_, v) => v =~# '^' .. arg)
 	endif
 	return []
 enddef
