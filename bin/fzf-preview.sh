@@ -65,7 +65,7 @@ preview_img(){ # 呼び出し元アプリ名の取得し画像プレビューを
 		ppid=$( echo "$pid" | awk '{print $2}')
 		pid=$( echo "$pid" | awk '{print $1}')
 		case "$app" in # 呼び出し元として使っているアプリを並べる
-			gvim|mlterm|xterm|tilda|wezterm|wezterm-gui|gnome-terminal-|nvim-qt)
+			gvim|nvim-qt|mlterm|xterm|tilda|wezterm|wezterm-gui|gnome-terminal-|guake)
 				sxiv_sixel "$pid" "$app" "$1"
 				return $?
 				;;
