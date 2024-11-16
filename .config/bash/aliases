@@ -25,7 +25,7 @@ alias gnuplot='PAGER=less GNUHELP=~/.config/gnuplot/gnuplot-ja.gih gnuplot'
 if type -t vim > /dev/null 2>&1 ; then
 	alias vi=vim
 	# vi としてそのまま起動すると、vim9script による記述がエラーになる
-	# alias vi='grep -E "^set" ~/.vim/vimrc | sed -E "s/ +#.*//g" > ~/.exrc && vi -u ~/.exrc'
+	# alias vi='grep -E "^set" ~/.config/vim/vimrc | sed -E "s/ +#.*//g" > ~/.exrc && vi -u ~/.exrc'
 fi
 # 普段の grep では --exclude= を使うので、使わないのは別エイリアスにしておく
 # 関数にすると引用符を削除して渡され不都合が生じる (Vimからの呼び出しはコマンドでこの問題に対処)
