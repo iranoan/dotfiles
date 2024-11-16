@@ -230,7 +230,7 @@ for s in ['solarized8', 'solarized', 'habamax', 'desert', 'default']
 	try # (glob() を使う存在確認は遅い)
 		execute 'colorscheme ' .. s
 		break
-	catch /^Vimcolorscheme:E185:\C/
+	catch /^Vim\%((\a\+)\)\:E185:\C/
 		continue
 	endtry
 endfor

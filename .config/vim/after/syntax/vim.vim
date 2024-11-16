@@ -1,10 +1,11 @@
 scriptencoding utf-8
 " syntax の追加
 " fix https://github.com/vim-jp/issues/issues/1418
-if exists('b:current_syntax_user')
-	finish
-endif
-let b:current_syntax_user = 1
+
+" if exists('b:current_syntax_user_after') " コメント外すと無効???
+" 	finish
+" endif
+" let b:current_syntax_user_after = 1
 
 syntax match vimOper /\%#=1\%(==\|!=\|>=\|<=\|=\~\|!\~\|>\|<\|=\)[?#]\{0,2}/  nextgroup=vimString,vimSpecFile skipwhite
 syntax case ignore
