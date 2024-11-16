@@ -16,11 +16,17 @@ License: GPL Ver.3.
 	" [comment] http://github.com/author/plugin {{{
 <や >
 	# [comment] http://github.com/author/plugin {{{ # Vim9Script
-<の様なフォールド・マーカー直前のリポジトリの URL の記載や >
+<の様なフォールド・マーカー直前に記載のリポジトリののプラグインを管理対象にする
+ここで [comment] はコメントを意味し、無くても良い
+
+その内 >
 	packadd plugin
-<といった記載のプラグインを管理対象にする
->
-ここで [comment] はそのプラグインについてのコメントを意味し無くても良い
+<や >
+	call pack_manage#SetMAP('plugin', 'execute_command', [
+				\ {'mode': 'n', 'key': '{lhs}', 'cmd': 'command'},
+				\ {'mode': 'x', 'key': '{lhs}', 'cmd': 'command'}
+				\ ] )
+<といった記載が有るものは遅延読み込みにする
 
                                                           *pack_manage-commands*
 コマンド~
@@ -63,6 +69,7 @@ tags [{flag}]                                              *pack_manage-sub_tags
 <
 setup                                                    *pack_manage-sub_setup*
 	* プラグインを導入/削除する
+		- 要 Git
 	* 概要 (|pack_manage-configration|) 記載の書式で導入元の URL が書かれている必要がある
 	* 記載が複数あれば |Quickfix| にも表示し、入手先に食い違いがあれば、インス
 		トールしない
