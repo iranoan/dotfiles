@@ -3,17 +3,34 @@
 # ・テキストは less で用いている source-highlight
 # ・動画は画像に変換後、画像ビューワを用いる
 # ・画像ビューワとしては
-# 	* nsxiv もしくは Sixel 対応アプリで img2sixel がありそれを使う
-# 	* Windows ID の取得ができず、nsxiv があれば別ウィンドウをモニター右上に表示
-# 	* Sixel を使う場合は、展開が遅いのでプレビューが上手くできないことも多い
-# 		- fzf-tmux は実際に tmux 上だと Sixel で画像が表示されないので注意
-# 		- tmux を使っている場合は前のプレビュー内容が残ることも多い
+# 	* nsxiv/sxiv もしくは Sixel 対応アプリで img2sixel が有ればそれを使う
+# 	* Windows ID の取得ができず、nsxiv/sxiv があれば別ウィンドウをモニター右上に表示
+# 		- フォーカスが奪われるので使いにくい
+# 	* Sixel を使う場合
+# 		- tmux を使っている場合は前のプレビュー内容が残る
+# 		- fzf-tmux は実際に tmux 上だと画像が表示されないので注意
 # ・ディレクトリや圧縮ファイルは内部のファイル・リスト
 # ・オフィスアプリは適当にテキスト変換
 # ・これらに該当しないファイルはメタ情報
 
 f=$( echo "$@"| sed -e "s>^~>$HOME>" -e "s/'/\\\'/g" -e 's/"/\\"/g' | xargs -I{} readlink -f "{}")
 mime=$( mimetype --brief "$f" ) # file --dereference --brief --mime-type だと CSV の判定で間違えるケースが有る
+
+use_sixel (){ # 表示サイズが大きいと上手くプレビューできないの表示サイズを計算して Sixel で表示する
+	# フォント・サイズを取得し、それを基準としたいが、よく使う 14pt を基準としてする
+	# +端数を扱えない+フォントのpt↔px 変換が有るので、計算に *72, *1000*96, /96 が登場する
+	width=$(( ( FZF_PREVIEW_COLUMNS ) * 14 * 72 ))
+	height=$(( ( FZF_PREVIEW_LINES ) * 14 * 2 * 72 ))
+	w_percent=$(( $1 * 1000 * 96 / width ))
+	h_percent=$(( $2 * 1000 * 96 / height ))
+	if [ $w_percent -gt $h_percent ]; then
+		height=$(( height * h_percent / w_percent / 96 ))
+		img2sixel -h "$height" "$3"
+	else
+		width=$(( width * w_percent / h_percent / 96 ))
+		img2sixel -w "$width" "$3"
+	fi
+}
 
 sxiv_sixel(){ # 環境によって sxiv と Sixel を使い分ける
 	# if [ "$2" = "wezterm" ] || [ "$2" = "wezterm-gui" ] ; then # fzf が 未対応のようで imgcat が使えない
@@ -33,6 +50,9 @@ sxiv_sixel(){ # 環境によって sxiv と Sixel を使い分ける
 			*)                                sixel=0 ;;
 		esac
 	fi
+	i_width="$( identify "$3" | awk '{print $3}' )"
+	i_height=$( echo "$i_width" | awk -F'x' '{print $2}' )
+	i_width=$( echo "$i_width" | awk -F'x' '{print $1}' )
 	win_id=$( wmctrl -lGp | grep -E "^0x[0-9a-f]+ +-?[0-9]+ +$1 " )
 	if [ -n "$win_id" ]; then
 		width=$(( $( echo "$win_id" | awk '{print $6}' ) / 2 ))
@@ -40,14 +60,22 @@ sxiv_sixel(){ # 環境によって sxiv と Sixel を使い分ける
 		height=$(($( echo "$win_id" | awk '{print $7}') - d_height))
 		win_id=$( echo "$win_id" | awk '{print $1}' )
 		if [ -n "$sxiv" ]; then
-			$sxiv -e "$win_id" -g "${width}x${height}+${width}+$d_height" --no-bar --scale-mode f --private "$3" & # & をなくしてもプロセスが残る点は変わらない+絞り込み入力側にフォーカスが戻らないことが増える印象
-			return 1
+			w_percent=$(( i_width * 1000 / width ))
+			h_percent=$(( i_height * 1000 / height ))
+			if [ $w_percent -gt $h_percent ]; then # ↓の プログラム実行時に & をなくしてもプロセスが残る点は変わらない
+				# ただし絞り込み入力側にフォーカスが戻らないことが増える印象
+				height=$(( height * h_percent / w_percent ))
+				$sxiv -e "$win_id" -g "${width}x${height}+${width}+$d_height" --no-bar --scale-mode f --private "$3" &
+			else
+				i_width=$(( width * w_percent / h_percent ))
+				$sxiv -e "$win_id" -g "${i_width}x${height}+${width}+$d_height" --no-bar --scale-mode f --private "$3" &
+			fi
 		elif [ "$sixel" -eq 1 ]; then
-			img2sixel -w "$width" "$3"
-			return 1
+			use_sixel "$i_width" "$i_height" "$3"
 		fi
+		return 1
 	elif [ "$sixel" -eq 1 ]; then
-		img2sixel -w "$(( $FZF_PREVIEW_COLUMNS * 14 * 72 * 8 / 960 ))" "$3" # フォント・サイズ 14pt を基準としたいが、大きいと上手くプレビューできないので *0.8 している
+		use_sixel "$i_width" "$i_height" "$3"
 		return 1
 	elif [ -n "$sxiv" ]; then
 		$sxiv -g -0+0 --no-bar --scale-mode f --private "$3" &
@@ -123,7 +151,7 @@ case "${f##*/}" in # ファイル名による分岐
 					application/pdf )              pdftotext "$f" - ;;
 					application/vnd.sqlite3)       echo .dump|sqlite3 "$f" ;;
 					audio/* )                      ffmpeg -hide_banner -i "$f" -f metadata - | tail -n +2 ;;
-					text/csv)                      nkf -wd "$f" | ~/bin/csv2tsv.awk | tsv2table.awk ;;
+					text/csv)                      nkf -wd "$f" | ~/bin/csv2tsv.awk | ~/bin/tsv2table.awk ;;
 					text/tab-separated-values|text/tsv) nkf -wd "$f" | ~/bin/tsv2table.awk ;;
 					text/*|application/xhtml+xml|application/javascript|application/rdf+xml|application/toml|application/x-awk|application/x-desktop|application/x-gnuplot|application/x-perl|application/x-php|application/x-ruby|application/x-shellscript|application/x-troff-man|application/x-yaml|application/xml )
 						source-highlight --tab=2 --failsafe --infer-lang -f esc --style-file=esc.style -i "$f" ;;
