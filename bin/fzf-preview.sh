@@ -6,7 +6,7 @@
 # 	* nsxiv もしくは Sixel 対応アプリで img2sixel がありそれを使う
 # 	* Windows ID の取得ができず、nsxiv があれば別ウィンドウをモニター右上に表示
 # 	* Sixel を使う場合は、展開が遅いのでプレビューが上手くできないことも多い
-# 		- fzf-tmux は Sixel 未対応なので注意
+# 		- fzf-tmux は実際に tmux 上だと Sixel で画像が表示されないので注意
 # 		- tmux を使っている場合は前のプレビュー内容が残ることも多い
 # ・ディレクトリや圧縮ファイルは内部のファイル・リスト
 # ・オフィスアプリは適当にテキスト変換
@@ -65,7 +65,7 @@ preview_img(){ # 呼び出し元アプリ名の取得し画像プレビューを
 		ppid=$( echo "$pid" | awk '{print $2}')
 		pid=$( echo "$pid" | awk '{print $1}')
 		case "$app" in # 呼び出し元として使っているアプリを並べる
-			gvim|nvim-qt|mlterm|xterm|tilda|wezterm|wezterm-gui|gnome-terminal-|guake)
+			gvim|nvim-qt|mlterm|xterm|tilda|wezterm|wezterm-gui|gnome-terminal*|guake)
 				sxiv_sixel "$pid" "$app" "$1"
 				return $?
 				;;
@@ -135,6 +135,8 @@ case "${f##*/}" in # ファイル名による分岐
 						~/bin/odp2text.sh "$f" ;;
 					application/vnd.ms-excel|application/vnd.openxmlformats-officedocument.spreadsheetml.sheet|application/vnd.oasis.opendocument.spreadsheet )
 						xlsx2table.sh "$f" ;;
+					image/x-gqv|image/gqv )
+						source-highlight --tab=2 --failsafe -f esc --lang-def=conf.lang --style-file=esc.style -i "$f" ;;
 					image/* )
 						if preview_img "$f"; then
 							exiftool "$f"
