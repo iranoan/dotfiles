@@ -18,17 +18,17 @@ mime=$( mimetype --brief "$f" ) # file --dereference --brief --mime-type だと 
 
 use_sixel (){ # 表示サイズが大きいと上手くプレビューできないの表示サイズを計算して Sixel で表示する
 	# フォント・サイズを取得し、それを基準としたいが、よく使う 14pt を基準としてする
-	# +端数を扱えない+フォントのpt↔px 変換が有るので、計算に *72, *1000*96, /96 が登場する
+	# +端数を扱えない+フォントのpt↔px 変換が有るので、計算に *72, *1000*96 が登場する
 	width=$(( ( FZF_PREVIEW_COLUMNS ) * 14 * 72 ))
 	height=$(( ( FZF_PREVIEW_LINES ) * 14 * 2 * 72 ))
 	w_percent=$(( $1 * 1000 * 96 / width ))
 	h_percent=$(( $2 * 1000 * 96 / height ))
 	if [ $w_percent -gt $h_percent ]; then
-		height=$(( height * h_percent / w_percent / 96 ))
-		img2sixel -h "$height" "$3"
-	else
-		width=$(( width * w_percent / h_percent / 96 ))
+		width=$(( width / 96 ))
 		img2sixel -w "$width" "$3"
+	else
+		height=$(( height / 96 ))
+		img2sixel -h "$height" "$3"
 	fi
 }
 
