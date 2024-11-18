@@ -45,3 +45,6 @@ fi
 # notmuch で日本語検索が出来るように (指定しないとカタカナ検索が出来ない?)
 export XAPIAN_CJK_NGRAM=1
 # export TMPDIR=~/.local/state/tmp/
+
+# ls の日時表示方法 (エイリアスにするとパイプでは無視されるので環境変数で指定する)
+export TIME_STYLE=long-iso
