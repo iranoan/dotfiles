@@ -11,12 +11,51 @@ source "$HOME/.config/fzf/key-bindings.bash"
 
 alias fd='fdfind --hidden --follow --no-ignore --ignore-file ~/.config/fd/ignore '
 
-f(){ # ファイル検索して fzf (本当は fzf-tmux を使いたいが、それだと sixel 非対応)
+f(){ # ファイル検索して fzf
+	# 呼び出し元ウィンドウのアプリを探す
+	ppid=$PPID
+	ps_xo=$( ps --cols 1000 xo pid,ppid,comm | tail -n +2 )
+	while true ; do # 呼び出し元の PID, WINID などを取得する
+		pid=$( echo "$ps_xo" | grep -E "^ *$ppid " )
+		app=$( echo "$pid" | awk '{print $3$4}')
+		ppid=$( echo "$pid" | awk '{print $2}')
+		pid=$( echo "$pid" | awk '{print $1}')
+		case "$app" in
+			wezterm|wezterm-gui) # windows ID を取得できない+Sixel を使うアプリは fzf を使う
+				fzf='fzf'
+				break
+				;;
+			nvim-qt|gvim|mlterm|xterm|tilda|guake|gnome-terminal*) # それ以外は fzf-tmux を使う
+				fzf='fzf-tmux -p 100%,100%'
+				break
+				;;
+			vim|nvim)
+				if ps --cols 1000 xo pid,comm,args | grep -E "^ *$pid +n?vim " | grep -qE ' -g\>' ; then # -g オプション付きで起動した Vim→GVim
+					fzf='fzf-tmux -p 100%,100%'
+					break
+				else
+					continue
+				fi
+				;;
+			tmux:server)
+				ppid=$( tmux list-clients -F '#{session_activity}:#{client_pid}' | sort | tail -n 1 | cut -d: -f2 )
+				continue
+				;;
+			flatpak-session)
+				ppid=$( ps --cols 1000 xo ppid,args | grep -E '^ *[0-9]+ +flatpak-spawn .+ --env=TERM_PROGRAM=' | awk '{print $1}')
+				continue
+				;;
+			*) continue ;;
+		esac
+		break
+	done
+	# nsixv/sixv どちらを使うか?
 	if command -v nsxiv > /dev/null ; then
 		sxiv=nsxiv
 	elif command -v sxiv > /dev/null ; then
 		sxiv=sxiv
 	fi
+	# 起動済み nsixv/sixv
 	sxiv_ls="^($( cat <<-_EOF_|
 		DUMMY
 		$( pgrep -u "$USER" -f "$sxiv -e " )
@@ -24,6 +63,7 @@ f(){ # ファイル検索して fzf (本当は fzf-tmux を使いたいが、そ
 			tr '\n' '|' |
 			sed -E 's/\|+$//'
 	)$)"
+	# fdfind/find のどちらか? 分岐して fzf/fzf-tmux を起動
 	dir="$( echo "${@:$#:1}" | sed -E "s>^~/>$HOME/>" )"
 	if command -v fdfind > /dev/null ; then
 		if [ $# -eq 0 ]; then
@@ -35,7 +75,7 @@ f(){ # ファイル検索して fzf (本当は fzf-tmux を使いたいが、そ
 		fi
 		dir="${dir//\"/\\\"}"
 		eval "${FZF_DEFAULT_COMMAND% .} $dir" |
-			fzf --prompt 'Files> ' --preview "$HOME/bin/fzf-preview.sh {}" --multi |
+			$fzf --prompt 'Files> ' --preview "$HOME/bin/fzf-preview.sh {}" --multi |
 			xargs -I{} xdg-open "{}"
 	else
 		if [ $# -eq 0 ]; then
@@ -54,9 +94,10 @@ f(){ # ファイル検索して fzf (本当は fzf-tmux を使いたいが、そ
 		cmd="${FZF_DEFAULT_COMMAND/find -L ./find -L $dir} $arg"
 		eval "${cmd/ -printf \"%P\\n\"/ -print0}" |
 			xargs --no-run-if-empty -n 1 -P 0 -0 -I{} realpath --no-symlinks --relative-base="$( pwd )" "{}" 2> /dev/null |
-			fzf --preview "$HOME/bin/fzf-preview.sh {}" --multi |
+			$fzf --preview "$HOME/bin/fzf-preview.sh {}" --multi |
 			xargs -I{} xdg-open "{}"
 	fi
+	# 起動していなかった、プレビューに用いて残っている nsixv/sixv を kill
 	pgrep -u "$USER" -f "$sxiv -e " |
 		grep -Ev "$sxiv_ls" |
 		xargs --no-run-if-empty -n 1 -P 0 kill
