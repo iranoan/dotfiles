@@ -153,6 +153,18 @@ case "${f##*/}" in # ファイル名による分岐
 					application/x-lha )            jlha l "$f" ;;
 					application/pdf )              pdftotext "$f" - ;;
 					application/vnd.sqlite3)       echo .dump|sqlite3 "$f" ;;
+					application/epub+zip)
+						gnome-epub-thumbnailer "$f" "$HOME/.cache/tmp-move-sixv.jpg"
+						if preview_img "$HOME/.cache/tmp-move-sixv.jpg" ; then
+							echo "$mime"
+						fi
+						;;
+					application/x-mobipocket-ebook|application/vnd.amazon.mobi8-ebook)
+						gnome-mobi-thumbnailer "$f" "$HOME/.cache/tmp-move-sixv.jpg"
+						if preview_img "$HOME/.cache/tmp-move-sixv.jpg" ; then
+							echo "$mime"
+						fi
+						;;
 					audio/* )                      ffmpeg -hide_banner -i "$f" -f metadata - | tail -n +2 ;;
 					text/csv)                      nkf -wd "$f" | ~/bin/csv2tsv.awk | ~/bin/tsv2table.awk ;;
 					text/tab-separated-values|text/tsv) nkf -wd "$f" | ~/bin/tsv2table.awk ;;
