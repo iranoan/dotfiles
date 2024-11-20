@@ -4,7 +4,7 @@
 # ・編集・閲覧の対象にしないファイル
 # ・編集・閲覧の対象であっても、ファイル名で探すことはないファイル (メール・ファイル等)
 /.bsfilter/
-/.texlive2023/
+/.texlive2024/
 /.npm/
 /node_modules/
 /Mail/.notmuch/xapian/
