@@ -1,6 +1,6 @@
 # ~/.mlterm/main
 termtype=xterm-256color
-fontsize=15
+fontsize=14
 use_variable_column_width=false
 use_anti_alias=true
 not_use_unicode_font=true
@@ -8,6 +8,7 @@ use_scrollbar=false
 letter_space=0
 line_space=0
 col_size_of_width_a=2
+unicode_full_width_areas = U+2600-27FF,U+1F000-1FFFF
 console_encoding=UTF-8
 encoding=UTF-8
 console_sixel_colors=full
