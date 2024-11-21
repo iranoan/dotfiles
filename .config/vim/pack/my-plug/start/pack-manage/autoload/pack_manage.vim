@@ -387,7 +387,7 @@ def Reinstall(packs: list<string>): void # プラグインの強制再インス�
 		if isdirectory(p.dir)
 			delete(p.dir, 'rf')
 		endif
-		echo system('git clone ' .. p.info[0].url .. ' ' .. p.dir)
+		echo system('git clone ' .. p.info[0].url .. ' ' .. p.dir .. ' &')
 	endfor
 	OutMulti(out)
 	if !more
