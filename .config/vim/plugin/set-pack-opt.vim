@@ -459,18 +459,17 @@ augroup loadVimHelpGenerator
 	| augroup! loadVimHelpGenerator
 augroup END
 
-# 編集中の Markdown などをブラウザでプレビュー https://github.com/previm/previm {{{1
+# 編集中の Markdown をブラウザでプレビュー https://github.com/shime/vim-livedown {{{1
 augroup MyMarkdown
 	autocmd!
-	autocmd FileType markdown nnoremap <silent><buffer><Leader>v :PrevimOpen<CR>
+	autocmd FileType markdown nnoremap <silent><buffer><Leader>v <Cmd>LivedownPreview<CR>
 augroup END
-augroup loadPreview
+augroup loadLivedownPreview
 	autocmd!
-	autocmd CmdUndefined PrevimOpen
-				\ set_preview#main()
-				| autocmd! loadPreview
-				| augroup! loadPreview
-				| delfunction set_preview#main
+	autocmd CmdUndefined LivedownPreview
+				\ packadd vim-livedown
+				| autocmd! loadLivedownPreview
+				| augroup! loadLivedownPreview
 augroup END
 
 # EPWING の辞書を呼び出す https://github.com/deton/eblook.vim {{{1
