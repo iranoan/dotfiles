@@ -193,6 +193,7 @@ augroup END
 augroup loadDirDiff
 	autocmd!
 	autocmd CmdUndefined DirDiff g:DirDiffForceLang = 'C LC_MESSAGES=C'
+	| g:DirDiffExcludes = ".git,.*.swp"
 	| packadd vim-dirdiff
 	| autocmd! loadDirDiff
 	| augroup! loadDirDiff
