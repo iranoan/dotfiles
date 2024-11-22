@@ -399,15 +399,6 @@ augroup loadSyntaxInfo
 	| augroup! loadSyntaxInfo
 augroup END
 
-# Linux では wmctrl を使ってフル・スクリーンをトグル $MYVIMDIR/pack/my-plug/opt/full-screen {{{1
-# noremap <silent><F11> :Fullscreen<CR>
-# augroup loadFullScreen
-# 	autocmd!
-# 	autocmd CmdUndefined Fullscreen packadd full-screen
-# 	| autocmd! loadFullScreen
-# 	| augroup! loadFullScreen
-# augroup END
-
 # Man コマンドを使用可能にする $MYVIMDIR/pack/my-plug/opt/man {{{1
 augroup ManCommand
 	autocmd!
