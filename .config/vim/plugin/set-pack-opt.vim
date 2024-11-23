@@ -181,7 +181,7 @@ augroup loadautofmt
 				| delfunction set_autofmt#main
 augroup END
 
-# vim 折りたたみ fold https://github.com/thinca/vim-ft-vim_fold を組み合わせ追加のため $MYVIMDIR/pack/my-plug/opt/vim-ft-vim_fold/ に置き換え {{{1
+# vim 折りたたみ fold $MYVIMDIR/pack/my-plug/opt/vim-ft-vim_fold/ {{{1 https://github.com/thinca/vim-ft-vim_fold を組み合わせ追加のために置き換え
 augroup loadvim_ft_vim_fold
 	autocmd!
 	autocmd FileType vim packadd vim-ft-vim_fold
@@ -391,7 +391,7 @@ if executable('git')
 	delfunction set_gitgutter#main
 endif
 
-# カーソル位置の Syntax の情報を表示する $MYVIMDIR/pack/my-plug/opt/syntax_info/ http://cohama.hateblo.jp/entry/2013/08/11/020849 から {{{1
+# カーソル位置の Syntax の情報を表示する $MYVIMDIR/pack/my-plug/opt/syntax_info/ {{{1 http://cohama.hateblo.jp/entry/2013/08/11/020849 を参考にした
 augroup loadSyntaxInfo
 	autocmd!
 	autocmd CmdUndefined SyntaxInfo packadd syntax_info
@@ -428,7 +428,7 @@ augroup loadPageDown
 	| augroup! loadPageDown
 augroup END
 
-# カーソル位置の単語を Google で検索 $MYVIMDIR/pack/my-plug/opt/google-search/ https://www.rasukarusan.com/entry/2019/03/09/011630 を参考にした {{{1
+# カーソル位置の単語を Google で検索 $MYVIMDIR/pack/my-plug/opt/google-search/ {{{1 https://www.rasukarusan.com/entry/2019/03/09/011630 を参考にした
 nnoremap <silent><Leader>s :SearchByGoogle<CR>
 xnoremap <silent><Leader>s :SearchByGoogle<CR>
 augroup loadSearchByGoogle

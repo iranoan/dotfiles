@@ -6,8 +6,8 @@ License: GPL Ver.3.
 
 ==============================================================================
                                                       *pack_manage-introduction*
-~/.vim/pack や ~/.config/vim/pack (以下 ~/.vim/pack とだけ記す) でプラグインを
-管理を少しでも便利にする関数・コマンド群
+~/.vim/pack や ~/.config/vim/pack (以下 ~/.vim/pack とだけ記す) のプラグイン管
+理を少しだけ便利にする関数・コマンド群
 
                                                       *pack_manage-configration*
 概要~
@@ -16,8 +16,8 @@ License: GPL Ver.3.
 	" [comment] http://github.com/author/plugin {{{
 <や >
 	# [comment] http://github.com/author/plugin {{{ # Vim9Script
-<の様なフォールド・マーカー直前に記載のリポジトリののプラグインを管理対象にする
-ここで [comment] はコメントを意味し、無くても良い
+<の様なフォールド・マーカー直前に記載のリポジトリのプラグインを管理対象にする
+ここで [comment] 部分は簡単な説明が書かれていることを想定し、無くても良い
 
 その内 >
 	packadd plugin
@@ -26,13 +26,13 @@ License: GPL Ver.3.
 				\ {'mode': 'n', 'key': '{lhs}', 'cmd': 'command'},
 				\ {'mode': 'x', 'key': '{lhs}', 'cmd': 'command'}
 				\ ] )
-<といった記載が有るものは遅延読み込みにする
+<といった記載が有るものは遅延読み込みにする (|pack_manage#SetMAP()| は後術する)
 
                                                           *pack_manage-commands*
 コマンド~
 
 PackManage {args}                                       *pack_manage-PackManage*
-	* {args} で指定されたサブコマンド (|pack_manage-subcommands|) を実行する
+	* {args} で指定された次のサブコマンドを実行する
                                                         *pack_manage-subcommands*
 サブコマンド~
 
@@ -40,18 +40,19 @@ help                                                      *pack_manage-sub_help*
 	* このヘルプ表示する
 
 list                                                      *pack_manage-sub_list*
-	* 概要 (|pack_manage-configration|) 記載の書式の一覧を表示する
+	* 概要 (|pack_manage-configration|) 記載された書式の一覧を表示する
 		- +popupwin だとポップアップ表示し c, q, x, <Esc> で閉じる
 		- そうでなければ、コマンドラインに表示する
 	* 表示項目は
 		- インストールされていれば、行頭に I
 		- 続いて /opt/ にインストールされるなら O
-		- その後ろにプラグイン名、その後に入手先
+		- その後ろにプラグイン名、その後に入手先や ~/.vim/pack からの相対パス
 			複数有る場合は、最初に見つかった入手先を一覧に表示し |Quickfix| も表示する
 
 reintsll {args}                                      *pack_manage-sub_reinstall*
 	* {args} で指定したプラグラインを強制的に再インストールする
-	* 概要 (|pack_manage-configration|) 記載の書式で導入元の URL が書かれている必要がある
+	* 概要 (|pack_manage-configration|) 記載の書式で導入元の Github のリポジトリが
+		書かれている必要がある
 	* 記載が複数あれば |Quickfix| にも表示し、入手先に食い違いがあれば、インス
 		トールしない
 
@@ -70,7 +71,8 @@ tags [{flag}]                                              *pack_manage-sub_tags
 setup                                                    *pack_manage-sub_setup*
 	* プラグインを導入/削除する
 		- 要 Git
-	* 概要 (|pack_manage-configration|) 記載の書式で導入元の URL が書かれている必要がある
+	* 概要 (|pack_manage-configration|) 記載の書式で導入元の Github のリポジトリが
+		書かれている必要がある
 	* 記載が複数あれば |Quickfix| にも表示し、入手先に食い違いがあれば、インス
 		トールしない
 	* 記載されたプラグインの内 >
@@ -81,6 +83,7 @@ setup                                                    *pack_manage-sub_setup*
 					\ {'mode': 'x', 'key': '{lhs}', 'cmd': 'command'}
 					\ ] )
 <		の要領の記載が有る plugin は遅延読み込みとして ~/.vim/pack/github/opt/ に入れる
+		 (|pack_manage#SetMAP()| は後術する)
 	* そうでなければ ~/.vim/pack/github/start/ に入れる
 	* start, opt の配置が記載と違いが有れば移動する
 	* 記載のないものは ~/.vim/pack/github/ から削除する

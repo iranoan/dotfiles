@@ -31,9 +31,9 @@ enddef
 export def CompPack(arg: string, cmd: string, pos: number): list<string>
 	var cmd_ls: list<string> = split(cmd)
 	if len(cmd_ls) >= 2 && cmd_ls[1] == 'reinstall'
-		return keys(Get_pack_ls())
+		return keys(Get_pack_ls()->filter((_, v) => v.info[0].url =~# '^https://github\.com/'))
 					->sort('i')
-					->filter((_, v) => v =~ '^' .. arg)
+					->filter((_, v) => v =~# '^' .. arg)
 	elseif len(cmd_ls) <= 2
 		return filter(['help', 'list', 'reinstall ', 'setup', 'tags'], (_, v) => v =~# '^' .. arg)
 	endif
@@ -41,8 +41,8 @@ export def CompPack(arg: string, cmd: string, pos: number): list<string>
 enddef
 
 def Helptags(remake: number): void
-	# ~/.vim/pack/*/{stat,opt}/*/doc に有るヘルプのタグを ~/.vim/doc/tags{,??x} に出力 (packadd しなくても、help が開けるようになる)
-	# ~/.vim/pack/*/{stat,opt}/*/doc に有る tags{,-??} が古ければ再作成
+	# $MYVIMDIR/pack/*/{stat,opt}/*/doc に有るヘルプのタグを $MYVIMDIR/doc/tags{,??x} に出力 (packadd しなくても、help が開けるようになる)
+	# $MYVIMDIR/pack/*/{stat,opt}/*/doc に有る tags{,-??} が古ければ再作成
 	# コンパイル済みの Python スクリプトにしても大して速度は変わらない
 	def MkHelpTags(h: string): void
 		var docdir: string = h .. '/doc'
@@ -192,12 +192,12 @@ def Get_pack_ls(): dict<any> # プラグインの名称、リポジトリ、イ�
 			var d: dict<any>
 			for i in glob(file, false, true, true)
 				for j in readfile(resolve(i))
-									->matchstrlist('^["#\t ]\+.*\zshttps://github\.com/[a-z0-9._/-]\+/\([a-z0-9._-]\+\)\ze *{{{[0-9]*', {submatches: true})
+									->matchstrlist('^["#\t ]\+.*\zs\(https://github\.com/[a-z0-9._/-]\+\|\$MYVIMDIR/pack/[a-z0-9._/-]\+\)/\([a-z0-9._-]\+\)\ze/\? *{{{[0-9]*', {submatches: true})
 					d = {
 						file: i,
 						line: j.idx + 1,
-						url: j.text,
-						pack: j.submatches[0]
+						url: substitute(j.text, '^\$MYVIMDIR/pack/', '', ''),
+						pack: j.submatches[1]
 					}
 					add(ret, d)
 				endfor
@@ -207,14 +207,20 @@ def Get_pack_ls(): dict<any> # プラグインの名称、リポジトリ、イ�
 
 		var pkgs: dict<any>
 		var pack: string
-		var pack_dir: string = resolve($MYVIMDIR .. 'pack/github/') .. '/'
+		var pack_dir: string = resolve($MYVIMDIR .. 'pack/') .. '/'
+		var path: string
 
 		for i in GetPack(f)
 			pack = i.pack
+			if i.url =~# 'https://github\.com/'
+				path = pack_dir .. 'github'
+			else
+				path = pack_dir .. substitute(i.url, '/.\+', '', '')
+			endif
 			if !has_key(pkgs, pack)
 				pkgs[pack] = {
 					info: [],
-					dir: pack_dir .. ( index(p, pack) == -1 ? 'start' : 'opt' ) .. '/' .. pack
+					dir: path .. ( index(p, pack) == -1 ? '/start' : '/opt' ) .. '/' .. pack
 				}
 			endif
 			add(pkgs[pack].info, {
@@ -244,6 +250,7 @@ def Get_pack_ls(): dict<any> # プラグインの名称、リポジトリ、イ�
 	enddef
 
 	var packages: dict<any>
+
 	var packadds: list<string> = Packadd_ls($MYVIMDIR .. 'plugin/*.vim')
 	extend(packadds, Packadd_ls($MYVIMDIR .. 'autoload/*.vim'))
 		->extend(Map_ls($MYVIMDIR .. 'plugin/*.vim'))
@@ -261,31 +268,35 @@ def IsMulti(k: string, info: dict<any>, out: list<dict<any>>, msg: bool): bool #
 	if len(info.info) == 1
 		return false
 	endif
-	add(out, {module: k})
-	for i in info.info
-		add(out, {filename: i.file, lnum: i.line, text: i.url})
-		add(urls, i.url)
-	endfor
 	set more
-	if msg
+	for i in info.info
+		add(urls, i.url)
 		if len(uniq(urls)) > 1
-			echohl ErrorMsg
-			echo 'Do not install ' .. k .. "\nmulti url: " .. join(urls)
-			echohl None
-			return true
+			add(out, {filename: i.file, lnum: i.line, text: 'Do not install ' .. k .. "\nmulti url: " .. join(urls)})
+			if msg
+				echohl ErrorMsg
+				echo 'Do not install ' .. k .. "\nmulti url: " .. join(urls)
+				echohl None
+				return true
+			endif
 		else
-			echohl WarningMsg
-			echo 'multi defin: ' .. k
-			echohl None
+			add(out, {filename: i.file, lnum: i.line, text: 'multi defin: ' .. k})
+			if msg
+				echohl WarningMsg
+				echo 'multi defin: ' .. k
+				echohl None
+			endif
 		endif
-	endif
+	endfor
 	return false
 enddef
 
-def OutMulti(out: list<dict<any>>): void # 多重設定を QuickFix に出力して開く
+def OutMulti(org: list<dict<any>>): void # 多重設定を QuickFix に出力して開く
+	var out: list<dict<any>>
 	var qf_nr: number = getqflist({nr: '$'}).nr
 	var qf_info: dict<any>
-	if len(out) > 0
+	if len(org) > 0
+		out = sort(copy(org), (i0, i1) => i0.filename > i1.filename ? 1 : ( i0.filename < i1.filename ? -1 : ( i0.lnum - i1.lnum )))
 		if qf_nr != 0
 			for i in range(1, qf_nr)
 				qf_info = getqflist({nr: i, title: 0, id: 0})
@@ -321,42 +332,59 @@ def Setup(): void # プラグインのインストール、設定のないもの
 	var packs: list<string>
 	var dirs: list<string>
 	var info: dict<any>
+	var info_i: dict<any>
 	var more: bool = &more
 	var out: list<dict<any>>
+	var pack_dir: string = resolve($MYVIMDIR .. 'pack') .. '/'
 
-	dirs = glob(resolve($MYVIMDIR .. 'pack/github/opt') .. '/*', false, true, true)
-	extend(dirs, glob(resolve($MYVIMDIR .. 'pack/github/start') .. '/*', false, true, true))
+	dirs = glob(pack_dir .. '*/opt/*', false, true, true)
+	extend(dirs, glob(pack_dir .. '*/start/*', false, true, true))
 	for k in keys(pack_info)->sort('i')
 		info = pack_info[k]
-		if match(dirs, '^' .. info.dir .. '$') != -1
+		if IsMulti(k, info, out, true)
+			continue
+		elseif match(dirs, '^' .. info.dir .. '$') != -1
 			echo 'Installed: ' .. k
 		else # 未インストール/ディレクトリ違い
-			swap_dir = substitute(info.dir, resolve($MYVIMDIR .. 'pack/github') .. '/\zs\(start\|opt\)\ze/', '\={"opt": "start", "start": "opt"}[submatch(0)]', '')
+			info_i = info.info[0]
+			if info_i.url =~# 'https://github\.com/'
+				swap_dir = pack_dir .. 'github'
+			else
+				swap_dir = pack_dir .. substitute(info_i.url, '/.\+', '', '')
+			endif
+			swap_dir = substitute(info.dir, swap_dir .. '/\zs\(start\|opt\)\ze/', '\={"opt": "start", "start": "opt"}[submatch(0)]', '')
 			set more
 			echohl WarningMsg
 			if match(dirs, '^' .. swap_dir .. '$') != -1 # ディレクトリ違い
 				echo 'mv ' .. swap_dir .. ' ' info.dir
 				rename(swap_dir, info.dir)
 			else # 未インストール
-				echo system('git clone ' .. info.info[0].url .. ' ' .. info.dir)
+				if info_i.url =~# 'https://github\.com/'
+					echo system('git clone ' .. info_i.url .. ' ' .. info.dir)
+				else
+					add(out, {filename: info_i.file, lnum: info_i.line, text: 'Can not install ' .. k .. ', not Github'})
+					echo 'Can not install ' .. k .. ', not Github'
+				endif
 			endif
 			echohl None
 		endif
-		IsMulti(k, info, out, true)
 	endfor
 	OutMulti(out)
 	# 設定なしを削除↓移動済みの場合が有るので再度リストアップ
-	dirs = glob(resolve($MYVIMDIR .. 'pack/github/opt') .. '/*', false, true, true)
-	extend(dirs, glob(resolve($MYVIMDIR .. 'pack/github/start') .. '/*', false, true, true))
+	dirs = glob(pack_dir .. '*/opt/*', false, true, true)
+	extend(dirs, glob(pack_dir .. '*/start/*', false, true, true))
 	packs = values(pack_info)->map((_, v) => v.dir)
+	swap_dir = '^' .. pack_dir .. 'github'
 	echohl WarningMsg
 	set more
 	for s in dirs
 		if match(packs, '^' .. s .. '$') != -1
 			continue
-		else
-			echo 'no setting: rm ' .. s
+		elseif s =~# swap_dir
+			echo 'no setting: rm ' .. substitute(s, '^' .. pack_dir, '', '')
 			delete(s, 'rf')
+		else
+			echo 'no setting: ' .. substitute(s, '^' .. pack_dir, '', '')
 		endif
 	endfor
 	echohl None
@@ -382,8 +410,12 @@ def Reinstall(packs: list<string>): void # プラグインの強制再インス�
 		p = pack_info[i]
 		if IsMulti(i, p, out, true)
 			continue
+		elseif p.info[0].url !~# '^https://github\.com/'
+			echohl WarningMsg
+			echo 'Not Github: ' .. i
+			echohl None
+			continue
 		endif
-			echomsg i
 		if isdirectory(p.dir)
 			delete(p.dir, 'rf')
 		endif

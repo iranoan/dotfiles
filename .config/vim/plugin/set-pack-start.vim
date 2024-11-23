@@ -99,11 +99,9 @@ augroup END
 nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 # nnoremap <silent>gf :TabEdit <cfile><CR> " ← 存在しなくても開く <C-R><C-F> と同じ
 
-# https://github.com/t9md/vim-foldtext を $MYVIMDIR/pack/my-plug/start/vim-foldtext/ で書き換え {{{1
-# 1}}}
+# $MYVIMDIR/pack/my-plug/start/vim-foldtext/ {{{1 https://github.com/t9md/vim-foldtext を書き換え
 
 # shell program を用いてバッファにフィルタを掛ける $MYVIMDIR/pack/my-plug/start/shell-filter/ {{{1
-# 1}}}
 
 # カラースキム {{{1
 # background によって一部の highlight を変える関数 (Solarized を基本としている) {{{2

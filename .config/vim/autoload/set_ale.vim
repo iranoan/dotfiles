@@ -38,6 +38,10 @@ function set_ale#main()
 	" let g:ale_open_list = 0
 	" let g:ale_keep_list_window_open = 0
 	" 他の Linter のオプションが増えないように限定しておく
+	" $MYVIMDIR/pack/my-plug/start/ale-css-custom {{{2
+	packadd ale-css-custom
+	" $MYVIMDIR/pack/my-plug/start/ale-nu-html-checker {{{2
+	packadd ale-nu-html-checker
 	let g:ale_linters = #{
 				\ c:      ['clang'],
 				\ cpp:    ['clang'],
