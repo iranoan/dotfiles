@@ -1,15 +1,12 @@
 vim9script
 # カレント・タブ・ページ内にじターミナルが有れば、既存のターミナルを残し、新たに開いたターミナルは閉じる
-# 欠点
-# :terminal +{cmd}
-# をしても、そのウィンドウを閉じてしまう
 
 export def Main(): void
 	var bufnum: number = bufnr('') # カレント・バッファ (直前に開いたターミナルを想定)
 	var terms: list<number> = term_list()
 	var terms_in_tab: list<number>
-	for buf in tabpagebuflist() # タブ・ページ内のバッファからターミナルを探す
-		if match(terms, '^' .. buf .. '$') >= 0
+	for buf in tabpagebuflist() # タブ・ページ内のバッファからターミナルを探す (コマンド実行済みは除く)
+		if match(terms, '^' .. buf .. '$') >= 0 && !getbufinfo(buf)[0].changed
 			add(terms_in_tab, buf)
 		endif
 	endfor
