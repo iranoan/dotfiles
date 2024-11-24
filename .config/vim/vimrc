@@ -323,6 +323,14 @@ augroup VIMRC
 	# tags ファイルは UTF-8 強制 (開く前に utf-8 に固定し開いた後元に戻す)
 	autocmd BufReadPre tags  set fileencodings=utf-8
 	autocmd BufRead    tags  &fileencodings = fileencodings
+	# 新規作成時にテンプレートを挿入
+	autocmd BufNewFile *.sh         vimrc#Insert_template('sh.sh')
+	autocmd BufNewFile *.tex        vimrc#Insert_template('TeX.tex')
+	autocmd BufNewFile *.htm,*.html vimrc#Insert_template('HTML.html')
+	autocmd BufNewFile *.plt        vimrc#Insert_template('Gnuplot.plt')
+	autocmd BufNewFile *.py         vimrc#Insert_template('Python.py')
+	autocmd BufNewFile *.css        vimrc#Insert_template('CSS.css')
+	autocmd BufNewFile *.vim        vimrc#Insert_template('vim.vim')
 augroup END
 # 日本語の表示/編集に関わる設定 {{{1
 set backspace=indent,eol,start
