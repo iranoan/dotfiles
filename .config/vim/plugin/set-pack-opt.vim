@@ -674,12 +674,12 @@ augroup loadSurroundTagMap
 augroup END
 
 # Markdown マッピング $MYVIMDIR/pack/my-plug/opt/map-markdown/ {{{1
-augroup MapMarkdown
+augroup loadMapMarkdown
 	autocmd!
 	autocmd FileType markdown
 				\ packadd map-markdown
-				| autocmd! MapMarkdown
-				| augroup! MapMarkdown
+				| autocmd! loadMapMarkdown
+				| augroup! loadMapMarkdown
 augroup END
 
 # カーソル行の URL やファイルを開く $MYVIMDIR/pack/my-plug/opt/open_uri/ {{{1
@@ -691,4 +691,12 @@ augroup OpenURI
 		| autocmd! OpenURI
 		| augroup! OpenURI
 augroup END
-# 1}}}
+
+# $MYVIMDIR/pack/my-plug/opt/python-fold {{{1
+augroup loadPythonFold
+	autocmd!
+	autocmd FileType python
+				\ packadd python-fold
+				| autocmd! loadPythonFold
+				| augroup! loadPythonFold
+augroup END

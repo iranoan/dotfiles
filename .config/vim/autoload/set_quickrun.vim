@@ -5,7 +5,9 @@ function set_quickrun#main() abort
 	" QuickFix 拡張 https://github.com/osyo-manga/shabadou.vim {{{
 	packadd shabadou.vim " }}}
 	" 非同期処理 https://github.com/Shougo/vimproc.vim {{{
-	packadd vimproc.vim " }}}
+	" do-setup: make
+	packadd vimproc.vim
+	" }}}
 	" #include<> に応じてコンパイル・オプション -l 追加 https://github.com/mattn/vim-quickrunex {{{
 	packadd vim-quickrunex
 	" }}}

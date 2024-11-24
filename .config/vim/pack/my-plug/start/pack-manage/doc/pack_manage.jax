@@ -14,19 +14,24 @@ License: GPL Ver.3.
 
 ~/.vim/vimrc, ~/.vim/gvimrc, ~/.vim/plugin/*.vim, ~/.vim/autoload/*.vim に >
 	" [comment] http://github.com/author/plugin {{{
+	" do-setup: make
 <や >
 	# [comment] http://github.com/author/plugin {{{ # Vim9Script
+	# do-setup: ./install
 <の様なフォールド・マーカー直前に記載のリポジトリのプラグインを管理対象にする
-ここで [comment] 部分は簡単な説明が書かれていることを想定し、無くても良い
+ここで
+	* [comment] 部分は簡単な説明が書かれていることを想定
+	* どちらも 2 行目は追加処理なので (参照: |pack_manage-do-setup|)
+無くても良い
 
-その内 >
+さらに、この管理対象の内 >
 	packadd plugin
 <や >
 	call pack_manage#SetMAP('plugin', 'execute_command', [
 				\ {'mode': 'n', 'key': '{lhs}', 'cmd': 'command'},
 				\ {'mode': 'x', 'key': '{lhs}', 'cmd': 'command'}
 				\ ] )
-<といった記載が有るものは遅延読み込みにする (|pack_manage#SetMAP()| は後術する)
+<といった記載が有るものは遅延読み込みにする (|pack_manage#SetMAP()| は後術)
 
                                                           *pack_manage-commands*
 コマンド~
@@ -44,7 +49,7 @@ list                                                      *pack_manage-sub_list*
 		- +popupwin だとポップアップ表示し c, q, x, <Esc> で閉じる
 		- そうでなければ、コマンドラインに表示する
 	* 表示項目は
-		- インストールされていれば、行頭に I
+		- ローカル指定なら L、ネットワーク入手でインストールされていれば、行頭に I
 		- 続いて /opt/ にインストールされるなら O
 		- その後ろにプラグイン名、その後に入手先や ~/.vim/pack からの相対パス
 			複数有る場合は、最初に見つかった入手先を一覧に表示し |Quickfix| も表示する
@@ -56,7 +61,7 @@ reintsll {args}                                      *pack_manage-sub_reinstall*
 	* 記載が複数あれば |Quickfix| にも表示し、入手先に食い違いがあれば、インス
 		トールしない
 
-tags [{flag}]                                              *pack_manage-sub_tags*
+tags [{flag}]                                             *pack_manage-sub_tags*
 	* ~/.vim/pack に有るヘルプのタグを纏めて |packadd| 使用前でもヘルプを引けるよ
 		うに ~/.vim/doc/tags, ~/.vim/doc/tags-?? に出力する
 	* {flag} が 0 以外だと必ずタグ・ファイルを再作成する
@@ -73,6 +78,13 @@ setup                                                    *pack_manage-sub_setup*
 		- 要 Git
 	* 概要 (|pack_manage-configration|) 記載の書式で導入元の Github のリポジトリが
 		書かれている必要がある
+	* これに続く連続するコメント行頭に                      *pack_manage-do-setup*  >
+		" do-setup: make
+<		や >
+		# do-setup: ./install
+<		の様な do-setup: の記載が有れば、インストール先のディレクトリをワーキング・
+		ディレクトリして、それより後ろの部分を |:terminal| ++shell の [command] とし
+		て実行する
 	* 記載が複数あれば |Quickfix| にも表示し、入手先に食い違いがあれば、インス
 		トールしない
 	* 記載されたプラグインの内 >
@@ -97,6 +109,7 @@ GetPackLs()                                             *pack_manage#GetPackLs()
 			+ url:  入手元のリポジトリの URL
 			+ file: 記載が書かれているファイルのパス名
 			+ line: その記載された行番号
+			+ setup: make 等セットアップ時に必要な追加コマンド
 
 	使用法: >
 		let packinfo = pack_manage#GetPackLs()

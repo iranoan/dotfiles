@@ -6,13 +6,12 @@ endif
 let b:did_ftplugin_user = 1
 
 " ファイルタイプ別のグローバル設定 {{{1
-if !exists('g:py_plugin')
-	let g:py_plugin = 1
-	" augroup myPython
-	" 	autocmd!
-	" augroup END
-	packadd python-fold
-endif
+" if !exists('g:py_plugin')
+" 	let g:py_plugin = 1
+" 	" augroup myPython
+" 	" 	autocmd!
+" 	" augroup END
+" endif
 
 " ファイルタイプ別ローカル設定 {{{1
 nnoremap p ]p

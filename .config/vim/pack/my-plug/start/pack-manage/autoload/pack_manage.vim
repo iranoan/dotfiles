@@ -130,6 +130,7 @@ def List(): void
 	var ls: list<string>
 	var pkg: dict<any>
 	var out: list<dict<any>>
+	var github: string = '^' .. resolve($MYVIMDIR) .. '/pack/github/'
 	var format: string = printf("%%s %%s %%-%ds %%s",
 		keys(packs)
 		->map((_, v) => len(v))
@@ -139,7 +140,7 @@ def List(): void
 	for k in keys(packs)->sort('i')
 		pkg = packs[k]
 		add(ls, printf(format,
-			isdirectory(pkg.dir) ? 'I ' : '  ',
+			pkg.dir !~# github ? 'L ' : (isdirectory(pkg.dir) ? 'I ' : '  '),
 			pkg.dir =~# '/start/' .. k ? '  ' : 'O ',
 			k,
 			pkg.info[0].url
@@ -190,15 +191,25 @@ def Get_pack_ls(): dict<any> # プラグインの名称、リポジトリ、イ�
 		def GetPack(file: string): list<dict<any>> # 外部プログラム無しの grep もどき
 			var ret: list<dict<any>>
 			var d: dict<any>
+			var lines: list<string>
 			for i in glob(file, false, true, true)
-				for j in readfile(resolve(i))
-									->matchstrlist('^["#\t ]\+.*\zs\(https://github\.com/[a-z0-9._/-]\+\|\$MYVIMDIR/pack/[a-z0-9._/-]\+\)/\([a-z0-9._-]\+\)\ze/\? *{{{[0-9]*', {submatches: true})
+				lines = readfile(resolve(i))
+				for j in lines
+						->matchstrlist('^["#\t ]\+.*\zs\(https://github\.com/[a-z0-9._/-]\+\|\$MYVIMDIR/pack/[a-z0-9._/-]\+\)/\([a-z0-9._-]\+\)\ze/\? *{{{[0-9]*', {submatches: true})
 					d = {
 						file: i,
 						line: j.idx + 1,
 						url: substitute(j.text, '^\$MYVIMDIR/pack/', '', ''),
-						pack: j.submatches[1]
+						pack: j.submatches[1],
+						setup: []
 					}
+					for k in lines[j.idx + 1 : ]
+						if k !~# '^[\t ]*["#]'
+							break
+						elseif k =~# '^["#\t ]\+[\t ]*do-setup:'
+							add(d.setup, substitute(k,  '^["#\t ]\+\<do-setup:[\t ]*', '', ''))
+						endif
+					endfor
 					add(ret, d)
 				endfor
 			endfor
@@ -226,7 +237,8 @@ def Get_pack_ls(): dict<any> # プラグインの名称、リポジトリ、イ�
 			add(pkgs[pack].info, {
 				url:  i.url,
 				file: i.file,
-				line: i.line
+				line: i.line,
+				setup: i.setup
 			})
 		endfor
 		return pkgs
@@ -336,9 +348,11 @@ def Setup(): void # プラグインのインストール、設定のないもの
 	var more: bool = &more
 	var out: list<dict<any>>
 	var pack_dir: string = resolve($MYVIMDIR .. 'pack') .. '/'
+	var wd: string = getcwd()
 
 	dirs = glob(pack_dir .. '*/opt/*', false, true, true)
 	extend(dirs, glob(pack_dir .. '*/start/*', false, true, true))
+	set more
 	for k in keys(pack_info)->sort('i')
 		info = pack_info[k]
 		if IsMulti(k, info, out, true)
@@ -353,7 +367,6 @@ def Setup(): void # プラグインのインストール、設定のないもの
 				swap_dir = pack_dir .. substitute(info_i.url, '/.\+', '', '')
 			endif
 			swap_dir = substitute(info.dir, swap_dir .. '/\zs\(start\|opt\)\ze/', '\={"opt": "start", "start": "opt"}[submatch(0)]', '')
-			set more
 			echohl WarningMsg
 			if match(dirs, '^' .. swap_dir .. '$') != -1 # ディレクトリ違い
 				echo 'mv ' .. swap_dir .. ' ' info.dir
@@ -363,28 +376,32 @@ def Setup(): void # プラグインのインストール、設定のないもの
 					echo system('git clone ' .. info_i.url .. ' ' .. info.dir)
 				else
 					add(out, {filename: info_i.file, lnum: info_i.line, text: 'Can not install ' .. k .. ', not Github'})
-					echo 'Can not install ' .. k .. ', not Github'
+					echomsg 'Can not install ' .. k .. ', not Github'
 				endif
 			endif
 			echohl None
 		endif
+		chdir(info.dir)
+		for c in info.info[0].setup
+			execute('terminal ++shell ' .. c)
+		endfor
 	endfor
+	chdir(wd)
 	OutMulti(out)
 	# 設定なしを削除↓移動済みの場合が有るので再度リストアップ
 	dirs = glob(pack_dir .. '*/opt/*', false, true, true)
 	extend(dirs, glob(pack_dir .. '*/start/*', false, true, true))
 	packs = values(pack_info)->map((_, v) => v.dir)
-	swap_dir = '^' .. pack_dir .. 'github'
+	swap_dir = '^' .. pack_dir .. 'github/'
 	echohl WarningMsg
-	set more
 	for s in dirs
 		if match(packs, '^' .. s .. '$') != -1
 			continue
 		elseif s =~# swap_dir
-			echo 'no setting: rm ' .. substitute(s, '^' .. pack_dir, '', '')
+			echomsg 'no setting: rm ' .. substitute(s, '^' .. pack_dir, '', '')
 			delete(s, 'rf')
 		else
-			echo 'no setting: ' .. substitute(s, '^' .. pack_dir, '', '')
+			echomsg 'no setting: ' .. substitute(s, '^' .. pack_dir, '', '')
 		endif
 	endfor
 	echohl None
@@ -403,7 +420,7 @@ def Reinstall(packs: list<string>): void # プラグインの強制再インス�
 	for i in packs
 		if !has_key(pack_info, i)
 			echohl WarningMsg
-			echo 'no setting: ' .. i
+			echomsg 'no setting: ' .. i
 			echohl None
 			continue
 		endif
@@ -412,7 +429,7 @@ def Reinstall(packs: list<string>): void # プラグインの強制再インス�
 			continue
 		elseif p.info[0].url !~# '^https://github\.com/'
 			echohl WarningMsg
-			echo 'Not Github: ' .. i
+			echomsg 'Not Github: ' .. i
 			echohl None
 			continue
 		endif

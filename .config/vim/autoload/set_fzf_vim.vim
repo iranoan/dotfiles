@@ -5,6 +5,7 @@ function set_fzf_vim#main() abort
 	" 	return
 	" endif
 	" https://github.com/junegunn/fzf {{{
+	" do-setup: ./install --bin
 	packadd fzf
 	" }}}
 	packadd fzf.vim
