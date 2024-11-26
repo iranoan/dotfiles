@@ -280,7 +280,6 @@ def IsMulti(k: string, info: dict<any>, out: list<dict<any>>, msg: bool): bool #
 	if len(info.info) == 1
 		return false
 	endif
-	set more
 	for i in info.info
 		add(urls, i.url)
 		if len(uniq(urls)) > 1
@@ -338,6 +337,70 @@ def OutMulti(org: list<dict<any>>): void # 多重設定を QuickFix に出力し
 	endif
 enddef
 
+def Make(ls: list<dict<any>>): void # make や別途インストールが必要時の処理
+	def Executable(s: string): bool # 最大 2 秒ファイルが実行可能か? 存在するかを確認 (git clone を & 付きで実行するのでダウンロード完了済みとは限らない)
+		var cmd: list<string> = split(s)
+		for i in range(20)
+			if cmd[0] !=# 'make'
+				if executable(cmd[0])
+					return true
+				endif
+			elseif len(cmd) == 1
+				if filereadable('Makefile')
+					return true
+				endif
+			elseif cmd[1] ==# '-f'
+				if filereadable(cmd[2])
+					return true
+				endif
+			elseif cmd[1] =~# '--\(make\)\?file='
+				if filereadable(matchstr(cmd[1], '--\(make\)\?file=\zs.\+'))
+					return true
+				endif
+			endif
+			sleep 100m
+		endfor
+		return false
+	enddef
+	def Isdirectory(d: string): bool # 最大 2 秒ディレクトリができているか確認
+		for i in range(20)
+			if isdirectory(d)
+				return true
+			endif
+			sleep 100m
+		endfor
+		return false
+	enddef
+	var wd: string = getcwd()
+	var d: string
+	for l in ls
+		d = l.dir
+		if !Isdirectory(d)
+			echohl WarningMsg | echomsg 'do not exist ' .. d | echohl None
+			continue
+		endif
+		chdir(d)
+		for c in l.setup
+			if !Executable(c)
+				echohl WarningMsg | echomsg 'do not rum ' .. c | echohl None
+				continue
+			endif
+			execute('terminal ++shell ' .. c)
+			execute 'silent file! run: ' .. c
+		endfor
+	endfor
+	chdir(wd)
+enddef
+
+def LsMake(p: dict<any>, ls_make: list<dict<any>>): void # make や別途インストールが必要時の処理を list で保存
+	if len(p.info[0].setup) != 0
+		add(ls_make, {
+			dir: p.dir,
+			setup: p.info[0].setup
+		})
+	endif
+enddef
+
 def Setup(): void # プラグインのインストール、設定のないものの削除
 	var swap_dir: string
 	var pack_info: dict<any> = Get_pack_ls()
@@ -348,7 +411,7 @@ def Setup(): void # プラグインのインストール、設定のないもの
 	var more: bool = &more
 	var out: list<dict<any>>
 	var pack_dir: string = resolve($MYVIMDIR .. 'pack') .. '/'
-	var wd: string = getcwd()
+	var ls_make: list<dict<any>>
 
 	dirs = glob(pack_dir .. '*/opt/*', false, true, true)
 	extend(dirs, glob(pack_dir .. '*/start/*', false, true, true))
@@ -373,7 +436,7 @@ def Setup(): void # プラグインのインストール、設定のないもの
 				rename(swap_dir, info.dir)
 			else # 未インストール
 				if info_i.url =~# 'https://github\.com/'
-					echo system('git clone ' .. info_i.url .. ' ' .. info.dir)
+					echo system('git clone ' .. info_i.url .. ' ' .. info.dir .. ' &')
 				else
 					add(out, {filename: info_i.file, lnum: info_i.line, text: 'Can not install ' .. k .. ', not Github'})
 					echomsg 'Can not install ' .. k .. ', not Github'
@@ -381,14 +444,11 @@ def Setup(): void # プラグインのインストール、設定のないもの
 			endif
 			echohl None
 		endif
-		chdir(info.dir)
-		for c in info.info[0].setup
-			execute('terminal ++shell ' .. c)
-		endfor
+		LsMake(info, ls_make)
 	endfor
-	chdir(wd)
 	OutMulti(out)
-	# 設定なしを削除↓移動済みの場合が有るので再度リストアップ
+	Make(ls_make)
+	# 設定なしを削除↓移動済みの場合が有るので再度リストアップ (上の Make() が有るとコマンドラインが閉じられてしまうが解決策が見つからない)
 	dirs = glob(pack_dir .. '*/opt/*', false, true, true)
 	extend(dirs, glob(pack_dir .. '*/start/*', false, true, true))
 	packs = values(pack_info)->map((_, v) => v.dir)
@@ -415,6 +475,7 @@ def Reinstall(packs: list<string>): void # プラグインの強制再インス�
 	var p: dict<any>
 	var out: list<dict<any>>
 	var more: bool = &more
+	var ls_make: list<dict<any>>
 
 	set more
 	for i in packs
@@ -437,8 +498,10 @@ def Reinstall(packs: list<string>): void # プラグインの強制再インス�
 			delete(p.dir, 'rf')
 		endif
 		echo system('git clone ' .. p.info[0].url .. ' ' .. p.dir .. ' &')
+		LsMake(p, ls_make)
 	endfor
 	OutMulti(out)
+	Make(ls_make)
 	if !more
 		set nomore
 	endif
