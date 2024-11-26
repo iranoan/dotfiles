@@ -401,6 +401,15 @@ def LsMake(p: dict<any>, ls_make: list<dict<any>>): void # make や別途イン�
 	endif
 enddef
 
+def Update(d: string): void
+	var wd: string = getcwd()
+	if d =~# '^' .. resolve($MYVIMDIR) .. '/pack/github/' && filereadable(d .. '/.git/config')
+		chdir(d)
+		echo system('git submodule update --init --recursive &')
+		chdir(wd)
+	endif
+enddef
+
 def Setup(): void # プラグインのインストール、設定のないものの削除
 	var swap_dir: string
 	var pack_info: dict<any> = Get_pack_ls()
@@ -444,10 +453,11 @@ def Setup(): void # プラグインのインストール、設定のないもの
 			endif
 			echohl None
 		endif
+		Update(info.dir)
 		LsMake(info, ls_make)
 	endfor
 	OutMulti(out)
-	Make(ls_make)
+	# Make(ls_make)
 	# 設定なしを削除↓移動済みの場合が有るので再度リストアップ (上の Make() が有るとコマンドラインが閉じられてしまうが解決策が見つからない)
 	dirs = glob(pack_dir .. '*/opt/*', false, true, true)
 	extend(dirs, glob(pack_dir .. '*/start/*', false, true, true))
@@ -498,6 +508,7 @@ def Reinstall(packs: list<string>): void # プラグインの強制再インス�
 			delete(p.dir, 'rf')
 		endif
 		echo system('git clone ' .. p.info[0].url .. ' ' .. p.dir .. ' &')
+		Update(p.dir)
 		LsMake(p, ls_make)
 	endfor
 	OutMulti(out)

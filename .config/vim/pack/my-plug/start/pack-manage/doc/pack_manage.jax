@@ -78,6 +78,8 @@ setup                                                    *pack_manage-sub_setup*
 		- 要 Git
 	* 概要 (|pack_manage-configration|) 記載の書式で導入元の Github のリポジトリが
 		書かれている必要がある
+	* 上記書式の記載が複数あれば |Quickfix| にも表示し、入手先に食い違いがあれば、
+		インストールしない
 	* これに続く連続するコメント行頭に                      *pack_manage-do-setup*  >
 		" do-setup: make
 <		や >
@@ -85,8 +87,6 @@ setup                                                    *pack_manage-sub_setup*
 <		の様な do-setup: の記載が有れば、インストール先のディレクトリをワーキング・
 		ディレクトリして、それより後ろの部分を |:terminal| ++shell の [command] とし
 		て実行する
-	* 記載が複数あれば |Quickfix| にも表示し、入手先に食い違いがあれば、インス
-		トールしない
 	* 記載されたプラグインの内 >
 		packadd plugin
 <		やキーマップ用の関数で >
@@ -99,6 +99,9 @@ setup                                                    *pack_manage-sub_setup*
 	* そうでなければ ~/.vim/pack/github/start/ に入れる
 	* start, opt の配置が記載と違いが有れば移動する
 	* 記載のないものは ~/.vim/pack/github/ から削除する
+	* ~/.vim/pack/github/ に入れる分は >
+		git submodule update --init --recursive
+<		を実行する
                                                          *pack_manage-functions*
 関数 ~
 
@@ -110,9 +113,11 @@ GetPackLs()                                             *pack_manage#GetPackLs()
 			+ file: 記載が書かれているファイルのパス名
 			+ line: その記載された行番号
 			+ setup: make 等セットアップ時に必要な追加コマンド
+	* プラグインの有無の確認にも使える
 
 	使用法: >
 		let packinfo = pack_manage#GetPackLs()
+		if has_key(pack_manage#GetPackLs(), 'plugin') | echo 'intstalled' | endif
 
 IsInstalled({plugin})                                 *pack_manage#IsInstalled()*
 	* {plugin} が既に |runtimepath| に加わっているか確認する
