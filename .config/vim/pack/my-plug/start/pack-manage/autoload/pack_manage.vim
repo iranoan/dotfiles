@@ -405,7 +405,7 @@ def Update(d: string): void
 	var wd: string = getcwd()
 	if d =~# '^' .. resolve($MYVIMDIR) .. '/pack/github/' && filereadable(d .. '/.git/config')
 		chdir(d)
-		echo system('git submodule update --init --recursive &')
+		echo system('git pull --ff --ff-only && git submodule update --init --recursive &')
 		chdir(wd)
 	endif
 enddef
@@ -415,22 +415,37 @@ def Setup(): void # プラグインのインストール、設定のないもの
 	var pack_info: dict<any> = Get_pack_ls()
 	var packs: list<string>
 	var dirs: list<string>
-	var info: dict<any>
 	var info_i: dict<any>
 	var more: bool = &more
 	var out: list<dict<any>>
 	var pack_dir: string = resolve($MYVIMDIR .. 'pack') .. '/'
 	var ls_make: list<dict<any>>
+	var n: number
+	var pack_count: number
+	var laststatus: number = &laststatus
+	var statusline = &statusline
+	w:pack_manage_statusline = {p: 0, bar: ''}
+	def Progress(): void # 進行状況を示す終了割合と、プログレス・バー代わりの文字列生成
+		w:pack_manage_statusline.p = n * 100 / pack_count
+		for i in range(( winwidth(0) - 21 ) * w:pack_manage_statusline.p / 100 - len(w:pack_manage_statusline.bar))
+			w:pack_manage_statusline.bar ..= ' '
+		endfor
+		redrawstatus
+	enddef
 
 	dirs = glob(pack_dir .. '*/opt/*', false, true, true)
 	extend(dirs, glob(pack_dir .. '*/start/*', false, true, true))
+	pack_count = len(pack_info)
+	&laststatus = 2
+	setlocal statusline=install/update...\ %#MatchParen#%3{w:pack_manage_statusline.p}%%\|%{w:pack_manage_statusline.bar}%<%*
 	set more
-	for k in keys(pack_info)->sort('i')
-		info = pack_info[k]
+	for [k, info] in items(pack_info)
+		Progress()
+		n += 1
 		if IsMulti(k, info, out, true)
 			continue
 		elseif match(dirs, '^' .. info.dir .. '$') != -1
-			echo 'Installed: ' .. k
+			Update(info.dir)
 		else # 未インストール/ディレクトリ違い
 			info_i = info.info[0]
 			if info_i.url =~# 'https://github\.com/'
@@ -439,25 +454,27 @@ def Setup(): void # プラグインのインストール、設定のないもの
 				swap_dir = pack_dir .. substitute(info_i.url, '/.\+', '', '')
 			endif
 			swap_dir = substitute(info.dir, swap_dir .. '/\zs\(start\|opt\)\ze/', '\={"opt": "start", "start": "opt"}[submatch(0)]', '')
-			echohl WarningMsg
 			if match(dirs, '^' .. swap_dir .. '$') != -1 # ディレクトリ違い
+				echohl WarningMsg
 				echo 'mv ' .. swap_dir .. ' ' info.dir
+				echohl None
 				rename(swap_dir, info.dir)
+				Update(info.dir)
 			else # 未インストール
 				if info_i.url =~# 'https://github\.com/'
 					echo system('git clone ' .. info_i.url .. ' ' .. info.dir .. ' &')
 				else
 					add(out, {filename: info_i.file, lnum: info_i.line, text: 'Can not install ' .. k .. ', not Github'})
-					echomsg 'Can not install ' .. k .. ', not Github'
 				endif
 			endif
-			echohl None
 		endif
-		Update(info.dir)
 		LsMake(info, ls_make)
 	endfor
+	&l:statusline = statusline
+	unlet w:pack_manage_statusline
+	&laststatus = laststatus
 	OutMulti(out)
-	# Make(ls_make)
+	Make(ls_make)
 	# 設定なしを削除↓移動済みの場合が有るので再度リストアップ (上の Make() が有るとコマンドラインが閉じられてしまうが解決策が見つからない)
 	dirs = glob(pack_dir .. '*/opt/*', false, true, true)
 	extend(dirs, glob(pack_dir .. '*/start/*', false, true, true))
