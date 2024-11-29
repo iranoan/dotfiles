@@ -144,6 +144,7 @@ SetMAP({plugin}, {cmd}, {map})                             *pack_manage#SetMAP()
 		mode: n, x, o などのモード
 		key: 割り当てるキーマップ {lhs}
 		cmd: 割り当てるコマンド (<Plug> を除く)
+		buffer: <buffer> に限定する場合は |v:true| (キーが無ければ |v:false|)
 	}
 
 	記載例: >

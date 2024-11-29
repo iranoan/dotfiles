@@ -537,7 +537,7 @@ def Reinstall(packs: list<string>): void # プラグインの強制再インス�
 	endif
 enddef
 
-export def SetMAP(plug: string, cmd: string, map_ls: list<dict<string>>): void # キーマップにによる遅延読み込み用関数
+export def SetMAP(plug: string, cmd: string, map_ls: list<dict<any>>): void # キーマップにによる遅延読み込み用関数
 	var extra: string
 	var c: number
 
@@ -549,7 +549,7 @@ export def SetMAP(plug: string, cmd: string, map_ls: list<dict<string>>): void #
 		extra ..= nr2char(c)
 	endwhile
 	for i in map_ls
-		execute i.mode .. 'noremap ' .. i.key .. ' <Plug>' .. i.cmd
+		execute i.mode .. 'noremap ' .. (get(i, 'buffer', false) ? '<buffer>' : '') .. i.key .. ' <Plug>' .. i.cmd
 	endfor
 	var exe_cmd = substitute(cmd, ' ', "\<Plug>", 'g')
 	execute 'packadd ' .. plug
