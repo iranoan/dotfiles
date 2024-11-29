@@ -342,7 +342,9 @@ def Make(ls: list<dict<any>>): void # make や別途インストールが必要�
 		var cmd: list<string> = split(s)
 		for i in range(20)
 			if cmd[0] !=# 'make'
-				if executable(cmd[0])
+				if index(['cd', 'set', 'export'], cmd[0]) != -1
+					return true
+				elseif executable(cmd[0])
 					return true
 				endif
 			elseif len(cmd) == 1
