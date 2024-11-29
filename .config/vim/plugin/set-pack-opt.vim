@@ -451,17 +451,19 @@ augroup loadVimHelpGenerator
 	| augroup! loadVimHelpGenerator
 augroup END
 
-# 編集中の Markdown をブラウザでプレビュー https://github.com/shime/vim-livedown {{{1
+# 編集中の Markdown をブラウザでプレビュー https://github.com/iamcco/markdown-preview.nvim {{{1
+# do-setup: cd app && npx --yes yarn install
+# help がないので上記 URL か $MYVIMDIR/pack/github/opt/markdown-preview.nvim/README.md
 augroup MyMarkdown
 	autocmd!
-	autocmd FileType markdown nnoremap <silent><buffer><Leader>v <Cmd>LivedownPreview<CR>
+	autocmd FileType markdown nnoremap <silent><buffer><Leader>v <Cmd>call mkdp#util#open_preview_page()<CR>
 augroup END
-augroup loadLivedownPreview
+augroup loadMarkdownPreviewNvim
 	autocmd!
-	autocmd CmdUndefined LivedownPreview
-				\ packadd vim-livedown
-				| autocmd! loadLivedownPreview
-				| augroup! loadLivedownPreview
+	autocmd FuncUndefined mkdp#*
+				\ packadd markdown-preview.nvim
+				| autocmd! loadMarkdownPreviewNvim
+				| augroup! loadMarkdownPreviewNvim
 augroup END
 
 # EPWING の辞書を呼び出す https://github.com/deton/eblook.vim {{{1
