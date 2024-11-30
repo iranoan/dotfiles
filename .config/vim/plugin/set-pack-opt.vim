@@ -462,6 +462,7 @@ augroup loadMarkdownPreviewNvim
 	autocmd!
 	autocmd FuncUndefined mkdp#*
 				\ packadd markdown-preview.nvim
+				| g:mkdp_markdown_css = expand('$MYVIMDIR/macros/markdown.css')
 				| autocmd! loadMarkdownPreviewNvim
 				| augroup! loadMarkdownPreviewNvim
 augroup END

@@ -1,0 +1,35 @@
+@charset "utf-8";
+
+html, header#page-header {
+	color: #586e75 !important;
+	text-align: justify !important;
+	background-color: #fdf6e3 !important;
+	border-color: #586e75 !important;
+}
+
+body, div#page-ctn, main {
+	font-size: 1em;
+	line-height: 1.2;
+	color: #586e75;
+	text-align: justify;
+	background-color: #fdf6e3;
+	border-color: #586e75;
+}
+
+h1 {
+	text-align: center;
+}
+
+@media (prefers-color-scheme: dark) {/* ダークモード */
+	html, header#page-header {
+		color: #EEE8D5 !important;
+		background-color: #002B36 !important;
+		border-color: #EEE8D5 !important;
+	}
+
+	body, div#page-ctn, main, header#page-header {
+		color: #EEE8D5;
+		background-color: #002B36;
+		border-color: #EEE8D5;
+	}
+}
