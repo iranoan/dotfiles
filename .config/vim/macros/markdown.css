@@ -20,6 +20,51 @@ h1 {
 	text-align: center;
 }
 
+strong {
+	font-weight: bold;
+	color: #DC322F;
+	border-color: #DC322F;
+}
+
+em {
+	font-style: italic;
+	color: #268BD2;
+	border-color: #268BD2;
+}
+
+del {
+	color: #839496 !important;
+	text-decoration: line-through;
+}
+
+ins {
+	color: #586E75;
+	text-decoration: none;
+}
+
+a:link {
+	color: #268BD2;
+}
+
+a:active {
+	color: #859900;
+}
+
+a:visited {
+	color: #D33682;
+}
+
+a[href]:hover {
+	font-size: 105%;
+	color: #D33682;
+	background-color: #B58900;
+}
+
+pre.hljs {
+	color: white;
+	background-color: black;
+}
+
 @media (prefers-color-scheme: dark) {/* ダークモード */
 	html, header#page-header {
 		color: #EEE8D5 !important;
@@ -31,5 +76,25 @@ h1 {
 		color: #EEE8D5;
 		background-color: #002B36;
 		border-color: #EEE8D5;
+	}
+
+	ins {
+		color: #EEE8D5;
+	}
+}
+
+@media print {/* 印刷用 */
+	body {
+		color: black;
+		background-color: white;
+		border-color: black;
+	}
+
+	p {
+		text-indent: 1em;
+	}
+
+	a:visited {
+		color: #268BD2;
 	}
 }
