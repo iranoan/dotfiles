@@ -389,7 +389,8 @@ def Make(ls: list<dict<any>>): void # make や別途インストールが必要�
 			endif
 			# execute('terminal ++shell ' .. c)
 			# execute 'silent file! run: ' .. c
-			execute '!' .. c
+			echohl MatchParen | echo c | echohl None
+			echo system(c)
 		endfor
 	endfor
 	chdir(wd)
@@ -408,7 +409,9 @@ def Update(d: string): void
 	var wd: string = getcwd()
 	if d =~# '^' .. resolve($MYVIMDIR) .. '/pack/github/' && filereadable(d .. '/.git/config')
 		chdir(d)
+		echohl MatchParen
 		echo system('git pull --ff --ff-only && git submodule update --init --recursive &')
+		echohl None
 		chdir(wd)
 	endif
 enddef
@@ -465,6 +468,7 @@ def Setup(): void # プラグインのインストール、設定のないもの
 				Update(info.dir)
 			else # 未インストール
 				if info_i.url =~# 'https://github\.com/'
+					echohl MatchParen | echo 'git clone ' .. info_i.url .. ' ' .. info.dir | echohl None
 					echo system('git clone ' .. info_i.url .. ' ' .. info.dir .. ' &')
 				else
 					add(out, {filename: info_i.file, lnum: info_i.line, text: 'Can not install ' .. k .. ', not Github'})
@@ -527,6 +531,7 @@ def Reinstall(packs: list<string>): void # プラグインの強制再インス�
 		if isdirectory(p.dir)
 			delete(p.dir, 'rf')
 		endif
+		echohl MatchParen | echo 'git clone ' .. p.info[0].url .. ' ' .. p.dir | echohl None
 		echo system('git clone ' .. p.info[0].url .. ' ' .. p.dir .. ' &')
 		Update(p.dir)
 		LsMake(p, ls_make)
