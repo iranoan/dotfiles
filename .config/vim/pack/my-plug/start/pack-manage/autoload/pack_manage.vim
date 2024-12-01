@@ -387,8 +387,9 @@ def Make(ls: list<dict<any>>): void # make や別途インストールが必要�
 				echohl WarningMsg | echomsg 'do not rum ' .. c | echohl None
 				continue
 			endif
-			execute('terminal ++shell ' .. c)
-			execute 'silent file! run: ' .. c
+			# execute('terminal ++shell ' .. c)
+			# execute 'silent file! run: ' .. c
+			execute '!' .. c
 		endfor
 	endfor
 	chdir(wd)
