@@ -37,7 +37,7 @@ export def Base(...arg: list<any>): string
 	endif
 	line_width -= 2 * (&signcolumn ==# 'yes' ? 1 : 0)
 
-	line = strcharpart(printf('%-' .. ( &shiftwidth * (v:foldlevel - 1) + 2) .. 's%s', '▸', line), 0, line_width - len(cnt))
+	line = strcharpart(printf('%-' .. ( &shiftwidth * (v:foldlevel - 1) + 2) .. 's%s', '▶', line), 0, line_width - len(cnt))
 	# 全角文字を使っていると、幅でカットすると広すぎる
 	# だからといって strcharpart() の代わりに strpart() を使うと、逆に余分にカットするケースが出てくる
 	# ↓末尾を 1 文字づつカットしていく
