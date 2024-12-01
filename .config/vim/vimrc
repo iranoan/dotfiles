@@ -265,8 +265,8 @@ set ignorecase smartcase                       # 小文字のみの検索では�
 set infercase                                  # 補完時に大文字/小文字をいい感じに調節してくれる
 # set hlsearch                                   # 検索ハイライトはトグル・スイッチにするために autocmd と map で行う
 # 一時的な取り消しが <Esc> を二回だと一回の <Esc> の反応が悪くなる
-nnoremap <expr><leader><Space> &hlsearch ? '<Cmd>set nohlsearch<CR>' : '<Cmd>set hlsearch<CR>'
-xnoremap <expr><leader><Space> &hlsearch ? '<Cmd>set nohlsearch<CR>' : '<Cmd>set hlsearch<CR>'
+nnoremap <leader><Space> <Cmd>set hlsearch!<CR>
+xnoremap <leader><Space> <Cmd>set hlsearch!<CR>
 nnoremap *  *<Cmd>set hlsearch<CR>
 xnoremap *  *<Cmd>set hlsearch<CR>
 nnoremap #  #<Cmd>set hlsearch<CR>
@@ -471,28 +471,28 @@ xnoremap X "+x
 # ↑元の v_X ほぼ v_x と同じだが行単位←元々行単位なら V を使う
 inoremap <S-Insert> <C-R>+
 inoremap <Insert> <C-R>+
+cnoremap <S-Insert> <C-R>+
+cnoremap <Insert> <C-R>+
 # inoremap <S-C-P> <C-R>+                        # 下と重なり無効になる←modifyOtherKeys
 # inoremap <C-P> <C-R>"
 inoremap <expr><C-P> pumvisible() ? '<C-P>' : '<C-R>"'
-#↑ insert moode の補完候補の選択にも使っている
-# inoremap <S-C-V> <C-R>+                        # 素の Ctrl-V が使えなくなる
-cnoremap <S-Insert> <C-R>+
-cnoremap <Insert> <C-R>+
-# cnoremap <S-C-P> <C-R>+                        # Ctrl-Pの割当と重なり無効になる
 cnoremap <expr><C-P> pumvisible() ? '<Up>' : '<C-R>"'
-cnoremap <expr><C-J> pumvisible() ? '<Down>' : '<C-J>"'
-#↑ command moode の補完候補の選択にも使っている
+#↑ insert moode の補完候補の選択にも使っている
 # 選択範囲の貼り付けで、直前のレジスタを連続して貼り付け←vimの連続コピペできない問題 https://baqamore.hatenablog.com/entry/2016/07/07/201856
+# ただし2つを入れ替えたい時は、書き換わったほうが都合が良いので、大文字側はデフォルトのままにしておく
 xnoremap <expr>p 'pgv"' .. v:register .. 'y`>'
 snoremap <expr><C-P> '<C-G>pgv"' .. v:register .. 'y`>a'
-# 2つを入れ替えたい時は、書き換わったほうが都合が良いので、大文字側はデフォルトのままにしておく
+# inoremap <S-C-V> <C-R>+                        # 素の Ctrl-V が使えなくなる
+# cnoremap <S-C-P> <C-R>+                        # Ctrl-Pの割当と重なり無効になる
+inoremap <expr><C-J> pumvisible() ? '<Down>' : '<C-J>'
+cnoremap <expr><C-J> pumvisible() ? '<Down>' : '<C-J>"'
+xnoremap <expr><C-J> pumvisible() ? '<Down>' : '<C-J>'
+#↑ command moode の補完候補の選択にも使っている
 # 挿入/コマンドモード時のカーソル移動 {{{2
 # [Henkan] を [BS] に割り当てているので、<C-H> は他に割り当てる
 inoremap <C-H> <C-G>U<Left>
 inoremap <Left> <C-G>U<Left>
 cnoremap <C-H> <Left>
-inoremap <expr><C-J> pumvisible() ? '<Down>' : '<C-J>'
-xnoremap <expr><C-J> pumvisible() ? '<Down>' : '<C-J>'
 #↑ insert moode の補完候補の選択にも使っている
 inoremap <C-K> <Up>
 inoremap <C-L> <C-G>U<Right>
@@ -508,7 +508,7 @@ inoremap <expr><C-N> pumvisible() ? '<C-N>' : '<Down>'
 vnoremap <expr><C-N> pumvisible() ? '<C-N>' : '<Down>'
 #↑ insert moode の補完候補の選択にも使っている
 # コマンドモードで素早くカレント・ディレクトリ入力 {{{2
-cnoremap <expr> %% getcmdtype() == ':' ? expand('%:h') .. '/' : '%%'
+cnoremap <expr> %% getcmdtype() == ':' ? expand('%:p:h') .. '/' : '%%'
 # コマンドモードの <C-N>, <C-K> を <Up>, <Down> に割当 {{{2
 cnoremap <C-N> <Down>
 cnoremap <C-K> <Up>
@@ -523,6 +523,10 @@ nnoremap <silent>gF <C-W>gF
 inoremap <BS> <C-G>u<BS>
 inoremap <Del> <C-G>u<Del>
 inoremap <S-BS> <C-G>u<Del>
+inoremap <CR> <C-G>u<CR>
+inoremap <C-m> <C-G>u<C-m>
+inoremap <C-u> <C-G>u<C-u>
+inoremap <C-w> <C-G>u<C-w>
 # ウィンドウ・サイズ変更 <C-W> の後の [+], [-], [<], [>] を押しっぱなしでサイズ変更できる {{{2
 nmap <C-W>+ <C-W>+<SID>ws
 nmap <C-W>- <C-W>-<SID>ws
