@@ -22,6 +22,7 @@ alias g='gvim.sh $@'
 # alias matlab='/usr/bin/octave --gui &'
 alias octave='octave-cli --silent'
 alias gnuplot='PAGER=less GNUHELP=~/.config/gnuplot/gnuplot-ja.gih gnuplot'
+alias fd='fdfind --hidden --follow --no-ignore --ignore-file ~/.config/fd/ignore '
 if type -t vim > /dev/null 2>&1 ; then
 	alias vi=vim
 	# vi としてそのまま起動すると、vim9script による記述がエラーになる
