@@ -1,3 +1,4 @@
+#!/bin/bash
 # ~/.bashrc: executed by bash(1) for non-login shells.
 # see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
 # for examples
@@ -214,6 +215,29 @@ ranger() { # ranger でファイルを less で開いた時にすぐ終わって
 	fi
 }
 
+find_function(){ # 下記の which() 関数から呼ばれ ~/.bashrc などから関数の記述位置を探す
+	# $1: function name
+	# $2: path
+	# 多重定義の対応は不完全で、読み込み順序とは関係なく定義箇所を羅列するだけ
+	# source で指定されている読み込みファイルはシェル変数未対応
+	if [ ! -f "$2" ]; then
+		return
+	fi
+	grep -E -nH "^\s*(function)?$1\s*\(\s*\)" "$2"
+	grep -E -h '(^\s*(source|\.)|(;|&&|\|\|)\s*(source|\.))\s' "$2" |
+		sed -E 's/(^\s*(source|\.)|.+(;|&&|\|\|)\s*(source|\.))\s+([^ ]+).*/\5/g' |
+		while read -r s; do
+			s=$( eval "echo $s" ) # " に挟まれていたり、環境変数を展開
+			case "$s" in "$HOME/.bash_login"|"$HOME/.bash_profile"|"$HOME/.bashrc"|"$HOME/.profile"|"$HOME/.xprofle")
+					# 無限ループを防ぐために ~/.bash_login, ~/.bash_profile, ~/.bashrc, ~/.profile, ~/.xprofile は再起処理から除外
+					continue ;;
+				*)
+					find_function "$1" "$s"
+					;;
+			esac
+		done
+}
+
 which(){ # 素の which /usr/bin/which ではリンクを辿らず、関数、alias の違いが不明
 	for f in "$@"; do
 		case "$( type -t "$f" )" in
@@ -229,7 +253,18 @@ which(){ # 素の which /usr/bin/which ではリンクを辿らず、関数、al
 				echo "keyword $f"
 				;;
 			function)
-				type "$f"
+				echo 'function'
+				for b in ~/.bash_profile ~/.bash_login ~/.profile
+				do
+					if [ -f "$b" ]; then
+						find_function "$f" "$b"
+						break
+					fi
+				done
+				for b in ~/.bashrc ~/.xprofile
+				do
+					find_function "$f" "$b"
+				done
 				;;
 			builtin)
 				echo "builtin $f"
