@@ -4,15 +4,15 @@
 # see /usr/share/doc/bash/examples/startup-files for examples.
 # the files are located in the bash-doc package.
 
-if [ -f ~/.xprofile ]; then
-	. ~/.xprofile
+if [ -f "$HOME/.xprofile" ]; then
+	. "$HOME/.xprofile"
 fi
 
 # if running bash
 if [ -n "$BASH_VERSION" ]; then
 	# include .bashrc if it exists
-	if [ -f ~/.bashrc ]; then
-		. ~/.bashrc
+	if [ -f "$HOME/.bashrc" ]; then
+		. "$HOME/.bashrc"
 	fi
 fi
 
