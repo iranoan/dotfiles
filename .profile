@@ -65,8 +65,3 @@ case "$TERM" in
 		export LC_TELEPHONE="ja_JP.UTF-8"
 		export LC_TIME="ja_JP.UTF-8";;
 esac
-# バックアップ関係
-sed -e "/\\[\\(RecentsMRL\\|General\\|Playlist\\)\\]$/,/^$/d" -e "/^playlistSize=@Size([0-9]\\+ [0-9]\\+)/d" ~/.config/vlc/vlc-qt-interface.conf > ~/Information/backup/home/.config/vlc/vlc-qt-interface.conf
-sed "/^ *\\(last_path\\|\\(main\\|float\\)_window\\.\\w\\+\\) = /d" ~/.config/geeqie/geeqierc.xml > ~/Information/backup/home/.config/geeqie/geeqierc.xml
-# sed "/^nautilus-icon-\\(position\\|view-layout\\)-timestamp=/d" ~/.config/nautilus/desktop-metadata > ~/Information/backup/home/.config/nautilus/desktop-metadata
-

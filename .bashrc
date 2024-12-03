@@ -90,7 +90,6 @@ if [ -x /usr/bin/dircolors ]; then
 	else
 		eval "$(dircolors -b)"
 	fi
-	alias ls='ls --color=auto --hide={*.o,*.fls,*.synctex.gz,*.fdb_latexmk,*.toc,*.out,*.dvi,*.aux,*.nav,*.snm,*.swp}'
 fi
 
 # colored GCC warnings and errors
