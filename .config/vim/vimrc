@@ -374,6 +374,7 @@ set grepprg=/usr/bin/grep\ $*\ /dev/null       # --exclude は --include を使�
 $LESS = substitute($LESS, '['' " =]\zs-\(-quit-if-one-screen\|F\)\>', '', 'g') # less 環境変数置き換え
 # ↑--quit-if-one-screen, -F が残っていると、プラグインのプレビューに使われていると、内容が画面に収まる場合に直ちに閉じられる (alias は外部フィルタ無効+選択状態でうまく処理してくれない)
 # キー割り当てを除いたその他 {{{1
+set timeout timeoutlen=500 ttimeoutlen=100     # マップの入力待ち 0.5s、キーコード入力待ち 0.1s
 set modeline
 # set modeline modelineexpr
 set shellslash                                 # Windowsでもパス区切りにスラッシュを使える
