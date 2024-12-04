@@ -1,5 +1,5 @@
 # Setup fzf
-# $FZF_DEFAULT_COMMAND, $FZF_DEFAULT_OPT はランチャーからの起動したアプリでも有効にするために ~/.xprofile で定義
+# $FZF_DEFAULT_COMMAND, $FZF_DEFAULT_OPTS はランチャーからの起動したアプリでも有効にするために ~/.xprofile で定義
 
 # Auto-completion
 # ---------------
@@ -8,6 +8,8 @@
 # Key bindings
 # ------------
 source "$HOME/.config/fzf/key-bindings.bash"
+
+alias fd='fdfind --hidden --follow --no-ignore --ignore-file ~/.config/fd/ignore '
 
 f(){ # ファイル検索して fzf
 	# 呼び出し元ウィンドウのアプリを探す
@@ -24,12 +26,14 @@ f(){ # ファイル検索して fzf
 				break
 				;;
 			nvim-qt|gvim|mlterm|xterm|tilda|guake|gnome-terminal*) # それ以外は fzf-tmux を使う
-				fzf='fzf-tmux -p 100%,100%'
+				# fzf='fzf-tmux -p 100%,100%' 本当はこちらを使いたいが、become() とシェルスクリプト内の & (バックグラウンド) 起動を試みると起動しない
+				fzf='fzf'
 				break
 				;;
 			vim|nvim)
 				if ps --cols 1000 xo pid,comm,args | grep -E "^ *$pid +n?vim " | grep -qE ' -g\>' ; then # -g オプション付きで起動した Vim→GVim
-					fzf='fzf-tmux -p 100%,100%'
+					# fzf='fzf-tmux -p 100%,100%'
+					fzf='fzf'
 					break
 				else
 					continue

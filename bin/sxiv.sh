@@ -121,15 +121,18 @@ open_img(){
 	fi
 }
 
-[ "$1" = '--' ] && shift
-case "$1" in
-	"")
-		case "$( ps xo pid,comm | awk -F ' ' '/^\s*\<'$PPID'\>/{ print $2 }' )" in
-			sh|ksh|ash|dash|bash|csh|tcsh|zsh|fish) open_img "$PWD" ;;
-			*) open_img "$( xdg-user-dir PICTURES )" ;;
-		esac
-		;;
-	/*) open_img "$1" ;;
-	"~"/*) open_img "$HOME/${1#"~"/}" ;;
-	*) open_img "$PWD/$1" ;;
-esac
+if [ $# -eq 0 ]; then
+	case "$( ps xo pid,comm | awk -F ' ' '/^\s*\<'$PPID'\>/{ print $2 }' )" in
+		sh|ksh|ash|dash|bash|csh|tcsh|zsh|fish) open_img "$PWD" ;;
+		*) open_img "$( xdg-user-dir PICTURES )" ;;
+	esac
+	exit
+fi
+for f in "$@"
+do
+	case "$f" in
+		/*) open_img "$f" ;;
+		"~"/*) open_img "$HOME/${f#"~"/}" ;;
+		*) open_img "$PWD/$f" ;;
+	esac
+done
