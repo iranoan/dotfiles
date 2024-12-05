@@ -9,8 +9,6 @@
 # ------------
 source "$HOME/.config/fzf/key-bindings.bash"
 
-alias fd='fdfind --hidden --follow --no-ignore --ignore-file ~/.config/fd/ignore '
-
 f(){ # ファイル検索して fzf
 	# 呼び出し元ウィンドウのアプリを探す
 	ppid=$PPID
