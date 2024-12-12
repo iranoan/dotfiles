@@ -89,12 +89,11 @@ g:loaded_netrwPlugin = 1
 # # g:netrw_timefmt = '%Y/%m/%d(%a) %H:%M:%S'
 # g:netrw_sort_by = 'time'                   # 日付で逆順ソート
 # g:netrw_sort_direction = 'reverse'
-# }}}
 # 読み込み明示が必要な分 {{{2
 packadd! editexisting                          # 既に開いていれば、そちらをアクティブに
 packadd! matchit                               # 対応するカッコ移動%を拡張→ファイルタイプ別設定でb:match_words
 # packadd termdebug                              # デバッガ ←vimspector を使う
-# マウス {{{2
+# マウス {{{1
 set mouse=a                                    # マウス有効化
 set mousemodel=popup                           # マウス右クリックは Windows 風 (GUI のみ)
 # set nomousefocus                               # デフォルト
@@ -172,6 +171,11 @@ set shortmess+=IWc shortmess-=S                # I 起動時にファイル未�
                                                # c 補完関連のメッセージを表示しない
                                                # S 検索ヒット件数表示←コマンドラインに検索のヒット位置、総個数を [?/?] で表示し、ファイルの先頭・終端になった時のメッセージが一瞬で消える
 set textwidth=0                                # 自動改行させない
+set display+=lastline                          # 画面最後の行をできる限り表示
+set wrap                                       # 長い行は折り返し表示
+set sidescroll=1                               # 横スクロールでカーソル位置を真ん中にしない
+set linebreak                                  # wrap at 'breakat
+set breakat=\ \	!/?)}>                         # break point for linebreak (set breakat-=*-+;:,. breakat+=)}>) (日本語は全角文字に空白が余分に表示されてしまう←helpに8bit文字のみとある)
 # 対応するカッコ {{{2
 set cpoptions+=MI                              # 対応するカッコで、\によるエスケープを除外+インデントの自動削除なしに
 set matchpairs+=<:>,「:」,（:）,『:』,【:】,‘:’,“:” # 対応括弧に<と>のペアやカギカッコを追加
@@ -183,8 +187,19 @@ set listchars=tab:»\ ,trail:␣,eol:⏎,extends:»,precedes:«,space:␣,nbsp:%
 # 空白などの不可視文字は_にすると、カーソル行の色指定との関係で、_自身と区別しにくい。eol の候補は他に→が有る ↵
 set fillchars=vert:\|,fold:\ ,
 set noexpandtab                                # 通常はタブ文字入力可能に
-# カーソル行 {{{2
 set number signcolumn=yes                      # 行番号、sign (マーク表示桁) 表示
+tabdo set cmdheight=1                          # コマンドバー行数
+set wildmenu wildmode=longest:full wildoptions=pum # 補完が拡張モード+最長展開+ポップアップ
+set suffixes+=.aux,.log,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.toc,.pdf,.synctex.gz # 補完の優先度を下げる拡張子
+set wildignore+=*.dvi,*.o,*.opp,*.obj,*.a,*.so,*.fdb_latexmk,*.fls,*.nav,*.out,*.snm,*.ltjruby,*.swp # 補完候補から完全に除外 (含めると補完候補にも現れなくなる)
+set isfname+=: isfname-=# isfname-==           # gf などでファイルとして扱う文字 Maildir では : がフラグの前置文字 HTML では # は id+シェルスクリプトなどで = は代入
+set autoindent smartindent                     # オートインデント+改行時に行末記号に合わせてインデント増減
+# set cindent                                  # 全てで C 言語風のインデントが適用されるので、ローカルで行うべき
+set tabstop=2 shiftwidth=2                     # タブ文字は2文字分に合わせてインデントは2文字
+set breakindent                                # 行頭空白の折り返し行で見かけ上インデント
+set breakindentopt=shift:0,min:10,list:0       # 見かけ上のインデント量を formatlistpat にヒットした文字数にする (list:-1はタブ文字も1文字なので、tabstop-1だけずれる)
+set formatlistpat=^\\c\\s*\\(([0-9a-z]\\+)\\\|\\[[0-9a-z]\\]\\\|[a-z][]\ :.)]\\\|\\d\\+[]\ :.)]\\)\\s* # 箇条書きとみなす空白、数値、1文字英字とカッコの組み合わせ
+# カーソル行 {{{2
 augroup CoursolLineColumn # 挿入モードでは、カーソール行桁背景色無し、ノーマル・モードでは付ける
 	autocmd!
 	autocmd WinEnter,InsertLeave,TabEnter * set cursorline cursorcolumn
@@ -206,18 +221,6 @@ if !has('gui_running')
 	&t_EI ..= "\e[1 q"                           # ノーマル:箱型
 	&t_SR ..= "\e[3 q"                           # 置換:    下線
 endif
-# インデント {{{2
-set autoindent smartindent                     # オートインデント+改行時に行末記号に合わせてインデント増減
-# set cindent                                  # 全てで C 言語風のインデントが適用されるので、ローカルで行うべき
-set tabstop=2 shiftwidth=2                     # タブ文字は2文字分に合わせてインデントは2文字
-set breakindent                                # 行頭空白の折り返し行で見かけ上インデント
-set formatlistpat=^\\c\\s*\\(([0-9a-z]\\+)\\\|\\[[0-9a-z]\\]\\\|[a-z][]\ :.)]\\\|\\d\\+[]\ :.)]\\)\\s* # 箇条書きとみなす空白、数値、1文字英字とカッコの組み合わせ
-set breakindentopt=shift:0,min:10,list:0       # 見かけ上のインデント量を formatlistpat にヒットした文字数にする (list:-1はタブ文字も1文字なので、tabstop-1だけずれる)
-# コマンド・バー {{{2
-tabdo set cmdheight=1                          # コマンドバー調整
-set wildmenu wildmode=longest:full wildoptions=pum # 補完が拡張モード+最長展開+ポップアップ
-set suffixes+=.aux,.log,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.toc,.pdf,.synctex.gz # 補完の優先度を下げる拡張子
-set wildignore+=*.dvi,*.o,*.opp,*.obj,*.a,*.so,*.fdb_latexmk,*.fls,*.nav,*.out,*.snm,*.ltjruby,*.swp # 補完候補から完全に除外 (含めると補完候補にも現れなくなる)
 # ステータス・バー {{{2
 set laststatus=2                               # 表示
 set statusline=%#StatusLineLeft#%-19.(%{tabpagenr()}/%{tabpagenr('$')}:%n%{%&buftype=='terminal'?'[terminal]':&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%#StatusGit#\ %{fugitive#statusline()[5:-3]->substitute('(','\ ','')}\ %*\ %<%F%=%#StatusLineRight#\ %c:%v:%{strcharlen(strpart(getline('.'),0,col('.')))}/%{strlen(join(getline(0,line('$')),(&ff=='dos'?'12':'1')))}:%{strcharlen(join(getline(0,line('$')),''))}\ %3l/%L%4p%%\ 0x%04B\ [%{&fenc!=''?&fenc:&enc}:%{%{'dos':'CR+LF','unix':'LF','mac':'CR'}[&ff]%}]
@@ -255,6 +258,7 @@ set delcombine                                 # 結合文字を別々に削除�
 set nrformats=bin,hex,alpha,blank              # アルファベットでもインクリメント、ディクリメント←8進数,octalは除外、-の前が空白でない場合はハイフン扱いで負数扱いにしない
 set spell spelllang+=cjk                       # スペル・チェック
 set clipboard=exclude:cons\|linux              # クリップボードの扱い
+set backspace=indent,eol,start
 # カーソル・キー {{{1
 set keymodel=startsel,stopsel                  # シフトキー+矢印キーで選択が出来る
 set whichwrap=b,s,h,l,<,>,[,]                  # カーソルを行頭、行末で止まらないようにする
@@ -333,7 +337,6 @@ augroup VIMRC
 	autocmd BufNewFile *.vim        vimrc#Insert_template('vim.vim')
 augroup END
 # 日本語の表示/編集に関わる設定 {{{1
-set backspace=indent,eol,start
 if exists('&ambiwidth')                        # □とか○の文字があってもカーソル位置がずれないようにする
 	set ambiwidth=double
 	setcellwidths([                              # 一部を再度半角/全角明示指定
@@ -354,14 +357,7 @@ if exists('&ambiwidth')                        # □とか○の文字があっ�
 	# 半角のデザインが中途半端
 endif
 set formatoptions+=mMj1 formatoptions-=t formatoptions-=c # 日本語の行の連結時には空白を入力しない+textwidth を使った自動折返しをしない
-set display+=lastline                          # 画面最後の行をできる限り表示
-set wrap                                       # 長い行は折り返し表示
-set sidescroll=1                               # 横スクロールでカーソル位置を真ん中にしない
-set linebreak                                  # wrap at 'breakat
-set breakat=\ \	!/?)}>                         # break point for linebreak (set breakat-=*-+;:,. breakat+=)}>) (日本語は全角文字に空白が余分に表示されてしまう←helpに8bit文字のみとある)
 set helplang=ja,en                             # 日本語ヘルプを優先的に表示
-# gf などでファイルとして扱う文字 {{{1
-set isfname+=: isfname-=# isfname-==           # Maildir では : がフラグの前置文字 HTML では # は id+シェルスクリプトなどで = は代入
 # ファイルタイプ別設定 {{{1 ftplugin/ では遅い分
 g:tex_flavor = 'latex'                         # *.tex の新規作成などで plainTeX ではなく LaTeX として扱う
 g:html_indent_autotags = 'html,body,tbody,dt,dd,li' # HTML でインデント量を変えない $MYVIMDIR/ftplugin/html.vim に書くと、他を開いてからだと反映されない
@@ -420,14 +416,10 @@ tnoremap <silent><C-W><Esc> <C-W>N
 tnoremap <C-W>p <C-W>""
 # ↑貼り付け
 # QuickFix {{{2
-nnoremap <silent><Leader>qf :wall<CR>:silent make<CR>:cwindow<CR>
-# ↑QuickFix ではないが、やりたいことは似ているので、ここに一緒に書いておく
-# QuickFix と diff モードに共通キー (次/前の変更/エラー箇所を共通化)
 nnoremap <silent><expr>]c   &diff ? ']c' : ':cnext<CR>'
 nnoremap <silent><expr>[c   &diff ? '[c' : ':cprevious<CR>'
 nnoremap <silent>]C         <Cmd>cnfile<CR>
 nnoremap <silent>[C         <Cmd>cpfile<CR>
-# 移動系 {{{2
 nnoremap <silent>[l         <Cmd>lprevious<CR>
 nnoremap <silent>]l         <Cmd>lnext<CR>
 nnoremap <silent>[L         <Cmd>lpfile<CR>
@@ -436,6 +428,10 @@ nnoremap <silent>[b         <Cmd>bprevious<CR>
 nnoremap <silent>]b         <Cmd>bnext<CR>
 nnoremap <silent>[C         <Cmd>cpfile<CR>
 nnoremap <silent>]C         <Cmd>cnfile<CR>
+nnoremap <silent><Leader>qf :wall<CR>:silent make<CR>:cwindow<CR>
+# ↑QuickFix ではないが、やりたいことは似ているので、ここに一緒に書いておく
+# QuickFix と diff モードに共通キー (次/前の変更/エラー箇所を共通化)
+# 移動系 {{{2
 nnoremap <silent>[E         g;
 nnoremap <silent>]E         g,
 nnoremap <silent>[e         <Cmd>call vimrc#MoveChanged(0)<CR>
