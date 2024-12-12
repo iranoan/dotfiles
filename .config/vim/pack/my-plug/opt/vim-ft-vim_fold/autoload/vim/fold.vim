@@ -51,8 +51,8 @@ def Calculate(bufnr: number): dict<any>
 	var s_marker_lv: string
 	var synid: string
 
-	var open_pat: string = '\<\%(\(export\s\+\)\?fu\%[nction][! \t]\|aug\%[roup]\>\|if\>\|for\>\|wh\%[ile]\>\|\(export\s\+\)\?def\>\|try\>\)'
-	var close_pat: string = '\<\%(endf\%[unction]\|aug\%[roup]\s\+END\|endfo\%[r]\|endw\%[hile]\|enddef\|en\%[dif]\|endt\%[ry]\)\>'
+	var open_pat: string = '\<\%(\(export\s\+\)\?fu\%[nction][! \t]\|aug\%[roup]\s\|if\>\|for\>\|wh\%[ile]\>\|\(export\s\+\)\?def\>\|try\>\)\C'
+	var close_pat: string = '\<\%(endf\%[unction]\|aug\%[roup]\s\+END\|endfo\%[r]\|endw\%[hile]\|enddef\|en\%[dif]\|endt\%[ry]\)\>\C'
 
 	def PareBracket(): number # ペアで存在しない (), [], {}
 		var i: number = 0
@@ -65,7 +65,7 @@ def Calculate(bufnr: number): dict<any>
 				break
 			endif
 			synid = synIDattr(synIDtrans(synID(lnum, i, 1)), 'name')
-			if synid ==# 'Comment' || synid ==# 'Constant'
+			if synid ==# 'Comment' || synid ==# 'Constant' || synid =~# 'vimMap[LR]hs'
 				continue
 			elseif index(['{', '[', '('], s) != -1
 				no_match += 1
