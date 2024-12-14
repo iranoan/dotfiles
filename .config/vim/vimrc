@@ -380,7 +380,11 @@ set tags+=tags;$HOME/                          # tags ファイルは $HOME ま�
 set belloff=all                                # 音を消す
 # set visualbell                                 # 多くの colorscheme や tmux, Gvim で効かない
 set mouse=a                                    # マウスの設定全てのモードで有効に
-&viminfo ..= ',n' .. expand('$MYVIMDIR/viminfo') # viminfo の保存先
+if has('win32')                                # viminfo の保存先等
+	&viminfo = "'500,<1000,s128,h,rA:,rB:,n" .. expand('$MYVIMDIR') .. 'viminfo'
+else
+	&viminfo = "'500,<1000,s128,h,r/tmp,n" .. expand('$MYVIMDIR') .. 'viminfo'
+endif
 set history=500                                # コマンド履歴の保存数 (あまり大きくすると q: 等で時間がかかるようになる)
 set termwinscroll=30000                        # ターミナルで遡れる行数
 # 個人的なキー割り当て keymap キーマップ {{{1
