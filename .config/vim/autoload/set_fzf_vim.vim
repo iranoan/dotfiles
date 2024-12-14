@@ -71,13 +71,12 @@ function set_fzf_vim#main() abort
 				\ 'ctrl-o': function('set_fzf_vim#FZF_open')
 				\ } " 他で sink を使うと、この設定は無視されるので注意←:help fzf-global-options-supported-by-fzf#wrap
 				" \ 'ctrl-e': 'edit', カーソルを入力の末尾移動と重なる
-	" [Buffers] Jump to the existing window if possible
-	let g:fzf_buffers_jump = 1
-	" let g:fzf_preview_window = ['right:50%', 'ctrl-]'] " FZF_DEFAULT_OPTS で定義済み
-	" let g:fzf_vim = {
-	" 			\ 'buffers_jump': 1,
-	" 			\ 'commits_log_options': '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"',
-	" 			\ }
+	" let g:fzf_vim = #{
+	" 			\ buffers_jump: 1,
+	" 			\ preview_window: ['right:50%', 'ctrl-]'],
+	" 			\ commits_log_options: '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"',
+	" 			\ } " buffers_jump: Buffers 使わず、preview_window: FZF_DEFAULT_OPTS で定義済み
+	let v:oldfiles = filter(v:oldfiles, {_, v -> filereadable(expand(v))})
 endfunction
 
 def set_fzf_vim#FZF_open(arg: list<string>): void
