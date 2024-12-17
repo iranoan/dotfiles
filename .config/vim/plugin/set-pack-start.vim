@@ -39,6 +39,8 @@ for g:packe_setting_s in ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'html', '
 		g:packe_setting_ext = '*.vim,.vimrc,vimrc,_vimrc,.gvimrc,gvimrc,_gvimrc'
 	elseif g:packe_setting_s ==# 'markdown'
 		g:packe_setting_ext = '*.md'
+	elseif g:packe_setting_s ==# 'cpp'
+		g:packe_setting_ext = '*.h'
 	else
 		g:packe_setting_ext = '*.' .. g:packe_setting_s
 	endif
