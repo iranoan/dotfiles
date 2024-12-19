@@ -23,7 +23,7 @@ scriptencoding utf-8
 
 # プラグイン管理 {{{1
 # $MYVIMDIR/pack でプラグインを管理する上で、FileType で読み込んだプラグインを再設定するために、再度 setfiletype して、そのイベント・トリガーを削除 {{{2
-for g:packe_setting_s in ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'html', 'xhtml', 'css', 'tex', 'sh', 'bash', 'markdown', 'go', 'help']
+for g:packe_setting_s in ['awk', 'c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'html', 'xhtml', 'css', 'tex', 'sh', 'bash', 'markdown', 'go', 'help']
 	if g:packe_setting_s ==# 'python'
 		g:packe_setting_ext = '*.py'
 	elseif g:packe_setting_s ==# 'ruby'
