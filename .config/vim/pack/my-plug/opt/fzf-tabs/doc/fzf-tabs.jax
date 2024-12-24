@@ -49,10 +49,10 @@ Option~
 	* fzf に渡すオプション
 	* プレビュー・プログラムに渡すファイル名は {2} を使う
 
-	Example: >
+	Example: >vim
 		let g:fzf_tabs_options = ['--preview', 'cat $(echo {2} | sed "s>^~>$HOME>")']
 <
-|g:fzf_layout|
+*g:fzf_layout*
 
 	ポップアップ・ウィンドウのレイアウト設定
 	see -> |fzf.txt|
