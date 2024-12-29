@@ -65,7 +65,8 @@ def Calculate(bufnr: number): dict<any>
 				break
 			endif
 			synid = synIDattr(synIDtrans(synID(lnum, i, 1)), 'name')
-			if synid ==# 'Comment' || synid ==# 'Constant' || synid =~# 'vimMap[LR]hs'
+			if synid ==# 'Comment' || synid ==# 'Constant' || synid =~# 'vimMap[LR]hs' || synid ==# 'vimNormalArg'
+			# if synid !=# 'Delimitere' && synid !=# 'vimParenSep' && synid !=# 'vimSep' && synid !=# 'vimOperParen' && synid !=# 'vimDefBody'
 				continue
 			elseif index(['{', '[', '('], s) != -1
 				no_match += 1
