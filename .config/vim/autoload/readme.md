@@ -1,6 +1,6 @@
 # 置いてあるファイル
 
-* gvimrc.vim
+* gvimrc.vim  
   GUI の設定変更の関数
 * hook\_function.vim  
   スクリプト・ローカルな関数を簡単に置き換えるための関数
