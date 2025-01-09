@@ -695,11 +695,11 @@ augroup OpenURI
 		| augroup! OpenURI
 augroup END
 
-# $MYVIMDIR/pack/my-plug/opt/python-fold {{{1
-augroup loadPythonFold
+# $MYVIMDIR/pack/my-plug/opt/ft-fold {{{1
+augroup loadFileTypeFold
 	autocmd!
-	autocmd FileType python
-				\ packadd python-fold
-				| autocmd! loadPythonFold
-				| augroup! loadPythonFold
+	autocmd FileType python,help,awk
+				\ packadd ft-fold
+				| autocmd! loadFileTypeFold
+				| augroup! loadFileTypeFold
 augroup END

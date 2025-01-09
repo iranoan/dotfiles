@@ -30,4 +30,4 @@ setlocal listchars+=leadmultispace:\ \ \ \|
 setlocal equalprg=autopep8\ -
 setlocal formatprg=autopep8\ -
 " --max-line-length\ 100 " ~/.config/pep8
-setlocal foldexpr=python_fold#Fold() foldmethod=expr
+setlocal foldexpr=python#fold#Fold() foldmethod=expr
