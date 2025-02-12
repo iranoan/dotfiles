@@ -11,7 +11,7 @@ if !exists("g:qf_plugin")
 	let g:qf_plugin = 1
 	augroup QuickFix
 		autocmd!
-		autocmd WinEnter     *
+		autocmd WinEnter *
 					\ if winnr('$') == 1 && getbufvar(winbufnr(0), '&buftype') == 'quickfix' |
 					\ 	if tabpagenr('$') == 1  |
 					\ 		quit |

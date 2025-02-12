@@ -306,7 +306,9 @@ augroup VIMRC
 				| endif
 	# ファイルを開いた/閉じた/保存時
 	autocmd BufReadPost * if &modifiable && search('[^\t -~]', 'cnw') == 0 | set fileencoding=utf-8 | endif # ASCII のみの時も utf-8 を使う
-	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,vimgrepadd topleft copen # cwindow を使うと、make で使用されるプログラムによってカーソル位置がずれる
+	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,vimgrepadd
+				\ topleft copen |
+				\ setlocal statusline=%#StatusLineLeft#%t\ %*%<%{exists('w:quickfix_title')?w:quickfix_title:''}%=%#StatusLineRight#%3l/%L%4p%%
 	autocmd QuickfixCmdPost lmake,lgrep,lgrepadd,lvimgrep,lvimgrepadd topleft lopen
 	autocmd BufEnter,BufFilePost,BufNewFile,BufRead * vimrc#Lcd()
 	autocmd BufWritePre * if &modified == true && &filetype != 'markdown' | pos = getpos('.') | :%s/\(^--\|^>.*\)\@<![ \u000B\t\r　]\+$//e | setpos('.', pos) | endif # メール署名の区切りと引用行以外の行末空白を保存時に削除

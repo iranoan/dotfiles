@@ -320,6 +320,10 @@ g:pairquote = {
 
 # grep で幾つかのオプションをデフォルトで付けたり、補完を可能にする $MYVIMDIR/pack/my-plug/start/gnu-grep/ {{{1
 g:gnu_grep = {'exclude-dir': '{.git,.cache,.thumbnail,cache,thumbnail,undo}'}
+augroup GnuGrep
+	autocmd!
+	autocmd QuickFixCmdPost * gnu_grep#SetQfTitle()
+augroup END
 
 # 出力を quickfix に取り込む $MYVIMDIR/pack/my-plug/start/output2qf {{{1
 # シェルの取り込みでは補完を使いたいので、opt にしない
