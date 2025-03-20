@@ -20,6 +20,13 @@
 .thumbnails/
 thumbnails/
 /img/スクリーンショット/
+/.wine/drive_c/users/hiroyuki/Downloads/
+/.wine/drive_c/users/hiroyuki/Documents/
+/.wine/drive_c/users/hiroyuki/Desktop/
+/.wine/drive_c/users/hiroyuki/Videos/
+/.wine/drive_c/users/hiroyuki/Pictures/
+/.wine/drive_c/users/hiroyuki/Music/
+/.wine/dosdevices/
 /PDF/
 /.local/share/log/
 _log/
