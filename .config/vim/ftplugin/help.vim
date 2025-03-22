@@ -8,10 +8,8 @@ endif
 b:did_ftplugin_user = 1
 
 # ファイルタイプ別のグローバル設定 {{{1
-if !exists('g:help_plugin')
-	g:help_plugin = 1
-# if !exists('g:help_example_languages')
-	# g:help_example_languages = {vim: 'vim', sh: 'sh', bash: 'sh', python: 'python'}
+if !exists('g:help_example_languages')
+	g:help_example_languages = {vim: 'vim', sh: 'sh', bash: 'sh', python: 'python'}
 	# augroup FileTypeHELP
 	# 	autocmd!
 	# 	autocmd BufWinEnter * setlocal foldlevel=99
