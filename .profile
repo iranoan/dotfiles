@@ -4,6 +4,37 @@
 # see /usr/share/doc/bash/examples/startup-files for examples.
 # the files are located in the bash-doc package.
 
+NUMLOCK=0
+if command -v gsettings > /dev/null  ; then
+	# Gnome の設定 (dconf) org.gnome.desktop.peripherals.keyboard.numlock-state の値を USB/Bluetooth のキーボードが
+	# 有れば true
+	# 無ければ false
+	for event in /dev/input/event*; do
+		INFO=$(udevadm info --query=all --name="$event" 2>/dev/null)
+		if grep -q '^E: ID_INPUT_KEYBOARD=1' <<-_EOF_ ; then
+		$INFO
+		_EOF_
+			if grep -q '^E: ID_BUS=usb' <<-_EOF_ ; then
+				$INFO
+				_EOF_
+				NUMLOCK=1
+				break
+			elif grep -q '^E: ID_BUS=bluetooth' <<-_EOF_ ; then
+				$INFO
+				_EOF_
+				NUMLOCK=1
+				break
+			fi
+		fi
+	done
+fi
+if [ $NUMLOCK -eq 1 ]; then
+	gsettings set org.gnome.desktop.peripherals.keyboard numlock-state true
+else
+	gsettings set org.gnome.desktop.peripherals.keyboard numlock-state false
+fi
+unset NUMLOCK
+
 if [ -f "$HOME/.xprofile" ]; then
 	. "$HOME/.xprofile"
 fi
