@@ -255,7 +255,7 @@ augroup END
 set completeopt=menuone,noinsert,popup,noselect # 補完の挙動
 set delcombine                                 # 結合文字を別々に削除する
 # set maxcombine=2                               # 結合文字の最大個数
-set nrformats=bin,hex,alpha,blank              # アルファベットでもインクリメント、ディクリメント←8進数,octalは除外、-の前が空白でない場合はハイフン扱いで負数扱いにしない
+set nrformats=bin,hex,alpha                    # アルファベットでもインクリメント、ディクリメント←8進数,octalは除外 blankは-の前が空白でない場合はハイフン扱いで負数扱いにしない→(1,-1)といった座標記述の都合が悪い
 set spell spelllang+=cjk                       # スペル・チェック
 set clipboard=exclude:cons\|linux              # クリップボードの扱い
 set backspace=indent,eol,start
