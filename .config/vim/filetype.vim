@@ -1,12 +1,12 @@
 vim9script
-# ファイル名によって filetype 指定
 scriptencoding utf-8
+# ファイル名によって filetype 指定
 if exists('did_load_filetypes')
 	finish
 endif
 var did_load_filetypes = 1
 
-augroup filetypedetect
+augroup user_filetypedetect
 	autocmd!
 	autocmd BufNewFile,BufRead *.plt          setfiletype gnuplot # *.plt は mimetypeが設定されていないことも有り得る
 	autocmd BufNewFile,BufRead .bash_history,.bashrc,~/dotfiles/.config/bash/*,~/.config/bash/* setfiletype bash
