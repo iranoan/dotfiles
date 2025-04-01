@@ -376,7 +376,7 @@ set timeout timeoutlen=500 ttimeoutlen=100     # マップの入力待ち 0.5s�
 set modeline
 # set modeline modelineexpr
 set shellslash                                 # Windowsでもパス区切りにスラッシュを使える
-set diffopt=filler,context:2,iwhite,vertical,closeoff,internal,algorithm:histogram,indent-heuristic # 差分表示オプション
+set diffopt=filler,context:2,iwhite,vertical,closeoff,internal,algorithm:histogram,indent-heuristic,linematch:60 # 差分表示オプション
 set path+=~/bin,~/Templates,
 set tags+=tags;$HOME/                          # tags ファイルは $HOME まで辿る :help file-searching
 set belloff=all                                # 音を消す
