@@ -491,7 +491,7 @@ augroup END
 # https://github.com/prabirshrestha/vim-lsp {{{1
 augroup loadvimlsp
 	autocmd!
-	autocmd FileType awk,c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,tex,css,sh,bash,go,conf
+	autocmd FileType awk,c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,css,sh,bash,go,conf
 				\ set_vimlsp#main()
 				| autocmd! loadvimlsp
 				| augroup! loadvimlsp

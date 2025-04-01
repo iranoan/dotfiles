@@ -107,10 +107,10 @@ function set_vimlsp#main() abort
 		" 			\ foldmethod=expr
 		" 			\ foldexpr=lsp#ui#vim#folding#foldexpr()
 		" 			\ foldtext=lsp#ui#vim#folding#foldtext()
-		" ↓packadd を使う場合、これがないと開いた既存のウィンドウでバッファを開いた時に有効にならない
-		autocmd FileType awk,c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,tex,css,sh,bash,go,conf if !s:check_run_lsp() | call lsp#activate() | endif
+		" ↓packadd を使う場合、これがないと開いた既存のウィンドウでバッファを開いた時に有効にならない (TeX はファイルが多いと遅くなるので使わない)
+		autocmd FileType awk,c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,css,sh,bash,go,conf if !s:check_run_lsp() | call lsp#activate() | endif
 		autocmd BufAdd *
-					\ if index(['awk','c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'html', 'xhtml', 'tex', 'css', 'sh', 'bash', 'go', 'conf'], &filetype) != -1
+					\ if index(['awk','c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'html', 'xhtml', 'css', 'sh', 'bash', 'go', 'conf'], &filetype) != -1
 					\ | if !s:check_run_lsp()
 					\ | 	call lsp#activate()
 					\ | endif
@@ -147,7 +147,7 @@ def s:on_lsp_buffer_enabled(): void
 		nnoremap <buffer>[a        <Plug>(lsp-previous-diagnostic)
 		nnoremap <buffer>]a        <Plug>(lsp-next-diagnostic)
 		nnoremap <buffer><leader>p <Plug>(lsp-document-diagnostics)
-	elseif index(['css', 'c', 'cpp', 'html', 'xhtml', 'tex'], &filetype) != -1
+	elseif index(['css', 'c', 'cpp', 'html', 'xhtml'], &filetype) != -1
 	# elseif &filetype == 'c' || &filetype == 'cpp'
 		b:lsp_diagnostics_enabled = 0
 		# clang 以外で行末の;無しで次の行がエラー扱いになる
