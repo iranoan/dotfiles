@@ -242,10 +242,6 @@ endfor
 g:hi_insert = 'highlight StatusLine term=reverse cterm=bold,reverse gui=bold,reverse ctermbg=White ctermfg=1 guibg=#dddddd guifg=#dc322f'
 # ↑インサート・モード時の highlight 指定
 
-# テキストオブジェクト化の元となる https://github.com/kana/vim-textobj-user {{{1
-# 遅延読み込みにすると、最初に gcaz 等、プラグイン+textobj-* の組み合わせた時うまく動作しない
-# またこのファイルの処理自体に時間がかかるようになるので、遅延処理の美味みがない
-
 # 同じインデントをテキストオプジェクト化 https://github.com/kana/vim-textobj-indent {{{1
 # キーマップ ii, ai
 
@@ -260,21 +256,6 @@ xnoremap ac <Plug>(textobj-syntax-a)
 
 # 折りたたみをテキストオプジェクト化 https://github.com/kana/vim-textobj-fold {{{1
 # キーマップ iz, az
-
-# テキストオブジェクトで (), {} "", '' を区別せずにカーソル近くで判定して、全て b で扱えるようにする https://github.com/osyo-manga/vim-textobj-multiblock {{{1
-# キーマップしないと ", ' の指定が働かない
-onoremap ab <Plug>(textobj-multiblock-a)
-onoremap ib <Plug>(textobj-multiblock-i)
-xnoremap ab <Plug>(textobj-multiblock-a)
-xnoremap ib <Plug>(textobj-multiblock-i)
-g:textobj_multiblock_blocks = [
-			[ '"', '"', 1 ],
-			[ "'", "'", 1 ],
-			[ '(', ')' ],
-			[ '{', '}' ],
-			[ '<', '>' ],
-			[ '[', ']' ],
-			]
 
 # 括弧や引用符をペアで入力/削除 $MYVIMDIR/pack/my-plug/start/pair_bracket/ {{{1
 # ドット・リピートは考慮していない

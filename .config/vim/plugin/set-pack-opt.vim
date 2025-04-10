@@ -258,6 +258,85 @@ augroup loadSyntaxC
 	| augroup! loadSyntaxC
 augroup END
 
+# テキストオブジェクト化の元となる https://github.com/kana/vim-textobj-user {{{1
+# 遅延読み込みにすると、最初に gcaz 等、プラグイン+textobj-* の組み合わせた時うまく動作しない
+# またこのファイルの処理自体に時間がかかるようになるので、遅延処理の美味みがない
+# + 独自の定義を追加したい
+# →読み込み明示
+packadd vim-textobj-user
+# 2025/04/06 20:53:41
+# 2025-04-06T20:53:41
+# 2025/04/06
+# 20:53:41
+# といった日付や時間のテキストオブジェクト化
+textobj#user#plugin('datetime', {
+	datetime: {
+		pattern: '\<\(\(\(\d\d\)\?\d\d[-/]\)\?\d\d\?[-/]\d\d\?\([ T]\d\d:\d\d\(:\d\d\)\?\)\?\|\d\d:\d\d\(:\d\d\)\?\)\>',
+		scan: 'line',
+		select: ['ad', 'id'],
+	},
+})
+# CSV/TSV のセル内
+textobj#user#plugin('spreadsheet', {
+	value: {
+		pattern: '\(^[^\t]\+\ze\t\|\t\zs[^\t]\+\ze\(\t\|$\)\|\(^\|,\)"\zs\(""\|[^"]\)\+\ze"\(,\|$\)\|^[^,]\+\ze,\|,\zs[^,]\+\ze\(,\|$\)\)',
+		scan: 'line',
+		select: ['av', 'iv'],
+	},
+})
+# markdown
+textobj#user#plugin('markdown', {
+	strong-a: {
+		pattern: '\*\(\\\*\|[^*]\)\+\*',
+		scan: 'line',
+		select: ['a*']
+	},
+	strong-i: {
+		pattern: '\*\zs\(\\\*\|[^*]\)\+\ze\*',
+		scan: 'line',
+		select: ['i*']
+	},
+	emphasis-a: {
+		pattern: '_\(\\_\|[^_]\)\+_',
+		scan: 'line',
+		select: ['a_']
+	},
+	emphasis-i: {
+		pattern: '_\zs\(\\_\|[^_]\)\+\ze_',
+		scan: 'line',
+		select: ['i_']
+	},
+	cancel-a: {
+		pattern: '\~\~\(\\\~\|[^~]\)\+\~\~',
+		scan: 'line',
+		select: ['as']
+	},
+	cancel-i: {
+		pattern: '\~\~\zs\(\\\~\|[^~]\)\+\ze\~\~',
+		scan: 'line',
+		select: ['is']
+	},
+}) # a~, i~ といったマップは効かなかった
+
+# テキストオブジェクトで (), {} "", '' を区別せずにカーソル近くで判定して、全て b で扱えるようにする https://github.com/osyo-manga/vim-textobj-multiblock {{{1
+# キーマップしないと ", ' の指定が働かない
+# デフォルト・マップを削除したい→読み込み明示
+packadd vim-textobj-multiblock
+onoremap ab <Plug>(textobj-multiblock-a)
+onoremap ib <Plug>(textobj-multiblock-i)
+xnoremap ab <Plug>(textobj-multiblock-a)
+xnoremap ib <Plug>(textobj-multiblock-i)
+g:textobj_multiblock_blocks = [
+			[ '"', '"', 1 ],
+			[ "'", "'", 1 ],
+			[ '(', ')' ],
+			[ '{', '}' ],
+			[ '<', '>' ],
+			[ '[', ']' ],
+			]
+unmap isb
+unmap asb
+
 # #ifdef 〜 #endif をテキストオプジェクト化→a#, i# https://github.com/anyakichi/vim-textobj-ifdef {{{1
 # depends = ['vim-textobj-user']
 augroup loadVimTextObjIfdef
