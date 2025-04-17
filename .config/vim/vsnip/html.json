@@ -86,7 +86,7 @@
 		"prefix": "ul",
 		"body": [
 			"<ul>",
-			"\t<li>${1}",
+			"\t<li>${1}</li>",
 			"</ul>",
 			"${2}"
 		]
@@ -95,7 +95,7 @@
 		"prefix": "ulsquare",
 		"body": [
 			"<ul style=\"list-style-type:square\">",
-			"\t<li>${1}",
+			"\t<li>${1}</li>",
 			"</ul>",
 			"${2}"
 		]
@@ -104,7 +104,7 @@
 		"prefix": "ulcircle",
 		"body": [
 			"<ul style=\"list-style-type:circle\">",
-			"\t<li>${1}",
+			"\t<li>${1}</li>",
 			"</ul>",
 			"${2}"
 		]
@@ -113,7 +113,7 @@
 		"prefix": "uldisc",
 		"body": [
 			"<ul style=\"list-style-type:disc\">",
-			"\t<li>${1}",
+			"\t<li>${1}</li>",
 			"</ul>",
 			"${2}"
 		]
@@ -122,7 +122,7 @@
 		"prefix": "ol",
 		"body": [
 			"<ol>",
-			"\t<li>${1}",
+			"\t<li>${1}</li>",
 			"</ol>",
 			"${2}"
 		]
@@ -131,7 +131,7 @@
 		"prefix": "olA",
 		"body": [
 			"<ol style=\"list-style-type:upper-alpha\">",
-			"\t<li>${1}",
+			"\t<li>${1}</li>",
 			"</ol>",
 			"${2}"
 		]
@@ -140,7 +140,7 @@
 		"prefix": "ola",
 		"body": [
 			"<ol style=\"list-style-type:lower-alpha\">",
-			"\t<li>${1}",
+			"\t<li>${1}</li>",
 			"</ol>",
 			"${2}"
 		]
@@ -149,7 +149,7 @@
 		"prefix": "ol1",
 		"body": [
 			"<ol style=\"list-style-type:decimal\">",
-			"\t<li>${1}",
+			"\t<li>${1}</li>",
 			"</ol>",
 			"${2}"
 		]
@@ -158,7 +158,7 @@
 		"prefix": "olI",
 		"body": [
 			"<ol style=\"list-style-type:upper-roman\">",
-			"\t<li>${1}",
+			"\t<li>${1}</li>",
 			"</ol>",
 			"${2}"
 		]
@@ -167,7 +167,7 @@
 		"prefix": "oli",
 		"body": [
 			"<ol style=\"list-style-type:lower-roman\">",
-			"\t<li>${1}",
+			"\t<li>${1}</li>",
 			"</ol>",
 			"${2}"
 		]
@@ -188,14 +188,14 @@
 	},
 	"li": {
 		"prefix": "li",
-		"body": "<li>"
+		"body": "<li>${1}</li>"
 	},
 	"dl": {
 		"prefix": "dl",
 		"body": [
 			"<dl>",
-			"\t<dt>${1}",
-			"\t<dd>${2}",
+			"\t<dt>${1}</dt>",
+			"\t<dd>${2}</dd>",
 			"</dl>",
 			"${3}"
 		]
@@ -203,14 +203,14 @@
 	"dt": {
 		"prefix": "dt",
 		"body": [
-			"<dt>${1}",
-			"<dd>${2}"
+			"<dt>${1}</dt>",
+			"<dd>${2}</dd>"
 		]
 	},
 	"dd": {
 		"prefix": "dd",
 		"body": [
-			"<dd>${1}",
+			"<dd>${1}</dd>",
 			"${2}"
 		]
 	},
