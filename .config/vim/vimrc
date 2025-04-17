@@ -208,6 +208,7 @@ augroup END
 set cursorline cursorcolumn                    # 起動時は、カーソール行桁背景色付ける
 # タブ・ページ/ターミナル環境の時のカーソル形状 {{{2
 set showtabline=0 tabpagemax=500               # 常にタブを非表示+上限 500
+set tabclose=uselast                             # タブ・ページを閉じた時、以前に使用したタブページに移動
 # if has('gui_running')
 # 	if $XDG_SESSION_TYPE ==# 'wayland'           # gvimrc では遅く、これがないとウィンドウ・サイズ変更などでウィンドウ描画が乱れる
 # 		$GVIM_ENABLE_WAYLAND = 1                   # 一方幾つかの関数・コマンドが使えなくなる→:help gui-wayland
