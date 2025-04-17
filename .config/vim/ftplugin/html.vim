@@ -21,7 +21,7 @@ source $MYVIMDIR/macros/html-xhtml-common.vim
 "html <S,C-Enter> の組み合わせは GUI のみ有効
 if &filetype !=# 'markdown'
 	inoremap <buffer>**              &times;
-	inoremap <expr><buffer><S-Enter>   pumvisible#Insert('<li>') .. '<C-G>u'
+	inoremap <expr><buffer><S-Enter>   pumvisible#Insert('<li></li><Left><Left><Left><Left><Left><C-G>u')
 	inoremap <expr><buffer><S-C-Enter> pumvisible#Insert_after('<br>') .. '<C-G>u'
 endif
 inoremap <buffer><=                &le;
