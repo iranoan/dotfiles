@@ -122,7 +122,11 @@ preview_img(){ # 呼び出し元アプリ名の取得し画像プレビューを
 	done
 }
 
-echo "$f"
+if [ "$mime" = "inode/directory" ]; then
+	tree -L 1 -C "$f"
+	exit 0
+fi
+find "${f%/*}" -name "${f##*/}" -printf "%p\n%TF %TR %s\n"
 case "${f##*/}" in # ファイル名による分岐
 	vimrc|gvimrc )
 		source-highlight --tab=2 --failsafe -f esc --lang-def=vim.lang --style-file=esc.style -i "$f" ;;
@@ -144,7 +148,6 @@ case "${f##*/}" in # ファイル名による分岐
 				source-highlight --tab=2 --failsafe -f esc --lang-def=zsh.lang --style-file=esc.style -i "$f" ;;
 			*)
 				case "$mime" in # mimetype による分岐
-					inode/directory )              tree -L 1 -C "$f" ;;
 					application/json )             jq -C . "$f" ;;
 					application/zip )              unzip -l "$f" ;;
 					application/gzip )             gzip --list "$f" ;;
