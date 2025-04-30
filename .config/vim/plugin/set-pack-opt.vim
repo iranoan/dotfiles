@@ -278,11 +278,17 @@ textobj#user#plugin('datetime', {
 })
 # CSV/TSV のセル内
 textobj#user#plugin('spreadsheet', {
-	value: {
+	value-a: {
 		pattern: '\(^[^\t]\+\ze\t\|\t\zs[^\t]\+\ze\(\t\|$\)\|\(^\|,\)"\zs\(""\|[^"]\)\+\ze"\(,\|$\)\|^[^,]\+\ze,\|,\zs[^,]\+\ze\(,\|$\)\)',
 		scan: 'line',
-		select: ['av', 'iv'],
+		select: ['av'],
 	},
+	value-i: {
+		pattern: '\(^\s*\zs[^\t]\{-}\ze\s*\t\|\t\s*\zs[^\t]\{-}\%#[^\t]\{-}\ze\s*\(\t\|$\)\|\(^\|,\)"\s*\zs\(""\|[^"]\)\{-}\%#\(""\|[^"]\)\{-}\ze\s*"\(,\|$\)\|^\s*\zs[^,]\{-}\%#[^,]\{-}\ze\s*,\|,\s*\zs[^,]\{-}\%#[^,]\{-}\ze\s*\(,\|$\)\)',
+		scan: 'line',
+		select: ['iv'],
+	},
+	# value-i はセル内データの先頭に空白が有り、そこにカーソルが有るとそれ移行の空白も含まれてしまうのが欠点
 })
 # markdown
 textobj#user#plugin('markdown', {
