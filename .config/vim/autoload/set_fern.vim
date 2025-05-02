@@ -212,7 +212,14 @@ def set_fern#open(cd: number): string
 		return "\<Plug>(fern-action-collapse)"
 	else
 		var mime: string = systemlist('file --mime-type --brief ' .. resolve(node._path))[0]
-		if mime[0 : 4] !=# 'text/'
+		if mime =~# '^application/xhtml+xml$'
+				|| mime =~# '^image/svg+xml$'
+			if len(gettabinfo(tabpagenr())[0].windows) == 1
+				return "\<Plug>(fern-action-open:right)"
+			else
+				return "\<Plug>(fern-action-open:select)"
+			endif
+		elseif mime[0 : 4] !=# 'text/'
 			if executable(node._path)
 				execute 'topleft terminal ' .. node._path
 			else
