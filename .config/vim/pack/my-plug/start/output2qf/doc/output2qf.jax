@@ -13,7 +13,7 @@ Shell2Qf~
 シェルの出力結果をファイルのリストとして取り込む
 
 使用法~
->
+>vim
 	Shell2Qf shell-command arg | shell-command arg ...
 
 ==============================================================================
@@ -22,15 +22,24 @@ Vim2Qf~
 
 |:message| の出力結果の内、エラーの出力を取り込む
 
+	* 環境変数 LC_ALL > LC_MESSAGES > LANGUAGE > LANG の優先順位で変化するメッセー
+		ジを |Quickfix| に取り込むキーワードとして取り込む
+	* 環境変数が ja_JP.UTF-8 等 ja 以外の環境では、Vim のソース・ファイルをダウン
+		ロードし >vim
+		call po2vim#Convert("$HOME/src/vim/")
+<		の要領で引数に Vim のソースファイルの保存先を指定し、メッセージ内容を変数に
+		保存する Vim script を生成しておく必要がある
+		生成されていない場合は >sh
+		export LC_ALL=C
+<		の様な環境と仮定して処理する
 	* |:message| にエラーがなく、バッファのファイルタイプが Vim なら |:source| % して再度取り込みを試みる
 	* コンパイルエラーで未定義扱いの場合は、エラー箇所を正しく探せない
 		* :function/function() どちらもエラーに成るので調べられない
-	* Python interface には対応してが他は未対応
-	* |lambda| 関数未対応
-		* おそらくエラーに成り、それだけ無視されるのではなく他も取り込まれない
+	* Python interface には対応してが Lua や Ruby は未対応
+	* |lambda| 関数の対応は不十分
 
 使用法~
->
+>vim
 	Vim2Qf
 
 vim:tw=78:ts=2:ft=help:norl:noet:fen:

@@ -1,6 +1,27 @@
 vim9script
 scriptencoding utf-8
 
+export def GetLang(): string
+	if $LC_ALL !=# ''
+		return $LC_ALL
+	elseif $LC_MESSAGES !=# ''
+		return $LC_MESSAGES
+	elseif $LANGUAGE !=# ''
+		return $LANGUAGE
+	elseif $LANG !=# ''
+		return $LANG
+	else
+		return 'ja'
+	endif
+enddef
+
+try
+	import expand('<sfile>:p:h') .. '/' .. output2qf#GetLang()[0 : 1] .. '.vim' as err
+catch /^Vim\%((\a\+)\)\=:E1053:/
+	import expand('<sfile>:p:h') .. '/C.vim' as err
+endtry
+var err_msg_last_set: string = err.msg['\tLast set from ']->substitute('\$$', '', 'g') .. err.msg['%s line %ld']->substitute('^^', '', 'g')
+
 export def Shell(...ls: list<string>): void
 	var ret: list<string> = systemlist(join(ls, ' '))->map('v:val .. ":1: "')
 	if len(ret) == 0
@@ -13,7 +34,6 @@ export def Shell(...ls: list<string>): void
 	copen
 enddef
 
-
 export def Vim(): void # Vim script のエラー内容を Quickfix に取り込む
 	# https://qiita.com/tmsanrinsha/items/0787352360997c387e84 に触発された→変数名などが共通している部分がある
 	def ParseErrorMessages(msgs: string): list<dict<any>>
@@ -24,31 +44,12 @@ export def Vim(): void # Vim script のエラー内容を Quickfix に取り込�
 		var ifilename: string              # 外部 interface のファイル名 (空かどうかで interface のファイルを読み込んでいるか? の判定にも使用)
 		var lnum: number                   # 関数内行番号
 		var lnum_s: string                 # lnum を数値に変換する前の文字列
-		var regex_process: string          # 処理中エラー検索文字列
-		var regex_compile: string          # コンパイル中エラー検索文字列
-		var regex_line: string             # エラーから得る行番号
-		var regex_last_set: string         # verbose function で表示されるファイル名と行番号の検索文字列
-		var Undefined_func: string         # verbose function で未定義関数のエラー文字列
 		var nr: string                     # エラー番号
 		var text: string                   # エラー内容
 		var output_flag: number            # 直前のアウトプットの種類 0b001: エラー検出行あり 0b010 エラー行あり 0b100 エラー内容あり
 		var error_index: number            # エラー処理の書き換えが必要になる qflist に入れた順序
 		var error_iindex: number           # 外部 interface のエラー処理の書き換えが必要になる qflist に入れた順序
 		var dummy: string                  # matchlist() の返り値の内、使わない分のダミー
-
-		if v:lang =~# 'ja_JP'
-			regex_process = '^\(\S.\+\) の処理中にエラーが検出されました:$'
-			regex_compile = '^\(\S.\+\) のコンパイル中にエラーが検出されました:$'
-			regex_line = '^行\s\+\zs\d\+\ze:$'
-			regex_last_set = '^\t最後にセットしたスクリプト: \(\f\+\) 行 \(\d\+\)$'
-			Undefined_func = 'E123: 未定義の関数です: '
-		else
-			regex_process = '^Error detected while processing \(\S.\+\):$'
-			regex_compile = '^Error detected while compiling \(\S.\+\):$'
-			regex_line = '^line\s\+\zs\d\+\ze:$'
-			regex_last_set = '^\tLast set from \(\f\+\) Line \(\d\+\)$'
-			Undefined_func = 'E123: Undefined function: '
-		endif
 
 		def BeginError(o: string, s: string): void
 			var l: string = substitute(o, s, '\1', '')
@@ -72,12 +73,13 @@ export def Vim(): void # Vim script のエラー内容を Quickfix に取り込�
 					return {
 							filename: filename,
 							lnum: 0,
-							text: Undefined_func .. f,
+							text: err.msg['E123: Undefined function: %s'] .. f,
 							type: 'E',
+							func: O,
 							nr: 123
 						}
 				endif
-				[fname, lnum_s] = matchlist(fname, regex_last_set)[1 : 2]
+				[fname, lnum_s] = matchlist(fname, err_msg_last_set)[1 : 2]
 				fname = expand(fname)
 				if !has_key(file_cache, fname)
 					file_cache[fname] = readfile(fname)
@@ -91,6 +93,7 @@ export def Vim(): void # Vim script のエラー内容を Quickfix に取り込�
 							lnum: lnum,
 							text: t .. 'in ' .. func_name,
 							type: t == 'calling location: ' ? 'I' : 'E',
+							func: func_name,
 							nr: 1
 						} # ↑情報はとりあえず1としておき、それ以外は通常あとから書き換わる
 			enddef
@@ -117,11 +120,23 @@ export def Vim(): void # Vim script のエラー内容を Quickfix に取り込�
 						lnum: lnum,
 						text: lnum == 0 ? '' : 'calling location',
 						type: lnum == 0 ? 'E' : 'I',
+						func: func_name,
 						nr: 1
 					})
 				else
 					[func_name, dummy, offset] = matchlist(func_file, '\c\([a-z0-9#<>_]\+\)\(\[\(\d\+\)\]\)\?')[1 : 3]
 					add(qf_list, GetFuncInfo(func_name, offset, offset ==# '' ? '' : 'calling location: '))
+				endif
+			endfor
+			for i in range(0, len(qf_list) - 1) # コンパイルエラーで未定義関数の処理 (付け焼き刃で行番号は正しく取得できない)
+				# エラーの内容ごとにキーワードとなる部分を取り出し行番号を取り出すしか無い?
+				if qf_list[i].type ==# 'E' && qf_list[i].nr == 123
+					if qf_list[i].filename ==# ''
+						qf_list[i].filename = qf_list[i - 1].filename
+					endif
+					if qf_list[i].lnum == 0
+						qf_list[i].lnum = qf_list[i - 1].lnum
+					endif
 				endif
 			endfor
 			qflist += reverse(qf_list)
@@ -142,29 +157,29 @@ export def Vim(): void # Vim script のエラー内容を Quickfix に取り込�
 		enddef
 
 		for line in split(msgs, "\n")
-			if line =~# regex_process # ... の処理中にエラーが検出されました:'
-				BeginError(line, regex_process)
-			elseif line =~# regex_compile # ... のコンパイル中にエラーが検出されました:'
-				BeginError(line, regex_compile)
-			elseif line =~# regex_line # 行番号
+			if line =~# err.msg['Error detected while processing %s:']
+				BeginError(line, err.msg['Error detected while processing %s:'])
+			elseif line =~# err.msg['Error detected while compiling %s:']
+				BeginError(line, err.msg['Error detected while compiling %s:'])
+			elseif line =~# err.msg['line %4ld:']
 				if and(output_flag, 0b001) != 0 # エラー検出あり
-					qflist[error_index].lnum += str2nr(matchstr(line, regex_line))
+					qflist[error_index].lnum += str2nr(matchlist(line, err.msg['line %4ld:'])[1])
 				else
 					add(qflist, {
 							filename: filename,
-							lnum: str2nr(matchstr(line, regex_line))
+							lnum: str2nr(matchlist(line, err.msg['line %4ld:'])[1])
 						}
 					)
 				endif
 				output_flag = or(output_flag, 0b010)
 				ifilename = ''
 			elseif line =~# '^[EW]' # E492: エディタのコマンドではありません: ... 等
-				[nr, text] = matchlist(line, '^E\(\d\+\): \(.\+\)')[1 : 2]
+				[nr, text] = matchlist(line, '^\(Error: Vim(var):\)\?E\(\d\+\): \(.\+\)')[2 : 3]
 				if and(output_flag, 0b001) == 0b001 # エラー検出行あり
 					ChangeQfItem(error_index, text, error_index, nr, (line =~# '^W' ? 'W' : 'E'))
 				elseif output_flag == 0b100 # 直前もエラー内容行
-					continue # エラー処理もエラー行もないのでエラー箇所を特定できない←大抵同じエラーの繰り返し?
-					# add(qflist, { filename: filename, lnum: lnum, nr: str2nr(nr), text: text })
+					# continue # エラー処理もエラー行もないのでエラー箇所を特定できない←大抵同じエラーの繰り返し?
+					add(qflist, { filename: filename != '' ? filename : qflist[-1].filename, lnum: lnum, nr: str2nr(nr), text: text })
 				elseif and(output_flag, 0b010) == 0b010 # 直前エラー行
 					qflist[-1].text = text
 					qflist[-1].nr = str2nr(nr)
@@ -180,6 +195,7 @@ export def Vim(): void # Vim script のエラー内容を Quickfix に取り込�
 						lnum: str2nr(lnum_s),
 						text: text,
 						type: 'I',
+						func: '',
 						nr: 1
 					})
 				elseif line =~# '^[A-Za-z]\+Error: ' # Python interface の内部エラー内容
@@ -209,6 +225,7 @@ export def Vim(): void # Vim script のエラー内容を Quickfix に取り込�
 	if qflist == [] && &filetype ==# 'vim' # エラーがないので、開いているファイルを source
 		qflist = ParseErrorMessages(execute('source ' .. expand('%:p')))
 	endif
+	b:qflist = qflist
 	setqflist(qflist, 'r')
 	cwindow
 enddef
