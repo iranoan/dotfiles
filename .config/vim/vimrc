@@ -237,26 +237,23 @@ augroup StatusLine
 	autocmd!
 	autocmd ColorScheme * StatusLineLeftRight()
 	autocmd OptionSet diff
-				\ if &diff |
-				\ 	setlocal statusline=%#StatusLineLeft#%(%{tabpagenr()}/%{tabpagenr('$')}:%n%{%&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%#StatusGit#%{fugitive#statusline()[5:-3]->substitute('(','\ ','')}%*%<%F%=%#StatusLineRight#%3p%%0x%04B |
-				\ else |
-				\ 	setlocal statusline=%#StatusLineLeft#%-19.(%{tabpagenr()}/%{tabpagenr('$')}:%n%{%&buftype=='terminal'?'[terminal]':&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%#StatusGit#\ %{fugitive#statusline()[5:-3]->substitute('(','\ ','')}\ %*\ %<%F%=%#StatusLineRight#\ %c:%v:%{strcharlen(strpart(getline('.'),0,col('.')))}/%{strlen(join(getline(0,line('$')),(&ff=='dos'?'12':'1')))}:%{strcharlen(join(getline(0,line('$')),''))}\ %3l/%L%4p%%\ 0x%04B\ [%{&fenc!=''?&fenc:&enc}:%{%{'dos':'CR+LF','unix':'LF','mac':'CR'}[&ff]%}] |
-				\ endif # diff モード縦分割を用いていウィンドウ幅が狭いので statusline を変える
+				\ if &diff
+				| 	setlocal statusline=%#StatusLineLeft#%(%{tabpagenr()}/%{tabpagenr('$')}:%n%{%&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%#StatusGit#%{fugitive#statusline()[5:-3]->substitute('(','\ ','')}%*%<%F%=%#StatusLineRight#%3p%%0x%04B
+				| else
+				| 	setlocal statusline=%#StatusLineLeft#%-19.(%{tabpagenr()}/%{tabpagenr('$')}:%n%{%&buftype=='terminal'?'[terminal]':&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%#StatusGit#\ %{fugitive#statusline()[5:-3]->substitute('(','\ ','')}\ %*\ %<%F%=%#StatusLineRight#\ %c:%v:%{strcharlen(strpart(getline('.'),0,col('.')))}/%{strlen(join(getline(0,line('$')),(&ff=='dos'?'12':'1')))}:%{strcharlen(join(getline(0,line('$')),''))}\ %3l/%L%4p%%\ 0x%04B\ [%{&fenc!=''?&fenc:&enc}:%{%{'dos':'CR+LF','unix':'LF','mac':'CR'}[&ff]%}]
+				| endif # diff モード縦分割を用いていウィンドウ幅が狭いので statusline を変える
 augroup END
 # # 全角スペースをハイライト表示←フォントで対応したのですべてコメント・アウト {{{2
-# function s:ZenkakuSpace()
-# 	highlight ZenkakuSpace cterm=reverse ctermfg=Black gui=reverse guifg=#CCCCCC
-# endfunction
 # # if &t_Co > 1                                 # ←上でターミナル起動も256色にしている
 # # 	syntax enable
 # # endif
 # if has('syntax') && !has('gui_running')        # 全角空白が可視化されるフォントを使っている
 # 	augroup ZenkakuSpace
 # 		autocmd!
-# 		autocmd ColorScheme       * s:ZenkakuSpace()
+# 		autocmd ColorScheme       * highlight ZenkakuSpace cterm=reverse ctermfg=Black gui=reverse guifg=#CCCCCC
 # 		autocmd VimEnter,WinEnter * match ZenkakuSpace /　/
 # 	augroup END
-# 	s:ZenkakuSpace()
+# 	highlight ZenkakuSpace cterm=reverse ctermfg=Black gui=reverse guifg=#CCCCCC
 # endif
 # 編集関係 {{{1
 set completeopt=menuone,noinsert,popup,noselect # 補完の挙動
@@ -314,17 +311,19 @@ augroup VIMRC
 	# ファイルを開いた/閉じた/保存時
 	autocmd BufReadPost * if &modifiable && search('[^\t -~]', 'cnw') == 0 | set fileencoding=utf-8 | endif # ASCII のみの時も utf-8 を使う
 	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,vimgrepadd
-				\ topleft copen |
-				\ setlocal statusline=%#StatusLineLeft#%t\ %*%<%{exists('w:quickfix_title')?w:quickfix_title:''}%=%#StatusLineRight#%3l/%L%4p%%
-	autocmd QuickfixCmdPost lmake,lgrep,lgrepadd,lvimgrep,lvimgrepadd topleft lopen
+				\ topleft copen
+				| setlocal statusline=%#StatusLineLeft#%t\ %*%<%{exists('w:quickfix_title')?w:quickfix_title:''}%=%#StatusLineRight#%3l/%L%4p%%
+	autocmd QuickfixCmdPost lmake,lgrep,lgrepadd,lvimgrep,lvimgrepadd
+				\ topleft lopen
+				| setlocal statusline=%#StatusLineLeft#%t\ %*%<%{exists('w:quickfix_title')?w:quickfix_title:''}%=%#StatusLineRight#%3l/%L%4p%%
 	autocmd BufEnter,BufFilePost,BufNewFile,BufRead * vimrc#Lcd()
 	autocmd BufWritePre * if &modified == true && &filetype != 'markdown' | pos = getpos('.') | :%s/\(^--\|^>.*\)\@<![ \u000B\t\r　]\+$//e | setpos('.', pos) | endif # メール署名の区切りと引用行以外の行末空白を保存時に削除
 	# autocmd TerminalOpen * nnoremap <silent><buffer>q :bwipeout<CR>
 	# ↑ターミナルで効いていないし、fzf を使ったバッファで q で閉じる意図しない動きになってしまう
 	# autocmd BufEnter,BufWinEnter *
-	# 			\ silent if &diff |
-	# 			\ execute 'normal! gg]c[c' |
-	# 			\ endif # diff モードでは、最初の差分(先頭が差分のことも有るので、]c[c と二重指定)
+	# 			\ silent if &diff
+	# 			| execute 'normal! gg]c[c'
+	# 			| endif # diff モードでは、最初の差分(先頭が差分のことも有るので、]c[c と二重指定)
 	# 			ウィンドウ切り替えで最初に戻ってしまう
 	# 			↓と上手く両立しない
 	autocmd BufReadPost *
@@ -359,7 +358,7 @@ if exists('&ambiwidth')                        # □とか○の文字があっ�
 		[0x2B0, 0x2B3, 1], [0x2B7, 0x2B8, 1], [0x2E1, 0x2E3, 1], [0x1D2C, 0x1D61, 1], [0x1D9B, 0x1DBF, 1], [0x2070, 0x2071, 1], [0x2074, 0x2075, 1], [0x207F, 0x207F, 1], [0x2C7D, 0x2C7F, 1], # 上付き文字
 		[0x1D62, 0x1D6A, 1], [0x2080, 0x209C, 1], [0x2C7C, 0x2C7C, 1], # 下付き文字
 		[0x2012, 0x2013, 1],                       # ダッシュ ‒ (数字と同じ幅のFigure dash), – (二分ダッシュ)
-		[0x2032, 0x2034, 1],                       # 分、秒、1/12inch (引用符 [0x2018, 0x201F, 1] 等は " 特別が付きにくくなるのでやめる)
+		[0x2032, 0x2034, 1],                       # 分、秒、1/12inch (引用符 [0x2018, 0x201F, 1] 等は " と区別が付きにくくなるのでやめる)
 		[0x20A0, 0x20A6, 1], [0x20A7, 0x20A8, 2], [0x20A9, 0x20AE, 1], [0x20AF, 0x20AF, 2], [0x20B0, 0x20C0, 1], # 通貨記号 (2 文字結合以外は半角)
 		[0x2102, 0x22FF, 2],                       # ℃などの文字様記号+ローマ数字 (3 以上は欠けるので全て全角幅に)+数式記号
 		[0x401, 0x401, 1], [0x410, 0x4F9, 1],      # キリル文字 (フォントの関係か上手く半角にならない文字も有る)
