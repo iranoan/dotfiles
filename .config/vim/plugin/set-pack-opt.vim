@@ -447,19 +447,19 @@ augroup loadQuickRun
 augroup END
 
 # Git 連携 https://github.com/tpope/vim-fugitive {{{1
-augroup loadFugitive
-	autocmd!
-	autocmd CmdUndefined Git,Ggrep,Glgrep,Gclog,Gllog,Gedit,Gread,Gwrite,Gdiffsplit,GRename,GBrowser
-				\ set_fugitve#main()
-				| autocmd! loadFugitive
-				| augroup! loadFugitive
-				| delfunction set_fugitve#main
-	autocmd FuncUndefined fugitive#*
-				\ set_fugitve#main()
-				| autocmd! loadFugitive
-				| augroup! loadFugitive
-				| delfunction set_fugitve#main
-augroup END
+# augroup loadFugitive
+# 	autocmd!
+# 	autocmd CmdUndefined Git,Ggrep,Glgrep,Gclog,Gllog,Gedit,Gread,Gwrite,Gdiffsplit,GRename,GBrowser
+# 				\ set_fugitve#main()
+# 				| autocmd! loadFugitive
+# 				| augroup! loadFugitive
+# 				| delfunction set_fugitve#main
+# 	autocmd FuncUndefined fugitive#*
+# 				\ set_fugitve#main()
+# 				| autocmd! loadFugitive
+# 				| augroup! loadFugitive
+# 				| delfunction set_fugitve#main
+# augroup END
 
 # Git の変更のあった signcolumn にマークをつける https://github.com/airblade/vim-gitgutter {{{1
 # 遅延読み込みをすると vim-signature との連携機能が使えない←連携できないだけ+ただし単純に /start に置くと git がないときに起動時にエラーになる

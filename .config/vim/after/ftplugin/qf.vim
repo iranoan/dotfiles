@@ -6,6 +6,8 @@ if exists('b:did_ftplugin_user_after')
 endif
 b:did_ftplugin_user_after = 1
 
+setlocal statusline=%{%StatusLine()%}
+
 if exists('b:undo_ftplugin')
 	b:undo_ftplugin ..= ' | call undo_ftplugin#Qf()'
 else

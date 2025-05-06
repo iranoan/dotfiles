@@ -144,7 +144,7 @@ def ColorschemeHighlight(): void
 			       highlight Comment      cterm=NONE gui=NONE ctermfg=10 guifg=#586e75
 		endif
 		if g:colors_name ==# 'solarized8'
-			highlight CursorColumn term=reverse ctermbg=254 guibg=#F5F2DC
+			       highlight CursorColumn term=reverse ctermbg=254 guibg=#F5F2DC
 		endif
 		bg = GetCursorLine(0xfd, 0xf6, 0xe3, 0xee, 0xe8, 0xd5)
 		         # 黒背景端末を使っているので背景色を明示する←端末も背景に NONE を使わない
