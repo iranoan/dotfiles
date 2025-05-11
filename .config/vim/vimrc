@@ -223,79 +223,9 @@ if !has('gui_running')
 	&t_SR ..= "\e[3 q"                           # 置換:    下線
 endif
 # ステータス・バー {{{2
-def g:StatusLine(): string
-	# 表示するのは大雑把に↓
-	# tabpagenr()/tabpagenr('$') bufnr filetype modified etc.|git|path|column bytes:number:word-count/file bytes:word-count line current/full % code charset:cr/lf
-	def GetFlag(): string
-		var f: string
-		if win_gettype() ==# 'preview'
-			f ..= ' PRV'
-		endif
-		if &readonly
-			f ..= ' RO'
-		endif
-		if &modified
-			f ..= ' +'
-			if !&modifiable
-				f ..= '-'
-			endif
-		elseif !&modifiable
-			f ..= ' -'
-		endif
-		if f ==# ''
-			return ' ' .. &filetype
-		else
-			return ' ' .. &filetype .. '[' .. f[1 : ] .. ']'
-		endif
-	enddef
-
-	def GetPath(): string
-		var p: string
-		if &buftype ==# 'help'
-			p = expand('%:t')
-		else
-			p = expand('%:p')->substitute('^' .. $HOME, '~', '')->substitute('%', '%%', 'g')
-		endif
-		if win_gettype() ==# 'command'
-			return '[Commaand Line]'
-		elseif p ==# ''
-			return '[No Name]'
-		else
-			return p
-		endif
-	enddef
-
-	var t: string = win_gettype()
-	var s: string = '%#StatusLineLeft#%-19.(' .. tabpagenr() .. '/' .. tabpagenr('$') .. ':%n'
-	if t ==# 'loclist' # quickfix  は編集することはないので、表示する情報を減らす
-		return s .. ' [Location]%) %*%<' .. (exists('w:quickfix_title') ? w:quickfix_title : '') .. '%=%#StatusLineRight#%3l/%L%4p%%'
-	elseif t ==# 'quickfix'
-		return s .. ' [QuickFix]%) %*%<' .. (exists('w:quickfix_title') ? w:quickfix_title : '') .. '%=%#StatusLineRight#%3l/%L%4p%%'
-	elseif &diff # diff モード縦分割を用いていウィンドウ幅が狭いので表示する情報を減らす
-		return '%#StatusLineLeft#' .. tabpagenr() .. '/' .. tabpagenr('$') .. ':%n' .. GetFlag()
-			.. '%#StatusGit#' .. fugitive#statusline()[5 : -3]->substitute('(', '\ ', '')
-			.. '%*%<' .. GetPath()
-			.. '%=%#StatusLineRight#%3p%%0x%04B'
-	elseif &buftype ==# 'terminal'
-		s ..= ' [Term]'
-	elseif &buftype ==# 'help'
-		s ..= ' [Help]'
-	elseif &filetype ==# 'fugitive' || &filetype ==# 'git'
-		s ..= ' ' .. &filetype
-	else
-		s ..= GetFlag()
-	endif
-	return s .. '%)%#StatusGit# ' .. fugitive#statusline()[5 : -3]->substitute('(', ' ', '')
-		.. ' %* %<' .. GetPath()
-		.. '%=%#StatusLineRight# %c:%v:'
-				.. strcharlen(strpart(getline('.'), 0, col('.'))) .. ' ' .. strlen(join(getline(0, line('$')), &ff == 'dos' ? '12' : '1')) .. ':' .. strcharlen(join(getline(0, line('$')), ''))
-				.. ' %3l/%L%4p%% 0x%04B ['
-				.. (&fenc != '' ? &fenc : &enc) .. ':' .. {dos: 'CR+LF', unix: 'LF', mac: 'CR'}[&ff] .. ']'
-enddef
-
 set laststatus=2                               # 表示
 set_fugitve#main() # statusline で fugitive#statusline() を使っている
-set statusline=%{%StatusLine()%}
+set statusline=%{%vimrc#StatusLine()%}
 # ↓元は
 # set statusline=%#StatusLineLeft#%-19.(%{tabpagenr()}/%{tabpagenr('$')}:%n%{%&buftype=='terminal'?'[terminal]':&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%#StatusGit#\ %{fugitive#statusline()[5:-3]->substitute('(','\ ','')}\ %*\ %<%F%=%#StatusLineRight#\ %c:%v:%{strcharlen(strpart(getline('.'),0,col('.')))}/%{strlen(join(getline(0,line('$')),(&ff=='dos'?'12':'1')))}:%{strcharlen(join(getline(0,line('$')),''))}\ %3l/%L%4p%%\ 0x%04B\ [%{&fenc!=''?&fenc:&enc}:%{%{'dos':'CR+LF','unix':'LF','mac':'CR'}[&ff]%}]
 # setlocal statusline=%#StatusLineLeft#%(%{tabpagenr()}/%{tabpagenr('$')}:%n%{%&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%#StatusGit#%{fugitive#statusline()[5:-3]->substitute('(','\ ','')}%*%<%F%=%#StatusLineRight#%3p%%0x%04B
