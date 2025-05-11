@@ -230,14 +230,12 @@ set statusline=%{%vimrc#StatusLine()%}
 # set statusline=%#StatusLineLeft#%-19.(%{tabpagenr()}/%{tabpagenr('$')}:%n%{%&buftype=='terminal'?'[terminal]':&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%#StatusGit#\ %{fugitive#statusline()[5:-3]->substitute('(','\ ','')}\ %*\ %<%F%=%#StatusLineRight#\ %c:%v:%{strcharlen(strpart(getline('.'),0,col('.')))}/%{strlen(join(getline(0,line('$')),(&ff=='dos'?'12':'1')))}:%{strcharlen(join(getline(0,line('$')),''))}\ %3l/%L%4p%%\ 0x%04B\ [%{&fenc!=''?&fenc:&enc}:%{%{'dos':'CR+LF','unix':'LF','mac':'CR'}[&ff]%}]
 # setlocal statusline=%#StatusLineLeft#%(%{tabpagenr()}/%{tabpagenr('$')}:%n%{%&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%#StatusGit#%{fugitive#statusline()[5:-3]->substitute('(','\ ','')}%*%<%F%=%#StatusLineRight#%3p%%0x%04B
 # ←区切りに使いたいが、GVim で隙間が空いてしまう
-def StatusLineLeftRight(): void
-	highlight StatusLineLeft  term=bold cterm=bold gui=bold ctermfg=White ctermbg=2 guifg=White guibg=SeaGreen
-	highlight StatusLineRight term=bold cterm=bold gui=bold ctermfg=White ctermbg=3 guifg=White guibg=DarkYellow
-	highlight StatusGit       term=bold cterm=bold gui=bold ctermfg=White ctermbg=6 guifg=White guibg=DarkCyan
-enddef
 augroup StatusLine
 	autocmd!
-	autocmd ColorScheme * StatusLineLeftRight()
+	autocmd ColorScheme *
+				\ highlight StatusLineLeft  term=bold cterm=bold gui=bold ctermfg=White ctermbg=2 guifg=White guibg=SeaGreen
+				| highlight StatusLineRight term=bold cterm=bold gui=bold ctermfg=White ctermbg=3 guifg=White guibg=DarkYellow
+				| highlight StatusGit       term=bold cterm=bold gui=bold ctermfg=White ctermbg=6 guifg=White guibg=DarkCyan
 augroup END
 # # 全角スペースをハイライト表示←フォントで対応したのですべてコメント・アウト {{{2
 # # if &t_Co > 1                                 # ←上でターミナル起動も256色にしている
