@@ -247,6 +247,7 @@ which(){ # 素の which /usr/bin/which ではリンクを辿らず、関数、al
 				if [ "$cmd" == 'command' ]; then
 					cmd=$( export LANGUAGE=C ; type "$f" | sed -E 's/^[^ ]+ is aliased to ['\''`"]?[^ ]+ ([^ ]+)( .+)?'\''/\1/g' )
 				fi
+				cmd=$( echo "$cmd" | sed -e "s>^~/>$HOME/>g" -e "s> ~> $HOME/>g" )
 				echo 'alias '"$( command which "$cmd" | xargs readlink -f )"
 				type "$f" | sed -E "s/^[^\`]+\`(.+)'.*/\1/g"
 				;;
