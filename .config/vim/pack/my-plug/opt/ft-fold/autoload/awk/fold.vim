@@ -18,7 +18,7 @@ export def Level(): any
 					break
 				endif
 				synid = synIDattr(synIDtrans(synID(l + 1, i, 1)), 'name')
-				if synid ==# 'Comment' || synid ==# 'Constant'
+				if index(['Comment', 'Constant', 'Special'], synid) != -1
 					continue
 				elseif '{' ==# s
 					no_match += 1
