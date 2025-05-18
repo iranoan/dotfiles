@@ -11,7 +11,7 @@ setlocal formatoptions-=c textwidth=0 iskeyword-=# iskeyword+=? # デフォル�
 # setlocal keywordprg=:VimHelp
 
 if exists('b:undo_ftplugin')
-	b:undo_ftplugin ..= ' | call undo_ftplugin#Vim()'
+	b:undo_ftplugin ..= ' | call undo_ftplugin#Reset("vim")'
 else
-	b:undo_ftplugin = 'call undo_ftplugin#Vim()'
+	b:undo_ftplugin = 'call undo_ftplugin#Reset("vim")'
 endif

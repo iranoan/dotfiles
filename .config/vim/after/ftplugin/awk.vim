@@ -7,7 +7,7 @@ endif
 b:did_ftplugin_user_after = 1
 
 if exists('b:undo_ftplugin')
-	b:undo_ftplugin ..= ' | call undo_ftplugin#AWK()'
+	b:undo_ftplugin ..= ' | call undo_ftplugin#Reset("awk")'
 else
-	b:undo_ftplugin = 'call undo_ftplugin#AWK()'
+	b:undo_ftplugin = 'call undo_ftplugin#Reset("awk")'
 endif

@@ -7,7 +7,7 @@ endif
 b:did_ftplugin_user_after = 1
 
 if exists('b:undo_ftplugin')
-	b:undo_ftplugin ..= ' | call undo_ftplugin#MSMTP()'
+	b:undo_ftplugin ..= ' | call undo_ftplugin#Reset("msmtp")'
 else
-	b:undo_ftplugin = 'call undo_ftplugin#MSMTP()'
+	b:undo_ftplugin = 'call undo_ftplugin#Reset("msmtp")'
 endif

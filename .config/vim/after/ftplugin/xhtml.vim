@@ -11,7 +11,7 @@ b:match_words = '<\(\w\+\)[^>]*>:</\1>,' .. &matchpairs # 箇条書き関係は�
 
 # Undo {{{1
 if exists('b:undo_ftplugin')
-	b:undo_ftplugin ..= '| call undo_ftplugin#HTML()'
+	b:undo_ftplugin ..= '| call undo_ftplugin#Reset("xhtml")'
 else
-	b:undo_ftplugin = 'call undo_ftplugin#HTML()'
+	b:undo_ftplugin = 'call undo_ftplugin#Reset("xhtml")'
 endif
