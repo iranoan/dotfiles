@@ -447,6 +447,7 @@ augroup loadQuickRun
 augroup END
 
 # Git 連携 https://github.com/tpope/vim-fugitive {{{1
+# statusline で使うので、$VIMDIR/autoload/vimrc.vim で読み込み
 # augroup loadFugitive
 # 	autocmd!
 # 	autocmd CmdUndefined Git,Ggrep,Glgrep,Gclog,Gllog,Gedit,Gread,Gwrite,Gdiffsplit,GRename,GBrowser
