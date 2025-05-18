@@ -118,22 +118,6 @@ function set_vimlsp#main() abort
 	augroup END
 endfunction
 
-def set_vimlsp#undo_ftplugin(): void
-	nunmap <buffer><C-]>
-	nunmap <buffer><Leader>lo
-	nunmap <buffer><expr>K
-	if hasmapto('<buffer><leader>p', 'n')
-		nunmap <buffer><leader>p
-	endif
-	if hasmapto('<buffer>[a', 'n')
-		nunmap <buffer>[a
-	endif
-	if hasmapto('<buffer>]a', 'n')
-		nunmap <buffer>]a
-	endif
-	setlocal omnifunc< tagfunc<
-enddef
-
 def s:on_lsp_buffer_enabled(): void
 	if index(['html', 'xhtml', 'css'], &filetype) == -1
 		setlocal omnifunc=lsp#complete
@@ -189,13 +173,6 @@ def s:on_lsp_buffer_enabled(): void
 		break
 	endwhile
 	lsp#enable()
-	if exists('b:undo_ftplugin')
-		if b:undo_ftplugin !~#  '\<call set_vimlsp#undo_ftplugin()'
-			b:undo_ftplugin ..= '| call set_vimlsp#undo_ftplugin()'
-		endif
-	else
-		b:undo_ftplugin = 'call set_vimlsp#undo_ftplugin()'
-	endif
 enddef
 
 def s:check_run_lsp(): bool # 後から同じウィンドウに開いた時以下の設定がないと、LSP server が起動しない

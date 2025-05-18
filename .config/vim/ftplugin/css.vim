@@ -17,6 +17,7 @@ endif
 " ファイルタイプ別ローカル設定 {{{1
 setlocal makeprg=css-check.sh\ \"%\"
 setlocal omnifunc=csscomplete#CompleteCSS
+setlocal spelloptions=camel
 " 折りたたみ fold {{{2
 " setlocal foldmethod=marker foldmarker={,} " ←連続するコメントも対象にしたいので止め
 setlocal foldmethod=syntax
@@ -24,4 +25,3 @@ setlocal foldmethod=syntax
 " inoremap <buffer> " ""<Left>
 " inoremap <buffer> ' ''<Left>
 " inoremap <buffer> /* /*  */<Left><Left><Left>
-setlocal spelloptions=camel

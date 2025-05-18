@@ -1,180 +1,159 @@
 vim9script
 scriptencoding utf-8
 # b:undo_ftplugin に使う関数を纏めてある
+#
+# 同じファイルタイプに設定されたとき
+# 	if &filetype ==# 'tex'
+# 		return
+# 	endif
+# と直ちに終わらせると b:undo_ftplugin に
+# setloval {option}<
+# があると、$MYVIMDIR/after/ftplugin の設定も元に戻されるので
+# unlet! b:did_ftplugin_user_after
+# は行う必要がある
+
+def Reset(): void
+	# 規定と違う setlocl をリセット
+	execute 'setlocal! '
+				.. split(execute('setlocal!'), '\n')[1 : ]
+				->map((_, v) => substitute(v, '^\(  \|--\)\(\w\+\)\(=.*\)\?', '\2', ''))
+				->filter((_, v) => v !=# 'foldlevel') # foldlevelは既定値が 0 なので全て折りたたまれてしまう
+				->join('< ')
+				.. '<'
+	# <buffer> ローカルの map 削除
+	for m in split(execute('map <buffer>'), '\n')
+				->filter((_, v) => v =~# '^[ cilnostvx] ')
+				->map((_, v) => substitute(v, '^\([ cilnostvx]\)  \([^ ]\+\) .*', '\1unmap <buffer>\2', ''))
+		execute m
+	endfor
+	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
+enddef
 
 export def AWK(): void
 	if &filetype ==# 'awk'
+		unlet! b:did_ftplugin_user_after
 		return
 	endif
-	setlocal cindent< autoindent< smartindent< foldmethod< errorformat< makeprg<
+	Reset()
 enddef
 
 export def Sh(): void
 	if &filetype ==# 'sh' || &filetype ==# 'bash'
+		unlet! b:did_ftplugin_user_after
 		return
 	endif
-	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
+	Reset()
 enddef
 
 export def HTML(): void # XHTML と共用
 	if &filetype ==# 'html'
+		unlet! b:did_ftplugin_user_after
 		return
 	endif
-	iunmap <buffer>&&
-	iunmap <buffer>&<space>
-	iunmap <buffer>**
-	iunmap <buffer>+-
-	iunmap <buffer>--
-	iunmap <buffer>---
-	iunmap <buffer><!
-	iunmap <buffer></
-	iunmap <buffer><<
-	iunmap <buffer><=
-	iunmap <buffer><C-Enter>
-	iunmap <buffer><C-Space>
-	iunmap <buffer><S-C-Enter>
-	iunmap <buffer><S-Enter>
-	iunmap <buffer>==
-	iunmap <buffer>>=
-	iunmap <buffer>>>
-	iunmap <buffer>\\
-	nunmap <buffer><Leader>v
-	if hasmapto('<leader>tt', 'n')
-		nunmap <buffer><leader>tt
-	endif
-	if hasmapto('<leader>tt', 'x')
-		xunmap <buffer><leader>tt
-	endif
-	if hasmapto('<leader>tr', 'n')
-		nunmap <buffer><leader>tr
-	endif
-	if hasmapto('<leader>tr ', 'x')
-		xunmap <buffer><leader>tr
-	endif
-	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
-	setlocal breakindentopt< errorformat< foldmethod< formatlistpat< iskeyword< makeprg< omnifunc< spelloptions<
+	Reset()
 enddef
 
 export def Vim(): void
 	if &filetype ==# 'vim'
+		unlet! b:did_ftplugin_user_after
 		return
 	endif
-	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
-	setlocal spelloptions< formatoptions< textwidth< iskeyword<
+	Reset()
 enddef
 
 export def C(): void
 	if &filetype ==# 'c'
+		unlet! b:did_ftplugin_user_after
 		return
 	endif
-	nunmap <buffer><Leader>gcc
-	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
-	setlocal equalprg< errorformat< foldmethod< makeprg< makeprg< makeprg< matchpairs< path<
+	Reset()
 enddef
 
 export def CSS(): void
 	if &filetype ==# 'css'
+		unlet! b:did_ftplugin_user_after
 		return
 	endif
-	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
-	setlocal equalprg< foldmethod< makeprg< omnifunc< spelloptions<
+	Reset()
 enddef
 
 export def Gnuplot(): void
 	if &filetype ==# 'gnuplot'
+		unlet! b:did_ftplugin_user_after
 		return
 	endif
-	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
-	setlocal commentstring< makeprg< errorformat<
+	Reset()
 enddef
 
 export def Help(): void
 	if &filetype ==# 'help'
+		unlet! b:did_ftplugin_user_after
 		return
 	endif
-	nunmap <buffer>q
-	nunmap <buffer>o
-	nunmap <buffer>i
-	nunmap <buffer>p
-	nunmap <buffer><tab>
-	nunmap <buffer><S-tab>
-	nunmap <buffer><CR>
-	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
-	setlocal commentstring< errorformat< foldmethod< keywordprg< makeprg<
+	Reset()
 enddef
 
 export def JSON(): void
 	if &filetype ==# 'json'
+		unlet! b:did_ftplugin_user_after
 		return
 	endif
-	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
-	setlocal errorformat< makeprg< equalprg< commentstring< foldmethod<
+	Reset()
 enddef
 
 export def Mail(): void
 	if &filetype ==# 'mail' || &filetype ==# 'notmuch-draft'
+		unlet! b:did_ftplugin_user_after
 		return
 	endif
-	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
-	setlocal textwidth< expandtab< formatexpr<
+	Reset()
 enddef
 
 export def Man(): void
 	if &filetype ==# 'man'
+		unlet! b:did_ftplugin_user_after
 		return
 	endif
-	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
-	setlocal list< spell< foldmethod< foldenable< foldlevelstart< foldcolumn< keywordprg<
+	Reset()
 enddef
 
 export def Markdown(): void
 	if &filetype ==# 'markdown'
+		unlet! b:did_ftplugin_user_after
 		return
 	endif
-	if hasmapto('<leader>v', 'n')
-			nunmap <silent><buffer><Leader>v
-		endif
-	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
-	setlocal expandtab< tabstop< shiftwidth< softtabstop<
+	Reset()
 enddef
 
 export def MSMTP(): void
 	if &filetype ==# 'msmtp'
+		unlet! b:did_ftplugin_user_after
 		return
 	endif
-	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
-	setlocal commentstring<
+	Reset()
 enddef
 
 export def Python(): void
 	if &filetype ==# 'python'
+		unlet! b:did_ftplugin_user_after
 		return
 	endif
 	nunmap p
-	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
-	setlocal equalprg< errorformat< foldexpr< formatprg< spelloptions< tabstop< tabstop< errorformat< foldexpr< iskeyword<
+	Reset()
 enddef
 
 export def Qf(): void
 	if &filetype ==# 'qf'
+		unlet! b:did_ftplugin_user_after
 		return
 	endif
-	nunmap <buffer>q
-	nunmap <buffer><C-O>
-	nunmap <buffer><C-I>
-	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
-	setlocal foldcolumn< statusline<
+	Reset()
 enddef
 
 export def TeX(): void
 	if &filetype ==# 'tex'
+		unlet! b:did_ftplugin_user_after
 		return
 	endif
-	nunmap <buffer><Leader>v
-	iunmap <buffer><S-Enter>
-	iunmap <buffer><S-C-Enter>
-	iunmap <buffer><C-Enter>
-	nunmap <buffer><leader>bb
-	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
-	setlocal breakindentopt< errorformat< formatlistpat< iskeyword< iskeyword< iskeyword< makeprg< suffixesadd<
+	Reset()
 enddef
