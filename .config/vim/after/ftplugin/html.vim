@@ -2,6 +2,7 @@ vim9script
 scriptencoding utf-8
 
 if exists('b:did_ftplugin_user_after')
+		|| &filetype ==# 'markdown' # デフォルトで markdown でも読み込まれるのを阻止
 	finish
 endif
 b:did_ftplugin_user_after = 1
