@@ -48,7 +48,7 @@ export def Lcd(): void # カレントディレクトリをファイルのディ�
 			return
 		endif
 	endif
-	execute 'lcd ' .. c_path
+	execute 'lcd' c_path
 enddef
 
 export def Resolve(): void # シンボリック・リンク先を開く
@@ -57,7 +57,7 @@ export def Resolve(): void # シンボリック・リンク先を開く
 	var filetype = &filetype
 	var full_path = resolve(expand('%'))
 	enew
-	execute 'bwipeout ' .. bufname .. ' | edit ' .. full_path
+	execute 'bwipeout' bufname .. ' | edit ' .. full_path
 	setpos('.', pos)
 	execute 'setlocal filetype=' .. filetype
 enddef

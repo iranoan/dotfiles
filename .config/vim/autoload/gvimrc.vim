@@ -11,7 +11,7 @@ def GuiOptionM(): void
 		if exists('g:did_install_syntax_menu')
 			unlet g:did_install_syntax_menu
 		endif
-		execute 'source ' .. resolve(globpath(&runtimepath, 'menu.vim', 1, 1)[0])
+		execute 'source' resolve(globpath(&runtimepath, 'menu.vim', 1, 1)[0])
 	endif
 enddef
 
