@@ -34,8 +34,6 @@ install.sh
     * use [ssconvert](https://help.gnome.org/users/gnumeric/stable/sect-files-ssconvert.html.en)
 * clang-format
   * [.clang-format](.clang-format)
-* colordiff
-  * [.colordiffrc](.colordiffrc)
 * Ctags
   * [.ctags](.ctags)
 * efm-langserver
