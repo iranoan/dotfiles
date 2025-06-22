@@ -559,17 +559,12 @@ nnoremap <silent>K          <Cmd>call set_eblook#SearchWord()<CR>
 
 # Undo をツリー表示で行き来する https://github.com/mbbill/undotree {{{1
 nnoremap <silent><Leader>u <Cmd>UndotreeToggle<CR>
-g:undotree_CustomUndotreeCmd  = 'vertical 30 new'
-g:undotree_CustomDiffpanelCmd = 'botright 10 new'
-augroup UndoTreeStatus
-	autocmd!
-	autocmd FileType undotree setlocal statusline=%#StatusLineLeft#%{t:undotree.GetStatusLine()}
-augroup END
 augroup loadUndotree
 	autocmd!
-	autocmd CmdUndefined UndotreeToggle packadd undotree
+	autocmd CmdUndefined UndotreeToggle set_undotree#main()
 	| autocmd! loadUndotree
 	| augroup! loadUndotree
+	| delfunction set_undotree#main
 augroup END
 
 # https://github.com/prabirshrestha/vim-lsp {{{1
