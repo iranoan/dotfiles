@@ -545,11 +545,10 @@ augroup MyMarkdown
 augroup END
 augroup loadMarkdownPreviewNvim
 	autocmd!
-	autocmd FuncUndefined mkdp#*
-				\ packadd markdown-preview.nvim
-				| g:mkdp_markdown_css = expand('$MYVIMDIR/macros/markdown.css')
+	autocmd FuncUndefined mkdp#* set_md_preview#main()
 				| autocmd! loadMarkdownPreviewNvim
 				| augroup! loadMarkdownPreviewNvim
+				| delfunction set_md_preview#main
 augroup END
 
 # EPWING の辞書を呼び出す https://github.com/deton/eblook.vim {{{1

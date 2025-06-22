@@ -132,7 +132,6 @@ def s:on_lsp_buffer_enabled(): void
 		nnoremap <buffer>]a        <Plug>(lsp-next-diagnostic)
 		nnoremap <buffer><leader>p <Plug>(lsp-document-diagnostics)
 	elseif index(['css', 'c', 'cpp', 'html', 'xhtml'], &filetype) != -1
-	# elseif &filetype == 'c' || &filetype == 'cpp'
 		b:lsp_diagnostics_enabled = 0
 		# clang 以外で行末の;無しで次の行がエラー扱いになる
 		# TeX では lacheck, CSS では css-validator が標準入力で扱えないので、efm-langserver を介すとファイルを保存のタイミングでしかチェックしない
