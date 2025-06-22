@@ -1,6 +1,7 @@
 scriptencoding utf-8
 
 function set_gitgutter#main() abort
+	packadd vim-gitgutter
 	let g:gitgutter_preview_win_floating = 1    " GitGutterPreviewHunk 表示はポップアップ
 	let g:gitgutter_map_keys = 0                " デフォルト・マッピング OFF
 	let g:gitgutter_close_preview_on_escape = 1 " <ESC> で閉じる

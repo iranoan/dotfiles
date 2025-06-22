@@ -472,7 +472,6 @@ augroup END
 # 				| delfunction set_gitgutter#main
 # augroup END
 if executable('git')
-	packadd vim-gitgutter
 	set_gitgutter#main()
 	delfunction set_gitgutter#main
 endif
