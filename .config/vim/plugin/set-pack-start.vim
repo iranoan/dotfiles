@@ -303,7 +303,7 @@ g:pairquote = {
 g:gnu_grep = {'exclude-dir': '{.git,.cache,.thumbnail,cache,thumbnail,undo}'}
 augroup GnuGrep
 	autocmd!
-	autocmd QuickFixCmdPost * gnu_grep#SetQfTitle()
+	autocmd FileType qf gnu_grep#SetQfTitle()
 augroup END
 
 # 出力を quickfix に取り込む $MYVIMDIR/pack/my-plug/start/output2qf {{{1
