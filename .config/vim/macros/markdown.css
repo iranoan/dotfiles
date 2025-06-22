@@ -16,6 +16,12 @@ body, div#page-ctn, main {
 	border-color: #586e75;
 }
 
+div#page-ctn {
+	max-width: 100em;
+	margin-right: 1em;
+	margin-left: 1em;
+}
+
 h1 {
 	text-align: center;
 }
