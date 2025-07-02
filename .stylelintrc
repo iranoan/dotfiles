@@ -49,7 +49,8 @@
 			"rules": {
 				"selector-class-pattern": "^[A-Za-z0-9_-]+$",
 				"selector-id-pattern": "^[A-Za-z0-9_-]+$",
-				"at-rule-no-vendor-prefix": false
+				"at-rule-no-vendor-prefix": false,
+				"at-rule-prelude-no-invalid": false
 			}
 		}
 	]
