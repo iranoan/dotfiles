@@ -170,6 +170,7 @@ set shortmess+=IWc shortmess-=S                # I 起動時にファイル未�
                                                # W ファイルの書き込み時に "書込み" や "[w]" を表示しない。
                                                # c 補完関連のメッセージを表示しない
                                                # S 検索ヒット件数表示←コマンドラインに検索のヒット位置、総個数を [?/?] で表示し、ファイルの先頭・終端になった時のメッセージが一瞬で消える
+set maxsearchcount=500                         # shortmess による検索個数の最大表示数
 set textwidth=0                                # 自動改行させない
 set display+=lastline                          # 画面最後の行をできる限り表示
 set wrap                                       # 長い行は折り返し表示
