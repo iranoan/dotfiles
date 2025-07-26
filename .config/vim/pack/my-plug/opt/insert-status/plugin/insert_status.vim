@@ -7,6 +7,7 @@ let s:save_cpo = &cpoptions
 set cpoptions&vim
 
 let g:hi_insert = get(g:, 'hi_insert', 'highlight ' .. substitute(substitute(execute('highlight StatusLine'), '[\r\n]', '', 'g'), 'xxx', '', ''))
+
 augroup InsertStatus
 	autocmd!
 	autocmd InsertEnter * call insert_status#Main('Enter')
