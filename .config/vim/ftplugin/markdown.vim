@@ -13,6 +13,8 @@ if !exists('g:did_ftplugin_html')
 	# augroup END
 endif
 
+# 見かけ上のインデント量を formatlistpat にヒットした文字数にする
+setlocal breakindentopt=shift:0,min:10,list:-1
 # ファイルタイプ別マップ {{{1
 # ↓pair_bracket を使う
 # 強調 {{{

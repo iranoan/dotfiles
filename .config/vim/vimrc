@@ -294,11 +294,6 @@ set browsedir=buffer                           # ファイルブラウザーの�
 augroup VIMRC
 	autocmd!
 	# autocmd VimEnter    * if exists(':Explore') | delcommand Explore | endif # netrw の使用自体取りやめ
-	# 見かけ上のインデント量を formatlistpat にヒットした文字数にする
-	autocmd BufEnter,BufFilePost,BufNewFile,BufRead *
-				\ if index(['', 'text', 'markdown'], &filetype) != -1
-				| setlocal breakindentopt=shift:0,min:10,list:-1
-				| endif
 	# ファイルを開いた/閉じた/保存時
 	autocmd BufReadPost * if &modifiable && search('[^\t -~]', 'cnw') == 0 | set fileencoding=utf-8 | endif # ASCII のみの時も utf-8 を使う
 	autocmd QuickfixCmdPost make,grep,grepadd,vimgrep,vimgrepadd,cfile
