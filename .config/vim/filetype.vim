@@ -18,4 +18,6 @@ augroup user_filetypedetect
 	autocmd BufNewFile,BufRead .fdignore,*/.config/fd/ignore setfiletype gitignore
 	# autocmd BufNewFile,BufRead *.htm,*.html   setlocal filetype=html
 	autocmd BufEnter           */textern/textern-*/*.txt setfiletype mail
+	autocmd BufWinEnter        *.jax          setfiletype help
+	autocmd BufNewFile,BufRead ~/Hidemaru/Macro/{**/,}*.mac setfiletype hidemaru
 augroup END
