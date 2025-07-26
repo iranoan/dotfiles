@@ -2,8 +2,8 @@ scriptencoding utf-8
 
 function set_expand_region#main(cmd) abort
 	call pack_manage#SetMAP('vim-expand-region', a:cmd, [
-				\ {'mode': 'x', 'key': 'v',  'cmd': '(expand_region_expand)'},
-				\ {'mode': 'x', 'key': 'V',  'cmd': '(expand_region_shrink)'}
+				\ #{mode: 'x', key: 'v',  cmd: '(expand_region_expand)'},
+				\ #{mode: 'x', key: 'V',  cmd: '(expand_region_shrink)'}
 				\ ] )
 	let g:expand_region_text_objects = {
 				\ 'iw': 0,
