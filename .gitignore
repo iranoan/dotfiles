@@ -30,7 +30,7 @@
 /.config/vim/pack/my-plug/opt/asyncomplete-html/
 /.config/vim/pack/my-plug/opt/notmuch-py-vim/
 /.config/vim/pack/my-plug/opt/docx2xhtml/
-/.config/vim/pack/my-plug/start/pair_bracket/
+/.config/vim/pack/my-plug/opt/pair_bracket/
 /.config/vim/print/
 /.config/vim/spell/
 /.config/vim/undo/
