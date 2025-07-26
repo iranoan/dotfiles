@@ -324,6 +324,7 @@ augroup VIMRC
 				| endif #前回閉じた時のカーソル位置に移動← $VIMRUNTIME/defaults.vim
 	autocmd BufEnter   *     if getftype(expand('%')) ==# 'link' | vimrc#Resolve() | endif # シンボリック・リンクは展開
 	autocmd BufEnter   *.sw? bwipeout!           # スワップファイルは閉じる
+	autocmd TerminalOpen *   vimrc#KillTerminal()  # terminal は一つにする
 	# tags ファイルは UTF-8 強制 (開く前に utf-8 に固定し開いた後元に戻す)
 	autocmd BufReadPre tags  set fileencodings=utf-8
 	autocmd BufRead    tags  &fileencodings = fileencodings
