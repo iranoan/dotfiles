@@ -1,7 +1,7 @@
 vim9script
 scriptencoding utf-8
 
-var output: string = expand('<sfile>:p:h') .. '/'
+var output: string = expand('<script>:p:h') .. '/'
 
 export def Convert(dir: string): void
 	var msg: list<any> = ['vim9script', 'export var msg: dict<string> = {']

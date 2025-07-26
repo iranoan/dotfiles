@@ -1,6 +1,6 @@
 vim9script
 
-var awk: string = expand('<sfile>:p:h:h') .. '/bin/preview-vim-help.awk'
+var awk: string = expand('<script>:p:h:h') .. '/bin/preview-vim-help.awk'
 command! HelpTags call fzf#run({
 			\ source:  fzf_help#HelpTags(),
 			\ sink:    function('fzf_help#HelpTagsSink'),

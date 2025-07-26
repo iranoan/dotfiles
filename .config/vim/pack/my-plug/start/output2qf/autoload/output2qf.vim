@@ -16,9 +16,9 @@ export def GetLang(): string
 enddef
 
 try
-	import expand('<sfile>:p:h') .. '/' .. output2qf#GetLang()[0 : 1] .. '.vim' as err
+	import expand('<script>:p:h') .. '/' .. output2qf#GetLang()[0 : 1] .. '.vim' as err
 catch /^Vim\%((\a\+)\)\=:E1053:/
-	import expand('<sfile>:p:h') .. '/C.vim' as err
+	import expand('<script>:p:h') .. '/C.vim' as err
 endtry
 var err_msg_last_set: string = err.msg['\tLast set from ']->substitute('\$$', '', 'g') .. err.msg['%s line %ld']->substitute('^^', '', 'g')
 
