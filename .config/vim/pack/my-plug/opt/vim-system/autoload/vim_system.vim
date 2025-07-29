@@ -25,6 +25,17 @@ def Enviroment(): list<string>
 	return mes
 enddef
 
+def Desktop(): list<string>
+	var mes: list<string>
+	if has('unix')
+			add(mes, '$ echo $XDG_CURRENT_DESKTOP')
+			extend(mes, systemlist('sh -c "echo $XDG_CURRENT_DESKTOP"'))
+			add(mes, '$ echo $XDG_SESSION_TYPE')
+			extend(mes, systemlist('sh -c "echo $XDG_SESSION_TYPE"'))
+	endif
+	return mes
+enddef
+
 def System(): list<string>
 	var mes: list<string> = [ ( ( has('win32') || has('win64') ) ? '>' : '$' ) .. ' vim --version' ]
 	extend(mes, split(execute('version'), '\n'))
@@ -42,9 +53,9 @@ export def Echo(): void
 enddef
 
 export def EnvWrite(): void
-	append(line('.'), Enviroment())
+	append(line('.'), Enviroment() + Desktop())
 enddef
 
 export def EnvEcho(): void
-	echo join(Enviroment(), "\n")
+	echo join(Enviroment() + Desktop(), "\n")
 enddef
