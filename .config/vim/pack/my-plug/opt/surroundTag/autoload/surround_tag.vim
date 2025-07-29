@@ -3,7 +3,6 @@ scriptencoding utf-8
 
 export def SurroundTag(...tag: list<string>): void
 	# add_tag: 追加タグ <ruby><rp>(</rp><rt></rt><rp>)</rp></ruby> 等
-	echomsg mode(1)
 	if mode() =~? '^v'
 		execute "normal! \<Esc>"
 	else

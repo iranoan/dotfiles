@@ -17,8 +17,8 @@ endif
 # ファイルタイプ別ローカル設定 {{{1 {{{1
 # nnoremap <buffer><silent><Leader>s :Notmuch mail-send<CR>
 # に割り当てられているのが notmuch-show は Google 検索に割当し直し
-nnoremap <buffer><silent><Leader>s :SearchByGoogle<CR>
-xnoremap <buffer><silent><Leader>s :SearchByGoogle<CR>
+nnoremap <buffer><silent><Leader>s <Cmd>call set_google_search#main() <Bar> delfunction set_google_search#main<CR>
+xnoremap <buffer><silent><Leader>s <Cmd>call set_google_search#main() <Bar> delfunction set_google_search#main<CR>
 # setlocal keywordprg=:call\ set_eblook#searchWord()
 setlocal tabstop=8
 setlocal nolinebreak

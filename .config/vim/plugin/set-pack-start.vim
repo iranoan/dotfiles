@@ -20,39 +20,6 @@ scriptencoding utf-8
 # * netfw を Fern に入れ替え https://github.com/lambdalisue/fern-hijack.vim
 #		- TabEdit でディレクトリなら、Fern を起動するように変更
 
-
-# プラグイン管理 {{{1
-# $MYVIMDIR/pack でプラグインを管理する上で、FileType で読み込んだプラグインを再設定するために、再度 setfiletype して、そのイベント・トリガーを削除 {{{2
-for g:packe_setting_s in ['awk', 'c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'html', 'xhtml', 'css', 'tex', 'sh', 'bash', 'markdown', 'go', 'help']
-	if g:packe_setting_s ==# 'python'
-		g:packe_setting_ext = '*.py'
-	elseif g:packe_setting_s ==# 'ruby'
-		g:packe_setting_ext = '*.rb'
-	elseif g:packe_setting_s ==# 'yaml'
-		g:packe_setting_ext = '*.yml'
-	elseif g:packe_setting_s ==# 'html'
-		g:packe_setting_ext = '*.htm,*.html'
-	# '_': {'type': ['markdown'], 'cmap': 0}, # * は箇条書きで使う
-	# '~': {'type': ['markdown'], 'cmap': 0}, # 下付き添字
-	# '^': {'type': ['markdown'], 'cmap': 0}, # 上付き添字
-	elseif g:packe_setting_s ==# 'vim'
-		g:packe_setting_ext = '*.vim,.vimrc,vimrc,_vimrc,.gvimrc,gvimrc,_gvimrc'
-	elseif g:packe_setting_s ==# 'markdown'
-		g:packe_setting_ext = '*.md'
-	elseif g:packe_setting_s ==# 'cpp'
-		g:packe_setting_ext = '*.h'
-	else
-		g:packe_setting_ext = '*.' .. g:packe_setting_s
-	endif
-	execute 'augroup ResetFiletype__' .. g:packe_setting_s
-					.. '| autocmd!'
-					.. '| autocmd BufWinEnter ' .. g:packe_setting_ext .. ' setfiletype ' .. g:packe_setting_s
-					.. '| autocmd! ResetFiletype__' .. g:packe_setting_s
-					.. '| augroup! ResetFiletype__' .. g:packe_setting_s
-					.. '| augroup END'
-endfor
-unlet g:packe_setting_ext g:packe_setting_s
-
 # vim-surround などのプラグインでも . リピートを可能にする https://github.com/tpope/vim-repeat {{{1
 # 1}}}
 
@@ -101,9 +68,11 @@ augroup END
 nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 # nnoremap <silent>gf :TabEdit <cfile><CR> " ← 存在しなくても開く <C-R><C-F> と同じ
 
-# $MYVIMDIR/pack/my-plug/start/vim-foldtext/ {{{1 https://github.com/t9md/vim-foldtext を書き換え
+# https://github.com/t9md/vim-foldtext を書き換え $MYVIMDIR/pack/my-plug/start/vim-foldtext/ {{{1
+# 1}}}
 
 # shell program を用いてバッファにフィルタを掛ける $MYVIMDIR/pack/my-plug/start/shell-filter/ {{{1
+# 1}}}
 
 # カラースキム {{{1
 # background によって一部の highlight を変える関数 (Solarized を基本としている) {{{2
@@ -238,10 +207,6 @@ endfor
 # 日本語ヘルプ https://github.com/vim-jp/vimdoc-ja {{{1
 # 1}}}
 
-# 挿入モード時、ステータスラインの色を変更 $MYVIMDIR/pack/my-plug/start/insert-status {{{1
-g:hi_insert = 'highlight StatusLine term=reverse cterm=bold,reverse gui=bold,reverse ctermbg=White ctermfg=1 guibg=#dddddd guifg=#dc322f'
-# ↑インサート・モード時の highlight 指定
-
 # 同じインデントをテキストオプジェクト化 https://github.com/kana/vim-textobj-indent {{{1
 # キーマップ ii, ai
 
@@ -256,36 +221,6 @@ xnoremap ac <Plug>(textobj-syntax-a)
 
 # 折りたたみをテキストオプジェクト化 https://github.com/kana/vim-textobj-fold {{{1
 # キーマップ iz, az
-
-# 括弧や引用符をペアで入力/削除 $MYVIMDIR/pack/my-plug/start/pair_bracket/ {{{1
-# ドット・リピートは考慮していない
-g:pairbracket = {
-	'(': {'pair': ')', 'space': 1, 'escape': {'tex': 2, 'vim': 1},
-		'search': {'v\': 0, '\': 2, 'v': 1, '_': 0}},
-	'[': {'pair': ']', 'space': 1, 'escape': {'tex': 2, 'vim': 1},
-		'search': {'v\': 0, '\': 0, 'v': 1, '_': 1}},
-	'{': {'pair': '}', 'space': 1, 'escape': {'tex': 2, 'vim': 1},
-		'search': {'v\': 0, '\': 1, 'v': 1, '_': 0}},
-	'<': {'pair': '>', 'space': 1, 'type': ['tex'], 'cmap': 0},
-	'/*': {'pair': '*/', 'space': 1, 'type': ['c', 'cpp', 'css'], 'cmap': 0},
-	'「': {'pair': '」'},
-	'『': {'pair': '』'},
-	'【': {'pair': '】'},
-	}
-g:pairquote = {
-	'"': {},
-	'''': {},
-	'`': {},
-	'$': {'type': ['tex']},
-	'*': {'type': ['help', 'markdown'], 'cmap': 0}, # tag と強調
-	'|': {'type': ['help'], 'cmap': 0},     # link
-	'_': {'type': ['markdown'], 'cmap': 0}, # 強調
-	'~': {'type': ['markdown'], 'cmap': 0}, # 下付き添字
-	'^': {'type': ['markdown'], 'cmap': 0}, # 上付き添字
-	# ↓ ', " 自体の反応が遅くなる
-	# "'''": {},
-	# '"""': {},
-	}
 
 # $MYVIMDIR/pack/*/{stat,opt}/* でプラグインを管理する上で、便利な関数 $MYVIMDIR/pack/my-plug/start/pack-manage {{{1
 # 遅延読み込みにすると、補完が使えない

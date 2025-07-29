@@ -1,17 +1,8 @@
 vim9script
 scriptencoding utf-8
 
-# 補完 https://github.com/prabirshrestha/asyncomplete.vim {{{1
-augroup loadasyncomplete
-	autocmd!
-	autocmd InsertEnter *
-				\ set_asyncomplete#main()
-				| autocmd! loadasyncomplete
-				| augroup! loadasyncomplete
-				| delfunction set_asyncomplete#main
-augroup END
-
-# 小文字で始まるコマンドを定義可能に https://github.com/kana/vim-altercmd {{{1
+# コマンドを使うなどの理由で $MYVIMDIR/pack/*/opt においているが、起動時に packadd しているために遅延にならない分 {{{1
+# 小文字で始まるコマンドを定義可能に https://github.com/kana/vim-altercmd {{{2
 # ↓実質 /start/と同じになるが、単純に /start/ に置くと、このスクリプト読み込み時点では AlterCommand が使えず、エラーになるので読み込み明示形式にする
 packadd vim-altercmd
 AlterCommand e[dit]     TabEdit
@@ -50,7 +41,7 @@ AlterCommand lgr[ep]    LGrep
 AlterCommand grepa[dd]  Grepadd
 AlterCommand lgrepa[dd] LGrepadd
 
-# 2019-03-31 14:51 などの日付や時刻もうまい具合に Ctrl-a/x で加算減算する https://github.com/tpope/vim-speeddating {{{1
+# 2019-03-31 14:51 などの日付や時刻もうまい具合に Ctrl-a/x で加算減算する https://github.com/tpope/vim-speeddating {{{2
 # 日時フォーマットを追加したいので、start に置かない
 # 遅延読み込みにすると
 # * 最初の使用時に {count}<C-a> の {cout} が効かない
@@ -83,182 +74,7 @@ xnoremap <C-A>  <Plug>SpeedDatingUp
 nnoremap <C-X>  <Plug>SpeedDatingDown
 nnoremap <C-A>  <Plug>SpeedDatingUp
 
-# https://github.com/junegunn/fzf.vim {{{1
-nnoremap <silent><Leader>fr <Cmd>Files ~<CR>
-xnoremap <silent><Leader>fr <Cmd>Files ~<CR>
-nnoremap <silent><Leader>ff <Cmd>Files<CR>
-xnoremap <silent><Leader>ff <Cmd>Files<CR>
-nnoremap <silent><Leader>fu <Cmd>Files ..<CR>
-xnoremap <silent><Leader>fu <Cmd>Files ..<CR>
-nnoremap <silent><Leader>f. <Cmd>Files ~/dotfiles<CR>
-xnoremap <silent><Leader>f. <Cmd>Files ~/dotfiles<CR>
-nnoremap <silent><Leader>fv <Cmd>Files $MYVIMDIR<CR>
-xnoremap <silent><Leader>fv <Cmd>Files $MYVIMDIR<CR>
-nnoremap <silent><Leader>fs <Cmd>Files ~/src<CR>
-xnoremap <silent><Leader>fs <Cmd>Files ~/src<CR>
-nnoremap <silent><Leader>fx <Cmd>Files ~/bin<CR>
-xnoremap <silent><Leader>fx <Cmd>Files ~/bin<CR>
-nnoremap <silent><Leader>fe <Cmd>Files ~/book/epub<CR>
-xnoremap <silent><Leader>fe <Cmd>Files ~/book/epub<CR>
-nnoremap <silent><Leader>fd <Cmd>Files ~/downloads<CR>
-xnoremap <silent><Leader>fd <Cmd>Files ~/downloads<CR>
-nnoremap <silent><Leader>fD <Cmd>Files ~/Document<CR>
-xnoremap <silent><Leader>fD <Cmd>Files ~/Document<CR>
-nnoremap <silent><Leader>fp <Cmd>Files ~/public_html/iranoan<CR>
-xnoremap <silent><Leader>fp <Cmd>Files ~/public_html/iranoan<CR>
-nnoremap <silent><Leader>fi <Cmd>Files ~/Information/slide<CR>
-xnoremap <silent><Leader>fi <Cmd>Files ~/Information/slide<CR>
-# nnoremap <silent><Leader>fb <Cmd>Buffers<CR>
-# xnoremap <silent><Leader>fb <Cmd>Buffers<CR>
-nnoremap <silent><Leader>fc <Cmd>Commands<CR>
-xnoremap <silent><Leader>fc <Cmd>Commands<CR>
-nnoremap <silent><Leader>fg <Cmd>GFiles?<CR>
-xnoremap <silent><Leader>fg <Cmd>GFiles?<CR>
-nnoremap <silent><Leader>fh <Cmd>HISTORY<CR>
-xnoremap <silent><Leader>fh <Cmd>HISTORY<CR>
-nnoremap <silent><Leader>fH <Cmd>HelpTags<CR>
-xnoremap <silent><Leader>fH <Cmd>HelpTags<CR>
-nnoremap <silent><Leader>fl <Cmd>BLines<CR>
-xnoremap <silent><Leader>fl <Cmd>BLines<CR>
-nnoremap <silent><Leader>fm <Cmd>Marks<CR>
-xnoremap <silent><Leader>fm <Cmd>Marks<CR>
-nnoremap <silent>m/         <Cmd>Marks<CR>
-xnoremap <silent>m/         <Cmd>Marks<CR>
-# ↑ vim-signature のデフォルト・キーマップをこちらに再定義
-# nnoremap <silent><Leader>ft :Tags<CR>
-# xnoremap <silent><Leader>ft :Tags<CR>
-# nnoremap <silent><Leader>fw <Cmd>Windows<CR>
-# xnoremap <silent><Leader>fw <Cmd>Windows<CR>
-nnoremap <silent><Leader>f: <Cmd>History:<CR>
-xnoremap <silent><Leader>f: <Cmd>History:<CR>
-nnoremap <silent><Leader>f/ <Cmd>History/<CR>
-xnoremap <silent><Leader>f/ <Cmd>History/<CR>
-augroup loadFZF_Vim
-	autocmd!
-	autocmd CmdUndefined Files,Buffers,Tags,Marks,History,HISTORY,GFiles,Windows,Helptags,Commands,BLines,HelpTags
-				\ set_fzf_vim#main()
-				| autocmd! loadFZF_Vim
-				| augroup! loadFZF_Vim
-				| delfunction set_fzf_vim#main
-augroup END
-
-# yank の履歴 https://github.com/justinhoward/fzf-neoyank {{{1
-nnoremap <Leader>fy <Cmd>FZFNeoyank<CR>
-nnoremap <Leader>fY <Cmd>FZFNeoyank # P<CR>
-xnoremap <Leader>fy <Cmd>FZFNeoyankSelection<CR>
-# nnoremap <Leader>dy <Cmd>FZFNeoyank<CR>
-# nnoremap <Leader>dY <Cmd>FZFNeoyank " P<CR>
-# xnoremap <Leader>dy <Cmd>FZFNeoyankSelection<CR>
-augroup loadfzf_neoyank
-	autocmd!
-	autocmd CmdUndefined FZFNeoyank,FZFNeoyankSelection
-				\ set_fzf_neoyank#main()
-				| autocmd! loadfzf_neoyank
-				| augroup! loadfzf_neoyank
-				| delfunction set_fzf_neoyank#main
-augroup END
-
-# fzf を使ってタブ・ページの切り替え $MYVIMDIR/pack/my-plug/opt/fzf-tabs/ {{{1
-nnoremap <Leader>ft <Cmd>FZFTabOpen<CR>
-vnoremap <Leader>ft <Cmd>FZFTabOpen<CR>
-nnoremap <Leader>fb <Cmd>FZFTabOpen<CR>
-nnoremap <Leader>fw <Cmd>FZFTabOpen<CR>
-augroup load_fzf_tabs
-	autocmd!
-	autocmd CmdUndefined FZFTabOpen
-				\ set_fzf_tabs#main()
-				| autocmd! load_fzf_tabs
-				| augroup! load_fzf_tabs
-				| delfunction set_fzf_tabs#main
-augroup END
-
-# 日本語入力に向いた設定にする (行の連結など) https://github.com/vim-jp/autofmt {{{1
-augroup loadautofmt
-	autocmd!
-	autocmd FileType text,mail,notmuch-edit set_autofmt#main()
-				| autocmd! loadautofmt
-				| augroup! loadautofmt
-				| delfunction set_autofmt#main
-augroup END
-
-# vim 折りたたみ fold $MYVIMDIR/pack/my-plug/opt/vim-ft-vim_fold/ {{{1 https://github.com/thinca/vim-ft-vim_fold を組み合わせ追加のために置き換え
-augroup loadvim_ft_vim_fold
-	autocmd!
-	autocmd FileType vim packadd vim-ft-vim_fold
-	| autocmd! loadvim_ft_vim_fold
-	| augroup! loadvim_ft_vim_fold
-augroup END
-
-# ディレクトリを再帰的に diff https://github.com/will133/vim-dirdiff {{{1
-augroup loadDirDiff
-	autocmd!
-	autocmd CmdUndefined DirDiff g:DirDiffForceLang = 'C LC_MESSAGES=C'
-	| g:DirDiffExcludes = ".git,.*.swp"
-	| packadd vim-dirdiff
-	| autocmd! loadDirDiff
-	| augroup! loadDirDiff
-augroup END
-
-# notmuch-python-Vim $MYVIMDIR/pack/my-plug/opt/notmuch-py-vim/ {{{1
-nnoremap <silent><Leader>m :Notmuch start<CR>
-augroup loadNotmuchPy
-	autocmd!
-	autocmd CmdUndefined Notmuch
-				\ set_notmuchpy#main()
-				| autocmd! loadNotmuchPy
-				| augroup! loadNotmuchPy
-				| delfunction set_notmuchpy#main
-augroup END
-# augroup NotmuchDraft # バッファを開き終わった後に asyncomplete が効かない
-# 	autocmd!
-# 	autocmd FileType notmuch-draft
-# 				\ if !pack_manage#IsInstalled('asyncomplete.vim')
-# 				| 	set_asyncomplete#main()
-# 				| 	autocmd! loadasyncomplete
-# 				| 	augroup! loadasyncomplete
-# 				| 	delfunction set_asyncomplete#main
-# 				| endif
-# 				| call asyncomplete#enable_for_buffer()
-# 				| autocmd! NotmuchDraft
-# 				| augroup! NotmuchDraft
-# augroup END
-
-# 各種言語の構文チェック https://github.com/dense-analysis/ale {{{1
-augroup loadALE
-	autocmd!
-	# autocmd FileType c,cpp,python,ruby,yaml,markdown,html,xhtml,css,tex,help,json
-	autocmd FileType c,cpp,ruby,yaml,markdown,html,xhtml,css,tex,help,json
-				\ set_ale#main()
-				| autocmd! loadALE
-				| augroup! loadALE
-				| delfunction set_ale#main
-augroup END
-
-# CSS シンタックス https://github.com/hail2u/vim-css3-syntax {{{1
-augroup loadSyntaxCSS
-	autocmd!
-	autocmd FileType css packadd vim-css3-syntax
-	| autocmd! loadSyntaxCSS
-	| augroup! loadSyntaxCSS
-augroup END
-
-# conky シンタックス https://github.com/smancill/conky-syntax.vim {{{1 ←署名を見ると同じ開発元だが、標準パッケージに含まれているものだと上手く動作しない
-augroup loadSyntaxConky
-	autocmd!
-	autocmd FileType conkyrc packadd conky-syntax.vim
-	| autocmd! loadSyntaxConky
-	| augroup! loadSyntaxConky
-augroup END
-
-# C/C++シンタックス https://github.com/vim-jp/vim-cpp {{{1
-augroup loadSyntaxC
-	autocmd!
-	autocmd FileType c,cpp packadd vim-cpp
-	| autocmd! loadSyntaxC
-	| augroup! loadSyntaxC
-augroup END
-
-# テキストオブジェクト化の元となる https://github.com/kana/vim-textobj-user {{{1
+# テキストオブジェクト化の元となる https://github.com/kana/vim-textobj-user {{{2
 # 遅延読み込みにすると、最初に gcaz 等、プラグイン+textobj-* の組み合わせた時うまく動作しない
 # またこのファイルの処理自体に時間がかかるようになるので、遅延処理の美味みがない
 # + 独自の定義を追加したい
@@ -324,7 +140,7 @@ textobj#user#plugin('markdown', {
 	},
 }) # a~, i~ といったマップは効かなかった
 
-# テキストオブジェクトで (), {} "", '' を区別せずにカーソル近くで判定して、全て b で扱えるようにする https://github.com/osyo-manga/vim-textobj-multiblock {{{1
+# テキストオブジェクトで (), {} "", '' を区別せずにカーソル近くで判定して、全て b で扱えるようにする https://github.com/osyo-manga/vim-textobj-multiblock {{{2
 # キーマップしないと ", ' の指定が働かない
 # デフォルト・マップを削除したい→読み込み明示
 packadd vim-textobj-multiblock
@@ -343,44 +159,392 @@ g:textobj_multiblock_blocks = [
 unmap isb
 unmap asb
 
-# #ifdef 〜 #endif をテキストオプジェクト化→a#, i# https://github.com/anyakichi/vim-textobj-ifdef {{{1
+# Git の変更のあった signcolumn にマークをつける https://github.com/airblade/vim-gitgutter {{{2
+# 遅延読み込みをすると vim-signature との連携機能が使えない←連携できないだけ
+if executable('git') # git がないときに起動時にエラーになるため
+	set_gitgutter#main()
+	delfunction set_gitgutter#main
+endif
+
+# Git 連携 https://github.com/tpope/vim-fugitive {{{2
+# statusline で使うので、$VIMDIR/autoload/vimrc.vim で読み込み
+
+# InsertEnter,CmdlineEnter をトリガーとする {{{1
+# 括弧や引用符をペアで入力/削除 $MYVIMDIR/pack/my-plug/start/pair_bracket/ {{{2
+# ドット・リピートは考慮していない
+g:pairbracket = {
+	'(': {'pair': ')', 'space': 1, 'escape': {'tex': 2, 'vim': 1},
+		'search': {'v\': 0, '\': 2, 'v': 1, '_': 0}},
+	'[': {'pair': ']', 'space': 1, 'escape': {'tex': 2, 'vim': 1},
+		'search': {'v\': 0, '\': 0, 'v': 1, '_': 1}},
+	'{': {'pair': '}', 'space': 1, 'escape': {'tex': 2, 'vim': 1},
+		'search': {'v\': 0, '\': 1, 'v': 1, '_': 0}},
+	'<': {'pair': '>', 'space': 1, 'type': ['tex'], 'cmap': 0},
+	'/*': {'pair': '*/', 'space': 1, 'type': ['c', 'cpp', 'css'], 'cmap': 0},
+	'「': {'pair': '」'},
+	'『': {'pair': '』'},
+	'【': {'pair': '】'},
+	}
+g:pairquote = {
+	'"': {},
+	'''': {},
+	'`': {},
+	'$': {'type': ['tex']},
+	'*': {'type': ['help', 'markdown'], 'cmap': 0}, # tag と強調
+	'|': {'type': ['help'], 'cmap': 0},     # link
+	'_': {'type': ['markdown'], 'cmap': 0}, # 強調
+	'~': {'type': ['markdown'], 'cmap': 0}, # 下付き添字
+	'^': {'type': ['markdown'], 'cmap': 0}, # 上付き添字
+	# ↓ ', " 自体の反応が遅くなる
+	# "'''": {},
+	# '"""': {},
+	}
+g:hi_insert = 'highlight StatusLine term=reverse cterm=bold,reverse gui=bold,reverse ctermbg=White ctermfg=1 guibg=#dddddd guifg=#dc322f'
+augroup SetPairBracket
+	autocmd!
+	autocmd InsertEnter,CmdlineEnter * packadd pair_bracket
+		| autocmd! SetPairBracket
+		| augroup! SetPairBracket
+augroup END
+
+# 補完 https://github.com/prabirshrestha/asyncomplete.vim {{{2
+augroup SetAsyncomplete
+autocmd InsertEnter * set_asyncomplete#main()
+			| autocmd! SetAsyncomplete
+			| augroup! SetAsyncomplete
+			| delfunction set_asyncomplete#main
+augroup END
+
+# 挿入モード時、ステータスラインの色を変更 $MYVIMDIR/pack/my-plug/start/insert-status {{{2
+# g:hi_insert がインサート・モード時の highlight 指定
+augroup SetInsertStatus
+autocmd InsertEnter * packadd insert-status
+			| insert_status#Main('Enter')
+			| autocmd! SetInsertStatus
+			| augroup! SetInsertStatus
+augroup END
+
+# BufNewFile,BufRead,CmdUndefined,FuncUndefined をトリガーとする {{{1
+augroup SetPackOpt
+	# ディレクトリを再帰的に diff https://github.com/will133/vim-dirdiff {{{2
+	autocmd CmdUndefined DirDiff g:DirDiffForceLang = 'C LC_MESSAGES=C'
+		| g:DirDiffExcludes = ".git,.*.swp"
+		| packadd vim-dirdiff
+		| autocmd! SetPackOpt CmdUndefined DirDiff
+
+	# カーソル位置の Syntax の情報を表示する $MYVIMDIR/pack/my-plug/opt/syntax_info/ {{{2 http://cohama.hateblo.jp/entry/2013/08/11/020849 を参考にした
+	autocmd CmdUndefined SyntaxInfo packadd syntax_info
+	| autocmd! SetPackOpt CmdUndefined SyntaxInfo
+
+	# Man コマンドを使用可能にする $MYVIMDIR/pack/my-plug/opt/man {{{2
+	autocmd CmdUndefined Man packadd man
+	| autocmd! SetPackOpt CmdUndefined Man
+
+	# dog と cat の入れ替えなどサイクリックに置換する関数などの定義 $MYVIMDIR/pack/my-plug/opt/replace-cyclic {{{2
+	autocmd FuncUndefined replace#* packadd replace-cyclic
+		| autocmd! SetPackOpt FuncUndefined replace#*
+
+	# Vim の環境を出力する $MYVIMDIR/pack/my-plug/opt/vim-system/ {{{2
+	autocmd FuncUndefined vim_system#* packadd vim-system
+		| autocmd! SetPackOpt FuncUndefined vim_system#*
+		| autocmd! SetPackOpt CmdUndefined VimSystem,VimSystemEcho,System,SystemEcho
+	autocmd CmdUndefined VimSystem,VimSystemEcho,System,SystemEcho packadd vim-system
+		| autocmd! SetPackOpt FuncUndefined vim_system#*
+		| autocmd! SetPackOpt CmdUndefined VimSystem,VimSystemEcho,System,SystemEcho
+
+	# *.docx をまとめて epub 用のファイルに変換 $MYVIMDIR/pack/my-plug/opt/docx2xhtml {{{2
+	# カレント・ディレクトリに有る Google Document を使って OCR したファイルを前提とし、自作シェル・スクリプトや LibreOffice も呼び出しているごく個人的なスクリプト
+	autocmd FuncUndefined docx2xhtml#main packadd docx2xhtml
+	| autocmd! SetPackOpt FuncUndefined docx2xhtml#main
+
+	# 印刷 $MYVIMDIR/pack/my-plug/opt/print/ {{{2
+	autocmd CmdUndefined PrintBuffer packadd print
+				| autocmd! SetPackOpt CmdUndefined PrintBuffer
+
+	# vim のヘルプ・ファイルから Readme.md を作成する https://github.com/LeafCage/vimhelpgenerator {{{2
+	autocmd CmdUndefined VimHelpGenerator packadd vimhelpgenerator
+				| autocmd! SetPackOpt CmdUndefined VimHelpGenerator
+
+	# conky シンタックス https://github.com/smancill/conky-syntax.vim {{{2 ←署名を見ると同じ開発元だが、標準パッケージに含まれているものだと上手く動作しない
+	autocmd BufNewFile,BufRead conkyrc,conky.conf packadd conky-syntax.vim
+				| set filetype=conkyrc
+				| autocmd! SetPackOpt BufNewFile,BufRead conkyrc,conky.conf
+
+	# ファイル・マネージャー https://github.com/lambdalisue/fern.vim {{{2
+	nnoremap <Leader>e <Cmd>call set_fern#main() <Bar> autocmd! SetPackOpt CmdUndefined Fern <Bar> delfunction set_fern#main <CR>
+	# キーマップだけだと、ディレクトリ部分の gf で使えない
+	autocmd CmdUndefined Fern call set_fern#main()
+		| autocmd! SetPackOpt CmdUndefined Fern
+		| delfunction set_fern#main
+
+	# getmail syntax https://github.com/vim-scripts/getmail.vim {{{2
+	# 	autocmd BufRead ~/.getmail/*,~/.config/getmail/* set_getmail_vim#main()
+	# 	| autocmd! SetPackOpt BufRead ~/.getmail/*,~/.config/getmail/*
+	# 	| delfunction set_getmail_vim#main
+
+augroup END # }}}1
+
+# Filetype をトリガーとする {{{1
+# プラグイン管理 {{{2
+# $MYVIMDIR/pack でプラグインを管理する上で、FileType で読み込んだプラグインを再設定するために、再度 setfiletype して、そのイベント・トリガーを削除 {{{2
+augroup ResetFiletype
+	autocmd!
+	for [t, e] in items({
+			awk: '*.awk',
+			c: '*.c',
+			cpp: '*.h,*.cpp',
+			python: '*.py',
+			vim: '*.vim,.vimrc,vimrc,_vimrc,.gvimrc,gvimrc,_gvimrc',
+			ruby: '*.rb',
+			yaml: '*.yml',
+			html: '*.htm,*.html',
+			xhtml: '*.xhtml',
+			css: '*.css',
+			tex: '*.tex',
+			sh: '*.sh',
+			bash: '*.sh,*.bash',
+			markdown: '*.md',
+			go: '*.go',
+			conkyrc: 'conkyrc,conky.conf'
+		})
+		execute 'autocmd BufWinEnter ' .. e .. ' setfiletype ' .. t
+						.. ' | autocmd! ResetFiletype BufWinEnter ' .. e
+	endfor
+augroup END
+
+# 日本語入力に向いた設定にする (行の連結など) https://github.com/vim-jp/autofmt {{{2
+augroup loadautofmt
+	autocmd!
+	autocmd FileType text,mail,notmuch-edit set_autofmt#main()
+				| autocmd! loadautofmt
+				| augroup! loadautofmt
+				| delfunction set_autofmt#main
+augroup END
+
+# vim 折りたたみ fold $MYVIMDIR/pack/my-plug/opt/vim-ft-vim_fold/ {{{2 https://github.com/thinca/vim-ft-vim_fold を組み合わせ追加のために置き換え
+augroup loadvim_ft_vim_fold
+	autocmd!
+	autocmd FileType vim packadd vim-ft-vim_fold
+	| autocmd! loadvim_ft_vim_fold
+	| augroup! loadvim_ft_vim_fold
+augroup END
+
+# 各種言語の構文チェック https://github.com/dense-analysis/ale {{{2
+augroup loadALE
+	autocmd!
+	# autocmd FileType c,cpp,python,ruby,yaml,markdown,html,xhtml,css,tex,help,json
+	autocmd FileType c,cpp,ruby,yaml,markdown,html,xhtml,css,tex,help,json
+				\ set_ale#main()
+				| autocmd! loadALE
+				| augroup! loadALE
+				| delfunction set_ale#main
+augroup END
+
+# CSS シンタックス https://github.com/hail2u/vim-css3-syntax {{{2
+augroup loadSyntaxCSS
+	autocmd!
+	autocmd FileType css packadd vim-css3-syntax
+	| autocmd! loadSyntaxCSS
+	| augroup! loadSyntaxCSS
+augroup END
+
+# C/C++シンタックス https://github.com/vim-jp/vim-cpp {{{2
+# #ifdef 〜 #endif をテキストオプジェクト化→a#, i# https://github.com/anyakichi/vim-textobj-ifdef {{{2
 # depends = ['vim-textobj-user']
 augroup loadVimTextObjIfdef
 	autocmd!
-	autocmd FileType c,cpp packadd vim-textobj-ifdef
+	autocmd FileType c,cpp packadd vim-textobj-ifdef | packadd vim-cpp
 	| autocmd! loadVimTextObjIfdef
 	| augroup! loadVimTextObjIfdef
 augroup END
 # a#, i# に割当
 
-# 関数をテキストオプジェクト化 https://github.com/kana/vim-textobj-function {{{1
+# 関数をテキストオプジェクト化 https://github.com/kana/vim-textobj-function {{{2
 # 判定にシンタックスを用いる https://github.com/haya14busa/vim-textobj-function-syntax {{{2 }}}
 # depends = ['vim-textobj-user']
 # af, if に割当
 augroup loadTextObjFunc
 	autocmd!
-	autocmd FileType c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,css,tex,sh,bash packadd vim-textobj-function
+	autocmd FileType c,cpp,vim packadd vim-textobj-function
 	| packadd vim-textobj-function-syntax
 	| autocmd! loadTextObjFunc
 	| augroup! loadTextObjFunc
 augroup END
 
-# LaTeXをテキストオプジェクト化 https://github.com/rbonvall/vim-textobj-latex {{{1
+# LaTeX をテキストオプジェクト化 https://github.com/rbonvall/vim-textobj-latex {{{2
 # depends = ['vim-textobj-user']
-augroup loadTextObjLaTeX
-	autocmd!
-	autocmd FileType tex packadd vim-textobj-latex
-	| autocmd! loadTextObjLaTeX
-	| augroup! loadTextObjLaTeX
-augroup END
 # できるのは次のテキストオプジェクト
 # a\ 	i\ 	Inline math surrounded by \( and \).
 # a$ 	i$ 	Inline math surrounded by dollar signs.
 # aq 	iq 	Single-quoted text `like this'.
 # aQ 	iQ 	Double-quoted text ``like this''.
 # ae 	ie 	Environment \begin{…} to \end{…}
+# LaTeX fold 折りたたみ https://github.com/matze/vim-tex-fold {{{2
+augroup loadTeX
+	autocmd!
+	autocmd FileType tex packadd vim-textobj-latex
+				| set_vim_tex_fold#main()
+				| autocmd! loadTeX
+				| augroup! loadTeX
+				| delfunction set_vim_tex_fold#main
+augroup END
 
-# 整形 https://github.com/junegunn/vim-easy-align {{{1
+# https://github.com/prabirshrestha/vim-lsp {{{2
+augroup loadvimlsp
+	autocmd!
+	autocmd FileType awk,c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,css,sh,bash,go,conf
+				\ set_vimlsp#main()
+				| autocmd! loadvimlsp
+				| augroup! loadvimlsp
+				| delfunction set_vimlsp#main
+augroup END
+
+# カーソル位置に合わせて filetype を判定←各種プラグインが依存 https://github.com/Shougo/context_filetype.vim {{{2
+augroup loadcontext_filetype
+	autocmd!
+	autocmd FileType sh,bash,vim,html,xhtml,markdown,lua set_context_filetype#main()
+				| autocmd! loadcontext_filetype
+				| augroup! loadcontext_filetype
+				| delfunction set_context_filetype#main
+augroup END
+
+# Markdown マッピング $MYVIMDIR/pack/my-plug/opt/map-markdown/ {{{2
+augroup loadMapMarkdown
+	autocmd!
+	autocmd FileType markdown
+				\ packadd map-markdown
+				| autocmd! loadMapMarkdown
+				| augroup! loadMapMarkdown
+augroup END
+
+# $MYVIMDIR/pack/my-plug/opt/ft-fold {{{2
+augroup loadFileTypeFold
+	autocmd!
+	autocmd FileType python,help,awk
+				\ packadd ft-fold
+				| autocmd! loadFileTypeFold
+				| augroup! loadFileTypeFold
+augroup END
+
+# キーマップし読み込みもする分 {{{1
+# カーソル位置の単語を Google で検索 $MYVIMDIR/pack/my-plug/opt/google-search/ {{{2 https://www.rasukarusan.com/entry/2019/03/09/011630 を参考にした
+nnoremap <silent><Leader>s <Cmd>call set_google_search#main() <Bar> delfunction set_google_search#main<CR>
+xnoremap <silent><Leader>s <Cmd>call set_google_search#main() <Bar> delfunction set_google_search#main<CR>
+
+# ctags や LSP を使った list https://github.com/liuchengxu/vista.vim {{{2
+# アウトライン https://github.com/vim-voom/VOoM {{{2
+nnoremap <silent><Leader>o <Cmd>call set_vista_voom#Load() <Bar> delfunction set_vista_voom#Load<CR>
+
+# ページ送りに $MYVIMDIR/pack/my-plug/opt/page-down {{{2
+nnoremap <silent><space> <Cmd>call set_page_down#main() <Bar> delfunction set_page_down#main<CR>
+
+# Undo をツリー表示で行き来する https://github.com/mbbill/undotree {{{2
+nnoremap <silent><Leader>u <Cmd>call set_undotree#main() <Bar> delfunction set_undotree#main()<CR>
+
+# https://github.com/puremourning/vimspector {{{2
+nnoremap <Leader>df       <Cmd>call set_vimspector#main('call vimspector#AddFunctionBreakpoint(''<cexpr>'')') <Bar> delfunction set_vimspector#main<CR>
+nnoremap <Leader>dc       <Cmd>call set_vimspector#main('call vimspector#Continue()') <Bar> delfunction set_vimspector#main<CR>
+nnoremap <Leader>dd       <Cmd>call set_vimspector#main('call vimspector#DownFrame()') <Bar> delfunction set_vimspector#main<CR>
+nnoremap <Leader>dp       <Cmd>call set_vimspector#main('call vimspector#Pause()') <Bar> delfunction set_vimspector#main<CR>
+nnoremap <Leader>dR       <Cmd>call set_vimspector#main('call vimspector#Restart()') <Bar> delfunction set_vimspector#main<CR>
+nnoremap <Leader>dr       <Cmd>call set_vimspector#main('call vimspector#RunToCursor()') <Bar> delfunction set_vimspector#main<CR>
+nnoremap <Leader>ds       <Cmd>call set_vimspector#main('call vimspector#StepInto()') <Bar> delfunction set_vimspector#main<CR>
+nnoremap <Leader>dS       <Cmd>call set_vimspector#main('call vimspector#StepOut()') <Bar> delfunction set_vimspector#main<CR>
+nnoremap <Leader>dn       <Cmd>call set_vimspector#main('call vimspector#StepOver()') <Bar> delfunction set_vimspector#main<CR>
+nnoremap <Leader>d<Space> <Cmd>call set_vimspector#main('call vimspector#Stop()') <Bar> delfunction set_vimspector#main<CR>
+nnoremap <Leader>db       <Cmd>call set_vimspector#main('call vimspector#ToggleBreakpoint()') <Bar> delfunction set_vimspector#main<CR>
+nnoremap <Leader>dx       <Cmd>call set_vimspector#main('call vimspector#Reset( { ''interactive'': v:false } )') <Bar> delfunction set_vimspector#main<CR>
+nnoremap <Leader>di       <Cmd>call set_vimspector#main('VimspectorBalloonEval') <Bar> delfunction set_vimspector#main<CR>
+xnoremap <Leader>di       :call set_vimspector#main('VimspectorBalloonEval') <Bar> delfunction set_vimspector#main<CR>
+
+# カーソル行の URL やファイルを開く $MYVIMDIR/pack/my-plug/opt/open_uri/ {{{2
+nnoremap <silent><Leader>x <Cmd>call set_open_uri#main() <Bar> delfunction set_open_uri#main<CR>
+nnoremap <2-LeftMouse>     <Cmd>call set_open_uri#main() <Bar> delfunction set_open_uri#main<CR>
+
+# 文字の変換 $MYVIMDIR/pack/my-plug/opt/transform/ {{{2
+nnoremap <Leader>ha <Cmd>call set_transform#main('Zen2han') <Bar> delfunction set_transform#main<CR>
+xnoremap <Leader>ha     :call set_transform#main('Zen2han') <Bar> delfunction set_transform#main<CR>
+nnoremap <Leader>hh <Cmd>call set_transform#main('InsertSpace') <Bar> delfunction set_transform#main<CR>
+xnoremap <Leader>hh     :call set_transform#main('InsertSpace') <Bar> delfunction set_transform#main<CR>
+nnoremap <Leader>hz <Cmd>call set_transform#main('Han2zen') <Bar> delfunction set_transform#main<CR>
+xnoremap <Leader>hz     :call set_transform#main('Han2zen') <Bar> delfunction set_transform#main<CR>
+nnoremap <Leader>hk <Cmd>call set_transform#main('Hira2kata') <Bar> delfunction set_transform#main<CR>
+xnoremap <Leader>hk     :call set_transform#main('Hira2kata') <Bar> delfunction set_transform#main<CR>
+nnoremap <Leader>hH <Cmd>call set_transform#main('Kata2hira') <Bar> delfunction set_transform#main<CR>
+xnoremap <Leader>hH     :call set_transform#main('Kata2hira') <Bar> delfunction set_transform#main<CR>
+# nnoremap <Leader>hb :Base64<CR>
+
+# https://github.com/junegunn/fzf.vim {{{2
+nnoremap <silent><Leader>fr <Cmd>call set_fzf_vim#main('Files ~') <Bar> delfunction set_fzf_vim#main<CR>
+xnoremap <silent><Leader>fr <Cmd>call set_fzf_vim#main('Files ~') <Bar> delfunction set_fzf_vim#main<CR>
+nnoremap <silent><Leader>ff <Cmd>call set_fzf_vim#main('Files') <Bar> delfunction set_fzf_vim#main<CR>
+xnoremap <silent><Leader>ff <Cmd>call set_fzf_vim#main('Files') <Bar> delfunction set_fzf_vim#main<CR>
+nnoremap <silent><Leader>fu <Cmd>call set_fzf_vim#main('Files ..') <Bar> delfunction set_fzf_vim#main<CR>
+xnoremap <silent><Leader>fu <Cmd>call set_fzf_vim#main('Files ..') <Bar> delfunction set_fzf_vim#main<CR>
+nnoremap <silent><Leader>f. <Cmd>call set_fzf_vim#main('Files ~/dotfiles') <Bar> delfunction set_fzf_vim#main<CR>
+xnoremap <silent><Leader>f. <Cmd>call set_fzf_vim#main('Files ~/dotfiles') <Bar> delfunction set_fzf_vim#main<CR>
+nnoremap <silent><Leader>fv <Cmd>call set_fzf_vim#main('Files $MYVIMDIR') <Bar> delfunction set_fzf_vim#main<CR>
+xnoremap <silent><Leader>fv <Cmd>call set_fzf_vim#main('Files $MYVIMDIR') <Bar> delfunction set_fzf_vim#main<CR>
+nnoremap <silent><Leader>fs <Cmd>call set_fzf_vim#main('Files ~/src') <Bar> delfunction set_fzf_vim#main<CR>
+xnoremap <silent><Leader>fs <Cmd>call set_fzf_vim#main('Files ~/src') <Bar> delfunction set_fzf_vim#main<CR>
+nnoremap <silent><Leader>fx <Cmd>call set_fzf_vim#main('Files ~/bin') <Bar> delfunction set_fzf_vim#main<CR>
+xnoremap <silent><Leader>fx <Cmd>call set_fzf_vim#main('Files ~/bin') <Bar> delfunction set_fzf_vim#main<CR>
+nnoremap <silent><Leader>fe <Cmd>call set_fzf_vim#main('Files ~/book/epub') <Bar> delfunction set_fzf_vim#main<CR>
+xnoremap <silent><Leader>fe <Cmd>call set_fzf_vim#main('Files ~/book/epub') <Bar> delfunction set_fzf_vim#main<CR>
+nnoremap <silent><Leader>fd <Cmd>call set_fzf_vim#main('Files ~/downloads') <Bar> delfunction set_fzf_vim#main<CR>
+xnoremap <silent><Leader>fd <Cmd>call set_fzf_vim#main('Files ~/downloads') <Bar> delfunction set_fzf_vim#main<CR>
+nnoremap <silent><Leader>fD <Cmd>call set_fzf_vim#main('Files ~/Document') <Bar> delfunction set_fzf_vim#main<CR>
+xnoremap <silent><Leader>fD <Cmd>call set_fzf_vim#main('Files ~/Document') <Bar> delfunction set_fzf_vim#main<CR>
+nnoremap <silent><Leader>fp <Cmd>call set_fzf_vim#main('Files ~/public_html/iranoan') <Bar> delfunction set_fzf_vim#main<CR>
+xnoremap <silent><Leader>fp <Cmd>call set_fzf_vim#main('Files ~/public_html/iranoan') <Bar> delfunction set_fzf_vim#main<CR>
+nnoremap <silent><Leader>fi <Cmd>call set_fzf_vim#main('Files ~/Information/slide') <Bar> delfunction set_fzf_vim#main<CR>
+xnoremap <silent><Leader>fi <Cmd>call set_fzf_vim#main('Files ~/Information/slide') <Bar> delfunction set_fzf_vim#main<CR>
+# nnoremap <silent><Leader>fb <Cmd>call set_fzf_vim#main('Buffers') <Bar> delfunction set_fzf_vim#main<CR>
+# xnoremap <silent><Leader>fb <Cmd>call set_fzf_vim#main('Buffers') <Bar> delfunction set_fzf_vim#main<CR>
+nnoremap <silent><Leader>fc <Cmd>call set_fzf_vim#main('Commands') <Bar> delfunction set_fzf_vim#main<CR>
+xnoremap <silent><Leader>fc <Cmd>call set_fzf_vim#main('Commands') <Bar> delfunction set_fzf_vim#main<CR>
+nnoremap <silent><Leader>fg <Cmd>call set_fzf_vim#main('GFiles?') <Bar> delfunction set_fzf_vim#main<CR>
+xnoremap <silent><Leader>fg <Cmd>call set_fzf_vim#main('GFiles?') <Bar> delfunction set_fzf_vim#main<CR>
+nnoremap <silent><Leader>fh <Cmd>call set_fzf_vim#main('HISTORY') <Bar> delfunction set_fzf_vim#main<CR>
+xnoremap <silent><Leader>fh <Cmd>call set_fzf_vim#main('HISTORY') <Bar> delfunction set_fzf_vim#main<CR>
+nnoremap <silent><Leader>fH <Cmd>call set_fzf_vim#main('HelpTags') <Bar> delfunction set_fzf_vim#main<CR>
+xnoremap <silent><Leader>fH <Cmd>call set_fzf_vim#main('HelpTags') <Bar> delfunction set_fzf_vim#main<CR>
+nnoremap <silent><Leader>fl <Cmd>call set_fzf_vim#main('BLines') <Bar> delfunction set_fzf_vim#main<CR>
+xnoremap <silent><Leader>fl <Cmd>call set_fzf_vim#main('BLines') <Bar> delfunction set_fzf_vim#main<CR>
+nnoremap <silent><Leader>fm <Cmd>call set_fzf_vim#main('Marks') <Bar> delfunction set_fzf_vim#main<CR>
+xnoremap <silent><Leader>fm <Cmd>call set_fzf_vim#main('Marks') <Bar> delfunction set_fzf_vim#main<CR>
+nnoremap <silent>m/         <Cmd>call set_fzf_vim#main('Marks') <Bar> delfunction set_fzf_vim#main<CR>
+xnoremap <silent>m/         <Cmd>call set_fzf_vim#main('Marks') <Bar> delfunction set_fzf_vim#main<CR>
+# ↑ vim-signature のデフォルト・キーマップをこちらに再定義
+# nnoremap <silent><Leader>ft <Cmd>call set_fzf_vim#main('Tags') <Bar> delfunction set_fzf_vim#main<CR>
+# xnoremap <silent><Leader>ft <Cmd>call set_fzf_vim#main('Tags') <Bar> delfunction set_fzf_vim#main<CR>
+# nnoremap <silent><Leader>fw <Cmd>call set_fzf_vim#main('Windows') <Bar> delfunction set_fzf_vim#main<CR>
+# xnoremap <silent><Leader>fw <Cmd>call set_fzf_vim#main('Windows') <Bar> delfunction set_fzf_vim#main<CR>
+nnoremap <silent><Leader>f: <Cmd>call set_fzf_vim#main('History:') <Bar> delfunction set_fzf_vim#main<CR>
+xnoremap <silent><Leader>f: <Cmd>call set_fzf_vim#main('History:') <Bar> delfunction set_fzf_vim#main<CR>
+nnoremap <silent><Leader>f/ <Cmd>call set_fzf_vim#main('History/') <Bar> delfunction set_fzf_vim#main<CR>
+xnoremap <silent><Leader>f/ <Cmd>call set_fzf_vim#main('History/') <Bar> delfunction set_fzf_vim#main<CR>
+
+# yank の履歴 https://github.com/justinhoward/fzf-neoyank {{{2
+nnoremap <Leader>fy <Cmd>call set_fzf_neoyank#main('FZFNeoyank') <Bar> delfunction set_fzf_neoyank#main<CR>
+nnoremap <Leader>fY <Cmd>call set_fzf_neoyank#main('FZFNeoyank # P') <Bar> delfunction set_fzf_neoyank#main<CR>
+xnoremap <Leader>fy <Cmd>call set_fzf_neoyank#main('FZFNeoyankSelection') <Bar> delfunction set_fzf_neoyank#main<CR>
+
+# fzf を使ってタブ・ページの切り替え $MYVIMDIR/pack/my-plug/opt/fzf-tabs/ {{{2
+nnoremap <Leader>ft <Cmd>call set_fzf_tabs#main('FZFTabOpen') <Bar> delfunction set_fzf_tabs#main<CR>
+vnoremap <Leader>ft <Cmd>call set_fzf_tabs#main('FZFTabOpen') <Bar> delfunction set_fzf_tabs#main<CR>
+nnoremap <Leader>fb <Cmd>call set_fzf_tabs#main('FZFTabOpen') <Bar> delfunction set_fzf_tabs#main<CR>
+nnoremap <Leader>fw <Cmd>call set_fzf_tabs#main('FZFTabOpen') <Bar> delfunction set_fzf_tabs#main<CR>
+
+# notmuch-python-Vim $MYVIMDIR/pack/my-plug/opt/notmuch-py-vim/ {{{2
+nnoremap <silent><Leader>m <Cmd>call set_notmuchpy#main() <Bar> delfunction set_notmuchpy#main <CR>
+
+# ソースの実行結果を別バッファに表示 https://github.com/thinca/vim-quickrun {{{2
+nnoremap <silent><Leader>qr  <Cmd>call set_quickrun#main() <Bar> delfunction set_quickrun#main<CR>
+xnoremap <silent><Leader>qr      :call set_quickrun#main() <Bar> delfunction set_quickrun#main<CR>
+inoremap <silent><C-\>qr     <Cmd>call set_quickrun#main() <Bar> delfunction set_quickrun#main<CR>
+
+# 整形 https://github.com/junegunn/vim-easy-align {{{2
 # 下記の例の ip はテキスト・オブジェクトの「段落」を表す
 # |command|how to remember|
 # |---|---|
@@ -396,389 +560,75 @@ augroup END
 # | ---     | ---                                |
 # | vipga=  | visual-select inner paragragh ga = |
 # | gaip=   | ga inner paragragh =               |
-xmap <Enter>    <Cmd>call set_easy_align#main()<CR>
-xmap <Leader>ea <Cmd>call set_easy_align#main()<CR>
-nmap <Leader>ea <Cmd>call set_easy_align#main()<CR>
+xnoremap <Enter>    <Cmd>call set_easy_align#main() <Bar> delfunction set_easy_align#main<CR>
+xnoremap <Leader>ea <Cmd>call set_easy_align#main() <Bar> delfunction set_easy_align#main<CR>
+nnoremap <Leader>ea <Cmd>call set_easy_align#main() <Bar> delfunction set_easy_align#main<CR>
 # ↑全て対象を全体 * にしたいが、nmap の <Leader>eaip などテキストオブジェクトの場合の方法がわからない
 
-# ctags や LSP を使ったlist https://github.com/liuchengxu/vista.vim {{{1
-augroup loadVista
-	autocmd!
-	autocmd CmdUndefined Vista
-				\ set_vista_voom#Vista()
-				| autocmd! loadVista
-				| augroup! loadVista
-				| delfunction set_vista_voom#Vista
-augroup END
-# 次の Voom に未対応は Vista を使う様に分岐関数とキーマップ
-nnoremap <silent><Leader>o :call set_vista_voom#Switch()<CR>
-
-# アウトライン https://github.com/vim-voom/VOoM {{{1
-augroup loadVOoM
-	autocmd!
-	autocmd CmdUndefined Voom
-				\ set_vista_voom#VOom()
-				| autocmd! loadVOoM
-				| augroup! loadVOoM
-				| delfunction set_vista_voom#VOom
-augroup END
-
-# LaTeX fold 折りたたみ https://github.com/matze/vim-tex-fold {{{1
-augroup loadvimTeXfold
-	autocmd!
-	autocmd FileType tex
-				\ set_vim_tex_fold#main()
-				| autocmd! loadvimTeXfold
-				| augroup! loadvimTeXfold
-				| delfunction set_vim_tex_fold#main
-augroup END
-
-# ソースの実行結果を別バッファに表示 https://github.com/thinca/vim-quickrun {{{1
-nnoremap <silent><Leader>qr       :QuickRun<CR>
-xnoremap <silent><Leader>qr       :QuickRun<CR>
-inoremap <silent><C-\>qr     <ESC>:QuickRun<CR>a
-augroup loadQuickRun
-	autocmd!
-	autocmd CmdUndefined QuickRun
-				\ set_quickrun#main()
-				| autocmd! loadQuickRun
-				| augroup! loadQuickRun
-				| delfunction set_quickrun#main
-augroup END
-
-# Git 連携 https://github.com/tpope/vim-fugitive {{{1
-# statusline で使うので、$VIMDIR/autoload/vimrc.vim で読み込み
-# augroup loadFugitive
-# 	autocmd!
-# 	autocmd CmdUndefined Git,Ggrep,Glgrep,Gclog,Gllog,Gedit,Gread,Gwrite,Gdiffsplit,GRename,GBrowser
-# 				\ set_fugitve#main()
-# 				| autocmd! loadFugitive
-# 				| augroup! loadFugitive
-# 				| delfunction set_fugitve#main
-# 	autocmd FuncUndefined fugitive#*
-# 				\ set_fugitve#main()
-# 				| autocmd! loadFugitive
-# 				| augroup! loadFugitive
-# 				| delfunction set_fugitve#main
-# augroup END
-
-# Git の変更のあった signcolumn にマークをつける https://github.com/airblade/vim-gitgutter {{{1
-# 遅延読み込みをすると vim-signature との連携機能が使えない←連携できないだけ+ただし単純に /start に置くと git がないときに起動時にエラーになる
-# augroup loadGitgutter
-# 	autocmd!
-# 	autocmd FileType c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,css,tex,sh,bash set_gitgutter#main()
-# 				| autocmd! loadGitgutter
-# 				| augroup! loadGitgutter
-# 				| delfunction set_gitgutter#main
-# augroup END
-if executable('git')
-	set_gitgutter#main()
-	delfunction set_gitgutter#main
-endif
-
-# カーソル位置の Syntax の情報を表示する $MYVIMDIR/pack/my-plug/opt/syntax_info/ {{{1 http://cohama.hateblo.jp/entry/2013/08/11/020849 を参考にした
-augroup loadSyntaxInfo
-	autocmd!
-	autocmd CmdUndefined SyntaxInfo packadd syntax_info
-	| autocmd! loadSyntaxInfo
-	| augroup! loadSyntaxInfo
-augroup END
-
-# Man コマンドを使用可能にする $MYVIMDIR/pack/my-plug/opt/man {{{1
-augroup ManCommand
-	autocmd!
-	autocmd CmdUndefined Man packadd man
-	| autocmd! ManCommand
-	| augroup! ManCommand
-augroup END
-
-# カレント・タブ・ページ内では同じターミナルを閉じる $MYVIMDIR/pack/my-plug/opt/kill-terminal {{{1
-augroup KillTerminal
-	autocmd!
-	autocmd TerminalOpen * kill_terminal#Main()
-augroup END
-augroup loadKillTerminal
-	autocmd!
-	autocmd FuncUndefined kill_terminal#Main packadd kill-terminal
-	| autocmd! loadKillTerminal
-	| augroup! loadKillTerminal
-augroup END
-
-# ページ送りに $MYVIMDIR/pack/my-plug/opt/page-down {{{1
-nnoremap <silent><space> :call page_down#Main()<CR>
-augroup loadPageDown
-	autocmd!
-	autocmd FuncUndefined page_down#Main packadd page-down
-	| autocmd! loadPageDown
-	| augroup! loadPageDown
-augroup END
-
-# カーソル位置の単語を Google で検索 $MYVIMDIR/pack/my-plug/opt/google-search/ {{{1 https://www.rasukarusan.com/entry/2019/03/09/011630 を参考にした
-nnoremap <silent><Leader>s :SearchByGoogle<CR>
-xnoremap <silent><Leader>s :SearchByGoogle<CR>
-augroup loadSearchByGoogle
-	autocmd!
-	autocmd CmdUndefined SearchByGoogle packadd google-search
-	| autocmd! loadSearchByGoogle
-	| augroup! loadSearchByGoogle
-augroup END
-
-# vim のヘルプ・ファイルから Readme.md を作成する https://github.com/LeafCage/vimhelpgenerator {{{1
-augroup loadVimHelpGenerator
-	autocmd!
-	autocmd CmdUndefined VimHelpGenerator packadd vimhelpgenerator
-	| if &filetype !=# 'help' | setlocal filetype=help | endif
-	| autocmd! loadVimHelpGenerator
-	| augroup! loadVimHelpGenerator
-	autocmd BufWinEnter *.jax packadd vimhelpgenerator
-	| if &filetype !=# 'help' | setlocal filetype=help | endif
-	| autocmd! loadVimHelpGenerator
-	| augroup! loadVimHelpGenerator
-augroup END
-
-# 編集中の Markdown をブラウザでプレビュー https://github.com/iamcco/markdown-preview.nvim {{{1
-# do-setup: cd app && npx --yes yarn install
-# help がないので上記 URL か $MYVIMDIR/pack/github/opt/markdown-preview.nvim/README.md
-augroup MyMarkdown
-	autocmd!
-	autocmd FileType markdown nnoremap <silent><buffer><Leader>v <Cmd>call mkdp#util#open_preview_page()<CR>
-augroup END
-augroup loadMarkdownPreviewNvim
-	autocmd!
-	autocmd FuncUndefined mkdp#* set_md_preview#main()
-				| autocmd! loadMarkdownPreviewNvim
-				| augroup! loadMarkdownPreviewNvim
-				| delfunction set_md_preview#main
-augroup END
-
-# EPWING の辞書を呼び出す https://github.com/deton/eblook.vim {{{1
+# EPWING の辞書を呼び出す https://github.com/deton/eblook.vim {{{2
 xnoremap <silent><Leader>eb <Cmd>call set_eblook#SearchVisual()<CR>
 nnoremap <silent><Leader>eb <Cmd>call set_eblook#SearchWord()<CR>
 xnoremap <silent>K          <Cmd>call set_eblook#SearchVisual()<CR>
 nnoremap <silent>K          <Cmd>call set_eblook#SearchWord()<CR>
 
-# Undo をツリー表示で行き来する https://github.com/mbbill/undotree {{{1
-nnoremap <silent><Leader>u <Cmd>UndotreeToggle<CR>
-augroup loadUndotree
-	autocmd!
-	autocmd CmdUndefined UndotreeToggle set_undotree#main()
-	| autocmd! loadUndotree
-	| augroup! loadUndotree
-	| delfunction set_undotree#main
-augroup END
-
-# https://github.com/prabirshrestha/vim-lsp {{{1
-augroup loadvimlsp
-	autocmd!
-	autocmd FileType awk,c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,css,sh,bash,go,conf
-				\ set_vimlsp#main()
-				| autocmd! loadvimlsp
-				| augroup! loadvimlsp
-				| delfunction set_vimlsp#main
-augroup END
-
-# https://github.com/puremourning/vimspector {{{1
-augroup loadVimspector
-	autocmd!
-	autocmd FuncUndefined vimspector#*
-				\ set_vimspector#main()
-				| autocmd! loadVimspector
-				| augroup! loadVimspector
-				| delfunction set_vimspector#main
-augroup END
-nnoremap <Leader>df       <Cmd>call vimspector#AddFunctionBreakpoint('<cexpr>')<CR>
-nnoremap <Leader>dc       <Cmd>call vimspector#Continue()<CR>
-nnoremap <Leader>dd       <Cmd>call vimspector#DownFrame()<CR>
-nnoremap <Leader>dp       <Cmd>call vimspector#Pause()<CR>
-nnoremap <Leader>dR       <Cmd>call vimspector#Restart()<CR>
-nnoremap <Leader>dr       <Cmd>call vimspector#RunToCursor()<CR>
-nnoremap <Leader>ds       <Cmd>call vimspector#StepInto()<CR>
-nnoremap <Leader>dS       <Cmd>call vimspector#StepOut()<CR>
-nnoremap <Leader>dn       <Cmd>call vimspector#StepOver()<CR>
-nnoremap <Leader>d<Space> <Cmd>call vimspector#Stop()<CR>
-nnoremap <Leader>db       <Cmd>call vimspector#ToggleBreakpoint()<CR>
-nnoremap <Leader>dx       <Cmd>call vimspector#Reset( { 'interactive': v:false } )<CR>
-nnoremap <Leader>di       <Plug>VimspectorBalloonEval
-xnoremap <Leader>di       <Plug>VimspectorBalloonEval
-
-# ファイル・マネージャー https://github.com/lambdalisue/fern.vim {{{1
-nnoremap <Leader>e <Cmd>topleft Fern $HOME -drawer -reveal=%:p -toggle<CR>
-augroup loadFern
-	autocmd!
-	autocmd CmdUndefined Fern set_fern#main()
-				| autocmd! loadFern
-				| augroup! loadFern
-				| delfunction set_fern#main
-augroup END
-
-# カーソル位置に合わせて filetype を判定←各種プラグインが依存 https://github.com/Shougo/context_filetype.vim {{{1
-augroup loadcontext_filetype
-	autocmd!
-	autocmd FileType sh,bash,vim,html,xhtml,markdown,lua set_context_filetype#main()
-				| autocmd! loadcontext_filetype
-				| augroup! loadcontext_filetype
-				| delfunction set_context_filetype#main
-augroup END
-
-# 素早く移動する https://github.com/easymotion/vim-easymotion {{{1
+# 素早く移動する https://github.com/easymotion/vim-easymotion {{{2
 for key in ['f', 'F', 't', 'T', 'w', 'W', 'b', 'B', 'e', 'E', 'ge', 'gE', 'j', 'k', 'n', 'N']
-	execute 'nmap <Leader><Leader>' .. key .. '  <Cmd>call set_easymotion#main(''(easymotion-' .. key .. ')'') <bar> delfunction set_easymotion#main<CR>'
-	execute 'xmap <Leader><Leader>' .. key .. '  <Cmd>call set_easymotion#main(''(easymotion-' .. key .. ')'') <bar> delfunction set_easymotion#main<CR>'
+	execute 'nnoremap <Leader><Leader>' .. key .. '  <Cmd>call set_easymotion#main(''(easymotion-' .. key .. ')'') <bar> delfunction set_easymotion#main<CR>'
+	execute 'xnoremap <Leader><Leader>' .. key .. '  <Cmd>call set_easymotion#main(''(easymotion-' .. key .. ')'') <bar> delfunction set_easymotion#main<CR>'
 endfor
-nmap <Leader><Leader>; <Cmd>call set_easymotion#main('(easymotion-next)') <bar> delfunction set_easymotion#main<CR>
-nmap <Leader><Leader>, <Cmd>call set_easymotion#main('(easymotion-prev)') <bar> delfunction set_easymotion#main<CR>
+nnoremap <Leader><Leader>; <Cmd>call set_easymotion#main('(easymotion-next)') <Bar> delfunction set_easymotion#main<CR>
+nnoremap <Leader><Leader>, <Cmd>call set_easymotion#main('(easymotion-prev)') <Bar> delfunction set_easymotion#main<CR>
 
-# 各種言語のコメントの追加/削除 gc{motion} https://github.com/tpope/vim-commentary {{{1
+# 各種言語のコメントの追加/削除 gc{motion} https://github.com/tpope/vim-commentary {{{2
 # マッピングは gc{motion}
-nmap gcu <Cmd>call set_commentary#main('Commentary Commentary') <bar> delfunction set_commentary#main<CR>
-nmap gcc <Cmd>call set_commentary#main('CommentaryLine') <bar> delfunction set_commentary#main<CR>
-omap gc  <Cmd>call set_commentary#main('Commentary') <bar> delfunction set_commentary#main<CR>
-nmap gc  <Cmd>call set_commentary#main('Commentary') <bar> delfunction set_commentary#main<CR>
-xmap gc  <Cmd>call set_commentary#main('Commentary') <bar> delfunction set_commentary#main<CR>
+nnoremap gcu <Cmd>call set_commentary#main('Commentary Commentary') <bar> delfunction set_commentary#main<CR>
+nnoremap gcc <Cmd>call set_commentary#main('CommentaryLine') <bar> delfunction set_commentary#main<CR>
+onoremap gc  <Cmd>call set_commentary#main('Commentary') <bar> delfunction set_commentary#main<CR>
+nnoremap gc  <Cmd>call set_commentary#main('Commentary') <bar> delfunction set_commentary#main<CR>
+xnoremap gc  <Cmd>call set_commentary#main('Commentary') <bar> delfunction set_commentary#main<CR>
 
-# カッコだけでなくタグでも括る https://github.com/tpope/vim-surround {{{1
-xmap s   <Cmd>call set_surround#main('VSurround') <bar> delfunction set_surround#main<CR>
-xmap gS  <Cmd>call set_surround#main('VgSurround') <bar> delfunction set_surround#main<CR>
+# カッコだけでなくタグでも括る https://github.com/tpope/vim-surround {{{2
+xnoremap s   <Cmd>call set_surround#main('VSurround') <bar> delfunction set_surround#main<CR>
+xnoremap gS  <Cmd>call set_surround#main('VgSurround') <bar> delfunction set_surround#main<CR>
 # ↑s と似ているが前後で改行 v_s は v_c と同じなのでキーマップを潰しても良いが、v_S は同じ意味のキーマップが無いので、gS に割り当てている
-nmap ysS <Cmd>call set_surround#main('YSsurround') <bar> delfunction set_surround#main<CR>
+nnoremap ysS <Cmd>call set_surround#main('YSsurround') <bar> delfunction set_surround#main<CR>
 # ↑行全体を挟む (前後に改行)
-nmap yss <Cmd>call set_surround#main('Yssurround') <bar> delfunction set_surround#main<CR>
+nnoremap yss <Cmd>call set_surround#main('Yssurround') <bar> delfunction set_surround#main<CR>
 # ↑行全体を挟む
-nmap yS  <Cmd>call set_surround#main('YSurround') <bar> delfunction set_surround#main<CR>
+nnoremap yS  <Cmd>call set_surround#main('YSurround') <bar> delfunction set_surround#main<CR>
 #↑↓に対して前後に改行
-nmap ys  <Cmd>call set_surround#main('Ysurround') <bar> delfunction set_surround#main<CR>
-nmap cS  <Cmd>call set_surround#main('CSurround') <bar> delfunction set_surround#main<CR>
-nmap cs  <Cmd>call set_surround#main('Csurround') <bar> delfunction set_surround#main<CR>
-nmap ds  <Cmd>call set_surround#main('Dsurround') <bar> delfunction set_surround#main<CR>
+nnoremap ys  <Cmd>call set_surround#main('Ysurround') <bar> delfunction set_surround#main<CR>
+nnoremap cS  <Cmd>call set_surround#main('CSurround') <bar> delfunction set_surround#main<CR>
+nnoremap cs  <Cmd>call set_surround#main('Csurround') <bar> delfunction set_surround#main<CR>
+nnoremap ds  <Cmd>call set_surround#main('Dsurround') <bar> delfunction set_surround#main<CR>
 # <Shift> を押すのが面倒
-nmap ys4 ys$
+nnoremap ys4 ys$
 for [n, q] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>'})
-	execute 'nmap ds' .. n .. ' ds' .. q
+	execute 'nnoremap ds' .. n .. ' ds' .. q
 endfor
 for [n1, q1] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '"': '"', "'": "'", '(': '(', ')': ')', '`': '`', '<': '<', '>': '>', '[': '[', ']': ']', '{': '{', '}': '}' })
 	for [n2, q2] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '"': '"', "'": "'", '(': '(', ')': ')', '`': '`', '<': '<', '>': '>', '[': '[', ']': ']', '{': '{', '}': '}' })
 		if n1 !=# n2 && q1 !=# q2 && n1 !=# q2 && q1 !=# n2 && n1 .. n2 !=# q1 .. q2
-			execute 'nmap cs' .. n1 .. n2 .. ' cs' .. q1 .. q2
+			execute 'nnoremap cs' .. n1 .. n2 .. ' cs' .. q1 .. q2
 		endif
 	endfor
 endfor
 
-# getmail syntax https://github.com/vim-scripts/getmail.vim {{{1
-# augroup Gatmail
-# 	autocmd!
-# 	autocmd BufRead ~/.getmail/*,~/.config/getmail/* set_getmail_vim#main()
-# augroup END
-
-# dog と cat の入れ替えなどサイクリックに置換する関数などの定義 $MYVIMDIR/pack/my-plug/opt/replace-cyclic {{{1
-augroup loadReplaceCyclic
+# 編集中の Markdown をブラウザでプレビュー https://github.com/iamcco/markdown-preview.nvim {{{2
+# do-setup: cd app && npx --yes yarn install
+# help がないので上記 URL か $MYVIMDIR/pack/github/opt/markdown-preview.nvim/README.md
+augroup MyMarkdown
 	autocmd!
-	autocmd FuncUndefined replace#* packadd replace-cyclic
-	| autocmd! loadReplaceCyclic
-	| augroup! loadReplaceCyclic
+	# autocmd FileType markdown nnoremap <silent><buffer><Leader>v <Cmd>call mkdp#util#open_preview_page()<CR>
+	autocmd FileType markdown nnoremap <silent><buffer><Leader>v <Cmd>call set_md_preview#main() <Bar> delfunction set_md_preview#main<CR>
 augroup END
 
-# *.docx をまとめて epub 用のファイルに変換 $MYVIMDIR/pack/my-plug/opt/docx2xhtml {{{1
-# カレント・ディレクトリに有る Google Document を使って OCR したファイルを前提とし、自作シェル・スクリプトや LibreOffice も呼び出しているごく個人的なスクリプト
-augroup loadDocx2xhtml
-	autocmd!
-	autocmd FuncUndefined docx2xhtml#main packadd docx2xhtml
-	| autocmd! loadDocx2xhtml
-	| augroup! loadDocx2xhtml
-augroup END
-
-# 文字の変換 $MYVIMDIR/pack/my-plug/opt/transform/ {{{1
-augroup loadtransform
-	autocmd!
-	autocmd FuncUndefined transform#* packadd transform
-	| autocmd! loadtransform
-	| augroup! loadtransform
-	autocmd CmdUndefined Zen2han,InsertSpace,Han2zen,Hira2kata,Kata2hira,Base64 packadd transform
-	| autocmd! loadtransform
-	| augroup! loadtransform
-augroup END
-nnoremap <Leader>ha :Zen2han<CR>
-xnoremap <Leader>ha :Zen2han<CR>
-nnoremap <Leader>hh :InsertSpace<CR>
-xnoremap <Leader>hh :InsertSpace<CR>
-nnoremap <Leader>hz :Han2zen<CR>
-xnoremap <Leader>hz :Han2zen<CR>
-nnoremap <Leader>hk :Hira2kata<CR>
-xnoremap <Leader>hk :Hira2kata<CR>
-nnoremap <Leader>hH :Kata2hira<CR>
-xnoremap <Leader>hH :Kata2hira<CR>
-# nnoremap <Leader>hb :Base64<CR>
-
-# Vim の環境を出力する $MYVIMDIR/pack/my-plug/opt/vim-system/ {{{1
-augroup loadVimSystem
-	autocmd!
-	autocmd FuncUndefined vim_system#* packadd vim-system
-	| autocmd! loadVimSystem
-	| augroup! loadVimSystem
-	autocmd CmdUndefined VimSystem,VimSystemEcho,System,SystemEcho packadd vim-system
-	| autocmd! loadVimSystem
-	| augroup! loadVimSystem
-augroup END
-
-# 印刷 $MYVIMDIR/pack/my-plug/opt/print/ {{{1
-augroup loadPrint
-	autocmd!
-	autocmd CmdUndefined PrintBuffer packadd print
-				| autocmd! loadPrint
-				| augroup! loadPrint
-augroup END
-
-# 秀丸マクロ $MYVIMDIR/pack/my-plug/opt/hidemaru/ {{{1
-augroup loadHidemaru
-	autocmd!
-	autocmd BufNewFile,BufRead ~/Hidemaru/Macro/{**/,}*.mac packadd hidemaru
-				| autocmd! loadHidemaru
-				| augroup! loadHidemaru
-augroup END
-augroup SetHidemaru
-	autocmd!
-	autocmd BufNewFile,BufRead ~/Hidemaru/Macro/{**/,}*.mac setlocal filetype=hidemaru
-augroup END
-
-# タグで挟む $MYVIMDIR/pack/my-plug/opt/surroundTag/ {{{1
+# タグで挟む $MYVIMDIR/pack/my-plug/opt/surroundTag/ {{{2
 # vim-surround では複数のタグを一度につけたり、クラス指定まで含む場合タイプ量が多くなる
-augroup loadSurroundTag
+augroup SurroundTag
 	autocmd!
-	autocmd CmdUndefined SurroundTag packadd surroundTag
-				| autocmd! loadSurroundTag
-				| augroup! loadSurroundTag
-augroup END
-augroup loadSurroundTagMap
-	autocmd!
-	autocmd FileType html,xhtml nnoremap <silent><buffer><leader>tt <Cmd>SurroundTag <span\ class="tcy"><CR>
-	autocmd FileType html,xhtml xnoremap <silent><buffer><leader>tt <Cmd>SurroundTag <span\ class="tcy"><CR>
-	autocmd FileType html,xhtml nnoremap <silent><buffer><leader>tr <Cmd>SurroundTag <ruby> <rp>(</rp><rt></rt><rp>)</rp><CR>
-	autocmd FileType html,xhtml xnoremap <silent><buffer><leader>tr <Cmd>SurroundTag <ruby> <rp>(</rp><rt></rt><rp>)</rp><CR>
-augroup END
-
-# Markdown マッピング $MYVIMDIR/pack/my-plug/opt/map-markdown/ {{{1
-augroup loadMapMarkdown
-	autocmd!
-	autocmd FileType markdown
-				\ packadd map-markdown
-				| autocmd! loadMapMarkdown
-				| augroup! loadMapMarkdown
-augroup END
-
-# カーソル行の URL やファイルを開く $MYVIMDIR/pack/my-plug/opt/open_uri/ {{{1
-nnoremap <silent><Leader>x <Cmd>call open_uri#main()<CR>
-nnoremap <2-LeftMouse> <Cmd>call open_uri#main()<CR>
-augroup OpenURI
-	autocmd!
-	autocmd FuncUndefined open_uri#* packadd open_uri
-		| autocmd! OpenURI
-		| augroup! OpenURI
-augroup END
-
-# $MYVIMDIR/pack/my-plug/opt/ft-fold {{{1
-augroup loadFileTypeFold
-	autocmd!
-	autocmd FileType python,help,awk
-				\ packadd ft-fold
-				| autocmd! loadFileTypeFold
-				| augroup! loadFileTypeFold
+	autocmd FileType html,xhtml nnoremap <silent><buffer><leader>tt <Cmd>call set_surroundTag#main('SurroundTag <span\ class="tcy">') <Bar> delfunction set_surroundTag#main<CR>
+	autocmd FileType html,xhtml xnoremap <silent><buffer><leader>tt <Cmd>call set_surroundTag#main('SurroundTag <span\ class="tcy">') <Bar> delfunction set_surroundTag#main<CR>
+	autocmd FileType html,xhtml nnoremap <silent><buffer><leader>tr <Cmd>call set_surroundTag#main('SurroundTag <ruby> <rp>(</rp><rt></rt><rp>)</rp>') <Bar> delfunction set_surroundTag#main<CR>
+	autocmd FileType html,xhtml xnoremap <silent><buffer><leader>tr <Cmd>call set_surroundTag#main('SurroundTag <ruby> <rp>(</rp><rt></rt><rp>)</rp>') <Bar> delfunction set_surroundTag#main<CR>
 augroup END

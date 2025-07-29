@@ -91,8 +91,8 @@ function set_vimlsp#main() abort
 	" if !pack_manage#IsInstalled('asyncomplete.vim') " ←asyncomplete.vim 自身を opt に置いても対応できる方法が見つかったらこちらにする
 	if !len(asyncomplete#get_source_names())
 		call set_asyncomplete#main() " 先に設定しておかないと補完候補に現れない
-		autocmd! loadasyncomplete
-		augroup! loadasyncomplete
+		autocmd! SetAsyncomplete
+		augroup! SetAsyncomplete
 		delfunction set_asyncomplete#main
 	endif
 	packadd asyncomplete-lsp.vim

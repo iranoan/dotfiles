@@ -23,9 +23,7 @@ function set_fern#main() abort
 	" g:fern#mapping#fzf#fzf_options を指定すると、b:fzf_action, g:fzf_action が無視され開けなくなる
 	" let g:fern#mapping#fzf#fzf_options = {'options': '--multi --no-unicode --margin=0% --padding=0% --preview=''~/bin/fzf-preview.sh {}'' --bind=''ctrl-]:change-preview-window(hidden|)'''}
 	if !pack_manage#IsInstalled('fzf.vim')
-		call set_fzf_vim#main()
-		autocmd! loadFZF_Vim
-		augroup! loadFZF_Vim
+		call set_fzf_vim#main('')
 		delfunction set_fzf_vim#main
 	endif
 	" }}}
@@ -46,11 +44,12 @@ function set_fern#main() abort
 	augroup END
 	" }}}
 	" }}}
-	nnoremap <Leader>e <Cmd>call <SID>FernSync()<CR>
+	call set_fern#FernSync()
 	" 既存のバッファを使うようにマップ置き換え
+	nnoremap <Leader>e <Cmd>call set_fern#FernSync()<CR>
 endfunction
 
-def s:FernSync(): void
+def set_fern#FernSync(): void
 	def Sync(b: list<number>, name: string, fern: number): void
 		var fern_win: list<number> = getbufinfo(fern)[0].windows
 		for w in gettabinfo(tabpagenr())[0].windows
@@ -84,7 +83,12 @@ def s:FernSync(): void
 			return
 		endif
 	endfor
-	execute 'topleft Fern $HOME -drawer -reveal=%:p -toggle'
+	var pwd: string = execute('pwd')->split('\n')[0] # expand('%:h') を使うと、無題の時にうまく行かない
+	if pwd =~# '^' .. $HOME
+		execute 'topleft Fern $HOME -drawer -reveal=%:p -toggle'
+	else
+		execute 'topleft Fern ' .. pwd .. ' -drawer -reveal=%:p -toggle'
+	endif
 	return
 enddef
 

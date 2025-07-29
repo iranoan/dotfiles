@@ -1,7 +1,6 @@
 scriptencoding utf-8
 
 function set_quickrun#main() abort
-	packadd vim-quickrun
 	" QuickFix 拡張 https://github.com/osyo-manga/shabadou.vim {{{
 	packadd shabadou.vim " }}}
 	" 非同期処理 https://github.com/Shougo/vimproc.vim {{{
@@ -88,6 +87,11 @@ function set_quickrun#main() abort
 			endif
 		endif
 	endfor
+	call pack_manage#SetMAP('vim-quickrun', 'QuickRun', [
+				\ #{mode: 'n', key: '<silent><Leader>qr', method: 1, cmd: 'QuickRun'},
+				\ #{mode: 'x', key: '<silent><Leader>qr', method: 2, cmd: 'QuickRun'},
+				\ #{mode: 'i', key: '<silent><C-\>qr', method: 1, cmd: 'QuickRun'},
+				\ ])
 endfunction
 
 def s:GetTeXfile(f: string): string

@@ -17,4 +17,18 @@ function set_md_preview#main() abort
 				\ 'disable_filename': 1,
 				\ 'toc': {}
 				\ }
+	call mkdp#util#open_preview_page()
+	" マップの付け直し↓ただし隠しバッファの場合付け直しが行われない制限が有る
+	for b in getbufinfo()
+		if getbufvar(b.bufnr, '&filetype') ==# 'markdown'
+			for w in b.windows
+				call win_execute(w,'nnoremap <silent><buffer><Leader>v <Cmd>call mkdp#util#open_preview_page()<CR>')
+				break " 複数ウィンドウで開いていても、バッファ単位のマッピングなので
+			endfor
+		endif
+	endfor
+	augroup MyMarkdown
+		autocmd!
+		autocmd FileType markdown nnoremap <silent><buffer><Leader>v <Cmd>call mkdp#util#open_preview_page()<CR>
+	augroup END
 endfunction

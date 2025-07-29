@@ -1,6 +1,6 @@
 scriptencoding utf-8
 
-function set_fzf_vim#main() abort
+function set_fzf_vim#main(cmd) abort
 	" if pack_manage#IsInstalled('fzf.vim')
 	" 	return
 	" endif
@@ -8,8 +8,6 @@ function set_fzf_vim#main() abort
 	" do-setup: ./install --bin
 	packadd fzf
 	" }}}
-	packadd fzf.vim
-	delcommand GitFiles " vim-fugitive の :Git と重なり使いにくくなる
 	" fzf.vim の Helptas の代わりに HelpTags を使う $MYVIMDIR/pack/my-plug/opt/fzf-help {{{
 	" delcommand Helptas←packadd しただけではまだ未定義
 	packadd fzf-help
@@ -48,7 +46,7 @@ function set_fzf_vim#main() abort
 					\ },
 					\ <bang>0
 				\ )
-					" バイナリ・ファイルとメールを除外 (メールはファイル名だけ見ても分らない) " }}}
+					" バイナリ・ファイルとメールを除外 (メールはファイル名だけ見ても分らない)
 	" TabEdit が --multi に対応したつもり History そのものは、コマンドや検索履歴で使うので、上書きしない
 	command! -bang -nargs=* HISTORY call fzf#run(
 				\ fzf#wrap(
@@ -77,6 +75,58 @@ function set_fzf_vim#main() abort
 	" 			\ commits_log_options: '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"',
 	" 			\ } " buffers_jump: Buffers 使わず、preview_window: FZF_DEFAULT_OPTS で定義済み
 	let v:oldfiles = filter(v:oldfiles, {_, v -> filereadable(expand(v))})
+	call pack_manage#SetMAP('fzf.vim', a:cmd, [
+				\ #{mode: 'n', key: '<silent><Leader>fr', method: 1, cmd: 'Files ~'},
+				\ #{mode: 'x', key: '<silent><Leader>fr', method: 1, cmd: 'Files ~'},
+				\ #{mode: 'n', key: '<silent><Leader>ff', method: 1, cmd: 'Files'},
+				\ #{mode: 'x', key: '<silent><Leader>ff', method: 1, cmd: 'Files'},
+				\ #{mode: 'n', key: '<silent><Leader>fu', method: 1, cmd: 'Files ..'},
+				\ #{mode: 'x', key: '<silent><Leader>fu', method: 1, cmd: 'Files ..'},
+				\ #{mode: 'n', key: '<silent><Leader>f.', method: 1, cmd: 'Files ~/dotfiles'},
+				\ #{mode: 'x', key: '<silent><Leader>f.', method: 1, cmd: 'Files ~/dotfiles'},
+				\ #{mode: 'n', key: '<silent><Leader>fv', method: 1, cmd: 'Files $MYVIMDIR'},
+				\ #{mode: 'x', key: '<silent><Leader>fv', method: 1, cmd: 'Files $MYVIMDIR'},
+				\ #{mode: 'n', key: '<silent><Leader>fs', method: 1, cmd: 'Files ~/src'},
+				\ #{mode: 'x', key: '<silent><Leader>fs', method: 1, cmd: 'Files ~/src'},
+				\ #{mode: 'n', key: '<silent><Leader>fx', method: 1, cmd: 'Files ~/bin'},
+				\ #{mode: 'x', key: '<silent><Leader>fx', method: 1, cmd: 'Files ~/bin'},
+				\ #{mode: 'n', key: '<silent><Leader>fe', method: 1, cmd: 'Files ~/book/epub'},
+				\ #{mode: 'x', key: '<silent><Leader>fe', method: 1, cmd: 'Files ~/book/epub'},
+				\ #{mode: 'n', key: '<silent><Leader>fd', method: 1, cmd: 'Files ~/downloads'},
+				\ #{mode: 'x', key: '<silent><Leader>fd', method: 1, cmd: 'Files ~/downloads'},
+				\ #{mode: 'n', key: '<silent><Leader>fD', method: 1, cmd: 'Files ~/Document'},
+				\ #{mode: 'x', key: '<silent><Leader>fD', method: 1, cmd: 'Files ~/Document'},
+				\ #{mode: 'n', key: '<silent><Leader>fp', method: 1, cmd: 'Files ~/public_html/iranoan'},
+				\ #{mode: 'x', key: '<silent><Leader>fp', method: 1, cmd: 'Files ~/public_html/iranoan'},
+				\ #{mode: 'n', key: '<silent><Leader>fi', method: 1, cmd: 'Files ~/Information/slide'},
+				\ #{mode: 'x', key: '<silent><Leader>fi', method: 1, cmd: 'Files ~/Information/slide'},
+				\ #{mode: 'n', key: '<silent><Leader>fc', method: 1, cmd: 'Commands'},
+				\ #{mode: 'x', key: '<silent><Leader>fc', method: 1, cmd: 'Commands'},
+				\ #{mode: 'n', key: '<silent><Leader>fg', method: 1, cmd: 'GFiles?'},
+				\ #{mode: 'x', key: '<silent><Leader>fg', method: 1, cmd: 'GFiles?'},
+				\ #{mode: 'n', key: '<silent><Leader>fh', method: 1, cmd: 'HISTORY'},
+				\ #{mode: 'x', key: '<silent><Leader>fh', method: 1, cmd: 'HISTORY'},
+				\ #{mode: 'n', key: '<silent><Leader>fH', method: 1, cmd: 'HelpTags'},
+				\ #{mode: 'x', key: '<silent><Leader>fH', method: 1, cmd: 'HelpTags'},
+				\ #{mode: 'n', key: '<silent><Leader>fl', method: 1, cmd: 'BLines'},
+				\ #{mode: 'x', key: '<silent><Leader>fl', method: 1, cmd: 'BLines'},
+				\ #{mode: 'n', key: '<silent><Leader>fm', method: 1, cmd: 'Marks'},
+				\ #{mode: 'x', key: '<silent><Leader>fm', method: 1, cmd: 'Marks'},
+				\ #{mode: 'n', key: '<silent>m/',         method: 1, cmd: 'Marks'},
+				\ #{mode: 'x', key: '<silent>m/',         method: 1, cmd: 'Marks'},
+				\ #{mode: 'n', key: '<silent><Leader>f:', method: 1, cmd: 'History:'},
+				\ #{mode: 'x', key: '<silent><Leader>f:', method: 1, cmd: 'History:'},
+				\ #{mode: 'n', key: '<silent><Leader>f/', method: 1, cmd: 'History/'},
+				\ #{mode: 'x', key: '<silent><Leader>f/', method: 1, cmd: 'History/'}
+				\ ])
+" \ #{mode: 'n, key: '<silent><Leader>fb', method: 1, cmd: 'Buffers'},
+" \ #{mode: 'n, key: '<silent><Leader>ft', method: 1, cmd: 'Tags'},
+" \ #{mode: 'x, key: '<silent><Leader>ft', method: 1, cmd: 'Tags'},
+" \ #{mode: 'n, key: '<silent><Leader>fw', method: 1, cmd: 'Windows'},
+" \ #{mode: 'x, key: '<silent><Leader>fw', method: 1, cmd: 'Windows'},
+" \ #{mode: 'x, key: '<silent><Leader>fb', method: 1, cmd: 'Buffers'},
+" \ ↑ vim-signature のデフォルト・キーマップをこちらに再定義
+	delcommand GitFiles " vim-fugitive の :Git と重なり使いにくくなる
 endfunction
 
 def set_fzf_vim#FZF_open(arg: list<string>): void

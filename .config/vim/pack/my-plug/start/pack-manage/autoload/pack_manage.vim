@@ -548,6 +548,10 @@ enddef
 export def SetMAP(plug: string, cmd: string, map_ls: list<dict<any>>): void # キーマップにによる遅延読み込み用関数
 	var extra: string
 	var c: number
+	var exe_cmd: string
+	var exe_methoud: number
+	var exe_methouds: dict<number>
+	var mode: string = tolower(mode())
 
 	while 1
 		c = getchar(0)
@@ -557,11 +561,37 @@ export def SetMAP(plug: string, cmd: string, map_ls: list<dict<any>>): void # �
 		extra ..= nr2char(c)
 	endwhile
 	for i in map_ls
-		execute i.mode .. 'noremap ' .. (get(i, 'buffer', false) ? '<buffer>' : '') .. i.key .. ' <Plug>' .. i.cmd
+		exe_methoud = get(i, 'method', 0)
+		# mode() の返り値先頭と map の時の先頭文字が違うものが有るので、置き換える
+		if i.mode ==# 'x'
+			exe_methouds[i.cmd .. ':v'] = exe_methoud
+		elseif i.mode ==# 'v'
+			exe_methouds[i.cmd .. ':v'] = exe_methoud
+			exe_methouds[i.cmd .. ':s'] = exe_methoud
+		else
+			exe_methouds[i.cmd .. ':' .. i.mode] = exe_methoud
+		endif
+		if exe_methoud == 0
+			execute i.mode .. 'noremap ' .. (get(i, 'buffer', false) ? '<buffer>' : '') .. i.key .. ' <Plug>' .. i.cmd
+		elseif ( i.mode ==# 'v' || i.mode ==# 's' || i.mode ==# 'x' ) && exe_methoud == 2
+			execute i.mode .. 'noremap ' .. (get(i, 'buffer', false) ? '<buffer>' : '') .. i.key .. ' :' .. i.cmd .. '<CR>'
+		else
+			execute i.mode .. 'noremap ' .. (get(i, 'buffer', false) ? '<buffer>' : '') .. i.key .. ' <Cmd>' .. i.cmd .. '<CR>'
+		endif
 	endfor
-	var exe_cmd = substitute(cmd, ' ', "\<Plug>", 'g')
 	execute 'packadd ' .. plug
-	feedkeys("\<Plug>" .. exe_cmd .. extra)
+	if cmd ==# ''
+		return
+	endif
+	exe_methoud = get(exe_methouds, cmd .. ':' .. mode, 0)
+	if exe_methoud == 0
+		exe_cmd = substitute(cmd, ' ', "\<Plug>", 'g')
+		feedkeys("\<Plug>" .. exe_cmd .. extra)
+	elseif mode =~# '^[vsx]' && exe_methoud == 2
+		feedkeys(":" .. cmd .. "\<CR>")
+	else
+		execute cmd
+	endif
 enddef
 
 export def GetPackLs(): dict<any> # プラグインの名称、リポジトリ、インストール先取得
