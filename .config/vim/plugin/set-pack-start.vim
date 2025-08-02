@@ -175,7 +175,7 @@ def ColorschemeBefore(color: string): void # t_Co, termguicolors 等 colorscheme
 			# &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 			# &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 		endif
-	elseif!has('gui_running')
+	elseif !has('gui_running')
 		set t_Co=256 # ←~/.tmux_conf set-option -g default-terminal "tmux-256color"
 		set notermguicolors
 	endif

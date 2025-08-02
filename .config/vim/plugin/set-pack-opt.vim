@@ -173,33 +173,32 @@ endif
 # 括弧や引用符をペアで入力/削除 $MYVIMDIR/pack/my-plug/start/pair_bracket/ {{{2
 # ドット・リピートは考慮していない
 g:pairbracket = {
-	'(': {'pair': ')', 'space': 1, 'escape': {'tex': 2, 'vim': 1},
-		'search': {'v\': 0, '\': 2, 'v': 1, '_': 0}},
-	'[': {'pair': ']', 'space': 1, 'escape': {'tex': 2, 'vim': 1},
-		'search': {'v\': 0, '\': 0, 'v': 1, '_': 1}},
-	'{': {'pair': '}', 'space': 1, 'escape': {'tex': 2, 'vim': 1},
-		'search': {'v\': 0, '\': 1, 'v': 1, '_': 0}},
-	'<': {'pair': '>', 'space': 1, 'type': ['tex'], 'cmap': 0},
-	'/*': {'pair': '*/', 'space': 1, 'type': ['c', 'cpp', 'css'], 'cmap': 0},
-	'「': {'pair': '」'},
-	'『': {'pair': '』'},
-	'【': {'pair': '】'},
+	'(': {pair: ')', space: 1, escape: {tex: 2, vim: 1},
+		search: {'v\': 0, '\': 2, 'v': 1, '_': 0}},
+	'[': {pair: ']', space: 1, escape: {tex: 2, vim: 1},
+		search: {'v\': 0, '\': 0, 'v': 1, '_': 1}},
+	'{': {pair: '}', space: 1, escape: {tex: 2, vim: 1},
+		search: {'v\': 0, '\': 1, 'v': 1, '_': 0}},
+	'<': {pair: '>', space: 1, type: ['tex'], cmap: 0},
+	'/*': {pair: '*/', space: 1, type: ['c', 'cpp', 'css'], cmap: 0},
+	'「': {pair: '」'},
+	'『': {pair: '』'},
+	'【': {pair: '】'},
 	}
 g:pairquote = {
 	'"': {},
 	'''': {},
 	'`': {},
-	'$': {'type': ['tex']},
-	'*': {'type': ['help', 'markdown'], 'cmap': 0}, # tag と強調
-	'|': {'type': ['help'], 'cmap': 0},     # link
-	'_': {'type': ['markdown'], 'cmap': 0}, # 強調
-	'~': {'type': ['markdown'], 'cmap': 0}, # 下付き添字
-	'^': {'type': ['markdown'], 'cmap': 0}, # 上付き添字
+	'$': {type: ['tex']},
+	'*': {type: ['help', 'markdown'], cmap: 0}, # tag と強調
+	'|': {type: ['help'],             cmap: 0}, # link
+	'_': {type: ['markdown'],         cmap: 0}, # 強調
+	'~': {type: ['markdown'],         cmap: 0}, # 下付き添字
+	'^': {type: ['markdown'],         cmap: 0}, # 上付き添字
 	# ↓ ', " 自体の反応が遅くなる
 	# "'''": {},
 	# '"""': {},
 	}
-g:hi_insert = 'highlight StatusLine term=reverse cterm=bold,reverse gui=bold,reverse ctermbg=White ctermfg=1 guibg=#dddddd guifg=#dc322f'
 augroup SetPairBracket
 	autocmd!
 	autocmd InsertEnter,CmdlineEnter * packadd pair_bracket
