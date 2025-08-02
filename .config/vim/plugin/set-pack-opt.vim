@@ -230,54 +230,45 @@ augroup END
 augroup SetPackOpt
 	autocmd!
 	# ディレクトリを再帰的に diff https://github.com/will133/vim-dirdiff {{{2
-	autocmd CmdUndefined DirDiff g:DirDiffForceLang = 'C LC_MESSAGES=C'
+	autocmd CmdUndefined DirDiff ++once g:DirDiffForceLang = 'C LC_MESSAGES=C'
 		| g:DirDiffExcludes = ".git,.*.swp"
 		| packadd vim-dirdiff
-		| autocmd! SetPackOpt CmdUndefined DirDiff
 
 	# カーソル位置の Syntax の情報を表示する $MYVIMDIR/pack/my-plug/opt/syntax_info/ {{{2 http://cohama.hateblo.jp/entry/2013/08/11/020849 を参考にした
-	autocmd CmdUndefined SyntaxInfo packadd syntax_info
-	| autocmd! SetPackOpt CmdUndefined SyntaxInfo
+	autocmd CmdUndefined SyntaxInfo ++once packadd syntax_info
 
 	# Man コマンドを使用可能にする $MYVIMDIR/pack/my-plug/opt/man {{{2
-	autocmd CmdUndefined Man packadd man
-	| autocmd! SetPackOpt CmdUndefined Man
+	autocmd CmdUndefined Man ++once packadd man
 
 	# dog と cat の入れ替えなどサイクリックに置換する関数などの定義 $MYVIMDIR/pack/my-plug/opt/replace-cyclic {{{2
-	autocmd FuncUndefined replace#* packadd replace-cyclic
-		| autocmd! SetPackOpt FuncUndefined replace#*
+	autocmd FuncUndefined replace#* ++once packadd replace-cyclic
 
 	# Vim の環境を出力する $MYVIMDIR/pack/my-plug/opt/vim-system/ {{{2
-	autocmd FuncUndefined vim_system#* packadd vim-system
-		| autocmd! SetPackOpt FuncUndefined vim_system#*
+	autocmd FuncUndefined vim_system#* ++once packadd vim-system
 		| autocmd! SetPackOpt CmdUndefined VimSystem,VimSystemEcho,System,SystemEcho
-	autocmd CmdUndefined VimSystem,VimSystemEcho,System,SystemEcho packadd vim-system
+	autocmd CmdUndefined VimSystem,VimSystemEcho,System,SystemEcho ++once packadd vim-system
 		| autocmd! SetPackOpt FuncUndefined vim_system#*
 		| autocmd! SetPackOpt CmdUndefined VimSystem,VimSystemEcho,System,SystemEcho
 
 	# *.docx をまとめて epub 用のファイルに変換 $MYVIMDIR/pack/my-plug/opt/docx2xhtml {{{2
 	# カレント・ディレクトリに有る Google Document を使って OCR したファイルを前提とし、自作シェル・スクリプトや LibreOffice も呼び出しているごく個人的なスクリプト
-	autocmd FuncUndefined docx2xhtml#main packadd docx2xhtml
-	| autocmd! SetPackOpt FuncUndefined docx2xhtml#main
+	autocmd FuncUndefined docx2xhtml#main ++once packadd docx2xhtml
 
 	# 印刷 $MYVIMDIR/pack/my-plug/opt/print/ {{{2
-	autocmd CmdUndefined PrintBuffer packadd print
-				| autocmd! SetPackOpt CmdUndefined PrintBuffer
+	autocmd CmdUndefined PrintBuffer ++once packadd print
 
 	# vim のヘルプ・ファイルから Readme.md を作成する https://github.com/LeafCage/vimhelpgenerator {{{2
-	autocmd CmdUndefined VimHelpGenerator packadd vimhelpgenerator
-				| autocmd! SetPackOpt CmdUndefined VimHelpGenerator
+	autocmd CmdUndefined VimHelpGenerator ++once packadd vimhelpgenerator
 
 	# conky シンタックス https://github.com/smancill/conky-syntax.vim {{{2 ←署名を見ると同じ開発元だが、標準パッケージに含まれているものだと上手く動作しない
-	autocmd BufNewFile,BufRead conkyrc,conky.conf packadd conky-syntax.vim
-				| set filetype=conkyrc
-				| autocmd! SetPackOpt BufNewFile,BufRead conkyrc,conky.conf
+	autocmd BufNewFile,BufRead conkyrc,conky.conf ++once packadd conky-syntax.vim
+		| set filetype=conkyrc
+		| autocmd! BufNewFile,BufRead conkyrc,conky.conf
 
 	# ファイル・マネージャー https://github.com/lambdalisue/fern.vim {{{2
 	nnoremap <Leader>e <Cmd>call set_fern#main() <Bar> autocmd! SetPackOpt CmdUndefined Fern <Bar> delfunction set_fern#main <CR>
 	# キーマップだけだと、ディレクトリ部分の gf で使えない
-	autocmd CmdUndefined Fern call set_fern#main()
-		| autocmd! SetPackOpt CmdUndefined Fern
+	autocmd CmdUndefined Fern ++once call set_fern#main()
 		| delfunction set_fern#main
 
 	# getmail syntax https://github.com/vim-scripts/getmail.vim {{{2
@@ -310,7 +301,7 @@ augroup ResetFiletype
 			go: '*.go',
 			conkyrc: 'conkyrc,conky.conf'
 		})
-		execute 'autocmd BufWinEnter ' .. e .. ' setfiletype ' .. t
+		execute 'autocmd BufWinEnter ' .. e .. ' ++once setfiletype ' .. t
 						.. ' | autocmd! ResetFiletype BufWinEnter ' .. e
 	endfor
 augroup END
@@ -336,8 +327,7 @@ augroup END
 augroup loadALE
 	autocmd!
 	# autocmd FileType c,cpp,python,ruby,yaml,markdown,html,xhtml,css,tex,help,json
-	autocmd FileType c,cpp,ruby,yaml,markdown,html,xhtml,css,tex,help,json
-				\ set_ale#main()
+	autocmd FileType c,cpp,ruby,yaml,markdown,html,xhtml,css,tex,help,json set_ale#main()
 				| autocmd! loadALE
 				| augroup! loadALE
 				| delfunction set_ale#main
@@ -395,8 +385,7 @@ augroup END
 # https://github.com/prabirshrestha/vim-lsp {{{2
 augroup loadvimlsp
 	autocmd!
-	autocmd FileType awk,c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,css,sh,bash,go,conf
-				\ set_vimlsp#main()
+	autocmd FileType awk,c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,css,sh,bash,go,conf set_vimlsp#main()
 				| autocmd! loadvimlsp
 				| augroup! loadvimlsp
 				| delfunction set_vimlsp#main
@@ -414,8 +403,7 @@ augroup END
 # Markdown マッピング $MYVIMDIR/pack/my-plug/opt/map-markdown/ {{{2
 augroup loadMapMarkdown
 	autocmd!
-	autocmd FileType markdown
-				\ packadd map-markdown
+	autocmd FileType markdown packadd map-markdown
 				| autocmd! loadMapMarkdown
 				| augroup! loadMapMarkdown
 augroup END
@@ -423,8 +411,7 @@ augroup END
 # $MYVIMDIR/pack/my-plug/opt/ft-fold {{{2
 augroup loadFileTypeFold
 	autocmd!
-	autocmd FileType python,help,awk
-				\ packadd ft-fold
+	autocmd FileType python,help,awk packadd ft-fold
 				| autocmd! loadFileTypeFold
 				| augroup! loadFileTypeFold
 augroup END
