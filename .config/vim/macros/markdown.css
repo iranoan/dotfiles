@@ -48,6 +48,10 @@ ins {
 	text-decoration: none;
 }
 
+img{
+	max-width: 80vw;
+}
+
 a:link {
 	color: #268BD2;
 }
