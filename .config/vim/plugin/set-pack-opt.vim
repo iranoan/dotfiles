@@ -208,23 +208,27 @@ augroup END
 
 # 補完 https://github.com/prabirshrestha/asyncomplete.vim {{{2
 augroup SetAsyncomplete
-autocmd InsertEnter * set_asyncomplete#main()
-			| autocmd! SetAsyncomplete
-			| augroup! SetAsyncomplete
-			| delfunction set_asyncomplete#main
+	autocmd!
+	autocmd InsertEnter * set_asyncomplete#main()
+		| autocmd! SetAsyncomplete
+		| augroup! SetAsyncomplete
+		| delfunction set_asyncomplete#main
 augroup END
 
 # 挿入モード時、ステータスラインの色を変更 $MYVIMDIR/pack/my-plug/start/insert-status {{{2
 # g:hi_insert がインサート・モード時の highlight 指定
+g:hi_insert = 'highlight StatusLine term=reverse cterm=bold,reverse gui=bold,reverse ctermbg=White ctermfg=1 guibg=#dddddd guifg=#dc322f'
 augroup SetInsertStatus
-autocmd InsertEnter * packadd insert-status
-			| insert_status#Main('Enter')
-			| autocmd! SetInsertStatus
-			| augroup! SetInsertStatus
+	autocmd!
+	autocmd InsertEnter * packadd insert-status
+		| insert_status#Main('Enter')
+		| autocmd! SetInsertStatus
+		| augroup! SetInsertStatus
 augroup END
 
 # BufNewFile,BufRead,CmdUndefined,FuncUndefined をトリガーとする {{{1
 augroup SetPackOpt
+	autocmd!
 	# ディレクトリを再帰的に diff https://github.com/will133/vim-dirdiff {{{2
 	autocmd CmdUndefined DirDiff g:DirDiffForceLang = 'C LC_MESSAGES=C'
 		| g:DirDiffExcludes = ".git,.*.swp"
