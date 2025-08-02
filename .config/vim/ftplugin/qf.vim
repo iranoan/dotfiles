@@ -8,7 +8,6 @@ endif
 b:did_ftplugin_user = 1
 
 # ファイルタイプ別のグローバル設定 {{{1
-var qfwin: number
 if !exists("g:qf_disable_statusline") # :help qf.vim にある statusline を変更するフラグをグローバル設定のフラグに流用
 	g:qf_disable_statusline = 1
 	augroup QuickFix
@@ -18,7 +17,7 @@ if !exists("g:qf_disable_statusline") # :help qf.vim にある statusline を変
 					| 	if tabpagenr('$') == 1
 					| 		quit
 					| 	else
-					| 		qfwin = bufnr('')
+					| 		var qfwin: number = bufnr('')
 					| 		tabnext
 					| 		execute 'bwipeout ' .. qfwin
 					| 	endif
