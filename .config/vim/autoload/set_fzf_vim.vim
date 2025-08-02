@@ -69,6 +69,7 @@ function set_fzf_vim#main(cmd) abort
 				\ 'ctrl-o': function('set_fzf_vim#FZF_open')
 				\ } " 他で sink を使うと、この設定は無視されるので注意←:help fzf-global-options-supported-by-fzf#wrap
 				" \ 'ctrl-e': 'edit', カーソルを入力の末尾移動と重なる
+	let $FZF_DEFAULT_OPTS = substitute($FZF_DEFAULT_OPTS, '--footer \zs\("[^"]\+"\|''[^'']\+''\)', '"<C-]/R/K>:Preview On/Off/Up/Down｜<C-F/B>:PageUP/Down｜<C-G>:edit｜<C-T>/<Enter>:tabedit｜<C-S>:split｜<C-V>:vsplit｜<C-O>:Open"', 'g')
 	" let g:fzf_vim = #{
 	" 			\ buffers_jump: 1,
 	" 			\ preview_window: ['right:50%', 'ctrl-]'],
