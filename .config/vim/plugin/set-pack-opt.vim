@@ -445,7 +445,7 @@ nnoremap <Leader>d<Space> <Cmd>call set_vimspector#main('call vimspector#Stop()'
 nnoremap <Leader>db       <Cmd>call set_vimspector#main('call vimspector#ToggleBreakpoint()') <Bar> delfunction set_vimspector#main<CR>
 nnoremap <Leader>dx       <Cmd>call set_vimspector#main('call vimspector#Reset( { ''interactive'': v:false } )') <Bar> delfunction set_vimspector#main<CR>
 nnoremap <Leader>di       <Cmd>call set_vimspector#main('VimspectorBalloonEval') <Bar> delfunction set_vimspector#main<CR>
-xnoremap <Leader>di       :call set_vimspector#main('VimspectorBalloonEval') <Bar> delfunction set_vimspector#main<CR>
+xnoremap <Leader>di           :call set_vimspector#main('VimspectorBalloonEval') <Bar> delfunction set_vimspector#main<CR>
 
 # カーソル行の URL やファイルを開く $MYVIMDIR/pack/my-plug/opt/open_uri/ {{{2
 nnoremap <silent><Leader>x <Cmd>call set_open_uri#main() <Bar> delfunction set_open_uri#main<CR>
@@ -563,34 +563,34 @@ nnoremap <silent>K          <Cmd>call set_eblook#SearchWord()<CR>
 
 # 素早く移動する https://github.com/easymotion/vim-easymotion {{{2
 for key in ['f', 'F', 't', 'T', 'w', 'W', 'b', 'B', 'e', 'E', 'ge', 'gE', 'j', 'k', 'n', 'N']
-	execute 'nnoremap <Leader><Leader>' .. key .. '  <Cmd>call set_easymotion#main(''(easymotion-' .. key .. ')'') <bar> delfunction set_easymotion#main<CR>'
-	execute 'xnoremap <Leader><Leader>' .. key .. '  <Cmd>call set_easymotion#main(''(easymotion-' .. key .. ')'') <bar> delfunction set_easymotion#main<CR>'
+	execute 'nnoremap <Leader><Leader>' .. key .. '  <Cmd>call set_easymotion#main(''(easymotion-' .. key .. ')'') <Bar> delfunction set_easymotion#main<CR>'
+	execute 'xnoremap <Leader><Leader>' .. key .. '  <Cmd>call set_easymotion#main(''(easymotion-' .. key .. ')'') <Bar> delfunction set_easymotion#main<CR>'
 endfor
 nnoremap <Leader><Leader>; <Cmd>call set_easymotion#main('(easymotion-next)') <Bar> delfunction set_easymotion#main<CR>
 nnoremap <Leader><Leader>, <Cmd>call set_easymotion#main('(easymotion-prev)') <Bar> delfunction set_easymotion#main<CR>
 
 # 各種言語のコメントの追加/削除 gc{motion} https://github.com/tpope/vim-commentary {{{2
 # マッピングは gc{motion}
-nnoremap gcu <Cmd>call set_commentary#main('Commentary Commentary') <bar> delfunction set_commentary#main<CR>
-nnoremap gcc <Cmd>call set_commentary#main('CommentaryLine') <bar> delfunction set_commentary#main<CR>
-onoremap gc  <Cmd>call set_commentary#main('Commentary') <bar> delfunction set_commentary#main<CR>
-nnoremap gc  <Cmd>call set_commentary#main('Commentary') <bar> delfunction set_commentary#main<CR>
-xnoremap gc  <Cmd>call set_commentary#main('Commentary') <bar> delfunction set_commentary#main<CR>
+nnoremap gcu <Cmd>call set_commentary#main('Commentary Commentary') <Bar> delfunction set_commentary#main<CR>
+nnoremap gcc <Cmd>call set_commentary#main('CommentaryLine') <Bar> delfunction set_commentary#main<CR>
+onoremap gc  <Cmd>call set_commentary#main('Commentary') <Bar> delfunction set_commentary#main<CR>
+nnoremap gc  <Cmd>call set_commentary#main('Commentary') <Bar> delfunction set_commentary#main<CR>
+xnoremap gc  <Cmd>call set_commentary#main('Commentary') <Bar> delfunction set_commentary#main<CR>
 
 # カッコだけでなくタグでも括る https://github.com/tpope/vim-surround {{{2
-xnoremap s   <Cmd>call set_surround#main('VSurround') <bar> delfunction set_surround#main<CR>
-xnoremap gS  <Cmd>call set_surround#main('VgSurround') <bar> delfunction set_surround#main<CR>
+xnoremap s   <Cmd>call set_surround#main('VSurround') <Bar> delfunction set_surround#main<CR>
+xnoremap gS  <Cmd>call set_surround#main('VgSurround') <Bar> delfunction set_surround#main<CR>
 # ↑s と似ているが前後で改行 v_s は v_c と同じなのでキーマップを潰しても良いが、v_S は同じ意味のキーマップが無いので、gS に割り当てている
-nnoremap ysS <Cmd>call set_surround#main('YSsurround') <bar> delfunction set_surround#main<CR>
+nnoremap ysS <Cmd>call set_surround#main('YSsurround') <Bar> delfunction set_surround#main<CR>
 # ↑行全体を挟む (前後に改行)
-nnoremap yss <Cmd>call set_surround#main('Yssurround') <bar> delfunction set_surround#main<CR>
+nnoremap yss <Cmd>call set_surround#main('Yssurround') <Bar> delfunction set_surround#main<CR>
 # ↑行全体を挟む
-nnoremap yS  <Cmd>call set_surround#main('YSurround') <bar> delfunction set_surround#main<CR>
+nnoremap yS  <Cmd>call set_surround#main('YSurround') <Bar> delfunction set_surround#main<CR>
 #↑↓に対して前後に改行
-nnoremap ys  <Cmd>call set_surround#main('Ysurround') <bar> delfunction set_surround#main<CR>
-nnoremap cS  <Cmd>call set_surround#main('CSurround') <bar> delfunction set_surround#main<CR>
-nnoremap cs  <Cmd>call set_surround#main('Csurround') <bar> delfunction set_surround#main<CR>
-nnoremap ds  <Cmd>call set_surround#main('Dsurround') <bar> delfunction set_surround#main<CR>
+nnoremap ys  <Cmd>call set_surround#main('Ysurround') <Bar> delfunction set_surround#main<CR>
+nnoremap cS  <Cmd>call set_surround#main('CSurround') <Bar> delfunction set_surround#main<CR>
+nnoremap cs  <Cmd>call set_surround#main('Csurround') <Bar> delfunction set_surround#main<CR>
+nnoremap ds  <Cmd>call set_surround#main('Dsurround') <Bar> delfunction set_surround#main<CR>
 # <Shift> を押すのが面倒
 nnoremap ys4 ys$
 for [n, q] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>'})
