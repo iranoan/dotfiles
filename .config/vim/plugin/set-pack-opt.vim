@@ -592,9 +592,10 @@ nnoremap cS  <Cmd>call set_surround#main('CSurround') <Bar> delfunction set_surr
 nnoremap cs  <Cmd>call set_surround#main('Csurround') <Bar> delfunction set_surround#main<CR>
 nnoremap ds  <Cmd>call set_surround#main('Dsurround') <Bar> delfunction set_surround#main<CR>
 # <Shift> を押すのが面倒
-nnoremap ys4 ys$
 for [n, q] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>'})
 	execute 'nmap ds' .. n .. ' ds' .. q
+	execute 'nmap ys$' .. n .. ' ys$' .. q
+	execute 'nmap ys4' .. n .. ' ys$' .. q
 endfor
 for [n1, q1] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '"': '"', "'": "'", '(': '(', ')': ')', '`': '`', '<': '<', '>': '>', '[': '[', ']': ']', '{': '{', '}': '}' })
 	for [n2, q2] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '"': '"', "'": "'", '(': '(', ')': ')', '`': '`', '<': '<', '>': '>', '[': '[', ']': ']', '{': '{', '}': '}' })
