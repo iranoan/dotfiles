@@ -445,7 +445,7 @@ nnoremap <Leader>d<Space> <Cmd>call set_vimspector#main('call vimspector#Stop()'
 nnoremap <Leader>db       <Cmd>call set_vimspector#main('call vimspector#ToggleBreakpoint()') <Bar> delfunction set_vimspector#main<CR>
 nnoremap <Leader>dx       <Cmd>call set_vimspector#main('call vimspector#Reset( { ''interactive'': v:false } )') <Bar> delfunction set_vimspector#main<CR>
 nnoremap <Leader>di       <Cmd>call set_vimspector#main('VimspectorBalloonEval') <Bar> delfunction set_vimspector#main<CR>
-xnoremap <Leader>di           :call set_vimspector#main('VimspectorBalloonEval') <Bar> delfunction set_vimspector#main<CR>
+xnoremap <Leader>di       <Cmd>call set_vimspector#main('VimspectorBalloonEval') <Bar> delfunction set_vimspector#main<CR>
 
 # カーソル行の URL やファイルを開く $MYVIMDIR/pack/my-plug/opt/open_uri/ {{{2
 nnoremap <silent><Leader>x <Cmd>call set_open_uri#main() <Bar> delfunction set_open_uri#main<CR>
@@ -453,15 +453,15 @@ nnoremap <2-LeftMouse>     <Cmd>call set_open_uri#main() <Bar> delfunction set_o
 
 # 文字の変換 $MYVIMDIR/pack/my-plug/opt/transform/ {{{2
 nnoremap <Leader>ha <Cmd>call set_transform#main('Zen2han') <Bar> delfunction set_transform#main<CR>
-xnoremap <Leader>ha     :call set_transform#main('Zen2han') <Bar> delfunction set_transform#main<CR>
+xnoremap <Leader>ha <Cmd>call set_transform#main('Zen2han') <Bar> delfunction set_transform#main<CR>
 nnoremap <Leader>hh <Cmd>call set_transform#main('InsertSpace') <Bar> delfunction set_transform#main<CR>
-xnoremap <Leader>hh     :call set_transform#main('InsertSpace') <Bar> delfunction set_transform#main<CR>
+xnoremap <Leader>hh <Cmd>call set_transform#main('InsertSpace') <Bar> delfunction set_transform#main<CR>
 nnoremap <Leader>hz <Cmd>call set_transform#main('Han2zen') <Bar> delfunction set_transform#main<CR>
-xnoremap <Leader>hz     :call set_transform#main('Han2zen') <Bar> delfunction set_transform#main<CR>
+xnoremap <Leader>hz <Cmd>call set_transform#main('Han2zen') <Bar> delfunction set_transform#main<CR>
 nnoremap <Leader>hk <Cmd>call set_transform#main('Hira2kata') <Bar> delfunction set_transform#main<CR>
-xnoremap <Leader>hk     :call set_transform#main('Hira2kata') <Bar> delfunction set_transform#main<CR>
+xnoremap <Leader>hk <Cmd>call set_transform#main('Hira2kata') <Bar> delfunction set_transform#main<CR>
 nnoremap <Leader>hH <Cmd>call set_transform#main('Kata2hira') <Bar> delfunction set_transform#main<CR>
-xnoremap <Leader>hH     :call set_transform#main('Kata2hira') <Bar> delfunction set_transform#main<CR>
+xnoremap <Leader>hH <Cmd>call set_transform#main('Kata2hira') <Bar> delfunction set_transform#main<CR>
 # nnoremap <Leader>hb :Base64<CR>
 
 # https://github.com/junegunn/fzf.vim {{{2
@@ -531,7 +531,7 @@ nnoremap <silent><Leader>m <Cmd>call set_notmuchpy#main() <Bar> delfunction set_
 
 # ソースの実行結果を別バッファに表示 https://github.com/thinca/vim-quickrun {{{2
 nnoremap <silent><Leader>qr  <Cmd>call set_quickrun#main() <Bar> delfunction set_quickrun#main<CR>
-xnoremap <silent><Leader>qr      :call set_quickrun#main() <Bar> delfunction set_quickrun#main<CR>
+xnoremap <silent><Leader>qr  <Cmd>call set_quickrun#main() <Bar> delfunction set_quickrun#main<CR>
 inoremap <silent><C-\>qr     <Cmd>call set_quickrun#main() <Bar> delfunction set_quickrun#main<CR>
 
 # 整形 https://github.com/junegunn/vim-easy-align {{{2
@@ -592,27 +592,26 @@ nnoremap cS  <Cmd>call set_surround#main('CSurround') <Bar> delfunction set_surr
 nnoremap cs  <Cmd>call set_surround#main('Csurround') <Bar> delfunction set_surround#main<CR>
 nnoremap ds  <Cmd>call set_surround#main('Dsurround') <Bar> delfunction set_surround#main<CR>
 # <Shift> を押すのが面倒
-for [n, q] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>'})
-	execute 'nmap ds' .. n .. ' ds' .. q
-	execute 'nmap ys$' .. n .. ' ys$' .. q
-	execute 'nmap ys4' .. n .. ' ys$' .. q
+var qq1: string
+var qq2: string
+for [n, q] in items({ 2: '"', 7: "''", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>'})
+	qq1 = q == "'" ? "''" : q
+	execute 'nnoremap ds'  .. n .. ' <Cmd>call set_surround#main(''Dsurround'') <Bar> call feedkeys(''$' .. qq1 .. ''') <Bar> delfunction set_surround#main<CR>'
+	execute 'nnoremap ys4' .. n .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''$' .. qq1 .. ''') <Bar> delfunction set_surround#main<CR>'
+	execute 'nnoremap ys4' .. q .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''$' .. qq1 .. ''') <Bar> delfunction set_surround#main<CR>'
+	execute 'nnoremap ys$' .. n .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''$' .. qq1 .. ''') <Bar> delfunction set_surround#main<CR>'
 endfor
 for [n1, q1] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '"': '"', "'": "'", '(': '(', ')': ')', '`': '`', '<': '<', '>': '>', '[': '[', ']': ']', '{': '{', '}': '}' })
 	for [n2, q2] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '"': '"', "'": "'", '(': '(', ')': ')', '`': '`', '<': '<', '>': '>', '[': '[', ']': ']', '{': '{', '}': '}' })
-		if n1 !=# n2 && q1 !=# q2 && n1 !=# q2 && q1 !=# n2 && n1 .. n2 !=# q1 .. q2
-			execute 'nmap ysi' .. n1 .. n2 .. ' ysi' .. q1 .. q2
-			execute 'nmap ysa' .. n1 .. n2 .. ' ysa' .. q1 .. q2
+		qq1 = q1 == "'" ? "''" : q1
+		qq2 = q2 == "'" ? "''" : q2
+		execute 'nnoremap ysi' .. n1 .. n2 .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''i' .. qq1 .. qq2 .. ''') <Bar> delfunction set_surround#main<CR>'
+		execute 'nnoremap ysa' .. n1 .. n2 .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''a' .. qq1 .. qq2 .. ''') <Bar> delfunction set_surround#main<CR>'
+		if n1 !=# n2 && q1 !=# q2 && n1 !=# q2 && q1 !=# n2
+			execute 'nnoremap cs' .. n1 .. n2 .. ' <Cmd>call set_surround#main(''Csurround'') <Bar> call feedkeys(''' .. qq1 .. qq2 .. ''') <Bar> delfunction set_surround#main<CR>'
 		endif
 	endfor
 endfor
-for [n1, q1] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '"': '"', "'": "'", '(': '(', ')': ')', '`': '`', '<': '<', '>': '>', '[': '[', ']': ']', '{': '{', '}': '}' })
-	for [n2, q2] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '"': '"', "'": "'", '(': '(', ')': ')', '`': '`', '<': '<', '>': '>', '[': '[', ']': ']', '{': '{', '}': '}' })
-		if n1 !=# n2 && q1 !=# q2 && n1 !=# q2 && q1 !=# n2 && n1 .. n2 !=# q1 .. q2
-			execute 'nmap cs' .. n1 .. n2 .. ' cs' .. q1 .. q2
-		endif
-	endfor
-endfor
-
 # 編集中の Markdown をブラウザでプレビュー https://github.com/iamcco/markdown-preview.nvim {{{2
 # do-setup: cd app && npx --yes yarn install
 # help がないので上記 URL か $MYVIMDIR/pack/github/opt/markdown-preview.nvim/README.md

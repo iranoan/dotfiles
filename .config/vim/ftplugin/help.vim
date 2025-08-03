@@ -25,11 +25,12 @@ setlocal keywordprg=:help
 setlocal commentstring=%s
 # ↑コメント書式がない
 # キーマップ
-nnoremap <buffer><nowait><expr><silent>q  &modifiable ? 'q' : ':bwipeout!<CR>'
-nnoremap <buffer><expr>o          &readonly ? "\<C-]>" : 'o'
-nnoremap <buffer><expr>i          &readonly ? "\<C-]>" : 'i'
-nnoremap <buffer><expr>p          &readonly ? "\<C-o>" : 'p'
+nnoremap <buffer><nowait><expr><silent>q  &buftype ==# 'help' ? ':bwipeout!<CR>' : 'q'
+nnoremap <buffer><expr>o                  &buftype ==# 'help' ? '<C-]>' : 'o'
+nnoremap <buffer><expr>i                  &buftype ==# 'help' ? '<C-]>' : 'i'
+nnoremap <buffer><expr>p                  &buftype ==# 'help' ? '<C-o>' : 'p'
 # タグに移動
-nnoremap <buffer><tab>            <Cmd>call search('\|\zs.\{-}\|', 'w')<CR>:nohlsearch<CR>
-nnoremap <buffer><S-tab>          <Cmd>call search('\|\zs.\{-}\|', 'wb')<CR>:nohlsearch<CR>
-nnoremap <buffer><CR>             <C-]>
+nnoremap <buffer><tab>                    <Cmd>call search('\|\zs.\{-}\|', 'w')<CR>:nohlsearch<CR>
+nnoremap <buffer><S-tab>                  <Cmd>call search('\|\zs.\{-}\|', 'wb')<CR>:nohlsearch<CR>
+nnoremap <buffer><expr><CR>               &buftype ==# 'help' ? '<CR>'  : ':help ' .. expand('<cword>') .. '<CR>'
+nnoremap <buffer><expr><C-]>              &buftype ==# 'help' ? '<C-]>' : ':help ' .. expand('<cword>') .. '<CR>'
