@@ -218,12 +218,10 @@ augroup END
 # 挿入モード時、ステータスラインの色を変更 $MYVIMDIR/pack/my-plug/start/insert-status {{{2
 # g:hi_insert がインサート・モード時の highlight 指定
 g:hi_insert = 'highlight StatusLine term=reverse cterm=bold,reverse gui=bold,reverse ctermbg=White ctermfg=1 guibg=#dddddd guifg=#dc322f'
-augroup SetInsertStatus
+augroup InsertStatus
 	autocmd!
 	autocmd InsertEnter * packadd insert-status
 		| insert_status#Main('Enter')
-		| autocmd! SetInsertStatus
-		| augroup! SetInsertStatus
 augroup END
 
 # BufNewFile,BufRead,CmdUndefined,FuncUndefined をトリガーとする {{{1
@@ -279,7 +277,6 @@ augroup SetPackOpt
 augroup END # }}}1
 
 # Filetype をトリガーとする {{{1
-# プラグイン管理 {{{2
 # $MYVIMDIR/pack でプラグインを管理する上で、FileType で読み込んだプラグインを再設定するために、再度 setfiletype して、そのイベント・トリガーを削除 {{{2
 augroup ResetFiletype
 	autocmd!
@@ -401,11 +398,10 @@ augroup loadcontext_filetype
 augroup END
 
 # Markdown マッピング $MYVIMDIR/pack/my-plug/opt/map-markdown/ {{{2
-augroup loadMapMarkdown
+augroup MapMarkdown
 	autocmd!
-	autocmd FileType markdown packadd map-markdown
-				| autocmd! loadMapMarkdown
-				| augroup! loadMapMarkdown
+	autocmd FileType markdown set_map_markdown#main()
+				| delfunction set_map_markdown#main
 augroup END
 
 # $MYVIMDIR/pack/my-plug/opt/ft-fold {{{2
