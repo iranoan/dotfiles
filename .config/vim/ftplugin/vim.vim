@@ -117,7 +117,7 @@ if !exists('g:vim_plugin')
 			return
 		endif
 		while true
-			[keyword, m_start, m_end] = matchstrpos(line, '\c\v(\s*\zs((\<bar\>|\|)\s*|<[bgv]:|\&)?[a-z0-9_]+(\(|\=)?|\<[-0-9a-z]+\>)', i)
+			[keyword, m_start, m_end] = matchstrpos(line, '\c\v((<[bgv]:|\&)?[a-z0-9_]+(\(|\=)?|\<[-0-9a-z]+\>)', i)
 			if m_start == -1
 				Help('' .. "\<C-r>\<C-w>")
 				break
