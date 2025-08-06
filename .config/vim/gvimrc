@@ -15,8 +15,9 @@ else
 		set antialias         # アンチエイリアス
 	endif
 endif
+
 # set linespace=-1         # 縦罫線がつながるが問題が出る可能性もあるとの事なので止めておく
-set guioptions-=T guioptions-=m guioptions-=r guioptions-=L guioptions+=k # ツール・バー/メニュー/スクロール・バー表示を OFF、lines, columns を維持
+set guioptions-=T guioptions-=m guioptions-=r guioptions-=L guioptions+=ck # ツール・バー/メニュー/スクロール・バー表示を OFF、ポップアップ・ダイアログではなくコンソールを使う lines, columns を維持
 # if $GVIM_ENABLE_WAYLAND !=# '1' # ←winpos 等が効かなくなる (Ubuntu 24.10で改善され、無くても描画は乱れないので指定することはない)
 augroup GVIMRC
 	autocmd!
