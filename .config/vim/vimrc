@@ -30,7 +30,7 @@ endif
 var pos: list<number>                          # getpos()
 var fileencodings: string = &fileencodings     # tags ファイルの時に一時的に置き換えるので、スクリプト・ローカルな変数に保存しておく
 # 初期化 {{{1
-set guioptions+=M                              #メニュー設定を読み込まない GUI だが vimrc で filetype on, syntax on より前に書く必要がある→:help go-M
+set guioptions+=fM                             #メニュー設定を読み込まない フォアグランドで実行 GUI だが vimrc で filetype on, syntax on より前に書く必要がある→:help go-M
 filetype plugin indent on                      # ファイルタイプ別プラグインとインデントを ON
 # 標準プラグイン {{{1
 # set runtimepath+=/usr/share/vim/addons,/usr/share/vim/vimfiles
