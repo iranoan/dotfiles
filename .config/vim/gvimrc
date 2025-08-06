@@ -2,6 +2,11 @@ vim9script
 scriptencoding utf-8
 set columns=168           # columns width of the display
 set lines=999             # lines number of lines in the display
+# if g:colors_name ==# 'solarized8' && &background ==# 'dark'
+# 	# solarized8 を使っている時は、配色の違いから set termguicolors としているので、ctermbg=NONE 同様 guibg=NONE を使っている
+# 	# →そのため :gui を使うと、そのまま guibg が NONE で配色がおかしくなる
+# 	highlight Normal guifg=#eee8d5 guibg=#002b36
+# endif
 if has('unix')            # 使用フォント(最初に見つかったフォントを使う)
 	set guifont=UDEV\ Gothic\ NF\ Regular\ 13,Noto\ Mono\ 13,Monospace\ 12
 else
