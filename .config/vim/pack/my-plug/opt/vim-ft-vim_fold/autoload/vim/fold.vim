@@ -49,7 +49,6 @@ def Calculate(bufnr: number): dict<any>
 	var col: number
 	var marker_lv: number
 	var s_marker_lv: string
-	var synid: string
 
 	var open_pat: string = '\<\%(\(export\s\+\)\?fu\%[nction][! \t]\|aug\%[roup]\s\|if\>\|for\>\|wh\%[ile]\>\|\(export\s\+\)\?def\>\|try\>\)\C'
 	var close_pat: string = '\<\%(endf\%[unction]\|aug\%[roup]\s\+END\|endfo\%[r]\|endw\%[hile]\|enddef\|en\%[dif]\|endt\%[ry]\)\>\C'
@@ -64,9 +63,8 @@ def Calculate(bufnr: number): dict<any>
 			if i == -1
 				break
 			endif
-			synid = synIDattr(synIDtrans(synID(lnum, i, 1)), 'name')
-			if synid ==# 'Comment' || synid ==# 'Constant' || synid =~# 'vimMap[LR]hs' || synid ==# 'vimNormalArg'
-			# if synid !=# 'Delimitere' && synid !=# 'vimParenSep' && synid !=# 'vimSep' && synid !=# 'vimOperParen' && synid !=# 'vimDefBody'
+			if index(['Comment', 'Constant', 'vimMapLhs', 'vimMapRhs', 'vimNormalArg', 'vimCommentString'], synIDattr(synIDtrans(synID(lnum, i, 1)), 'name')) != -1
+			# if index(['Delimitere', 'vimParenSep', 'vimSep', 'vimOperParen', 'vimDefBody'], synIDattr(synIDtrans(synID(lnum, i, 1)), 'name')) != -1
 				continue
 			elseif index(['{', '[', '('], s) != -1
 				no_match += 1
@@ -95,7 +93,7 @@ def Calculate(bufnr: number): dict<any>
 			here_lv = cur_lv + 1
 			levels[lnum] = '>' .. here_lv
 			end_marker = substitute(cur_line,
-						\ '.*\<\(py\%[thon]\|py3\|python3\|rub\%[y]\|lua\|mz\%[scheme]\|pe\%[rl]\|tcl\)\s*<<\s*\(trim\)\?\s*\(\w\+\)/*', '\3', '')
+						'.*\<\(py\%[thon]\|py3\|python3\|rub\%[y]\|lua\|mz\%[scheme]\|pe\%[rl]\|tcl\)\s*<<\s*\(trim\)\?\s*\(\w\+\)/*', '\3', '')
 			while lnum < endl
 				lnum += 1
 				levels[lnum] = here_lv
@@ -114,11 +112,11 @@ def Calculate(bufnr: number): dict<any>
 			o_pos = stridx(cur_line, open_marker, col)
 			c_pos = stridx(cur_line, close_marker, col)
 			if o_pos >= 0
-				if synIDattr(synIDtrans(synID(lnum, o_pos, 1)), 'name') !=# 'Comment'
+				if index(['Comment', 'vimCommentString'], synIDattr(synIDtrans(synID(lnum, o_pos, 1)), 'name')) == -1
 					break
 				endif
 			elseif c_pos >= 0
-				if synIDattr(synIDtrans(synID(lnum, c_pos, 1)), 'name') !=# 'Comment'
+				if index(['Comment', 'vimCommentString'], synIDattr(synIDtrans(synID(lnum, c_pos, 1)), 'name')) == -1
 					break
 				endif
 			else
