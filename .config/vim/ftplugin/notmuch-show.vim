@@ -23,7 +23,7 @@ xnoremap <buffer><silent><Leader>s <Cmd>call set_google_search#main() <Bar> delf
 setlocal tabstop=8
 setlocal nolinebreak
 # :NoMatchParen " 対応するカッコの ON/OFF
-# 1}}}
+# }}}1
 
 # Undo {{{1
 if exists('b:undo_ftplugin')

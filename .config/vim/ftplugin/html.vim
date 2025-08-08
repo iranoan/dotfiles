@@ -70,7 +70,7 @@ if !exists('g:html_syntax_folding') # ↓設定済みか? に流用
 		return
 	enddef
 endif
-# 1}}}
+# }}}1
 
 # ファイルタイプ別ローカル設定 {{{1
 setlocal foldmethod=syntax
@@ -105,4 +105,4 @@ inoremap <expr><buffer>+-          &filetype ==# 'html' ? '&plusmn;' : '&#215;'
 inoremap <expr><buffer>==          &filetype ==# 'html' ? '&equiv;'  : '&#8801;'
 nnoremap <buffer>gf                <Cmd>call g:GF()<CR>
 # }}}
-# 1}}}
+# }}}1

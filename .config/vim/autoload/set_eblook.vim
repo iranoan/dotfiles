@@ -49,7 +49,7 @@ augroup EblookMAP
 	autocmd!
 	autocmd FileType eblook Filetype()
 augroup END
-# 1}}}
+# }}}1
 
 export def UndoFtplugin(): void
 	setlocal spell< list<

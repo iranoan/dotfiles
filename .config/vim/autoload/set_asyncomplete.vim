@@ -102,7 +102,7 @@ function set_asyncomplete#main() abort
 				\ priority: 100
 				\ }))
 	" }}}
-	" 2}}}
+	" }}}2
 	let g:asyncomplete_preprocessor = [function('s:asyncomplete_preprocessor')]
 	" call asyncomplete#enable_for_buffer() " asyncomplete.vim 自体の遅延読み込みを試みたがだめだった
 endfunction

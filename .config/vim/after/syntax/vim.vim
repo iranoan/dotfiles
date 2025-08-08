@@ -14,15 +14,15 @@ syntax match vimNotation /\%#=1\%(\\\|<lt>\)\=<\%([scamd]-\)\{0,4}x\=\%(f\d\{1,2
 if exists("g:vimsyn_folding")
 	" foldmarker
 	syntax region VimFoldMarker start='["#].*{{{' end='\n\ze["#].*{{{\d\+' end='["#].*}}}' end='^$' fold transparent keepend
-	syntax region VimFoldMarker start='["#].*{{{9\>' end='\n\ze["#].*{{{[1-9]\>' end='["#].*\<9}}}' end='^$' fold transparent keepend
-	syntax region VimFoldMarker start='["#].*{{{8\>' end='\n\ze["#].*{{{[1-8]\>' end='["#].*\<8}}}' end='^$' fold transparent keepend
-	syntax region VimFoldMarker start='["#].*{{{7\>' end='\n\ze["#].*{{{[1-7]\>' end='["#].*\<7}}}' end='^$' fold transparent keepend
-	syntax region VimFoldMarker start='["#].*{{{6\>' end='\n\ze["#].*{{{[1-6]\>' end='["#].*\<6}}}' end='^$' fold transparent keepend
-	syntax region VimFoldMarker start='["#].*{{{5\>' end='\n\ze["#].*{{{[1-5]\>' end='["#].*\<5}}}' end='^$' fold transparent keepend
-	syntax region VimFoldMarker start='["#].*{{{4\>' end='\n\ze["#].*{{{[1-4]\>' end='["#].*\<4}}}' end='^$' fold transparent keepend
-	syntax region VimFoldMarker start='["#].*{{{3\>' end='\n\ze["#].*{{{[1-3]\>' end='["#].*\<3}}}' end='^$' fold transparent keepend
-	syntax region VimFoldMarker start='["#].*{{{2\>' end='\n\ze["#].*{{{[12]\>' end='["#].*\<2}}}' end='^$' fold transparent keepend
-	syntax region VimFoldMarker start='["#].*{{{1\>' end='\n\ze["#].*{{{1\>' end='["#].*\<1}}}' end='^$' fold transparent keepend
+	syntax region VimFoldMarker start='["#].*{{{9\>' end='\n\ze["#].*{{{[1-9]\>' end='["#].*}}}9\>' end='^$' fold transparent keepend
+	syntax region VimFoldMarker start='["#].*{{{8\>' end='\n\ze["#].*{{{[1-8]\>' end='["#].*}}}8\>' end='^$' fold transparent keepend
+	syntax region VimFoldMarker start='["#].*{{{7\>' end='\n\ze["#].*{{{[1-7]\>' end='["#].*}}}7\>' end='^$' fold transparent keepend
+	syntax region VimFoldMarker start='["#].*{{{6\>' end='\n\ze["#].*{{{[1-6]\>' end='["#].*}}}6\>' end='^$' fold transparent keepend
+	syntax region VimFoldMarker start='["#].*{{{5\>' end='\n\ze["#].*{{{[1-5]\>' end='["#].*}}}5\>' end='^$' fold transparent keepend
+	syntax region VimFoldMarker start='["#].*{{{4\>' end='\n\ze["#].*{{{[1-4]\>' end='["#].*}}}4\>' end='^$' fold transparent keepend
+	syntax region VimFoldMarker start='["#].*{{{3\>' end='\n\ze["#].*{{{[1-3]\>' end='["#].*}}}3\>' end='^$' fold transparent keepend
+	syntax region VimFoldMarker start='["#].*{{{2\>' end='\n\ze["#].*{{{[12]\>'  end='["#].*}}}2\>' end='^$' fold transparent keepend
+	syntax region VimFoldMarker start='["#].*{{{1\>' end='\n\ze["#].*{{{1\>'     end='["#].*}}}1\>' end='^$' fold transparent keepend
 	" if, for, while, try
 	syntax region VimIfForWhileTry start='\<if\>' end='\<en\%[dif]\>' end='\n\ze\s*\%(el\%[se]\|elseif\=\)\>' fold transparent keepend
 	syntax region VimIfForWhileTry start='\<\%(el\%[se]\|elseif\=\)\>' end='\<en\%[dif]\>' end='\n\ze\s*\%(el\%[se]\|elseif\=\)\>' fold transparent keepend

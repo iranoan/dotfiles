@@ -21,7 +21,7 @@ scriptencoding utf-8
 #		- TabEdit でディレクトリなら、Fern を起動するように変更
 
 # vim-surround などのプラグインでも . リピートを可能にする https://github.com/tpope/vim-repeat {{{1
-# 1}}}
+# }}}1
 
 # マークを可視化 visial mark https://github.com/kshenoy/vim-signature {{{1
 # 遅延読み込みだと、開いた時に以前開いた時に付いていたマークが可視化されない
@@ -69,10 +69,10 @@ nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 # nnoremap <silent>gf :TabEdit <cfile><CR> " ← 存在しなくても開く <C-R><C-F> と同じ
 
 # https://github.com/t9md/vim-foldtext を書き換え $MYVIMDIR/pack/my-plug/start/vim-foldtext/ {{{1
-# 1}}}
+# }}}1
 
 # shell program を用いてバッファにフィルタを掛ける $MYVIMDIR/pack/my-plug/start/shell-filter/ {{{1
-# 1}}}
+# }}}1
 
 # カラースキム {{{1
 # background によって一部の highlight を変える関数 (Solarized を基本としている) {{{2
@@ -171,7 +171,7 @@ def ColorschemeBefore(color: string): void # t_Co, termguicolors 等 colorscheme
 		if !has('gui_running')
 			set t_Co=256 # ←~/.tmux_conf set-option -g default-terminal "tmux-256color"
 			set termguicolors
-			# ↓端末やの色設定あれば不要? 変化が不明
+			# ↓端末側の色設定あれば不要? 変化が不明
 			# &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 			# &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 		endif
@@ -180,12 +180,12 @@ def ColorschemeBefore(color: string): void # t_Co, termguicolors 等 colorscheme
 		set notermguicolors
 	endif
 enddef
-# 2}}}
+# }}}2
 set background=dark
 # https://github.com/lifepillar/vim-solarized8 {{{2
-# 2}}}
+# }}}2
 # https://github.com/altercation/vim-colors-solarized {{{2
-# 2}}}
+# }}}2
 augroup ChangeColorScheme
 	autocmd!
 	autocmd ColorScheme * ColorschemeHighlight()
@@ -205,7 +205,7 @@ for s in ['solarized8', 'solarized', 'habamax', 'desert', 'default']
 endfor
 
 # 日本語ヘルプ https://github.com/vim-jp/vimdoc-ja {{{1
-# 1}}}
+# }}}1
 
 # 同じインデントをテキストオプジェクト化 https://github.com/kana/vim-textobj-indent {{{1
 # キーマップ ii, ai
