@@ -590,15 +590,18 @@ nnoremap ds  <Cmd>call set_surround#main('Dsurround') <Bar> delfunction set_surr
 # <Shift> を押すのが面倒
 var qq1: string
 var qq2: string
-for [n, q] in items({ 2: '"', 7: "''", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>'})
+for [n, q] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>'})
 	qq1 = q == "'" ? "''" : q
 	execute 'nnoremap ds'  .. n .. ' <Cmd>call set_surround#main(''Dsurround'') <Bar> call feedkeys(''$' .. qq1 .. ''') <Bar> delfunction set_surround#main<CR>'
 	execute 'nnoremap ys4' .. n .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''$' .. qq1 .. ''') <Bar> delfunction set_surround#main<CR>'
-	execute 'nnoremap ys4' .. q .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''$' .. qq1 .. ''') <Bar> delfunction set_surround#main<CR>'
 	execute 'nnoremap ys$' .. n .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''$' .. qq1 .. ''') <Bar> delfunction set_surround#main<CR>'
 endfor
-for [n1, q1] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '"': '"', "'": "'", '(': '(', ')': ')', '`': '`', '<': '<', '>': '>', '[': '[', ']': ']', '{': '{', '}': '}' })
-	for [n2, q2] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '"': '"', "'": "'", '(': '(', ')': ')', '`': '`', '<': '<', '>': '>', '[': '[', ']': ']', '{': '{', '}': '}' })
+for q in ['"', "'", '(', ')', '`', '<', '>', '[', ']', '{', '}']
+	qq1 = q == "'" ? "''" : q
+	execute 'nnoremap ys4' .. q .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''$' .. qq1 .. ''') <Bar> delfunction set_surround#main<CR>'
+endfor
+for [n1, q1] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '"': '"', "'": "'", '(': '(', ')': ')', '`': '`', '<': '<', '>': '>', '[': '[', ']': ']', '{': '{', '}': '}'})
+	for [n2, q2] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '"': '"', "'": "'", '(': '(', ')': ')', '`': '`', '<': '<', '>': '>', '[': '[', ']': ']', '{': '{', '}': '}'})
 		qq1 = q1 == "'" ? "''" : q1
 		qq2 = q2 == "'" ? "''" : q2
 		execute 'nnoremap ysi' .. n1 .. n2 .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''i' .. qq1 .. qq2 .. ''') <Bar> delfunction set_surround#main<CR>'
