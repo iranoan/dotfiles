@@ -11,8 +11,9 @@ endfunction
 
 def s:get_func(fname: string): string
 	var f = resolve(expand(fname)) # シンボリック・リンク展開
+		->resolve()
 		->substitute('^' .. escape(expand('$HOME'), '/\.'), '~', 'g') # $HOME を ~ に置換
-	f = execute('filter /\m^\s\+\d\+:\s\+' .. escape(f, '/\~.') .. '$/ scriptnames', 'silent!') # スクリプト ID とパス取得
+	f = execute('filter /\m^\s*\d\+:\s\+' .. escape(f, '/\~.') .. '$/ scriptnames', 'silent!') # スクリプト ID とパス取得
 		->substitute('[\n\r]', '', 'g') # 改行削除
 		->substitute('^\s*\(\d\+\):.\+', '\1', 'g') # ID のみ取り出し
 	return '<SNR>' .. f .. '_'
