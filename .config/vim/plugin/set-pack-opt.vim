@@ -224,7 +224,35 @@ augroup InsertStatus
 		| insert_status#Main('Enter')
 augroup END
 
-# BufNewFile,BufRead,CmdUndefined,FuncUndefined をトリガーとする {{{1
+# BufNewFile,BufRead,CmdUndefined,FuncUndefined をトリガーとする {{{2
+# :Tabedit $MYVIMDIR/pack/my-plug/opt/tabedit/ {{{2
+augroup TabEdit
+	autocmd!
+	autocmd CmdUndefined TabEdit packadd tabedit
+		| autocmd! TabEdit
+		| augroup! TabEdit
+	autocmd CmdlineEnter * packadd tabedit
+		| autocmd! TabEdit
+		| augroup! TabEdit
+augroup END
+nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
+# nnoremap <silent>gf :TabEdit <cfile><CR> " ← 存在しなくても開く <C-R><C-F> と同じ
+
+# 出力を quickfix に取り込む $MYVIMDIR/pack/my-plug/opt/output2qf {{{2
+# grep で幾つかのオプションをデフォルトで付けたり、補完を可能にする $MYVIMDIR/pack/my-plug/opt/gnu-grep/ {{{2
+augroup SetPackCmdlineEnter
+	autocmd!
+	autocmd CmdlineEnter * packadd output2qf
+		| packadd gnu-grep
+		| autocmd! SetPackCmdlineEnter
+		| augroup! SetPackCmdlineEnter
+augroup END
+g:gnu_grep = {'exclude-dir': '{.git,.cache,.thumbnail,cache,thumbnail,undo}'}
+augroup GnuGrep
+	autocmd!
+	autocmd FileType qf gnu_grep#SetQfTitle()
+augroup END
+
 augroup SetPackOpt
 	autocmd!
 	# ディレクトリを再帰的に diff https://github.com/will133/vim-dirdiff {{{2

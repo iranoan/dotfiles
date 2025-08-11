@@ -63,11 +63,6 @@ augroup VimSignature # SignColumn デフォルトの色が使われるので他�
 				| highlight GitGutterDelete   term=bold cterm=bold gui=bold ctermbg=NONE guibg=NONE
 augroup END
 
-# :Tabedit $MYVIMDIR/pack/my-plug/start/tabedit/ {{{1
-# ↑opt/ に入れて呼び出すようにすると、最初の使用時に補完が働かない
-nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
-# nnoremap <silent>gf :TabEdit <cfile><CR> " ← 存在しなくても開く <C-R><C-F> と同じ
-
 # https://github.com/t9md/vim-foldtext を書き換え $MYVIMDIR/pack/my-plug/start/vim-foldtext/ {{{1
 # }}}1
 
@@ -233,13 +228,3 @@ xnoremap ac <Plug>(textobj-syntax-a)
 # 		| autocmd! loadPackManage
 # 		| augroup! loadPackManage
 # augroup END
-
-# grep で幾つかのオプションをデフォルトで付けたり、補完を可能にする $MYVIMDIR/pack/my-plug/start/gnu-grep/ {{{1
-g:gnu_grep = {'exclude-dir': '{.git,.cache,.thumbnail,cache,thumbnail,undo}'}
-augroup GnuGrep
-	autocmd!
-	autocmd FileType qf gnu_grep#SetQfTitle()
-augroup END
-
-# 出力を quickfix に取り込む $MYVIMDIR/pack/my-plug/start/output2qf {{{1
-# シェルの取り込みでは補完を使いたいので、opt にしない
