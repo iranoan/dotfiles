@@ -7,7 +7,7 @@ function set_asyncomplete#main() abort
 	" call asyncomplete#force_refresh()
 	" let g:asyncomplete_min_chars = 1
 	let g:asyncomplete_auto_completeopt = 0
-	" 以下 plugin {{{2
+	" 以下 plugin {{{
 	" また 'allowlist': ['*'] を使うと、直ぐ消えてしまうケースが出てくる←vim のコメントで再現
 	" snippet https://github.com/hrsh7th/vim-vsnip {{{
 		packadd vim-vsnip
@@ -102,9 +102,16 @@ function set_asyncomplete#main() abort
 				\ priority: 100
 				\ }))
 	" }}}
-	" }}}2
+	" }}}
 	let g:asyncomplete_preprocessor = [function('s:asyncomplete_preprocessor')]
 	" call asyncomplete#enable_for_buffer() " asyncomplete.vim 自体の遅延読み込みを試みたがだめだった
+	" let f = glob('$MYVIMDIR/pack/*/*/asyncomplete.vim/autoload/asyncomplete.vim')
+	" 			\ ->resolve()
+	" 			\ ->substitute('^' .. escape(expand('$HOME'), '/\.'), '~', 'g') " $HOME を ~ に置換
+	" let f = execute('filter /\m^\s*\d\+:\s\+' .. escape(f, '/\~.') .. '$/ scriptnames', 'silent!')
+	" 			\ ->substitute('[\n\r]', '', 'g')
+	" 			\ ->substitute('^\s*\(\d\+\):.\+', '\1', 'g')
+	" call call('<SNR>' .. f .. '_' .. 'on_insert_enter', [])
 endfunction
 
 def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>): void
