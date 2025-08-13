@@ -1,9 +1,17 @@
 scriptencoding utf-8
 
 function set_fzf_vim#main(cmd) abort
-	" if pack_manage#IsInstalled('fzf.vim')
-	" 	return
-	" endif
+	if !pack_manage#IsInstalled('tabedit')
+		" 各種コマンドから tabedit#Tabedit を使っているが、
+		" autocmd FuncUndefined tabedit#Tabedit packadd tabedit をしても
+		" function 12[30]..<SNR>62_callback[25]..function 12[30]..<SNR>62_callback の処理中にエラーが検出されました:
+		" 行   23:
+		" Vim(return):E117: 未知の関数です: tabedit#Tabedit
+		" ノエラーになる
+		packadd tabedit
+		autocmd! TabEdit
+		augroup! TabEdit
+	endif
 	" https://github.com/junegunn/fzf {{{
 	" do-setup: ./install --bin
 	packadd fzf
