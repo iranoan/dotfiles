@@ -239,13 +239,23 @@ nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 # nnoremap <silent>gf :TabEdit <cfile><CR> " ← 存在しなくても開く <C-R><C-F> と同じ
 
 # 出力を quickfix に取り込む $MYVIMDIR/pack/my-plug/opt/output2qf {{{2
-# grep で幾つかのオプションをデフォルトで付けたり、補完を可能にする $MYVIMDIR/pack/my-plug/opt/gnu-grep/ {{{2
-augroup SetPackCmdlineEnter
+augroup SetOutput2Qf
 	autocmd!
 	autocmd CmdlineEnter * packadd output2qf
 		| packadd gnu-grep
-		| autocmd! SetPackCmdlineEnter
-		| augroup! SetPackCmdlineEnter
+		| autocmd! SetOutput2Qf
+		| augroup! SetOutput2Qf
+augroup END
+
+# grep で幾つかのオプションをデフォルトで付けたり、補完を可能にする $MYVIMDIR/pack/my-plug/opt/gnu-grep/ {{{2
+augroup SetGnuGrep
+	autocmd!
+	autocmd FileType qf packadd gnu-grep
+		| autocmd! SetGnuGrep
+		| augroup! SetGnuGrep
+	autocmd CmdlineEnter * packadd gnu-grep
+		| autocmd! SetGnuGrep
+		| augroup! SetGnuGrep
 augroup END
 g:gnu_grep = {'exclude-dir': '{.git,.cache,.thumbnail,cache,thumbnail,undo}'}
 augroup GnuGrep
