@@ -77,7 +77,7 @@ function set_context_filetype#main() abort
 		\ },
 		\ {
 			\ 	'filetype': 'awk',
-			\ 	'start': '\<[mg]\?awk\s\+''.*{',
+			\ 	'start': '\<[mg]\?awk\s\+''[^/]*{',
 			\ 	'end': '}\s*[{;'']'
 		\ },
 		\ {
