@@ -549,8 +549,8 @@ export def SetMAP(plug: string, cmd: string, map_ls: list<dict<any>>): void # �
 	var extra: string
 	var c: number
 	var exe_cmd: string
-	var exe_methoud: number
-	var exe_methouds: dict<number>
+	var exe_method: number
+	var exe_methods: dict<number>
 	var mode: string = tolower(mode())
 
 	while 1
@@ -561,19 +561,19 @@ export def SetMAP(plug: string, cmd: string, map_ls: list<dict<any>>): void # �
 		extra ..= nr2char(c)
 	endwhile
 	for i in map_ls
-		exe_methoud = get(i, 'method', 0)
+		exe_method = get(i, 'method', 0)
 		# mode() の返り値先頭と map の時の先頭文字が違うものが有るので、置き換える
 		if i.mode ==# 'x'
-			exe_methouds[i.cmd .. ':v'] = exe_methoud
+			exe_methods[i.cmd .. ':v'] = exe_method
 		elseif i.mode ==# 'v'
-			exe_methouds[i.cmd .. ':v'] = exe_methoud
-			exe_methouds[i.cmd .. ':s'] = exe_methoud
+			exe_methods[i.cmd .. ':v'] = exe_method
+			exe_methods[i.cmd .. ':s'] = exe_method
 		else
-			exe_methouds[i.cmd .. ':' .. i.mode] = exe_methoud
+			exe_methods[i.cmd .. ':' .. i.mode] = exe_method
 		endif
-		if exe_methoud == 0
+		if exe_method == 0
 			execute i.mode .. 'noremap ' .. (get(i, 'buffer', false) ? '<buffer>' : '') .. i.key .. ' <Plug>' .. i.cmd
-		elseif ( i.mode ==# 'v' || i.mode ==# 's' || i.mode ==# 'x' ) && exe_methoud == 2
+		elseif ( i.mode ==# 'v' || i.mode ==# 's' || i.mode ==# 'x' ) && exe_method == 2
 			execute i.mode .. 'noremap ' .. (get(i, 'buffer', false) ? '<buffer>' : '') .. i.key .. ' :' .. i.cmd .. '<CR>'
 		else
 			execute i.mode .. 'noremap ' .. (get(i, 'buffer', false) ? '<buffer>' : '') .. i.key .. ' <Cmd>' .. i.cmd .. '<CR>'
@@ -583,11 +583,11 @@ export def SetMAP(plug: string, cmd: string, map_ls: list<dict<any>>): void # �
 	if cmd ==# ''
 		return
 	endif
-	exe_methoud = get(exe_methouds, cmd .. ':' .. mode, 0)
-	if exe_methoud == 0
+	exe_method = get(exe_methods, cmd .. ':' .. mode, 0)
+	if exe_method == 0
 		exe_cmd = substitute(cmd, ' ', "\<Plug>", 'g')
 		feedkeys("\<Plug>" .. exe_cmd .. extra)
-	elseif mode =~# '^[vsx]' && exe_methoud == 2
+	elseif mode =~# '^[vsx]' && exe_method == 2
 		feedkeys(":" .. cmd .. "\<CR>")
 	else
 		execute cmd
