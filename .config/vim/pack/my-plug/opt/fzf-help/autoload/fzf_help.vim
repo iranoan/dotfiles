@@ -17,55 +17,51 @@ export def HelpTags(): list<string>
 	enddef
 
 	var helplang: dict<number> = GetLang()
-
-	def ListupTags(d: string, f: string): list<dict<any>>
-		var dir: string
-		var ls: list<dict<any>>
-		var lang_n: number
-		var lang_s: string
-
-		for t in globpath(d, f, true, true)
-			lang_s = (f =~# '/tags$' ? 'en' : t[-2 : -1])
-			lang_n = get(helplang, lang_s, 1000)
-			dir = substitute(t, '/[^/]\+$', '', '')
-			ls += readfile(t)
-			        ->filter((_, v) => v =~# '^[^\t]\+\t[^\t]\+\t[^\t]\+$')
-			        ->filter((_, v) => v !~# '!_TAG_FILE_ENCODING')
-			        ->map((_, v) => split(v, "\t"))
-			        ->filter((_, v) => v[1] =~# '\.\(txt\|\a\ax\)$')
-			        ->map((_, v) => ({
-			          		tag:     v[0],
-			          		search:  '*' .. v[0] .. '*',
-			          		file:    substitute(v[1], '.*/', '', ''),
-			          		path:    simplify(dir .. '/' .. v[1]),
-			          		dir:     simplify(dir .. '/' .. v[1])->substitute('^' .. $MYVIMDIR .. '\(pack/\)\?', '', '')->substitute('/doc/[^/]\+$', '', ''),
-			          		opt:     v[1] =~# '/pack/[^/]\+/opt/[^/]\+/doc/[^/]\+$' ? 'opt' : 'start',
-			          		lang:    lang_s,
-			          		priority: lang_n
-			        }))
-		endfor
-		return ls
-	enddef
-
-	var tags_list: list<dict<any>> = ListupTags($MYVIMDIR, 'doc/tags')
-	var tags: list<any>
+	var lang_n: number
+	var lang_s: string
+	var tags: list<string>
+	var tags_list: list<dict<any>>
 	var tag_width: number
 	var file_width: number
+	var dir: string
 
-	tags_list += ListupTags($MYVIMDIR, 'doc/tags-[a-z][a-z]')
-	tags_list += ListupTags($MYVIMDIR, 'pack/*/*/*/doc/tags')
-	tags_list += ListupTags($MYVIMDIR, 'pack/*/*/*/doc/tags-[a-z][a-z]')
-	for i in split(&runtimepath, ',')->filter((_, v) => resolve(v .. '/') !~# '^' .. $MYVIMDIR)
-		tags_list += ListupTags(i, 'doc/tags')
-		tags_list += ListupTags(i, 'doc/tags-[a-z][a-z]')
-		tags_list += ListupTags(i, 'pack/*/*/*/doc/tags')
-		tags_list += ListupTags(i, 'pack/*/*/*/doc/tags-[a-z][a-z]')
+	tags += globpath($MYVIMDIR, 'doc/tags', true, true)
+	tags += globpath($MYVIMDIR, 'doc/tags-[a-z][a-z]', true, true)
+	tags += globpath($MYVIMDIR, 'pack/*/*/*/doc/tags', true, true)
+	tags += globpath($MYVIMDIR, 'pack/*/*/*/doc/tags-[a-z][a-z]', true, true)
+	for i in split(&runtimepath, ',')
+		tags += globpath(i, 'doc/tags', true, true)
+		tags += globpath(i, 'doc/tags-[a-z][a-z]', true, true)
+		tags += globpath(i, 'pack/*/*/*/doc/tags', true, true)
+		tags += globpath(i, 'pack/*/*/*/doc/tags-[a-z][a-z]', true, true)
 	endfor
+	sort(tags)->uniq()
+	for t in tags
+		lang_s = (t =~# '/tags$' ? 'en' : t[-2 : -1])
+		lang_n = get(helplang, lang_s, 1000)
+		dir = substitute(t, '/[^/]\+$', '', '')
+		tags_list += readfile(t)
+						->filter((_, v) => v =~# '^[^\t]\+\t[^\t]\+\t[^\t]\+$')
+						->filter((_, v) => v !~# '!_TAG_FILE_ENCODING')
+						->map((_, v) => split(v, "\t"))
+						->filter((_, v) => v[1] =~# '\.\(txt\|\a\ax\)$')
+						->map((_, v) => ({
+									tag:     v[0],
+									search:  '*' .. v[0] .. '*',
+									file:    substitute(v[1], '.*/', '', ''),
+									path:    simplify(dir .. '/' .. v[1]),
+									dir:     simplify(dir .. '/' .. v[1])->substitute('^' .. $MYVIMDIR .. '\(pack/\)\?', '', '')->substitute('/doc/[^/]\+$', '', ''),
+									# opt:     v[1] =~# '/pack/[^/]\+/opt/[^/]\+/doc/[^/]\+$' ? 'opt' : 'start', # ← 「/opt/」で絞り込めるので使っていない
+									lang:    lang_s,
+									priority: lang_n
+						}))
+	endfor
+
 	tag_width = min([23, max(deepcopy(tags_list)->map((_, v) => strdisplaywidth(v.tag)))])
 	# file_width = min([20, max(deepcopy(tags_list)->map((_, v) => strdisplaywidth(v.file)))])
 	return deepcopy(tags_list)
 		->sort((d1, d2) => d1.tag >? d2.tag ? 1 : ( d1.tag <? d2.tag ? -1 : d1.priority - d2.priority ))
-		->uniq((d1, d2) => d1.tag !=# d2.tag || d1.path !=# d2.path ? 1 : 0)
+		->uniq((d1, d2) => d1.tag ==# d2.tag && d1.lang ==# d2.lang ? 0 : 1)
 		->map((_, v) => printf("\x1B[32m%-" .. tag_width .. "S\x1B[0m\t%2S\t%-15S\t%S\t%S\t%s",
 		                	v.tag, v.lang, v.file, v.dir, v.path, v.search))
 enddef
