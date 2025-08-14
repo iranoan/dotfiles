@@ -66,9 +66,6 @@ augroup END
 # https://github.com/t9md/vim-foldtext を書き換え $MYVIMDIR/pack/my-plug/start/vim-foldtext/ {{{1
 # }}}1
 
-# shell program を用いてバッファにフィルタを掛ける $MYVIMDIR/pack/my-plug/start/shell-filter/ {{{1
-# }}}1
-
 # カラースキム {{{1
 # background によって一部の highlight を変える関数 (Solarized を基本としている) {{{2
 def ColorschemeHighlight(): void

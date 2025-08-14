@@ -584,3 +584,9 @@ onoremap i. i>
 xnoremap i. i>
 # abbreviate の代わり {{2
 cnoremap <expr>~vim $MYVIMDIR
+# Quoted-Printのデコード {{{2
+nnoremap <silent><silent><Leader>hq :let b:pos=getpos(".")<CR>:%s/\v\=\?utf-8\?Q\?(.+)\?\=/\1/g<CR>:%!perl -M'MIME::QuotedPrint' -e 'while (<STDIN>) { print decode_qp($_); }'<CR>:call setpos('.',b:pos)<CR>:set fileencoding=<CR>
+xnoremap <silent><silent><Leader>hq :!perl -M'MIME::QuotedPrint' -e 'while (<STDIN>) { print decode_qp($_); }'<CR>:set fileencoding=<CR>
+# dase64 のデコード←範囲選択しないと上手くいかない {{{2
+nnoremap <silent><silent><Leader>hb :let b:pos=getpos(".") <CR>:%!base64 -di -w 0 -<CR>
+xnoremap <silent><silent><Leader>hb :!base64 -di -w 0 -<CR>
