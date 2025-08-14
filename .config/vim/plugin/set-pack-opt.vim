@@ -315,6 +315,29 @@ augroup SetPackOpt
 	# 	| autocmd! SetPackOpt BufRead ~/.getmail/*,~/.config/getmail/*
 	# 	| delfunction set_getmail_vim#main
 
+	# vim 折りたたみ fold $MYVIMDIR/pack/my-plug/opt/vim-ft-vim_fold/ {{{2 https://github.com/thinca/vim-ft-vim_fold を組み合わせ追加のために置き換え
+	autocmd FileType vim ++once packadd vim-ft-vim_fold
+
+	# CSS シンタックス https://github.com/hail2u/vim-css3-syntax {{{2
+	autocmd FileType css ++once packadd vim-css3-syntax
+
+	# LaTeX をテキストオプジェクト化 https://github.com/rbonvall/vim-textobj-latex {{{2
+	# depends = ['vim-textobj-user']
+	# できるのは次のテキストオプジェクト
+	# a\ 	i\ 	Inline math surrounded by \( and \).
+	# a$ 	i$ 	Inline math surrounded by dollar signs.
+	# aq 	iq 	Single-quoted text `like this'.
+	# aQ 	iQ 	Double-quoted text ``like this''.
+	# ae 	ie 	Environment \begin{…} to \end{…}
+	# LaTeX fold 折りたたみ https://github.com/matze/vim-tex-fold {{{2
+	autocmd FileType tex ++once packadd vim-textobj-latex
+		| set_vim_tex_fold#main()
+		| delfunction set_vim_tex_fold#main
+
+	# Markdown マッピング $MYVIMDIR/pack/my-plug/opt/map-markdown/ {{{2
+	autocmd FileType markdown ++once set_map_markdown#main()
+		| delfunction set_map_markdown#main
+
 augroup END # }}}1
 
 # Filetype をトリガーとする {{{1
@@ -353,14 +376,6 @@ augroup loadautofmt
 				| delfunction set_autofmt#main
 augroup END
 
-# vim 折りたたみ fold $MYVIMDIR/pack/my-plug/opt/vim-ft-vim_fold/ {{{2 https://github.com/thinca/vim-ft-vim_fold を組み合わせ追加のために置き換え
-augroup loadvim_ft_vim_fold
-	autocmd!
-	autocmd FileType vim packadd vim-ft-vim_fold
-	| autocmd! loadvim_ft_vim_fold
-	| augroup! loadvim_ft_vim_fold
-augroup END
-
 # 各種言語の構文チェック https://github.com/dense-analysis/ale {{{2
 augroup loadALE
 	autocmd!
@@ -369,14 +384,6 @@ augroup loadALE
 				| autocmd! loadALE
 				| augroup! loadALE
 				| delfunction set_ale#main
-augroup END
-
-# CSS シンタックス https://github.com/hail2u/vim-css3-syntax {{{2
-augroup loadSyntaxCSS
-	autocmd!
-	autocmd FileType css packadd vim-css3-syntax
-	| autocmd! loadSyntaxCSS
-	| augroup! loadSyntaxCSS
 augroup END
 
 # C/C++シンタックス https://github.com/vim-jp/vim-cpp {{{2
@@ -402,24 +409,6 @@ augroup loadTextObjFunc
 	| augroup! loadTextObjFunc
 augroup END
 
-# LaTeX をテキストオプジェクト化 https://github.com/rbonvall/vim-textobj-latex {{{2
-# depends = ['vim-textobj-user']
-# できるのは次のテキストオプジェクト
-# a\ 	i\ 	Inline math surrounded by \( and \).
-# a$ 	i$ 	Inline math surrounded by dollar signs.
-# aq 	iq 	Single-quoted text `like this'.
-# aQ 	iQ 	Double-quoted text ``like this''.
-# ae 	ie 	Environment \begin{…} to \end{…}
-# LaTeX fold 折りたたみ https://github.com/matze/vim-tex-fold {{{2
-augroup loadTeX
-	autocmd!
-	autocmd FileType tex packadd vim-textobj-latex
-				| set_vim_tex_fold#main()
-				| autocmd! loadTeX
-				| augroup! loadTeX
-				| delfunction set_vim_tex_fold#main
-augroup END
-
 # https://github.com/prabirshrestha/vim-lsp {{{2
 augroup loadvimlsp
 	autocmd!
@@ -436,13 +425,6 @@ augroup loadcontext_filetype
 				| autocmd! loadcontext_filetype
 				| augroup! loadcontext_filetype
 				| delfunction set_context_filetype#main
-augroup END
-
-# Markdown マッピング $MYVIMDIR/pack/my-plug/opt/map-markdown/ {{{2
-augroup MapMarkdown
-	autocmd!
-	autocmd FileType markdown set_map_markdown#main()
-				| delfunction set_map_markdown#main
 augroup END
 
 # $MYVIMDIR/pack/my-plug/opt/ft-fold {{{2
