@@ -1,8 +1,4 @@
 vim9script
-# :TabEdit
-# 指定されたバッファ/ファイルがあればそれをアクティブにし、無ければ開く
-# 複数指定では、最初に見つかった分をアクティブに
-# mimetype が text/* でない、圧縮ファイル (zip, tar.*) でもないときは関連付けで開く
 
 export def Tabedit(...arg: list<string>): void
 	var win_id: number = 0  # 終了後最初に見つかった/開いたアクティブにする候補の初期値 (有り得ない 0 としておく)
@@ -102,34 +98,21 @@ export def Tabedit(...arg: list<string>): void
 			endif
 		enddef
 
-		def OpenBuffer(subf: string): bool # バッファ番号の可能性を探り有れば開く
-			var n: number = str2nr(subf)
-			if n .. '' !=# subf || strlen(n .. '') != strlen(subf)  # 値/文字列としての幅のどちらか違うので数字ではない→バッファ場号の可能性なし
-				return false
-			endif
-			for v in getbufinfo()
-				if v.bufnr == n  # バッファ番号が見つかった
-					if GotoWin(v.windows)
-						return true
-					endif
-					# バッファは有ったが hidden
-					execute 'silent tab sbuffer ' .. subf
-					win_id = win_id ? win_id : winnr()
-					return true
-				endif
-			endfor
-			return false
-		enddef
-
 		var full: string = ToFullpath(f, pwd)
 		var ftype: string = getftype(full)
 		if ftype ==# 'file' || ftype ==# 'link'  # ファイルが存在するなら無条件で開く
 			OpenFile(full)
 		elseif ftype ==# 'dir'  # ディレクトリなら Fern で開く
-			if has_key(pack_manage#GetPackLs(), 'fern.vim')
-				execute 'tabedit | Fern ' .. full
-			else
+			var cmd: list<any> = get(g:, 'tabedit_dir', [])
+			if cmd == []
 				AssociateCore(full)
+			else
+				if cmd[1]
+					var Func = function(cmd[0], [full])
+					Func()
+				else
+					execute cmd[0] .. ' ' .. full
+				endif
 			endif
 		else
 			if wordcount().bytes == 0 && &modified == false && len(tabpagebuflist()) == 1
@@ -158,3 +141,4 @@ export def Tabedit(...arg: list<string>): void
 	win_gotoid(win_id)
 	redraw  # これが無いとタグが切り替わったように見えない
 enddef
+defcompile
