@@ -207,7 +207,7 @@ augroup SetPairBracket
 augroup END
 
 # 補完 https://github.com/prabirshrestha/asyncomplete.vim {{{2
-augroup SetAsyncomplete
+augroup SetAsyncomplete # vim-lsp からも読み込まれうので、++once を使わない
 	autocmd!
 	autocmd InsertEnter * set_asyncomplete#main()
 		| autocmd! SetAsyncomplete
@@ -216,14 +216,20 @@ augroup SetAsyncomplete
 augroup END
 
 # :Tabedit $MYVIMDIR/pack/my-plug/opt/tabedit/ {{{2
-augroup TabEdit
+augroup TabEdit # tabedit, fern.vim, fzf.vim サイクリック依存
 	autocmd!
-	autocmd CmdUndefined TabEdit packadd tabedit
+	autocmd CmdUndefined TabEdit set_tabedit#main()
 		| autocmd! TabEdit
 		| augroup! TabEdit
-	autocmd CmdlineEnter * packadd tabedit
+		| delfunction set_tabedit#main
+	autocmd CmdlineEnter * set_tabedit#main()
 		| autocmd! TabEdit
 		| augroup! TabEdit
+		| delfunction set_tabedit#main
+augroup END
+augroup SetTabEditVim # Vim で再設定されてしまう
+	autocmd!
+	autocmd FileType vim nnoremap <buffer><silent>gf :TabEdit <C-R><C-P><CR>
 augroup END
 nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 # nnoremap <silent>gf :TabEdit <cfile><CR> " ← 存在しなくても開く <C-R><C-F> と同じ
@@ -253,6 +259,16 @@ augroup VimDocJa
 	autocmd CmdlineEnter * packadd vimdoc-ja
 		| autocmd! VimDocJa
 		| augroup! VimDocJa
+augroup END
+
+# ファイル・マネージャー https://github.com/lambdalisue/fern.vim {{{2
+nnoremap <Leader>e <Cmd>call set_fern#FernSync()<CR>
+augroup SetFernSync # tabedit, fern.vim, fzf.vim サイクリック依存
+	# キーマップだけだと、ディレクトリ部分の gf で使えない
+	autocmd CmdUndefined Fern set_fern#main()
+		| autocmd! SetFernSync
+		| augroup! SetFernSync
+		| delfunction set_fern#main
 augroup END
 
 # autocmd 削除を纏められる→++once が使えるタイプ {{{1
@@ -303,12 +319,6 @@ augroup SetPackOpt
 	autocmd BufNewFile,BufRead conkyrc,conky.conf ++once packadd conky-syntax.vim
 		| set filetype=conkyrc
 		| autocmd! BufNewFile,BufRead conkyrc,conky.conf
-
-	# ファイル・マネージャー https://github.com/lambdalisue/fern.vim {{{2
-	nnoremap <Leader>e <Cmd>call set_fern#main() <Bar> autocmd! SetPackOpt CmdUndefined Fern <Bar> delfunction set_fern#main <CR>
-	# キーマップだけだと、ディレクトリ部分の gf で使えない
-	autocmd CmdUndefined Fern ++once call set_fern#main()
-		| delfunction set_fern#main
 
 	# getmail syntax https://github.com/vim-scripts/getmail.vim {{{2
 	# 	autocmd BufRead ~/.getmail/*,~/.config/getmail/* set_getmail_vim#main()
@@ -483,7 +493,7 @@ nnoremap <Leader>hH <Cmd>call set_transform#main('Kata2hira') <Bar> delfunction 
 xnoremap <Leader>hH <Cmd>call set_transform#main('Kata2hira') <Bar> delfunction set_transform#main<CR>
 # nnoremap <Leader>hb :Base64<CR>
 
-# https://github.com/junegunn/fzf.vim {{{2
+# https://github.com/junegunn/fzf.vim {{{2 # tabedit, fern.vim, fzf.vim サイクリック依存
 nnoremap <silent><Leader>fr <Cmd>call set_fzf_vim#main('Files ~') <Bar> delfunction set_fzf_vim#main<CR>
 xnoremap <silent><Leader>fr <Cmd>call set_fzf_vim#main('Files ~') <Bar> delfunction set_fzf_vim#main<CR>
 nnoremap <silent><Leader>ff <Cmd>call set_fzf_vim#main('Files') <Bar> delfunction set_fzf_vim#main<CR>

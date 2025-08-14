@@ -1,19 +1,12 @@
 scriptencoding utf-8
 
 function set_fzf_vim#main(cmd) abort
-	if !pack_manage#IsInstalled('tabedit')
-		" 各種コマンドから tabedit#Tabedit を使っているが、
-		" autocmd FuncUndefined tabedit#Tabedit packadd tabedit をしても
-		" function 12[30]..<SNR>62_callback[25]..function 12[30]..<SNR>62_callback の処理中にエラーが検出されました:
-		" 行   23:
-		" Vim(return):E117: 未知の関数です: tabedit#Tabedit
-		" ノエラーになる
-		packadd tabedit
-		autocmd! TabEdit
-		augroup! TabEdit
-	endif
 	" https://github.com/junegunn/fzf {{{
 	" do-setup: ./install --bin
+	echomsg 'fzf ' .. pack_manage#IsInstalled('fzf')
+	if pack_manage#IsInstalled('fzf')
+		return
+	endif
 	packadd fzf
 	" }}}
 	" fzf.vim の Helptas の代わりに HelpTags を使う $MYVIMDIR/pack/my-plug/opt/fzf-help {{{
@@ -84,6 +77,18 @@ function set_fzf_vim#main(cmd) abort
 	" 			\ commits_log_options: '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"',
 	" 			\ } " buffers_jump: Buffers 使わず、preview_window: FZF_DEFAULT_OPTS で定義済み
 	let v:oldfiles = filter(v:oldfiles, {_, v -> filereadable(expand(v))})
+	if !pack_manage#IsInstalled('tabedit')
+		" 各種コマンドから tabedit#Tabedit を使っているが、
+		" autocmd FuncUndefined tabedit#Tabedit packadd tabedit をしても
+		" function 12[30]..<SNR>62_callback[25]..function 12[30]..<SNR>62_callback の処理中にエラーが検出されました:
+		" 行   23:
+		" Vim(return):E117: 未知の関数です: tabedit#Tabedit
+		" ノエラーになる
+		call set_tabedit#main()
+		autocmd! TabEdit
+		augroup! TabEdit
+		delfunction set_tabedit#main
+	endif
 	call pack_manage#SetMAP('fzf.vim', a:cmd, [
 				\ #{mode: 'n', key: '<silent><Leader>fr', method: 1, cmd: 'Files ~'},
 				\ #{mode: 'x', key: '<silent><Leader>fr', method: 1, cmd: 'Files ~'},
