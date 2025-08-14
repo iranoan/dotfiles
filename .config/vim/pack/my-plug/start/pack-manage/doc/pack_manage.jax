@@ -142,14 +142,19 @@ SetMAP({plugin}, {cmd}, {map})                             *pack_manage#SetMAP()
 	{
 		mode: n, x, o などのモード
 		key: 割り当てるキーマップ {lhs}
-		cmd: 割り当てるコマンド (<Plug> を除く)
+		cmd: 割り当てるコマンド {rhs} (<Plug> を除く)
 		buffer: <buffer> に限定する場合は |v:true| (キーが無ければ |v:false|)
+		method: |:nnoremap| 等の {rhs} 部の指定方法| (キーが無ければ 0)
+						0 <Plug>cmd 扱い
+						1 :cmdcmd 扱い
+						2 <Cmd>cmd 扱い
 	}
 
 	記載例: >vim
 	call pack_manage#SetMAP('plugin', 'Commad', [
-				\ {'mode': 'n', 'key': 'lhs',  'cmd': 'Commad'},
-				\ {'mode': 'x', 'key': 'lhs',  'cmd': 'Commad'}
+				\ {'mode': 'n', 'key': 'lhs',  'cmd': 'PlugCommad'},
+				\ {'mode': 'x', 'key': 'lhs',  'cmd': 'Commad', 'method': 1}
+				\ {'mode': 'v', 'key': 'lhs',  'cmd': 'Commad', 'method': 2}
 				\ ] )
 
 vim:tw=78:ts=2:ft=help:norl:noet:fen:
