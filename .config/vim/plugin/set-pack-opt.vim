@@ -494,66 +494,68 @@ xnoremap <Leader>hH <Cmd>call set_transform#main('Kata2hira') <Bar> delfunction 
 # nnoremap <Leader>hb :Base64<CR>
 
 # https://github.com/junegunn/fzf.vim {{{2 # tabedit, fern.vim, fzf.vim サイクリック依存
-nnoremap <silent><Leader>fr <Cmd>call set_fzf_vim#main('Files ~') <Bar> delfunction set_fzf_vim#main<CR>
-xnoremap <silent><Leader>fr <Cmd>call set_fzf_vim#main('Files ~') <Bar> delfunction set_fzf_vim#main<CR>
-nnoremap <silent><Leader>ff <Cmd>call set_fzf_vim#main('Files') <Bar> delfunction set_fzf_vim#main<CR>
-xnoremap <silent><Leader>ff <Cmd>call set_fzf_vim#main('Files') <Bar> delfunction set_fzf_vim#main<CR>
-nnoremap <silent><Leader>fu <Cmd>call set_fzf_vim#main('Files ..') <Bar> delfunction set_fzf_vim#main<CR>
-xnoremap <silent><Leader>fu <Cmd>call set_fzf_vim#main('Files ..') <Bar> delfunction set_fzf_vim#main<CR>
-nnoremap <silent><Leader>f. <Cmd>call set_fzf_vim#main('Files ~/dotfiles') <Bar> delfunction set_fzf_vim#main<CR>
-xnoremap <silent><Leader>f. <Cmd>call set_fzf_vim#main('Files ~/dotfiles') <Bar> delfunction set_fzf_vim#main<CR>
-nnoremap <silent><Leader>fv <Cmd>call set_fzf_vim#main('Files $MYVIMDIR') <Bar> delfunction set_fzf_vim#main<CR>
-xnoremap <silent><Leader>fv <Cmd>call set_fzf_vim#main('Files $MYVIMDIR') <Bar> delfunction set_fzf_vim#main<CR>
-nnoremap <silent><Leader>fs <Cmd>call set_fzf_vim#main('Files ~/src') <Bar> delfunction set_fzf_vim#main<CR>
-xnoremap <silent><Leader>fs <Cmd>call set_fzf_vim#main('Files ~/src') <Bar> delfunction set_fzf_vim#main<CR>
-nnoremap <silent><Leader>fx <Cmd>call set_fzf_vim#main('Files ~/bin') <Bar> delfunction set_fzf_vim#main<CR>
-xnoremap <silent><Leader>fx <Cmd>call set_fzf_vim#main('Files ~/bin') <Bar> delfunction set_fzf_vim#main<CR>
-nnoremap <silent><Leader>fe <Cmd>call set_fzf_vim#main('Files ~/book/epub') <Bar> delfunction set_fzf_vim#main<CR>
-xnoremap <silent><Leader>fe <Cmd>call set_fzf_vim#main('Files ~/book/epub') <Bar> delfunction set_fzf_vim#main<CR>
-nnoremap <silent><Leader>fd <Cmd>call set_fzf_vim#main('Files ~/downloads') <Bar> delfunction set_fzf_vim#main<CR>
-xnoremap <silent><Leader>fd <Cmd>call set_fzf_vim#main('Files ~/downloads') <Bar> delfunction set_fzf_vim#main<CR>
-nnoremap <silent><Leader>fD <Cmd>call set_fzf_vim#main('Files ~/Document') <Bar> delfunction set_fzf_vim#main<CR>
-xnoremap <silent><Leader>fD <Cmd>call set_fzf_vim#main('Files ~/Document') <Bar> delfunction set_fzf_vim#main<CR>
-nnoremap <silent><Leader>fp <Cmd>call set_fzf_vim#main('Files ~/public_html/iranoan') <Bar> delfunction set_fzf_vim#main<CR>
-xnoremap <silent><Leader>fp <Cmd>call set_fzf_vim#main('Files ~/public_html/iranoan') <Bar> delfunction set_fzf_vim#main<CR>
-nnoremap <silent><Leader>fi <Cmd>call set_fzf_vim#main('Files ~/Information/slide') <Bar> delfunction set_fzf_vim#main<CR>
-xnoremap <silent><Leader>fi <Cmd>call set_fzf_vim#main('Files ~/Information/slide') <Bar> delfunction set_fzf_vim#main<CR>
-# nnoremap <silent><Leader>fb <Cmd>call set_fzf_vim#main('Buffers') <Bar> delfunction set_fzf_vim#main<CR>
-# xnoremap <silent><Leader>fb <Cmd>call set_fzf_vim#main('Buffers') <Bar> delfunction set_fzf_vim#main<CR>
-nnoremap <silent><Leader>fc <Cmd>call set_fzf_vim#main('Commands') <Bar> delfunction set_fzf_vim#main<CR>
-xnoremap <silent><Leader>fc <Cmd>call set_fzf_vim#main('Commands') <Bar> delfunction set_fzf_vim#main<CR>
-nnoremap <silent><Leader>fg <Cmd>call set_fzf_vim#main('GFiles?') <Bar> delfunction set_fzf_vim#main<CR>
-xnoremap <silent><Leader>fg <Cmd>call set_fzf_vim#main('GFiles?') <Bar> delfunction set_fzf_vim#main<CR>
-nnoremap <silent><Leader>fh <Cmd>call set_fzf_vim#main('HISTORY') <Bar> delfunction set_fzf_vim#main<CR>
-xnoremap <silent><Leader>fh <Cmd>call set_fzf_vim#main('HISTORY') <Bar> delfunction set_fzf_vim#main<CR>
-nnoremap <silent><Leader>fH <Cmd>call set_fzf_vim#main('HelpTags') <Bar> delfunction set_fzf_vim#main<CR>
-xnoremap <silent><Leader>fH <Cmd>call set_fzf_vim#main('HelpTags') <Bar> delfunction set_fzf_vim#main<CR>
-nnoremap <silent><Leader>fl <Cmd>call set_fzf_vim#main('BLines') <Bar> delfunction set_fzf_vim#main<CR>
-xnoremap <silent><Leader>fl <Cmd>call set_fzf_vim#main('BLines') <Bar> delfunction set_fzf_vim#main<CR>
-nnoremap <silent><Leader>fm <Cmd>call set_fzf_vim#main('Marks') <Bar> delfunction set_fzf_vim#main<CR>
-xnoremap <silent><Leader>fm <Cmd>call set_fzf_vim#main('Marks') <Bar> delfunction set_fzf_vim#main<CR>
-nnoremap <silent>m/         <Cmd>call set_fzf_vim#main('Marks') <Bar> delfunction set_fzf_vim#main<CR>
-xnoremap <silent>m/         <Cmd>call set_fzf_vim#main('Marks') <Bar> delfunction set_fzf_vim#main<CR>
+nnoremap <silent><Leader>fr <Cmd>call set_fzf#vim('Files ~') <Bar> delfunction set_fzf#vim<CR>
+xnoremap <silent><Leader>fr <Cmd>call set_fzf#vim('Files ~') <Bar> delfunction set_fzf#vim<CR>
+nnoremap <silent><Leader>ff <Cmd>call set_fzf#vim('Files') <Bar> delfunction set_fzf#vim<CR>
+xnoremap <silent><Leader>ff <Cmd>call set_fzf#vim('Files') <Bar> delfunction set_fzf#vim<CR>
+nnoremap <silent><Leader>fu <Cmd>call set_fzf#vim('Files ..') <Bar> delfunction set_fzf#vim<CR>
+xnoremap <silent><Leader>fu <Cmd>call set_fzf#vim('Files ..') <Bar> delfunction set_fzf#vim<CR>
+nnoremap <silent><Leader>f. <Cmd>call set_fzf#vim('Files ~/dotfiles') <Bar> delfunction set_fzf#vim<CR>
+xnoremap <silent><Leader>f. <Cmd>call set_fzf#vim('Files ~/dotfiles') <Bar> delfunction set_fzf#vim<CR>
+nnoremap <silent><Leader>fv <Cmd>call set_fzf#vim('Files $MYVIMDIR') <Bar> delfunction set_fzf#vim<CR>
+xnoremap <silent><Leader>fv <Cmd>call set_fzf#vim('Files $MYVIMDIR') <Bar> delfunction set_fzf#vim<CR>
+nnoremap <silent><Leader>fs <Cmd>call set_fzf#vim('Files ~/src') <Bar> delfunction set_fzf#vim<CR>
+xnoremap <silent><Leader>fs <Cmd>call set_fzf#vim('Files ~/src') <Bar> delfunction set_fzf#vim<CR>
+nnoremap <silent><Leader>fx <Cmd>call set_fzf#vim('Files ~/bin') <Bar> delfunction set_fzf#vim<CR>
+xnoremap <silent><Leader>fx <Cmd>call set_fzf#vim('Files ~/bin') <Bar> delfunction set_fzf#vim<CR>
+nnoremap <silent><Leader>fe <Cmd>call set_fzf#vim('Files ~/book/epub') <Bar> delfunction set_fzf#vim<CR>
+xnoremap <silent><Leader>fe <Cmd>call set_fzf#vim('Files ~/book/epub') <Bar> delfunction set_fzf#vim<CR>
+nnoremap <silent><Leader>fd <Cmd>call set_fzf#vim('Files ~/downloads') <Bar> delfunction set_fzf#vim<CR>
+xnoremap <silent><Leader>fd <Cmd>call set_fzf#vim('Files ~/downloads') <Bar> delfunction set_fzf#vim<CR>
+nnoremap <silent><Leader>fD <Cmd>call set_fzf#vim('Files ~/Document') <Bar> delfunction set_fzf#vim<CR>
+xnoremap <silent><Leader>fD <Cmd>call set_fzf#vim('Files ~/Document') <Bar> delfunction set_fzf#vim<CR>
+nnoremap <silent><Leader>fp <Cmd>call set_fzf#vim('Files ~/public_html/iranoan') <Bar> delfunction set_fzf#vim<CR>
+xnoremap <silent><Leader>fp <Cmd>call set_fzf#vim('Files ~/public_html/iranoan') <Bar> delfunction set_fzf#vim<CR>
+nnoremap <silent><Leader>fi <Cmd>call set_fzf#vim('Files ~/Information/slide') <Bar> delfunction set_fzf#vim<CR>
+xnoremap <silent><Leader>fi <Cmd>call set_fzf#vim('Files ~/Information/slide') <Bar> delfunction set_fzf#vim<CR>
+# nnoremap <silent><Leader>fb <Cmd>call set_fzf#vim('Buffers') <Bar> delfunction set_fzf#vim<CR>
+# xnoremap <silent><Leader>fb <Cmd>call set_fzf#vim('Buffers') <Bar> delfunction set_fzf#vim<CR>
+nnoremap <silent><Leader>fc <Cmd>call set_fzf#vim('Commands') <Bar> delfunction set_fzf#vim<CR>
+xnoremap <silent><Leader>fc <Cmd>call set_fzf#vim('Commands') <Bar> delfunction set_fzf#vim<CR>
+nnoremap <silent><Leader>fg <Cmd>call set_fzf#vim('GFiles?') <Bar> delfunction set_fzf#vim<CR>
+xnoremap <silent><Leader>fg <Cmd>call set_fzf#vim('GFiles?') <Bar> delfunction set_fzf#vim<CR>
+nnoremap <silent><Leader>fh <Cmd>call set_fzf#vim('HISTORY') <Bar> delfunction set_fzf#vim<CR>
+xnoremap <silent><Leader>fh <Cmd>call set_fzf#vim('HISTORY') <Bar> delfunction set_fzf#vim<CR>
+nnoremap <silent><Leader>fl <Cmd>call set_fzf#vim('BLines') <Bar> delfunction set_fzf#vim<CR>
+xnoremap <silent><Leader>fl <Cmd>call set_fzf#vim('BLines') <Bar> delfunction set_fzf#vim<CR>
+nnoremap <silent><Leader>fm <Cmd>call set_fzf#vim('Marks') <Bar> delfunction set_fzf#vim<CR>
+xnoremap <silent><Leader>fm <Cmd>call set_fzf#vim('Marks') <Bar> delfunction set_fzf#vim<CR>
+nnoremap <silent>m/         <Cmd>call set_fzf#vim('Marks') <Bar> delfunction set_fzf#vim<CR>
+xnoremap <silent>m/         <Cmd>call set_fzf#vim('Marks') <Bar> delfunction set_fzf#vim<CR>
 # ↑ vim-signature のデフォルト・キーマップをこちらに再定義
-# nnoremap <silent><Leader>ft <Cmd>call set_fzf_vim#main('Tags') <Bar> delfunction set_fzf_vim#main<CR>
-# xnoremap <silent><Leader>ft <Cmd>call set_fzf_vim#main('Tags') <Bar> delfunction set_fzf_vim#main<CR>
-# nnoremap <silent><Leader>fw <Cmd>call set_fzf_vim#main('Windows') <Bar> delfunction set_fzf_vim#main<CR>
-# xnoremap <silent><Leader>fw <Cmd>call set_fzf_vim#main('Windows') <Bar> delfunction set_fzf_vim#main<CR>
-nnoremap <silent><Leader>f: <Cmd>call set_fzf_vim#main('History:') <Bar> delfunction set_fzf_vim#main<CR>
-xnoremap <silent><Leader>f: <Cmd>call set_fzf_vim#main('History:') <Bar> delfunction set_fzf_vim#main<CR>
-nnoremap <silent><Leader>f/ <Cmd>call set_fzf_vim#main('History/') <Bar> delfunction set_fzf_vim#main<CR>
-xnoremap <silent><Leader>f/ <Cmd>call set_fzf_vim#main('History/') <Bar> delfunction set_fzf_vim#main<CR>
+# nnoremap <silent><Leader>ft <Cmd>call set_fzf#vim('Tags') <Bar> delfunction set_fzf#vim<CR>
+# xnoremap <silent><Leader>ft <Cmd>call set_fzf#vim('Tags') <Bar> delfunction set_fzf#vim<CR>
+# nnoremap <silent><Leader>fw <Cmd>call set_fzf#vim('Windows') <Bar> delfunction set_fzf#vim<CR>
+# xnoremap <silent><Leader>fw <Cmd>call set_fzf#vim('Windows') <Bar> delfunction set_fzf#vim<CR>
+nnoremap <silent><Leader>f: <Cmd>call set_fzf#vim('History :') <Bar> delfunction set_fzf#vim<CR>
+xnoremap <silent><Leader>f: <Cmd>call set_fzf#vim('History :') <Bar> delfunction set_fzf#vim<CR>
+nnoremap <silent><Leader>f/ <Cmd>call set_fzf#vim('History /') <Bar> delfunction set_fzf#vim<CR>
+xnoremap <silent><Leader>f/ <Cmd>call set_fzf#vim('History /') <Bar> delfunction set_fzf#vim<CR>
+
+# fzf.vim の Helptas の代わりに HelpTags を使う $MYVIMDIR/pack/my-plug/opt/fzf-help {{{2
+nnoremap <silent><Leader>fH <Cmd>call set_fzf#help() <Bar> delfunction set_fzf#help<CR>
+xnoremap <silent><Leader>fH <Cmd>call set_fzf#help() <Bar> delfunction set_fzf#help<CR>
 
 # yank の履歴 https://github.com/justinhoward/fzf-neoyank {{{2
-nnoremap <Leader>fy <Cmd>call set_fzf_neoyank#main('FZFNeoyank') <Bar> delfunction set_fzf_neoyank#main<CR>
-nnoremap <Leader>fY <Cmd>call set_fzf_neoyank#main('FZFNeoyank # P') <Bar> delfunction set_fzf_neoyank#main<CR>
-xnoremap <Leader>fy <Cmd>call set_fzf_neoyank#main('FZFNeoyankSelection') <Bar> delfunction set_fzf_neoyank#main<CR>
+nnoremap <Leader>fy <Cmd>call set_fzf#neoyank('FZFNeoyank') <Bar> delfunction set_fzf#neoyank<CR>
+nnoremap <Leader>fY <Cmd>call set_fzf#neoyank('FZFNeoyank # P') <Bar> delfunction set_fzf#neoyank<CR>
+xnoremap <Leader>fy <Cmd>call set_fzf#neoyank('FZFNeoyankSelection') <Bar> delfunction set_fzf#neoyank<CR>
 
 # fzf を使ってタブ・ページの切り替え $MYVIMDIR/pack/my-plug/opt/fzf-tabs/ {{{2
-nnoremap <Leader>ft <Cmd>call set_fzf_tabs#main('FZFTabOpen') <Bar> delfunction set_fzf_tabs#main<CR>
-vnoremap <Leader>ft <Cmd>call set_fzf_tabs#main('FZFTabOpen') <Bar> delfunction set_fzf_tabs#main<CR>
-nnoremap <Leader>fb <Cmd>call set_fzf_tabs#main('FZFTabOpen') <Bar> delfunction set_fzf_tabs#main<CR>
-nnoremap <Leader>fw <Cmd>call set_fzf_tabs#main('FZFTabOpen') <Bar> delfunction set_fzf_tabs#main<CR>
+nnoremap <Leader>ft <Cmd>call set_fzf#tabs() <Bar> delfunction set_fzf#tabs<CR>
+vnoremap <Leader>ft <Cmd>call set_fzf#tabs() <Bar> delfunction set_fzf#tabs<CR>
+nnoremap <Leader>fb <Cmd>call set_fzf#tabs() <Bar> delfunction set_fzf#tabs<CR>
+nnoremap <Leader>fw <Cmd>call set_fzf#tabs() <Bar> delfunction set_fzf#tabs<CR>
 
 # notmuch-python-Vim $MYVIMDIR/pack/my-plug/opt/notmuch-py-vim/ {{{2
 nnoremap <silent><Leader>m <Cmd>call set_notmuchpy#main() <Bar> delfunction set_notmuchpy#main <CR>

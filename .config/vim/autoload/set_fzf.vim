@@ -1,29 +1,16 @@
 scriptencoding utf-8
 
-function set_fzf_vim#main(cmd) abort
+function set_fzf#main() abort
 	" https://github.com/junegunn/fzf {{{
 	" do-setup: ./install --bin
-	echomsg 'fzf ' .. pack_manage#IsInstalled('fzf')
-	if pack_manage#IsInstalled('fzf')
-		return
-	endif
 	packadd fzf
 	" }}}
-	" fzf.vim の Helptas の代わりに HelpTags を使う $MYVIMDIR/pack/my-plug/opt/fzf-help {{{
-	" delcommand Helptas←packadd しただけではまだ未定義
-	packadd fzf-help
-	" }}}
-	let s:fzf_options = [
-						\ '--multi', '--margin=0%', '--padding=0%',
-						\ '--preview', '~/bin/fzf-preview.sh {}',
-						\ '--bind', 'ctrl-o:execute-silent(xdg-open {})',
-						\ ]
 	let g:fzf_layout = { 'window': { 'width': 1, 'height': 1, 'xoffset': 0 , 'yoffset': 0 } }
 	if has('gui_running')
-		call set_fzf_vim#solarized()
+		call set_fzf#solarized()
 		augroup FZF_Vim_Solaraized
 			autocmd!
-			autocmd ColorScheme * call set_fzf_vim#solarized()
+			autocmd ColorScheme * call set_fzf#solarized()
 		augroup END
 	else " CUI では Normal の ctermbg=NOE としているので、そのまま使うと黒色になる
 		let g:fzf_colors = {
@@ -34,9 +21,69 @@ function set_fzf_vim#main(cmd) abort
 					\ 'border': ['fg', 'Normal'],
 					\ 'info':   ['fg', 'LineNr'],
 					\ }
-		" if g:colors_name ==# 'solarized'
-		" 	" let s:fzf_options += ['--color', &background] " ↑上の色指定が無視される
-		" endif
+	endif
+	let g:fzf_action = {
+				\ 'ctrl-g': 'edit',
+				\ 'ctrl-t': function('set_fzf#FZF_open'),
+				\ 'ctrl-s': 'split',
+				\ 'ctrl-v': 'vsplit',
+				\ 'enter': function('set_fzf#FZF_open'),
+				\ 'ctrl-o': function('set_fzf#FZF_open')
+				\ } " 他で sink を使うと、この設定は無視されるので注意←:help fzf-global-options-supported-by-fzf#wrap
+				" \ 'ctrl-e': 'edit', カーソルを入力の末尾移動と重なる
+endfunction
+
+function set_fzf#help() abort
+	if !pack_manage#IsInstalled('fzf')
+		call set_fzf#main()
+		delfunction set_fzf#main
+	endif
+	call pack_manage#SetMAP('fzf-help', 'HelpTags', [
+				\ #{mode: 'n', key: '<Leader>fH', method: 1, cmd: 'HelpTags'},
+				\ #{mode: 'x', key: '<Leader>fH', method: 1, cmd: 'HelpTags'},
+				\ ] )
+endfunction
+
+function set_fzf#neoyank(cmd) abort
+	" yank の履歴 https://github.com/Shougo/neoyank.vim {{{
+	packadd neoyank.vim " }}}
+	if !pack_manage#IsInstalled('fzf')
+		call set_fzf#main()
+		delfunction set_fzf#main
+	endif
+	call pack_manage#SetMAP('fzf-neoyank', a:cmd, [
+				\ #{mode: 'n', key: '<Leader>fy', method: 1, cmd: 'FZFNeoyank'},
+				\ #{mode: 'n', key: '<Leader>fY', method: 1, cmd: 'FZFNeoyank # P'},
+				\ #{mode: 'x', key: '<Leader>fy', method: 1, cmd: 'FZFNeoyankSelection'},
+				\ ] )
+endfunction
+
+function set_fzf#tabs() abort
+	if !pack_manage#IsInstalled('fzf')
+		call set_fzf#main()
+		delfunction set_fzf#main
+	endif
+	let g:fzf_tabs_options = ['--preview', '~/bin/fzf-preview.sh {2}']
+	call pack_manage#SetMAP('fzf-tabs', 'FZFTabOpen', [
+				\ #{mode: 'n', key: '<Leader>ft', method: 1, cmd: 'FZFTabOpen'},
+				\ #{mode: 'v', key: '<Leader>ft', method: 1, cmd: 'FZFTabOpen'},
+				\ #{mode: 'n', key: '<Leader>fb', method: 1, cmd: 'FZFTabOpen'},
+				\ #{mode: 'n', key: '<Leader>fw', method: 1, cmd: 'FZFTabOpen'},
+				\ ])
+endfunction
+
+function set_fzf#vim(cmd) abort
+	if !pack_manage#IsInstalled('fzf')
+		call set_fzf#main()
+		delfunction set_fzf#main
+	endif
+	let s:fzf_options = [
+						\ '--multi', '--margin=0%', '--padding=0%',
+						\ '--preview', '~/bin/fzf-preview.sh {}',
+						\ '--bind', 'ctrl-o:execute-silent(xdg-open {})',
+						\ ]
+	if get(g:, 'colors_name', '') ==# 'solarized'
+		let s:fzf_options += ['--color', &background] " ↑上の色指定が無視される
 	endif
 	let $FZF_DEFAULT_COMMAND = executable("fdfind")
 						\ ? 'fdfind --hidden --follow --no-ignore --ignore-file ~/.config/fd/ignore --ignore-file ~/.config/fd/noedit --type file --type symlink --type directory .'
@@ -61,15 +108,6 @@ function set_fzf_vim#main(cmd) abort
 					\ <bang>0
 					\ )
 				\ )
-	let g:fzf_action = {
-				\ 'ctrl-g': 'edit',
-				\ 'ctrl-t': function('set_fzf_vim#FZF_open'),
-				\ 'ctrl-s': 'split',
-				\ 'ctrl-v': 'vsplit',
-				\ 'enter': function('set_fzf_vim#FZF_open'),
-				\ 'ctrl-o': function('set_fzf_vim#FZF_open')
-				\ } " 他で sink を使うと、この設定は無視されるので注意←:help fzf-global-options-supported-by-fzf#wrap
-				" \ 'ctrl-e': 'edit', カーソルを入力の末尾移動と重なる
 	let $FZF_DEFAULT_OPTS = substitute($FZF_DEFAULT_OPTS, '--footer \zs\("[^"]\+"\|''[^'']\+''\)', '"<C-]/R/K>:Preview On/Off/Up/Down｜<C-F/B>:PageUP/Down｜<C-G>:edit｜<C-T>/<Enter>:tabedit｜<C-S>:split｜<C-V>:vsplit｜<C-O>:Open"', 'g')
 	" let g:fzf_vim = #{
 	" 			\ buffers_jump: 1,
@@ -83,7 +121,7 @@ function set_fzf_vim#main(cmd) abort
 		" function 12[30]..<SNR>62_callback[25]..function 12[30]..<SNR>62_callback の処理中にエラーが検出されました:
 		" 行   23:
 		" Vim(return):E117: 未知の関数です: tabedit#Tabedit
-		" ノエラーになる
+		" のエラーになる
 		call set_tabedit#main()
 		autocmd! TabEdit
 		augroup! TabEdit
@@ -128,10 +166,10 @@ function set_fzf_vim#main(cmd) abort
 				\ #{mode: 'x', key: '<silent><Leader>fm', method: 1, cmd: 'Marks'},
 				\ #{mode: 'n', key: '<silent>m/',         method: 1, cmd: 'Marks'},
 				\ #{mode: 'x', key: '<silent>m/',         method: 1, cmd: 'Marks'},
-				\ #{mode: 'n', key: '<silent><Leader>f:', method: 1, cmd: 'History:'},
-				\ #{mode: 'x', key: '<silent><Leader>f:', method: 1, cmd: 'History:'},
-				\ #{mode: 'n', key: '<silent><Leader>f/', method: 1, cmd: 'History/'},
-				\ #{mode: 'x', key: '<silent><Leader>f/', method: 1, cmd: 'History/'}
+				\ #{mode: 'n', key: '<silent><Leader>f:', method: 1, cmd: 'History :'},
+				\ #{mode: 'x', key: '<silent><Leader>f:', method: 1, cmd: 'History :'},
+				\ #{mode: 'n', key: '<silent><Leader>f/', method: 1, cmd: 'History /'},
+				\ #{mode: 'x', key: '<silent><Leader>f/', method: 1, cmd: 'History /'}
 				\ ])
 " \ #{mode: 'n, key: '<silent><Leader>fb', method: 1, cmd: 'Buffers'},
 " \ #{mode: 'n, key: '<silent><Leader>ft', method: 1, cmd: 'Tags'},
@@ -143,7 +181,7 @@ function set_fzf_vim#main(cmd) abort
 	delcommand GitFiles " vim-fugitive の :Git と重なり使いにくくなる
 endfunction
 
-def set_fzf_vim#FZF_open(arg: list<string>): void
+def set_fzf#FZF_open(arg: list<string>): void
 	var dir: string = getcwd() .. '/'
 	for f in arg
 		if match(f, '^[~/]') != 0
@@ -155,7 +193,7 @@ def set_fzf_vim#FZF_open(arg: list<string>): void
 enddef
 defcompile
 
-def set_fzf_vim#solarized(): void
+def set_fzf#solarized(): void
 	if get(g:, 'colors_name', '') ==# 'solarized'
 		g:terminal_ansi_colors = [
 						'#073642', '#dc322f', '#859900', '#b58900', '#268bd2', '#d33682', '#2aa198', '#eee8d5',

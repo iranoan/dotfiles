@@ -38,8 +38,8 @@ function set_fern#main() abort
 		autocmd FileType nerdtree,startify call glyph_palette#apply()
 		autocmd FileType fern call s:init_fern()
 		autocmd FileType fern ++once if !pack_manage#IsInstalled('fzf.vim')
-					\ | 	call set_fzf_vim#main('')
-					\ | 	delfunction set_fzf_vim#main
+					\ | 	call set_fzf#vim('')
+					\ | 	delfunction set_fzf#vim
 					\ | endif
 	augroup END
 	" }}}
