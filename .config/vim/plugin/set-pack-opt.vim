@@ -169,7 +169,7 @@ endif
 # Git 連携 https://github.com/tpope/vim-fugitive {{{2
 # statusline で使うので、$VIMDIR/autoload/vimrc.vim で読み込み
 
-# InsertEnter,CmdlineEnter をトリガーとする {{{1
+# autocmd 削除を纏められないにタイプ {{{1
 # 括弧や引用符をペアで入力/削除 $MYVIMDIR/pack/my-plug/start/pair_bracket/ {{{2
 # ドット・リピートは考慮していない
 g:pairbracket = {
@@ -215,16 +215,6 @@ augroup SetAsyncomplete
 		| delfunction set_asyncomplete#main
 augroup END
 
-# 挿入モード時、ステータスラインの色を変更 $MYVIMDIR/pack/my-plug/start/insert-status {{{2
-# g:hi_insert がインサート・モード時の highlight 指定
-g:hi_insert = 'highlight StatusLine term=reverse cterm=bold,reverse gui=bold,reverse ctermbg=White ctermfg=1 guibg=#dddddd guifg=#dc322f'
-augroup InsertStatus
-	autocmd!
-	autocmd InsertEnter * packadd insert-status
-		| insert_status#Main('Enter')
-augroup END
-
-# BufNewFile,BufRead,CmdUndefined,FuncUndefined をトリガーとする {{{2
 # :Tabedit $MYVIMDIR/pack/my-plug/opt/tabedit/ {{{2
 augroup TabEdit
 	autocmd!
@@ -237,15 +227,6 @@ augroup TabEdit
 augroup END
 nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 # nnoremap <silent>gf :TabEdit <cfile><CR> " ← 存在しなくても開く <C-R><C-F> と同じ
-
-# 出力を quickfix に取り込む $MYVIMDIR/pack/my-plug/opt/output2qf {{{2
-augroup SetOutput2Qf
-	autocmd!
-	autocmd CmdlineEnter * packadd output2qf
-		| packadd gnu-grep
-		| autocmd! SetOutput2Qf
-		| augroup! SetOutput2Qf
-augroup END
 
 # grep で幾つかのオプションをデフォルトで付けたり、補完を可能にする $MYVIMDIR/pack/my-plug/opt/gnu-grep/ {{{2
 augroup SetGnuGrep
@@ -263,12 +244,34 @@ augroup GnuGrep
 	autocmd FileType qf gnu_grep#SetQfTitle()
 augroup END
 
+# 日本語ヘルプ https://github.com/vim-jp/vimdoc-ja {{{2
+augroup VimDocJa
+	autocmd!
+	autocmd FileType vim packadd vimdoc-ja
+		| autocmd! VimDocJa
+		| augroup! VimDocJa
+	autocmd CmdlineEnter * packadd vimdoc-ja
+		| autocmd! VimDocJa
+		| augroup! VimDocJa
+augroup END
+
+# autocmd 削除を纏められる→++once が使えるタイプ {{{1
 augroup SetPackOpt
 	autocmd!
+
+	# 挿入モード時、ステータスラインの色を変更 $MYVIMDIR/pack/my-plug/opt/insert-status {{{2
+	# g:hi_insert がインサート・モード時の highlight 指定
+	g:hi_insert = 'highlight StatusLine term=reverse cterm=bold,reverse gui=bold,reverse ctermbg=White ctermfg=1 guibg=#dddddd guifg=#dc322f'
+	autocmd InsertEnter * ++once packadd insert-status
+		| insert_status#Main('Enter')
+
 	# ディレクトリを再帰的に diff https://github.com/will133/vim-dirdiff {{{2
 	autocmd CmdUndefined DirDiff ++once g:DirDiffForceLang = 'C LC_MESSAGES=C'
 		| g:DirDiffExcludes = ".git,.*.swp"
 		| packadd vim-dirdiff
+
+	# 出力を quickfix に取り込む $MYVIMDIR/pack/my-plug/opt/output2qf {{{2
+	autocmd CmdlineEnter * ++once packadd output2qf
 
 	# カーソル位置の Syntax の情報を表示する $MYVIMDIR/pack/my-plug/opt/syntax_info/ {{{2 http://cohama.hateblo.jp/entry/2013/08/11/020849 を参考にした
 	autocmd CmdUndefined SyntaxInfo ++once packadd syntax_info

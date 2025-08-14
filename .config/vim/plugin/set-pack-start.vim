@@ -196,9 +196,6 @@ for s in ['solarized8', 'solarized', 'habamax', 'desert', 'default']
 	endtry
 endfor
 
-# 日本語ヘルプ https://github.com/vim-jp/vimdoc-ja {{{1
-# }}}1
-
 # 同じインデントをテキストオプジェクト化 https://github.com/kana/vim-textobj-indent {{{1
 # キーマップ ii, ai
 
