@@ -42,14 +42,6 @@ function syntax_vim(a_line){ # Vim Help の色付け
 {
 	if( NR == 1 ){
 		print FILENAME
-		gsub(/\$/, "\\$", sword)
-		gsub(/\*/, "\\*", sword)
-		gsub(/\+/, "\\+", sword)
-		gsub(/\|/, "\\|", sword)
-		gsub(/\{/, "\\{", sword)
-		gsub(/\}/, "\\}", sword)
-		gsub(/\(/, "\\(", sword)
-		gsub(/\)/, "\\)", sword)
 		sline = 0
 	}
 	if( match($0, sword) ){

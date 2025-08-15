@@ -9,7 +9,7 @@ command! HelpTags call fzf#run({
 			\ 	'--no-multi',
 			\ 	'--separator', "\t",
 			\ 	'--nth', '..4',
-			\ 	'--with-nth', '..5',
+			\ 	'--with-nth', '..4',
 			\ 	'--prompt', 'help> ',
 			\ 	'--tabstop', '4',
 			\ 	'--no-scrollbar',

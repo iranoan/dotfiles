@@ -47,7 +47,7 @@ export def HelpTags(): list<string>
 						->filter((_, v) => v[1] =~# '\.\(txt\|\a\ax\)$')
 						->map((_, v) => ({
 									tag:     v[0],
-									search:  '*' .. v[0] .. '*',
+									search:  escape('*' .. v[0] .. '*', '\*^$.+[(?')->escape('\'),
 									file:    substitute(v[1], '.*/', '', ''),
 									path:    simplify(dir .. '/' .. v[1]),
 									dir:     simplify(dir .. '/' .. v[1])->substitute('^' .. $MYVIMDIR .. '\(pack/\)\?', '', '')->substitute('/doc/[^/]\+$', '', ''),
@@ -62,7 +62,7 @@ export def HelpTags(): list<string>
 	return deepcopy(tags_list)
 		->sort((d1, d2) => d1.tag >? d2.tag ? 1 : ( d1.tag <? d2.tag ? -1 : d1.priority - d2.priority ))
 		->uniq((d1, d2) => d1.tag ==# d2.tag && d1.lang ==# d2.lang ? 0 : 1)
-		->map((_, v) => printf("\x1B[32m%-" .. tag_width .. "S\x1B[0m\t%2S\t%-15S\t%S\t%S\t%s",
+		->map((_, v) => printf("\x1B[32m%-" .. tag_width .. "S\x1B[0m\t%-2S\t%-15S\t%-S\t%S\t%S",
 		                	v.tag, v.lang, v.file, v.dir, v.path, v.search))
 enddef
 
