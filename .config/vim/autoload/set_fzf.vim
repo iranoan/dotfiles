@@ -184,7 +184,7 @@ function set_fzf#vim(cmd) abort
 " \ #{mode: 'x, key: '<silent><Leader>fb', method: 1, cmd: 'Buffers'},
 " \ ↑ vim-signature のデフォルト・キーマップをこちらに再定義
 	delcommand GitFiles " vim-fugitive の :Git と重なり使いにくくなる
-	delcommand HelpTags
+	delcommand Helptags
 endfunction
 
 def set_fzf#FZF_open(arg: list<string>): void

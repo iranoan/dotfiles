@@ -275,12 +275,13 @@ augroup END
 augroup SetNeoyank
 	autocmd!
 	autocmd TextYankPost * packadd neoyank.vim
-		| silent call neoyank#_append()
-		| silent call neoyank#_yankpost()
+		| silent neoyank#_append()
+		| silent neoyank#_yankpost()
 		| autocmd! SetNeoyank
 		| augroup! SetNeoyank
 	autocmd TextChanged * packadd neoyank.vim
-		| silent call neoyank#_append()
+		| silent neoyank#_append()
+		| silent neoyank#_yankpost()
 		| autocmd! SetNeoyank
 		| augroup! SetNeoyank
 augroup END
