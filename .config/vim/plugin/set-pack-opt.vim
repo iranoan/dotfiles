@@ -271,6 +271,20 @@ augroup SetFernSync # tabedit, fern.vim, fzf.vim サイクリック依存
 		| delfunction set_fern#main
 augroup END
 
+# yank の履歴 https://github.com/Shougo/neoyank.vim {{{2
+augroup SetNeoyank
+	autocmd!
+	autocmd TextYankPost * packadd neoyank.vim
+		| silent call neoyank#_append()
+		| silent call neoyank#_yankpost()
+		| autocmd! SetNeoyank
+		| augroup! SetNeoyank
+	autocmd TextChanged * packadd neoyank.vim
+		| silent call neoyank#_append()
+		| autocmd! SetNeoyank
+		| augroup! SetNeoyank
+augroup END
+
 # autocmd 削除を纏められる→++once が使えるタイプ {{{1
 augroup SetPackOpt
 	autocmd!

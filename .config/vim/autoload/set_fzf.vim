@@ -31,6 +31,7 @@ function set_fzf#main() abort
 				\ 'ctrl-o': function('set_fzf#FZF_open')
 				\ } " 他で sink を使うと、この設定は無視されるので注意←:help fzf-global-options-supported-by-fzf#wrap
 				" \ 'ctrl-e': 'edit', カーソルを入力の末尾移動と重なる
+	let $FZF_DEFAULT_OPTS = substitute($FZF_DEFAULT_OPTS, '--footer "[^"]\+"', '', 'g')
 endfunction
 
 function set_fzf#help() abort
@@ -45,11 +46,16 @@ function set_fzf#help() abort
 endfunction
 
 function set_fzf#neoyank(cmd) abort
-	" yank の履歴 https://github.com/Shougo/neoyank.vim {{{
-	packadd neoyank.vim " }}}
 	if !pack_manage#IsInstalled('fzf')
 		call set_fzf#main()
 		delfunction set_fzf#main
+	endif
+	if !pack_manage#IsInstalled('neoyank.vim')
+		packadd neoyank.vim
+		silent call neoyank#_append()
+		silent call neoyank#_yankpost()
+		autocmd! SetNeoyank
+		augroup! SetNeoyank
 	endif
 	call pack_manage#SetMAP('fzf-neoyank', a:cmd, [
 				\ #{mode: 'n', key: '<Leader>fy', method: 1, cmd: 'FZFNeoyank'},
@@ -63,7 +69,7 @@ function set_fzf#tabs() abort
 		call set_fzf#main()
 		delfunction set_fzf#main
 	endif
-	let g:fzf_tabs_options = ['--preview', '~/bin/fzf-preview.sh {2}']
+	let g:fzf_tabs_options = ['--preview', '~/bin/fzf-preview.sh {2}', '--footer', 'Ctrl-]/R/K:Preview On/Off/Up/Down｜F/B:PageUP/Down｜G:Sxiv｜O:Open｜V:Vim']
 	call pack_manage#SetMAP('fzf-tabs', 'FZFTabOpen', [
 				\ #{mode: 'n', key: '<Leader>ft', method: 1, cmd: 'FZFTabOpen'},
 				\ #{mode: 'v', key: '<Leader>ft', method: 1, cmd: 'FZFTabOpen'},
@@ -81,6 +87,7 @@ function set_fzf#vim(cmd) abort
 						\ '--multi', '--margin=0%', '--padding=0%',
 						\ '--preview', '~/bin/fzf-preview.sh {}',
 						\ '--bind', 'ctrl-o:execute-silent(xdg-open {})',
+						\ '--footer', 'Ctrl-]/R/K:Preview On/Off/Up/Down｜F/B:PageUP/Down｜G:Sxiv｜O:Open｜V:Vim'
 						\ ]
 	if get(g:, 'colors_name', '') ==# 'solarized'
 		let s:fzf_options += ['--color', &background] " ↑上の色指定が無視される
