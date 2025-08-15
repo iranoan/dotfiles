@@ -2,11 +2,13 @@ scriptencoding utf-8
 " スクリプト・ローカルな関数を置き換える
 " 元ネタ https://thinca.hatenablog.com/entry/20111228/1325077104
 
-function hook_function#main(from_f, to_f, func)
-	" from_f:   置き換え元の関数が書かれたファイル・パス
-	" to_f:     置き換え先の関数が書かれたファイル・パス
-	" func:     関数名
-	exec "function! " .. s:get_func(a:from_f) .. a:func .. "(...)\nreturn call('" .. s:get_func(a:to_f) .. a:func .. "', a:000)\nendfunction"
+function hook_function#main(from_f, to_f, from_func, to_func)
+	" from_f:    置き換え元の関数が書かれたファイル・パス
+	" to_f:      置き換え先の関数が書かれたファイル・パス
+	" from_func: 書き換え元の関数名
+	" to_func:   書き換え先の関数名
+	echomsg "function! " .. s:get_func(a:from_f) .. a:from_func .. "(...)\nreturn call('" .. s:get_func(a:to_f) .. a:to_func .. "', a:000)\nendfunction"
+	exec "function! " .. s:get_func(a:from_f) .. a:from_func .. "(...)\nreturn call('" .. s:get_func(a:to_f) .. a:to_func .. "', a:000)\nendfunction"
 endfunction
 
 def s:get_func(fname: string): string
