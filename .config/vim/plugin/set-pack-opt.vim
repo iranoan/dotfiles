@@ -548,7 +548,7 @@ xnoremap <silent><Leader>fH <Cmd>call set_fzf#help() <Bar> delfunction set_fzf#h
 
 # yank の履歴 https://github.com/justinhoward/fzf-neoyank {{{2
 nnoremap <Leader>fy <Cmd>call set_fzf#neoyank('FZFNeoyank') <Bar> delfunction set_fzf#neoyank<CR>
-nnoremap <Leader>fY <Cmd>call set_fzf#neoyank('FZFNeoyank # P') <Bar> delfunction set_fzf#neoyank<CR>
+nnoremap <Leader>fY <Cmd>call set_fzf#neoyank('FZFNeoyank " P') <Bar> delfunction set_fzf#neoyank<CR>
 xnoremap <Leader>fy <Cmd>call set_fzf#neoyank('FZFNeoyankSelection') <Bar> delfunction set_fzf#neoyank<CR>
 
 # fzf を使ってタブ・ページの切り替え $MYVIMDIR/pack/my-plug/opt/fzf-tabs/ {{{2

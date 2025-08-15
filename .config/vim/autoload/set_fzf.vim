@@ -53,7 +53,7 @@ function set_fzf#neoyank(cmd) abort
 	endif
 	call pack_manage#SetMAP('fzf-neoyank', a:cmd, [
 				\ #{mode: 'n', key: '<Leader>fy', method: 1, cmd: 'FZFNeoyank'},
-				\ #{mode: 'n', key: '<Leader>fY', method: 1, cmd: 'FZFNeoyank # P'},
+				\ #{mode: 'n', key: '<Leader>fY', method: 1, cmd: 'FZFNeoyank " P'},
 				\ #{mode: 'x', key: '<Leader>fy', method: 1, cmd: 'FZFNeoyankSelection'},
 				\ ] )
 endfunction
@@ -158,8 +158,6 @@ function set_fzf#vim(cmd) abort
 				\ #{mode: 'x', key: '<silent><Leader>fg', method: 1, cmd: 'GFiles?'},
 				\ #{mode: 'n', key: '<silent><Leader>fh', method: 1, cmd: 'HISTORY'},
 				\ #{mode: 'x', key: '<silent><Leader>fh', method: 1, cmd: 'HISTORY'},
-				\ #{mode: 'n', key: '<silent><Leader>fH', method: 1, cmd: 'HelpTags'},
-				\ #{mode: 'x', key: '<silent><Leader>fH', method: 1, cmd: 'HelpTags'},
 				\ #{mode: 'n', key: '<silent><Leader>fl', method: 1, cmd: 'BLines'},
 				\ #{mode: 'x', key: '<silent><Leader>fl', method: 1, cmd: 'BLines'},
 				\ #{mode: 'n', key: '<silent><Leader>fm', method: 1, cmd: 'Marks'},
@@ -179,6 +177,7 @@ function set_fzf#vim(cmd) abort
 " \ #{mode: 'x, key: '<silent><Leader>fb', method: 1, cmd: 'Buffers'},
 " \ ↑ vim-signature のデフォルト・キーマップをこちらに再定義
 	delcommand GitFiles " vim-fugitive の :Git と重なり使いにくくなる
+	delcommand HelpTags
 endfunction
 
 def set_fzf#FZF_open(arg: list<string>): void
