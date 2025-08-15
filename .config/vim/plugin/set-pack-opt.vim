@@ -274,16 +274,14 @@ augroup END
 # yank の履歴 https://github.com/Shougo/neoyank.vim {{{2
 augroup SetNeoyank
 	autocmd!
-	autocmd TextYankPost * packadd neoyank.vim
-		| silent neoyank#_append()
-		| silent neoyank#_yankpost()
+	autocmd TextYankPost * set_fzf#neoyank_sub()
 		| autocmd! SetNeoyank
 		| augroup! SetNeoyank
-	autocmd TextChanged * packadd neoyank.vim
-		| silent neoyank#_append()
-		| silent neoyank#_yankpost()
+		| delfunction set_fzf#neoyank_sub
+	autocmd TextChanged * set_fzf#neoyank_sub()
 		| autocmd! SetNeoyank
 		| augroup! SetNeoyank
+		| delfunction set_fzf#neoyank_sub
 augroup END
 
 # autocmd 削除を纏められる→++once が使えるタイプ {{{1

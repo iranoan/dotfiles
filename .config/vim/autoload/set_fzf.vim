@@ -46,17 +46,23 @@ function set_fzf#help() abort
 				\ ] )
 endfunction
 
+function set_fzf#neoyank_sub() abort
+	let g:neoyank#file = $MYVIMDIR .. "cache/neoyank_history.json"
+	packadd neoyank.vim
+	silent call neoyank#_append()
+	silent call neoyank#_yankpost()
+endfunction
+
 function set_fzf#neoyank(cmd) abort
 	if !pack_manage#IsInstalled('fzf')
 		call set_fzf#main()
 		delfunction set_fzf#main
 	endif
 	if !pack_manage#IsInstalled('neoyank.vim')
-		packadd neoyank.vim
-		silent call neoyank#_append()
-		silent call neoyank#_yankpost()
+		call set_fzf#neoyank_sub()
 		autocmd! SetNeoyank
 		augroup! SetNeoyank
+		delfunction set_fzf#neoyank_sub
 	endif
 	call pack_manage#SetMAP('fzf-neoyank', a:cmd, [
 				\ #{mode: 'n', key: '<Leader>fy', method: 1, cmd: 'FZFNeoyank'},
