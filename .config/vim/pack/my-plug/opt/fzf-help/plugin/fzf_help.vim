@@ -16,7 +16,8 @@ command! HelpTags call fzf#run({
 			\ 	'--preview', awk
 			\ 		.. ' cline=' .. (float2nr(get(g:, 'fzf_layout', {window: {width: 0.9, height: 0.6}})->get('window', {width: 0.9, height: 0.6}).height * &lines / 2) - 1)
 			\ 		.. ' sword={6} {5}'
-			\ 	],
+			\ 	]
+			\ + get(g:, 'fzf_help', []),
 			\ window: get(g:, 'fzf_layout', {window: {width: 0.9, height: 0.6}})->get('window', {width: 0.9, height: 0.6})
 			\ }
 			\ )

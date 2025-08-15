@@ -39,6 +39,7 @@ function set_fzf#help() abort
 		call set_fzf#main()
 		delfunction set_fzf#main
 	endif
+	let g:fzf_help = ['--footer', '<C-]/R/K>:Preview On/Off/Up/Down｜<Enter>:Open']
 	call pack_manage#SetMAP('fzf-help', 'HelpTags', [
 				\ #{mode: 'n', key: '<Leader>fH', method: 1, cmd: 'HelpTags'},
 				\ #{mode: 'x', key: '<Leader>fH', method: 1, cmd: 'HelpTags'},
