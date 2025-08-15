@@ -39,6 +39,7 @@
 
 # 履歴
 /.config/bash/history
+/.config/vim/cache/
 
 # プラグインの設定ファイル
 !/.vim/pack/github/opt/vimspector/configurations/
