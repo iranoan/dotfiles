@@ -39,7 +39,7 @@ function set_fzf#help() abort
 		call set_fzf#main()
 		delfunction set_fzf#main
 	endif
-	let g:fzf_help = ['--footer', '<C-]/R/K>:Preview On/Off/Up/Down｜<Enter>:Open']
+	let g:fzf_help = ['--footer', '<C-]/R/K/^>:Preview On/Off/Up/Down/[No]Wrap｜<Enter>:Open｜W:[No]Wrap']
 	call pack_manage#SetMAP('fzf-help', 'HelpTags', [
 				\ #{mode: 'n', key: '<Leader>fH', method: 1, cmd: 'HelpTags'},
 				\ #{mode: 'x', key: '<Leader>fH', method: 1, cmd: 'HelpTags'},
@@ -76,7 +76,7 @@ function set_fzf#tabs() abort
 		call set_fzf#main()
 		delfunction set_fzf#main
 	endif
-	let g:fzf_tabs_options = ['--preview', '~/bin/fzf-preview.sh {2}', '--footer', 'Ctrl-]/R/K:Preview On/Off/Up/Down｜F/B:PageUP/Down｜G:Sxiv｜O:Open｜V:Vim']
+	let g:fzf_tabs_options = ['--preview', '~/bin/fzf-preview.sh {2}', '--footer', 'Ctrl-]/R/K/^:Preview On/Off/Up/Down/[No]Wrap｜F/B:PageUP/Down｜G:Sxiv｜O:Open｜V:Vim｜W:[No]Wrap']
 	call pack_manage#SetMAP('fzf-tabs', 'FZFTabOpen', [
 				\ #{mode: 'n', key: '<Leader>ft', method: 1, cmd: 'FZFTabOpen'},
 				\ #{mode: 'v', key: '<Leader>ft', method: 1, cmd: 'FZFTabOpen'},
@@ -94,7 +94,7 @@ function set_fzf#vim(cmd) abort
 						\ '--multi', '--margin=0%', '--padding=0%',
 						\ '--preview', '~/bin/fzf-preview.sh {}',
 						\ '--bind', 'ctrl-o:execute-silent(xdg-open {})',
-						\ '--footer', 'Ctrl-]/R/K:Preview On/Off/Up/Down｜F/B:PageUP/Down｜G:Sxiv｜O:Open｜V:Vim'
+						\ '--footer', 'Ctrl-]/R/K/^:Preview On/Off/Up/Down/[No]Wrap｜F/B:PageUP/Down｜G:Sxiv｜O:Open｜V:Vim｜W:[No]Wrap'
 						\ ]
 	if get(g:, 'colors_name', '') ==# 'solarized'
 		let s:fzf_options += ['--color', &background] " ↑上の色指定が無視される
@@ -122,7 +122,7 @@ function set_fzf#vim(cmd) abort
 					\ <bang>0
 					\ )
 				\ )
-	let $FZF_DEFAULT_OPTS = substitute($FZF_DEFAULT_OPTS, '--footer \zs\("[^"]\+"\|''[^'']\+''\)', '"<C-]/R/K>:Preview On/Off/Up/Down｜<C-F/B>:PageUP/Down｜<C-G>:edit｜<C-T>/<Enter>:tabedit｜<C-S>:split｜<C-V>:vsplit｜<C-O>:Open"', 'g')
+	let $FZF_DEFAULT_OPTS = substitute($FZF_DEFAULT_OPTS, '--footer \zs\("[^"]\+"\|''[^'']\+''\)', '"<C-]/R/K/^>:Preview On/Off/Up/Down｜<C-F/B>:PageUP/Down｜<C-G>:edit｜<C-T>/<Enter>:tabedit｜<C-S>:split｜<C-V>:vsplit｜<C-O>:Open｜W:[No]Wrap"', 'g')
 	" let g:fzf_vim = #{
 	" 			\ buffers_jump: 1,
 	" 			\ preview_window: ['right:50%', 'ctrl-]'],
