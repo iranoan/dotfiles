@@ -471,7 +471,7 @@ nnoremap <silent><Leader>o <Cmd>call set_vista_voom#Load() <Bar> delfunction set
 nnoremap <silent><space> <Cmd>call set_page_down#main() <Bar> delfunction set_page_down#main<CR>
 
 # Undo をツリー表示で行き来する https://github.com/mbbill/undotree {{{2
-nnoremap <silent><Leader>u <Cmd>call set_undotree#main() <Bar> delfunction set_undotree#main()<CR>
+nnoremap <silent><Leader>u <Cmd>call set_undotree#main() <Bar> delfunction set_undotree#main<CR>
 
 # https://github.com/puremourning/vimspector {{{2
 nnoremap <Leader>df       <Cmd>call set_vimspector#main('call vimspector#AddFunctionBreakpoint(''<cexpr>'')') <Bar> delfunction set_vimspector#main<CR>
