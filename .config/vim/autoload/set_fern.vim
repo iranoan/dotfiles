@@ -91,39 +91,21 @@ enddef
 
 def set_fern#undo_ftplugin(): void
 	setlocal number< foldcolumn<
-	nunmap <buffer>!
-	nunmap <buffer>-
-	nunmap <buffer>.
-	nunmap <buffer>/
-	nunmap <buffer><C-C>
-	nunmap <buffer><C-H>
-	nunmap <buffer><C-K>
-	nunmap <buffer><C-L>
-	nunmap <buffer><F5>
-	nunmap <buffer><S-Space>
-	nunmap <buffer><Space>
-	nunmap <buffer><leader>f
-	nunmap <buffer><leader>x
-	nunmap <buffer>?
-	nunmap <buffer>D
-	nunmap <buffer>P
-	nunmap <buffer>Y
-	nunmap <buffer>a
-	nunmap <buffer>c
-	nunmap <buffer>d
-	nunmap <buffer>f
-	nunmap <buffer>h
-	nunmap <buffer>i
-	nunmap <buffer>l
-	nunmap <buffer>o
-	nunmap <buffer>p
-	nunmap <buffer>q
-	nunmap <buffer>r
-	nunmap <buffer>s
-	nunmap <buffer>t
-	nunmap <buffer>x
-	nunmap <buffer>y
+	mapclear <buffer>
 	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
+enddef
+
+def s:visible_popup(): bool
+	var ls: list<number> = popup_list()
+	if ls == []
+		return false
+	endif
+	for i in ls
+		if popup_getpos(i).visible
+			return true
+		endif
+	endfor
+	return false
 enddef
 
 def s:init_fern(): void
@@ -145,7 +127,7 @@ def s:init_fern(): void
 	nnoremap <buffer>d               <Plug>(fern-action-trash=)y<CR>
 	nnoremap <buffer>s               <Plug>(fern-action-open:right)
 	nnoremap <buffer>t               <Plug>(fern-action-open:tabedit)
-	nnoremap <expr><buffer>o         set_fern#open(1)
+	nnoremap <expr><buffer>o         <SID>open(1)
 	nnoremap <buffer>r               <Plug>(fern-action-rename)
 	nnoremap <buffer>y               <Plug>(fern-action-yank)
 	nnoremap <buffer>x               <Cmd>call <SID>OpenSystem()<CR>
@@ -159,15 +141,15 @@ def s:init_fern(): void
 	nnoremap <buffer>/               <Cmd>BLines<CR>
 	# fern-preview.vim 用
 	nnoremap <buffer>p               <Plug>(fern-action-preview:auto:toggle)
-	nnoremap <expr><buffer>q         popup_list() != [] ? '<Plug>(fern-action-preview:auto:toggle)' : ':quit<CR>'
-	nnoremap <expr><buffer><Space>   popup_list() != [] ? '<Plug>(fern-action-preview:scroll:down:half)' : '<PageDown>'
-	nnoremap <expr><buffer><S-Space> popup_list() != [] ? '<Plug>(fern-action-preview:scroll:up:half)' : '<PageUp>'
+	nnoremap <expr><buffer>q         <SID>visible_popup() ? '<Plug>(fern-action-preview:auto:toggle)' : ':quit<CR>'
+	nnoremap <expr><buffer><Space>   <SID>visible_popup() ? '<Plug>(fern-action-preview:scroll:down:half)' : '<PageDown>'
+	nnoremap <expr><buffer><S-Space> <SID>visible_popup() ? '<Plug>(fern-action-preview:scroll:up:half)' : '<PageUp>'
 	# fzf-mapping-fzf.vim
 	nnoremap <buffer><leader>f       <Plug>(fern-action-fzf-files)
 	nnoremap <buffer>f               <Plug>(fern-action-fzf-files)
 	# ranger like collapse/expand
-	nnoremap <expr><buffer>h         set_fern#open(-1)
-	nnoremap <expr><buffer>l         set_fern#open(0)
+	nnoremap <expr><buffer>h         <SID>open(-1)
+	nnoremap <expr><buffer>l         <SID>open(0)
 	if exists('b:undo_ftplugin')
 		if b:undo_ftplugin !~#  '\<call set_fern#undo_ftplugin()'
 			b:undo_ftplugin ..= ' | call set_fern#undo_ftplugin()'
@@ -187,7 +169,7 @@ def g:Fern_mapping_fzf_customize_option(spec: dict<any>): dict<any>
 	# endif
 enddef
 
-def set_fern#open(cd: number): string
+def s:open(cd: number): string
 	if &filetype != 'fern'
 		return ''
 	endif
@@ -213,26 +195,20 @@ def set_fern#open(cd: number): string
 		return "\<Plug>(fern-action-collapse)"
 	else
 		var mime: string = systemlist('file --mime-type --brief ' .. resolve(node._path))[0]
-		if mime =~# '^application/xhtml+xml$'
-				|| mime =~# '^image/svg+xml$'
+		if index(['application/xhtml+xml', 'image/svg+xml', 'application/json'], mime) != -1
+				|| mime[0 : 4] ==# 'text/'
 			if len(gettabinfo(tabpagenr())[0].windows) == 1
 				return "\<Plug>(fern-action-open:right)"
 			else
 				return "\<Plug>(fern-action-open:select)"
 			endif
-		elseif mime[0 : 4] !=# 'text/'
+		else
 			if executable(node._path)
 				execute 'topleft terminal ' .. node._path
 			else
 				system('xdg-open ' .. node._path .. ' &')
 			endif
 			return ''
-		else
-			if len(gettabinfo(tabpagenr())[0].windows) == 1
-				return "\<Plug>(fern-action-open:right)"
-			else
-				return "\<Plug>(fern-action-open:select)"
-			endif
 		endif
 	endif
 enddef
