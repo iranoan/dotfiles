@@ -21,11 +21,6 @@ export def Reset(ft: string): void
 	if localset != []
 		execute 'setlocal' join(localset, '< ') .. '<'
 	endif
-	# <buffer> ローカルの map 削除
-	for m in split(execute('map <buffer>'), '\n')
-				->filter((_, v) => v =~# '^[ cilnostvx] ')
-				->map((_, v) => substitute(v, '^\([ cilnostvx]\)  \([^ ]\+\) .*', '\1unmap <buffer>\2', ''))
-		execute m
-	endfor
+	mapclear <buffer>
 	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
 enddef
