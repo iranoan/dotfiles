@@ -27,16 +27,4 @@ function set_md_preview#main() abort
 			endfor
 		endif
 	endfor
-	augroup MyMarkdown
-		autocmd!
-		autocmd FileType markdown nnoremap <silent><buffer><Leader>v <Cmd>call mkdp#util#open_preview_page()<CR>
-	augroup END
-	augroup MKDP_REFRESH_INIT1
-		" ↓のエラー対策
-		" Error detected while processing BufHidden Autocommands for "<buffer=2>"..function mkdp#rpc#preview_close[11]..mkdp#autocmd#clear_buf:
-		" line    1:
-		" E216: No such group or event: MKDP_REFRESH_INIT1
-		autocmd!
-		autocmd FileType markdown echo
-	augroup END
 endfunction

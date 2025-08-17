@@ -4,7 +4,7 @@ scriptencoding utf-8
 
 export def Reset(ft: string): void
 	if &filetype ==# ft
-		unlet! b:did_ftplugin_user_after
+		unlet! b:did_ftplugin_user_after b:did_ftplugin_setpack_after
 		# ↑がなく直ちに終わらせると b:undo_ftplugin に
 		# setloval {option}<
 		# があると、$MYVIMDIR/after/ftplugin の設定も元に戻される

@@ -227,14 +227,12 @@ augroup TabEdit # tabedit, fern.vim, fzf.vim サイクリック依存
 		| augroup! TabEdit
 		| delfunction set_tabedit#main
 augroup END
-augroup SetTabEditVim # Vim で再設定されてしまう
-	autocmd!
-	autocmd FileType vim nnoremap <buffer><silent>gf :TabEdit <C-R><C-P><CR>
-augroup END
+# Vim で再設定されてしまう分は $MYVIMDIR/pack/my-plug/start/set-pack/after/ftplugin/vim.vim
 nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 # nnoremap <silent>gf :TabEdit <cfile><CR> " ← 存在しなくても開く <C-R><C-F> と同じ
 
 # grep で幾つかのオプションをデフォルトで付けたり、補完を可能にする $MYVIMDIR/pack/my-plug/opt/gnu-grep/ {{{2
+# statusline  w:quickfix_title 変更は $MYVIMDIR/pack/my-plug/start/set-pack/ftplugin/qf.vim
 augroup SetGnuGrep
 	autocmd!
 	autocmd CmdlineEnter * packadd gnu-grep
@@ -324,6 +322,21 @@ augroup SetPackOpt
 	# vim のヘルプ・ファイルから Readme.md を作成する https://github.com/LeafCage/vimhelpgenerator {{{2
 	autocmd CmdUndefined VimHelpGenerator ++once packadd vimhelpgenerator
 
+	# タグで挟む $MYVIMDIR/pack/my-plug/opt/surroundTag/ {{{2
+	# vim-surround では複数のタグを一度につけたり、クラス指定まで含む場合タイプ量が多くなる
+	# 実際のキーマップは $MYVIMDIR/pack/my-plug/start/set-pack/ftplugin/html.vim
+	autocmd CmdUndefined SurroundTag ++once packadd surroundTag
+
+	# Markdown マッピング $MYVIMDIR/pack/my-plug/opt/map-markdown/ {{{2
+	# 実際のキーマップは $MYVIMDIR/pack/my-plug/start/set-pack/ftplugin/markdown.vim
+	autocmd FuncUndefined map_markdown#* ++once packadd map-markdown
+
+	# 編集中の Markdown をブラウザでプレビュー https://github.com/iamcco/markdown-preview.nvim {{{2
+	# do-setup: cd app && npx --yes yarn install
+	# help がないので上記 URL か $MYVIMDIR/pack/github/opt/markdown-preview.nvim/README.md
+	# 実際のキーマップは $MYVIMDIR/pack/my-plug/start/set-pack/ftplugin/markdown.vim
+	autocmd FuncUndefined mkdp#* ++once set_md_preview#main() | delfunction set_md_preview#main
+
 	# conky シンタックス https://github.com/smancill/conky-syntax.vim {{{2 ←署名を見ると同じ開発元だが、標準パッケージに含まれているものだと上手く動作しない
 	autocmd BufNewFile,BufRead conkyrc,conky.conf ++once packadd conky-syntax.vim
 		| set filetype=conkyrc
@@ -352,10 +365,6 @@ augroup SetPackOpt
 	autocmd FileType tex ++once packadd vim-textobj-latex
 		| set_vim_tex_fold#main()
 		| delfunction set_vim_tex_fold#main
-
-	# Markdown マッピング $MYVIMDIR/pack/my-plug/opt/map-markdown/ {{{2
-	autocmd FileType markdown ++once set_map_markdown#main()
-		| delfunction set_map_markdown#main
 
 augroup END # }}}1
 
@@ -416,9 +425,9 @@ augroup loadVimTextObjIfdef
 augroup END
 # a#, i# に割当
 
-# 関数をテキストオプジェクト化 https://github.com/kana/vim-textobj-function {{{2
-# 判定にシンタックスを用いる https://github.com/haya14busa/vim-textobj-function-syntax {{{2 }}}
+# 判定にシンタックスを用いる https://github.com/haya14busa/vim-textobj-function-syntax {{{2
 # depends = ['vim-textobj-user']
+# 関数をテキストオプジェクト化 https://github.com/kana/vim-textobj-function {{{2
 # af, if に割当
 augroup loadTextObjFunc
 	autocmd!
@@ -655,21 +664,3 @@ for [n1, q1] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.':
 		endif
 	endfor
 endfor
-# 編集中の Markdown をブラウザでプレビュー https://github.com/iamcco/markdown-preview.nvim {{{2
-# do-setup: cd app && npx --yes yarn install
-# help がないので上記 URL か $MYVIMDIR/pack/github/opt/markdown-preview.nvim/README.md
-augroup MyMarkdown
-	autocmd!
-	# autocmd FileType markdown nnoremap <silent><buffer><Leader>v <Cmd>call mkdp#util#open_preview_page()<CR>
-	autocmd FileType markdown nnoremap <silent><buffer><Leader>v <Cmd>call set_md_preview#main() <Bar> delfunction set_md_preview#main<CR>
-augroup END
-
-# タグで挟む $MYVIMDIR/pack/my-plug/opt/surroundTag/ {{{2
-# vim-surround では複数のタグを一度につけたり、クラス指定まで含む場合タイプ量が多くなる
-augroup SurroundTag
-	autocmd!
-	autocmd FileType html,xhtml nnoremap <silent><buffer><leader>tt <Cmd>call set_surroundTag#main('SurroundTag <span\ class="tcy">') <Bar> delfunction set_surroundTag#main<CR>
-	autocmd FileType html,xhtml xnoremap <silent><buffer><leader>tt <Cmd>call set_surroundTag#main('SurroundTag <span\ class="tcy">') <Bar> delfunction set_surroundTag#main<CR>
-	autocmd FileType html,xhtml nnoremap <silent><buffer><leader>tr <Cmd>call set_surroundTag#main('SurroundTag <ruby> <rp>(</rp><rt></rt><rp>)</rp>') <Bar> delfunction set_surroundTag#main<CR>
-	autocmd FileType html,xhtml xnoremap <silent><buffer><leader>tr <Cmd>call set_surroundTag#main('SurroundTag <ruby> <rp>(</rp><rt></rt><rp>)</rp>') <Bar> delfunction set_surroundTag#main<CR>
-augroup END
