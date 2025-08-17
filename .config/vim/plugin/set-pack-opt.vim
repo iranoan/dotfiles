@@ -237,18 +237,14 @@ nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 # grep で幾つかのオプションをデフォルトで付けたり、補完を可能にする $MYVIMDIR/pack/my-plug/opt/gnu-grep/ {{{2
 augroup SetGnuGrep
 	autocmd!
-	autocmd FileType qf packadd gnu-grep
+	autocmd CmdlineEnter * packadd gnu-grep
 		| autocmd! SetGnuGrep
 		| augroup! SetGnuGrep
-	autocmd CmdlineEnter * packadd gnu-grep
+	autocmd FuncUndefined gnu_grep#* packadd gnu-grep
 		| autocmd! SetGnuGrep
 		| augroup! SetGnuGrep
 augroup END
 g:gnu_grep = {'exclude-dir': '{.git,.cache,.thumbnail,cache,thumbnail,undo}'}
-augroup GnuGrep
-	autocmd!
-	autocmd FileType qf gnu_grep#SetQfTitle()
-augroup END
 
 # 日本語ヘルプ https://github.com/vim-jp/vimdoc-ja {{{2
 augroup VimDocJa
