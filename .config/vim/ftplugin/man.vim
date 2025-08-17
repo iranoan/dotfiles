@@ -14,3 +14,10 @@ setlocal nospell
 setlocal foldmethod=indent foldenable foldlevelstart=99 foldcolumn=3
 " setlocal iskeyword=@,40,41,48-57,_,192-255,.,-   " セクション指定のために () を追加 (man(3) の様に () を含みたい時は、<C-]> を使えば良い (iskeyword に含めてしまうと関数 strstr(char) 問板記述のときに扱いにくくなる))
 setlocal keywordprg=:Man
+
+" Undo {{{1
+if exists('b:undo_ftplugin')
+	let b:undo_ftplugin ..= ' | call undo_ftplugin#Reset("man")'
+else
+	let b:undo_ftplugin = 'call undo_ftplugin#Reset("man")'
+endif

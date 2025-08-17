@@ -27,3 +27,10 @@ setlocal breakindentopt=shift:0,min:10,list:-1
 # # }}}
 # 打ち消し線↓下付き添字と重なる反応が遅くなる
 # inoremap <buffer><expr>~~      '~~~~<Left><Left>'
+
+# Undo {{{1
+if exists('b:undo_ftplugin')
+	b:undo_ftplugin ..= ' | call undo_ftplugin#Reset("markdown")'
+else
+	b:undo_ftplugin = 'call undo_ftplugin#Reset("markdown")'
+endif

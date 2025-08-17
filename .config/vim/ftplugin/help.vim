@@ -1,10 +1,10 @@
 vim9script
 # Vim help 用の設定
 scriptencoding utf-8
+
 if exists('b:did_ftplugin_user')
 	finish
 endif
-
 b:did_ftplugin_user = 1
 
 # ファイルタイプ別のグローバル設定 {{{1
@@ -34,3 +34,10 @@ nnoremap <buffer><tab>                    <Cmd>call search('\|\zs.\{-}\|', 'w')<
 nnoremap <buffer><S-tab>                  <Cmd>call search('\|\zs.\{-}\|', 'wb')<CR>:nohlsearch<CR>
 nnoremap <buffer><expr><CR>               &buftype ==# 'help' ? '<CR>'  : ':help ' .. expand('<cword>') .. '<CR>'
 nnoremap <buffer><expr><C-]>              &buftype ==# 'help' ? '<C-]>' : ':help ' .. expand('<cword>') .. '<CR>'
+
+# Undo {{{1
+if exists('b:undo_ftplugin')
+	b:undo_ftplugin ..= ' | call undo_ftplugin#Reset("help")'
+else
+	b:undo_ftplugin = 'call undo_ftplugin#Reset("help")'
+endif

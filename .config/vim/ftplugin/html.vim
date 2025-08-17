@@ -106,3 +106,10 @@ inoremap <expr><buffer>==          &filetype ==# 'html' ? '&equiv;'  : '&#8801;'
 nnoremap <buffer>gf                <Cmd>call g:GF()<CR>
 # }}}
 # }}}1
+
+# Undo {{{1
+if exists('b:undo_ftplugin')
+	b:undo_ftplugin ..= '| call undo_ftplugin#Reset("html")'
+else
+	b:undo_ftplugin = 'call undo_ftplugin#Reset("html")'
+endif

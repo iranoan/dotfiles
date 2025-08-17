@@ -98,3 +98,10 @@ def s:xbb(): void # カーソル位置のパスの ebb -x -O の出力の一部 
 	echo 'cursor postion do not write path.'
 	echohl None
 enddef
+
+" Undo {{{1
+if exists('b:undo_ftplugin')
+	let b:undo_ftplugin ..= ' | call undo_ftplugin#Reset("tex")'
+else
+	let b:undo_ftplugin = 'call undo_ftplugin#Reset("tex")'
+endif
