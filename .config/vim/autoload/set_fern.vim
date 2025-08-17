@@ -194,7 +194,7 @@ def s:open(cd: number): string
 	elseif status == helper.STATUS_EXPANDED
 		return "\<Plug>(fern-action-collapse)"
 	else
-		var mime: string = systemlist('file --mime-type --brief ' .. resolve(node._path))[0]
+		var mime: string = systemlist('mimetype --brief ' .. resolve(node._path))[0]
 		if index(['application/xhtml+xml', 'image/svg+xml', 'application/json'], mime) != -1
 				|| mime[0 : 4] ==# 'text/'
 			if len(gettabinfo(tabpagenr())[0].windows) == 1
