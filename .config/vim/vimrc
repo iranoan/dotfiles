@@ -235,9 +235,6 @@ augroup StatusLine
 				| highlight StatusGit       term=bold cterm=bold gui=bold ctermfg=White ctermbg=6 guifg=White guibg=DarkCyan
 augroup END
 # # 全角スペースをハイライト表示←フォントで対応したのですべてコメント・アウト {{{2
-# # if &t_Co > 1                                 # ←上でターミナル起動も256色にしている
-# # 	syntax enable
-# # endif
 # if has('syntax') && !has('gui_running')        # 全角空白が可視化されるフォントを使っている
 # 	augroup ZenkakuSpace
 # 		autocmd!
@@ -332,7 +329,7 @@ augroup VIMRC
 	autocmd BufNewFile *.css        vimrc#Insert_template('CSS.css')
 	autocmd BufNewFile *.vim        vimrc#Insert_template('vim.vim')
 augroup END
-# 日本語の表示/編集に関わる設定 {{{1
+# 日本語の表示/編集、文字幅に関わる設定 {{{1
 if exists('&ambiwidth')                        # □とか○の文字があってもカーソル位置がずれないようにする
 	set ambiwidth=double
 	setcellwidths([                              # 一部を再度半角/全角明示指定
