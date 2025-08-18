@@ -95,7 +95,7 @@ export def MoveChanged(move_rear: bool): void # カーソルリストの前後�
 	echo ''
 enddef
 
-export def Insert_template(s: string): void # ~/Templates/ からテンプレート挿入 {{{2
+export def Insert_template(s: string): void # ~/Templates/ からテンプレート挿入
 	# 普通に r を使うと空行ができる
 	# ついでに適当な位置にカーソル移動
 	execute ':1r ++encoding=utf-8 ~/Templates/' .. s
