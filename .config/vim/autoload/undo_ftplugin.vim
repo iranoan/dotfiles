@@ -22,5 +22,5 @@ export def Reset(ft: string): void
 		execute 'setlocal' join(localset, '< ') .. '<'
 	endif
 	mapclear <buffer>
-	unlet! b:did_ftplugin_user_after b:did_ftplugin_user
+	unlet! b:did_ftplugin_user_after b:did_ftplugin_user b:did_ftplugin_setpack
 enddef
