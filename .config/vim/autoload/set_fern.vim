@@ -127,7 +127,7 @@ def s:init_fern(): void
 	nnoremap <buffer>d               <Plug>(fern-action-trash=)y<CR>
 	nnoremap <buffer>s               <Plug>(fern-action-open:right)
 	nnoremap <buffer>t               <Plug>(fern-action-open:tabedit)
-	nnoremap <expr><buffer>o         <SID>open(1)
+	nnoremap <buffer>o               <Cmd>call <SID>open(1)<CR>
 	nnoremap <buffer>r               <Plug>(fern-action-rename)
 	nnoremap <buffer>y               <Plug>(fern-action-yank)
 	nnoremap <buffer>x               <Cmd>call <SID>OpenSystem()<CR>
@@ -148,8 +148,8 @@ def s:init_fern(): void
 	nnoremap <buffer><leader>f       <Plug>(fern-action-fzf-files)
 	nnoremap <buffer>f               <Plug>(fern-action-fzf-files)
 	# ranger like collapse/expand
-	nnoremap <expr><buffer>h         <SID>open(-1)
-	nnoremap <expr><buffer>l         <SID>open(0)
+	nnoremap <buffer>h               <Cmd>call <SID>open(-1)<CR>
+	nnoremap <buffer>l               <Cmd>call <SID>open(0)<CR>
 	if exists('b:undo_ftplugin')
 		if b:undo_ftplugin !~#  '\<call set_fern#undo_ftplugin()'
 			b:undo_ftplugin ..= ' | call set_fern#undo_ftplugin()'
@@ -169,38 +169,39 @@ def g:Fern_mapping_fzf_customize_option(spec: dict<any>): dict<any>
 	# endif
 enddef
 
-def s:open(cd: number): string
+def s:open(cd: number): void
 	if &filetype != 'fern'
-		return ''
+		return
 	endif
 
 	var helper: dict<any> = fern#helper#new()
 	var node: dict<any> = helper.sync.get_cursor_node()
 
-	execute('lcd ' .. node._path, 'silent!')
-	if cd == -1
-		execute('lcd ' .. substitute(node._path, '/[^/]\+$', '', ''), 'silent!')
-		return "\<Plug>(fern-action-focus:parent)"
-	elseif cd == 0
-		return "\<Plug>(fern-action-expand)"
-	endif
 	if &filetype != 'fern'
-		return ''
+		return
+	elseif cd == -1
+		execute('lcd ' .. substitute(node._path, '/[^/]\+$', '', ''), 'silent!')
+		feedkeys("\<Plug>(fern-action-focus:parent)")
+		return
+	elseif cd == 0
+		feedkeys("\<Plug>(fern-action-expand)")
+		return
 	endif
 
 	var status: number = node.status
+	execute('lcd ' .. node._path, 'silent!')
 	if status == helper.STATUS_COLLAPSED
-		return "\<Plug>(fern-action-expand)"
+		feedkeys("\<Plug>(fern-action-expand)")
 	elseif status == helper.STATUS_EXPANDED
-		return "\<Plug>(fern-action-collapse)"
+		feedkeys("\<Plug>(fern-action-collapse)")
 	else
 		var mime: string = systemlist('mimetype --brief ' .. resolve(node._path))[0]
 		if index(['application/xhtml+xml', 'image/svg+xml', 'application/json'], mime) != -1
 				|| mime[0 : 4] ==# 'text/'
 			if len(gettabinfo(tabpagenr())[0].windows) == 1
-				return "\<Plug>(fern-action-open:right)"
+				feedkeys("\<Plug>(fern-action-open:right)")
 			else
-				return "\<Plug>(fern-action-open:select)"
+				feedkeys("\<Plug>(fern-action-open:select)")
 			endif
 		else
 			if executable(node._path)
@@ -208,9 +209,9 @@ def s:open(cd: number): string
 			else
 				system('xdg-open ' .. node._path .. ' &')
 			endif
-			return ''
 		endif
 	endif
+	return
 enddef
 
 def s:OpenSystem(): void # <Plug>(fern-action-open:system) はアプリを閉じるまで Vim が操作不能になる
