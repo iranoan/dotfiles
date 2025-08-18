@@ -207,7 +207,7 @@ augroup SetPairBracket
 augroup END
 
 # 補完 https://github.com/prabirshrestha/asyncomplete.vim {{{2
-augroup SetAsyncomplete # vim-lsp からも読み込まれうので、++once を使わない
+augroup SetAsyncomplete # vim-lsp からも読み込まれるので、++once を使わない
 	autocmd!
 	autocmd InsertEnter * set_asyncomplete#main()
 		| autocmd! SetAsyncomplete
@@ -227,7 +227,7 @@ augroup TabEdit # tabedit, fern.vim, fzf.vim サイクリック依存
 		| augroup! TabEdit
 		| delfunction set_tabedit#main
 augroup END
-# Vim で再設定されてしまう分は $MYVIMDIR/pack/my-plug/start/set-pack/after/ftplugin/vim.vim
+# *.vim で再設定されてしまう分は $MYVIMDIR/pack/my-plug/start/set-pack/after/ftplugin/vim.vim
 nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 # nnoremap <silent>gf :TabEdit <cfile><CR> " ← 存在しなくても開く <C-R><C-F> と同じ
 
