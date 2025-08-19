@@ -6,7 +6,7 @@ endif
 let b:did_ftplugin_user = 1
 
 " ファイルタイプ別のグローバル設定 {{{1
-" 特殊な読み込みをしているので、~/.config/vim/pack/my-plug/opt/man/plugin/man.vim で指定しないと無効
+" 特殊な読み込みをしているので、$MYVIMDIR/pack/my-plug/opt/man/plugin/man.vim で指定しないと無効
 
 " ファイルタイプ別ローカル設定 {{{1
 setlocal nolist

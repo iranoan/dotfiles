@@ -29,8 +29,6 @@ inoremap <buffer><expr><BS>    map_markdown#BackSpace()
 inoremap <buffer><expr><Tab>   map_markdown#Tab()
 # マークダウン記法は行末で「半角スペース」を「2個」連続入力すると、以降の文章を改行する→それを踏まえて、箇条書きでは行頭に同じ記号を追加する
 inoremap <buffer><expr><CR>    map_markdown#Enter()
-# }}}
 
 # プレヴュー markdown-preview.nvim {{{
 nnoremap <silent><buffer><Leader>v <Cmd>call mkdp#util#open_preview_page()<CR>
-# }}}
