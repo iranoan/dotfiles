@@ -86,6 +86,11 @@ def set_fern#FernSync(dir: string = '%:p'): void
 	else
 		execute 'topleft Fern ' .. pwd .. ' -drawer -reveal=' .. dir .. ' -toggle'
 	endif
+	clearjumps # <C-o>, <C-i> で移動後戻るった時も o の <Plug>... が効かなくなる
+	augroup FernWin
+		autocmd!
+		autocmd CursorMoved <buffer> call execute('lcd ' .. substitute(fern#helper#new().sync.get_cursor_node()._path, '/[^/]\+$', '', ''), 'silent')
+	augroup END
 	return
 enddef
 
@@ -127,7 +132,7 @@ def s:init_fern(): void
 	nnoremap <buffer>d               <Plug>(fern-action-trash=)y<CR>
 	nnoremap <buffer>s               <Plug>(fern-action-open:right)
 	nnoremap <buffer>t               <Plug>(fern-action-open:tabedit)
-	nnoremap <buffer>o               <Cmd>call <SID>open(1)<CR>
+	nnoremap <buffer>o               <Cmd>call <SID>open()<CR>
 	nnoremap <buffer>r               <Plug>(fern-action-rename)
 	nnoremap <buffer>y               <Plug>(fern-action-yank)
 	nnoremap <buffer>x               <Cmd>call <SID>OpenSystem()<CR>
@@ -141,15 +146,17 @@ def s:init_fern(): void
 	nnoremap <buffer>/               <Cmd>BLines<CR>
 	# fern-preview.vim 用
 	nnoremap <buffer>p               <Plug>(fern-action-preview:auto:toggle)
-	nnoremap <expr><buffer>q         <SID>visible_popup() ? '<Plug>(fern-action-preview:auto:toggle)' : ':quit<CR>'
+	nnoremap <expr><buffer>q         <SID>visible_popup() ? '<Plug>(fern-action-preview:auto:toggle)' : ':bwipeout!<CR>'
+	# ↑ quit にすると、再度開いた時に o の <Plug>... が効かなくなる
+	# 正しくは BufWinEnter で読み込まれた時
 	nnoremap <expr><buffer><Space>   <SID>visible_popup() ? '<Plug>(fern-action-preview:scroll:down:half)' : '<PageDown>'
 	nnoremap <expr><buffer><S-Space> <SID>visible_popup() ? '<Plug>(fern-action-preview:scroll:up:half)' : '<PageUp>'
 	# fzf-mapping-fzf.vim
 	nnoremap <buffer><leader>f       <Plug>(fern-action-fzf-files)
 	nnoremap <buffer>f               <Plug>(fern-action-fzf-files)
 	# ranger like collapse/expand
-	nnoremap <buffer>h               <Cmd>call <SID>open(-1)<CR>
-	nnoremap <buffer>l               <Cmd>call <SID>open(0)<CR>
+	nnoremap <buffer>h               <Plug>(fern-action-focus:parent)
+	nnoremap <buffer>l               <Plug>(fern-action-expand)
 	if exists('b:undo_ftplugin')
 		if b:undo_ftplugin !~#  '\<call set_fern#undo_ftplugin()'
 			b:undo_ftplugin ..= ' | call set_fern#undo_ftplugin()'
@@ -169,27 +176,15 @@ def g:Fern_mapping_fzf_customize_option(spec: dict<any>): dict<any>
 	# endif
 enddef
 
-def s:open(cd: number): void
-	if &filetype != 'fern'
-		return
-	endif
-
+def s:open(): void
 	var helper: dict<any> = fern#helper#new()
 	var node: dict<any> = helper.sync.get_cursor_node()
 
 	if &filetype != 'fern'
 		return
-	elseif cd == -1
-		execute('lcd ' .. substitute(node._path, '/[^/]\+$', '', ''), 'silent!')
-		feedkeys("\<Plug>(fern-action-focus:parent)")
-		return
-	elseif cd == 0
-		feedkeys("\<Plug>(fern-action-expand)")
-		return
 	endif
 
 	var status: number = node.status
-	execute('lcd ' .. node._path, 'silent!')
 	if status == helper.STATUS_COLLAPSED
 		feedkeys("\<Plug>(fern-action-expand)")
 	elseif status == helper.STATUS_EXPANDED
