@@ -89,7 +89,11 @@ def set_fern#FernSync(dir: string = '%:p'): void
 	clearjumps # <C-o>, <C-i> で移動後戻るった時も o の <Plug>... が効かなくなる
 	augroup FernWin
 		autocmd!
-		autocmd CursorMoved <buffer> call execute('lcd ' .. substitute(fern#helper#new().sync.get_cursor_node()._path, '/[^/]\+$', '', ''), 'silent')
+		autocmd CursorMoved <buffer> if isdirectory(fern#helper#new().sync.get_cursor_node()._path)
+			| 	execute('lcd ' .. fern#helper#new().sync.get_cursor_node()._path, 'silent')
+			| else
+			| 	execute('lcd ' .. substitute(fern#helper#new().sync.get_cursor_node()._path, '/[^/]\+$', '', ''), 'silent')
+			| endif
 	augroup END
 	return
 enddef
@@ -146,9 +150,7 @@ def s:init_fern(): void
 	nnoremap <buffer>/               <Cmd>BLines<CR>
 	# fern-preview.vim 用
 	nnoremap <buffer>p               <Plug>(fern-action-preview:auto:toggle)
-	nnoremap <expr><buffer>q         <SID>visible_popup() ? '<Plug>(fern-action-preview:auto:toggle)' : ':bwipeout!<CR>'
-	# ↑ quit にすると、再度開いた時に o の <Plug>... が効かなくなる
-	# 正しくは BufWinEnter で読み込まれた時
+	nnoremap <expr><buffer>q         <SID>visible_popup() ? '<Plug>(fern-action-preview:auto:toggle)' : ':quit!<CR>'
 	nnoremap <expr><buffer><Space>   <SID>visible_popup() ? '<Plug>(fern-action-preview:scroll:down:half)' : '<PageDown>'
 	nnoremap <expr><buffer><S-Space> <SID>visible_popup() ? '<Plug>(fern-action-preview:scroll:up:half)' : '<PageUp>'
 	# fzf-mapping-fzf.vim
@@ -177,26 +179,42 @@ def g:Fern_mapping_fzf_customize_option(spec: dict<any>): dict<any>
 enddef
 
 def s:open(): void
-	var helper: dict<any> = fern#helper#new()
-	var node: dict<any> = helper.sync.get_cursor_node()
+	def GetSNR(org: string): string
+		var f: string = split(&runtimepath, ',')
+			->filter((_, val) => val =~# '/fern.vim$')[0]
+			->resolve()
+			->substitute('^' .. escape(expand('$HOME'), '/\.'), '~', 'g') .. '/autoload/fern/mapping/' .. org .. '.vim' # $HOME を ~ に置換
+		f = execute('filter /\m^\s*\d\+:\s\+' .. escape(f, '/\~.') .. '$/ scriptnames', 'silent!') # スクリプト ID とパス取得
+			->split('[\n\r]')[0]
+			->substitute('^\s*\(\d\+\):.\+', '\1', 'g') # ID のみ取り出し
+		return '<SNR>' .. f .. '_'
+	enddef
 
 	if &filetype != 'fern'
 		return
 	endif
 
+	var helper: dict<any> = fern#helper#new()
+	var node: dict<any> = helper.sync.get_cursor_node()
 	var status: number = node.status
+
 	if status == helper.STATUS_COLLAPSED
-		feedkeys("\<Plug>(fern-action-expand)")
+		# feedkeys() 等を使って <Plug>.. の展開だと、しくは BufWinEnter で読み込まれた時動作しない
+		# <Plug>(fern-action-expand)
+		call('fern#mapping#call', [funcref(GetSNR('node') .. 'map_expand_in')])
 	elseif status == helper.STATUS_EXPANDED
-		feedkeys("\<Plug>(fern-action-collapse)")
+		# <Plug>(fern-action-collapse)
+		call('fern#mapping#call', [funcref(GetSNR('node') .. 'map_collapse')])
 	else
 		var mime: string = systemlist('mimetype --brief ' .. resolve(node._path))[0]
-		if index(['application/xhtml+xml', 'image/svg+xml', 'application/json'], mime) != -1
+		if index(['application/xhtml+xml', 'image/svg+xml', 'application/json', 'application/x-awk', 'application/x-shellscript'], mime) != -1
 				|| mime[0 : 4] ==# 'text/'
 			if len(gettabinfo(tabpagenr())[0].windows) == 1
-				feedkeys("\<Plug>(fern-action-open:right)")
+				# <Plug>(fern-action-open:right)
+				call('fern#mapping#call', [funcref(GetSNR('open') .. 'map_open'), 'rightbelow', 'vsplit'])
 			else
-				feedkeys("\<Plug>(fern-action-open:select)")
+				# <Plug>(fern-action-open:select)
+				call('fern#mapping#call', [funcref(GetSNR('open') .. 'map_open'), 'select'])
 			endif
 		else
 			if executable(node._path)
