@@ -51,9 +51,8 @@ export def Tabedit(...arg: list<string>): void
 
 			def Associate(cmd: string, subsubf: string): void # mimetype が text/*, XML 圧縮ファイルでないときは関連付けで開く
 				var app: string = systemlist('mimetype --brief "' .. subsubf .. '"')[0]
-				if app[0 : 4] ==# 'text/'
-						|| app =~# '^application/xhtml+xml$'
-						|| app =~# '^image/svg+xml$'
+				if index(['application/xhtml+xml', 'image/svg+xml', 'application/json', 'application/x-awk', 'application/x-shellscript'], app) != -1
+						|| app[0 : 4] ==# 'text/'
 						|| app =~# '^application/\(x-\)\?zip$'
 						|| app =~# '^application/\(x-\)\?xz$'
 						|| app =~# '^application/\(x-\)\?tar$'
