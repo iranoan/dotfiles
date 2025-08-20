@@ -204,7 +204,6 @@ def set_fzf#FZF_open(arg: list<string>): void
 		endif
 	endfor
 enddef
-defcompile
 
 def set_fzf#solarized(): void
 	if get(g:, 'colors_name', '') ==# 'solarized'
