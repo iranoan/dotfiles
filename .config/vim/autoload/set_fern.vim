@@ -199,7 +199,7 @@ def s:open(): void
 	var status: number = node.status
 
 	if status == helper.STATUS_COLLAPSED
-		# feedkeys() 等を使って <Plug>.. の展開だと、しくは BufWinEnter で読み込まれた時動作しない
+		# feedkeys() 等を使って <Plug>.. の展開だと、BufWinEnter で読み込まれた時動作しない
 		# <Plug>(fern-action-expand)
 		call('fern#mapping#call', [funcref(GetSNR('node') .. 'map_expand_in')])
 	elseif status == helper.STATUS_EXPANDED
