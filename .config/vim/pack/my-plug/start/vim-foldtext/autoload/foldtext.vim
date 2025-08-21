@@ -5,7 +5,7 @@ export def Base(...arg: list<any>): string
 	# use the argument for display if possible, otherwise the current line
 	var line: string
 	var foldmarkers: list<string> = split(&foldmarker, ',')
-	var comment: string = &commentstring
+	var comment: string = escape(&commentstring, '.$*~\')->substitute('%s', '\\(.\\{-}\\)', '')
 	var line_width: number
 	var cnt = printf('[%' .. len(line('$')) .. 's] ', (v:foldend - v:foldstart + 1))
 	if len(arg) > 0
@@ -15,8 +15,9 @@ export def Base(...arg: list<any>): string
 	endif
 	# remove the marker that caused this fold from the display
 	line = substitute(line, '\V' .. foldmarkers[0] .. '\%(\d\+\)\?', ' ', '')
-	if comment !=# ''
-		comment = escape(comment, '.$*~\')->substitute('%s', '\\(.\\{-}\\)', '')
+	if &filetype ==# 'vim'
+		line = substitute(line, '\(^\s*\zs#\|\s\+#\|"\)\s*', '', '')
+	elseif comment !=# ''
 		while match(line, comment) != -1
 			line = substitute(line, comment, '\1', '')
 		endwhile
