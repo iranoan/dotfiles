@@ -113,3 +113,9 @@ if exists('b:undo_ftplugin')
 else
 	b:undo_ftplugin = 'call undo_ftplugin#Reset("html")'
 endif
+
+# $MYVIMDIR/pack/ のファイルタイプ別ローカル設定 {{{1
+nnoremap <silent><buffer><leader>tt <Cmd>SurroundTag <span\ class="tcy"><CR>
+xnoremap <silent><buffer><leader>tt <Cmd>SurroundTag <span\ class="tcy"><CR>
+nnoremap <silent><buffer><leader>tr <Cmd>SurroundTag <ruby> <rp>(</rp><rt></rt><rp>)</rp><CR>
+xnoremap <silent><buffer><leader>tr <Cmd>SurroundTag <ruby> <rp>(</rp><rt></rt><rp>)</rp><CR>

@@ -227,12 +227,12 @@ augroup TabEdit # tabedit, fern.vim, fzf.vim サイクリック依存
 		| augroup! TabEdit
 		| delfunction set_tabedit#main
 augroup END
-# *.vim で再設定されてしまう分は $MYVIMDIR/pack/my-plug/start/set-pack/after/ftplugin/vim.vim
+# *.vim で再設定されてしまう分は $MYVIMDIR/after/ftplugin/vim.vim
 nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 # nnoremap <silent>gf :TabEdit <cfile><CR> " ← 存在しなくても開く <C-R><C-F> と同じ
 
 # grep で幾つかのオプションをデフォルトで付けたり、補完を可能にする $MYVIMDIR/pack/my-plug/opt/gnu-grep/ {{{2
-# statusline  w:quickfix_title 変更は $MYVIMDIR/pack/my-plug/start/set-pack/ftplugin/qf.vim
+# statusline  w:quickfix_title 変更は $MYVIMDIR/ftplugin/qf.vim
 augroup SetGnuGrep
 	autocmd!
 	autocmd CmdlineEnter * packadd gnu-grep
@@ -324,17 +324,17 @@ augroup SetPackOpt
 
 	# タグで挟む $MYVIMDIR/pack/my-plug/opt/surroundTag/ {{{2
 	# vim-surround では複数のタグを一度につけたり、クラス指定まで含む場合タイプ量が多くなる
-	# 実際のキーマップは $MYVIMDIR/pack/my-plug/start/set-pack/ftplugin/html.vim
+	# 実際のキーマップは $MYVIMDIR/ftplugin/html.vim
 	autocmd CmdUndefined SurroundTag ++once packadd surroundTag
 
 	# Markdown マッピング $MYVIMDIR/pack/my-plug/opt/map-markdown/ {{{2
-	# 実際のキーマップは $MYVIMDIR/pack/my-plug/start/set-pack/ftplugin/markdown.vim
+	# 実際のキーマップは $MYVIMDIR/ftplugin/markdown.vim
 	autocmd FuncUndefined map_markdown#* ++once packadd map-markdown
 
 	# 編集中の Markdown をブラウザでプレビュー https://github.com/iamcco/markdown-preview.nvim {{{2
 	# do-setup: cd app && npx --yes yarn install
 	# help がないので上記 URL か $MYVIMDIR/pack/github/opt/markdown-preview.nvim/README.md
-	# 実際のキーマップは $MYVIMDIR/pack/my-plug/start/set-pack/ftplugin/markdown.vim
+	# 実際のキーマップは $MYVIMDIR/ftplugin/markdown.vim
 	autocmd FuncUndefined mkdp#* ++once set_md_preview#main() | delfunction set_md_preview#main
 
 	# conky シンタックス https://github.com/smancill/conky-syntax.vim {{{2 ←署名を見ると同じ開発元だが、標準パッケージに含まれているものだと上手く動作しない

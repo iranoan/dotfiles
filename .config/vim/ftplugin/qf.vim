@@ -38,3 +38,6 @@ if exists('b:undo_ftplugin')
 else
 	b:undo_ftplugin = 'call undo_ftplugin#Reset("qf")'
 endif
+
+# $MYVIMDIR/pack/ のファイルタイプ別ローカル設定 {{{1
+gnu_grep#SetQfTitle()
