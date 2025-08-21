@@ -7,12 +7,11 @@ function hook_function#main(from_f, to_f, from_func, to_func)
 	" to_f:      置き換え先の関数が書かれたファイル・パス
 	" from_func: 書き換え元の関数名
 	" to_func:   書き換え先の関数名
-	echomsg "function! " .. s:get_func(a:from_f) .. a:from_func .. "(...)\nreturn call('" .. s:get_func(a:to_f) .. a:to_func .. "', a:000)\nendfunction"
-	exec "function! " .. s:get_func(a:from_f) .. a:from_func .. "(...)\nreturn call('" .. s:get_func(a:to_f) .. a:to_func .. "', a:000)\nendfunction"
+	execute "function! " .. s:get_func(a:from_f) .. a:from_func .. "(...)\nreturn call('" .. s:get_func(a:to_f) .. a:to_func .. "', a:000)\nendfunction"
 endfunction
 
 def s:get_func(fname: string): string
-	var f = resolve(expand(fname)) # シンボリック・リンク展開
+	var f: string = resolve(expand(fname)) # シンボリック・リンク展開
 		->substitute('^' .. escape(expand('$HOME'), '/\.'), '~', 'g') # $HOME を ~ に置換
 	f = execute('filter /\m^\s*\d\+:\s\+' .. escape(f, '/\~.') .. '$/ scriptnames', 'silent!') # スクリプト ID とパス取得
 		->substitute('[\n\r]', '', 'g') # 改行削除
