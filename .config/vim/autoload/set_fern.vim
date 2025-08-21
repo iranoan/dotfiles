@@ -179,17 +179,6 @@ def g:Fern_mapping_fzf_customize_option(spec: dict<any>): dict<any>
 enddef
 
 def s:open(): void
-	def GetSNR(org: string): string
-		var f: string = split(&runtimepath, ',')
-			->filter((_, val) => val =~# '/fern.vim$')[0]
-			->resolve()
-			->substitute('^' .. escape(expand('$HOME'), '/\.'), '~', 'g') .. '/autoload/fern/mapping/' .. org .. '.vim' # $HOME を ~ に置換
-		f = execute('filter /\m^\s*\d\+:\s\+' .. escape(f, '/\~.') .. '$/ scriptnames', 'silent!') # スクリプト ID とパス取得
-			->split('[\n\r]')[0]
-			->substitute('^\s*\(\d\+\):.\+', '\1', 'g') # ID のみ取り出し
-		return '<SNR>' .. f .. '_'
-	enddef
-
 	if &filetype != 'fern'
 		return
 	endif
@@ -201,20 +190,20 @@ def s:open(): void
 	if status == helper.STATUS_COLLAPSED
 		# feedkeys() 等を使って <Plug>.. の展開だと、BufWinEnter で読み込まれた時動作しない
 		# <Plug>(fern-action-expand)
-		call('fern#mapping#call', [funcref(GetSNR('node') .. 'map_expand_in')])
+		call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo({'name': '/fern\.vim/autoload/fern/mapping/node\.vim$'})[0].sid .. '_' .. 'map_expand_in')])
 	elseif status == helper.STATUS_EXPANDED
 		# <Plug>(fern-action-collapse)
-		call('fern#mapping#call', [funcref(GetSNR('node') .. 'map_collapse')])
+		call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo({'name': '/fern\.vim/autoload/fern/mapping/node\.vim$'})[0].sid .. '_' .. 'map_collapse')])
 	else
 		var mime: string = systemlist('mimetype --brief ' .. resolve(node._path))[0]
 		if index(['application/xhtml+xml', 'image/svg+xml', 'application/json', 'application/x-awk', 'application/x-shellscript'], mime) != -1
 				|| mime[0 : 4] ==# 'text/'
 			if len(gettabinfo(tabpagenr())[0].windows) == 1
 				# <Plug>(fern-action-open:right)
-				call('fern#mapping#call', [funcref(GetSNR('open') .. 'map_open'), 'rightbelow', 'vsplit'])
+				call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo({'name': '/fern\.vim/autoload/fern/mapping/open\.vim$'})[0].sid .. '_' .. 'map_open'), 'rightbelow', 'vsplit'])
 			else
 				# <Plug>(fern-action-open:select)
-				call('fern#mapping#call', [funcref(GetSNR('open') .. 'map_open'), 'select'])
+				call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo({'name': '/fern\.vim/autoload/fern/mapping/open\.vim$'})[0].sid .. '_' .. 'map_open'), 'select'])
 			endif
 		else
 			if executable(node._path)
