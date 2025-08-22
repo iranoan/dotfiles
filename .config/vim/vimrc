@@ -370,8 +370,10 @@ set shellslash                                 # Windowsでもパス区切りに
 set diffopt=filler,followwrap,context:2,iwhite,vertical,closeoff,internal,algorithm:histogram,indent-heuristic,linematch:60 # 差分表示オプション
 set path+=~/bin,~/Templates,
 set tags+=tags;$HOME/                          # tags ファイルは $HOME まで辿る :help file-searching
-set belloff=all                                # 音を消す
-# set visualbell                                 # 多くの colorscheme や tmux, Gvim で効かない
+set belloff=backspace,cursor,esc,ex,insertmode # 音を消す
+if $TERM_PROGRAM !=# 'tmux' || has('gui_running')
+	set visualbell                               # tmux 効かないので tumx 側で visual-bell on, Gvim も効かないが音は消したい
+endif
 set mouse=a                                    # マウスの設定全てのモードで有効に
 if has('win32')                                # viminfo の保存先等
 	&viminfo = "'500,<1000,s128,h,rA:,rB:,n" .. $MYVIMDIR .. 'cache/viminfo'
