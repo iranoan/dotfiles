@@ -202,7 +202,7 @@ def s:open(): void
 				|| mime[0 : 4] ==# 'text/'
 			if len(gettabinfo(tabpagenr())[0].windows) == 1
 				# <Plug>(fern-action-open:right)
-				call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo({'name': '/fern\.vim/autoload/fern/mapping/open\.vim$'})[0].sid .. '_' .. 'map_open'), 'rightbelow', 'vsplit'])
+				call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo({'name': '/fern\.vim/autoload/fern/mapping/open\.vim$'})[0].sid .. '_' .. 'map_open'), 'rightbelow vsplit'])
 			else
 				# <Plug>(fern-action-open:select)
 				call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo({'name': '/fern\.vim/autoload/fern/mapping/open\.vim$'})[0].sid .. '_' .. 'map_open'), 'select'])
