@@ -15,7 +15,7 @@ function set_quickrun#main() abort
 	let b:quickrun_config = {} " TeX ではバッファ毎に srcfile を変えたいので予め初期化
 	"※vimproc挿入モードで実行すると g が挿入される
 	"ウィンドウは上
-	let g:quickrun_config['_'] = {
+	let g:quickrun_config._ = {
 				\ 'runmode'                         : 'async:remote:vimproc',
 				\ 'runner'                          : 'vimproc',
 				\ 'runner/vimproc/updatetime'       : 40,
@@ -38,7 +38,8 @@ function set_quickrun#main() abort
 				\   executable('clang') ? '-lm -W -Wall' :
 				\   executable('gcc')   ? '-lm -Wall' :
 				\                         ' ',
-				\}
+				\ 'runner'                : 'system'
+				\}" vimproc のままだと成功時、コンパイル・エラー時のファイル名:行番号の出力の取り込みの両対応ができない
 	" }}}
 	"gnuplot 成功時は出力しない {{{
 	let g:quickrun_config.gnuplot = {
