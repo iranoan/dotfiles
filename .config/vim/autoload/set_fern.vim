@@ -198,7 +198,7 @@ def s:open(): void
 		call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo({'name': '/fern\.vim/autoload/fern/mapping/node\.vim$'})[0].sid .. '_' .. 'map_collapse')])
 	else
 		var mime: string = systemlist('mimetype --brief ' .. resolve(node._path))[0]
-		if index(['application/xhtml+xml', 'image/svg+xml', 'application/json', 'application/x-awk', 'application/x-shellscript'], mime) != -1
+		if index(['application/xhtml+xml', 'image/svg+xml', 'application/json', 'application/x-awk', 'application/x-shellscript', 'application/x-desktop'], mime) != -1
 				|| mime[0 : 4] ==# 'text/'
 			if len(gettabinfo(tabpagenr())[0].windows) == 1
 				# <Plug>(fern-action-open:right)
