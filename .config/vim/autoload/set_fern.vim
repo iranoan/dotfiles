@@ -119,48 +119,97 @@ def s:visible_popup(): bool
 	return false
 enddef
 
+def s:help(): void
+	maplist()
+		->filter((_, d) => d.rhs =~? '\(call(''fern#\|<plug>(fern-\|call fern_preview\)' && d.lhs !~? '^<plug>(fern-')
+		->map((_, d) => printf(' %-7s %s', d.lhs,
+				substitute(d.rhs, '<Cmd>call call(''fern#.\+'', \[funcref(''<SNR>'' \.\. getscriptinfo(#{name: ''/fern.\+\.vim\$''})\[0\]\.sid \.\. ''_'' \.\. ''map_\(.\+\)])<CR>', '\1', '')
+				->substitute(''')', '', 'g')
+			))
+		->sort('i')
+		->popup_create({
+				drag: true,
+				border: [1],
+				borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
+				close: 'click',
+				moved: 'any',
+				filter: 's:close_popup'
+		})
+enddef
+defcompile
+
+def s:close_popup(id: number, key: string): bool
+	if key ==? 'q' || key ==? '/' || key ==? '?' || key ==? "\<Esc>"
+		popup_close(id)
+	endif
+	return true
+enddef
+
 def s:init_fern(): void
 	setlocal nonumber foldcolumn=0 statusline=%#StatusLineLeft#[%{&filetype}]
 	glyph_palette#apply()     # バッファ毎に呼ばないと効かない
-	# キー・マップ
-	nnoremap <buffer><C-K>           <Plug>(fern-action-leave)
-	nnoremap <buffer><C-C>           <Plug>(fern-action-cancel)
-	# nnoremap <buffer><Enter>         <Plug>(fern-action-open:select)
-	nnoremap <buffer><F5>            <Plug>(fern-action-reload)
-	nnoremap <buffer>!               <Plug>(fern-action-hidden:toggle)
-	nnoremap <buffer><C-H>           <Plug>(fern-action-hidden:toggle)
-	nnoremap <buffer>-               <Plug>(fern-action-mark:toggle)
-	nnoremap <buffer>.               <Plug>(fern-action-repeat)
-	# nnoremap <buffer>?               <Plug>(fern-action-help)
-	nnoremap <buffer>?               <Cmd>echo join(filter(filter(split(execute('map'), '\n'), 'v:val =~? "\(fern-"' ), 'v:val !~? "^[nvxsoilct] *<plug"'), "\n")<CR>
-	nnoremap <buffer>a               <Plug>(fern-action-choice)
-	nnoremap <buffer>c               <Plug>(fern-action-copy)
-	nnoremap <buffer>d               <Plug>(fern-action-trash=)y<CR>
-	nnoremap <buffer>s               <Plug>(fern-action-open:right)
-	nnoremap <buffer>t               <Plug>(fern-action-open:tabedit)
-	nnoremap <buffer>o               <Cmd>call <SID>open()<CR>
-	nnoremap <buffer>r               <Plug>(fern-action-rename)
-	nnoremap <buffer>y               <Plug>(fern-action-yank)
-	nnoremap <buffer>x               <Cmd>call <SID>OpenSystem()<CR>
-	nnoremap <buffer><leader>x       <Cmd>call <SID>OpenSystem()<CR>
-	nnoremap <buffer>D               <Plug>(fern-action-clipboard-move)
-	nnoremap <buffer>Y               <Plug>(fern-action-clipboard-copy)
-	nnoremap <buffer>P               <Plug>(fern-action-clipboard-paste)
-	nnoremap <buffer>i               <Plug>(fern-action-zoom:reset)
-	nnoremap <buffer><C-L>           <Plug>(fern-action-reload:all)
-	# FZF
-	nnoremap <buffer>/               <Cmd>BLines<CR>
-	# fern-preview.vim 用
-	nnoremap <buffer>p               <Plug>(fern-action-preview:auto:toggle)
-	nnoremap <expr><buffer>q         <SID>visible_popup() ? '<Plug>(fern-action-preview:auto:toggle)' : ':quit!<CR>'
-	nnoremap <expr><buffer><Space>   <SID>visible_popup() ? '<Plug>(fern-action-preview:scroll:down:half)' : '<PageDown>'
-	nnoremap <expr><buffer><S-Space> <SID>visible_popup() ? '<Plug>(fern-action-preview:scroll:up:half)' : '<PageUp>'
-	# fzf-mapping-fzf.vim
-	nnoremap <buffer><leader>f       <Plug>(fern-action-fzf-files)
-	nnoremap <buffer>f               <Plug>(fern-action-fzf-files)
+	# キー・マップ {{{
+	# <Plug>.. の展開だと FernReveal で読み込まれた時動作しない
+	# <Plug>(fern-action-leave)
+	nnoremap <buffer><C-K>     <Cmd>call call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern\.vim/autoload/fern/mapping/node\.vim$'})[0].sid .. '_' .. 'map_leave')])<CR>
+	# <Plug>(fern-action-cancel)
+	nnoremap <buffer><C-C>     <Cmd>call call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern\.vim/autoload/fern/mapping/tree\.vim$'})[0].sid .. '_' .. 'map_cancel')])<CR>
+	# <Plug>(fern-action-reload)
+	nnoremap <buffer><F5>      <Cmd>call call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern\.vim/autoload/fern/mapping/node\.vim$'})[0].sid .. '_' .. 'map_reload_all')])<CR>
+	# <Plug>(fern-action-hidden:toggle)
+	nnoremap <buffer>!         <Cmd>call call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern\.vim/autoload/fern/mapping/filter\.vim$'})[0].sid .. '_' .. 'map_hidden_toggle')])<CR>
+	nnoremap <buffer><C-H>     <Cmd>call call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern\.vim/autoload/fern/mapping/filter\.vim$'})[0].sid .. '_' .. 'map_hidden_toggle')])<CR>
+	# <Plug>(fern-action-mark:toggle)
+	nnoremap <buffer>-         <Cmd>call call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern\.vim/autoload/fern/mapping/mark\.vim$'})[0].sid .. '_' .. 'map_mark_toggle')])<CR>
+	# <Plug>(fern-action-help) 相当
+	nnoremap <buffer><leader>? <Plug>(fern-action-help)
+	nnoremap <buffer>?         <Cmd>call <SID>help()<CR>
+	# <Plug>(fern-action-copy)
+	nnoremap <buffer>c         <Cmd>call call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern\.vim/autoload/fern/scheme/file/mapping\.vim$'})[0].sid .. '_' .. 'map_copy')])<CR>
+	# <Plug>(fern-action-trash=)y<CR>
+	nnoremap <buffer>d         <Cmd>call call('fern#mapping#call_without_guard', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern\.vim/autoload/fern/scheme/file/mapping\.vim$'})[0].sid .. '_' .. 'map_trash')])<CR>y<CR>
+	# <Plug>(fern-action-open:right)
+	nnoremap <buffer>s         <Cmd>call call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern\.vim/autoload/fern/mapping/open\.vim$'})[0].sid .. '_' .. 'map_open'), 'rightbelow vsplit'])<CR>
+	# <Plug>(fern-action-open:tabedit)
+	nnoremap <buffer>t         <Cmd>call call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern\.vim/autoload/fern/mapping/open\.vim$'})[0].sid .. '_' .. 'map_open'), 'tabedit'])<CR>
+	nnoremap <buffer>o         <Cmd>call <SID>open()<CR>
+	# <Plug>(fern-action-rename)
+	nnoremap <buffer>r         <Cmd>call call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern\.vim/autoload/fern/scheme/file/mapping/rename\.vim$'})[0].sid .. '_' .. 'map_rename'), 'split'])<CR>
+	# <Plug>(fern-action-yank)
+	nnoremap <buffer>y         <Cmd>call call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern\.vim/autoload/fern/mapping/yank\.vim$'})[0].sid .. '_' .. 'map_yank'), 'bufname'])<CR>
+	nnoremap <buffer>x         <Cmd>call <SID>OpenSystem()<CR>
+	nnoremap <buffer><leader>x <Cmd>call <SID>OpenSystem()<CR>
+	# <Plug>(fern-action-clipboard-move)
+	nnoremap <buffer>D         <Cmd>call call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern\.vim/autoload/fern/scheme/file/mapping/clipboard\.vim$'})[0].sid .. '_' .. 'map_clipboard_move')])<CR>
+	# <Plug>(fern-action-clipboard-copy)
+	nnoremap <buffer>Y         <Cmd>call call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern\.vim/autoload/fern/scheme/file/mapping/clipboard\.vim$'})[0].sid .. '_' .. 'map_clipboard_copy')])<CR>
+	# <Plug>(fern-action-clipboard-paste)
+	nnoremap <buffer>P         <Cmd>call call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern\.vim/autoload/fern/scheme/file/mapping/clipboard\.vim$'})[0].sid .. '_' .. 'map_clipboard_paste')])<CR>
+	# <Plug>(fern-action-zoom:reset)
+	nnoremap <buffer>i         <Cmd>call call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern\.vim/autoload/fern/mapping/drawer\.vim$'})[0].sid .. '_' .. 'map_zoom_reset')])<CR>
+	# <Plug>(fern-action-reload:all)
+	nnoremap <buffer><C-L>     <Cmd>call call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern\.vim/autoload/fern/mapping/node\.vim$'})[0].sid .. '_' .. 'map_reload_all')])<CR>
 	# ranger like collapse/expand
-	nnoremap <buffer>h               <Plug>(fern-action-focus:parent)
-	nnoremap <buffer>l               <Plug>(fern-action-expand)
+	# <Plug>(fern-action-focus:parent)
+	nnoremap <buffer>h          <Cmd>call call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern\.vim/autoload/fern/mapping/node\.vim$'})[0].sid .. '_' .. 'map_focus_parent')])<CR>
+	# <Plug>(fern-action-expand)
+	nnoremap <buffer>l          <Cmd>call call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern\.vim/autoload/fern/mapping/node\.vim$'})[0].sid .. '_' .. 'map_expand_in')])<CR>
+	# FZF {{{
+	nnoremap <buffer>/          <Cmd>BLines<CR>
+	# }}}
+	# fern-preview\.vim 用 {{{
+	nnoremap <buffer>p              <Cmd>call fern_preview#toggle_auto_preview()<CR>
+	nnoremap <buffer>q              <Cmd>if <SID>visible_popup() <Bar> call fern_preview#toggle_auto_preview() <Bar> else <Bar> quit! <Bar> endif<CR>
+	nnoremap <buffer><Space>        <Cmd>if <SID>visible_popup() <Bar> call fern_preview#half_down() <Bar> else <Bar> call feedkeys("\<PageDown>") <Bar> endif<CR>
+	nnoremap <buffer><S-Space>      <Cmd>if <SID>visible_popup() <Bar> call fern_preview#half_up() <Bar> else <Bar> call feedkeys("\<PageUp>") <Bar> endif<CR>
+	nnoremap <buffer><BackSpace>    <Cmd>if <SID>visible_popup() <Bar> call fern_preview#half_up() <Bar> else <Bar> call feedkeys("\<PageUp>") <Bar> endif<CR>
+	# }}}
+	# fern-mapping-fzf\.vim {{{
+	# <Plug>(fern-action-fzf-files)
+	nnoremap <buffer><leader>f <Cmd>call call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern-mapping-fzf\.vim/autoload/fern/mapping/fzf\.vim$'})[0].sid .. '_' .. 'map_fzf_files')])<CR>
+	nnoremap <buffer>f     <Cmd>call call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern-mapping-fzf\.vim/autoload/fern/mapping/fzf\.vim$'})[0].sid .. '_' .. 'map_fzf_files')])<CR>
+	# }}}
+	# }}}
 	if exists('b:undo_ftplugin')
 		if b:undo_ftplugin !~#  '\<call set_fern#undo_ftplugin()'
 			b:undo_ftplugin ..= ' | call set_fern#undo_ftplugin()'
@@ -190,22 +239,21 @@ def s:open(): void
 	var status: number = node.status
 
 	if status == helper.STATUS_COLLAPSED
-		# feedkeys() 等を使って <Plug>.. の展開だと、BufWinEnter で読み込まれた時動作しない
 		# <Plug>(fern-action-expand)
-		call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo({'name': '/fern\.vim/autoload/fern/mapping/node\.vim$'})[0].sid .. '_' .. 'map_expand_in')])
+		call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo({name: '/fern\.vim/autoload/fern/mapping/node\.vim$'})[0].sid .. '_' .. 'map_expand_in')])
 	elseif status == helper.STATUS_EXPANDED
 		# <Plug>(fern-action-collapse)
-		call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo({'name': '/fern\.vim/autoload/fern/mapping/node\.vim$'})[0].sid .. '_' .. 'map_collapse')])
+		call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo({name: '/fern\.vim/autoload/fern/mapping/node\.vim$'})[0].sid .. '_' .. 'map_collapse')])
 	else
 		var mime: string = systemlist('mimetype --brief ' .. resolve(node._path))[0]
 		if index(['application/xhtml+xml', 'image/svg+xml', 'application/json', 'application/x-awk', 'application/x-shellscript', 'application/x-desktop'], mime) != -1
 				|| mime[0 : 4] ==# 'text/'
 			if len(gettabinfo(tabpagenr())[0].windows) == 1
 				# <Plug>(fern-action-open:right)
-				call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo({'name': '/fern\.vim/autoload/fern/mapping/open\.vim$'})[0].sid .. '_' .. 'map_open'), 'rightbelow vsplit'])
+				call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo({name: '/fern\.vim/autoload/fern/mapping/open\.vim$'})[0].sid .. '_' .. 'map_open'), 'rightbelow vsplit'])
 			else
 				# <Plug>(fern-action-open:select)
-				call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo({'name': '/fern\.vim/autoload/fern/mapping/open\.vim$'})[0].sid .. '_' .. 'map_open'), 'select'])
+				call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo({name: '/fern\.vim/autoload/fern/mapping/open\.vim$'})[0].sid .. '_' .. 'map_open'), 'select'])
 			endif
 		else
 			if executable(node._path)
