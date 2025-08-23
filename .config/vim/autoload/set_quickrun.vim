@@ -73,10 +73,11 @@ function set_quickrun#main() abort
 				" ↓以下は非同期 vimproc との組み合わせで失敗時も開かない
 				" \ 'outputter/error/success': 'null',
 				" \ 'hook/close_quickfix/enable_success' :
-	augroup QuickRunTeX
+	augroup SetQuickRun
 		autocmd!
 		" srcfile は最初に QuickRun を使ったときだけに指定されるので、バッファごとの指定にしないと、最初に実行したファイルに固定されてしまう
 		autocmd FileType tex let b:quickrun_config= {'srcfile' : s:GetTeXfile(expand('%:p'))}
+		autocmd FileType quickrun nnoremap <buffer><nowait><silent>q  <Cmd>bwipeout!<CR>
 	augroup END
 	for b in getbufinfo() " 既に開かれている TeX の srcfile を設定する
 		let nr = b.bufnr
