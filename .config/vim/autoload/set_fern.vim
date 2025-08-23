@@ -16,7 +16,9 @@ function set_fern#main() abort
 	call fern_git_status#init()
 	" }}}
 	" プレビュー  https://github.com/yuki-yano/fern-preview.vim {{{
-	packadd fern-preview.vim " }}}
+	packadd fern-preview.vim
+	let g:fern_preview_window_calculator = #{height: {-> &lines - 2}, left: {-> g:fern#drawer_width + 1}, top: {-> 0}, width: {-> &columns - g:fern#drawer_width - 2}}
+	" }}}
 	" fzf と連携 https://github.com/LumaKernel/fern-mapping-fzf.vim {{{
 	packadd fern-mapping-fzf.vim
 	let g:fern#mapping#fzf#disable_default_mappings = 1
