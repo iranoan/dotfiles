@@ -1,7 +1,6 @@
 vim9script
 scriptencoding utf-8
-set columns=168           # columns width of the display
-set lines=999             # lines number of lines in the display
+set lines=999 columns=168           # columns width of the display
 # if g:colors_name ==# 'solarized8' && &background ==# 'dark'
 # 	# solarized8 を使っている時は、配色の違いから set termguicolors としているので、ctermbg=NONE 同様 guibg=NONE を使っている
 # 	# →そのため :gui を使うと、そのまま guibg が NONE で配色がおかしくなる
@@ -21,13 +20,13 @@ set guioptions-=T guioptions-=m guioptions-=r guioptions-=L guioptions+=ck # ツ
 # if $GVIM_ENABLE_WAYLAND !=# '1' # ←winpos 等が効かなくなる (Ubuntu 24.10で改善され、無くても描画は乱れないので指定することはない)
 augroup GVIMRC
 	autocmd!
-	# 画面左上に表示 (help に有る通り autocmd を使わないと環境によって gvimrc の記載では無効)
-	autocmd GUIEnter * winpos 0 0
-		| 	autocmd! GVIMRC
-		| 	augroup! GVIMRC
-	# autocmd VimEnter,GUIEnter * if &lines != 48 | set lines=48 | endif
-	# ↑GTK でズレが生じるため再設定 https://github.com/vim-jp/issues/issues/1374
-	# lines=999 としたのでコメントに
+	autocmd GUIEnter   * set lines=999 # lines number of lines in the display←何時からか autocmd でない箇所で 999 を指定すると Wayland の環境で横幅まで最大にされることが多くなる
+	# ↑GTK でズレが生じるため再設定 https://github.com/vim-jp/issues/issues/1374 と関係が有る?
+	# 画面左上に表示 (help に有る通り autocmd を使わないと環境によって gvimrc の記載では無効+Wayland では無効)
+	if !has('unix') || $XDG_SESSION_TYPE ==# 'x11' || $GDK_BACKEND ==# 'x11'
+		autocmd GUIEnter * winpos 0 0
+	endif
+	autocmd GUIEnter   * autocmd_delete([{group: 'GVIMRC'}])
 augroup END
 # endif
 # ホイール・スクロールは [Shift] 押しながらと逆にする {{{
