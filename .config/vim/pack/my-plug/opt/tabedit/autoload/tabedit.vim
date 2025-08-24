@@ -60,6 +60,20 @@ export def Tabedit(...arg: list<string>): void
 						|| app =~# '^application/\(x-\)\?bz2-compressed$'
 					execute 'silent ' .. cmd .. ' ' .. subsubf
 					return
+				else # 関連付けで判定
+					mime = systemlist('xdg-mime query default ' .. mime)[0]
+					var app: list<string>
+					for p in [$HOME .. '/.local/share/applications/', '/usr/local/share/applications/', '/usr/share/applications/' ]
+						app = readfile(p .. mime)->filter( (_, v ) => v =~? '^TryExec=' )
+						if app != []
+							mime = app[0][8 : ]
+							break
+						endif
+					endfor
+					if mime =~? '^g\?vim$'
+						execute 'silent ' .. cmd .. ' ' .. subsubf
+						return
+					endif
 				endif
 				AssociateCore(subsubf)
 			enddef
@@ -132,7 +146,7 @@ export def Tabedit(...arg: list<string>): void
 		if fs ==# ''
 			Open(files, pwd)
 		else
-			for f in split(fs)
+			for f in split(fs, '\n')
 				Open(f, pwd)
 			endfor
 		endif
