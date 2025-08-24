@@ -245,9 +245,10 @@ def s:open(): void
 		# <Plug>(fern-action-collapse)
 		call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo({name: '/fern\.vim/autoload/fern/mapping/node\.vim$'})[0].sid .. '_' .. 'map_collapse')])
 	else
-		var mime: string = systemlist('mimetype --brief ' .. resolve(node._path))[0]
+		var mime: string = systemlist('mimetype --brief ''' .. substitute(resolve(node._path), "'", '''\\''''', 'g') .. '''')[0]
 		if index(['application/xhtml+xml', 'image/svg+xml', 'application/json', 'application/x-awk', 'application/x-shellscript', 'application/x-desktop'], mime) != -1
 				|| mime[0 : 4] ==# 'text/'
+				|| index(['aux', 'bash', 'bat', 'bib', 'c', 'cfg', 'cls', 'cpp', 'css', 'csv', 'desktop', 'go', 'h', 'htm', 'html', 'idx', 'ilg', 'ind', 'java', 'json', 'log', 'lua', 'mac', 'plt', 'py', 'rb', 'sh', 'sty', 'tex', 'toc', 'tsv', 'txt', 'vim', 'xhtml', 'yaml', 'yml', 'zsh'], split(subsubf, '/')[-1]->split('\.')[-1] ) != -1 # mimetype で誤判定が有るので、特定の拡張子は Vim で開く
 			if len(gettabinfo(tabpagenr())[0].windows) == 1
 				# <Plug>(fern-action-open:right)
 				call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo({name: '/fern\.vim/autoload/fern/mapping/open\.vim$'})[0].sid .. '_' .. 'map_open'), 'rightbelow vsplit'])

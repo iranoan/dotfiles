@@ -50,14 +50,15 @@ export def Tabedit(...arg: list<string>): void
 			enddef
 
 			def Associate(cmd: string, subsubf: string): void # mimetype が text/*, XML 圧縮ファイルでないときは関連付けで開く
-				var app: string = systemlist('mimetype --brief "' .. subsubf .. '"')[0]
-				if index(['application/xhtml+xml', 'image/svg+xml', 'application/json', 'application/x-awk', 'application/x-shellscript', 'application/x-desktop'], app) != -1
-						|| app[0 : 4] ==# 'text/'
-						|| app =~# '^application/\(x-\)\?zip$'
-						|| app =~# '^application/\(x-\)\?xz$'
-						|| app =~# '^application/\(x-\)\?tar$'
-						|| app =~# '^application/\(x-\)\?gzip$'
-						|| app =~# '^application/\(x-\)\?bz2-compressed$'
+				var mime: string = systemlist('file --mime-type --brief ''' .. substitute(subsubf, "'", '''\\''''', 'g') .. '''')[0]
+				if index(['application/xhtml+xml', 'image/svg+xml', 'application/json', 'application/x-awk', 'application/x-shellscript', 'application/x-desktop'], mime) != -1
+						|| mime[0 : 4] ==# 'text/'
+						|| mime =~# '^application/\(x-\)\?zip$'
+						|| mime =~# '^application/\(x-\)\?xz$'
+						|| mime =~# '^application/\(x-\)\?tar$'
+						|| mime =~# '^application/\(x-\)\?gzip$'
+						|| mime =~# '^application/\(x-\)\?bz2-compressed$'
+						|| index(['aux', 'bash', 'bat', 'bib', 'c', 'cfg', 'cls', 'cpp', 'css', 'csv', 'desktop', 'go', 'h', 'htm', 'html', 'idx', 'ilg', 'ind', 'java', 'json', 'log', 'lua', 'mac', 'plt', 'py', 'rb', 'sh', 'sty', 'tex', 'toc', 'tsv', 'txt', 'vim', 'xhtml', 'yaml', 'yml', 'zsh'], split(subsubf, '/')[-1]->split('\.')[-1] ) != -1 # mimetype で誤判定が有るので、特定の拡張子は Vim で開く
 					execute 'silent ' .. cmd .. ' ' .. subsubf
 					return
 				else # 関連付けで判定
@@ -142,11 +143,11 @@ export def Tabedit(...arg: list<string>): void
 	endif
 	var pwd: string = getcwd()
 	for files in arg
-		var fs: string = glob(files)
-		if fs ==# ''
+		var fs: list<string> = glob(files, true, true, true)
+		if fs ==# [] # 存在しないファイル
 			Open(files, pwd)
 		else
-			for f in split(fs, '\n')
+			for f in fs
 				Open(f, pwd)
 			endfor
 		endif
