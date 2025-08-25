@@ -60,6 +60,8 @@ install.sh
   * [.lesskey](.lesskey)
 * mlterm
   * [.config/mlterm/](.config/mlterm/)
+* qt5ct
+  * [.config/qt5ct/](.config/qt5ct/)
 * Shell
   * [.bashrc](.bashrc)
   * [.config/bash/](.config/bash/)
