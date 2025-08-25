@@ -23,7 +23,7 @@ strstrlt_sub(str,index,target)=(strstrt(substr(str, index, strlen(str)),target)=
 strstrlt(str,target)=strstrlt_sub(str,1,target)
 # pathからディレクトリ名に変換
 dirname(path)=strstrt(path, "/")!= 0 ? substr(path, 1, strstrlt(path,"/")) : ""
-# pathからディレクトリ名に変換
+# pathからファイル名に変換
 basename(path)=substr(path,strstrlt(path,"/")+1,strlen(path))
 # pathからディレクトリと拡張子を消したものを返す
 rmext(path)=strstrt(path, ".")==0 ? basename(path) : \
