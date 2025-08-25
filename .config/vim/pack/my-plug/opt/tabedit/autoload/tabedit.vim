@@ -61,9 +61,13 @@ export def Tabedit(...arg: list<string>): void
 						|| index(['aux', 'bash', 'bat', 'bib', 'c', 'cfg', 'cls', 'cpp', 'css', 'csv', 'desktop', 'go', 'h', 'htm', 'html', 'idx', 'ilg', 'ind', 'java', 'json', 'log', 'lua', 'mac', 'plt', 'py', 'rb', 'sh', 'sty', 'tex', 'toc', 'tsv', 'txt', 'vim', 'xhtml', 'yaml', 'yml', 'zsh'], split(subsubf, '/')[-1]->split('\.')[-1] ) != -1 # mimetype で誤判定が有るので、特定の拡張子は Vim で開く
 					execute 'silent ' .. cmd .. ' ' .. subsubf
 					return
-				else # 関連付けで判定
+				elseif has('unix') # 関連付けで判定
+					var app: list<string> = systemlist('xdg-mime query default ' .. mime)
+					if app == [] # 関連付けられたアプリがない
+						execute 'silent ' .. cmd .. ' ' .. subsubf
+						return
+					endif
 					mime = systemlist('xdg-mime query default ' .. mime)[0]
-					var app: list<string>
 					for p in [$HOME .. '/.local/share/applications/', '/usr/local/share/applications/', '/usr/share/applications/' ]
 						app = readfile(p .. mime)->filter( (_, v ) => v =~? '^TryExec=' )
 						if app != []
