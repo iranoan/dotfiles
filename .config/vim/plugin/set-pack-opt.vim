@@ -385,12 +385,12 @@ augroup ResetFiletype
 			css: '*.css',
 			tex: '*.tex',
 			sh: '*.sh',
-			bash: '*.sh,*.bash',
+			bash: '*.bash,.bash_history,.bashrc,~/dotfiles/.config/bash/*,~/.config/bash/*',
 			markdown: '*.md',
 			go: '*.go',
 			conkyrc: 'conkyrc,conky.conf'
 		})
-		execute 'autocmd BufWinEnter ' .. e .. ' ++once setfiletype ' .. t
+		execute 'autocmd BufWinEnter ' .. e .. ' ++once call execute("setfiletype " .. &filetype)'
 						.. ' | autocmd! ResetFiletype BufWinEnter ' .. e
 	endfor
 augroup END
