@@ -136,7 +136,6 @@ def s:help(): void
 				filter: 's:close_popup'
 		})
 enddef
-defcompile
 
 def s:close_popup(id: number, key: string): bool
 	if key ==? 'q' || key ==? '/' || key ==? '?' || key ==? "\<Esc>"
@@ -245,10 +244,7 @@ def s:open(): void
 		# <Plug>(fern-action-collapse)
 		call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo({name: '/fern\.vim/autoload/fern/mapping/node\.vim$'})[0].sid .. '_' .. 'map_collapse')])
 	else
-		var mime: string = systemlist('mimetype --brief ''' .. substitute(resolve(node._path), "'", '''\\''''', 'g') .. '''')[0]
-		if index(['application/xhtml+xml', 'image/svg+xml', 'application/json', 'application/x-awk', 'application/x-shellscript', 'application/x-desktop', 'application/x-troff-man'], mime) != -1
-				|| mime[0 : 4] ==# 'text/'
-				|| index(['aux', 'bash', 'bat', 'bib', 'c', 'cfg', 'cls', 'cpp', 'css', 'csv', 'desktop', 'go', 'h', 'htm', 'html', 'idx', 'ilg', 'ind', 'java', 'json', 'log', 'lua', 'mac', 'plt', 'py', 'rb', 'sh', 'sty', 'tex', 'toc', 'tsv', 'txt', 'vim', 'xhtml', 'yaml', 'yml', 'zsh'], split(node._path, '/')[-1]->split('\.')[-1] ) != -1 # mimetype で誤判定が有るので、特定の拡張子は Vim で開く
+		if tabedit#IsTextFile(node._path)
 			if len(gettabinfo(tabpagenr())[0].windows) == 1
 				# <Plug>(fern-action-open:right)
 				call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo({name: '/fern\.vim/autoload/fern/mapping/open\.vim$'})[0].sid .. '_' .. 'map_open'), 'rightbelow vsplit'])
