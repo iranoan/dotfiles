@@ -25,25 +25,6 @@ function set_vimlsp#main() abort
 	" let g:lsp_document_code_action_signs_hint = {'text': '💡', 'icon': l:icon_dir .. 'hint' .. l:icon_ext}
 	let g:lsp_fold_enabled = 0
 	let g:lsp_text_edit_enabled = 1
-	" vim-lsp-settings は &filetype == sh に対応しているが &filetype == bash は未対応 {{{
-	call lsp#register_server(#{
-				\ name: 'bash-language-server',
-				\ cmd: {server_info->['bash-language-server', 'start']},
-				\ initialization_options: v:null,
-				\ allowlist: ['sh', 'bash'],
-				\ blocklist: [],
-				\ config: #{refresh_pattern: '\([a-zA-Z0-9_-]\+\|\k\+\)$'}
-				\ })
-	call lsp#register_server(#{
-				\ name: 'vscode-html-language-server',
-				\ cmd: {server_info->['vscode-html-language-server', '--stdio']},
-				\ initialization_options: #{embeddedLanguages: {'javascript': v:true, 'css': v:true}},
-				\ allowlist: ['html', 'xhtml'],
-				\ blocklist: [],
-				\ config: #{refresh_pattern: '\(/\|\k\+\)$'},
-				\ workspace_config: {},
-				\ semantic_highlight: {},
-				\ })
 	" call lsp#register_server(#{
 	" 			\ name: 'efm-langserver',
 	" 			\ cmd: {server_info->['efm-langserver']},
@@ -56,8 +37,11 @@ function set_vimlsp#main() abort
 				\ 'allowlist': ['awk'],
 				\ })
 	" vim-lsp の自動設定 https://github.com/mattn/vim-lsp-settings {{{
-	packadd vim-lsp-settings
+	" vim-lsp-settings は &filetype == sh に対応しているが bash は未対応、html には対応しているが xhtml には未対応
+	" let g:lsp_settings は packadd の前に指定する必要あり
 	let g:lsp_settings = #{
+				\ vscode-html-language-server: #{allowlist: ['html', 'xhtml']},
+				\ bash-language-server: #{allowlist: ['sh', 'bash']},
 				\ pylsp: #{
 				\ 	workspace_config: #{
 				\ 		pylsp: #{
@@ -80,12 +64,13 @@ function set_vimlsp#main() abort
 				\ 	}
 				\ }
 				\ }
-	" 		" vim-vsnip で追加したほうが良い設定例
-	" 			" \ gopls: #{
-	" 			" 	\ initialization_options: #{
-	" 			" 		\ usePlaceholders: v:true,
-	" 			" 	\ },
-	" 			" \ }
+			" vim-vsnip で追加したほうが良い設定例
+				" \ gopls: #{
+				" 	\ initialization_options: #{
+				" 		\ usePlaceholders: v:true,
+				" 	\ },
+				" \ }
+	packadd vim-lsp-settings
 	" }}}
 	" LSP との連携 https://github.com/prabirshrestha/asyncomplete-lsp.vim {{{
 	" if !pack_manage#IsInstalled('asyncomplete.vim') " ←asyncomplete.vim 自身を opt に置いても対応できる方法が見つかったらこちらにする
