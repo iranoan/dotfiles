@@ -46,11 +46,13 @@ def Helptags(remake: number): void
 	# $MYVIMDIR/pack/*/{stat,opt}/*/doc に有るヘルプのタグを $MYVIMDIR/doc/tags{,??x} に出力 (packadd しなくても、help が開けるようになる)
 	# $MYVIMDIR/pack/*/{stat,opt}/*/doc に有る tags{,-??} が古ければ再作成
 	# コンパイル済みの Python スクリプトにしても大して速度は変わらない
-	def MkHelpTags(h: string): void
-		var docdir: string = h .. '/doc'
+	var docdir: string = $MYVIMDIR .. '/doc'
+
+	def MkHelpTags(): void
 		var dir: string
 		var existfile: bool
 		var tags: string
+		var tags_dic: dict<list<string>>
 
 		if len(glob(docdir .. '/*.{txt,??x}', 1, 1))
 			execute 'helptags ' .. docdir
@@ -59,7 +61,7 @@ def Helptags(remake: number): void
 				delete(f)
 			endfor
 		endif
-		for d in glob(h .. '/pack/*/{start,opt}/*/doc', 1, 1)
+		for d in glob($MYVIMDIR .. '/pack/*/{start,opt}/*/doc', 1, 1)
 			dir = fnamemodify(d, ':p:h:h:s?.\+/??')
 			if isdirectory(d)
 				existfile = glob(d .. 'tags{,-??}', 1, 1) == []
@@ -68,47 +70,45 @@ def Helptags(remake: number): void
 				endif
 				for f in glob(d .. 'tags{,-??}', 1, 1)
 					tags = substitute(f, '[-_/A-Za-z0-9.]\+\/\zetags\(-..\)\?$', '', '')
-					dir = substitute(substitute(f, 'tags\(-..\)\?$', '', ''), h, '..', '')
-					execute 'noautocmd :0split ' .. f
-					execute 'silent :%s;^[^\t]\+\t;&' .. dir .. '; '
-					execute 'silent noautocmd write! >> ' .. docdir .. '/' .. tags
-					bwipeout!
+					dir = substitute(substitute(f, 'tags\(-..\)\?$', '', ''), $MYVIMDIR, '..', '')
+					tags_dic[tags] = get(tags_dic, tags, []) + readfile(f)
+						->map((_, v) => substitute(v, '^[^\t]\+\t', '&' .. dir, ''))
 					if existfile
 						delete(f)
 					endif
 				endfor
 			endif
 		endfor
-		for f in glob(docdir .. '/tags{,-??}', 1, 1)
-			execute 'noautocmd split ' .. f
-			sort u | write
-			bwipeout!
+		var l: list<string>
+		for [k, v] in items(tags_dic)
+			l = filter(v, (_, i) => i !~# '^!_TAG_FILE_ENCODING\t')
+				->sort()
+				->uniq()
+			if k !=# 'tags'
+				l = ["!_TAG_FILE_ENCODING\tutf-8\t//"] + l
+			endif
+			writefile(l, docdir .. '/' .. k)
 		endfor
 	enddef
 
-	var h: string = split(&runtimepath, ',')[0]
-	var docdir: string = h .. '/doc'
 	if !isdirectory(docdir)
 		mkdir(docdir, 'p', 0o700)
 	endif
 	if remake != 0
-		MkHelpTags(h)
+		MkHelpTags()
 		return
 	endif
 	var max_tags_time: number = 0 # tags, tags-?? 最終更新日時取得
-	for tags in glob(h .. '/doc/tags{,-??}', 1, 1)
+	for tags in glob($MYVIMDIR .. '/doc/tags{,-??}', 1, 1)
 		var tags_time: number = getftime(tags)
 		if tags_time > max_tags_time
 			max_tags_time = tags_time
 		endif
 	endfor
-	for f in glob(h .. '/pack/*/{start,opt}/*/doc/*.{txt,??x}', 1, 1)
-		# for f in glob(h .. '/pack/github/{start,opt}/*/doc/*.{txt,??x}', 1, 1)
-		if fnamemodify(f, ':p:h:h:s?.\+/??') ==# 'vimdoc-ja' # 日本語ヘルプは除外 (tags,tags-ja は作成済み)
-			continue
-		endif
+	for f in glob($MYVIMDIR .. '/pack/*/{start,opt}/*/doc/*.{txt,??x}', 1, 1)->filter((_, v) => v !~# '/vimdoc-ja/doc/[^/]\+\.jax$')
+	# for f in glob($MYVIMDIR .. '/pack/github/{start,opt}/*/doc/*.{txt,??x}', 1, 1)->filter((_, v) => v !~# '/vimdoc-ja/doc/[^/]\+\.jax$')
 		if max_tags_time < getftime(f)
-			MkHelpTags(h)
+			MkHelpTags()
 			return
 		endif
 	endfor
