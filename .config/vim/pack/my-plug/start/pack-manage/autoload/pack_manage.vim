@@ -36,7 +36,7 @@ export def CompPack(arg: string, cmd: string, pos: number): list<string>
 					->filter((_, v) => v =~# '^' .. arg)
 	elseif len(cmd_ls) == 2 && cmd_ls[1] == 'tags'
 		return ['0', '1']
-	elseif len(cmd_ls) <= 2 && count(['help', 'list', 'reinstall ', 'setup', 'tags'], cmd_ls[1]) == 0
+	elseif len(cmd_ls) == 1 || (len(cmd_ls) <= 2 && count(['help', 'list', 'reinstall ', 'setup', 'tags'], cmd_ls[1]) == 0)
 		return filter(['help', 'list', 'reinstall ', 'setup', 'tags '], (_, v) => v =~# '^' .. arg)
 	endif
 	return []
