@@ -1,6 +1,7 @@
 scriptencoding utf-8
 
 function set_fugitve#main() abort
+	" Git 連携 https://github.com/tpope/vim-fugitive {{{
 	packadd vim-fugitive
 	" 既に廃止済みや単なる別名コマンド削除←補完候補として出ると邪魔
 	" delcommand Gblame
@@ -23,6 +24,7 @@ function set_fugitve#main() abort
 		autocmd!
 		autocmd FileType fugitive,fugitiveblame,git call set_fugitve#filetype()
 	augroup END
+	" }}}
 endfunction
 
 def set_fugitve#undo_ftplugin(): void

@@ -166,9 +166,6 @@ if executable('git') # git がないときに起動時にエラーになるた�
 	delfunction set_gitgutter#main
 endif
 
-# Git 連携 https://github.com/tpope/vim-fugitive {{{2
-# statusline で使うので、$VIMDIR/autoload/vimrc.vim で読み込み
-
 # autocmd 削除を纏められないにタイプ {{{1
 # 括弧や引用符をペアで入力/削除 $MYVIMDIR/pack/my-plug/start/pair_bracket/ {{{2
 # ドット・リピートは考慮していない
