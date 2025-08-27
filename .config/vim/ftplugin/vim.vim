@@ -111,7 +111,7 @@ if !exists('g:vim_plugin')
 		# 	Help(tmp)
 		# 	return
 		# endif
-		[keyword, m_start, m_end] = matchstrpos(line, '^\c\v\s*\zs[a-z]+')
+		[keyword, m_start, m_end] = matchstrpos(line, '^\c\v\s*\zs[a-z0-9]+')
 		if m_start != -1 && column <= m_end && column >= m_start # 行頭→コマンド
 			Help(':' .. keyword)
 			return
