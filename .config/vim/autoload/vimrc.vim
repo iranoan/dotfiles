@@ -207,3 +207,28 @@ export def KillTerminal(): void
 	terms_in_tab = filter(terms_in_tab, 'v:key != ' .. bufnum)
 	win_gotoid(bufwinid(terms_in_tab[0]))
 enddef
+
+export def ChangeScrolloff(): void # /, ? と :s[ubstitute] で c フラグを使った時に scrolloff=2 とする それ以外の : で scrolloff=0 にする
+	# 検索や置換では前後を確認したい←一々 <C-E>, <C-Y> をするのが面倒
+	def Type(t: string, s: string): bool
+		if t ==# '/' || t ==# '?'
+			return true
+		elseif t == ':'
+			var matchl: list<string> = matchlist(s, '^\(\([0-9]\+\|''<\|\.\),\([0-9]\+\|''>\|\$\)\|%\)\?\<s\%[ubstitute]\([][!"#''()-=^,/;:@`]\).\+\4&\?\([cegiInp#lr]*\)$')
+			if matchl != [] && matchl[5] =~# 'c'
+				return true
+			endif
+		endif
+		return false
+	enddef
+
+	if Type(getcmdtype(), getcmdline())
+		setlocal scrolloff=2
+		return
+	elseif Type(getcmdwintype(), getline('.'))
+		setlocal scrolloff=2
+		return
+	endif
+	setlocal scrolloff<
+	return
+enddef

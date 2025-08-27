@@ -170,7 +170,9 @@ set shortmess+=IWc shortmess-=S                # I 起動時にファイル未�
                                                # W ファイルの書き込み時に "書込み" や "[w]" を表示しない。
                                                # c 補完関連のメッセージを表示しない
                                                # S 検索ヒット件数表示←コマンドラインに検索のヒット位置、総個数を [?/?] で表示し、ファイルの先頭・終端になった時のメッセージが一瞬で消える
-set maxsearchcount=500                         # shortmess による検索個数の最大表示数
+if has('patch-9.1.1535')
+	set maxsearchcount=500                       # shortmess による検索個数の最大表示数
+endif
 set textwidth=0                                # 自動改行させない
 set display+=lastline                          # 画面最後の行をできる限り表示
 set wrap                                       # 長い行は折り返し表示
@@ -261,8 +263,8 @@ set ignorecase smartcase                       # 小文字のみの検索では�
 set infercase                                  # 補完時に大文字/小文字をいい感じに調節してくれる
 # set hlsearch                                   # 検索ハイライトはトグル・スイッチにするために autocmd と map で行う
 # 一時的な取り消しが <Esc> を二回だと一回の <Esc> の反応が悪くなる
-nnoremap <leader><Space> <Cmd>set hlsearch!<CR>
-xnoremap <leader><Space> <Cmd>set hlsearch!<CR>
+nnoremap <leader><Space> <Cmd>set hlsearch! scrolloff<<CR>
+xnoremap <leader><Space> <Cmd>set hlsearch! scrolloff<<CR>
 nnoremap *  *<Cmd>set hlsearch<CR>
 xnoremap *  *<Cmd>set hlsearch<CR>
 nnoremap #  #<Cmd>set hlsearch<CR>
@@ -328,6 +330,7 @@ augroup VIMRC
 	autocmd BufNewFile *.py         vimrc#Insert_template('Python.py')
 	autocmd BufNewFile *.css        vimrc#Insert_template('CSS.css')
 	autocmd BufNewFile *.vim        vimrc#Insert_template('vim.vim')
+	autocmd CmdwinLeave,CmdlineLeave,TabLeave,WinLeave,InsertEnter * vimrc#ChangeScrolloff()
 augroup END
 # 日本語の表示/編集、文字幅に関わる設定 {{{1
 if exists('&ambiwidth')                        # □とか○の文字があってもカーソル位置がずれないようにする
@@ -367,7 +370,11 @@ set timeout timeoutlen=500 ttimeoutlen=100     # マップの入力待ち 0.5s�
 set modeline
 # set modeline modelineexpr
 set shellslash                                 # Windowsでもパス区切りにスラッシュを使える
-set diffopt=filler,followwrap,context:2,iwhite,vertical,closeoff,internal,algorithm:histogram,indent-heuristic,linematch:60 # 差分表示オプション
+if has('patch-9.1.1557')
+	set diffopt=filler,followwrap,context:2,iwhite,vertical,closeoff,internal,algorithm:histogram,indent-heuristic,linematch:60 # 差分表示オプション
+else
+	set diffopt=filler,followwrap,context:2,iwhite,vertical,closeoff,internal,algorithm:histogram,indent-heuristic
+endif
 set path+=~/bin,~/Templates,
 set tags+=tags;$HOME/                          # tags ファイルは $HOME まで辿る :help file-searching
 set belloff=backspace,cursor,esc,ex,insertmode # 音を消す
