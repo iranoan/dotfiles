@@ -16,7 +16,7 @@ function set_vimlsp#main() abort
 	let g:lsp_document_highlight_delay = 200
 	let g:lsp_semantic_delay = 200
 	let g:lsp_diagnostics_virtual_text_enabled = 0 " 行末に表示され邪魔だし、set wrap でキャレットや n の検索ヒットがずれる行がでてくる
-	let l:icon_dir = split(&runtimepath, ',')[0] .. '/icons/'
+	let l:icon_dir = $MYVIMDIR .. '/icons/'
 	let l:icon_ext = has('win32') ? '.ico' : '.png'
 	let g:lsp_diagnostics_signs_error       = {'text': '😰', 'icon': l:icon_dir .. 'error' .. l:icon_ext}
 	let g:lsp_diagnostics_signs_warning     = {'text': '🤔', 'icon': l:icon_dir .. 'warning' .. l:icon_ext}
