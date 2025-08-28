@@ -329,7 +329,7 @@ augroup SetPackOpt
 	autocmd FuncUndefined map_markdown#* ++once packadd map-markdown
 
 	# 編集中の Markdown をブラウザでプレビュー https://github.com/iamcco/markdown-preview.nvim {{{2
-	# do-setup: cd app && npx --yes yarn install
+	# do-setup: npx --yes yarn install && NODE_OPTIONS=--openssl-legacy-provider npx --yes yarn build
 	# help がないので上記 URL か $MYVIMDIR/pack/github/opt/markdown-preview.nvim/README.md
 	# 実際のキーマップは $MYVIMDIR/ftplugin/markdown.vim
 	autocmd FuncUndefined mkdp#* ++once set_md_preview#main() | delfunction set_md_preview#main
