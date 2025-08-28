@@ -19,7 +19,6 @@ endif
 
 setlocal formatoptions-=c textwidth=0 iskeyword-=# iskeyword+=? # デフォルト設定から好みに変更
 # ? は is?, isnot? の syntax highlight を効かせるため
-# setlocal keywordprg=:VimHelp
 
 # $MYVIMDIR/pack/ のファイルタイプ別ローカル設定 {{{1
 nnoremap <buffer><silent>gf :TabEdit <C-R><C-P><CR>

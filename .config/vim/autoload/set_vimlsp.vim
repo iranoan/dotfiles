@@ -136,7 +136,7 @@ def s:on_lsp_buffer_enabled(): void
 	# # テキスト整形
 	# nnoremap <leader>s          <Plug>(lsp-document-format)
 	# # Lint結果をQuickFixで表示
-	nnoremap <buffer><expr>K     &filetype ==# 'vim' ? '<Cmd>call g:VimHelp()<CR>' : '<Plug>(lsp-hover)'
+	nnoremap <buffer><expr>K     &filetype ==# 'vim' ? '<Cmd>call ftplugin#vim#VimHelp()<CR>' : '<Plug>(lsp-hover)'
 	nnoremap <buffer><C-]>       <Plug>(lsp-definition)
 	# nnoremap <buffer>gi        <Plug>(lsp-implementation)
 	# nnoremap <buffer>gt        <Plug>(lsp-type-definition)
