@@ -59,7 +59,7 @@ export def Tabedit(...arg: list<string>): void
 		return false
 	enddef
 
-	def Open(f: any, pwd: string): void  # f (バッファ番号、もしくはファイル名) を開く
+	def Open(f: any, pwd: string): void
 		def AssociateCore(subf: string): void
 			if has('unix')
 				system('xdg-open "' .. subf .. '" &')
@@ -144,9 +144,9 @@ export def Tabedit(...arg: list<string>): void
 			endif
 		else
 			if wordcount().bytes == 0 && &modified == false && len(tabpagebuflist()) == 1
-				execute 'silent edit ' .. f
+				execute 'silent edit ' .. full
 			else
-				execute 'silent tabedit ' .. f
+				execute 'silent tabedit ' .. full
 			endif
 		endif
 	enddef
