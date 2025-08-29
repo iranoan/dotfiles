@@ -8,6 +8,7 @@ var did_load_filetypes = 1
 
 augroup user_filetypedetect
 	autocmd!
+	autocmd BufNewFile,BufRead conkyrc,conky.conf setfiletype conkyrc
 	autocmd BufNewFile,BufRead *.plt          setfiletype gnuplot # *.plt は mimetypeが設定されていないことも有り得る
 	autocmd BufNewFile,BufRead *.sh           if getline(1) =~# '^#!\s*\(/usr/bin/env\s\+\|/bin/\|/usr/bin/\)\=bash\>' && &filetype !=# 'bash' | setfiletype bash | endif
 	autocmd BufNewFile,BufRead .bash_history,.bashrc,~/dotfiles/.config/bash/*,~/.config/bash/* setfiletype bash

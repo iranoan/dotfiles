@@ -332,8 +332,6 @@ augroup SetPackOpt
 
 	# conky シンタックス https://github.com/smancill/conky-syntax.vim {{{2 ←署名を見ると同じ開発元だが、標準パッケージに含まれているものだと上手く動作しない
 	autocmd BufNewFile,BufRead conkyrc,conky.conf ++once packadd conky-syntax.vim
-		| set filetype=conkyrc
-		| autocmd! BufNewFile,BufRead conkyrc,conky.conf
 
 	# getmail syntax https://github.com/vim-scripts/getmail.vim {{{2
 	# 	autocmd BufRead ~/.getmail/*,~/.config/getmail/* set_getmail_vim#main()
