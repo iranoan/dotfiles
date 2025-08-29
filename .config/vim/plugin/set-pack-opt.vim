@@ -216,6 +216,9 @@ augroup TabEdit # tabedit, fern.vim, fzf.vim サイクリック依存
 	autocmd CmdUndefined TabEdit set_tabedit#main()
 		| autocmd_delete([{group: 'TabEdit'}])
 		| delfunction set_tabedit#main
+	autocmd FuncUndefined tabedit#* set_tabedit#main()
+		| autocmd_delete([{group: 'TabEdit'}])
+		| delfunction set_tabedit#main
 	autocmd CmdlineEnter * set_tabedit#main()
 		| autocmd_delete([{group: 'TabEdit'}])
 		| delfunction set_tabedit#main

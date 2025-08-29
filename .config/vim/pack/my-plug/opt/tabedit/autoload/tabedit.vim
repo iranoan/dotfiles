@@ -12,7 +12,15 @@ export def IsTextFile(f: string): bool
 		return true
 	elseif mime =~# '^text/'
 			|| mime =~# '^[A-Za-z_-]\+/[A-Za-z_-]\++xml$'
-			|| mime =~# '^application/\(x-\)\?\(zip|xz|tar|gzip|bz2-compressed\)$'
+		return true
+	elseif mime =~# '^application/\(x-\)\=zip$'
+		unlet! g:loaded_zip g:loaded_zipPlugin
+		source $VIMRUNTIME/plugin/zipPlugin.vim
+		return true
+	elseif mime =~# '^application/\(x-\)\=\(xz\|tar\|gzip\|bz2-compressed\)$'
+		unlet! g:loaded_tar g:loaded_tarPlugin g:loaded_gzip
+		source $VIMRUNTIME/plugin/tarPlugin.vim
+		source $VIMRUNTIME/plugin/gzip.vim
 		return true
 	endif
 	# 関連付けで判定
@@ -47,13 +55,13 @@ export def Tabedit(...arg: list<string>): void
 		# 現在のタブに有るか?
 		for w in windows
 			if win_id2tabwin(w)[0] == tabnr
-				win_id = win_id ? win_id : w
+				win_id = win_id != 0 ? win_id : w
 				return true
 			endif
 		endfor
 		# 他のタブも含めて開いているか?
 		for w in windows
-			win_id = win_id ? win_id : w
+			win_id = win_id != 0 ? win_id : w
 			return true
 		endfor
 		return false
@@ -80,7 +88,7 @@ export def Tabedit(...arg: list<string>): void
 						return true
 					endif
 					execute 'silent tab sbuffer ' .. v.bufnr
-					win_id = win_id ? win_id : winnr()
+					win_id = win_id != 0 ? win_id : winnr()
 					return true
 				endfor
 				return false
@@ -105,7 +113,7 @@ export def Tabedit(...arg: list<string>): void
 			else
 				Associate('tabedit', subf)
 			endif
-			win_id = win_id ? win_id : winnr()
+			win_id = win_id != 0 ? win_id : winnr()
 		enddef
 
 		def ToFullpath(subf: string, dir: string): string # フルパスに変換

@@ -50,7 +50,7 @@ g:loaded_zip = 1
 augroup loadZipArchive
 	autocmd!
 	autocmd BufReadPre *.aar,*.apk,*.celzip,*.crtx,*.docm,*.docx,*.dotm,*.dotx,*.ear,*.epub,*.gcsx,*.glox,*.gqsx,*.ja,*.jar,*.kmz,*.odb,*.odc,*.odf,*.odg,*.odi,*.odm,*.odp,*.ods,*.odt,*.otc,*.otf,*.otg,*.oth,*.oti,*.otp,*.ots,*.ott,*.oxt,*.potm,*.potx,*.ppam,*.ppsm,*.ppsx,*.pptm,*.pptx,*.sldx,*.thmx,*.vdw,*.war,*.wsz,*.xap,*.xlam,*.xlam,*.xlsb,*.xlsm,*.xlsx,*.xltm,*.xltx,*.xpi,*.zip
-				\ unlet g:loaded_zip g:loaded_zipPlugin | source $VIMRUNTIME/plugin/zipPlugin.vim
+				\ unlet! g:loaded_zip g:loaded_zipPlugin | source $VIMRUNTIME/plugin/zipPlugin.vim
 	autocmd BufRead *.aar,*.apk,*.celzip,*.crtx,*.docm,*.docx,*.dotm,*.dotx,*.ear,*.epub,*.gcsx,*.glox,*.gqsx,*.ja,*.jar,*.kmz,*.odb,*.odc,*.odf,*.odg,*.odi,*.odm,*.odp,*.ods,*.odt,*.otc,*.otf,*.otg,*.oth,*.oti,*.otp,*.ots,*.ott,*.oxt,*.potm,*.potx,*.ppam,*.ppsm,*.ppsx,*.pptm,*.pptx,*.sldx,*.thmx,*.vdw,*.war,*.wsz,*.xap,*.xlam,*.xlam,*.xlsb,*.xlsm,*.xlsx,*.xltm,*.xltx,*.xpi,*.zip
 				\ ++nested edit!
 				| autocmd! loadZipArchive
@@ -60,20 +60,15 @@ augroup END
 g:loaded_gzip = 1 # {{{ # $VIMRUNTIME/plugin/gzip.vim で exists("#BufReadPre#*.gz") は finish としているので、Vim 起動後に BufReadPre をトリガーとして遅延読み込みできない
 g:loaded_tar                = 1
 g:loaded_tarPlugin = 1
-command GzipEnable unlet g:loaded_tar g:loaded_tarPlugin g:loaded_gzip
-	| source $VIMRUNTIME/plugin/tarPlugin.vim
-	| source $VIMRUNTIME/plugin/gzip.vim
-	| delcommand GzipEnable
-# augroup loadTarArchive
-# 	autocmd!
-# 	autocmd FileReadPre *.gz,*.bz2,*.Z,*.lzma,*.xz,*.lz,*.zst,*.br,*.lzo,*.tar,*.lrp,*.tbz,*.tgz,*.txz,*.tzs
-# 				\ unlet g:loaded_tarPlugin | source $VIMRUNTIME/plugin/tarPlugin.vim
-# 				| unlet g:loaded_gzip | source $VIMRUNTIME/plugin/gzip.vim
-# 	autocmd BufRead *.tar.*,*.tar,*.tbz,*.tgz,*.txz,*.tzs
-# 				\ ++nested edit!
-# 				\ autocmd! loadTarArchive
-# 				| augroup! loadTarArchive
-# augroup END
+augroup loadTarArchive
+	autocmd!
+	autocmd BufRead *.gz,*.bz2,*.Z,*.lzma,*.xz,*.lz,*.zst,*.br,*.lzo,*.tar,*.lrp,*.tbz,*.tgz,*.txz,*.tzs
+				\ ++once unlet! g:loaded_tar g:loaded_tarPlugin g:loaded_gzip
+				| source $VIMRUNTIME/plugin/tarPlugin.vim
+				| source $VIMRUNTIME/plugin/gzip.vim
+				| echohl WarningMsg | echo 'edit! ' .. expand('%:t') | echohl None
+				# execute 'edit! ' .. expand('%:t') が効かない
+augroup END
 # # }}}
 # netrw {{{ ↓ fern を使う
 g:loaded_netrw = 1
