@@ -49,7 +49,6 @@ endfunction
 function set_fzf#neoyank_sub() abort
 	let g:neoyank#file = $MYVIMDIR .. "cache/neoyank_history.json"
 	packadd neoyank.vim
-	silent call neoyank#_append()
 	silent call neoyank#_yankpost()
 endfunction
 

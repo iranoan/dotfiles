@@ -269,10 +269,6 @@ augroup SetNeoyank
 		| autocmd! SetNeoyank
 		| augroup! SetNeoyank
 		| delfunction set_fzf#neoyank_sub
-	autocmd TextChanged * set_fzf#neoyank_sub()
-		| autocmd! SetNeoyank
-		| augroup! SetNeoyank
-		| delfunction set_fzf#neoyank_sub
 augroup END
 
 # autocmd 削除を纏められる→++once が使えるタイプ {{{1
