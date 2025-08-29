@@ -9,7 +9,6 @@ b:did_ftplugin_user = 1
 #ファイルタイプ別のグローバル設定 {{{1
 # if !exists('g:awk_plugin')
 # 	g:awk_plugin = 1
-# 	defcompile
 # endif
 
 # ファイルタイプ別ローカル設定 {{{1

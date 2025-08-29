@@ -169,4 +169,3 @@ export def Tabedit(...arg: list<string>): void
 	win_gotoid(win_id)
 	redraw  # これが無いとタグが切り替わったように見えない
 enddef
-defcompile

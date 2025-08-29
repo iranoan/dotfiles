@@ -98,4 +98,3 @@ export def Level(): any
 	endif
 	return get(b:awk_levels, v:lnum, 0)
 enddef
-defcompile
