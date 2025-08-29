@@ -199,16 +199,14 @@ g:pairquote = {
 augroup SetPairBracket
 	autocmd!
 	autocmd InsertEnter,CmdlineEnter * packadd pair_bracket
-		| autocmd! SetPairBracket
-		| augroup! SetPairBracket
+		| autocmd_delete([{group: 'SetPairBracket'}])
 augroup END
 
 # 補完 https://github.com/prabirshrestha/asyncomplete.vim {{{2
 augroup SetAsyncomplete # vim-lsp からも読み込まれるので、++once を使わない
 	autocmd!
 	autocmd InsertEnter * set_asyncomplete#main()
-		| autocmd! SetAsyncomplete
-		| augroup! SetAsyncomplete
+		| autocmd_delete([{group: 'SetAsyncomplete'}])
 		| delfunction set_asyncomplete#main
 augroup END
 
@@ -216,12 +214,10 @@ augroup END
 augroup TabEdit # tabedit, fern.vim, fzf.vim サイクリック依存
 	autocmd!
 	autocmd CmdUndefined TabEdit set_tabedit#main()
-		| autocmd! TabEdit
-		| augroup! TabEdit
+		| autocmd_delete([{group: 'TabEdit'}])
 		| delfunction set_tabedit#main
 	autocmd CmdlineEnter * set_tabedit#main()
-		| autocmd! TabEdit
-		| augroup! TabEdit
+		| autocmd_delete([{group: 'TabEdit'}])
 		| delfunction set_tabedit#main
 augroup END
 # *.vim で再設定されてしまう分は $MYVIMDIR/after/ftplugin/vim.vim
@@ -233,11 +229,9 @@ nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 augroup SetGnuGrep
 	autocmd!
 	autocmd CmdlineEnter * packadd gnu-grep
-		| autocmd! SetGnuGrep
-		| augroup! SetGnuGrep
+		| autocmd_delete([{group: 'SetGnuGrep'}])
 	autocmd FuncUndefined gnu_grep#* packadd gnu-grep
-		| autocmd! SetGnuGrep
-		| augroup! SetGnuGrep
+		| autocmd_delete([{group: 'SetGnuGrep'}])
 augroup END
 g:gnu_grep = {'exclude-dir': '{.git,.cache,.thumbnail,cache,thumbnail,undo}'}
 
@@ -245,11 +239,9 @@ g:gnu_grep = {'exclude-dir': '{.git,.cache,.thumbnail,cache,thumbnail,undo}'}
 augroup VimDocJa
 	autocmd!
 	autocmd FileType vim packadd vimdoc-ja
-		| autocmd! VimDocJa
-		| augroup! VimDocJa
+		| autocmd_delete([{group: 'VimDocJa'}])
 	autocmd CmdlineEnter * packadd vimdoc-ja
-		| autocmd! VimDocJa
-		| augroup! VimDocJa
+		| autocmd_delete([{group: 'VimDocJa'}])
 augroup END
 
 # ファイル・マネージャー https://github.com/lambdalisue/fern.vim {{{2
@@ -257,8 +249,7 @@ nnoremap <Leader>e <Cmd>call set_fern#FernSync()<CR>
 augroup SetFernSync # tabedit, fern.vim, fzf.vim サイクリック依存
 	# キーマップだけだと、ディレクトリ部分の gf で使えない
 	autocmd CmdUndefined Fern set_fern#main()
-		| autocmd! SetFernSync
-		| augroup! SetFernSync
+		| autocmd_delete([{group: 'SetFernSync'}])
 		| delfunction set_fern#main
 augroup END
 
@@ -266,8 +257,7 @@ augroup END
 augroup SetNeoyank
 	autocmd!
 	autocmd TextYankPost * set_fzf#neoyank_sub()
-		| autocmd! SetNeoyank
-		| augroup! SetNeoyank
+		| autocmd_delete([{group: 'SetNeoyank'}])
 		| delfunction set_fzf#neoyank_sub
 augroup END
 
@@ -335,8 +325,8 @@ augroup SetPackOpt
 
 	# getmail syntax https://github.com/vim-scripts/getmail.vim {{{2
 	# 	autocmd BufRead ~/.getmail/*,~/.config/getmail/* set_getmail_vim#main()
-	# 	| autocmd! SetPackOpt BufRead ~/.getmail/*,~/.config/getmail/*
-	# 	| delfunction set_getmail_vim#main
+	# 		| autocmd! SetPackOpt BufRead ~/.getmail/*,~/.config/getmail/*
+	# 		| delfunction set_getmail_vim#main
 
 	# vim 折りたたみ fold $MYVIMDIR/pack/my-plug/opt/vim-ft-vim_fold/ {{{2 https://github.com/thinca/vim-ft-vim_fold を組み合わせ追加のために置き換え
 	autocmd FileType vim ++once packadd vim-ft-vim_fold
@@ -390,9 +380,8 @@ augroup END
 augroup loadautofmt
 	autocmd!
 	autocmd FileType text,mail,notmuch-edit set_autofmt#main()
-				| autocmd! loadautofmt
-				| augroup! loadautofmt
-				| delfunction set_autofmt#main
+		| autocmd_delete([{group: 'loadautofmt'}])
+		| delfunction set_autofmt#main
 augroup END
 
 # 各種言語の構文チェック https://github.com/dense-analysis/ale {{{2
@@ -400,9 +389,8 @@ augroup loadALE
 	autocmd!
 	# autocmd FileType c,cpp,python,ruby,yaml,markdown,html,xhtml,css,tex,help,json
 	autocmd FileType c,cpp,ruby,yaml,markdown,html,xhtml,css,tex,help,json set_ale#main()
-				| autocmd! loadALE
-				| augroup! loadALE
-				| delfunction set_ale#main
+		| autocmd_delete([{group: 'loadALE'}])
+		| delfunction set_ale#main
 augroup END
 
 # C/C++シンタックス https://github.com/vim-jp/vim-cpp {{{2
@@ -411,8 +399,7 @@ augroup END
 augroup loadVimTextObjIfdef
 	autocmd!
 	autocmd FileType c,cpp packadd vim-textobj-ifdef | packadd vim-cpp
-	| autocmd! loadVimTextObjIfdef
-	| augroup! loadVimTextObjIfdef
+		| autocmd_delete([{group: 'loadVimTextObjIfdef'}])
 augroup END
 # a#, i# に割当
 
@@ -423,35 +410,31 @@ augroup END
 augroup loadTextObjFunc
 	autocmd!
 	autocmd FileType c,cpp,vim packadd vim-textobj-function
-	| packadd vim-textobj-function-syntax
-	| autocmd! loadTextObjFunc
-	| augroup! loadTextObjFunc
+		| packadd vim-textobj-function-syntax
+		| autocmd_delete([{group: 'loadTextObjFunc'}])
 augroup END
 
 # https://github.com/prabirshrestha/vim-lsp {{{2
 augroup loadvimlsp
 	autocmd!
 	autocmd FileType awk,c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,css,sh,bash,go,conf set_vimlsp#main()
-				| autocmd! loadvimlsp
-				| augroup! loadvimlsp
-				| delfunction set_vimlsp#main
+		| autocmd_delete([{group: 'loadvimlsp'}])
+		| delfunction set_vimlsp#main
 augroup END
 
 # カーソル位置に合わせて filetype を判定←各種プラグインが依存 https://github.com/Shougo/context_filetype.vim {{{2
 augroup loadcontext_filetype
 	autocmd!
 	autocmd FileType sh,bash,vim,html,xhtml,markdown,lua set_context_filetype#main()
-				| autocmd! loadcontext_filetype
-				| augroup! loadcontext_filetype
-				| delfunction set_context_filetype#main
+		| autocmd_delete([{group: 'loadcontext_filetype'}])
+		| delfunction set_context_filetype#main
 augroup END
 
 # $MYVIMDIR/pack/my-plug/opt/ft-fold {{{2
 augroup loadFileTypeFold
 	autocmd!
 	autocmd FileType python,help,awk packadd ft-fold
-				| autocmd! loadFileTypeFold
-				| augroup! loadFileTypeFold
+		| autocmd_delete([{group: 'loadFileTypeFold'}])
 augroup END
 
 # キーマップし読み込みもする分 {{{1
