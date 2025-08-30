@@ -346,6 +346,10 @@ def Make(ls: list<dict<any>>): void # make や別途インストールが必要�
 			if cmd[0] !=# 'make'
 				if index(['cd', 'set', 'export'], cmd[0]) != -1
 					return true
+				elseif cmd[0] =~? '^\w\+='
+					if executable(cmd[1])
+						return true
+					endif
 				elseif executable(cmd[0])
 					return true
 				endif
@@ -386,7 +390,7 @@ def Make(ls: list<dict<any>>): void # make や別途インストールが必要�
 		chdir(d)
 		for c in l.setup
 			if !Executable(c)
-				echohl WarningMsg | echomsg 'do not rum ' .. c | echohl None
+				echohl WarningMsg | echomsg 'do not run ' .. c | echohl None
 				continue
 			endif
 			# execute('terminal ++shell ' .. c)
