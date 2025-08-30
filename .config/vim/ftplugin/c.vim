@@ -48,10 +48,3 @@ setlocal errorformat =
 			\%-G%f:%l:\ %#error:\ %#(Each\ undeclared\ identifier\ is\ reported\ only%.%#,
 			\%-G%f:%s:,
 			\%E%m
-
-" Undo {{{1
-if exists('b:undo_ftplugin')
-	let b:undo_ftplugin ..= ' | call undo_ftplugin#Reset("c")'
-else
-	let b:undo_ftplugin = 'call undo_ftplugin#Reset("c")'
-endif

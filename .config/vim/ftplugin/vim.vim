@@ -21,10 +21,3 @@ endif
 ftplugin#vim#ChangeVim9VimL()
 setlocal spelloptions=camel
 nnoremap <silent><buffer>K <ScriptCmd>call ftplugin#vim#VimHelp()<CR>
-
-# Undo {{{1
-if exists('b:undo_ftplugin')
-	b:undo_ftplugin ..= ' | call undo_ftplugin#Reset("vim")'
-else
-	b:undo_ftplugin = 'call undo_ftplugin#Reset("vim")'
-endif

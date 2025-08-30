@@ -31,10 +31,3 @@ setlocal equalprg=autopep8\ -
 setlocal formatprg=autopep8\ -
 " --max-line-length\ 100 " ~/.config/pep8
 setlocal foldexpr=python#fold#Fold() foldmethod=expr
-
-" Undo {{{1
-if exists('b:undo_ftplugin')
-	let b:undo_ftplugin ..= ' | call undo_ftplugin#Reset("python")'
-else
-	let b:undo_ftplugin = 'call undo_ftplugin#Reset("python")'
-endif

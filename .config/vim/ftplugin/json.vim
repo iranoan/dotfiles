@@ -18,10 +18,3 @@ setlocal makeprg=jq\ --tab\ --monochrome-output\ .\ %
 setlocal equalprg=jq\ --tab\ --monochrome-output\ '.'
 setlocal commentstring=/*%s*/ " 本来は JSON にコメントはないが、.vimspectore.json 用
 setlocal foldmethod=syntax
-
-" Undo {{{1
-if exists('b:undo_ftplugin')
-	let b:undo_ftplugin ..= ' | call undo_ftplugin#Reset("json")'
-else
-	let b:undo_ftplugin = 'call undo_ftplugin#Reset("json")'
-endif

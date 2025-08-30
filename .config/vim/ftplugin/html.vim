@@ -53,13 +53,6 @@ nnoremap <buffer>gf                <Cmd>call ftplugin#html#GF()<CR>
 # }}}
 # }}}1
 
-# Undo {{{1
-if exists('b:undo_ftplugin')
-	b:undo_ftplugin ..= '| call undo_ftplugin#Reset("html")'
-else
-	b:undo_ftplugin = 'call undo_ftplugin#Reset("html")'
-endif
-
 # $MYVIMDIR/pack/ のファイルタイプ別ローカル設定 {{{1
 nnoremap <silent><buffer><leader>tt <Cmd>SurroundTag <span\ class="tcy"><CR>
 xnoremap <silent><buffer><leader>tt <Cmd>SurroundTag <span\ class="tcy"><CR>

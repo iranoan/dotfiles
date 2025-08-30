@@ -16,10 +16,3 @@ setlocal cindent autoindent smartindent
 setlocal foldmethod=expr foldexpr=awk#fold#Level()
 setlocal errorformat=awk:\ %f:%l:\ %m,gawk:\ %f:%l:\ %m,mawk:\ %f:%l:\ %m
 setlocal makeprg=awk\ -f\ %\ % # 編集中のファイル自身を処理させる
-
-# Undo {{{1
-if exists('b:undo_ftplugin')
-	b:undo_ftplugin ..= ' | call undo_ftplugin#Reset("awk")'
-else
-	b:undo_ftplugin = 'call undo_ftplugin#Reset("awk")'
-endif

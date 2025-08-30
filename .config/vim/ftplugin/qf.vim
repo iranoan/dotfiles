@@ -32,12 +32,5 @@ nnoremap <buffer><nowait><silent>q <CMD>bwipeout!<CR>
 nnoremap <buffer><C-O> <CMD>colder<CR>
 nnoremap <buffer><C-I> <CMD>cnewer<CR>
 
-# Undo {{{1
-if exists('b:undo_ftplugin')
-	b:undo_ftplugin ..= ' | call undo_ftplugin#Reset("qf")'
-else
-	b:undo_ftplugin = 'call undo_ftplugin#Reset("qf")'
-endif
-
 # $MYVIMDIR/pack/ のファイルタイプ別ローカル設定 {{{1
 gnu_grep#SetQfTitle()

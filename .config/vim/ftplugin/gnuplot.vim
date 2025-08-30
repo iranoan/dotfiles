@@ -19,10 +19,3 @@ setlocal errorformat=%E%p^,%C\"%f\"\\,\ line\ %l:\ %m
 "対応するカッコの入力
 " inoremap <buffer> " ""<LEFT>
 " inoremap <buffer> ' ''<LEFT>
-
-" Undo {{{1
-if exists('b:undo_ftplugin')
-	let b:undo_ftplugin ..= ' | call undo_ftplugin#Reset("gnuplot")'
-else
-	let b:undo_ftplugin = 'call undo_ftplugin#Reset("gnuplot")'
-endif

@@ -25,10 +25,3 @@ setlocal foldmethod=syntax
 " inoremap <buffer> " ""<Left>
 " inoremap <buffer> ' ''<Left>
 " inoremap <buffer> /* /*  */<Left><Left><Left>
-
-" Undo {{{1
-if exists('b:undo_ftplugin')
-	let b:undo_ftplugin ..= ' | call undo_ftplugin#Reset("css")'
-else
-	let b:undo_ftplugin = 'call undo_ftplugin#Reset("css")'
-endif

@@ -7,3 +7,10 @@ endif
 b:did_ftplugin_user_after = 1
 
 setlocal textwidth=0 expandtab # デフォルト設定から好みに変更
+
+# Undo {{{1
+if exists('b:undo_ftplugin')
+	b:undo_ftplugin ..= ' | call undo_ftplugin#Reset("mail")'
+else
+	b:undo_ftplugin = 'call undo_ftplugin#Reset("mail")'
+endif

@@ -6,15 +6,16 @@ endif
 let b:did_ftplugin_user = 1
 
 " ファイルタイプ別のグローバル設定 {{{1
-" if !exists('g:tex_plugin')
-" 	let g:tex_plugin = 1
-" 	" let g:tex_conceal=''                    " TeXのキーワード置き換えはかえって見難いのでキャンセル
-" 	" setlocal conceallevel=0                 " vimrc 側でやっている
-" 	augroup myTeX
-" 		autocmd!
-" 		autocmd FileType tex setlocal termwinsize=5x0
-" 	augroup END
-" endif
+if !exists('g:tex_plugin')
+	let g:tex_plugin = 1
+	augroup myTeX
+		autocmd!
+		autocmd!
+		autocmd InsertEnter <buffer> setlocal iskeyword=@,_,-,:,.,192-255
+		autocmd InsertLeave <buffer> setlocal iskeyword=@,48-57,_,-,:,.,192-255
+	augroup END
+endif
+
 " ファイルタイプ別ローカル設定 {{{1
 "find コマンドが使えることは前提で、~/texmf/ やシステム配下にある個人用のファイルを gf で開けるようにする
 " r!find $HOME/texmf/ -type f -name "*.ty" -o -name "*.tex" -o -name "*.cls" -o -name "*.bst" -o -name "*.bib" | sed -r 's/\/[^\/]+$//g' | sort | uniq | sed -e 's/^/\t\t\t\\ .. '\''/g' -e 's/$/,'\''/g'
@@ -52,15 +53,3 @@ setlocal iskeyword=@,48-57,_,-,:,.,192-255 "\labelには/を使うことも有�
 " let b:match_words =  &matchpairs .. ",{,}:[:],<:>,\\begin{\([A-Za-z]\+\)}:\\end{\1}"
 setlocal formatlistpat=^\\s*\\\\item\\(\\[[^]]\\+\\]\\)\\?\\s\\+
 setlocal breakindentopt=list:1
-augroup TeXiskeyword " 入力時は補完時は数字を単語から外す (例:width=0.8textw→width=0.8\textwidth をやりやすく)
-	autocmd!
-	autocmd InsertEnter <buffer> setlocal iskeyword=@,_,-,:,.,192-255
-	autocmd InsertLeave <buffer> setlocal iskeyword=@,48-57,_,-,:,.,192-255
-augroup END
-
-" Undo {{{1
-if exists('b:undo_ftplugin')
-	let b:undo_ftplugin ..= ' | call undo_ftplugin#Reset("tex")'
-else
-	let b:undo_ftplugin = 'call undo_ftplugin#Reset("tex")'
-endif

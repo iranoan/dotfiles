@@ -24,10 +24,3 @@ setlocal tabstop=8
 setlocal nolinebreak
 # :NoMatchParen " 対応するカッコの ON/OFF
 # }}}1
-
-# Undo {{{1
-if exists('b:undo_ftplugin')
-	b:undo_ftplugin ..= '| call undo_ftplugin#Reset("notmuch-show")'
-else
-	b:undo_ftplugin =  'call undo_ftplugin#Reset("notmuch-show")'
-endif
