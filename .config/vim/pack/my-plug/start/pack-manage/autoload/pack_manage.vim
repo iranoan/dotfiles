@@ -132,46 +132,67 @@ def List(): void
 	var ls: list<string>
 	var pkg: dict<any>
 	var out: list<dict<any>>
-	var github: string = '^' .. resolve($MYVIMDIR) .. '/pack/github/'
-	var format: string = printf("%%s %%s %%-%ds %%s",
-		keys(packs)
-		->map((_, v) => len(v))
-		->max()
-	)
+	var k_width: number = keys(packs)->map((_, v) => len(v))->max()
+	var v_width: number = 0
+	var url_width: number
+	var github: string = escape('^' .. resolve($MYVIMDIR) .. 'pack/github/', '.[]')
+	var format: string = printf("%%s %%s %%-%ds %%s", k_width)
+	var n_ls: number
 
 	for k in keys(packs)->sort('i')
 		pkg = packs[k]
+		url_width = len(pkg.info[0].url)
 		add(ls, printf(format,
-			pkg.dir !~# github ? 'L ' : (isdirectory(pkg.dir) ? 'I ' : '  '),
+			isdirectory(pkg.dir) ? (pkg.dir !~# github ? 'L ' :  'I ') : '  ',
 			pkg.dir =~# '/start/' .. k ? '  ' : 'O ',
 			k,
 			pkg.info[0].url
 		))
+		v_width = url_width > v_width ? url_width : v_width
 		IsMulti(k, packs[k], out, false)
 	endfor
+	n_ls = len(ls)
 	if has('popupwin')
 		popup_menu(ls, {
-			border: [1, 1, 1, 1],
+			border: [1],
 			borderchars: ['─', '│', '─', '│', '┌', '┐', '┘', '└'],
-			close: 'click',
 			cursorline: true,
 			maxheight: &lines - 2,
 			moved: 'any',
+			col: 'cursor+2',
 			padding: [0, 1, 0, 1],
-			pos: 'center',
+			pos: 'topleft',
+			drag: true,
 			scrollbar: true,
 			wrap: false,
 			zindex: 1000,
+			minwidth: v_width + k_width + 7,
 			filter: (id, key) => {
+				var wininfo: dict<any> = getwininfo(id)[0]
 				if key ==? 'x' || key ==? 'q' || key ==? 'c' || key ==? "\<Esc>"
 					popup_close(id, 1)
-					return true
-				# elseif key ==? 'j'
-				# 	normal! ("\<ScrollWheelUp>")
-				# 	normal! "\<ScrollWheelUp>"
-				else
-					return popup_filter_menu(id, key)
+				elseif key ==? 'h' || key ==? "\<Up>" || key ==? "\<C-y>"
+					if wininfo.topline != 1
+						win_execute(id, "normal! \<C-y>")
+					endif
+				elseif key ==? 'j' || key ==? "\<PageDown>" || key ==? "\<C-f>"
+					if wininfo.botline == n_ls
+						return true
+					elseif 2 * wininfo.botline - wininfo.topline > n_ls # スクロールの残りが1ページ分もない
+						win_execute(id, "normal! " .. (n_ls - wininfo.botline) .. "\<C-e>")
+					else
+						win_execute(id, "normal! \<C-f>")
+					endif
+				elseif key ==? 'k' || key ==? "\<PageUp>" || key ==? "\<C-b>"
+					if wininfo.topline != 1
+						win_execute(id, "normal! \<C-b>")
+					endif
+				elseif key ==? 'l' || key ==? "\<Down>" || key ==? "\<C-e>"
+					if wininfo.botline != n_ls
+						win_execute(id, "normal! \<C-e>")
+					endif
 				endif
+				return true
 			}
 		})
 	else
@@ -576,11 +597,11 @@ export def SetMAP(plug: string, cmd: string, map_ls: list<dict<any>>): void # �
 			exe_methods[i.cmd .. ':' .. i.mode] = exe_method
 		endif
 		if exe_method == 0
-			execute i.mode .. 'noremap ' .. (get(i, 'buffer', false) ? '<buffer>' : '') .. i.key .. ' <Plug>' .. i.cmd
+			execute i.mode .. 'noremap ' .. (get(i, 'buffer', []) != [] ? '<buffer>' : '') .. i.key .. ' <Plug>' .. i.cmd
 		elseif ( i.mode ==# 'v' || i.mode ==# 's' || i.mode ==# 'x' ) && exe_method == 2
-			execute i.mode .. 'noremap ' .. (get(i, 'buffer', false) ? '<buffer>' : '') .. i.key .. ' :' .. i.cmd .. '<CR>'
+			execute i.mode .. 'noremap ' .. (get(i, 'buffer', []) != [] ? '<buffer>' : '') .. i.key .. ' :' .. i.cmd .. '<CR>'
 		else
-			execute i.mode .. 'noremap ' .. (get(i, 'buffer', false) ? '<buffer>' : '') .. i.key .. ' <Cmd>' .. i.cmd .. '<CR>'
+			execute i.mode .. 'noremap ' .. (get(i, 'buffer', []) != [] ? '<buffer>' : '') .. i.key .. ' <Cmd>' .. i.cmd .. '<CR>'
 		endif
 	endfor
 	execute 'packadd ' .. plug

@@ -46,7 +46,12 @@ help                                                      *pack_manage-sub_help*
 
 list                                                      *pack_manage-sub_list*
 	* 概要 (|pack_manage-configration|) 記載された書式の一覧を表示する
-		- +popupwin だとポップアップ表示し c, q, x, <Esc> で閉じる
+		- |+popupwin| だとポップアップ表示し
+			* c, q, x, <Esc> で閉じる
+			* j, k でページ・アップ/アップ
+			* h, l でスクロール・ダウン/アップ
+			* |CTRL-F|, <PageDown>, |CTRL-B| <PageUp>, |CTRL-Y|, <Up>, |CTRL-E| <Up> も同様に
+				動作する
 		- そうでなければ、コマンドラインに表示する
 	* 表示項目は
 		- ローカル指定なら L、ネットワーク入手でインストールされていれば、行頭に I
