@@ -318,7 +318,9 @@ augroup SetPackOpt
 	autocmd FuncUndefined map_markdown#* ++once packadd map-markdown
 
 	# 編集中の Markdown をブラウザでプレビュー https://github.com/iamcco/markdown-preview.nvim {{{2
-	# do-setup: NODE_OPTIONS=--openssl-legacy-provider npx --yes yarn install && NODE_OPTIONS=--openssl-legacy-provider npx --yes yarn build
+	# do-setup: npx --yes yarn install
+	# && NODE_OPTIONS=--openssl-legacy-provider npx --yes yarn build
+	# ↑不要?
 	# help がないので上記 URL か $MYVIMDIR/pack/github/opt/markdown-preview.nvim/README.md
 	# 実際のキーマップは $MYVIMDIR/ftplugin/markdown.vim
 	autocmd FuncUndefined mkdp#* ++once set_md_preview#main() | delfunction set_md_preview#main
@@ -363,6 +365,7 @@ augroup ResetFiletype
 			python: '*.py',
 			vim: '*.vim,.vimrc,vimrc,_vimrc,.gvimrc,gvimrc,_gvimrc',
 			ruby: '*.rb',
+			lua: '*.lua',
 			yaml: '*.yml',
 			html: '*.htm,*.html',
 			xhtml: '*.xhtml',
@@ -420,7 +423,7 @@ augroup END
 # https://github.com/prabirshrestha/vim-lsp {{{2
 augroup loadvimlsp
 	autocmd!
-	autocmd FileType awk,c,cpp,python,vim,ruby,yaml,markdown,html,xhtml,css,sh,bash,go,conf set_vimlsp#main()
+	autocmd FileType awk,c,cpp,python,vim,lua,ruby,yaml,markdown,html,xhtml,css,sh,bash,go,conf set_vimlsp#main()
 		| autocmd_delete([{group: 'loadvimlsp'}])
 		| delfunction set_vimlsp#main
 augroup END
