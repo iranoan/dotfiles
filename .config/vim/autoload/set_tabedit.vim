@@ -7,6 +7,6 @@ function! set_tabedit#main() abort
 		call set_fern#main()
 		autocmd! SetFernSync
 		augroup! SetFernSync
-		delfunction set_fern#main
 	endif
+	call timer_start(1, {->execute('delfunction set_tabedit#main')})
 endfunction

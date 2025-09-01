@@ -27,4 +27,5 @@ function set_gitgutter#main() abort
 	" 				\ | autocmd! hook_gitgutter
 	" 				\ | augroup! hook_gitgutter
 	" augroup END
+	call timer_start(1, {->execute('delfunction set_gitgutter#main')})
 endfunction

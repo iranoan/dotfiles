@@ -94,6 +94,7 @@ function set_quickrun#main() abort
 				\ #{mode: 'x', key: '<silent><Leader>qr', method: 2, cmd: 'QuickRun'},
 				\ #{mode: 'i', key: '<silent><C-\>qr', method: 1, cmd: 'QuickRun'},
 				\ ])
+	call timer_start(1, {->execute('delfunction set_quickrun#main')})
 endfunction
 
 def s:GetTeXfile(f: string): string

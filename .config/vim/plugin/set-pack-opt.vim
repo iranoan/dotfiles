@@ -163,7 +163,6 @@ unmap asb
 # 遅延読み込みをすると vim-signature との連携機能が使えない←連携できないだけ
 if executable('git') # git がないときに起動時にエラーになるため
 	set_gitgutter#main()
-	delfunction set_gitgutter#main
 endif
 
 # autocmd 削除を纏められないにタイプ {{{1
@@ -207,7 +206,6 @@ augroup SetAsyncomplete # vim-lsp からも読み込まれるので、++once を
 	autocmd!
 	autocmd InsertEnter * set_asyncomplete#main()
 		| autocmd_delete([{group: 'SetAsyncomplete'}])
-		| delfunction set_asyncomplete#main
 augroup END
 
 # :Tabedit $MYVIMDIR/pack/my-plug/opt/tabedit/ {{{2
@@ -215,13 +213,10 @@ augroup TabEdit # tabedit, fern.vim, fzf.vim サイクリック依存
 	autocmd!
 	autocmd CmdUndefined TabEdit set_tabedit#main()
 		| autocmd_delete([{group: 'TabEdit'}])
-		| delfunction set_tabedit#main
 	autocmd FuncUndefined tabedit#* set_tabedit#main()
 		| autocmd_delete([{group: 'TabEdit'}])
-		| delfunction set_tabedit#main
 	autocmd CmdlineEnter * set_tabedit#main()
 		| autocmd_delete([{group: 'TabEdit'}])
-		| delfunction set_tabedit#main
 augroup END
 # *.vim で再設定されてしまう分は $MYVIMDIR/after/ftplugin/vim.vim
 nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
@@ -253,7 +248,6 @@ augroup SetFernSync # tabedit, fern.vim, fzf.vim サイクリック依存
 	# キーマップだけだと、ディレクトリ部分の gf で使えない
 	autocmd CmdUndefined Fern set_fern#main()
 		| autocmd_delete([{group: 'SetFernSync'}])
-		| delfunction set_fern#main
 augroup END
 
 # yank の履歴 https://github.com/Shougo/neoyank.vim {{{2
@@ -261,7 +255,6 @@ augroup SetNeoyank
 	autocmd!
 	autocmd TextYankPost * set_fzf#neoyank_sub()
 		| autocmd_delete([{group: 'SetNeoyank'}])
-		| delfunction set_fzf#neoyank_sub
 augroup END
 
 # autocmd 削除を纏められる→++once が使えるタイプ {{{1
@@ -323,7 +316,7 @@ augroup SetPackOpt
 	# ↑不要?
 	# help がないので上記 URL か $MYVIMDIR/pack/github/opt/markdown-preview.nvim/README.md
 	# 実際のキーマップは $MYVIMDIR/ftplugin/markdown.vim
-	autocmd FuncUndefined mkdp#* ++once set_md_preview#main() | delfunction set_md_preview#main
+	autocmd FuncUndefined mkdp#* ++once set_md_preview#main()
 
 	# conky シンタックス https://github.com/smancill/conky-syntax.vim {{{2 ←署名を見ると同じ開発元だが、標準パッケージに含まれているものだと上手く動作しない
 	autocmd BufNewFile,BufRead conkyrc,conky.conf ++once packadd conky-syntax.vim
@@ -331,7 +324,6 @@ augroup SetPackOpt
 	# getmail syntax https://github.com/vim-scripts/getmail.vim {{{2
 	# 	autocmd BufRead ~/.getmail/*,~/.config/getmail/* set_getmail_vim#main()
 	# 		| autocmd! SetPackOpt BufRead ~/.getmail/*,~/.config/getmail/*
-	# 		| delfunction set_getmail_vim#main
 
 	# vim 折りたたみ fold $MYVIMDIR/pack/my-plug/opt/vim-ft-vim_fold/ {{{2 https://github.com/thinca/vim-ft-vim_fold を組み合わせ追加のために置き換え
 	autocmd FileType vim ++once packadd vim-ft-vim_fold
@@ -350,7 +342,6 @@ augroup SetPackOpt
 	# LaTeX fold 折りたたみ https://github.com/matze/vim-tex-fold {{{2
 	autocmd FileType tex ++once packadd vim-textobj-latex
 		| set_vim_tex_fold#main()
-		| delfunction set_vim_tex_fold#main
 
 augroup END # }}}1
 
@@ -387,7 +378,6 @@ augroup loadautofmt
 	autocmd!
 	autocmd FileType text,mail,notmuch-edit set_autofmt#main()
 		| autocmd_delete([{group: 'loadautofmt'}])
-		| delfunction set_autofmt#main
 augroup END
 
 # 各種言語の構文チェック https://github.com/dense-analysis/ale {{{2
@@ -396,7 +386,6 @@ augroup loadALE
 	# autocmd FileType c,cpp,python,ruby,yaml,markdown,html,xhtml,css,tex,help,json
 	autocmd FileType c,cpp,ruby,yaml,markdown,html,xhtml,css,tex,help,json set_ale#main()
 		| autocmd_delete([{group: 'loadALE'}])
-		| delfunction set_ale#main
 augroup END
 
 # C/C++シンタックス https://github.com/vim-jp/vim-cpp {{{2
@@ -425,7 +414,6 @@ augroup loadvimlsp
 	autocmd!
 	autocmd FileType awk,c,cpp,python,vim,lua,ruby,yaml,markdown,html,xhtml,css,sh,bash,go,conf set_vimlsp#main()
 		| autocmd_delete([{group: 'loadvimlsp'}])
-		| delfunction set_vimlsp#main
 augroup END
 
 # カーソル位置に合わせて filetype を判定←各種プラグインが依存 https://github.com/Shougo/context_filetype.vim {{{2
@@ -433,7 +421,6 @@ augroup loadcontext_filetype
 	autocmd!
 	autocmd FileType sh,bash,vim,html,xhtml,markdown,lua set_context_filetype#main()
 		| autocmd_delete([{group: 'loadcontext_filetype'}])
-		| delfunction set_context_filetype#main
 augroup END
 
 # $MYVIMDIR/pack/my-plug/opt/ft-fold {{{2
@@ -445,123 +432,123 @@ augroup END
 
 # キーマップし読み込みもする分 {{{1
 # カーソル位置の単語を Google で検索 $MYVIMDIR/pack/my-plug/opt/google-search/ {{{2 https://www.rasukarusan.com/entry/2019/03/09/011630 を参考にした
-nnoremap <silent><Leader>s <Cmd>call set_google_search#main() <Bar> delfunction set_google_search#main<CR>
-xnoremap <silent><Leader>s <Cmd>call set_google_search#main() <Bar> delfunction set_google_search#main<CR>
+nnoremap <silent><Leader>s <Cmd>call set_google_search#main()<CR>
+xnoremap <silent><Leader>s <Cmd>call set_google_search#main()<CR>
 
 # ctags や LSP を使った list https://github.com/liuchengxu/vista.vim {{{2
 # アウトライン https://github.com/vim-voom/VOoM {{{2
-nnoremap <silent><Leader>o <Cmd>call set_vista_voom#Load() <Bar> delfunction set_vista_voom#Load<CR>
+nnoremap <silent><Leader>o <Cmd>call set_vista_voom#Load()<CR>
 
 # ページ送りに $MYVIMDIR/pack/my-plug/opt/page-down {{{2
-nnoremap <silent><space> <Cmd>call set_page_down#main() <Bar> delfunction set_page_down#main<CR>
+nnoremap <silent><space> <Cmd>call set_page_down#main()<CR>
 
 # Undo をツリー表示で行き来する https://github.com/mbbill/undotree {{{2
-nnoremap <silent><Leader>u <Cmd>call set_undotree#main() <Bar> delfunction set_undotree#main<CR>
+nnoremap <silent><Leader>u <Cmd>call set_undotree#main()<CR>
 
 # https://github.com/puremourning/vimspector {{{2
-nnoremap <Leader>df       <Cmd>call set_vimspector#main('call vimspector#AddFunctionBreakpoint(''<cexpr>'')') <Bar> delfunction set_vimspector#main<CR>
-nnoremap <Leader>dc       <Cmd>call set_vimspector#main('call vimspector#Continue()') <Bar> delfunction set_vimspector#main<CR>
-nnoremap <Leader>dd       <Cmd>call set_vimspector#main('call vimspector#DownFrame()') <Bar> delfunction set_vimspector#main<CR>
-nnoremap <Leader>dp       <Cmd>call set_vimspector#main('call vimspector#Pause()') <Bar> delfunction set_vimspector#main<CR>
-nnoremap <Leader>dR       <Cmd>call set_vimspector#main('call vimspector#Restart()') <Bar> delfunction set_vimspector#main<CR>
-nnoremap <Leader>dr       <Cmd>call set_vimspector#main('call vimspector#RunToCursor()') <Bar> delfunction set_vimspector#main<CR>
-nnoremap <Leader>ds       <Cmd>call set_vimspector#main('call vimspector#StepInto()') <Bar> delfunction set_vimspector#main<CR>
-nnoremap <Leader>dS       <Cmd>call set_vimspector#main('call vimspector#StepOut()') <Bar> delfunction set_vimspector#main<CR>
-nnoremap <Leader>dn       <Cmd>call set_vimspector#main('call vimspector#StepOver()') <Bar> delfunction set_vimspector#main<CR>
-nnoremap <Leader>d<Space> <Cmd>call set_vimspector#main('call vimspector#Stop()') <Bar> delfunction set_vimspector#main<CR>
-nnoremap <Leader>db       <Cmd>call set_vimspector#main('call vimspector#ToggleBreakpoint()') <Bar> delfunction set_vimspector#main<CR>
-nnoremap <Leader>dx       <Cmd>call set_vimspector#main('call vimspector#Reset( { ''interactive'': v:false } )') <Bar> delfunction set_vimspector#main<CR>
-nnoremap <Leader>di       <Cmd>call set_vimspector#main('VimspectorBalloonEval') <Bar> delfunction set_vimspector#main<CR>
-xnoremap <Leader>di       <Cmd>call set_vimspector#main('VimspectorBalloonEval') <Bar> delfunction set_vimspector#main<CR>
+nnoremap <Leader>df       <Cmd>call set_vimspector#main('call vimspector#AddFunctionBreakpoint(''<cexpr>'')')<CR>
+nnoremap <Leader>dc       <Cmd>call set_vimspector#main('call vimspector#Continue()')<CR>
+nnoremap <Leader>dd       <Cmd>call set_vimspector#main('call vimspector#DownFrame()')<CR>
+nnoremap <Leader>dp       <Cmd>call set_vimspector#main('call vimspector#Pause()')<CR>
+nnoremap <Leader>dR       <Cmd>call set_vimspector#main('call vimspector#Restart()')<CR>
+nnoremap <Leader>dr       <Cmd>call set_vimspector#main('call vimspector#RunToCursor()')<CR>
+nnoremap <Leader>ds       <Cmd>call set_vimspector#main('call vimspector#StepInto()')<CR>
+nnoremap <Leader>dS       <Cmd>call set_vimspector#main('call vimspector#StepOut()')<CR>
+nnoremap <Leader>dn       <Cmd>call set_vimspector#main('call vimspector#StepOver()')<CR>
+nnoremap <Leader>d<Space> <Cmd>call set_vimspector#main('call vimspector#Stop()')<CR>
+nnoremap <Leader>db       <Cmd>call set_vimspector#main('call vimspector#ToggleBreakpoint()')<CR>
+nnoremap <Leader>dx       <Cmd>call set_vimspector#main('call vimspector#Reset( { ''interactive'': v:false } )')<CR>
+nnoremap <Leader>di       <Cmd>call set_vimspector#main('VimspectorBalloonEval')<CR>
+xnoremap <Leader>di       <Cmd>call set_vimspector#main('VimspectorBalloonEval')<CR>
 
 # カーソル行の URL やファイルを開く $MYVIMDIR/pack/my-plug/opt/open_uri/ {{{2
-nnoremap <silent><Leader>x <Cmd>call set_open_uri#main() <Bar> delfunction set_open_uri#main<CR>
-nnoremap <2-LeftMouse>     <Cmd>call set_open_uri#main() <Bar> delfunction set_open_uri#main<CR>
+nnoremap <silent><Leader>x <Cmd>call set_open_uri#main()<CR>
+nnoremap <2-LeftMouse>     <Cmd>call set_open_uri#main()<CR>
 
 # 文字の変換 $MYVIMDIR/pack/my-plug/opt/transform/ {{{2
-nnoremap <Leader>ha <Cmd>call set_transform#main('Zen2han') <Bar> delfunction set_transform#main<CR>
-xnoremap <Leader>ha <Cmd>call set_transform#main('Zen2han') <Bar> delfunction set_transform#main<CR>
-nnoremap <Leader>hh <Cmd>call set_transform#main('InsertSpace') <Bar> delfunction set_transform#main<CR>
-xnoremap <Leader>hh <Cmd>call set_transform#main('InsertSpace') <Bar> delfunction set_transform#main<CR>
-nnoremap <Leader>hz <Cmd>call set_transform#main('Han2zen') <Bar> delfunction set_transform#main<CR>
-xnoremap <Leader>hz <Cmd>call set_transform#main('Han2zen') <Bar> delfunction set_transform#main<CR>
-nnoremap <Leader>hk <Cmd>call set_transform#main('Hira2kata') <Bar> delfunction set_transform#main<CR>
-xnoremap <Leader>hk <Cmd>call set_transform#main('Hira2kata') <Bar> delfunction set_transform#main<CR>
-nnoremap <Leader>hH <Cmd>call set_transform#main('Kata2hira') <Bar> delfunction set_transform#main<CR>
-xnoremap <Leader>hH <Cmd>call set_transform#main('Kata2hira') <Bar> delfunction set_transform#main<CR>
+nnoremap <Leader>ha <Cmd>call set_transform#main('Zen2han')<CR>
+xnoremap <Leader>ha <Cmd>call set_transform#main('Zen2han')<CR>
+nnoremap <Leader>hh <Cmd>call set_transform#main('InsertSpace')<CR>
+xnoremap <Leader>hh <Cmd>call set_transform#main('InsertSpace')<CR>
+nnoremap <Leader>hz <Cmd>call set_transform#main('Han2zen')<CR>
+xnoremap <Leader>hz <Cmd>call set_transform#main('Han2zen')<CR>
+nnoremap <Leader>hk <Cmd>call set_transform#main('Hira2kata')<CR>
+xnoremap <Leader>hk <Cmd>call set_transform#main('Hira2kata')<CR>
+nnoremap <Leader>hH <Cmd>call set_transform#main('Kata2hira')<CR>
+xnoremap <Leader>hH <Cmd>call set_transform#main('Kata2hira')<CR>
 # nnoremap <Leader>hb :Base64<CR>
 
 # https://github.com/junegunn/fzf.vim {{{2 # tabedit, fern.vim, fzf.vim サイクリック依存
-nnoremap <silent><Leader>fr <Cmd>call set_fzf#vim('Files ~') <Bar> delfunction set_fzf#vim<CR>
-xnoremap <silent><Leader>fr <Cmd>call set_fzf#vim('Files ~') <Bar> delfunction set_fzf#vim<CR>
-nnoremap <silent><Leader>ff <Cmd>call set_fzf#vim('Files') <Bar> delfunction set_fzf#vim<CR>
-xnoremap <silent><Leader>ff <Cmd>call set_fzf#vim('Files') <Bar> delfunction set_fzf#vim<CR>
-nnoremap <silent><Leader>fu <Cmd>call set_fzf#vim('Files ..') <Bar> delfunction set_fzf#vim<CR>
-xnoremap <silent><Leader>fu <Cmd>call set_fzf#vim('Files ..') <Bar> delfunction set_fzf#vim<CR>
-nnoremap <silent><Leader>f. <Cmd>call set_fzf#vim('Files ~/dotfiles') <Bar> delfunction set_fzf#vim<CR>
-xnoremap <silent><Leader>f. <Cmd>call set_fzf#vim('Files ~/dotfiles') <Bar> delfunction set_fzf#vim<CR>
-nnoremap <silent><Leader>fv <Cmd>call set_fzf#vim('Files $MYVIMDIR') <Bar> delfunction set_fzf#vim<CR>
-xnoremap <silent><Leader>fv <Cmd>call set_fzf#vim('Files $MYVIMDIR') <Bar> delfunction set_fzf#vim<CR>
-nnoremap <silent><Leader>fs <Cmd>call set_fzf#vim('Files ~/src') <Bar> delfunction set_fzf#vim<CR>
-xnoremap <silent><Leader>fs <Cmd>call set_fzf#vim('Files ~/src') <Bar> delfunction set_fzf#vim<CR>
-nnoremap <silent><Leader>fx <Cmd>call set_fzf#vim('Files ~/bin') <Bar> delfunction set_fzf#vim<CR>
-xnoremap <silent><Leader>fx <Cmd>call set_fzf#vim('Files ~/bin') <Bar> delfunction set_fzf#vim<CR>
-nnoremap <silent><Leader>fe <Cmd>call set_fzf#vim('Files ~/book/epub') <Bar> delfunction set_fzf#vim<CR>
-xnoremap <silent><Leader>fe <Cmd>call set_fzf#vim('Files ~/book/epub') <Bar> delfunction set_fzf#vim<CR>
-nnoremap <silent><Leader>fd <Cmd>call set_fzf#vim('Files ~/downloads') <Bar> delfunction set_fzf#vim<CR>
-xnoremap <silent><Leader>fd <Cmd>call set_fzf#vim('Files ~/downloads') <Bar> delfunction set_fzf#vim<CR>
-nnoremap <silent><Leader>fD <Cmd>call set_fzf#vim('Files ~/Document') <Bar> delfunction set_fzf#vim<CR>
-xnoremap <silent><Leader>fD <Cmd>call set_fzf#vim('Files ~/Document') <Bar> delfunction set_fzf#vim<CR>
-nnoremap <silent><Leader>fp <Cmd>call set_fzf#vim('Files ~/public_html/iranoan') <Bar> delfunction set_fzf#vim<CR>
-xnoremap <silent><Leader>fp <Cmd>call set_fzf#vim('Files ~/public_html/iranoan') <Bar> delfunction set_fzf#vim<CR>
-nnoremap <silent><Leader>fi <Cmd>call set_fzf#vim('Files ~/Information/slide') <Bar> delfunction set_fzf#vim<CR>
-xnoremap <silent><Leader>fi <Cmd>call set_fzf#vim('Files ~/Information/slide') <Bar> delfunction set_fzf#vim<CR>
-# nnoremap <silent><Leader>fb <Cmd>call set_fzf#vim('Buffers') <Bar> delfunction set_fzf#vim<CR>
-# xnoremap <silent><Leader>fb <Cmd>call set_fzf#vim('Buffers') <Bar> delfunction set_fzf#vim<CR>
-nnoremap <silent><Leader>fc <Cmd>call set_fzf#vim('Commands') <Bar> delfunction set_fzf#vim<CR>
-xnoremap <silent><Leader>fc <Cmd>call set_fzf#vim('Commands') <Bar> delfunction set_fzf#vim<CR>
-nnoremap <silent><Leader>fg <Cmd>call set_fzf#vim('GFiles?') <Bar> delfunction set_fzf#vim<CR>
-xnoremap <silent><Leader>fg <Cmd>call set_fzf#vim('GFiles?') <Bar> delfunction set_fzf#vim<CR>
-nnoremap <silent><Leader>fh <Cmd>call set_fzf#vim('HISTORY') <Bar> delfunction set_fzf#vim<CR>
-xnoremap <silent><Leader>fh <Cmd>call set_fzf#vim('HISTORY') <Bar> delfunction set_fzf#vim<CR>
-nnoremap <silent><Leader>fl <Cmd>call set_fzf#vim('BLines') <Bar> delfunction set_fzf#vim<CR>
-xnoremap <silent><Leader>fl <Cmd>call set_fzf#vim('BLines') <Bar> delfunction set_fzf#vim<CR>
-nnoremap <silent><Leader>fm <Cmd>call set_fzf#vim('Marks') <Bar> delfunction set_fzf#vim<CR>
-xnoremap <silent><Leader>fm <Cmd>call set_fzf#vim('Marks') <Bar> delfunction set_fzf#vim<CR>
-nnoremap <silent>m/         <Cmd>call set_fzf#vim('Marks') <Bar> delfunction set_fzf#vim<CR>
-xnoremap <silent>m/         <Cmd>call set_fzf#vim('Marks') <Bar> delfunction set_fzf#vim<CR>
+nnoremap <silent><Leader>fr <Cmd>call set_fzf#vim('Files ~')<CR>
+xnoremap <silent><Leader>fr <Cmd>call set_fzf#vim('Files ~')<CR>
+nnoremap <silent><Leader>ff <Cmd>call set_fzf#vim('Files')<CR>
+xnoremap <silent><Leader>ff <Cmd>call set_fzf#vim('Files')<CR>
+nnoremap <silent><Leader>fu <Cmd>call set_fzf#vim('Files ..')<CR>
+xnoremap <silent><Leader>fu <Cmd>call set_fzf#vim('Files ..')<CR>
+nnoremap <silent><Leader>f. <Cmd>call set_fzf#vim('Files ~/dotfiles')<CR>
+xnoremap <silent><Leader>f. <Cmd>call set_fzf#vim('Files ~/dotfiles')<CR>
+nnoremap <silent><Leader>fv <Cmd>call set_fzf#vim('Files $MYVIMDIR')<CR>
+xnoremap <silent><Leader>fv <Cmd>call set_fzf#vim('Files $MYVIMDIR')<CR>
+nnoremap <silent><Leader>fs <Cmd>call set_fzf#vim('Files ~/src')<CR>
+xnoremap <silent><Leader>fs <Cmd>call set_fzf#vim('Files ~/src')<CR>
+nnoremap <silent><Leader>fx <Cmd>call set_fzf#vim('Files ~/bin')<CR>
+xnoremap <silent><Leader>fx <Cmd>call set_fzf#vim('Files ~/bin')<CR>
+nnoremap <silent><Leader>fe <Cmd>call set_fzf#vim('Files ~/book/epub')<CR>
+xnoremap <silent><Leader>fe <Cmd>call set_fzf#vim('Files ~/book/epub')<CR>
+nnoremap <silent><Leader>fd <Cmd>call set_fzf#vim('Files ~/downloads')<CR>
+xnoremap <silent><Leader>fd <Cmd>call set_fzf#vim('Files ~/downloads')<CR>
+nnoremap <silent><Leader>fD <Cmd>call set_fzf#vim('Files ~/Document')<CR>
+xnoremap <silent><Leader>fD <Cmd>call set_fzf#vim('Files ~/Document')<CR>
+nnoremap <silent><Leader>fp <Cmd>call set_fzf#vim('Files ~/public_html/iranoan')<CR>
+xnoremap <silent><Leader>fp <Cmd>call set_fzf#vim('Files ~/public_html/iranoan')<CR>
+nnoremap <silent><Leader>fi <Cmd>call set_fzf#vim('Files ~/Information/slide')<CR>
+xnoremap <silent><Leader>fi <Cmd>call set_fzf#vim('Files ~/Information/slide')<CR>
+# nnoremap <silent><Leader>fb <Cmd>call set_fzf#vim('Buffers')<CR>
+# xnoremap <silent><Leader>fb <Cmd>call set_fzf#vim('Buffers')<CR>
+nnoremap <silent><Leader>fc <Cmd>call set_fzf#vim('Commands')<CR>
+xnoremap <silent><Leader>fc <Cmd>call set_fzf#vim('Commands')<CR>
+nnoremap <silent><Leader>fg <Cmd>call set_fzf#vim('GFiles?')<CR>
+xnoremap <silent><Leader>fg <Cmd>call set_fzf#vim('GFiles?')<CR>
+nnoremap <silent><Leader>fh <Cmd>call set_fzf#vim('HISTORY')<CR>
+xnoremap <silent><Leader>fh <Cmd>call set_fzf#vim('HISTORY')<CR>
+nnoremap <silent><Leader>fl <Cmd>call set_fzf#vim('BLines')<CR>
+xnoremap <silent><Leader>fl <Cmd>call set_fzf#vim('BLines')<CR>
+nnoremap <silent><Leader>fm <Cmd>call set_fzf#vim('Marks')<CR>
+xnoremap <silent><Leader>fm <Cmd>call set_fzf#vim('Marks')<CR>
+nnoremap <silent>m/         <Cmd>call set_fzf#vim('Marks')<CR>
+xnoremap <silent>m/         <Cmd>call set_fzf#vim('Marks')<CR>
 # ↑ vim-signature のデフォルト・キーマップをこちらに再定義
-# nnoremap <silent><Leader>ft <Cmd>call set_fzf#vim('Tags') <Bar> delfunction set_fzf#vim<CR>
-# xnoremap <silent><Leader>ft <Cmd>call set_fzf#vim('Tags') <Bar> delfunction set_fzf#vim<CR>
-# nnoremap <silent><Leader>fw <Cmd>call set_fzf#vim('Windows') <Bar> delfunction set_fzf#vim<CR>
-# xnoremap <silent><Leader>fw <Cmd>call set_fzf#vim('Windows') <Bar> delfunction set_fzf#vim<CR>
-nnoremap <silent><Leader>f: <Cmd>call set_fzf#vim('History :') <Bar> delfunction set_fzf#vim<CR>
-xnoremap <silent><Leader>f: <Cmd>call set_fzf#vim('History :') <Bar> delfunction set_fzf#vim<CR>
-nnoremap <silent><Leader>f/ <Cmd>call set_fzf#vim('History /') <Bar> delfunction set_fzf#vim<CR>
-xnoremap <silent><Leader>f/ <Cmd>call set_fzf#vim('History /') <Bar> delfunction set_fzf#vim<CR>
+# nnoremap <silent><Leader>ft <Cmd>call set_fzf#vim('Tags')<CR>
+# xnoremap <silent><Leader>ft <Cmd>call set_fzf#vim('Tags')<CR>
+# nnoremap <silent><Leader>fw <Cmd>call set_fzf#vim('Windows')<CR>
+# xnoremap <silent><Leader>fw <Cmd>call set_fzf#vim('Windows')<CR>
+nnoremap <silent><Leader>f: <Cmd>call set_fzf#vim('History :')<CR>
+xnoremap <silent><Leader>f: <Cmd>call set_fzf#vim('History :')<CR>
+nnoremap <silent><Leader>f/ <Cmd>call set_fzf#vim('History /')<CR>
+xnoremap <silent><Leader>f/ <Cmd>call set_fzf#vim('History /')<CR>
 
 # fzf.vim の Helptas の代わりに HelpTags を使う $MYVIMDIR/pack/my-plug/opt/fzf-help {{{2
-nnoremap <silent><Leader>fH <Cmd>call set_fzf#help() <Bar> delfunction set_fzf#help<CR>
-xnoremap <silent><Leader>fH <Cmd>call set_fzf#help() <Bar> delfunction set_fzf#help<CR>
+nnoremap <silent><Leader>fH <Cmd>call set_fzf#help()<CR>
+xnoremap <silent><Leader>fH <Cmd>call set_fzf#help()<CR>
 
 # yank の履歴 https://github.com/justinhoward/fzf-neoyank {{{2
-nnoremap <Leader>fy <Cmd>call set_fzf#neoyank('FZFNeoyank') <Bar> delfunction set_fzf#neoyank<CR>
-nnoremap <Leader>fY <Cmd>call set_fzf#neoyank('FZFNeoyank " P') <Bar> delfunction set_fzf#neoyank<CR>
-xnoremap <Leader>fy <Cmd>call set_fzf#neoyank('FZFNeoyankSelection') <Bar> delfunction set_fzf#neoyank<CR>
+nnoremap <Leader>fy <Cmd>call set_fzf#neoyank('FZFNeoyank')<CR>
+nnoremap <Leader>fY <Cmd>call set_fzf#neoyank('FZFNeoyank " P')<CR>
+xnoremap <Leader>fy <Cmd>call set_fzf#neoyank('FZFNeoyankSelection')<CR>
 
 # fzf を使ってタブ・ページの切り替え $MYVIMDIR/pack/my-plug/opt/fzf-tabs/ {{{2
-nnoremap <Leader>ft <Cmd>call set_fzf#tabs() <Bar> delfunction set_fzf#tabs<CR>
-vnoremap <Leader>ft <Cmd>call set_fzf#tabs() <Bar> delfunction set_fzf#tabs<CR>
-nnoremap <Leader>fb <Cmd>call set_fzf#tabs() <Bar> delfunction set_fzf#tabs<CR>
-nnoremap <Leader>fw <Cmd>call set_fzf#tabs() <Bar> delfunction set_fzf#tabs<CR>
+nnoremap <Leader>ft <Cmd>call set_fzf#tabs()<CR>
+vnoremap <Leader>ft <Cmd>call set_fzf#tabs()<CR>
+nnoremap <Leader>fb <Cmd>call set_fzf#tabs()<CR>
+nnoremap <Leader>fw <Cmd>call set_fzf#tabs()<CR>
 
 # notmuch-python-Vim $MYVIMDIR/pack/my-plug/opt/notmuch-py-vim/ {{{2
-nnoremap <silent><Leader>m <Cmd>call set_notmuchpy#main() <Bar> delfunction set_notmuchpy#main <CR>
+nnoremap <silent><Leader>m <Cmd>call set_notmuchpy#main()<CR>
 
 # ソースの実行結果を別バッファに表示 https://github.com/thinca/vim-quickrun {{{2
-nnoremap <silent><Leader>qr  <Cmd>call set_quickrun#main() <Bar> delfunction set_quickrun#main<CR>
-xnoremap <silent><Leader>qr  <Cmd>call set_quickrun#main() <Bar> delfunction set_quickrun#main<CR>
-inoremap <silent><C-\>qr     <Cmd>call set_quickrun#main() <Bar> delfunction set_quickrun#main<CR>
+nnoremap <silent><Leader>qr  <Cmd>call set_quickrun#main()<CR>
+xnoremap <silent><Leader>qr  <Cmd>call set_quickrun#main()<CR>
+inoremap <silent><C-\>qr     <Cmd>call set_quickrun#main()<CR>
 
 # 整形 https://github.com/junegunn/vim-easy-align {{{2
 # 下記の例の ip はテキスト・オブジェクトの「段落」を表す
@@ -579,9 +566,9 @@ inoremap <silent><C-\>qr     <Cmd>call set_quickrun#main() <Bar> delfunction set
 # | ---     | ---                                |
 # | vipga=  | visual-select inner paragragh ga = |
 # | gaip=   | ga inner paragragh =               |
-xnoremap <Enter>    <Cmd>call set_easy_align#main() <Bar> delfunction set_easy_align#main<CR>
-xnoremap <Leader>ea <Cmd>call set_easy_align#main() <Bar> delfunction set_easy_align#main<CR>
-nnoremap <Leader>ea <Cmd>call set_easy_align#main() <Bar> delfunction set_easy_align#main<CR>
+xnoremap <Enter>    <Cmd>call set_easy_align#main()<CR>
+xnoremap <Leader>ea <Cmd>call set_easy_align#main()<CR>
+nnoremap <Leader>ea <Cmd>call set_easy_align#main()<CR>
 # ↑全て対象を全体 * にしたいが、nmap の <Leader>eaip などテキストオブジェクトの場合の方法がわからない
 
 # EPWING の辞書を呼び出す https://github.com/deton/eblook.vim {{{2
@@ -592,55 +579,55 @@ nnoremap <silent>K          <Cmd>call set_eblook#SearchWord()<CR>
 
 # 素早く移動する https://github.com/easymotion/vim-easymotion {{{2
 for key in ['f', 'F', 't', 'T', 'w', 'W', 'b', 'B', 'e', 'E', 'ge', 'gE', 'j', 'k', 'n', 'N']
-	execute 'nnoremap <Leader><Leader>' .. key .. '  <Cmd>call set_easymotion#main(''(easymotion-' .. key .. ')'') <Bar> delfunction set_easymotion#main<CR>'
-	execute 'xnoremap <Leader><Leader>' .. key .. '  <Cmd>call set_easymotion#main(''(easymotion-' .. key .. ')'') <Bar> delfunction set_easymotion#main<CR>'
+	execute 'nnoremap <Leader><Leader>' .. key .. '  <Cmd>call set_easymotion#main(''(easymotion-' .. key .. ')'')<CR>'
+	execute 'xnoremap <Leader><Leader>' .. key .. '  <Cmd>call set_easymotion#main(''(easymotion-' .. key .. ')'')<CR>'
 endfor
-nnoremap <Leader><Leader>; <Cmd>call set_easymotion#main('(easymotion-next)') <Bar> delfunction set_easymotion#main<CR>
-nnoremap <Leader><Leader>, <Cmd>call set_easymotion#main('(easymotion-prev)') <Bar> delfunction set_easymotion#main<CR>
+nnoremap <Leader><Leader>; <Cmd>call set_easymotion#main('(easymotion-next)')<CR>
+nnoremap <Leader><Leader>, <Cmd>call set_easymotion#main('(easymotion-prev)')<CR>
 
 # 各種言語のコメントの追加/削除 gc{motion} https://github.com/tpope/vim-commentary {{{2
 # マッピングは gc{motion}
-nnoremap gcu <Cmd>call set_commentary#main('Commentary Commentary') <Bar> delfunction set_commentary#main<CR>
-nnoremap gcc <Cmd>call set_commentary#main('CommentaryLine') <Bar> delfunction set_commentary#main<CR>
-onoremap gc  <Cmd>call set_commentary#main('Commentary') <Bar> delfunction set_commentary#main<CR>
-nnoremap gc  <Cmd>call set_commentary#main('Commentary') <Bar> delfunction set_commentary#main<CR>
-xnoremap gc  <Cmd>call set_commentary#main('Commentary') <Bar> delfunction set_commentary#main<CR>
+nnoremap gcu <Cmd>call set_commentary#main('Commentary Commentary')<CR>
+nnoremap gcc <Cmd>call set_commentary#main('CommentaryLine')<CR>
+onoremap gc  <Cmd>call set_commentary#main('Commentary')<CR>
+nnoremap gc  <Cmd>call set_commentary#main('Commentary')<CR>
+xnoremap gc  <Cmd>call set_commentary#main('Commentary')<CR>
 
 # カッコだけでなくタグでも括る https://github.com/tpope/vim-surround {{{2
-xnoremap s   <Cmd>call set_surround#main('VSurround') <Bar> delfunction set_surround#main<CR>
-xnoremap gS  <Cmd>call set_surround#main('VgSurround') <Bar> delfunction set_surround#main<CR>
+xnoremap s   <Cmd>call set_surround#main('VSurround')<CR>
+xnoremap gS  <Cmd>call set_surround#main('VgSurround')<CR>
 # ↑s と似ているが前後で改行 v_s は v_c と同じなのでキーマップを潰しても良いが、v_S は同じ意味のキーマップが無いので、gS に割り当てている
-nnoremap ysS <Cmd>call set_surround#main('YSsurround') <Bar> delfunction set_surround#main<CR>
+nnoremap ysS <Cmd>call set_surround#main('YSsurround')<CR>
 # ↑行全体を挟む (前後に改行)
-nnoremap yss <Cmd>call set_surround#main('Yssurround') <Bar> delfunction set_surround#main<CR>
+nnoremap yss <Cmd>call set_surround#main('Yssurround')<CR>
 # ↑行全体を挟む
-nnoremap yS  <Cmd>call set_surround#main('YSurround') <Bar> delfunction set_surround#main<CR>
+nnoremap yS  <Cmd>call set_surround#main('YSurround')<CR>
 #↑↓に対して前後に改行
-nnoremap ys  <Cmd>call set_surround#main('Ysurround') <Bar> delfunction set_surround#main<CR>
-nnoremap cS  <Cmd>call set_surround#main('CSurround') <Bar> delfunction set_surround#main<CR>
-nnoremap cs  <Cmd>call set_surround#main('Csurround') <Bar> delfunction set_surround#main<CR>
-nnoremap ds  <Cmd>call set_surround#main('Dsurround') <Bar> delfunction set_surround#main<CR>
+nnoremap ys  <Cmd>call set_surround#main('Ysurround')<CR>
+nnoremap cS  <Cmd>call set_surround#main('CSurround')<CR>
+nnoremap cs  <Cmd>call set_surround#main('Csurround')<CR>
+nnoremap ds  <Cmd>call set_surround#main('Dsurround')<CR>
 # <Shift> を押すのが面倒
 var qq1: string
 var qq2: string
 for [n, q] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>'})
 	qq1 = q == "'" ? "''" : q
-	execute 'nnoremap ds'  .. n .. ' <Cmd>call set_surround#main(''Dsurround'') <Bar> call feedkeys(''$' .. qq1 .. ''') <Bar> delfunction set_surround#main<CR>'
-	execute 'nnoremap ys4' .. n .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''$' .. qq1 .. ''') <Bar> delfunction set_surround#main<CR>'
-	execute 'nnoremap ys$' .. n .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''$' .. qq1 .. ''') <Bar> delfunction set_surround#main<CR>'
+	execute 'nnoremap ds'  .. n .. ' <Cmd>call set_surround#main(''Dsurround'') <Bar> call feedkeys(''$' .. qq1 .. ''')<CR>'
+	execute 'nnoremap ys4' .. n .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''$' .. qq1 .. ''')<CR>'
+	execute 'nnoremap ys$' .. n .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''$' .. qq1 .. ''')<CR>'
 endfor
 for q in ['"', "'", '(', ')', '`', '<', '>', '[', ']', '{', '}']
 	qq1 = q == "'" ? "''" : q
-	execute 'nnoremap ys4' .. q .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''$' .. qq1 .. ''') <Bar> delfunction set_surround#main<CR>'
+	execute 'nnoremap ys4' .. q .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''$' .. qq1 .. ''')<CR>'
 endfor
 for [n1, q1] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '"': '"', "'": "'", '(': '(', ')': ')', '`': '`', '<': '<', '>': '>', '[': '[', ']': ']', '{': '{', '}': '}'})
 	for [n2, q2] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '"': '"', "'": "'", '(': '(', ')': ')', '`': '`', '<': '<', '>': '>', '[': '[', ']': ']', '{': '{', '}': '}'})
 		qq1 = q1 == "'" ? "''" : q1
 		qq2 = q2 == "'" ? "''" : q2
-		execute 'nnoremap ysi' .. n1 .. n2 .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''i' .. qq1 .. qq2 .. ''') <Bar> delfunction set_surround#main<CR>'
-		execute 'nnoremap ysa' .. n1 .. n2 .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''a' .. qq1 .. qq2 .. ''') <Bar> delfunction set_surround#main<CR>'
+		execute 'nnoremap ysi' .. n1 .. n2 .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''i' .. qq1 .. qq2 .. ''')<CR>'
+		execute 'nnoremap ysa' .. n1 .. n2 .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''a' .. qq1 .. qq2 .. ''')<CR>'
 		if n1 !=# n2 && q1 !=# q2 && n1 !=# q2 && q1 !=# n2
-			execute 'nnoremap cs' .. n1 .. n2 .. ' <Cmd>call set_surround#main(''Csurround'') <Bar> call feedkeys(''' .. qq1 .. qq2 .. ''') <Bar> delfunction set_surround#main<CR>'
+			execute 'nnoremap cs' .. n1 .. n2 .. ' <Cmd>call set_surround#main(''Csurround'') <Bar> call feedkeys(''' .. qq1 .. qq2 .. ''')<CR>'
 		endif
 	endfor
 endfor

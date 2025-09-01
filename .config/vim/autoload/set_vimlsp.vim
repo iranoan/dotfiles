@@ -78,7 +78,6 @@ function set_vimlsp#main() abort
 		call set_asyncomplete#main() " 先に設定しておかないと補完候補に現れない
 		autocmd! SetAsyncomplete
 		augroup! SetAsyncomplete
-		delfunction set_asyncomplete#main
 	endif
 	packadd asyncomplete-lsp.vim
 	call lsp#activate()
@@ -101,6 +100,7 @@ function set_vimlsp#main() abort
 					\ | endif
 					\ | endif
 	augroup END
+	call timer_start(1, {->execute('delfunction set_vimlsp#main')})
 endfunction
 
 def s:on_lsp_buffer_enabled(): void
@@ -137,7 +137,7 @@ def s:on_lsp_buffer_enabled(): void
 	# nnoremap <leader>s          <Plug>(lsp-document-format)
 	# # Lint結果をQuickFixで表示
 	nnoremap <buffer><expr>K     &filetype ==# 'vim' ? '<Cmd>call ftplugin#vim#VimHelp()<CR>' : '<Plug>(lsp-hover)'
-	nnoremap <buffer><C-]>       <Plug>(lsp-definition)
+	nnoremap <buffer><expr><C-]> &filetype ==# 'vim' ? '<Cmd>call ftplugin#vim#Goto()<CR>' : '<Plug>(lsp-definition)'
 	# nnoremap <buffer>gi        <Plug>(lsp-implementation)
 	# nnoremap <buffer>gt        <Plug>(lsp-type-definition)
 	# }}}

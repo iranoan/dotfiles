@@ -25,4 +25,5 @@ function set_autofmt#main() abort
 		" autocmd FileType text,mail,notmuch-edit setlocal formatexpr=autofmt#japanese#formatexpr()
 		autocmd FileType text,mail,notmuch-edit setlocal formatexpr=autofmt#uax14#formatexpr()
 	augroup END
+	call timer_start(1, {->execute('delfunction set_autofmt#main')})
 endfunction

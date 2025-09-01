@@ -25,6 +25,7 @@ function set_fugitve#main() abort
 		autocmd FileType fugitive,fugitiveblame,git call set_fugitve#filetype()
 	augroup END
 	" }}}
+	call timer_start(1, {->execute('delfunction set_fugitve#main')})
 endfunction
 
 def set_fugitve#undo_ftplugin(): void

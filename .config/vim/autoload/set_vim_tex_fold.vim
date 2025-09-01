@@ -3,4 +3,5 @@ function set_vim_tex_fold#main() abort
 	let g:tex_fold_additional_envs = ['itemize', 'description', 'enumerate', 'center', 'gather', 'minipage', 'tikzpicture', 'scope', 'spacing']
 	" To disable matching environments at all set: >
 	" let g:tex_fold_ignore_envs = 1
+	call timer_start(1, {->execute('delfunction set_vim_tex_fold#main')})
 endfunction

@@ -71,6 +71,7 @@ function set_ale#main()
 		autocmd!
 		autocmd BufWinEnter * call set_ale#on()
 	augroup END
+	call timer_start(1, {->execute('delfunction set_ale#main')})
 endfunction
 
 def set_ale#on(): void

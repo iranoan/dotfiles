@@ -14,4 +14,5 @@ function set_transform#main(cmd) abort
 				\ #{mode: 'x', key: '<Leader>hH', method: 2, cmd: 'Kata2hira'}
 				\ ] )
 				" #{mode: 'n', key: '<Leader>hb', method: 1, cmd: 'Base64'},
+	call timer_start(1, {->execute('delfunction set_transform#main')})
 endfunction

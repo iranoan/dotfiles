@@ -3,7 +3,6 @@ scriptencoding utf-8
 # $MYVIMRC で書かれた/使う関数
 
 set_fugitve#main() # statusline で fugitive#statusline() を使っている
-delfunction set_fugitve#main
 
 export def Lcd(): void # カレントディレクトリをファイルのディレクトリに移動
 	if get(b:, 'lcd_worked', false)

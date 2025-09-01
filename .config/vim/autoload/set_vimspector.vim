@@ -19,4 +19,5 @@ function set_vimspector#main(cmd) abort
 				\ #{mode: 'n', key: '<Leader>di',       method: 0, cmd: 'VimspectorBalloonEval'},
 				\ #{mode: 'x', key: '<Leader>di',       method: 0, cmd: 'VimspectorBalloonEval'},
 				\ ] )
+	call timer_start(1, {->execute('delfunction set_vimspector#main')})
 endfunction

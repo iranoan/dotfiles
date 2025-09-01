@@ -4,7 +4,6 @@ augroup loadVista
 				\ call set_vista_voom#Vista()
 				\ | autocmd! loadVista
 				\ | augroup! loadVista
-				\ | delfunction set_vista_voom#Vista
 augroup END
 
 augroup loadVoom
@@ -13,12 +12,12 @@ augroup loadVoom
 				\ call set_vista_voom#VOom()
 				\ | autocmd! loadVoom
 				\ | augroup! loadVoom
-				\ | delfunction set_vista_voom#VOom
 augroup END
 
 function! set_vista_voom#Load() abort
 	call set_vista_voom#Switch()
 	nnoremap <silent><Leader>o <Cmd>call set_vista_voom#Switch()<CR>
+	call timer_start(1, {set_vista_voom#Load})
 endfunction
 
 def set_vista_voom#Switch(): void # Voom に未対応は Vista を使う様に分岐
@@ -56,6 +55,7 @@ function set_vista_voom#VOom() abort
 	let g:voom_tree_placement = 'right'
 	let g:voom_tree_width = 40
 	packadd VOoM
+	call timer_start(1, {->execute('delfunction et_vista_voom#VOom')})
 endfunction
 
 function set_vista_voom#Vista() abort
@@ -63,13 +63,11 @@ function set_vista_voom#Vista() abort
 		call set_vimlsp#main()
 		autocmd! loadvimlsp
 		augroup! loadvimlsp
-		delfunction set_vimlsp#main
 	endif
 	" if !pack_manage#IsInstalled('ale') " 通常不要
 	" 	call set_ale#main()
 	" 	autocmd! loadALE
 	" 	augroup! loadALE
-	" 	delfunction set_ale#main
 	" endif
 	packadd vista.vim
 	let g:vista_executive_for = {
@@ -90,4 +88,5 @@ function set_vista_voom#Vista() abort
 	" let g:vista_finder_alternative_executives=['Voom']
 	" let g:vista_echo_cursor_strategy='floating_win'
 	" let g:vista_fzf_preview = ['right:50%']
+	call timer_start(1, {->execute('delfunction Vista')})
 endfunction

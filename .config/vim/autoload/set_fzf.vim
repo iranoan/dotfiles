@@ -32,48 +32,48 @@ function set_fzf#main() abort
 				\ } " 他で sink を使うと、この設定は無視されるので注意←:help fzf-global-options-supported-by-fzf#wrap
 				" \ 'ctrl-e': 'edit', カーソルを入力の末尾移動と重なる
 	let $FZF_DEFAULT_OPTS = substitute($FZF_DEFAULT_OPTS, '--footer "[^"]\+"', '', 'g')
+	call timer_start(1, {->execute('delfunction set_fzf#main')})
 endfunction
 
 function set_fzf#help() abort
 	if !pack_manage#IsInstalled('fzf')
 		call set_fzf#main()
-		delfunction set_fzf#main
 	endif
 	let g:fzf_help = ['--footer', '<C-]/R/K/^>:Preview On/Off/Up/Down/[No]Wrap｜<Enter>:Open｜W:[No]Wrap']
 	call pack_manage#SetMAP('fzf-help', 'HelpTags', [
 				\ #{mode: 'n', key: '<Leader>fH', method: 1, cmd: 'HelpTags'},
 				\ #{mode: 'x', key: '<Leader>fH', method: 1, cmd: 'HelpTags'},
 				\ ] )
+	call timer_start(1, {->execute('delfunction set_fzf#help')})
 endfunction
 
 function set_fzf#neoyank_sub() abort
 	let g:neoyank#file = $MYVIMDIR .. "cache/neoyank_history.json"
 	packadd neoyank.vim
 	silent call neoyank#_yankpost()
+	call timer_start(1, {->execute('delfunction set_fzf#neoyank_sub')})
 endfunction
 
 function set_fzf#neoyank(cmd) abort
 	if !pack_manage#IsInstalled('fzf')
 		call set_fzf#main()
-		delfunction set_fzf#main
 	endif
 	if !pack_manage#IsInstalled('neoyank.vim')
 		call set_fzf#neoyank_sub()
 		autocmd! SetNeoyank
 		augroup! SetNeoyank
-		delfunction set_fzf#neoyank_sub
 	endif
 	call pack_manage#SetMAP('fzf-neoyank', a:cmd, [
 				\ #{mode: 'n', key: '<Leader>fy', method: 1, cmd: 'FZFNeoyank'},
 				\ #{mode: 'n', key: '<Leader>fY', method: 1, cmd: 'FZFNeoyank " P'},
 				\ #{mode: 'x', key: '<Leader>fy', method: 1, cmd: 'FZFNeoyankSelection'},
 				\ ] )
+	call timer_start(1, {->execute('delfunction set_fzf#neoyank')})
 endfunction
 
 function set_fzf#tabs() abort
 	if !pack_manage#IsInstalled('fzf')
 		call set_fzf#main()
-		delfunction set_fzf#main
 	endif
 	let g:fzf_tabs_options = ['--preview', '~/bin/fzf-preview.sh {2}', '--footer', 'Ctrl-]/R/K/^:Preview On/Off/Up/Down/[No]Wrap｜F/B:PageUP/Down｜G:Sxiv｜O:Open｜V:Vim｜W:[No]Wrap']
 	call pack_manage#SetMAP('fzf-tabs', 'FZFTabOpen', [
@@ -82,12 +82,12 @@ function set_fzf#tabs() abort
 				\ #{mode: 'n', key: '<Leader>fb', method: 1, cmd: 'FZFTabOpen'},
 				\ #{mode: 'n', key: '<Leader>fw', method: 1, cmd: 'FZFTabOpen'},
 				\ ])
+	call timer_start(1, {->execute('delfunction set_fzf#tabs')})
 endfunction
 
 function set_fzf#vim(cmd) abort
 	if !pack_manage#IsInstalled('fzf')
 		call set_fzf#main()
-		delfunction set_fzf#main
 	endif
 	let s:fzf_options = [
 						\ '--multi', '--margin=0%', '--padding=0%',
@@ -138,7 +138,6 @@ function set_fzf#vim(cmd) abort
 		call set_tabedit#main()
 		autocmd! TabEdit
 		augroup! TabEdit
-		delfunction set_tabedit#main
 	endif
 	call pack_manage#SetMAP('fzf.vim', a:cmd, [
 				\ #{mode: 'n', key: '<silent><Leader>fr', method: 1, cmd: 'Files ~'},
@@ -191,6 +190,7 @@ function set_fzf#vim(cmd) abort
 " \ ↑ vim-signature のデフォルト・キーマップをこちらに再定義
 	delcommand GitFiles " vim-fugitive の :Git と重なり使いにくくなる
 	delcommand Helptags
+	call timer_start(1, {->execute('delfunction set_fzf#vim')})
 endfunction
 
 def set_fzf#FZF_open(arg: list<string>): void

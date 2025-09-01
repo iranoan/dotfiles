@@ -54,4 +54,5 @@ function set_surround#main(cmd) abort
 			endif
 		endfor
 	endfor
+	call timer_start(1, {->execute('delfunction set_surround#main')})
 endfunction

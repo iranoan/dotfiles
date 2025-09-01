@@ -8,4 +8,5 @@ function! set_getmail_vim#main() abort
 		endif
 		set filetype=conf syntax=getmailrc
 	endif
+	call timer_start(1, {->execute('delfunction set_getmail_vim#main')})
 endfunction

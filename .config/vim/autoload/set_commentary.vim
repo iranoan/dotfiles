@@ -8,4 +8,5 @@ function set_commentary#main(cmd) abort
 				\ #{mode: 'n', key: 'gc',  cmd: 'Commentary'},
 				\ #{mode: 'x', key: 'gc',  cmd: 'Commentary'}
 				\ ] )
+	call timer_start(1, {->execute('delfunction set_commentary#main')})
 endfunction

@@ -10,4 +10,5 @@ function set_undotree#main() abort
 		autocmd!
 		autocmd FileType undotree setlocal statusline=%#StatusLineLeft#%{t:undotree.GetStatusLine()}
 	augroup END
+	call timer_start(1, {->execute('delfunction set_undotree#main')})
 endfunction

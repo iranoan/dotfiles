@@ -41,11 +41,11 @@ function set_fern#main() abort
 		autocmd FileType fern call s:init_fern()
 		autocmd FileType fern ++once if !pack_manage#IsInstalled('fzf.vim')
 					\ | 	call set_fzf#vim('')
-					\ | 	delfunction set_fzf#vim
 					\ | endif
 	augroup END
 	" }}}
 	" }}}
+	call timer_start(1, {->execute('delfunction set_fern#main')})
 endfunction
 
 def set_fern#FernSync(dir: string = '%:p'): void

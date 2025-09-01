@@ -42,4 +42,5 @@ function set_easymotion#main(cmd) abort
 				\ #{mode: 'x', key: '<Leader><Leader>n',  cmd: '(easymotion-n)'},
 				\ #{mode: 'x', key: '<Leader><Leader>N',  cmd: '(easymotion-N)'}
 				\ ] )
+	call timer_start(1, {->execute('delfunction set_easymotion#main')})
 endfunction

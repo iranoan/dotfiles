@@ -27,4 +27,5 @@ function set_md_preview#main() abort
 			endfor
 		endif
 	endfor
+	call timer_start(1, {->execute('delfunction set_md_preview#main')})
 endfunction

@@ -112,6 +112,7 @@ function set_asyncomplete#main() abort
 	" 			\ ->substitute('[\n\r]', '', 'g')
 	" 			\ ->substitute('^\s*\(\d\+\):.\+', '\1', 'g')
 	" call call('<SNR>' .. f .. '_' .. 'on_insert_enter', [])
+	call timer_start(1, {->execute('delfunction set_asyncomplete#main')})
 endfunction
 
 def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>): void

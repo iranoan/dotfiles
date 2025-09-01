@@ -124,8 +124,8 @@ function set_context_filetype#main() abort
 		autocmd CursorMoved,CursorMovedI * call s:set_precious()
 					\ | autocmd! loadprecious
 					\ | augroup! loadprecious
-					\ | delfunction s:set_precious
 	augroup END
+	call timer_start(1, {->execute('delfunction set_context_filetype#main')})
 endfunction
 
 function s:set_precious() abort
@@ -139,4 +139,5 @@ function s:set_precious() abort
 	autocmd!
 		autocmd User PreciousFileType :if &diff && &foldmethod !=# 'diff' | setlocal foldmethod=diff | end
 	augroup END
+	call timer_start(1, {->execute('delfunction s:set_precious')})
 endfunction

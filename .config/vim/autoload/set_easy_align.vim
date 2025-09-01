@@ -10,4 +10,5 @@ function set_easy_align#main() abort
 				\ '|': { 'align': 'al*' },
 				\ '&': { 'align': 'al*' }
 				\ }
+	call timer_start(1, {->execute('delfunction set_easy_align#main')})
 endfunction
