@@ -1,5 +1,7 @@
 vim9script
 
+set_transform#main('')
+
 export def ReformMail(): void # ML の広告を削除する個人的な関数
 	def DelBlock(s: string, e: string, i: number, j: number): void # s, e 両方の文字列 (行) が有ったときのみ、その範囲を削除
 		var buf: list<string>
