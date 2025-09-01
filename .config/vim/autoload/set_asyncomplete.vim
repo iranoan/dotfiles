@@ -43,7 +43,7 @@ function set_asyncomplete#main() abort
 	packadd asyncomplete-omni.vim
 	call asyncomplete#register_source(asyncomplete#sources#omni#get_source_options(#{
 				\ name: 'omni',
-				\ filter: function('FilterOmni'),
+				\ filter: function('s:FilterOmni'),
 				\ priority: 60,
 				\ allowlist: ['*'],
 				\ blocklist: ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'css', 'tex', 'sh', 'go','notmuch-draft'],
@@ -59,7 +59,7 @@ function set_asyncomplete#main() abort
 	packadd asyncomplete-file.vim
 	call asyncomplete#register_source(asyncomplete#sources#file#get_source_options(#{
 				\ name: 'file',
-				\ filter: function('FilterFile'),
+				\ filter: function('s:FilterFile'),
 				\ priority: 50,
 				\ allowlist: ['*'],
 				\ blocklist: ['notmuch-draft'],
@@ -83,7 +83,7 @@ function set_asyncomplete#main() abort
 	" mail $MYVIMDIR/pack/my-plug/opt/asyncomplete-mail/ {{{
 	packadd asyncomplete-mail
 	call asyncomplete#register_source(asyncomplete#sources#mail#get_source_options(#{
-				\ filter: function('FilterMail'),
+				\ filter: function('s:FilterMail'),
 				\ priority: 100,
 				\ allowlist: ['notmuch-draft']
 				\ }))
@@ -98,7 +98,7 @@ function set_asyncomplete#main() abort
 	" html $MYVIMDIR/pack/my-plug/opt/asyncomplete-html {{{
 	packadd asyncomplete-html
 	call asyncomplete#register_source(asyncomplete#sources#html_id#GetSourceOptions(#{
-				\ filter: function('FilterFile'),
+				\ filter: function('s:FilterFile'),
 				\ priority: 100
 				\ }))
 	" }}}
@@ -223,7 +223,7 @@ def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>):
 	asyncomplete#preprocess_complete(options, l_items)
 enddef
 
-def FilterMail(org: dict<any>, col: number, base: string): list<dict<any>>
+def s:FilterMail(org: dict<any>, col: number, base: string): list<dict<any>>
 	var matches_org: list<dict<any>> = org.items
 	var matches: list<dict<any>>
 
@@ -239,7 +239,7 @@ def FilterMail(org: dict<any>, col: number, base: string): list<dict<any>>
 	return matches
 enddef
 
-def FilterOmni(org: dict<any>, col: number, base: string): list<dict<any>>
+def s:FilterOmni(org: dict<any>, col: number, base: string): list<dict<any>>
 	var matches: list<dict<any>> = org.items
 
 	# 候補候補とカーソル前の文字が同じ引用符もしくは#なら候補前の引用符/#を取り除く
@@ -265,7 +265,7 @@ def FilterOmni(org: dict<any>, col: number, base: string): list<dict<any>>
 	return matches
 enddef
 
-def FilterFile(org: dict<any>, col: number, base: string): list<dict<any>>
+def s:FilterFile(org: dict<any>, col: number, base: string): list<dict<any>>
 	var matches: list<dict<any>> = org.items
 
 	if !matches
