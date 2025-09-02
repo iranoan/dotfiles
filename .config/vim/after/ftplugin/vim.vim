@@ -15,6 +15,7 @@ setlocal formatoptions-=c textwidth=0 iskeyword-=# iskeyword+=? # デフォル�
 # ? は is?, isnot? の syntax highlight を効かせるため
 
 # $MYVIMDIR/pack/ のファイルタイプ別ローカル設定 {{{1
+nnoremap <buffer><C-]>      <Cmd>call ftplugin#vim#Goto()<CR>
 # $VIMRUNTIME/ftplugin/vim.vim で置き換えられるので
 nnoremap <buffer><silent>gf :TabEdit <C-R><C-P><CR>
 
