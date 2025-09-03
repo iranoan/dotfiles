@@ -9,7 +9,7 @@ def IsVim9(): bool
 		endif
 	enddef
 
-	var defs = filter(getline(1, '.'), (_, v) => v =~# '^\s*\(\(export\s\+\)\=\(def\|fu\%[nction]!\=\)\s\+\([sg]:\|\(\w\+#\)\+\)\=\w\+(\|enddef\>\|endf\%[unction]\>\)')
+	var defs = filter(getline(1, '.'), (_, v) => v =~# '^\s*\(\(export\s\+\)\=\(def\|fu\%[nction]\)!\=\s\+\([sg]:\|\(\w\+#\)\+\)\=\w\+(\|enddef\>\|endf\%[unction]\>\)')
 						->map((_, v) => substitute(v, '^\s*\(export\s\+\)\=\(enddef\|def\|endf\|fu\).*', '\2', 'g'))
 	if len(defs) == 0
 		return TopLine()
@@ -165,7 +165,7 @@ export def Goto(): void # 関数や変数の定義場所に移動
 			       	->map((_, v) => ({lnum: v.lnum + 1, cnum: match(v.lstr, ss) + 1}))
 		enddef
 
-		def SelectPos(ls: list<string>, p: string, vim9: string, vimL: string): list<number>
+		def SelectPos(ls: list<string>, p: string, vim9: string, vimL: string): list<number> # 複数ある時の絞り込み
 			var l: list<dict<number>>
 
 			l = GetPos(ls, vim9, vimL)
@@ -206,7 +206,7 @@ export def Goto(): void # 関数や変数の定義場所に移動
 			func = match_ls[3]
 			var line: number
 			for p in bufinfo->filter((_, v) => v.name =~# $'/autoload/{f}$')
-				if GotoPosBuffer(p.name, p.bufnr, '^\s*\(def\|fu\%[nction]!\=\)\s\+\zs' .. func, '^\s*\(def\|fu\%[nction]!\=\)\s\+\zss:' .. func)
+				if GotoPosBuffer(p.name, p.bufnr, '^\s*\(def\|fu\%[nction]\)!\=\s\+\zs' .. func, '^\s*\(def\|fu\%[nction]\)!\=\s\+\zss:' .. func)
 					return
 				endif
 			endfor
@@ -214,7 +214,7 @@ export def Goto(): void # 関数や変数の定義場所に移動
 				if !filereadable(p)
 					continue
 				endif
-				if GotoPosFile(p, '^\s*export\s\+\(def\|fu\%[nction]!\=\)\s\+\zs' .. func, '^\s*\(def\|fu\%[nction]!\=\)\s\+\zs' .. func)
+				if GotoPosFile(p, '^\s*export\s\+\(def\|fu\%[nction]\)!\=\s\+\zs' .. func, '^\s*\(def\|fu\%[nction]\)!\=\s\+\zs' .. func)
 					return
 				endif
 			endfor
@@ -222,7 +222,7 @@ export def Goto(): void # 関数や変数の定義場所に移動
 				if !filereadable(p)
 					continue
 				endif
-				if GotoPosFile(p, '^\s*export\s\+\(def\|fu\%[nction]!\=\)\s\+\zs' .. func, '^\s*\(def\|fu\%[nction]!\=\)\s\+\zs' .. func)
+				if GotoPosFile(p, '^\s*export\s\+\(def\|fu\%[nction]\)!\=\s\+\zs' .. func, '^\s*\(def\|fu\%[nction]\)!\=\s\+\zs' .. func)
 					return
 				endif
 			endfor
@@ -231,16 +231,16 @@ export def Goto(): void # 関数や変数の定義場所に移動
 			# asyncomplete#sources#mail#completor(opt, ctx) abort
 			# ftplugin#vim#VimHeop()
 			# vimgoto#Find()
-		elseif s =~? '\(s:\|<SID>\)' || ( s !~# '^g:' && getline(1) =~# '^\s*vim9script\>') # script local
+		elseif s =~? '\(s:\|<SID>\)' || ( s !~# '^g:' && getline(1) =~# '^\s*vim9script\>') # script local OR local (internal function)
 			match_ls = matchlist(s, '\(s:\|<SID>\)\=\(\w\+\)')
 			func = match_ls[2]
-			if !GotoPosBuffer(expand('%:p'), bufnr(), '^\s*\(def\|fu\%[nction]!\=\)\s\+\zs' .. func, '^\s*\(def\|fu\%[nction]!\=\)\s\+\zss:' .. func)
+			if !GotoPosBuffer(expand('%:p'), bufnr(), '^\s*\(def\|fu\%[nction]\)!\=\s\+\zs' .. func, '^\s*\(def\|fu\%[nction]\)!\=\s\+\zss:' .. func)
 				echohl WarningMsg | echo "Don't Find local " .. func .. '()!' | echohl None
 			endif
 		else # global g:func()
 			func = matchlist(s, '^\(g:\)\=\([A-Z]\w*\)')[2]
 			for b in bufinfo
-				if GotoPosBuffer(b.name, b.bufnr, '^\s*\(def\|fu\%[nction]!\=\)\s\+\zsg:' .. func, '^\s*\(def\|fu\%[nction]!\=\)\s\+\zs\(g:\)\=' .. func)
+				if GotoPosBuffer(b.name, b.bufnr, '^\s*\(def\|fu\%[nction]\)!\=\s\+\zsg:' .. func, '^\s*\(def\|fu\%[nction]\)!\=\s\+\zs\(g:\)\=' .. func)
 					return
 				endif
 			endfor
@@ -248,7 +248,7 @@ export def Goto(): void # 関数や変数の定義場所に移動
 				if !filereadable(p)
 					continue
 				endif
-				if GotoPosFile(p, '^\s*\(def\|fu\%[nction]!\=\)\s\+\zsg:' .. func, '^\s*\(def\|fu\%[nction]!\=\)\s\+\zs\(g:\)\=' .. func)
+				if GotoPosFile(p, '^\s*\(def\|fu\%[nction]\)!\=\s\+\zsg:' .. func, '^\s*\(def\|fu\%[nction]\)!\=\s\+\zs\(g:\)\=' .. func)
 					return
 				endif
 			endfor
@@ -256,7 +256,7 @@ export def Goto(): void # 関数や変数の定義場所に移動
 				if !filereadable(p)
 					continue
 				endif
-				if GotoPosFile(p, '^\s*\(def\|fu\%[nction]!\=\)\s\+\zsg:' .. func, '^\s*\(def\|fu\%[nction]!\=\)\s\+\zs\(g:\)\=' .. func)
+				if GotoPosFile(p, '^\s*\(def\|fu\%[nction]\)!\=\s\+\zsg:' .. func, '^\s*\(def\|fu\%[nction]\)!\=\s\+\zs\(g:\)\=' .. func)
 					return
 				endif
 			endfor
@@ -288,9 +288,9 @@ export def Goto(): void # 関数や変数の定義場所に移動
 		var ls_all: list<dict<any>> = map(getline(1, '.'), (i, v) => ({lnum: i, lstr: v}))
 					->filter((_, v) =>
 						v.lstr =~# filter_s # 変数でフィルタリング
-							.. '\|\(export\s\+\)\=\(def\|fu\%[nction]!\=\)\s\+\([sg]:\|\(\w\+#\)\+\)\=\w\+(\|enddef\>\|endf\%[unction]\>\)') # 関数でフィルタリング
+							.. '\|\(export\s\+\)\=\(def\|fu\%[nction]\)!\=\s\+\([sg]:\|\(\w\+#\)\+\)\=\w\+(\|enddef\>\|endf\%[unction]\>\)') # 関数でフィルタリング
 					->map((_, v) => ({lnum: v.lnum, lstr: v.lstr, kind:  # 行ごとの種類
-						v.lstr =~# '^\s*\(export\s\+\)\=\(def\|fu\%[nction]!\=\)' # 関数始まり
+						v.lstr =~# '^\s*\(export\s\+\)\=\(def\|fu\%[nction]\)!\=' # 関数始まり
 						? 1
 						: v.lstr =~# '^\s*\(enddef\|endf\%[unction]\)\>' # 関数終り
 						? -1
@@ -326,7 +326,7 @@ export def Goto(): void # 関数や変数の定義場所に移動
 				ls = copy(ls_all)
 			endif
 		else
-			filter_s = filter_s .. '\|\(export\s\+\)\=def\=\s\+\(g:\|\(\w\+#\)\+\)\=\w\+(\(\w\+\(\s*:\s*[A-Za-z<>]\+\)\s*,\s*\)*\zs' .. varb .. '\>\)'
+			filter_s = filter_s .. '\|\(export\s\+\)\=def!\=\s\+\(g:\|\(\w\+#\)\+\)\=\w\+(\(\w\+\(\s*:\s*[A-Za-z<>]\+\)\s*,\s*\)*\zs' .. varb .. '\>\)'
 		endif
 		filter(ls, (_, v) => v.lstr =~# filter_s)
 		if ls == []
