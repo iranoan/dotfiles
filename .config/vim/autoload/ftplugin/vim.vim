@@ -1,46 +1,43 @@
 vim9script
 
-def IsVim9(): bool
-	def TopLine(): bool
-		if getline(1) =~# '^\s*vim9script\>'
-			return true
-		else
-			return false
-		endif
+def RemoveFunction(ls: list<dict<any>>): void # ペアの関数削除
+	def RemoveRange(l: list<dict<any>>): dict<number> # 関数の最初と最後のペアを返す
+		var range_s: number
+
+		for [i, v] in items(l)
+			if v.kind == 1
+				range_s = i
+			elseif v.kind == -1
+				return {start: range_s, end: i}
+			endif
+		endfor
+		return {start: 0, end: -1}
 	enddef
 
-	var defs = filter(getline(1, '.'), (_, v) => v =~# '^\s*\(\(export\s\+\)\=\(def\|fu\%[nction]\)!\=\s\+\([sg]:\|\(\w\+#\)\+\)\=\w\+(\|enddef\>\|endf\%[unction]\>\)')
-						->map((_, v) => substitute(v, '^\s*\(export\s\+\)\=\(enddef\|def\|endf\|fu\).*', '\2', 'g'))
-	if len(defs) == 0
-		return TopLine()
-	endif
-	var f_kind0 = substitute(getline('.'), '\<\(enddef\|def\|endf\|fu\).*', '\1', 'g')
-	if f_kind0 ==# 'fu' || f_kind0 ==# 'def'
-		remove(defs, -1)
-	endif
-	var i = len(defs) - 1
-	var f_kind1: string
-	while i >= 1
-		f_kind0 = defs[i]
-		f_kind1 = defs[i - 1]
-		if (f_kind0 ==# 'endf' || f_kind0 ==# 'enddef') && (f_kind1 ==# 'fu' || f_kind1 ==# 'def')
-			i -= 2
-		else
+	var rm_range: dict<number> # 関数の最初と最後のペアのインデックス
+	while true
+		rm_range = RemoveRange(ls)
+		if rm_range.end == -1
 			break
 		endif
+		remove(ls, rm_range.start, rm_range.end)
 	endwhile
-	if i < 0
-		return TopLine()
-	else
-		f_kind0 = defs[i]
-		if f_kind0 ==# 'fu'
-			return false
-		elseif f_kind0 ==# 'def'
-			return true
-		else # endf%[unction] || enddef
-			return TopLine()
-		endif
+enddef
+
+def IsVim9(): bool
+	var ls: list<dict<any>> = map(getline(1, '.'), (i, v) => ({lnum: i, lstr: v}))
+				->filter((_, v) =>
+					v.lstr =~# '^\s*\(\(export\s\+\)\=\(def\|fu\%[nction]\)!\=\s\+\([sg]:\|\(\w\+#\)\+\)\=\w\+(\|enddef\>\|endf\%[unction]\>\)') # 関数でフィルタリング
+				->map((_, v) => v->extend({kind:  # 行ごとの種類
+					v.lstr =~# '^\s*\(export\s\+\)\=\(def\|fu\%[nction]\)!\=' # 関数始まり
+					? 1
+					: -1}))
+
+	RemoveFunction(ls)
+	if ls == [] || line('.') == ls[-1].lnum + 1
+		return getline(1) =~# '^\s*vim9script\>'
 	endif
+	return ls[-1].lstr =~# '^\s*\(export\s\+\)\=def!\='
 enddef
 
 export def ChangeVim9VimL(): void # vim9script/def/function によって適切な commentstring を設定し iskeyword+-=: を切り替える
@@ -265,31 +262,17 @@ export def Goto(): void # 関数や変数の定義場所に移動
 	enddef
 
 	def Var(s: string): void
-		def RemoveRange(l: list<dict<any>>): dict<number> # 関数の最初と最後のペアを返す
-			var range_s: number
-
-			for [i, v] in items(l)
-				if v.kind == 1
-					range_s = i
-				elseif v.kind == -1
-					return {start: range_s, end: i}
-				endif
-			endfor
-			return {start: 0, end: -1}
-		enddef
-
 		var varb: string = substitute(s, '\(\["\([^"]\|\"\)\+"\]\|\[''\([^'']\|''''\)\+''\]\|\[\w\+\]\|\.\w\+\)$', '', '')
 		var filter_s = varb =~# '^g:' # グローバル変数は VimL だと、プレフィックス無し/有り両方
 					? '^\s*\(\zs' .. varb .. '\s*=\|let\s\+' .. '\zs' .. varb .. '\s*=\|let\s\+' .. '\zs' .. varb[ 2 : ] .. '\s*='
 					: '^\s*\(\zs' .. varb .. '\s*=\|let\s\+' .. '\zs' .. varb .. '\s*=\|var\s\+' .. '\zs' .. varb .. '[ \t=:]'
-		var rm_range: dict<number> # 関数の最初と最後のペアのインデックス
 		var last_f: number = -1
 
 		var ls_all: list<dict<any>> = map(getline(1, '.'), (i, v) => ({lnum: i, lstr: v}))
 					->filter((_, v) =>
 						v.lstr =~# filter_s # 変数でフィルタリング
 							.. '\|\(export\s\+\)\=\(def\|fu\%[nction]\)!\=\s\+\([sg]:\|\(\w\+#\)\+\)\=\w\+(\|enddef\>\|endf\%[unction]\>\)') # 関数でフィルタリング
-					->map((_, v) => ({lnum: v.lnum, lstr: v.lstr, kind:  # 行ごとの種類
+					->map((_, v) => v->extend({kind:  # 行ごとの種類
 						v.lstr =~# '^\s*\(export\s\+\)\=\(def\|fu\%[nction]\)!\=' # 関数始まり
 						? 1
 						: v.lstr =~# '^\s*\(enddef\|endf\%[unction]\)\>' # 関数終り
@@ -298,13 +281,7 @@ export def Goto(): void # 関数や変数の定義場所に移動
 		var ls: list<dict<any>> = copy(ls_all)
 
 		if s !~# '^[gbws]:' # このプレフィックスはファイルを跨るまたはスクリプト・ローカル (ファイル内グローバル) 変数なので、直前の関数の始まり以降に絞り込む必要がない
-			while true # ペアの関数削除
-				rm_range = RemoveRange(ls)
-				if rm_range.end == -1
-					break
-				endif
-				remove(ls, rm_range.start, rm_range.end)
-			endwhile
+			RemoveFunction(ls)
 			for [i, v] in items(ls) # 最後の関数開始以降のみにする
 				if v.kind == 1
 					last_f = i
