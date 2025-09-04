@@ -75,6 +75,34 @@ pre.hljs {
 	background-color: black;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	padding-bottom: 0.3em;
+	margin-bottom: 0.3em;
+}
+
+h2,
+h3,
+h4,
+h5,
+h6 {
+  border-bottom: 1px solid #586e75;
+}
+
+h1 .anchor,
+h2 .anchor,
+h3 .anchor,
+h4 .anchor,
+h5 .anchor,
+h6 .anchor {
+	visibility: hidden;
+	margin-left: -24px;
+}
+
 @media (prefers-color-scheme: dark) {/* ダークモード */
 	html, header#page-header {
 		color: #EEE8D5 !important;
@@ -107,4 +135,13 @@ pre.hljs {
 	a:visited {
 		color: #268BD2;
 	}
+
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		border-bottom: 1px solid black;
+	}
+
 }
