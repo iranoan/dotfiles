@@ -2,6 +2,8 @@ vim9script
 
 def RemoveFunction(ls: list<dict<any>>): void # ペアの関数削除
 	def RemoveRange(l: list<dict<any>>): dict<number> # 関数の最初と最後のペアを返す
+		# function, endfunction, def, enddef は行頭 (空白文字は除く) にあるを前提
+		# function ...  endfunction / def ...  enddef と対応していなくとも OK としている
 		var range_s: number
 
 		for [i, v] in items(l)
@@ -41,20 +43,13 @@ def IsVim9(): bool
 enddef
 
 export def ChangeVim9VimL(): void # vim9script/def/function によって適切な commentstring を設定し iskeyword+-=: を切り替える
-	# function ... | ... | endfunction の様に | で連結した関数が有るとうまく判定できない
-	# function ...  endfunction / def ...  enddef と対応していなくとも OK としている
-	def SetVim9(): void
+	if line('.') == 1
+		# 1行目にvim9script にあっても、コメント・アウトすると vimL になるので、「"」を使う必要がある"
+		setlocal commentstring="%s
+	elseif IsVim9()
 		setlocal commentstring=#%s iskeyword-=: # vim9script では変数宣言 var hoge: type があるので、: を単語の一部とすると邪魔 (そのため b:var, g:var は一単語にならない)
-	enddef
-
-	def SetVimL(): void
-		setlocal commentstring="%s iskeyword+=: # vimL では変数宣言 s:func, a:arg, が多くあるので、: を単語の一部としたほうが都合が良い
-	enddef
-
-	if IsVim9()
-		SetVim9()
 	else
-		SetVimL()
+		setlocal commentstring="%s iskeyword+=: # vimL では変数宣言 s:func, a:arg, が多くあるので、: を単語の一部としたほうが都合が良い
 	endif
 enddef
 
