@@ -263,7 +263,7 @@ export def Goto(): void # 関数や変数の定義場所に移動
 			return BufSearch(getbufinfo(bufnr())
 				->map((_, v) => ({filename: resolve(v.name), n: v.bufnr}))[0],
 				false, 's:\|<SID>', ss,
-				(_, v: dict<any>): bool => (getline(1)[0] ==# 'vim9script'
+				(_, v: dict<any>): bool => (getline(1) ==# 'vim9script'
 						|| v.text =~# '^\s*\%(def\|fu\%[nction]\)!\=\s\+s:' .. ss .. '('))
 			->filter((_, v) => IsGlobalScript(v, 's:'))
 			->GotoPos2(ss)
