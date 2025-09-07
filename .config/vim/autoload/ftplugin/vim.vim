@@ -1,6 +1,6 @@
 vim9script
 
-def RemoveFunction(ls: list<dict<any>>): void # ペアの関数削除
+def RemoveFunction(ls: list<dict<any>>): list<dict<any>> # ペアの関数削除
 	def RemoveRange(l: list<dict<any>>): dict<number> # 関数の最初と最後のペアを返す
 		# function, endfunction, def, enddef は行頭 (空白文字は除く) にあるを前提
 		# function ...  endfunction / def ...  enddef と対応していなくとも OK としている
@@ -24,20 +24,27 @@ def RemoveFunction(ls: list<dict<any>>): void # ペアの関数削除
 		endif
 		remove(ls, rm_range.start, rm_range.end)
 	endwhile
+	return ls
 enddef
 
 def IsVim9(): bool
 	var ls: list<dict<any>> = map(getline(1, '.'), (i, v) => ({lnum: i, text: v}))
-				->filter((_, v) =>
-					v.text =~# '^\s*\%(\%(export\s\+\)\=\%(def\|fu\%[nction]\)!\=\s\+\%([sg]:\|\%(\w\+#\)\+\)\=\w\+(\|enddef\>\|endf\%[unction]\>\)') # 関数でフィルタリング
-				->map((_, v) => v->extend({kind:  # 行ごとの種類
-					v.text =~# '^\s*\%(export\s\+\)\=\%(def\|fu\%[nction]\)!\=' # 関数始まり
-					? 1
-					: -1}))
+		->filter((_, v) =>
+			v.text =~# '^\s*\%(\%(export\s\+\)\=\%(def\|fu\%[nction]\)!\=\s\+\%([sg]:\|\%(\w\+#\)\+\)\=\w\+(\|enddef\>\|endf\%[unction]\>\)') # 関数でフィルタリング
+		->map((_, v) => v->extend({kind:  # 行ごとの種類
+			v.text =~# '^\s*\%(export\s\+\)\=\%(def\|fu\%[nction]\)!\=' # 関数始まり
+				? 1
+				: -1}))
+		->RemoveFunction()
 
-	RemoveFunction(ls)
-	if ls == [] || line('.') == ls[-1].lnum + 1
+	if ls == []
 		return getline(1) =~# '^\s*vim9script\>'
+	elseif line('.') == ls[-1].lnum + 1
+		if len(ls) > 1
+			return ls[-2].text =~# '^\s*\%(export\s\+\)\=def!\='
+		else
+			return getline(1) =~# '^\s*vim9script\>'
+		endif
 	endif
 	return ls[-1].text =~# '^\s*\%(export\s\+\)\=def!\='
 enddef
@@ -186,8 +193,8 @@ export def Goto(): void # 関数や変数の定義場所に移動
 				v.text =~# '^\s*\%(export\s\+\)\=\%(def\|fu\%[nction]\)!\=' # 関数始まり
 					? 1
 					: -1}))
-				RemoveFunction(lines) # 関数の始まり/終りのペアを除く
-				filter(lines, (_, v) => v.text =~# '^\s*\%(export\s\+\)\=def!\=\s\+') # 除いてなお def が残っているか?
+				->RemoveFunction() # 関数の始まり/終りのペアを除く
+				->filter((_, v) => v.text =~# '^\s*\%(export\s\+\)\=def!\=\s\+') # 除いてなお def が残っているか?
 				if lines != []  # 残っていれば、調べている関数は関数内ローカル
 					return false
 				endif
@@ -247,6 +254,7 @@ export def Goto(): void # 関数や変数の定義場所に移動
 			->filter((_, v) => IsGlobalScript(v, 'g:'))
 			->GotoPos2(func)
 			# g:EditExisting()
+			# EditExisting() ←Local() から辿って
 			# g:EdiExisting() 存在しない
 		enddef
 
@@ -258,11 +266,12 @@ export def Goto(): void # 関数や変数の定義場所に移動
 						|| v.text =~# '^\s*\%(def\|fu\%[nction]\)!\=\s\+s:' .. ss .. '('))
 			->filter((_, v) => IsGlobalScript(v, 's:'))
 			->GotoPos2(ss)
-			# RemoveFunction(ls) Vim9
+			# RemoveFunction(ls) Vim9 ←Local() から辿って
 		enddef
 
 		def Local(ss: string): bool # 関数内ローカル→スクリプト・ローカル→グローバルの順で探す→関数内ローカル手つかず
 			var func: string = ss[ : -2 ]
+			var ls: list<dict<any>> = getline(1,)
 
 			if Script(func)
 				return true
