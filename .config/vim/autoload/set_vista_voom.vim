@@ -2,23 +2,15 @@ augroup loadVista
 	autocmd!
 	autocmd CmdUndefined Vista
 				\ call set_vista_voom#Vista()
-				\ | autocmd! loadVista
-				\ | augroup! loadVista
+				\ | call autocmd_delete([#{group: 'loadVista'}])
 augroup END
 
 augroup loadVoom
 	autocmd!
 	autocmd CmdUndefined Voom
 				\ call set_vista_voom#VOom()
-				\ | autocmd! loadVoom
-				\ | augroup! loadVoom
+				\ | call autocmd_delete([#{group: 'loadVoom'}])
 augroup END
-
-function! set_vista_voom#Load() abort
-	call set_vista_voom#Switch()
-	nnoremap <silent><Leader>o <Cmd>call set_vista_voom#Switch()<CR>
-	call timer_start(1, {set_vista_voom#Load})
-endfunction
 
 def set_vista_voom#Switch(): void # Voom に未対応は Vista を使う様に分岐
 	var voom_support_list: list<string> = glob('$MYVIMDIR' .. '/pack/*/opt/VOoM/autoload/voom/voom_vimplugin*/voom_mode_*.py', true, true)
@@ -55,7 +47,7 @@ function set_vista_voom#VOom() abort
 	let g:voom_tree_placement = 'right'
 	let g:voom_tree_width = 40
 	packadd VOoM
-	call timer_start(1, {->execute('delfunction et_vista_voom#VOom')})
+	call timer_start(1, {->execute('delfunction set_vista_voom#VOom')})
 endfunction
 
 function set_vista_voom#Vista() abort
@@ -88,5 +80,5 @@ function set_vista_voom#Vista() abort
 	" let g:vista_finder_alternative_executives=['Voom']
 	" let g:vista_echo_cursor_strategy='floating_win'
 	" let g:vista_fzf_preview = ['right:50%']
-	call timer_start(1, {->execute('delfunction Vista')})
+	call timer_start(1, {->execute('delfunction set_vista_voom#Vista')})
 endfunction

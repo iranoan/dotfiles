@@ -437,7 +437,7 @@ xnoremap <silent><Leader>s <Cmd>call set_google_search#main()<CR>
 
 # ctags や LSP を使った list https://github.com/liuchengxu/vista.vim {{{2
 # アウトライン https://github.com/vim-voom/VOoM {{{2
-nnoremap <silent><Leader>o <Cmd>call set_vista_voom#Load()<CR>
+nnoremap <silent><Leader>o <Cmd>call set_vista_voom#Switch()<CR>
 
 # ページ送りに $MYVIMDIR/pack/my-plug/opt/page-down {{{2
 nnoremap <silent><space> <Cmd>call set_page_down#main()<CR>
