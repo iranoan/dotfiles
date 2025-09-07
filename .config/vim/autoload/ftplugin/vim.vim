@@ -243,6 +243,9 @@ export def Goto(): void # 関数や変数の定義場所に移動
 		enddef
 
 		def Global(ss: string): bool
+			# g:EditExisting()
+			# EditExisting() ←Local() から辿って
+			# g:EdiExisting() 存在しない
 			var func: string = matchlist(ss, '^\%(g:\)\=\([A-Z]\w*\)')[1]
 
 			return BufGrepSearch('\(/\.\=g\=vimrc\|\.vim\)$', false, 'g:', func,
@@ -253,12 +256,10 @@ export def Goto(): void # 関数や変数の定義場所に移動
 					[$MYVIMRC .. ' ' .. $MYGVIMRC, ' -r ' .. $MYVIMDIR .. ' -r ' .. $VIMRUNTIME .. ' --include=*.vim'])
 			->filter((_, v) => IsGlobalScript(v, 'g:'))
 			->GotoPos2(func)
-			# g:EditExisting()
-			# EditExisting() ←Local() から辿って
-			# g:EdiExisting() 存在しない
 		enddef
 
 		def Script(ss: string): bool
+			# RemoveFunction(ls) Vim9 ←Local() から辿って
 			return BufSearch(getbufinfo(bufnr())
 				->map((_, v) => ({filename: resolve(v.name), n: v.bufnr}))[0],
 				false, 's:\|<SID>', ss,
@@ -266,7 +267,6 @@ export def Goto(): void # 関数や変数の定義場所に移動
 						|| v.text =~# '^\s*\%(def\|fu\%[nction]\)!\=\s\+s:' .. ss .. '('))
 			->filter((_, v) => IsGlobalScript(v, 's:'))
 			->GotoPos2(ss)
-			# RemoveFunction(ls) Vim9 ←Local() から辿って
 		enddef
 
 		def Local(ss: string): bool # 関数内ローカル→スクリプト・ローカル→グローバルの順で探す→関数内ローカル手つかず
@@ -284,6 +284,10 @@ export def Goto(): void # 関数や変数の定義場所に移動
 		var match_s: string
 
 		if s =~# '#' # autoload
+			# ftplugin#vim#VimHelp() カレントバッファ
+			# asyncomplete#sources#mail#completor(opt, ctx) $MYVIMDIR
+			# ftplugin#vim#VimHeop() 存在しない
+			# vimgoto#Find() $VIMRUNTIME
 			match_ls = matchlist(s, '\(\(\w\+#\)*\(\w\+#\)\)\(\w\+\)')
 			var path: string = substitute(match_ls[1][ : -2 ], '#', '/', 'g') .. '.vim'
 			var prefix: string = match_ls[1]
@@ -301,11 +305,7 @@ export def Goto(): void # 関数や変数の定義場所に移動
 					(glob($MYVIMDIR .. '**/autoload/' .. path, 1, 1)
 						+ glob($VIMRUNTIME .. '/autoload/' .. path, 1, 1))
 						->map((_, v) => substitute(resolve(v), "'", "''", 'g')))
-			->GotoPos2(func)
-			# ftplugin#vim#VimHelp() カレントバッファ
-			# asyncomplete#sources#mail#completor(opt, ctx) $MYVIMDIR
-			# ftplugin#vim#VimHeop() 存在しない
-			# vimgoto#Find() $VIMRUNTIME
+					->GotoPos2(func)
 		elseif s =~? '^\%(s:\|<SID>\)' || ( s !~# '^g:' && getline(1) !~# '^\s*vim9script\>') # script local
 			if !Script(matchlist(s, '\%(s:\|<SID>\)\=\(\w\+\)')[1])
 				echohl WarningMsg | echo "Don't Find script " .. matchlist(s, '\%(s:\|<SID>\)\=\(\w\+\)')[1] .. '()!' | echohl None
@@ -375,6 +375,8 @@ export def Goto(): void # 関数や変数の定義場所に移動
 	enddef
 
 	def Plug(s: string): bool
+		# <Plug>(fern-action-yank:label)
+		# <Plug>(fern-action-help)
 		var plug: string = '^\s*\%(map\|map!\|[nvxoilc]m\%[ap]\|smap\|tma\%[p]\|snor\%[emap]\|[oict]\=no\%[remap]!\=\|[lnvx]n\%[oremap]\)\s\+\%(<\%(buffer\|nowait\|silent\|special\|script\|expr\|unique\)>\|\s\)*\s\+' .. s
 		var ls: list<dict<any>>
 		var bufs: list<dict<any>> = getbufinfo()
@@ -397,8 +399,6 @@ export def Goto(): void # 関数や変数の定義場所に移動
 			add(ls, p)
 		endfor
 		return GotoPos2(ls, s)
-		# <Plug>(fern-action-yank:label)
-		# <Plug>(fern-action-help)
 	enddef
 
 	var line_str: string = getline('.')
