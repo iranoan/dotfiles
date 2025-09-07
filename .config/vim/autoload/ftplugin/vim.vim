@@ -270,10 +270,74 @@ export def Goto(): void # 関数や変数の定義場所に移動
 		enddef
 
 		def Local(ss: string): bool # 関数内ローカル→スクリプト・ローカル→グローバルの順で探す→関数内ローカル手つかず
-			var func: string = ss[ : -2 ]
-			var ls: list<dict<any>> = getline(1,)
+			def GetRange(ls: list<dict<any>>, l: number): list<any>
+				var i: number = 0
+				var def_start: number # l 行の関数の開始インデックス
+				var def_enddef: number = 0 # 関数の開始終了の対応状況を表す数字
 
-			if Script(func)
+				for v in ls
+					if v.lnum == l
+						def_start = i
+						i += 1
+						break
+					endif
+					i += 1
+				endfor
+				for v in ls[ def_start + 1 : ]
+					def_enddef += v.kind
+					if def_enddef < 0
+						break
+					endif
+					i += 1
+				endfor
+				return [ls[def_start : i], def_start, i]
+			enddef
+
+			var func: string = ss[ : -2 ]
+			var reg_func: string = '^\s*\%(def\|fu\%[nction]\)!\=\s\+' .. func .. '('
+			var bufnr: number = bufnr()
+			var f: string = resolve(expand('%:p'))
+			var c_line: number = line('.') - 1 # 何かのチェックに用いる行番号
+			var def_all: list<dict<any>> = getline(1, '$') # カレント・バッファの全関数の最初と最後のペア
+				->map((i, v) => ({lnum: i, text: v, n: bufnr, filename: f}))
+				->filter((_, v) => v.text =~# '^\s*\%(\%(def\|fu\%[nction]\)!\=\s\+\w\+(\|enddef\>\|endf\%[unction]\>\)')
+				->map((_, v) => v->extend({kind:  # 行ごとの種類
+					v.text =~# '^\s*\%(export\s\+\)\=\%(def\|fu\%[nction]\)!\=' # 関数始まり
+						? 1
+						: -1}))
+			var def_root: list<number> = filter(copy(def_all), (_, v) => v.lnum < c_line) # 現在行までに開始の有る関数
+				->RemoveFunction() # 現在行の前に終わっている関数を削除→直接含む関数とその親関数を最初まで辿る
+				->reverse() # 逆順に
+				->copy() # 次の操作のためにコピー
+				->map((_, v) => v.lnum) # 現在行を含む関数を内側から順にその関数の開始の行番号のリストに
+			var def_check: list<dict<any>>
+			var ls: list<dict<any>>
+			var s_index: number # 部分取り出す開始インデックス
+			var e_index: number # 部分取り出す終了インデックス
+			var def_enddef: number = 0 # 関数の開始終了の対応状況を表す数字
+
+			if def_root != []
+				c_line = def_root[-1]
+				[def_all, s_index, e_index] = GetRange(def_all, c_line)
+				for i in def_root
+					[def_check, s_index, e_index] = GetRange(def_all, i)
+					for p in def_check[ 1 : -2 ]
+						if def_enddef == 0 && p.text =~# reg_func
+							add(ls, p)
+						endif
+						def_enddef += p.kind
+					endfor
+					if ls != []
+						break
+					endif
+					if e_index - s_index != 1 # 現在操作対象の範囲内に関数がない←例えば GetRange() 無いのカーソル位置で実行されたような場合
+						remove(def_all, s_index + 1, e_index - 1)
+					endif
+				endfor
+			endif
+			if ls != []
+				return GotoPos2(map(ls, (_, v) => v->extend({lnum: v.lnum + 1})), func)
+			elseif Script(func)
 				return true
 			else
 				return Global(func)
@@ -316,7 +380,7 @@ export def Goto(): void # 関数や変数の定義場所に移動
 			endif
 		else # prefix 無し
 			if !Local(s)
-				echohl WarningMsg | echo "Don't Find local " .. s[ : -2 ] .. '()!' | echohl None
+				echohl WarningMsg | echo "Don't Find local/script/global " .. s[ : -2 ] .. '()!' | echohl None
 			endif
 		endif
 	enddef
