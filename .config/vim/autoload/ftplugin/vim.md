@@ -8,7 +8,7 @@
 
 カーソル位置が Vim9 script, Vim Legacy 扱いになるかに従って次の変更をする
 
-* commentstring を 「#」「"」 のどちらか
+* commentstring を「#」「"」のどちらか
 * iskeyword に : を含める/含めない
   * Vim Legacy では `s:`, `g:`, `l:` などのプリフィックスを付けることが多い
   * それに対して、Vim9 script では宣言時に
