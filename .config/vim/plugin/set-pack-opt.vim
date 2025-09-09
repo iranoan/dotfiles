@@ -263,7 +263,7 @@ augroup SetPackOpt
 
 	# 挿入モード時、ステータスラインの色を変更 $MYVIMDIR/pack/my-plug/opt/insert-status {{{2
 	# g:hi_insert がインサート・モード時の highlight 指定
-	g:hi_insert = 'highlight StatusLine term=reverse cterm=bold,reverse gui=bold,reverse ctermbg=White ctermfg=1 guibg=#dddddd guifg=#dc322f'
+	g:hi_insert = [{name: 'StatusLine', term: {reverse: true}, cterm: {bold: true, reverse: true}, gui: {bold: true, reverse: true}, ctermbg: 'White', ctermfg: '1', guibg: '#dddddd', guifg: '#dc322f'}]
 	autocmd InsertEnter * ++once packadd insert-status
 		| insert_status#Main('Enter')
 

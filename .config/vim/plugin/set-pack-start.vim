@@ -69,15 +69,15 @@ augroup END
 def ColorschemeHighlight(): void
 	def GetCursorLine(r0: number, g0: number, b0: number, r1: number, g1: number, b1: number): string # CursorLine の guibg を取得
 		# 無ければ Solarized を基本に Normal 背景色より少し明るい/暗い色を計算
-		var bg: string = execute('highlight CursorLine')
-		if bg =~# '\<guibg='
-			return matchstr(bg, '.\+ guibg=\zs\S\+\ze')
+		var bg_dic: dict<any> = hlget('CursorLine')[0]
+		if has_key(bg_dic, 'guibg')
+			return bg_dic.guibg
 		endif
-		bg = execute('highlight Normal')
-		if bg !~# '\<guibg=#'
+		bg_dic = hlget('Normal')[0]
+		if has_key(bg_dic, 'guibg')
 			return &background ==? 'light' ? '#fdf6e3' : '#002b36'
 		endif
-		bg = matchstr(bg, '.\+ guibg=#\zs[0-9A-Fa-f]\+\>\ze')
+		var bg: string = bg_dic.guibg
 		return printf('#%02x%02x%02x',      # ↓ Normal - ColorLine の色を引きたいので、-+ 逆転
 			str2nr(strpart(bg, 0, 2), 16) - r0 + r1, # Red
 			str2nr(strpart(bg, 2, 2), 16) - g0 + g1, # Green
@@ -85,15 +85,21 @@ def ColorschemeHighlight(): void
 		)
 	enddef
 	def ChangeVert(): void
-		c: string = execute('highlight VertSplit')
-			->substitute('[\n\r]\+', '', 'g')
-			->substitute('^VertSplit \+xxx', '', '')
-		execute c =~# '\<links\s\+to\>'
-					\ ? 'highlight link VertSplit ' .. substitute(c, '.\+\<links\s\+to\s\+\(\S\+\)', '\1', '')
-					\ : 'highlight VertSplit' .. substitute(c, 'ctermfg=\S\+ ctermbg=\(\S\+\) guifg=\S\+ guibg=\(\S\+\)', 'ctermfg=\1 ctermbg=\1 guifg=\2 guibg=\2', '')
+		var c: dict<any> = hlget('VertSplit', true)[0]
+		if (has_key(c, 'cterm') && get(c.cterm, 'revere', false)) || (has_key(c, 'term') && get(c.term, 'revere', false))
+			extend(c, {ctermbg: c.ctermfg})
+		else
+			extend(c, has_key(c, 'ctermbg') ? {ctermfg: c.ctermbg} : {})
+		endif
+		if has_key(c, 'gui') && get(c.gui, 'revere', false)
+			extend(c, {guibg: c.guifg})
+		else
+			extend(c, has_key(c, 'guibg') ? {guifg: c.guibg} : {})
+		endif
+		hlset([c])
 		return
 	enddef
-	var nbg: string = matchstr(execute('highlight Normal'), '\<guibg=\zs\S\+')
+	var nbg: string = get(hlget('Normal')[0], 'guibg', '')
 	var bg: string
 	if &background ==# 'light'
 		if nbg ==# ''
@@ -139,8 +145,8 @@ def ColorschemeHighlight(): void
 	highlight MatchParen term=bold,reverse cterm=bold,reverse gui=bold,reverse ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
 	execute 'highlight QuickFixLine term=NONE cterm=NONE gui=NONE ctermfg=NONE ctermbg=0 guifg=NONE guibg=' .. bg
 	execute 'highlight PmenuSel term=NONE cterm=NONE gui=NONE ctermfg=NONE ctermbg=0 guifg=NONE guibg=' .. bg
-	bg = execute('highlight Terminal', 'silent!')->substitute('[\r\n]', '', 'g')
-	if bg ==# '' || match(bg, '\<cleared\>') != -1 # Terminal 未定義は Normal
+	var bg_dic: list<dict<any>> = hlget('Terminal')
+	if bg_dic ==# [] || !get(bg_dic[0], 'cleared', false) # Terminal 未定義は Normal
 		highlight link Terminal Normal
 	endif
 	ChangeVert()

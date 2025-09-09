@@ -1,19 +1,14 @@
+vim9script
+
 if exists('g:insert_status')
 	finish
 endif
-let g:insert_status = 1
+g:insert_status = 1
 
-let s:save_cpo = &cpoptions
-set cpoptions&vim
-
-let g:hi_insert = get(g:, 'hi_insert', 'highlight ' .. substitute(substitute(execute('highlight StatusLine'), '[\r\n]', '', 'g'), 'xxx', '', ''))
+g:hi_insert = get(g:, 'hi_insert', hlget('StatusLine'))
 
 augroup InsertStatus
 	autocmd!
-	autocmd InsertEnter * call insert_status#Main('Enter')
-	autocmd InsertLeave * call insert_status#Main('Leave')
+	autocmd InsertEnter * insert_status#Main('Enter')
+	autocmd InsertLeave * insert_status#Main('Leave')
 augroup END
-
-" Reset User condition
-let &cpoptions = s:save_cpo
-unlet s:save_cpo

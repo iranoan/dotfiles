@@ -32,11 +32,8 @@ endfunction
 
 function print#Main(first, last) range abort
 	" linewidth=4 で固定されていて変えられない
-	" let l:normal = substitute(substitute(substitute(execute('highlight Normal'), '[\n\r]\+', '', 'g'), ' *Normal\s\+xxx *', '', ''), 'font=.*', '', 'g')
-	let l:linenr = substitute(substitute(execute('highlight LineNr'), '[\n\r]\+', '', 'g'), ' *LineNr\s\+xxx *', '', '')
-	" highlight Normal guifg=#000000 guibg=#FFFFFF gui=NONE cterm=NONE ctermfg=black ctermbg=white
+	let l:linenr = hlget('LineNr')
 	highlight LineNr guifg=#000000 guibg=#FFFFFF gui=bold cterm=bold ctermfg=black ctermbg=white
 	execute a:first .. ',' .. a:last .. 'hardcopy'
-	" execute 'highlight Normal ' .. s:set_none(l:normal)
-	execute 'highlight LineNr ' .. s:set_none(l:linenr)
+	call hlset(l:linenr)
 endfunction
