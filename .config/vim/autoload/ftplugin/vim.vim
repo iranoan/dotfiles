@@ -262,7 +262,7 @@ export def Goto(): void # 関数や変数の定義場所に移動
 			# RemoveFunction(ls) Vim9 ←Local() から辿って
 			return BufSearch(getbufinfo(bufnr())
 				->map((_, v) => ({filename: resolve(v.name), n: v.bufnr}))[0],
-				false, 's:\|<SID>', ss,
+				false, 's:\|<[Ss][Ii][Dd]>', ss,
 				(_, v: dict<any>): bool => (getline(1) ==# 'vim9script'
 						|| v.text =~# '^\s*\%(def\|fu\%[nction]\)!\=\s\+s:' .. ss .. '('))
 			->filter((_, v) => IsGlobalScript(v, 's:'))
@@ -300,7 +300,7 @@ export def Goto(): void # 関数や変数の定義場所に移動
 			var c_line: number = line('.') - 1 # 何かのチェックに用いる行番号
 			var def_all: list<dict<any>> = getline(1, '$') # カレント・バッファの全関数の最初と最後のペア
 				->map((i, v) => ({lnum: i, text: v, n: bufnr, filename: f}))
-				->filter((_, v) => v.text =~# '^\s*\%(export\s\+\)\=\%(\%(def\|fu\%[nction]\)!\=\s\+\w\+(\|enddef\>\|endf\%[unction]\>\)')
+				->filter((_, v) => v.text =~# '^\s*\%(\%(def\|fu\%[nction]\)!\=\s\+\w\+(\|enddef\>\|endf\%[unction]\>\)')
 				->map((_, v) => v->extend({kind:  # 行ごとの種類
 					v.text =~# '^\s*\%(export\s\+\)\=\%(def\|fu\%[nction]\)!\=' # 関数始まり
 						? 1
@@ -370,9 +370,9 @@ export def Goto(): void # 関数や変数の定義場所に移動
 						+ glob($VIMRUNTIME .. '/autoload/' .. path, 1, 1))
 						->map((_, v) => substitute(resolve(v), "'", "''", 'g')))
 					->GotoPos2(func)
-		elseif s =~? '^\%(s:\|<SID>\)' || ( s !~# '^g:' && getline(1) !~# '^\s*vim9script\>') # script local
-			if !Script(matchlist(s, '\%(s:\|<SID>\)\=\(\w\+\)')[1])
-				echohl WarningMsg | echo "Don't Find script " .. matchlist(s, '\%(s:\|<SID>\)\=\(\w\+\)')[1] .. '()!' | echohl None
+		elseif s =~# '^\%(s:\|<[Ss][Ii][Dd]>\)' || ( s !~# '^g:' && getline(1) !~# '^\s*vim9script\>') # script local
+			if !Script(matchlist(s, '\%(s:\|<[Ss][Ii][Dd]>\)\=\(\w\+\)')[1])
+				echohl WarningMsg | echo "Don't Find script " .. matchlist(s, '\%(s:\|<[Ss][Ii][Dd]>\)\=\(\w\+\)')[1] .. '()!' | echohl None
 			endif
 		elseif s =~? '^g:' || ( s !~# '^g:' && getline(1) !~# '^\s*vim9script\>') # global
 			if !Global(s)
@@ -455,7 +455,7 @@ export def Goto(): void # 関数や変数の定義場所に移動
 			add(ls, p)
 			endfor
 		endfor
-		for p in systemlist('grep -iEl ''map .+<plug>''' .. escape(plug, '()\') .. ' -r ' .. $MYVIMDIR .. ' --include=*.vim /dev/null')
+		for p in systemlist('grep -El ''map .+<[Pp][Ll][Uu][Gg]>''' .. escape(plug, '()\') .. ' -r ' .. $MYVIMDIR .. ' --include=*.vim /dev/null')
 					->filter((_, v) => v !~# '%')
 					->map((_, v) => SplitGrep(v))
 					->filter((_, v) => v != {} # 空の結果でない
@@ -472,10 +472,10 @@ export def Goto(): void # 関数や変数の定義場所に移動
 	var column: number = col('.')
 
 	while true
-		[m_str, m_start, m_end] = matchstrpos(line_str, '\c\%('
-		.. '<Plug>[^ \t]\+\|' # <Plug>
+		[m_str, m_start, m_end] = matchstrpos(line_str, '\%('
+		.. '<[Pp][Ll][Uu][Gg]>[^ \t]\+\|' # <Plug>
 		.. 'function(\%("[^"]\+"\|''[^'']\+''\))\|'
-		.. '\%([sg]:\|<SID>\|\%(\w\+#\)\+\|\%(\w\+\.\)\+\)\=\w\+(\|' # 関数 (スクリプト・ローカル、autoload、辞書、プレフィックス無しの順)
+		.. '\%([sg]:\|<[Ss][Ii][Dd]>\|\%(\w\+#\)\+\|\%(\w\+\.\)\+\)\=\w\+(\|' # 関数 (スクリプト・ローカル、autoload、辞書、プレフィックス無しの順)
 		.. '\%([vawbgsl]:\|&\)\=\w\+\%(\["\%([^"]\|\"\)\+"\]\|\[''\%([^'']\|''''\)\+''\]\|\[\w\+\]\|\.\w\+\)*\)', # 変数
 		m_end)
 		# ↓探す時
