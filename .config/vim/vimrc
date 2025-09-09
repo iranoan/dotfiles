@@ -53,12 +53,10 @@ augroup loadZipArchive
 				\ unlet! g:loaded_zip g:loaded_zipPlugin | source $VIMRUNTIME/plugin/zipPlugin.vim
 	autocmd BufRead *.aar,*.apk,*.celzip,*.crtx,*.docm,*.docx,*.dotm,*.dotx,*.ear,*.epub,*.gcsx,*.glox,*.gqsx,*.ja,*.jar,*.kmz,*.odb,*.odc,*.odf,*.odg,*.odi,*.odm,*.odp,*.ods,*.odt,*.otc,*.otf,*.otg,*.oth,*.oti,*.otp,*.ots,*.ott,*.oxt,*.potm,*.potx,*.ppam,*.ppsm,*.ppsx,*.pptm,*.pptx,*.sldx,*.thmx,*.vdw,*.war,*.wsz,*.xap,*.xlam,*.xlam,*.xlsb,*.xlsm,*.xlsx,*.xltm,*.xltx,*.xpi,*.zip
 				\ ++nested edit!
-				| autocmd! loadZipArchive
-				| augroup! loadZipArchive
 augroup END
 # }}}
 g:loaded_gzip = 1 # {{{ # $VIMRUNTIME/plugin/gzip.vim で exists("#BufReadPre#*.gz") は finish としているので、Vim 起動後に BufReadPre をトリガーとして遅延読み込みできない
-g:loaded_tar                = 1
+g:loaded_tar = 1
 g:loaded_tarPlugin = 1
 augroup loadTarArchive
 	autocmd!

@@ -51,6 +51,7 @@ function set_fzf#neoyank_sub() abort
 	let g:neoyank#file = $MYVIMDIR .. "cache/neoyank_history.json"
 	packadd neoyank.vim
 	silent call neoyank#_yankpost()
+	silent call neoyank#_append()
 	call timer_start(1, {->execute('delfunction set_fzf#neoyank_sub')})
 endfunction
 
