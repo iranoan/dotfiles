@@ -53,6 +53,7 @@ augroup loadZipArchive
 				\ unlet! g:loaded_zip g:loaded_zipPlugin | source $VIMRUNTIME/plugin/zipPlugin.vim
 	autocmd BufRead *.aar,*.apk,*.celzip,*.crtx,*.docm,*.docx,*.dotm,*.dotx,*.ear,*.epub,*.gcsx,*.glox,*.gqsx,*.ja,*.jar,*.kmz,*.odb,*.odc,*.odf,*.odg,*.odi,*.odm,*.odp,*.ods,*.odt,*.otc,*.otf,*.otg,*.oth,*.oti,*.otp,*.ots,*.ott,*.oxt,*.potm,*.potx,*.ppam,*.ppsm,*.ppsx,*.pptm,*.pptx,*.sldx,*.thmx,*.vdw,*.war,*.wsz,*.xap,*.xlam,*.xlam,*.xlsb,*.xlsm,*.xlsx,*.xltm,*.xltx,*.xpi,*.zip
 				\ ++nested edit!
+				| autocmd_delete([{group: 'loadZipArchive'}])
 augroup END
 # }}}
 g:loaded_gzip = 1 # {{{ # $VIMRUNTIME/plugin/gzip.vim で exists("#BufReadPre#*.gz") は finish としているので、Vim 起動後に BufReadPre をトリガーとして遅延読み込みできない
@@ -65,6 +66,7 @@ augroup loadTarArchive
 				| source $VIMRUNTIME/plugin/tarPlugin.vim
 				| source $VIMRUNTIME/plugin/gzip.vim
 				| echohl WarningMsg | echo 'edit! ' .. expand('%:t') | echohl None
+				| autocmd_delete([{group: 'loadTarArchive'}])
 				# execute 'edit! ' .. expand('%:t') が効かない
 augroup END
 # # }}}
