@@ -65,77 +65,53 @@ augroup END
 # }}}1
 
 # カラースキム {{{1
+# https://github.com/lifepillar/vim-solarized8 {{{2
+# }}}2
 # background によって一部の highlight を変える関数 (Solarized を基本としている) {{{2
 def ColorschemeHighlight(): void
-	def GetCursorLine(r0: number, g0: number, b0: number, r1: number, g1: number, b1: number): string # CursorLine の guibg を取得
-		# 無ければ Solarized を基本に Normal 背景色より少し明るい/暗い色を計算
-		var bg_dic: dict<any> = hlget('CursorLine')[0]
-		if has_key(bg_dic, 'guibg')
-			return bg_dic.guibg
-		endif
-		bg_dic = hlget('Normal')[0]
-		if has_key(bg_dic, 'guibg')
-			return &background ==? 'light' ? '#fdf6e3' : '#002b36'
-		endif
-		var bg: string = bg_dic.guibg
-		return printf('#%02x%02x%02x',      # ↓ Normal - ColorLine の色を引きたいので、-+ 逆転
-			str2nr(strpart(bg, 0, 2), 16) - r0 + r1, # Red
-			str2nr(strpart(bg, 2, 2), 16) - g0 + g1, # Green
-			str2nr(strpart(bg, 4, 2), 16) - b0 + b1  # Blue
-		)
-	enddef
 	def ChangeVert(): void
-		var c: dict<any> = hlget('VertSplit', true)[0]
-		if (has_key(c, 'cterm') && get(c.cterm, 'revere', false)) || (has_key(c, 'term') && get(c.term, 'revere', false))
-			extend(c, {ctermbg: c.ctermfg})
+		var hlget_dic: dict<any> = hlget('VertSplit', true)[0]
+		if (has_key(hlget_dic, 'cterm') && get(hlget_dic.cterm, 'revere', false)) || (has_key(hlget_dic, 'term') && get(hlget_dic.term, 'revere', false))
+			extend(hlget_dic, {ctermbg: hlget_dic.ctermfg})
 		else
-			extend(c, has_key(c, 'ctermbg') ? {ctermfg: c.ctermbg} : {})
+			extend(hlget_dic, has_key(hlget_dic, 'ctermbg') ? {ctermfg: hlget_dic.ctermbg} : {})
 		endif
-		if has_key(c, 'gui') && get(c.gui, 'revere', false)
-			extend(c, {guibg: c.guifg})
+		if has_key(hlget_dic, 'gui') && get(hlget_dic.gui, 'revere', false)
+			extend(hlget_dic, {guibg: hlget_dic.guifg})
 		else
-			extend(c, has_key(c, 'guibg') ? {guifg: c.guibg} : {})
+			extend(hlget_dic, has_key(hlget_dic, 'guibg') ? {guifg: hlget_dic.guibg} : {})
 		endif
-		hlset([c])
+		hlset([hlget_dic])
 		return
 	enddef
-	var nbg: string = get(hlget('Normal')[0], 'guibg', '')
-	var bg: string
+	var nbg: string = get(hlget('Normal')[0], 'guibg', (&background ==# 'light' ? '#fdf6e3' : '#002b36'))
 	if &background ==# 'light'
-		if nbg ==# ''
-			nbg = '#fdf6e3'
-		endif
-		if g:colors_name =~# '^solarized'
-			       highlight Comment      cterm=NONE gui=NONE ctermfg=10 guifg=#586e75
-		endif
+		# Solarized の base01 を文字色に
+		# ↓黒背景端末を使っているので背景色を明示する←端末も背景に NONE を使わない
+		execute   'highlight Normal ctermfg=8 ctermbg=15 guifg=#073642 guibg=' .. nbg
+		# execute 'highlight NormalDefault ctermfg=8 ctermbg=15 guifg=#073642 guibg=' .. nbg # 背景色 NONE にしない Normal
+		           highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=15 guifg=#b58900 guibg=NONE
 		if g:colors_name ==# 'solarized8'
-			       highlight CursorColumn term=reverse ctermbg=254 guibg=#F5F2DC
+			         highlight CursorColumn term=reverse ctermbg=254 guibg=#F5F2DC
+			execute 'highlight PmenuSel ctermfg=8 ctermbg=15 guifg=#073642 guibg=' .. nbg
+			# light/dark で同設定
+			         highlight Comment term=NONE cterm=NONE gui=NONE ctermfg=14 guifg=#93a1a1
+			         highlight link PmenuMatch Type
+			         highlight link PmenuMatchSel Type
 		endif
-		bg = GetCursorLine(0xfd, 0xf6, 0xe3, 0xee, 0xe8, 0xd5)
-		         # 黒背景端末を使っているので背景色を明示する←端末も背景に NONE を使わない
-		execute 'highlight Normal        ctermfg=8 ctermbg=15 guifg=#073642 guibg=' .. nbg
-		execute 'highlight NormalDefault ctermfg=8 ctermbg=15 guifg=#073642 guibg=' .. nbg
-		         highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=15 guifg=#b58900 guibg=NONE
-		# execute 'highlight TabLineSel   term=bold,underline cterm=bold,underline gui=bold,underline ctermfg=0 ctermbg=7 guifg=#111111 guibg=' .. bg
-		#          highlight TabLine      term=underline cterm=underline gui=underline ctermfg=8 ctermbg=NONE guifg=#839496 guibg=NONE
-		#          highlight TabLineFill  term=underline cterm=underline gui=underline ctermfg=8 ctermbg=NONE guifg=#839496 guibg=NONE
 	else
-		if nbg ==# ''
-			nbg = '#002b36'
-		endif
-		if g:colors_name =~# '^solarized'
-			       highlight Comment      cterm=NONE gui=NONE ctermfg=14 guifg=#93a1a1
-		endif
+		# Solarized の base1 を文字色に
+		execute    'highlight Normal ctermfg=15 ctermbg=NONE guifg=#eee8d5 guibg=' .. (!has('gui_running') && g:colors_name ==# 'solarized8' ? 'NONE' : nbg)
+		# execute   'highlight NormalDefault ctermfg=15 ctermbg=8 guifg=#eee8d5 guibg=' .. nbg # 背景色 NONE にしない Normal
+			         highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=8 guifg=#b58900 guibg=NONE
 		if g:colors_name ==# 'solarized8'
-			highlight CursorColumn term=reverse ctermbg=236 guibg=#0E414E
+			         highlight CursorColumn term=reverse ctermbg=236 guibg=#0E414E
+			execute 'highlight PmenuSel ctermfg=15 ctermbg=8 guifg=#eee8d5 guibg=' .. nbg
+			# light/dark で同設定
+			         highlight Comment term=NONE cterm=NONE gui=NONE ctermfg=14 guifg=#93a1a1
+			         highlight link PmenuMatch Type
+			         highlight link PmenuMatchSel Type
 		endif
-		bg = GetCursorLine(0x00, 0x2b, 0x36, 0x07, 0x36, 0x42)
-		execute 'highlight Normal        ctermfg=15 ctermbg=NONE guifg=#eee8d5 guibg=' .. (!has('gui_running') && g:colors_name ==# 'solarized8' ? 'NONE' : nbg)
-		execute 'highlight NormalDefault ctermfg=15 ctermbg=8 guifg=#eee8d5 guibg=' .. nbg
-		         highlight CursorLineNr cterm=bold gui=bold ctermfg=3 ctermbg=8 guifg=#b58900 guibg=NONE
-		# execute 'highlight TabLineSel   term=bold,underline cterm=bold,underline gui=bold,underline ctermfg=15 ctermbg=0 guifg=#dddddd guibg=' .. bg
-		#          highlight TabLine      term=underline cterm=underline gui=underline ctermfg=14 ctermbg=NONE guifg=#93a1a1 guibg=NONE
-		#          highlight TabLineFill  term=underline cterm=underline gui=underline ctermfg=14 ctermbg=NONE guifg=#93a1a1 guibg=NONE
 	endif
 	# light/dark で同設定
 	highlight SpellBad   term=underline cterm=underline ctermfg=NONE ctermul=9 guifg=NONE guisp=#cb4b16
@@ -143,25 +119,12 @@ def ColorschemeHighlight(): void
 	highlight SpellLocal term=underline cterm=underline ctermfg=NONE ctermul=3 guifg=NONE guisp=#b58900
 	highlight SpellRare  term=underline cterm=underline ctermfg=NONE ctermul=6 guifg=NONE guisp=#2aa198
 	highlight MatchParen term=bold,reverse cterm=bold,reverse gui=bold,reverse ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
-	execute 'highlight QuickFixLine term=NONE cterm=NONE gui=NONE ctermfg=NONE ctermbg=0 guifg=NONE guibg=' .. bg
-	execute 'highlight PmenuSel term=NONE cterm=NONE gui=NONE ctermfg=NONE ctermbg=0 guifg=NONE guibg=' .. bg
-	var bg_dic: list<dict<any>> = hlget('Terminal')
-	if bg_dic ==# [] || !get(bg_dic[0], 'cleared', false) # Terminal 未定義は Normal
-		highlight link Terminal Normal
-	endif
+	highlight link QuickFixLine CursorLine
 	ChangeVert()
 enddef
 
 def ColorschemeBefore(color: string): void # t_Co, termguicolors 等 colorscheme 切り替え前に必要な設定をする
-	if color ==# 'solarized'
-		# g:solarized_italic = 0
-		if has('gui_running')
-			g:solarized_menu = 0
-		else
-			set notermguicolors
-			set t_Co=16 # ターミナルが 256 色だと一部の色が変わる
-		endif
-	elseif color ==# 'solarized8'
+	if color ==# 'solarized8'
 		g:solarized_old_cursor_style = 1
 		# g:solarized_italics = 0
 		if !has('gui_running')
@@ -178,21 +141,13 @@ def ColorschemeBefore(color: string): void # t_Co, termguicolors 等 colorscheme
 enddef
 # }}}2
 set background=dark
-# https://github.com/lifepillar/vim-solarized8 {{{2
-# }}}2
-# https://github.com/altercation/vim-colors-solarized {{{2
-# }}}2
 augroup ChangeColorScheme
 	autocmd!
 	autocmd ColorScheme * ColorschemeHighlight()
 	autocmd ColorSchemePre * ColorschemeBefore(expand('<amatch>'))
-	# Solarized で GUI が CUI と異なる色になっている
-	autocmd ColorScheme solarized highlight Pmenu term=reverse ctermfg=0 ctermbg=13 gui=reverse guifg=#073642 guibg=#839496
-				| highlight SignColumn ctermfg=11 ctermbg=8 guifg=#839496 guibg=NONE
-				| highlight link vimSet vimCommand
 augroup END
-for s in ['solarized8', 'solarized', 'habamax', 'desert', 'default']
-	try # (glob() を使う存在確認は遅い)
+for s in ['solarized8', 'habamax', 'desert', 'default']
+	try # (glob() や getcompletion() を使う存在確認は遅い)
 		execute 'colorscheme ' .. s
 		break
 	catch /^Vim\%((\a\+)\)\:E185:\C/

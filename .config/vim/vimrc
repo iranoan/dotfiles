@@ -392,11 +392,11 @@ nnoremap <silent><leader>cc <Cmd>set showcmd! showcmd?<CR>
 nnoremap <silent><leader>cd <Cmd>call vimrc#Lcd() <Bar>pwd<CR>
 nnoremap <silent><leader>cm <Cmd>set more! more?<CR>
 nnoremap <silent><leader>cs <Cmd>let &l:scrolloff = ( &scrolloff ? 0 : ( &lines > 20 ? &lines / 4 : 5 ) ) <Bar> setlocal scrolloff?<CR>
-nnoremap <silent><leader>ct <Cmd>let &showtabline = ( &showtabline ? 0 : 2 )<CR>
+nnoremap <silent><leader>ct <Cmd>call vimrc#ToggleTabLine()<CR>
 nnoremap <silent><leader>cw <Cmd>setlocal wrap! wrap?<CR>
 # gvimrc に書かれた分 {{{3
-# nnoremap <leader>cM <Cmd>call toggle#Menu()<CR>
-# nnoremap <leader>cT <Cmd>call toggle#Toolbar()<CR>
+# nnoremap <leader>cM <Cmd>call gvimrc#Menu()<CR>
+# nnoremap <leader>cT <Cmd>call gvimrc#Toolbar()<CR>
 # 日付と時刻入力 {{{2
 # 一度プレフィックスに<C-J>にしたが、補完の移動でタイムラグが有り上手く動作しなくなる
 inoremap <silent><expr><C-\>d     strftime('%Y/%m/%d')

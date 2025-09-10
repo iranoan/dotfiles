@@ -231,3 +231,41 @@ export def ChangeScrolloff(): void # /, ? と :s[ubstitute] で c フラグを�
 	setlocal scrolloff<
 	return
 enddef
+
+export def ToggleTabLine(): void # タブラインをトグル (色の変更については、autocmd ColorScheme に対応していない)
+	def GetCursorLine(r0: number, g0: number, b0: number, r1: number, g1: number, b1: number): string # CursorLine の guibg を取得
+		# 無ければ Solarized を基本に Normal 背景色より少し明るい/暗い色を計算
+		var hlget_dic: dict<any> = hlget('CursorLine')[0]
+		if has_key(hlget_dic, 'guibg')
+			return hlget_dic.guibg
+		endif
+		hlget_dic = hlget('Normal')[0]
+		if !has_key(hlget_dic, 'guibg')
+			return &background ==? 'light' ? '#eee8d5' : '#073642'
+		endif
+		var bg: string = hlget_dic.guibg
+		return printf('#%02x%02x%02x',      # ↓ Normal - ColorLine の色を引きたいので、-+ 逆転
+			str2nr(strpart(bg, 0, 2), 16) - r0 + r1, # Red
+			str2nr(strpart(bg, 2, 2), 16) - g0 + g1, # Green
+			str2nr(strpart(bg, 4, 2), 16) - b0 + b1  # Blue
+		)
+	enddef
+
+	var bg: string
+	if &showtabline == 0
+		if &background ==# 'light'
+			bg = GetCursorLine(0xfd, 0xf6, 0xe3, 0xee, 0xe8, 0xd5)
+			execute 'highlight TabLineSel   term=bold,underline cterm=bold,underline gui=bold,underline ctermfg=0 ctermbg=7 guifg=#111111 guibg=' .. bg
+			         highlight TabLine      term=underline cterm=underline gui=underline ctermfg=8 ctermbg=NONE guifg=#839496 guibg=NONE
+			         highlight TabLineFill  term=underline cterm=underline gui=underline ctermfg=8 ctermbg=NONE guifg=#839496 guibg=NONE
+		else
+			bg = GetCursorLine(0x00, 0x2b, 0x36, 0x07, 0x36, 0x42)
+			execute 'highlight TabLineSel   term=bold,underline cterm=bold,underline gui=bold,underline ctermfg=15 ctermbg=0 guifg=#dddddd guibg=' .. bg
+			         highlight TabLine      term=underline cterm=underline gui=underline ctermfg=14 ctermbg=NONE guifg=#93a1a1 guibg=NONE
+			         highlight TabLineFill  term=underline cterm=underline gui=underline ctermfg=14 ctermbg=NONE guifg=#93a1a1 guibg=NONE
+		endif
+		set showtabline=2
+	else
+		set showtabline=0
+	endif
+enddef
