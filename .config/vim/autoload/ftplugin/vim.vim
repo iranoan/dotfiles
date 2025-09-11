@@ -144,7 +144,7 @@ export def Goto(): void # 関数や変数の定義場所に移動
 		if l_bufinf == [] # not open
 			execute('tabedit ' .. p)
 		else
-			if l_bufinf[0].hidden || l_bufinf[0].linecount == 1 || !(l_bufinf[0].listed) # hide
+			if l_bufinf[0].hidden || !l_bufinf[0].loaded # hide OR not load
 				execute('tab sbuffer ' .. l_bufinf[0].bufnr)
 			elseif index(l_bufinf[0].windows, win_getid()) == -1 # not current window
 				win_gotoid(l_bufinf[0].windows[0])
@@ -220,7 +220,7 @@ export def Goto(): void # 関数や変数の定義場所に移動
 			# grep_fs: grep 対象のファイルやディレクトリ
 			var ls: list<dict<any>>
 			var bufs: list<dict<any>> = getbufinfo()
-				->filter((_, v) => v.linecount != 1 && v.name =~# reg_f && v.name !=# ':' && v.name !~# '%')
+				->filter((_, v) => !v.loaded && v.name =~# reg_f && v.name !=# ':' && v.name !~# '%')
 				->map((_, v) => ({filename: resolve(v.name), n: v.bufnr})) # 読み込み済みの *.vim ファイル
 			var bufs_name: list<string> = map(copy(bufs), (_, v) => (v.filename))
 
@@ -357,7 +357,7 @@ export def Goto(): void # 関数や変数の定義場所に移動
 			var prefix: string = match_ls[1]
 			var func: string = match_ls[4]
 			var bufs: list<dict<any>> = getbufinfo()
-				->filter((_, v) => v.linecount != 1 && v.name =~# $'/autoload/{path}$')
+				->filter((_, v) => !v.loaded && v.name =~# $'/autoload/{path}$')
 				->map((_, v) => ({filename: resolve( v.name ), n: v.bufnr})) # 読み込み済みの *.vim ファイル
 			var bufs_name: list<string> = map(copy(bufs), (_, v) => (v.filename))
 
@@ -444,7 +444,7 @@ export def Goto(): void # 関数や変数の定義場所に移動
 		var plug: string = '^\s*\%(map\|map!\|[nvxoilc]m\%[ap]\|smap\|tma\%[p]\|snor\%[emap]\|[oict]\=no\%[remap]!\=\|[lnvx]n\%[oremap]\)\s\+\%(<\%(buffer\|nowait\|silent\|special\|script\|expr\|unique\)>\|\s\)*\s\+' .. s
 		var ls: list<dict<any>>
 		var bufs: list<dict<any>> = getbufinfo()
-			->filter((_, v) => v.linecount != 1 && v.name =~# '\(/\.\=g\=vimrc\|\.vim\)$' && v.name !=# ':' && v.name !~# '%')
+			->filter((_, v) => !v.loaded && v.name =~# '\(/\.\=g\=vimrc\|\.vim\)$' && v.name !=# ':' && v.name !~# '%')
 			->map((_, v) => ({filename: resolve(v.name), n: v.bufnr})) # 読み込み済みの *.vim ファイル
 		var bufs_name: list<string> = map(copy(bufs), (_, v) => (v.filename))
 
