@@ -269,3 +269,33 @@ export def ToggleTabLine(): void # タブラインをトグル (色の変更に�
 		set showtabline=0
 	endif
 enddef
+
+# Cursor の点滅を擬似的に止めるため関数 {{{1
+# GUI では色をなくし、CUI では点滅しない縦棒にする
+# 	Blink に点滅処理 () => hlset(hi_cursor) 等
+# 	Stop  でそれを止める () => hlset([{name: 'Cursor', cleared: true}])) 等
+# の number を返す関数を引数にする
+g:blink_idle_timer = -1
+export def BlinkIdleTimer(Blink: func(): number, Stop: func(): number): void # タイマーを再起動してアイドル監視をセット
+	if g:blink_idle_timer != -1
+		timer_stop(g:blink_idle_timer)
+	endif
+	Blink()
+	g:blink_idle_timer = timer_start(3000, ((_) => Stop()))
+enddef
+
+export def BlinkStop(): void # タイマーを止める
+	timer_stop(g:blink_idle_timer)
+enddef
+
+export def BlinkIdleTimerCheckPOS(Blink: func(): number, Stop: func(): number): void
+	# <PageUP>/<PageDown> ではカーソルの点滅状況を変えない
+	var l: number = line('.')
+	var c: number = col('.')
+	if ( l - &scrolloff == line('w0') || l + &scrolloff == line('w$') ) # カーソル位置が &scrolloff を加味した表示範囲の最上/下行
+		&& ( c == 1 || getline(l)[ : c - 2] =~# '^\s\+$' ) # 先頭桁かカーソル前は空白文字のみ
+		return
+	endif
+	vimrc#BlinkIdleTimer(Blink, Stop)
+enddef
+# }}}1
