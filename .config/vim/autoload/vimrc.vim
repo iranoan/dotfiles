@@ -110,7 +110,7 @@ export def Insert_template(s: string): void # ~/Templates/ からテンプレー
 	endif
 enddef
 
-export def StatusLine(): string
+export def StatusLine(): string # set statusline=%{%vimrc#StatusLine()%} で利用する
 	# 表示するのは大雑把に↓
 	# tabpagenr()/tabpagenr('$') bufnr filetype modified etc.|git|path|column bytes:number:word-count/file bytes:word-count line current/full % code charset:cr/lf
 	def GetFlag(): string
@@ -180,7 +180,7 @@ export def StatusLine(): string
 				.. (&fenc != '' ? &fenc : &enc) .. ':' .. {dos: 'CR+LF', unix: 'LF', mac: 'CR'}[&ff] .. ']'
 enddef
 
-export def KillTerminal(): void
+export def KillTerminal(): void # :terminal は一つに
 	var bufnum: number = bufnr('') # カレント・バッファ (直前に開いたターミナルを想定)
 	var terms: list<number> = term_list()
 	var terms_in_tab: list<number>
