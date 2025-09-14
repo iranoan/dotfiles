@@ -45,6 +45,10 @@ g:loaded_2html_plugin = 1
 g:loaded_logiPat = 1
 g:loaded_rrhelper = 1
 # g:loaded_matchparen = 1
+augroup MatchParen # 対応する強調を取りを OFF にしたいファイルタイプが有るので、ON にする autocmd を用意しておく
+	autocmd!
+	autocmd MatchParen WinEnter,TabEnter,BufWinEnter * if &filetype !=# 'qf' | execute('DoMatchParen') | endif # ← 条件なしだと qf 開いたまま grep でエラー
+augroup END
 g:loaded_zipPlugin = 1 # {{{
 g:loaded_zip = 1
 augroup loadZipArchive
