@@ -284,7 +284,7 @@ export def BlinkIdleTimer(Blink: func(): number, Stop: func(): number): void # �
 	g:blink_idle_timer = timer_start(3000, ((_) => Stop()))
 enddef
 
-export def BlinkStop(): void # タイマーを止める
+export def BlinkTimerStop(): void # タイマーを止める
 	timer_stop(g:blink_idle_timer)
 enddef
 
@@ -293,7 +293,10 @@ export def BlinkIdleTimerCheckPOS(Blink: func(): number, Stop: func(): number): 
 	var l: number = line('.')
 	var c: number = col('.')
 	if ( l - &scrolloff == line('w0') || l + &scrolloff == line('w$') ) # カーソル位置が &scrolloff を加味した表示範囲の最上/下行
-		&& ( c == 1 || getline(l)[ : c - 2] =~# '^\s\+$' ) # 先頭桁かカーソル前は空白文字のみ
+			&& ( c == 1 || getline(l)[ : c - 2] =~# '^\s\+$' ) # 先頭桁かカーソル前は空白文字のみ
+		return
+	elseif &filetype ==# 'notmuch-show' && search('\%^[A-Za-z-]\+:.\+\n\(\%([A-Za-z-]\+:\s\+\).\+\n\)\+\n\%#', 'bcn') == 1
+		Stop()
 		return
 	endif
 	vimrc#BlinkIdleTimer(Blink, Stop)

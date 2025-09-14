@@ -58,10 +58,12 @@ if has('gui_running')
 	autocmd Notmuch_Show CursorMoved <buffer> vimrc#BlinkIdleTimerCheckPOS(
 				\ () => hlset(g:hi_cursor),
 				\ () => hlset([{name: 'Cursor', cleared: true}]))
-	autocmd CmdlineEnter,CmdwinEnter <buffer> hlset(g:hi_cursor)
-	autocmd Notmuch_Show VimLeave <buffer> hlset([{name: 'Cursor', cleared: true}])
-	# autocmd Notmuch_Show WinEnter <buffer> hlset([{name: 'Cursor', cleared: true}]) | vimrc#BlinkStop() # このあと CursorMove が働くので意味をなさない
-	autocmd Notmuch_Show WinLeave <buffer> hlset(g:hi_cursor) | vimrc#BlinkStop()
+	autocmd Notmuch_Show CmdlineEnter,CmdwinEnter <buffer> hlset(g:hi_cursor)
+	# autocmd Notmuch_Show VimLeave <buffer> hlset(g:hi_cursor) | vimrc#BlinkTimerStop()
+	autocmd Notmuch_Show WinLeave,TabLeave <buffer> hlset(g:hi_cursor) | vimrc#BlinkTimerStop()
+	autocmd Notmuch_Show WinEnter,TabEnter <buffer> hlset(g:hi_cursor) | vimrc#BlinkTimerStop()
+	autocmd Notmuch_Show WinEnter * if &filetype !=# 'notmuch-show' | hlset(g:hi_cursor) | vimrc#BlinkTimerStop() | endif # CTRL-W_W などでウィンドウを移動すると、2度めのウィンドウでカーソルが消えるのを防ぐ (プラグインの関数内部でカレントウィンドウを切り替えないでカーソルを変える処理をしているため?)
+	# ただし、これだけにすると他のタブに移動した時に移動先もカーソルが消えたままになるので注意
 else
 	autocmd Notmuch_Show CmdlineLeave,CmdwinLeave <buffer> vimrc#BlinkIdleTimer(
 				\ () => writefile(["\e[1 q"], '/dev/tty', 'b'),
@@ -71,8 +73,9 @@ else
 				\ () => writefile(["\e[6 q"], '/dev/tty', 'b'))
 	autocmd Notmuch_Show CmdlineEnter,CmdwinEnter <buffer> writefile(["\e[1 q"], '/dev/tty', 'b')
 	autocmd Notmuch_Show VimLeave <buffer> writefile(["\e[1 q"], '/dev/tty', 'b')
-	# autocmd Notmuch_Show WinEnter <buffer> writefile(["\e[1 q"], '/dev/tty', 'b') # このあと CursorMove が働くので意味をなさない
-	autocmd Notmuch_Show WinLeave <buffer> writefile(["\e[1 q"], '/dev/tty', 'b') | vimrc#BlinkStop()
+	autocmd Notmuch_Show WinLeave,TabLeave <buffer> writefile(["\e[1 q"], '/dev/tty', 'b') | vimrc#BlinkTimerStop()
+	autocmd Notmuch_Show WinEnter,TabEnter <buffer> writefile(["\e[1 q"], '/dev/tty', 'b') | vimrc#BlinkTimerStop()
+	autocmd Notmuch_Show WinEnter * if &filetype !=# 'notmuch-show' | writefile(["\e[1 q"], '/dev/tty', 'b') | vimrc#BlinkTimerStop() | endif
 endif
 autocmd Notmuch_Show ColorScheme <buffer> g:hi_cursor = hlget('Cursor', true)
 
