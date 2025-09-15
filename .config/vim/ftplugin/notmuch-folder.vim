@@ -4,7 +4,6 @@ scriptencoding utf-8
 # ファイルタイプ別のグローバル設定 {{{1
 if !exists('g:notmuch_folder_plugin')
 	g:notmuch_folder_plugin = 1
-	# g:hi_cursor = hlget('Cursor', true)
 	augroup NotmuchFileType # 対応するカッコの ON/OFF ← グループの作成だけしておく
 		autocmd!
 	augroup END

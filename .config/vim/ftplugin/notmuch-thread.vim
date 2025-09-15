@@ -2,10 +2,9 @@ vim9script
 scriptencoding utf-8
 
 # ファイルタイプ別のグローバル設定 {{{1
-if !exists('g:notmuch_thread_plugin')
-	g:notmuch_thread_plugin = 1
-	g:hi_cursor = hlget('Cursor', true)
-endif
+# if !exists('g:notmuch_thread_plugin')
+# 	g:notmuch_thread_plugin = 1
+# endif
 
 # ファイルタイプ別ローカル設定 {{{1
 # :NoMatchParen " 対応するカッコの ON/OFF {{{2

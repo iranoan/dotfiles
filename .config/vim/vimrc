@@ -47,7 +47,7 @@ g:loaded_rrhelper = 1
 # g:loaded_matchparen = 1
 augroup MatchParen # 対応する強調を取りを OFF にしたいファイルタイプが有るので、ON にする autocmd を用意しておく
 	autocmd!
-	autocmd MatchParen WinEnter,TabEnter,BufWinEnter * if &filetype !=# 'qf' | execute('DoMatchParen') | endif # ← 条件なしだと qf 開いたまま grep でエラー
+	autocmd MatchParen WinEnter,TabEnter,BufWinEnter * if &filetype !=# 'qf' && getcmdwintype() ==# '' | execute('DoMatchParen') | endif # ←条件なしだと qf 開いたまま grep でエラー
 augroup END
 g:loaded_zipPlugin = 1 # {{{
 g:loaded_zip = 1
@@ -275,8 +275,25 @@ xnoremap #  #<Cmd>set hlsearch<CR>
 # xnoremap N  N<Cmd>set hlsearch<CR>
 augroup HighlightSearch # 検索ハイライト
 	autocmd!
-	autocmd CmdlineLeave,CmdwinLeave * if (getcmdtype() =~# '[/?]' || getcmdwintype() =~# '[/?]') && pos != getpos('.') | set hlsearch | endif
-	autocmd CmdwinEnter * pos = getpos('.')
+	# &hlsearch ON だと Cursor が目立たない (マッチによって移動したカーソル位置がわかりにくい) ので Error と同色にする
+	autocmd ColorScheme * g:hi_cursor = hlget('Cursor', true)
+	autocmd OptionSet hlsearch
+				\ if &hlsearch
+				| 	highlight clear Cursor
+				| 	highlight link Cursor Error
+				| else
+				| 	hlset(g:hi_cursor)
+				| endif
+	# 検索実行によってハイライト
+	autocmd CmdlineLeave,CmdwinLeave [/?]
+				\ if getcmdwintype() !~# '[/?]' || pos != getpos('.')
+				| 	set hlsearch
+				| 	highlight clear Cursor
+				| 	highlight link Cursor Error
+				| endif
+	# ↑autocmd OptionSet は autocmd 内の set に反応しない→:help OptionSet
+	# Cmdwin ではカーソルが移動している必要がある
+	autocmd CmdwinEnter [/?] pos = getpos('.')
 augroup END
 # ファイルの扱い {{{1
 # 読み込み、保存関係
