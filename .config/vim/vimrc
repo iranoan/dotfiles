@@ -81,7 +81,7 @@ g:loaded_netrwFileHandlers  = 1
 g:loaded_netrwPlugin = 1
 # g:netrw_banner = 0                           # バーナー非表示
 # g:netrw_liststyle = 0                      # ファイル・サイズ/タイム・スタンプも非表示←除外がしにくくなる
-# # g:netrw_list_hide = netrw_gitignore#Hide() .. '.*\.swp$' ヘルプに有る関数は遅い
+# g:netrw_list_hide = netrw_gitignore#Hide() .. '.*\.swp$' ヘルプに有る関数は遅い
 # g:netrw_list_hide = '.*\.swp$,\.o$,\.fls$,\.synctex\.gz$,\.fdb_latexmk$,\.toc$,\.out$,\.dvi$,\.aux$,\.nav$,\.snm$,\.git/$' # 隠すファイル
 # # g:netrw_sizestyle = 'H'                    # 人間が読める形式 (例: 5K, 4M, 3G) 1024 ベース
 # g:netrw_sort_options = 'i'                 # ソートで大/小文字を区別しない
@@ -273,7 +273,7 @@ xnoremap #  #<Cmd>set hlsearch<CR>
 # xnoremap n  n<Cmd>set hlsearch<CR>
 # nnoremap N  N<Cmd>set hlsearch<CR>
 # xnoremap N  N<Cmd>set hlsearch<CR>
-augroup HighlightSearch # ハイライトはトグル・スイッチ
+augroup HighlightSearch # 検索ハイライト
 	autocmd!
 	autocmd CmdlineLeave,CmdwinLeave * if (getcmdtype() =~# '[/?]' || getcmdwintype() =~# '[/?]') && pos != getpos('.') | set hlsearch | endif
 	autocmd CmdwinEnter * pos = getpos('.')
@@ -307,7 +307,7 @@ augroup VIMRC
 	# 			| execute 'normal! gg]c[c'
 	# 			| endif # diff モードでは、最初の差分(先頭が差分のことも有るので、]c[c と二重指定)
 	# 			ウィンドウ切り替えで最初に戻ってしまう
-	# 			↓と上手く両立しない
+	# 			前回閉じた時のカーソル位置に移動と上手く両立しない
 	autocmd BufReadPost *
 				\ silent if index(['xxd', 'gitrebase', 'commit'], &filetype) == -1
 				\ 	&& line("'\"") > 1
