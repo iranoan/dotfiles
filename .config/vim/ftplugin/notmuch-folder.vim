@@ -16,4 +16,4 @@ autocmd MatchParen WinEnter,TabEnter,BufWinEnter <buffer> execute('NoMatchParen'
 # Blink ON/OFF {{{2
 # ↓CTRL-W_W などでウィンドウを移動すると、2度めのウィンドウでカーソルが消えるのを防ぐ (プラグインの関数内部でカレントウィンドウを切り替えないでカーソルを変える処理をしているため?)
 # これだけにすると他のタブに移動した時に移動先もカーソルが消えたままになるので注意→notmuch-show 側で WinLeave がある
-autocmd NotmuchFileType WinEnter <buffer> hlset(g:hi_cursor) | vimrc#BlinkTimerStop()
+autocmd NotmuchFileType WinEnter,TabEnter <buffer> hlset(g:hi_cursor) | vimrc#BlinkTimerStop()
