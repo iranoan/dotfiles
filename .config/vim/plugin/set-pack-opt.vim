@@ -215,7 +215,7 @@ augroup TabEdit # tabedit, fern.vim, fzf.vim サイクリック依存
 		| autocmd_delete([{group: 'TabEdit'}])
 	autocmd FuncUndefined tabedit#* set_tabedit#main()
 		| autocmd_delete([{group: 'TabEdit'}])
-	autocmd CmdlineEnter * set_tabedit#main()
+	autocmd CmdlineEnter : set_tabedit#main()
 		| autocmd_delete([{group: 'TabEdit'}])
 augroup END
 # *.vim で再設定されてしまう分は $MYVIMDIR/after/ftplugin/vim.vim
@@ -226,7 +226,7 @@ nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 # statusline  w:quickfix_title 変更は $MYVIMDIR/ftplugin/qf.vim
 augroup SetGnuGrep
 	autocmd!
-	autocmd CmdlineEnter * packadd gnu-grep
+	autocmd CmdlineEnter : packadd gnu-grep
 		| autocmd_delete([{group: 'SetGnuGrep'}])
 	autocmd FuncUndefined gnu_grep#* packadd gnu-grep
 		| autocmd_delete([{group: 'SetGnuGrep'}])
@@ -238,7 +238,7 @@ augroup VimDocJa
 	autocmd!
 	autocmd FileType vim packadd vimdoc-ja
 		| autocmd_delete([{group: 'VimDocJa'}])
-	autocmd CmdlineEnter * packadd vimdoc-ja
+	autocmd CmdlineEnter : packadd vimdoc-ja
 		| autocmd_delete([{group: 'VimDocJa'}])
 augroup END
 
@@ -273,7 +273,7 @@ augroup SetPackOpt
 		| packadd vim-dirdiff
 
 	# 出力を quickfix に取り込む $MYVIMDIR/pack/my-plug/opt/output2qf {{{2
-	autocmd CmdlineEnter * ++once packadd output2qf
+	autocmd CmdlineEnter : ++once packadd output2qf
 
 	# カーソル位置の Syntax の情報を表示する $MYVIMDIR/pack/my-plug/opt/syntax_info/ {{{2 http://cohama.hateblo.jp/entry/2013/08/11/020849 を参考にした
 	autocmd CmdUndefined SyntaxInfo ++once packadd syntax_info
