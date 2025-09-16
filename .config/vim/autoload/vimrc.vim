@@ -302,3 +302,17 @@ export def BlinkIdleTimerCheckPOS(Blink: func(): number, Stop: func(): number): 
 	vimrc#BlinkIdleTimer(Blink, Stop)
 enddef
 # }}}1
+
+# $MYVIMDIR/cache/viminfo をバックアップ {{{1
+export def BackupViminfo(): void
+	wviminfo!
+	if systemlist('cmp -s ' .. $MYVIMDIR .. 'cache/viminfo ' .. $MYVIMDIR .. 'cache/viminfo.0 ; echo $?') == ['0']
+		return
+	endif
+	for i in range(1, 9)->reverse()
+		if filereadable($MYVIMDIR .. 'cache/viminfo.' .. (i - 1))
+			rename($MYVIMDIR .. 'cache/viminfo.' .. (i - 1), $MYVIMDIR .. 'cache/viminfo.' .. i)
+		endif
+	endfor
+	filecopy($MYVIMDIR .. 'cache/viminfo', $MYVIMDIR .. 'cache/viminfo.0')
+enddef

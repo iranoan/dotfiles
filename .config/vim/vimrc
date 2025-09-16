@@ -353,6 +353,7 @@ augroup VIMRC
 	autocmd BufNewFile *.css        vimrc#Insert_template('CSS.css')
 	autocmd BufNewFile *.vim        vimrc#Insert_template('vim.vim')
 	autocmd CmdwinLeave,CmdlineLeave,TabLeave,WinLeave,InsertEnter * vimrc#ChangeScrolloff()
+	autocmd VimLeave * vimrc#BackupViminfo()
 augroup END
 # 日本語の表示/編集、文字幅に関わる設定 {{{1
 if exists('&ambiwidth')                        # □とか○の文字があってもカーソル位置がずれないようにする
