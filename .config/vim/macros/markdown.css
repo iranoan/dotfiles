@@ -103,6 +103,29 @@ h6 .anchor {
 	margin-left: -24px;
 }
 
+table {
+	margin-right: auto;
+	margin-left: auto;
+	empty-cells: show;
+	border-collapse: collapse;
+	border-style: solid none;
+	border-width: 1pt;
+}
+
+th {
+	padding: 2px 10px;
+	font-weight: bold;
+	vertical-align: middle;
+	text-align: center;
+	border-style: solid none;
+	border-width: 1pt;
+}
+
+td {
+	padding: 2px 10px;
+	border-style: none;
+}
+
 @media (prefers-color-scheme: dark) {/* ダークモード */
 	html, header#page-header {
 		color: #EEE8D5 !important;
