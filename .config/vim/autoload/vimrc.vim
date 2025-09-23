@@ -73,12 +73,12 @@ export def MoveChanged(move_rear: bool): void # カーソルリストの前後�
 	var l: number = line('.')
 
 	if move_rear
-		change = filter(change, (idx, val) => ( val.lnum == l && val.col > col('.') && val.col < col('$') - 1 )
-																			 || ( val.lnum > l && val.lnum <= getbufinfo(bufnr())[0].linecount)
+		filter(change, (_, v) => ( v.lnum == l && v.col > col('.') && v.col < col('$') - 1 )
+															|| ( v.lnum > l && v.lnum <= getbufinfo(bufnr())[0].linecount)
 		)
 	else
-		change = filter(change, (idx, val) => ( val.lnum == l && val.col < col('.') - 1 )
-																			 ||   val.lnum < l
+		filter(change, (_, v) => ( v.lnum == l && v.col < col('.') - 1 )
+															|| v.lnum < l
 		)
 	endif
 	if len(change) == 0
@@ -203,7 +203,7 @@ export def KillTerminal(): void # :terminal は一つに
 		return
 	endif
 	execute 'bwipeout! ' .. bufnum
-	terms_in_tab = filter(terms_in_tab, 'v:key != ' .. bufnum)
+	terms_in_tab = filter(terms_in_tab, (k, _) => k != bufnum)
 	win_gotoid(bufwinid(terms_in_tab[0]))
 enddef
 
