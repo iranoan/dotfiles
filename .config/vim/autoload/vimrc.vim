@@ -305,7 +305,6 @@ enddef
 
 # $MYVIMDIR/cache/viminfo をバックアップ {{{1
 export def BackupViminfo(): void
-	wviminfo!
 	if systemlist('cmp -s ' .. $MYVIMDIR .. 'cache/viminfo ' .. $MYVIMDIR .. 'cache/viminfo.0 ; echo $?') == ['0']
 		return
 	endif
