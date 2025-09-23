@@ -16,7 +16,7 @@ export def Base(...arg: list<any>): string
 	# remove the marker that caused this fold from the display
 	line = substitute(line, '\V' .. foldmarkers[0] .. '\%(\d\+\)\?', ' ', '')
 	if &filetype ==# 'vim'
-		line = substitute(line, '\(^\s*\zs#\|\s\+#\|"\)\s*', '', '')
+		line = substitute(line, '\(^\s*\zs#\|\s\+#\|"\)\s*', ' ', '')
 	elseif comment !=# ''
 		while match(line, comment) != -1
 			line = substitute(line, comment, '\1', '')
