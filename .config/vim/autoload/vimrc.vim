@@ -275,17 +275,18 @@ enddef
 # 	Blink に点滅処理 () => hlset(hi_cursor) 等
 # 	Stop  でそれを止める () => hlset([{name: 'Cursor', cleared: true}])) 等
 # の number を返す関数を引数にする
-g:blink_idle_timer = -1
 export def BlinkIdleTimer(Blink: func(): number, Stop: func(): number): void # タイマーを再起動してアイドル監視をセット
-	if g:blink_idle_timer != -1
-		timer_stop(g:blink_idle_timer)
-	endif
-	Blink()
+	BlinkTimerStop(Blink)
 	g:blink_idle_timer = timer_start(3000, ((_) => Stop()))
 enddef
 
-export def BlinkTimerStop(): void # タイマーを止める
+export def BlinkTimerStop(Blink: func(): number): void # タイマーを止める
+	if get(g:, 'blink_idle_timer', -1) == -1
+		return
+	endif
+	Blink()
 	timer_stop(g:blink_idle_timer)
+	g:blink_idle_timer = -1
 enddef
 
 export def BlinkIdleTimerCheckPOS(Blink: func(): number, Stop: func(): number): void
@@ -295,8 +296,8 @@ export def BlinkIdleTimerCheckPOS(Blink: func(): number, Stop: func(): number): 
 	if ( l - &scrolloff == line('w0') || l + &scrolloff == line('w$') ) # カーソル位置が &scrolloff を加味した表示範囲の最上/下行
 			&& ( c == 1 || getline(l)[ : c - 2] =~# '^\s\+$' ) # 先頭桁かカーソル前は空白文字のみ
 		return
-	elseif &filetype ==# 'notmuch-show' && search('\%^[A-Za-z-]\+:.\+\n\(\%([A-Za-z-]\+:\s\+\).\+\n\)\+\n\%#', 'bcn') == 1
-		Stop()
+	elseif &filetype ==# 'notmuch-show' && search('\%^\(\%([A-Za-z-]\+:\s\+\).\+\n\)*.*\%#', 'bcn') == 1 # メール・ヘッダの中
+		BlinkTimerStop(Blink)
 		return
 	endif
 	vimrc#BlinkIdleTimer(Blink, Stop)
