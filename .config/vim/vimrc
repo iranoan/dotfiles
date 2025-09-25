@@ -262,8 +262,8 @@ set ignorecase smartcase                       # 小文字のみの検索では�
 set infercase                                  # 補完時に大文字/小文字をいい感じに調節してくれる
 # set hlsearch                                   # 検索ハイライトはトグル・スイッチにするために autocmd と map で行う
 # 一時的な取り消しが <Esc> を二回だと一回の <Esc> の反応が悪くなる
-nnoremap <leader><Space> <Cmd>set hlsearch! scrolloff<<CR>
-xnoremap <leader><Space> <Cmd>set hlsearch! scrolloff<<CR>
+nnoremap <leader><Space> <Cmd>set hlsearch!<CR>
+xnoremap <leader><Space> <Cmd>set hlsearch!<CR>
 nnoremap *  *<Cmd>set hlsearch<CR>
 xnoremap *  *<Cmd>set hlsearch<CR>
 nnoremap #  #<Cmd>set hlsearch<CR>
@@ -275,31 +275,12 @@ xnoremap #  #<Cmd>set hlsearch<CR>
 # xnoremap N  N<Cmd>set hlsearch<CR>
 augroup HighlightSearch # 検索ハイライト
 	autocmd!
-	# &hlsearch ON だと Cursor が目立たない (マッチによって移動したカーソル位置がわかりにくい) ので Error と同色にする
-	autocmd ColorScheme * g:hi_cursor = hlget('Cursor', true)
-	autocmd OptionSet hlsearch
-				\ if &hlsearch
-				| 	highlight clear Cursor
-				| 	highlight link Cursor Error
-				| else
-				| 	hlset(g:hi_cursor)
-				| endif
-	# 検索実行によってハイライト
 	autocmd CmdlineLeave,CmdwinLeave [/?]
 				\ if getcmdwintype() !~# '[/?]' || pos != getpos('.')
 				| 	set hlsearch
-				| 	highlight clear Cursor
-				| 	highlight link Cursor Error
 				| endif
-	# ↑autocmd OptionSet は autocmd 内の set に反応しない→:help OptionSet
-	# Cmdwin ではカーソルが移動している必要がある
+	# Cmdwin では↓と組み合わせて、カーソルが移動している場合に限定する←何もしないでそのまま閉じた場合は変更させないため
 	autocmd CmdwinEnter [/?] pos = getpos('.')
-	autocmd CmdLineEnter : hlset(g:hi_cursor)
-	autocmd CmdlineLeave :
-				\ if &hlsearch
-				| 	highlight clear Cursor
-				| 	highlight link Cursor Error
-				| endif
 augroup END
 # ファイルの扱い {{{1
 # 読み込み、保存関係

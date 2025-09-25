@@ -120,6 +120,7 @@ def ColorschemeHighlight(): void
 	highlight SpellRare  term=underline cterm=underline ctermfg=NONE ctermul=6 guifg=NONE guisp=#2aa198
 	highlight MatchParen term=bold,reverse cterm=bold,reverse gui=bold,reverse ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
 	highlight link QuickFixLine CursorLine
+	highlight link CurSearch IncSearch
 	ChangeVert()
 enddef
 
