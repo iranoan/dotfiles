@@ -231,9 +231,9 @@ set statusline=%{%vimrc#StatusLine()%}
 augroup StatusLine
 	autocmd!
 	autocmd ColorScheme *
-				\ highlight StatusLineLeft  term=bold cterm=bold gui=bold ctermfg=White ctermbg=2 guifg=White guibg=SeaGreen
-				| highlight StatusLineRight term=bold cterm=bold gui=bold ctermfg=White ctermbg=3 guifg=White guibg=DarkYellow
-				| highlight StatusGit       term=bold cterm=bold gui=bold ctermfg=White ctermbg=6 guifg=White guibg=DarkCyan
+				\ highlight StatusLineLeft  term=bold cterm=bold gui=bold ctermfg=7 ctermbg=2 guifg=#eee8d5 guibg=#859900
+				| highlight StatusLineRight term=bold cterm=bold gui=bold ctermfg=7 ctermbg=3 guifg=#eee8d5 guibg=#b58900
+				| highlight StatusGit       term=bold cterm=bold gui=bold ctermfg=7 ctermbg=6 guifg=#eee8d5 guibg=#2aa198
 augroup END
 # # 全角スペースをハイライト表示←フォントで対応したのですべてコメント・アウト {{{2
 # if has('syntax') && !has('gui_running')        # 全角空白が可視化されるフォントを使っている
