@@ -5,23 +5,22 @@ function set_fzf#main() abort
 	" do-setup: ./install --bin
 	packadd fzf
 	" }}}
-	let g:fzf_layout = { 'window': { 'width': 1, 'height': 1, 'xoffset': 0 , 'yoffset': 0 } }
+	let g:fzf_layout = #{ window: #{ width: 1, height: 1, xoffset: 0 , yoffset: 0 } }
 	if has('gui_running')
 		call set_fzf#solarized()
 		augroup FZF_Vim_Solaraized
 			autocmd!
 			autocmd ColorScheme * call set_fzf#solarized()
 		augroup END
-	else " CUI では Normal の ctermbg=NOE としているので、そのまま使うと黒色になる
-		let g:fzf_colors = {
-					\ 'fg':     ['fg', 'Normal'],
-					\ 'bg':     ['bg', 'NormalDefault'],
-					\ 'fg+':    ['fg', 'CursorLineNr'],
-					\ 'bg+':    ['bg', 'CursorLine'],
-					\ 'border': ['fg', 'Normal'],
-					\ 'info':   ['fg', 'LineNr'],
-					\ }
 	endif
+	let g:fzf_colors = {
+				\ 'fg':  ['fg', 'Pmenu'],
+				\ 'bg':  ['bg', 'Pmenu'],
+				\ 'hl':  ['fg', 'PmenuMatch'],
+				\ 'fg+': ['fg', 'PmenuSel'],
+				\ 'hl+': ['fg', 'PmenuMatchSel'],
+				\ 'bg+': ['bg', 'PmenuSel'],
+				\ }
 	let g:fzf_action = {
 				\ 'ctrl-g': 'edit',
 				\ 'ctrl-t': function('set_fzf#FZF_open'),
