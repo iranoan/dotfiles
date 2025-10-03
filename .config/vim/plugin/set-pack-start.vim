@@ -142,19 +142,20 @@ def ColorschemeBefore(color: string): void # t_Co, termguicolors 等 colorscheme
 enddef
 # }}}2
 set background=dark
-augroup ChangeColorScheme
-	autocmd!
-	autocmd ColorScheme * ColorschemeHighlight()
-	autocmd ColorSchemePre * ColorschemeBefore(expand('<amatch>'))
-augroup END
-for s in ['solarized8', 'habamax', 'desert', 'default']
-	try # (glob() や getcompletion() を使う存在確認は遅い)
-		execute 'colorscheme ' .. s
-		break
-	catch /^Vim\%((\a\+)\)\:E185:\C/
-		continue
-	endtry
-endfor
+# augroup ChangeColorScheme
+# 	autocmd!
+# 	autocmd ColorScheme * ColorschemeHighlight()
+# 	autocmd ColorSchemePre * ColorschemeBefore(expand('<amatch>'))
+# augroup END
+# for s in ['solarized8', 'habamax', 'desert', 'default']
+# 	try # (glob() や getcompletion() を使う存在確認は遅い)
+# 		execute 'colorscheme ' .. s
+# 		break
+# 	catch /^Vim\%((\a\+)\)\:E185:\C/
+# 		continue
+# 	endtry
+# endfor
+colorscheme solarized9
 
 # 同じインデントをテキストオプジェクト化 https://github.com/kana/vim-textobj-indent {{{1
 # キーマップ ii, ai
