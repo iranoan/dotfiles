@@ -210,7 +210,7 @@ augroup END
 set cursorline cursorcolumn                    # 起動時は、カーソール行桁背景色付ける
 # タブ・ページ/ターミナル環境の時のカーソル形状 {{{2
 set showtabline=0 tabpagemax=500               # 常にタブを非表示+上限 500
-set tabclose=uselast                             # タブ・ページを閉じた時、以前に使用したタブページに移動
+set tabclose=uselast                           # タブ・ページを閉じた時、以前に使用したタブページに移動
 # if has('gui_running')
 # 	# set guitablabel=%!mk_tabline#GUI()           # タブページの書式変更
 # else
@@ -223,11 +223,7 @@ if !has('gui_running')
 endif
 # ステータス・バー {{{2
 set laststatus=2                               # 表示
-set statusline=%{%vimrc#StatusLine()%}
-# ↓元は
-# set statusline=%#StatusLineLeft#%-19.(%{tabpagenr()}/%{tabpagenr('$')}:%n%{%&buftype=='terminal'?'[terminal]':&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%#StatusGit#\ %{fugitive#statusline()[5:-3]->substitute('(','\ ','')}\ %*\ %<%F%=%#StatusLineRight#\ %c:%v:%{strcharlen(strpart(getline('.'),0,col('.')))}/%{strlen(join(getline(0,line('$')),(&ff=='dos'?'12':'1')))}:%{strcharlen(join(getline(0,line('$')),''))}\ %3l/%L%4p%%\ 0x%04B\ [%{&fenc!=''?&fenc:&enc}:%{%{'dos':'CR+LF','unix':'LF','mac':'CR'}[&ff]%}]
-# setlocal statusline=%#StatusLineLeft#%(%{tabpagenr()}/%{tabpagenr('$')}:%n%{%&buftype=='help'?'%h':&filetype=='fugitive'\|\|&filetype=='git'?'%y':'%y%w%r%m'%}%)%#StatusGit#%{fugitive#statusline()[5:-3]->substitute('(','\ ','')}%*%<%F%=%#StatusLineRight#%3p%%0x%04B
-# ←区切りに使いたいが、GVim で隙間が空いてしまう
+set statusline=%!vimrc#StatusLine()
 augroup StatusLine
 	autocmd!
 	autocmd ColorScheme *

@@ -261,12 +261,6 @@ augroup END
 augroup SetPackOpt
 	autocmd!
 
-	# 挿入モード時、ステータスラインの色を変更 $MYVIMDIR/pack/my-plug/opt/insert-status {{{2
-	# g:hi_insert がインサート・モード時の highlight 指定 (未指定時は WarningMsg の太字反転にする)
-	autocmd InsertEnter * ++once g:hi_insert = get(g:, 'hi_insert', hlget('WarningMsg')->map((_, v) => v->extend({name: 'StatusLine', term: {bold: true, reverse: true}, cterm: {bold: true, reverse: true}, gui: {bold: true, reverse: true}, ctermbg: '15', guibg: '#eee8d5'})))
-		| packadd insert-status
-		| insert_status#Main('Enter')
-
 	# ディレクトリを再帰的に diff https://github.com/will133/vim-dirdiff {{{2
 	autocmd CmdUndefined DirDiff ++once g:DirDiffForceLang = 'C LC_MESSAGES=C'
 		| g:DirDiffExcludes = ".git,.*.swp"

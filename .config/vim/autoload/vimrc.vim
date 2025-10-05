@@ -110,74 +110,121 @@ export def Insert_template(s: string): void # ~/Templates/ からテンプレー
 	endif
 enddef
 
-export def StatusLine(): string # set statusline=%{%vimrc#StatusLine()%} で利用する
+export def StatusLine(): string # set statusline=%!vimrc#StatusLine() で利用する
 	# 表示するのは大雑把に↓
-	# tabpagenr()/tabpagenr('$') bufnr filetype modified etc.|git|path|column bytes:number:word-count/file bytes:word-count line current/full % code charset:cr/lf
+	# tabpagenr()/tabpagenr('$') bufnr filetype modified etc.|git|path|column bytes:number:word-count/file word-count:bytes line current/full % code charset:cr/lf
+	# ←区切りに使いたいが、GVim で隙間が空いてしまう
+	var bufnr: number = winbufnr(g:statusline_winid)
+	var filetype: string = getbufvar(bufnr, '&filetype')
+	var buftype: string = getbufvar(bufnr, '&buftype')
+	var fileformat: string = getbufvar(bufnr, '&fileformat')
+	var fileencoding: string = getbufvar(bufnr, '&fileencoding')
+	var win_type: string = win_gettype(g:statusline_winid)
+	var curpos: list<any> = getcurpos(g:statusline_winid)
+	var curline: string = printf('%3d', curpos[1]) # %3l (:help stl-%! の %l) では中身が空だと 0 になる
+	var diff: bool =  getwinvar(g:statusline_winid, '&diff')
+
 	def GetFlag(): string
 		var f: string
-		if win_gettype() ==# 'preview'
+		if win_type ==# 'preview'
 			f ..= ' PRV'
 		endif
-		if &readonly
+		if getbufvar(bufnr, '&readonly')
 			f ..= ' RO'
 		endif
-		if &modified
+		if getbufvar(bufnr, '&modified')
 			f ..= ' +'
-			if !&modifiable
+			if !getbufvar(bufnr, '&modifiable')
 				f ..= '-'
 			endif
-		elseif !&modifiable
-			f ..= ' -'
+		elseif !getbufvar(bufnr, '&modifiable')
+			if f ==# ''
+				f = ' -'
+			else
+				f ..= '-'
+			endif
 		endif
-		if f ==# ''
-			return ' ' .. &filetype
+		if diff
+			if f ==# ''
+				return ' [Diff]'
+			else
+				return ' [Diff:' .. f[1 : ] .. ']'
+			endif
+		elseif f ==# ''
+			return ' ' .. filetype
 		else
-			return ' ' .. &filetype .. '[' .. f[1 : ] .. ']'
+			return ' ' .. filetype .. '[' .. f[1 : ] .. ']'
 		endif
 	enddef
 
 	def GetPath(): string
-		var p: string
-		if &buftype ==# 'help'
-			p = expand('%:t')
+		var p: string = getbufinfo(bufnr)[0].name
+		if buftype ==# 'help'
+			p = substitute(p, '.*/', '', '')
 		else
-			p = expand('%:p')->substitute('^' .. $HOME, '~', '')->substitute('%', '%%', 'g')
+			p = substitute(p, '^' .. $HOME, '~', '')
 		endif
-		if win_gettype() ==# 'command'
-			return '[Commaand Line]'
-		elseif p ==# ''
+		if p ==# ''
 			return '[No Name]'
 		else
 			return p
 		endif
 	enddef
 
-	var t: string = win_gettype()
+	def StatusKind(): string
+		var mode: string = mode()
+		if g:statusline_winid != win_getid(winnr())
+			return '%#StatusLineNC#'
+		elseif mode ==# 'i'
+			return '%#IncSearch#'
+		elseif mode ==# 'c'
+			return '%#WildMenu#'
+		elseif mode ==# 'R'
+			return '%#Error#'
+		endif
+		return '%#StatusLine#'
+	enddef
+
+	def StatusRight(): string
+		return '%=%#StatusLineRight# %c:%v:'
+			.. strcharlen(strpart(getbufoneline(bufnr, curpos[1]), 0, curpos[2])) .. ' '
+			.. strcharlen(join(getbufline(bufnr, 0, '$'), ''))
+			.. ':' .. strlen(join(getbufline(bufnr, 0, '$'), fileformat == 'dos' ? '12' : '1'))
+			.. ' ' .. curline .. '/%L%4p%% 0x%04B ['
+			.. (fileencoding != '' ? fileencoding : &enc) .. ':' .. {dos: 'CR+LF', unix: 'LF', mac: 'CR'}[fileformat] .. ']'
+	enddef
+
 	var s: string = '%#StatusLineLeft#%-19.(' .. tabpagenr() .. '/' .. tabpagenr('$') .. ':%n'
-	if t ==# 'loclist' # quickfix  は編集することはないので、表示する情報を減らす
-		return s .. ' [Location]%) %*%<' .. (exists('w:quickfix_title') ? w:quickfix_title : '') .. '%=%#StatusLineRight#%3l/%L%4p%%'
-	elseif t ==# 'quickfix'
-		return s .. ' [QuickFix]%) %*%<' .. (exists('w:quickfix_title') ? w:quickfix_title : '') .. '%=%#StatusLineRight#%3l/%L%4p%%'
-	elseif &diff # diff モード縦分割を用いていウィンドウ幅が狭いので表示する情報を減らす
-		return '%#StatusLineLeft#' .. tabpagenr() .. '/' .. tabpagenr('$') .. ':%n' .. GetFlag()
-			.. '%#StatusGit#' .. fugitive#statusline()[5 : -3]->substitute('(', '\ ', '')
-			.. '%*%<' .. GetPath()
-			.. '%=%#StatusLineRight#%3p%%0x%04B'
-	elseif &buftype ==# 'terminal'
+	if win_type ==# 'loclist' # quickfix は編集することはないので、表示する情報を減らす
+		return s .. ' [Location]%) ' .. StatusKind() .. '%<' .. (exists('w:quickfix_title') ? w:quickfix_title : '') .. '%=%#StatusLineRight#' .. curline .. '/%L%4p%%'
+	elseif win_type ==# 'quickfix'
+		return s .. ' [QuickFix]%) ' .. StatusKind() .. '%<' .. (exists('w:quickfix_title') ? w:quickfix_title : '') .. '%=%#StatusLineRight#' .. curline .. '/%L%4p%%'
+	elseif diff # diff モード縦分割を用いていウィンドウ幅が狭いので表示する情報を減らす
+		# echo winlayout(1)
+		# ['col', [['row', [['leaf', 1028], ['leaf', 1027]]], ['leaf', 1000]]]
+		# ↑split ↑vsplit
+		return s .. GetFlag()
+			.. '%) %#StatusGit#%{fugitive#Statusline()[5 : -3]->substitute("(", " ", "")}' .. '' .. StatusKind() .. '%<' .. GetPath() .. '%=%#StatusLineRight#%3p%% 0x%04B'
+	elseif win_type ==# 'command'
+		win_type = win_execute(g:statusline_winid, 'echo getcmdwintype()')
+		if win_type =~# ':'
+			return s .. ' [Command Line Window]%) %#StatusLine#%< Ex command' .. StatusRight()
+		elseif win_type =~# '/'
+			return s .. ' [Command Line Window]%) %#StatusLine#%< Search forward' .. StatusRight()
+		elseif win_type =~# '?'
+			return s .. ' [Command Line Window]%) %#StatusLine#%< Search backward' .. StatusRight()
+		endif
+		return s .. ' [Command Line Window]%) %#StatusLine#%<' .. StatusRight()
+	elseif buftype ==# 'terminal'
 		s ..= ' [Term]'
-	elseif &buftype ==# 'help'
+	elseif buftype ==# 'help'
 		s ..= ' [Help]'
-	elseif &filetype ==# 'fugitive' || &filetype ==# 'git'
-		s ..= ' ' .. &filetype
+	elseif filetype ==# 'fugitive' || filetype ==# 'git'
+		s ..= ' ' .. filetype
 	else
 		s ..= GetFlag()
 	endif
-	return s .. '%)%#StatusGit# ' .. fugitive#statusline()[5 : -3]->substitute('(', ' ', '')
-		.. ' %* %<' .. GetPath()
-		.. '%=%#StatusLineRight# %c:%v:'
-				.. strcharlen(strpart(getline('.'), 0, col('.'))) .. ' ' .. strlen(join(getline(0, line('$')), &ff == 'dos' ? '12' : '1')) .. ':' .. strcharlen(join(getline(0, line('$')), ''))
-				.. ' %3l/%L%4p%% 0x%04B ['
-				.. (&fenc != '' ? &fenc : &enc) .. ':' .. {dos: 'CR+LF', unix: 'LF', mac: 'CR'}[&ff] .. ']'
+	return s .. '%)%#StatusGit# %{fugitive#Statusline()[5 : -3]} ' .. StatusKind() .. ' %<' .. GetPath() .. StatusRight()
 enddef
 
 export def KillTerminal(): void # :terminal は一つに
@@ -270,11 +317,6 @@ export def ToggleTabLine(): void # タブラインをトグル (色の変更に�
 	endif
 enddef
 
-# Cursor の点滅を擬似的に止めるため関数 {{{1
-# GUI では色をなくし、CUI では点滅しない縦棒にする
-# 	Blink に点滅処理 () => hlset(hi_cursor) 等
-# 	Stop  でそれを止める () => hlset([{name: 'Cursor', cleared: true}])) 等
-# の number を返す関数を引数にする
 export def BlinkIdleTimer(Blink: func(): number, Stop: func(): number): void # タイマーを再起動してアイドル監視をセット
 	BlinkTimerStop(Blink)
 	g:blink_idle_timer = timer_start(3000, ((_) => Stop()))
@@ -302,10 +344,8 @@ export def BlinkIdleTimerCheckPOS(Blink: func(): number, Stop: func(): number): 
 	endif
 	vimrc#BlinkIdleTimer(Blink, Stop)
 enddef
-# }}}1
 
-# $MYVIMDIR/cache/viminfo をバックアップ {{{1
-export def BackupViminfo(): void
+export def BackupViminfo(): void # $MYVIMDIR/cache/viminfo をバックアップ
 	if systemlist('cmp -s ' .. $MYVIMDIR .. 'cache/viminfo ' .. $MYVIMDIR .. 'cache/viminfo.0 ; echo $?') == ['0']
 		return
 	endif
