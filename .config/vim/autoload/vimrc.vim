@@ -122,7 +122,8 @@ export def StatusLine(): string # set statusline=%!vimrc#StatusLine() で利用�
 	var win_type: string = win_gettype(g:statusline_winid)
 	var curpos: list<any> = getcurpos(g:statusline_winid)
 	var curline: string = printf('%3d', curpos[1]) # %3l (:help stl-%! の %l) では中身が空だと 0 になる
-	var diff: bool =  getwinvar(g:statusline_winid, '&diff')
+	var diff: bool = getwinvar(g:statusline_winid, '&diff')
+	var statusGit: string = '%#StatusGit#%{fugitive#Statusline()[5 : -3]->substitute("(", " ", "")}'
 
 	def GetFlag(): string
 		var f: string
@@ -146,9 +147,9 @@ export def StatusLine(): string # set statusline=%!vimrc#StatusLine() で利用�
 		endif
 		if diff
 			if f ==# ''
-				return ' [Diff]'
+				return f
 			else
-				return ' [Diff:' .. f[1 : ] .. ']'
+				return f[1 : ]
 			endif
 		elseif f ==# ''
 			return ' ' .. filetype
@@ -167,7 +168,7 @@ export def StatusLine(): string # set statusline=%!vimrc#StatusLine() で利用�
 		if p ==# ''
 			return '[No Name]'
 		else
-			return p
+			return ' %<' .. p
 		endif
 	enddef
 
@@ -194,17 +195,85 @@ export def StatusLine(): string # set statusline=%!vimrc#StatusLine() で利用�
 			.. (fileencoding != '' ? fileencoding : &enc) .. ':' .. {dos: 'CR+LF', unix: 'LF', mac: 'CR'}[fileformat] .. ']'
 	enddef
 
+	def DiffPostion(id: number): dict<any>
+		# vert: id が縦分割の内部か? (親を辿っても)
+		# n:    diff の何番目
+		# all:  diff が全体で幾つ有る?
+		# exist_hor: diff の中で横幅全体が有るか?
+		var ret: dict<any> = {exist_hor: false}
+		var count: number = 0
+		def ColRow(ls: list<any>, vert: bool): void
+			if ls[0] ==# 'col'
+				for i in ls[1]
+					ColRow(i, vert)
+				endfor
+			elseif ls[0] ==# 'row'
+				for i in ls[1]
+					ColRow(i, true)
+				endfor
+			else # leaf
+				if ls[1] == id
+					count += 1 # 確認するまで泣く diff
+					ret = {
+						vert: vert,
+						n: count,
+						exist_hor: ret.exist_hor ? true : !vert
+					}
+				elseif getwinvar(ls[1], '&diff')
+					count += 1
+					if !vert
+						ret.exist_hor = true
+					endif
+				endif
+			endif
+		enddef
+
+		ColRow(winlayout(), false)
+		ret.all = count
+		return ret
+	enddef
+
 	var s: string = '%#StatusLineLeft#%-19.(' .. tabpagenr() .. '/' .. tabpagenr('$') .. ':%n'
 	if win_type ==# 'loclist' # quickfix は編集することはないので、表示する情報を減らす
 		return s .. ' [Location]%) ' .. StatusKind() .. '%<' .. (exists('w:quickfix_title') ? w:quickfix_title : '') .. '%=%#StatusLineRight#' .. curline .. '/%L%4p%%'
 	elseif win_type ==# 'quickfix'
 		return s .. ' [QuickFix]%) ' .. StatusKind() .. '%<' .. (exists('w:quickfix_title') ? w:quickfix_title : '') .. '%=%#StatusLineRight#' .. curline .. '/%L%4p%%'
 	elseif diff # diff モード縦分割を用いていウィンドウ幅が狭いので表示する情報を減らす
-		# echo winlayout(1)
-		# ['col', [['row', [['leaf', 1028], ['leaf', 1027]]], ['leaf', 1000]]]
-		# ↑split ↑vsplit
-		return s .. GetFlag()
-			.. '%) %#StatusGit#%{fugitive#Statusline()[5 : -3]->substitute("(", " ", "")}' .. '' .. StatusKind() .. '%<' .. GetPath() .. '%=%#StatusLineRight#%3p%% 0x%04B'
+		# echomsg [g:statusline_winid, DiffPostion(g:statusline_winid)]
+		var k: dict<any> = DiffPostion(g:statusline_winid)
+		var f: string = GetFlag()
+		if !(k.vert) # 縦分割されていない
+			if f ==# ''
+				return s .. ' [Diff]%)' .. statusGit .. ' ' .. StatusKind() .. GetPath() .. StatusRight()
+			else
+				return s .. ' [Diff:' .. f .. ']%)' .. statusGit .. ' ' .. StatusKind() .. GetPath() .. StatusRight()
+			endif
+		elseif k.exist_hor # 縦分割されていない diff が他に有る
+			if f ==# ''
+				return '%#StatusLineLeft#%n ' .. statusGit .. StatusKind() .. GetPath()
+			else
+				return '%#StatusLineLeft#%n[' .. f .. '] ' .. statusGit .. StatusKind() .. GetPath()
+			endif
+		elseif k.n == 1 # 最初の diff
+			if f ==# ''
+				return '%#StatusLineLeft#' .. tabpagenr() .. '/' .. tabpagenr('$')
+					.. ':%n [Diff] ' .. statusGit .. StatusKind() .. GetPath()
+			else
+				return '%#StatusLineLeft#' .. tabpagenr() .. '/' .. tabpagenr('$')
+					.. ':%n [Diff:' .. f .. '] ' .. statusGit .. StatusKind() .. GetPath()
+			endif
+		elseif k.n == k.all # 最後の diff
+			if f ==# ''
+				return '%#StatusLineLeft#%n ' .. statusGit .. StatusKind() .. GetPath() .. '%=%#StatusLineRight#%3p%% 0x%04B'
+			else
+				return '%#StatusLineLeft#%n[' .. f .. '] ' .. statusGit .. StatusKind() .. GetPath() .. '%=%#StatusLineRight#%3p%% 0x%04B'
+			endif
+		endif
+		if f ==# ''
+			return '%#StatusLineLeft#%n ' .. statusGit .. StatusKind() .. GetPath()
+		else
+			return '%#StatusLineLeft#%n[' .. f .. '] ' .. statusGit .. StatusKind() .. GetPath()
+		endif
 	elseif win_type ==# 'command'
 		win_type = win_execute(g:statusline_winid, 'echo getcmdwintype()')
 		if win_type =~# ':'
@@ -224,7 +293,7 @@ export def StatusLine(): string # set statusline=%!vimrc#StatusLine() で利用�
 	else
 		s ..= GetFlag()
 	endif
-	return s .. '%)%#StatusGit# %{fugitive#Statusline()[5 : -3]} ' .. StatusKind() .. ' %<' .. GetPath() .. StatusRight()
+	return s .. '%)' .. statusGit .. ' ' .. StatusKind() .. GetPath() .. StatusRight()
 enddef
 
 export def KillTerminal(): void # :terminal は一つに
