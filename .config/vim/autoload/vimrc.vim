@@ -386,6 +386,7 @@ export def ToggleTabLine(): void # タブラインをトグル (色の変更に�
 	endif
 enddef
 
+# カーソルの点滅を止める {{{1
 export def BlinkIdleTimer(Blink: func(): number, Stop: func(): number): void # タイマーを再起動してアイドル監視をセット
 	BlinkTimerStop(Blink)
 	g:blink_idle_timer = timer_start(3000, ((_) => Stop()))
@@ -413,6 +414,7 @@ export def BlinkIdleTimerCheckPOS(Blink: func(): number, Stop: func(): number): 
 	endif
 	vimrc#BlinkIdleTimer(Blink, Stop)
 enddef
+# }}}1
 
 export def BackupViminfo(): void # $MYVIMDIR/cache/viminfo をバックアップ
 	if systemlist('cmp -s ' .. $MYVIMDIR .. 'cache/viminfo ' .. $MYVIMDIR .. 'cache/viminfo.0 ; echo $?') == ['0']
