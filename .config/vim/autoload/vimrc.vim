@@ -417,13 +417,22 @@ enddef
 # }}}1
 
 export def BackupViminfo(): void # $MYVIMDIR/cache/viminfo をバックアップ
-	if systemlist('cmp -s ' .. $MYVIMDIR .. 'cache/viminfo ' .. $MYVIMDIR .. 'cache/viminfo.0 ; echo $?') == ['0']
+	var viminfo: string = &viminfofile # $MYVIMDIR .. 'cache/viminfo'
+	if viminfo ==# 'NONE'
+		return
+	elseif viminfo ==# ''
+		viminfo = matchstr(&viminfo, '\(\(^\|,\)n\zs[^,]\+\ze,\|\(^\|,\)n\zs[^,]\+$\)')
+		if viminfo ==# ''
+			viminfo = $HOME .. '/.viminfo'
+		endif
+	endif
+	if systemlist('cmp -s ' .. viminfo .. ' ' .. viminfo .. '.0 ; echo $?') == ['0']
 		return
 	endif
 	for i in range(1, 9)->reverse()
-		if filereadable($MYVIMDIR .. 'cache/viminfo.' .. (i - 1))
-			rename($MYVIMDIR .. 'cache/viminfo.' .. (i - 1), $MYVIMDIR .. 'cache/viminfo.' .. i)
+		if filereadable(viminfo .. '.' .. (i - 1))
+			rename(viminfo .. '.' .. (i - 1), viminfo .. '.' .. i)
 		endif
 	endfor
-	filecopy($MYVIMDIR .. 'cache/viminfo', $MYVIMDIR .. 'cache/viminfo.0')
+	filecopy(viminfo, viminfo .. '.0')
 enddef
