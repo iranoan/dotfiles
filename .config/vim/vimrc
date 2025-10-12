@@ -399,7 +399,7 @@ nnoremap <silent><leader>cm <Cmd>set more! more?<CR>
 nnoremap <silent><leader>cs <Cmd>let &l:scrolloff = ( &scrolloff ? 0 : ( &lines > 20 ? &lines / 4 : 5 ) ) <Bar> setlocal scrolloff?<CR>
 nnoremap <silent><leader>ct <Cmd>call vimrc#ToggleTabLine()<CR>
 nnoremap <silent><leader>cw <Cmd>setlocal wrap! wrap?<CR>
-# gvimrc に書かれた分 {{{3
+# gvimrc.vim に書かれた分 {{{3
 # nnoremap <leader>cM <Cmd>call gvimrc#Menu()<CR>
 # nnoremap <leader>cT <Cmd>call gvimrc#Toolbar()<CR>
 # 日付と時刻入力 {{{2
@@ -456,6 +456,10 @@ inoremap <silent><C-Tab>   <C-PageDown>
 noremap  <silent><S-C-Tab> gT
 tnoremap <silent><S-C-Tab> <C-W>gT
 inoremap <silent><S-C-Tab> <C-PageUp>
+# dh, dl は使わない (それぞれ x, X と同じ) ので、diff で使う {{{2
+# diff のバッファが3つまでに対応し、dh で上/左から、dl で下/右から差分を取得
+nnoremap <silent>dh         <Cmd>call vimrc#DiffGet(-1)<CR>
+nnoremap <silent>dl         <Cmd>call vimrc#DiffGet(1)<CR>
 # クリップボードのコピー、ペースト、切り取り+ポップアップが表示されているときの切り替え {{{2
 vnoremap <C-C> "+y
 vnoremap <C-Y> "+y

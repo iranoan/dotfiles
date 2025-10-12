@@ -436,3 +436,54 @@ export def BackupViminfo(): void # $MYVIMDIR/cache/viminfo をバックアップ
 	endfor
 	filecopy(viminfo, viminfo .. '.0')
 enddef
+
+export def DiffGet(n: number): void
+	# 差分を取得する
+	# 差分バッファが4つ以上は未対応
+	# 差分バッファが3つの場合は、常に真ん中に取り込む
+	# n: -1 で左/前の差分を取得
+	# n: 1 で右/後の差分を取得
+	var bufnr: number = bufnr()
+	var winid: number = win_getid()
+
+	def GetDifWin(): list<dict<number>>
+		var difs: list<dict<number>>
+		var same_buf: bool
+
+		for i in gettabinfo(tabpagenr())[0].windows
+				->filter((_, v) => getwinvar(v, '&diff'))
+				->map((_, v) => copy({id: v, bufnr: getwininfo(v)[0].bufnr})) # diff ウィンドウのウィンドウ ID と バッファ番号
+			if i.bufnr == bufnr && i.id != winid
+				continue
+			endif
+			same_buf = true
+			for j in difs
+				if i.bufnr == j.bufnr
+					same_buf = false
+					break
+				endif
+			endfor
+			if same_buf
+				add(difs, i)
+			endif
+		endfor
+		return difs
+	enddef
+
+	if !&diff
+		return
+	endif
+	var diffs: list<dict<number>> = GetDifWin()
+	var diff_n = len(diffs)
+
+	if diff_n <= 1
+		return
+	elseif diff_n <= 3
+		if n == -1
+			win_execute(diffs[1].id, 'diffget ' .. diffs[0].bufnr) # 1 番目で 0 番目から取得
+		elseif n == 1
+			win_execute(diffs[-1].id, 'diffput ' .. diffs[-2].bufnr) # 最後で最後から2番目に伝達
+		endif
+	endif
+enddef
+
