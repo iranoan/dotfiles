@@ -470,9 +470,6 @@ export def DiffGet(n: number): void
 		return difs
 	enddef
 
-	if !&diff
-		return
-	endif
 	var diffs: list<dict<number>> = GetDifWin()
 	var diff_n = len(diffs)
 
@@ -484,6 +481,8 @@ export def DiffGet(n: number): void
 		elseif n == 1
 			win_execute(diffs[-1].id, 'diffput ' .. diffs[-2].bufnr) # 最後で最後から2番目に伝達
 		endif
+	else
+		echohl WarningMsg | echo "Don't support four or more diff buffers!" | echohl None
 	endif
 enddef
 
