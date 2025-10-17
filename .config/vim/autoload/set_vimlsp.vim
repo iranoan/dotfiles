@@ -42,6 +42,7 @@ function set_vimlsp#main() abort
 	let g:lsp_settings = #{
 				\ vscode-html-language-server: #{allowlist: ['html', 'xhtml']},
 				\ bash-language-server: #{allowlist: ['sh', 'bash']},
+				\ digestif: #{disabled: 1},
 				\ pylsp: #{
 				\ 	workspace_config: #{
 				\ 		pylsp: #{
@@ -70,6 +71,7 @@ function set_vimlsp#main() abort
 				" 		\ usePlaceholders: v:true,
 				" 	\ },
 				" \ }
+			" TeX では LSP を使わないし、digestif はエラーが発生する
 	packadd vim-lsp-settings
 	" }}}
 	" LSP との連携 https://github.com/prabirshrestha/asyncomplete-lsp.vim {{{
@@ -119,7 +121,7 @@ def s:on_lsp_buffer_enabled(): void
 	elseif index(['css', 'c', 'cpp', 'html', 'xhtml'], &filetype) != -1
 		b:lsp_diagnostics_enabled = 0
 		# clang 以外で行末の;無しで次の行がエラー扱いになる
-		# TeX では lacheck, CSS では css-validator が標準入力で扱えないので、efm-langserver を介すとファイルを保存のタイミングでしかチェックしない
+		# TeX では lacheck, CSS では css-validator が標準入力で扱えない+efm-langserver を介すとファイルを保存のタイミングでしかチェックしない
 		# →シェルスクリプトにすると保存だけでなく、編集に対応できるが css-validator はワーニングだけだと、バッファを開いた直後は表示されない
 	else # 結果的に b:lsp_diagnostics_enabled != 0 はエラー/警告リスト ALE 優先に
 		nnoremap <buffer><leader>p <Plug>(lsp-document-diagnostics)
