@@ -24,15 +24,14 @@ export def XBB(): void # カーソル位置のパスの ebb -x -O の出力の�
 				echo 'Not exist: ' .. url
 				echohl None
 				return
-			endif
-			if !filereadable(url)
+			elseif !filereadable(url)
 				echohl WarningMsg
 				echo 'Not readable ' .. url
 				echohl None
 				return
 			endif
-			urls = split(system('ebb -x -O ' .. url), '[\r\n]')
-			execute "normal! o" .. urls[0] .. "\n" .. urls[3]
+			var l = line('.')
+			append(l, matchstr(getline(l), '^\s*') .. systemlist('ebb -x -O ' .. url)[3])
 			return
 		endif
 	endfor
