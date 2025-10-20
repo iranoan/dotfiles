@@ -231,9 +231,9 @@ export def StatusLine(): string # set statusline=%!vimrc#StatusLine() で利用�
 
 	var s: string = '%#StatusLineLeft#%-19.(' .. tabpagenr() .. '/' .. tabpagenr('$') .. ':%n'
 	if win_type ==# 'loclist' # quickfix は編集することはないので、表示する情報を減らす
-		return s .. ' [Location]%) ' .. StatusKind() .. '%<' .. (exists('w:quickfix_title') ? w:quickfix_title : '') .. '%=%#StatusLineRight#' .. curline .. '/%L%4p%%'
+		return s .. ' [Location]%) ' .. StatusKind() .. '%<' .. getwinvar(g:statusline_winid, 'quickfix_title') .. '%=%#StatusLineRight#' .. curline .. '/%L%4p%%'
 	elseif win_type ==# 'quickfix'
-		return s .. ' [QuickFix]%) ' .. StatusKind() .. '%<' .. (exists('w:quickfix_title') ? w:quickfix_title : '') .. '%=%#StatusLineRight#' .. curline .. '/%L%4p%%'
+		return s .. ' [QuickFix]%) ' .. StatusKind() .. '%<' .. getwinvar(g:statusline_winid, 'quickfix_title') .. '%=%#StatusLineRight#' .. curline .. '/%L%4p%%'
 	elseif diff # diff モード縦分割を用いていウィンドウ幅が狭いので表示する情報を減らす
 		# echomsg [g:statusline_winid, DiffPostion(g:statusline_winid)]
 		var k: dict<any> = DiffPostion(g:statusline_winid)
