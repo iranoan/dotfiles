@@ -34,6 +34,7 @@ setlocal signcolumn=auto foldcolumn=0
 nnoremap <buffer><nowait><silent>q <CMD>bwipeout!<CR>
 nnoremap <buffer><C-O> <CMD>colder<CR>
 nnoremap <buffer><C-I> <CMD>cnewer<CR>
+nmap     <buffer>o <CR>
 # :NoMatchParen " 対応するカッコの ON/OFF {{{2
 # ↓qf を開いた状態で、grep するとエラーになる
 # NoMatchParen
