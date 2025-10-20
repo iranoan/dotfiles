@@ -562,34 +562,12 @@ xnoremap gk k
 vnoremap <Down> gj
 vnoremap <Up>   gk
 # 記号で括る系を [Shift] 無しで可能にする (JIS キーボード向け) {{{2
-onoremap a2 a"
-xnoremap a2 a"
-onoremap i2 i"
-xnoremap i2 i"
-onoremap a7 a'
-xnoremap a7 a'
-onoremap i7 i'
-xnoremap i7 i'
-onoremap a8 a(
-xnoremap a8 a(
-onoremap i8 i(
-xnoremap i8 i(
-onoremap a9 a)
-xnoremap a9 a)
-onoremap i9 i)
-xnoremap i9 i)
-onoremap a@ a`
-xnoremap a@ a`
-onoremap i@ i`
-xnoremap i@ i`
-onoremap a, a<
-xnoremap a, a<
-onoremap i, i<
-xnoremap i, i<
-onoremap a. a>
-xnoremap a. a>
-onoremap i. i>
-xnoremap i. i>
+for [n, q] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>'})
+	execute 'onoremap a' .. n .. ' a' .. q
+	execute 'xnoremap a' .. n .. ' a' .. q
+	execute 'onoremap i' .. n .. ' i' .. q
+	execute 'xnoremap i' .. n .. ' i' .. q
+endfor
 # abbreviate の代わり {{2
 cnoremap <expr>~vim $MYVIMDIR
 # Quoted-Printのデコード {{{2

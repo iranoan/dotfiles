@@ -608,11 +608,11 @@ for [n, q] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '
 	qq1 = q == "'" ? "''" : q
 	execute 'nnoremap ds'  .. n .. ' <Cmd>call set_surround#main(''Dsurround'') <Bar> call feedkeys(''' .. qq1 .. ''')<CR>'
 	execute 'nnoremap ys4' .. n .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''$' .. qq1 .. ''')<CR>'
+	execute 'nnoremap ys4' .. q .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''$' .. qq1 .. ''')<CR>'
 	execute 'nnoremap ys$' .. n .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''$' .. qq1 .. ''')<CR>'
 endfor
-for q in ['"', "'", '(', ')', '`', '<', '>', '[', ']', '{', '}']
-	qq1 = q == "'" ? "''" : q
-	execute 'nnoremap ys4' .. q .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''$' .. qq1 .. ''')<CR>'
+for q in ['[', ']', '{', '}']
+	execute 'nnoremap ys4' .. q .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''$' .. q .. ''')<CR>'
 endfor
 for [n1, q1] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '"': '"', "'": "'", '(': '(', ')': ')', '`': '`', '<': '<', '>': '>', '[': '[', ']': ']', '{': '{', '}': '}'})
 	for [n2, q2] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '"': '"', "'": "'", '(': '(', ')': ')', '`': '`', '<': '<', '>': '>', '[': '[', ']': ']', '{': '{', '}': '}'})
