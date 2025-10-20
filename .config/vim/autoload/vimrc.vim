@@ -85,13 +85,9 @@ export def MoveChanged(move_rear: bool): void # カーソルリストの前後�
 		echo 'No Change in ' .. (move_rear ? 'rear' : 'front')
 		return
 	endif
-	if move_rear
-		pos = sort(change, BigSmall)[0]
-	else
-		pos = sort(change, BigSmall)[-1]
-	endif
-	setpos('.', [bufnr(), pos.lnum, pos.col, 0])
-	echo ''
+	sort(change, BigSmall)->uniq()
+	pos = move_rear ? change[0] : change[-1]
+	setpos('.', [bufnr(), pos.lnum, pos.col + 1, 0])
 enddef
 
 export def Insert_template(s: string): void # ~/Templates/ からテンプレート挿入
