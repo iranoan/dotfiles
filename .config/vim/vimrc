@@ -432,8 +432,6 @@ nnoremap <silent>[L         <Cmd>lpfile<CR>
 nnoremap <silent>]L         <Cmd>lnfile<CR>
 nnoremap <silent>[b         <Cmd>bprevious<CR>
 nnoremap <silent>]b         <Cmd>bnext<CR>
-nnoremap <silent>[C         <Cmd>cpfile<CR>
-nnoremap <silent>]C         <Cmd>cnfile<CR>
 nnoremap <silent><Leader>qf :wall<CR>:silent make<CR>:cwindow<CR>
 # ↑QuickFix ではないが、やりたいことは似ているので、ここに一緒に書いておく
 # QuickFix と diff モードに共通キー (次/前の変更/エラー箇所を共通化)
@@ -477,9 +475,9 @@ xnoremap <S-Del> "+x
 xnoremap X "+x
 # ↑元の v_X ほぼ v_x と同じだが行単位←元々行単位なら V を使う
 inoremap <S-Insert> <C-R>+
-inoremap <Insert> <C-R>+
+inoremap <Insert>   <C-R>+
 cnoremap <S-Insert> <C-R>+
-cnoremap <Insert> <C-R>+
+cnoremap <Insert>   <C-R>+
 # inoremap <S-C-P> <C-R>+                        # 下と重なり無効になる←modifyOtherKeys
 # inoremap <C-P> <C-R>"
 inoremap <expr><C-P> pumvisible() ? '<C-P>' : '<C-R>"'
@@ -497,19 +495,19 @@ xnoremap <expr><C-J> pumvisible() ? '<Down>' : '<C-J>'
 #↑ command moode の補完候補の選択にも使っている
 # 挿入/コマンドモード時のカーソル移動 {{{2
 # [Henkan] を [BS] に割り当てているので、<C-H> は他に割り当てる
-inoremap <C-H> <C-G>U<Left>
-inoremap <Left> <C-G>U<Left>
-cnoremap <C-H> <Left>
+inoremap <C-H>   <C-G>U<Left>
+inoremap <Left>  <C-G>U<Left>
+cnoremap <C-H>   <Left>
 #↑ insert moode の補完候補の選択にも使っている
-inoremap <C-K> <Up>
-inoremap <C-L> <C-G>U<Right>
+inoremap <C-K>   <Up>
+inoremap <C-L>   <C-G>U<Right>
 inoremap <Right> <C-G>U<Right>
-cnoremap <C-L> <Right>
-cnoremap <C-A> <Home>
-cnoremap <C-B> <Left>
+cnoremap <C-L>   <Right>
+cnoremap <C-A>   <Home>
+cnoremap <C-B>   <Left>
 # コマンドモードで <Del> に <S-BS> と <C-D> を割り当て (前者はターミナルで聞かない)
 # オリジナルの <C-D> (c_CTRL-D) は <Tab> で代用可
-cnoremap <C-D> <Del>
+cnoremap <C-D>  <Del>
 cnoremap <S-BS> <Del>
 inoremap <expr><C-N> pumvisible() ? '<C-N>' : '<Down>'
 vnoremap <expr><C-N> pumvisible() ? '<C-N>' : '<Down>'
@@ -527,13 +525,13 @@ nnoremap <silent>gF <C-W>gF
 # <BS> などがアンドゥーの単位になるように {{{2
 # 一般的な [BS] と同等
 # inoremap <C-H> <C-G>u<BS>
-inoremap <BS> <C-G>u<BS>
-inoremap <Del> <C-G>u<Del>
+inoremap <BS>   <C-G>u<BS>
+inoremap <Del>  <C-G>u<Del>
 inoremap <S-BS> <C-G>u<Del>
-inoremap <CR> <C-G>u<CR>
-inoremap <C-m> <C-G>u<C-m>
-inoremap <C-u> <C-G>u<C-u>
-inoremap <C-w> <C-G>u<C-w>
+inoremap <CR>   <C-G>u<CR>
+inoremap <C-m>  <C-G>u<C-m>
+inoremap <C-u>  <C-G>u<C-u>
+inoremap <C-w>  <C-G>u<C-w>
 # ウィンドウ・サイズ変更 <C-W> の後の [+], [-], [<], [>] を押しっぱなしでサイズ変更できる {{{2
 nmap <C-W>+ <C-W>+<SID>ws
 nmap <C-W>- <C-W>-<SID>ws
