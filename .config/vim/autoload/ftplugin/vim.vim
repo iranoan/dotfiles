@@ -300,7 +300,7 @@ export def Goto(): void # 関数や変数の定義場所に移動
 			var c_line: number = line('.') - 1 # 何かのチェックに用いる行番号
 			var def_all: list<dict<any>> = getline(1, '$') # カレント・バッファの全関数の最初と最後のペア
 				->map((i, v) => ({lnum: i, text: v, n: bufnr, filename: f}))
-				->filter((_, v) => v.text =~# '^\s*\%(\%(def\|fu\%[nction]\)!\=\s\+\w\+(\|enddef\>\|endf\%[unction]\>\)')
+				->filter((_, v) => v.text =~# '^\s*\%(\%(export\s\+\)\=\%(def\|fu\%[nction]\)!\=\s\+\w\+(\|enddef\>\|endf\%[unction]\>\)')
 				->map((_, v) => v->extend({kind:  # 行ごとの種類
 					v.text =~# '^\s*\%(export\s\+\)\=\%(def\|fu\%[nction]\)!\=' # 関数始まり
 						? 1
