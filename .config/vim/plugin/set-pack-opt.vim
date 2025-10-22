@@ -92,6 +92,14 @@ textobj#user#plugin('datetime', {
 		select: ['ad', 'id'],
 	},
 })
+# パスや URL
+textobj#user#plugin('uri', {
+	uri: {
+		pattern: '\%(\%(\%(https\=\|ftp\|gopher\)://\|\%(mailto\|file\|news\):\)[^][{}()'' \t<>"]\+\|\%(www\|web\|w3\)[a-z0-9_-]*\.[a-z0-9._-]\+\.[^][{}()'' \t<>"]\+\)[a-z0-9/]\|\%(\~\=/\)\=\%([-A-Za-z._0-9]\+/\)*[-A-Za-z._0-9]\+\%(\.\a\%([A-Za-z0-9]\{,3}\)\|/\)\?',
+		scan: 'line',
+		select: ['au', 'iu'],
+	},
+})
 # CSV/TSV のセル内
 textobj#user#plugin('spreadsheet', {
 	value-a: {
