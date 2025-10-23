@@ -10,7 +10,7 @@ function open_uri#main()
 	let urls = []
 	let only_urls = []
 	while 1
-		let [url, m_start, m_end] = matchstrpos(line_str, '\v<(((https?|ftp|gopher)://|(mailto|file|news):)[^][{}()'' \t<>"]+|(www|web|w3)[a-z0-9_-]*\.[a-z0-9._-]+\.[^][{}()'' \t<>"]+)[a-z0-9/]|(\~?/)?([-A-Za-z._0-9]+/)*[-A-Za-z._0-9]+(\.\a([A-Za-z0-9]{,3})|/)', m_end)
+		let [url, m_start, m_end] = matchstrpos(line_str, '\v<(((https?|ftp|gopher)://|(mailto|file|news):)[^][{}()'' \t<>"]+|(www|web|w3)[a-z0-9_-]*\.[a-z0-9._-]+\.[^][{}()'' \t<>"]+)[a-z0-9/]|(\~?/)?([-A-Za-z._0-9]+/)*[-A-Za-z._0-9]+(\.\a([A-Za-z0-9]{,3})|/)?', m_end)
 		if m_start == -1
 			break
 		endif
