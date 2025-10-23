@@ -117,7 +117,7 @@ License: GPL Ver.3.
 	g:gnu_grep                                                       *g:gnu_grep*
 	Type: |Dictionary|
 	Default: `{'exclude-dir': '{.git,.svn,.cvs,.cache,.thumbnail}',`
-					`\ 'exclude': '{*.asf,*.aux,*.avi,*.bmc,*.bmp,*.cer,*.chm,*.chw,*.class,*.crt,*.cur,*.db,*.db-*,*..db:encryptable,*.dll,*.doc,*.docx,*.dvi,*.emf,*.epub,*.exe,*.fdb_latexmk,*.fls,*.flv,*.gpg,*.hlp,*.hmereg,*.icc,*.icm,*.ico,*.ics,*.jar,*.jp2,*.jpg,*.kbx,*.ltjruby,*.lz4,*.lzh,*.m4a,*.mkv,*.mov,*.mozlz4,*.mp3,*.mp4,*.mpg,*.nav,*.nvram,*.o,*.obj,*.odb,*.odg,*.odp,*.ods,*.odt,*.oll,*.opp,*.out,*.pdf,*.pfa,*.pl3,*.png,*.ppm,*.ppt,*.pptx,*.pyc,*.reg,*.rm,*.rtf,*.snm,*.sqlite,*.sqlite-*,*.sqlite3,*.sqlite3-*,*.swf,*.gz,*.bz2,*.Z,*.lzma,*.xz,*.lz,*.tfm,*.toc,*.ttf,*.vbox,*.vbox-prev,*.vdi,*.vf,*.webm,*.wmf,*.wmv,*.xls,*.xlsm,*.xlsx,.*.sw?,.viminfo,viminfo,a.out,tags,tags-ja}'`
+					`\ 'exclude': '{*.asf,*.aux,*.avi,*.bmc,*.bmp,*.cer,*.chm,*.chw,*.class,*.crt,*.cur,*.db,*.db-*,*..db:encryptable,*.dll,*.doc,*.docx,*.dvi,*.emf,*.epub,*.exe,*.fdb_latexmk,*.fls,*.flv,*.gpg,*.hlp,*.hmereg,*.icc,*.icm,*.ico,*.ics,*.jar,*.jp2,*.jpg,*.kbx,*.ltjruby,*.lz4,*.lzh,*.m4a,*.mkv,*.mov,*.mozlz4,*.mp3,*.mp4,*.mpg,*.nav,*.nvram,*.o,*.obj,*.odb,*.odg,*.odp,*.ods,*.odt,*.oll,*.opp,*.out,*.pdf,*.pfa,*.pl3,*.png,*.ppm,*.ppt,*.pptx,*.pyc,*.reg,*.rm,*.rtf,*.snm,*.sqlite,*.sqlite-*,*.sqlite3,*.sqlite3-*,*.swf,*.gz,*.bz2,*.Z,*.lzma,*.xz,*.lz,*.tfm,*.toc,*.ttf,*.vbox,*.vbox-prev,*.vdi,*.vf,*.webm,*.wmf,*.wmv,*.xls,*.xlsm,*.xlsx,.*.sw?,.viminfo,viminfo,a.out,tags,tags-ja}'}`
 	* --exclude=, --exclude-dir= の値を辞書で指定する
 	* 次の様に全キーの値を指定していない場合、他のキーの値はデフォルトが使われる >vim
 			let g:gnu_grep = {'exclude-dir':
