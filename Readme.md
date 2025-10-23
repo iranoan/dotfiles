@@ -11,7 +11,7 @@
 install.sh
 
 * do not install application, plug-in and etc.
-* __delete an existing dotfiles__
+* **delete an existing dotfiles**
 
 ## include
 
@@ -81,8 +81,6 @@ install.sh
   * [.config/tmux/](.config/tmux/)
 * uim
   * [.uim](.uim)
-* urlview
-  * [.urlview](.urlview)
 * Vim
   * [.config/vim/](.config/vim/)
 * X
