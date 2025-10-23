@@ -275,13 +275,12 @@ augroup SetPackOpt
 		| packadd vim-dirdiff
 
 	# 出力を quickfix に取り込む $MYVIMDIR/pack/my-plug/opt/output2qf {{{2
-	autocmd CmdlineEnter : ++once packadd output2qf
+	# Man コマンドを使用可能にする $MYVIMDIR/pack/my-plug/opt/man {{{2
+	autocmd CmdlineEnter : ++once packadd man
+		| packadd output2qf
 
 	# カーソル位置の Syntax の情報を表示する $MYVIMDIR/pack/my-plug/opt/syntax_info/ {{{2 http://cohama.hateblo.jp/entry/2013/08/11/020849 を参考にした
 	autocmd CmdUndefined SyntaxInfo ++once packadd syntax_info
-
-	# Man コマンドを使用可能にする $MYVIMDIR/pack/my-plug/opt/man {{{2
-	autocmd CmdUndefined Man ++once packadd man
 
 	# dog と cat の入れ替えなどサイクリックに置換する関数などの定義 $MYVIMDIR/pack/my-plug/opt/replace-cyclic {{{2
 	autocmd FuncUndefined replace#* ++once packadd replace-cyclic
