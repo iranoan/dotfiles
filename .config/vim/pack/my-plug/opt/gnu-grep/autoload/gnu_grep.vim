@@ -102,7 +102,7 @@ export def Grep(kind: bool, add: bool, bang: string, ...args: list<string>): voi
 	if exclude_dir !=# ''
 		exclude_dir = '--exclude-dir=' .. exclude_dir
 	endif
-	if len(filter(copy(args_ls), 'v:val =~# "^--include="')) > 0
+	if len(filter(copy(args_ls), (_, v) => v =~# '^--include=')) > 0
 		opt = ' -nHsI --color=never -d skip ' .. exclude_dir .. ' '
 	else
 		var exclude: string = '{*.asf,*.aux,*.avi,*.bmc,*.bmp,*.cer,*.chm,*.chw,*.class,*.crt,*.cur,*.db,*.db-*,*..db:encryptable,*.dll,*.doc,*.docx,*.dvi,*.emf,*.epub,*.exe,*.fdb_latexmk,*.fls,*.flv,*.gpg,*.hlp,*.hmereg,*.icc,*.icm,*.ico,*.ics,*.jar,*.jp2,*.jpg,*.kbx,*.ltjruby,*.lz4,*.lzh,*.m4a,*.mkv,*.mov,*.mozlz4,*.mp3,*.mp4,*.mpg,*.nav,*.nvram,*.o,*.obj,*.odb,*.odg,*.odp,*.ods,*.odt,*.oll,*.opp,*.out,*.pdf,*.pfa,*.pl3,*.png,*.ppm,*.ppt,*.pptx,*.pyc,*.reg,*.rm,*.rtf,*.snm,*.sqlite,*.sqlite-*,*.sqlite3,*.sqlite3-*,*.swf,*.gz,*.bz2,*.Z,*.lzma,*.xz,*.lz,*.tfm,*.toc,*.ttf,*.vbox,*.vbox-prev,*.vdi,*.vf,*.webm,*.wmf,*.wmv,*.xls,*.xlsm,*.xlsx,.*.sw?,.viminfo,viminfo,a.out,tags,tags-ja}'
@@ -141,21 +141,20 @@ export def GrepComp(ArgLead: string, CmdLine: string, CursorPos: number): list<s
 	def LS(s: string, isdir: bool): list<string> # パス・リストを取得
 		var ls: list<string>
 		if s ==# ''
-			ls = glob('{,.}*')->split('\n')
+			ls = glob('{,.}*', false, true, true)
 		elseif s ==# '~'
-			ls = glob('~/{,.}*')->split('\n')
+			ls = glob('~/{,.}*', false, true, true)
 		elseif isdirectory(s) && s[-1] !=# '/'
-			ls = glob(s .. '/{,.}*')->split('\n')
+			ls = glob(s .. '/{,.}*', false, true, true)
 		else
-			ls = glob(s .. '{,.}*')->split('\n')
+			ls = glob(s .. '{,.}*', false, true, true)
 		endif
 		if isdir
-			ls = filter(ls, 'isdirectory((resolve(v:val)))')
+			filter(ls, (_, v) => isdirectory((resolve(v))))
 		endif
 		if s[0] ==# '~'
 			var home: string = expand('~')
-			map(ls, (key, val) => substitute(val, home, '\~', ''))
-			# map(ls, 'substitute(v:val, "' .. home .. '", "~", "")')
+			map(ls, (_, v) => substitute(v, home, '\~', ''))
 		endif
 		return ls->sort('i')
 	enddef
@@ -281,7 +280,7 @@ export def GrepComp(ArgLead: string, CmdLine: string, CursorPos: number): list<s
 		return opt
 	else
 		if args_cursor[-1] =~# '^--file='
-			return map(LS(args_cursor[-1][7 : ], false), '"--file=" .. v:val')
+			return map(LS(args_cursor[-1][7 : ], false), (_, v) => '--file=' .. v)
 		elseif len(args_cursor) >= 2
 			if args_cursor[-2] ==# '-r' || args_cursor[-2] ==# '--recursive'
 				|| args_cursor[-2] ==# '-R' || args_cursor[-2] ==# '--dereference-recursive'
@@ -289,6 +288,7 @@ export def GrepComp(ArgLead: string, CmdLine: string, CursorPos: number): list<s
 			endif
 		endif
 		AddLS(args_cursor[-1])
-		return filter(opt, 'v:val =~# ''^' .. escape(args_cursor[-1], '.$*~()\[]') .. '''')->map((key, val) => substitute(val, '^-[-A-Za-z]\+[^=]\zs$', ' ', ''))
+		return filter(opt, (_, v) => v =~# '^' .. escape(args_cursor[-1], '.$*~()\[]'))
+			->map((_, v) => substitute(v, '^-[-A-Za-z]\+[^=]\zs$', ' ', ''))
 	endif
 enddef
