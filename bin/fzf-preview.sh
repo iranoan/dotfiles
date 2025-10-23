@@ -123,7 +123,7 @@ preview_img(){ # 呼び出し元アプリ名の取得し画像プレビューを
 }
 
 if [ "$mime" = "inode/directory" ]; then
-	tree -L 1 -C "$f"
+	ls --color=always --group-directories-first -lhG "$f"
 	exit 0
 fi
 find "${f%/*}" -name "${f##*/}" -printf "%p\n%TF %TR %s\n"
