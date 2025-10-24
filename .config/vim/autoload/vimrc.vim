@@ -162,7 +162,8 @@ export def StatusLine(): string # set statusline=%!vimrc#StatusLine() で利用�
 			p = substitute(p, '^' .. $HOME, '~', '')
 		endif
 		if p ==# ''
-			return '[No Name]'
+			# return '[No Name]'
+			return ' %<' .. substitute(execute('pwd')[1 : ] .. '/', '^' .. $HOME .. '/', '~/', '')
 		else
 			return ' %<' .. p
 		endif
