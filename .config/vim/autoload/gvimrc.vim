@@ -35,8 +35,11 @@ enddef
 
 export def FontSize(size: number): void # フォント・サイズを増減
 	# size: 増減させる数値
-	# var columns: number = &columns
-	# var lines: number = &lines
-	execute 'set guifont=' .. substitute(&guifont, '\(\d\+\ze,\|\d\+$\)', '\=(str2nr(submatch(0)) + size)', 'g' )
-		->substitute(' ', '\\ ', 'g')
+	var f_size: number = str2nr(matchstr(&guifont, '\(\d\+\ze,\|\d\+$\)'))
+	var F_size: number = f_size + size
+	var columns: number = (&columns * 100 * f_size / F_size + 50) / 100
+	var lines: number = (&lines * 100 * f_size / F_size + 50) / 100
+	&guifont = substitute(&guifont, '\(\d\+\ze,\|\d\+$\)', F_size, 'g')
+	&columns = columns
+	&lines = lines
 enddef
