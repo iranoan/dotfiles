@@ -161,6 +161,8 @@ else
 endif
 # 表示関係 {{{1
 syntax enable                                  # カラー表示 ON
+set background=dark
+colorscheme solarized9
 set conceallevel=0                             # 個々のファイルタイプごとで、文字を省略したり置き換える機能は使わない
 set nomore                                     # メッセージが一杯になっても一旦停止せずそのまま続ける
 set noshowcmd                                  # コマンドラインに選択中の文字数などを表示する
@@ -224,13 +226,6 @@ endif
 # ステータス・バー {{{2
 set laststatus=2                               # 表示
 set statusline=%!vimrc#StatusLine()
-augroup StatusLine
-	autocmd!
-	autocmd ColorScheme *
-				\ highlight StatusLineLeft  term=bold cterm=bold gui=bold ctermfg=7 ctermbg=2 guifg=#eee8d5 guibg=#859900
-				| highlight StatusLineRight term=bold cterm=bold gui=bold ctermfg=7 ctermbg=3 guifg=#eee8d5 guibg=#b58900
-				| highlight StatusGit       term=bold cterm=bold gui=bold ctermfg=7 ctermbg=6 guifg=#eee8d5 guibg=#2aa198
-augroup END
 # # 全角スペースをハイライト表示←フォントで対応したのですべてコメント・アウト {{{2
 # if has('syntax') && !has('gui_running')        # 全角空白が可視化されるフォントを使っている
 # 	augroup ZenkakuSpace

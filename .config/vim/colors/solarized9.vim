@@ -42,6 +42,9 @@ if &background ==# 'dark'
 	hi SpecialKey term=bold cterm=bold gui=bold ctermfg=11 guifg=#657b83 ctermbg=0 guibg=#073642 ctermul=NONE guisp=NONE
 	hi StatusLine term=bold,reverse cterm=bold,reverse gui=bold,reverse ctermfg=12 guifg=#839496 ctermbg=0 guibg=#073642 ctermul=NONE guisp=NONE
 	hi StatusLineNC term=reverse cterm=reverse gui=reverse ctermfg=10 guifg=#586e75 ctermbg=0 guibg=#073642 ctermul=NONE guisp=NONE
+	hi StatusLineLeft term=bold cterm=bold gui=bold ctermfg=8 ctermbg=2 guifg=#002b36 guibg=#859900
+	hi StatusLineRight term=bold cterm=bold gui=bold ctermfg=8 ctermbg=3 guifg=#002b36 guibg=#b58900
+	hi StatusGit term=bold cterm=bold gui=bold ctermfg=8 ctermbg=6 guifg=#002b36 guibg=#2aa198
 	hi TabLine term=underline cterm=underline gui=underline ctermfg=12 guifg=#839496 ctermbg=0 guibg=#073642 ctermul=NONE guisp=NONE
 	hi TabLineSel term=underline,bold cterm=underline,bold gui=underline,bold ctermfg=7 guifg=#eee8d5 ctermbg=8 guibg=#002b36 ctermul=NONE guisp=NONE
 	hi ToolbarButton term=bold,reverse cterm=bold gui=bold ctermfg=14 guifg=#93a1a1 ctermbg=0 guibg=#073642 ctermul=NONE guisp=NONE
@@ -65,7 +68,7 @@ if &background ==# 'dark'
 	hi GlyphPalette8 term=NONE cterm=NONE gui=NONE ctermfg=8 guifg=#002b36 ctermbg=NONE guibg=NONE ctermul=NONE guisp=NONE
 	hi pandocTableZebraDark term=NONE cterm=NONE gui=NONE ctermfg=4 guifg=#268bd2 ctermbg=0 guibg=#073642 ctermul=NONE guisp=NONE
 	hi pandocTableZebraLight term=NONE cterm=NONE gui=NONE ctermfg=4 guifg=#268bd2 ctermbg=8 guibg=#002b36 ctermul=NONE guisp=NONE
-	hi SignatureMarkText term=bold cterm=bold gui=bold ctermfg=15 guifg=#dddddd ctermbg=0 guibg=#073642 ctermul=NONE guisp=NONE
+	hi SignatureMarkText term=bold cterm=bold gui=bold ctermfg=15 guifg=#fdf6e3 ctermbg=0 guibg=#073642 ctermul=NONE guisp=NONE
 else # light
 	if has('gui_running')
 		hi Normal term=NONE cterm=NONE gui=NONE ctermfg=0 guifg=#073642 ctermbg=15 guibg=#fdf6e3 ctermul=NONE guisp=NONE
@@ -99,6 +102,9 @@ else # light
 	hi SpecialKey term=bold cterm=bold gui=bold ctermfg=12 guifg=#839496 ctermbg=7 guibg=#eee8d5 ctermul=NONE guisp=NONE
 	hi StatusLine term=bold,reverse cterm=bold,reverse gui=bold,reverse ctermfg=10 guifg=#586e75 ctermbg=7 guibg=#eee8d5 ctermul=NONE guisp=NONE
 	hi StatusLineNC term=reverse cterm=reverse gui=reverse ctermfg=12 guifg=#839496 ctermbg=7 guibg=#eee8d5 ctermul=NONE guisp=NONE
+	hi StatusLineLeft term=bold cterm=bold gui=bold ctermfg=7 ctermbg=2 guifg=#eee8d5 guibg=#859900
+	hi StatusLineRight term=bold cterm=bold gui=bold ctermfg=7 ctermbg=3 guifg=#eee8d5 guibg=#b58900
+	hi StatusGit term=bold cterm=bold gui=bold ctermfg=7 ctermbg=6 guifg=#eee8d5 guibg=#2aa198
 	hi TabLine term=underline cterm=underline gui=underline ctermfg=11 guifg=#657b83 ctermbg=7 guibg=#eee8d5 ctermul=NONE guisp=NONE
 	hi TabLineSel term=underline,bold cterm=underline,bold gui=underline,bold ctermfg=0 guifg=#073642 ctermbg=15 guibg=#fdf6e3 ctermul=NONE guisp=NONE
 	hi ToolbarButton term=bold,reverse cterm=bold gui=bold ctermfg=14 guifg=#93a1a1 ctermbg=15 guibg=#fdf6e3 ctermul=NONE guisp=NONE
@@ -122,7 +128,7 @@ else # light
 	hi GlyphPalette8 term=NONE cterm=NONE gui=NONE ctermfg=7 guifg=#eee8d5 ctermbg=NONE guibg=NONE ctermul=NONE guisp=NONE
 	hi pandocTableZebraDark term=NONE cterm=NONE gui=NONE ctermfg=4 guifg=#268bd2 ctermbg=15 guibg=#fdf6e3 ctermul=NONE guisp=NONE
 	hi pandocTableZebraLight term=NONE cterm=NONE gui=NONE ctermfg=4 guifg=#268bd2 ctermbg=7 guibg=#eee8d5 ctermul=NONE guisp=NONE
-	hi SignatureMarkText term=bold cterm=bold gui=bold ctermfg=0 guifg=#dddddd ctermbg=15 guibg=#fdf6e3 ctermul=NONE guisp=NONE
+	hi SignatureMarkText term=bold cterm=bold gui=bold ctermfg=0 guifg=#073642 ctermbg=15 guibg=#fdf6e3 ctermul=NONE guisp=NONE
 endif
 # common {{{
 hi Added term=bold cterm=NONE gui=NONE ctermfg=2 guifg=#859900 ctermbg=NONE guibg=NONE ctermul=NONE guisp=NONE
