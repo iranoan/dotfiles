@@ -565,7 +565,8 @@ for [n, q] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '
 	execute 'xnoremap i' .. n .. ' i' .. q
 endfor
 # abbreviate の代わり {{2
-cnoremap <expr>~vim $MYVIMDIR
+cnoremap <expr> ~vim $MYVIMDIR
+inoremap <expr> ~vim getcmdwintype() =~# '[?/:]' ? $MYVIMDIR : '~vim'
 # Quoted-Printのデコード {{{2
 nnoremap <silent><silent><Leader>hq :let b:pos=getpos(".")<CR>:%s/\v\=\?utf-8\?Q\?(.+)\?\=/\1/g<CR>:%!perl -M'MIME::QuotedPrint' -e 'while (<STDIN>) { print decode_qp($_); }'<CR>:call setpos('.',b:pos)<CR>:set fileencoding=<CR>
 xnoremap <silent><silent><Leader>hq :!perl -M'MIME::QuotedPrint' -e 'while (<STDIN>) { print decode_qp($_); }'<CR>:set fileencoding=<CR>
