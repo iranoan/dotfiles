@@ -25,7 +25,7 @@ if !exists("g:qf_disable_statusline") # :help qf.vim にある statusline を変
 					| endif # QuickFix だけなら閉じる
 		# ↑複数のタブ・ページがあり、複数回 :grep したときなどでエラーになるが、改善方法不明
 		# $MYVIMDIR/pack/ のファイルタイプ別グローバル設定 {{{2
-		autocmd QuickFixCmdPost * gnu_grep#SetQfTitle()
+		autocmd QuickFixCmdPost grep,grepadd,lgrep,lgrepadd gnu_grep#SetQfTitle()
 	augroup END
 endif
 

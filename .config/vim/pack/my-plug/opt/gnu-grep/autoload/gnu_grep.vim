@@ -13,29 +13,19 @@ export def SetQfTitle(): void
 		exclude_dir = '--exclude-dir=' .. exclude_dir
 	endif
 	exclude = get(g:, 'gnu_grep', {'exclude': exclude})->get('exclude', exclude)->escape('.*$~[]')
-	if exclude ==# ''
-		exclude = '\( \)\? ' # 完全に空すると置換時の参照の個数が合わなくなる
-	else
-		exclude = '\( --exclude=' .. exclude .. '\)\? '
+	if exclude !=# ''
+		exclude = '\%( --exclude=' .. exclude .. '\)\? '
 	endif
 	for b in tabpagebuflist()
 		i = getbufinfo(b)[0]
 		if getbufvar(i.bufnr, '&filetype') ==# 'qf'
 			win_id = bufwinid(i.bufnr)
 			title = getwinvar(win_id, 'quickfix_title')
-			if title =~# '^:[lc]\(add\|get\)\?expr system(''' .. grepprg .. ' -nHsI --color=never -d skip ' .. exclude_dir
-				title = substitute(title, '^:[lc]\(add\|get\)\?expr system(''' .. grepprg .. ' -nHsI --color=never -d skip '
-								            .. exclude_dir
-								            .. exclude
-								            .. '\(.*\) \+/dev/null'')->substitute(''\\ze\\n'', '':1: '', ''g'')$', 'grep \3', '')
-								->substitute("''", "'", 'g')
-								->substitute('%', '%%', 'g')
-				setwinvar(win_id, 'quickfix_title', ' ' .. title)
-			elseif title =~# '^:' .. grepprg .. ' -nHsI --color=never -d skip ' .. exclude_dir
+			if title =~# '^:' .. grepprg .. ' -nHsI --color=never -d skip ' .. exclude_dir
 				title = substitute(title, '^:' .. grepprg .. ' -nHsI --color=never -d skip '
-								            .. exclude_dir
-								            .. exclude .. '\(.*\) \+/dev/null$', 'grep \2', '')
-								->substitute('%', '%%', 'g')
+					.. exclude_dir
+					.. exclude .. '\(.*\) \+/dev/null$', 'grep \1', '')
+					->substitute('%', '%%', 'g')
 				setwinvar(win_id, 'quickfix_title', ' ' .. title)
 			endif
 		endif
@@ -44,34 +34,27 @@ enddef
 
 export def Grep(kind: bool, add: bool, bang: string, ...args: list<string>): void
 	def FileList(s: string): void
-		var arg: string = substitute(s, "'", "''", 'g')
-		var exe_cmd: string
-		var cmd: string
+		def GrepAutoCmd(k: string): void
+			for c in autocmd_get({event: 'QuickFixCmdPost', pattern: k})
+				execute c.cmd
+			endfor
+		enddef
+		var action: string = 'r'
+		if add
+			action = 'a'
+		endif
+		var exe_cmd: string = split(&grepprg)[0] .. s .. ' /dev/null'
 		if kind
-			if add
-				exe_cmd = 'caddexpr'
-			else
-				exe_cmd = 'cexpr' .. bang
-			endif
-			cmd = 'grep'
+			setqflist([], action, {title: ':' .. exe_cmd, lines: systemlist(exe_cmd), efm: '%f'})
+			GrepAutoCmd('grep')
 		else
-			if add
-				exe_cmd = 'laddexpr'
-			else
-				exe_cmd = 'lexpr' .. bang
-			endif
-			cmd = 'lgrep'
+			setloclist(0, [], action, {title: ':' .. exe_cmd, lines: systemlist(exe_cmd), efm: '%f'})
+			GrepAutoCmd('lgrep')
 		endif
-		execute exe_cmd .. ' system(''' .. split(&grepprg)[0] .. arg .. ' /dev/null'')->substitute(''\ze\n'', '':1: '', ''g'')'
-		var qf_cmd: list<string> = execute('autocmd QuickFixCmdPost ' .. cmd)->split('\n')
-		if len(qf_cmd) > 2
-			execute qf_cmd[2]->substitute('["#].*', '', '')->split('\s\+')[1 : ]->join()
-		endif
-		if add && bang !=# '!'
-			if exe_cmd ==# 'caddexpr'
+		if !add || bang !=# '!'
+			if kind
 				:cc 1
 			else
-				exe_cmd = 'laddexpr'
 				:ll 1
 			endif
 		endif

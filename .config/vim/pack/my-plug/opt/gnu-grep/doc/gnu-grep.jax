@@ -55,8 +55,9 @@ License: GPL Ver.3.
 	* -L (--files-without-match) の結果にも行番号を付けて出力
 	* $VIMRC 等で                                           *gnu_grep#SetQfTitle()*  >vim
 			set grepprg=/usr/bin/grep\ $*\ /dev/null
-<		とした上で $MYVIMDIR/after/ftplugin/qf.vim 等で >vim
+<		とした上で $MYVIMDIR/ftplugin/qf.vim 等で >vim
 			call gnu_grep#SetQfTitle()
+			autocmd QuickFixCmdPost grep,grepadd,lgrep,lgrepadd gnu_grep#SetQfTitle()
 <		と記載すると、必ず付けるオプション (|gnu-grep-option|) を |w:quickfix_title| か
 		ら除外する
 		結果として |status-line| の表示内容を変えられる
