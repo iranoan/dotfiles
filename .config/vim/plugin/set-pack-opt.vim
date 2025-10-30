@@ -2,44 +2,6 @@ vim9script
 scriptencoding utf-8
 
 # コマンドを使うなどの理由で $MYVIMDIR/pack/*/opt においているが、起動時に packadd しているために遅延にならない分 {{{1
-# 小文字で始まるコマンドを定義可能に https://github.com/kana/vim-altercmd {{{2
-# ↓実質 /start/と同じになるが、単純に /start/ に置くと、このスクリプト読み込み時点では AlterCommand が使えず、エラーになるので読み込み明示形式にする
-packadd vim-altercmd
-AlterCommand e[dit]     TabEdit
-AlterCommand ut[f8]     edit\ ++enc=utf8
-AlterCommand sj[is]     edit\ ++enc=cp932
-AlterCommand cp[932]    edit\ ++enc=cp932
-AlterCommand eu[c]      edit\ ++enc=eucjp-ms
-AlterCommand ji[s]      edit\ ++enc=iso-2022-jp-3
-AlterCommand mak[e]     silent\ make
-AlterCommand lmak[e]    silent\ lmake
-AlterCommand tabd[o]    silent\ tabdo
-AlterCommand windo      silent\ windo
-AlterCommand argdo      silent\ argdo
-AlterCommand cdo        silent\ cdo
-AlterCommand cfdo       silent\ cfdo
-AlterCommand ld[o]      silent\ ldo
-AlterCommand lfdo       silent\ lfdo
-AlterCommand ter[minal] topleft\ terminal
-AlterCommand man        Man
-AlterCommand p[rint]    PrintBuffer
-# ↑:print は使わないので、印刷に置き換え
-AlterCommand u[pdate]   update
-# ↑:update の短縮形は :up で :u は :undo だがまず使わない
-AlterCommand ua[ll]     bufdo\ update
-AlterCommand helpt[ags] PackManage\ tags
-AlterCommand bc         .!bc\ -l\ -q\ ~/.config/bc\ <Bar>\ sed\ -E\ -e\ 's/^\\\./0./g'\ -e\ 's/(\\\.[0-9]*[1-9])0+/\\\1/g'\ -e\ 's/\\\.$//g'
-AlterCommand bi[nary]   if\ !&binary\ <Bar>\ execute('setlocal\ binary\ <Bar>\ %!xxd')\ <Bar>\ endif
-AlterCommand nob[inary] if\ &binary\ <Bar>\ execute('setlocal\ nobinary\ <Bar>\ %!xxd\ -r')\ <Bar>\ endif
-# fugitive.vim 用 (glob() を使う存在確認は遅い)
-AlterCommand git      Git
-AlterCommand gl[og]   Gllog
-AlterCommand gd[iff]  Gdiffsplit
-# grep, lgpre は gnu-grep に置き換え
-AlterCommand gr[ep]     Grep
-AlterCommand lgr[ep]    LGrep
-AlterCommand grepa[dd]  Grepadd
-AlterCommand lgrepa[dd] LGrepadd
 
 # 2019-03-31 14:51 などの日付や時刻もうまい具合に Ctrl-a/x で加算減算する https://github.com/tpope/vim-speeddating {{{2
 # 日時フォーマットを追加したいので、start に置かない
@@ -176,36 +138,9 @@ endif
 # autocmd 削除を纏められないにタイプ {{{1
 # 括弧や引用符をペアで入力/削除 $MYVIMDIR/pack/my-plug/start/pair_bracket/ {{{2
 # ドット・リピートは考慮していない
-g:pairbracket = {
-	'(': {pair: ')', space: 1, escape: {tex: 2, vim: 1},
-		search: {'v\': 0, '\': 2, 'v': 1, '_': 0}},
-	'[': {pair: ']', space: 1, escape: {tex: 2, vim: 1},
-		search: {'v\': 0, '\': 0, 'v': 1, '_': 1}},
-	'{': {pair: '}', space: 1, escape: {tex: 2, vim: 1},
-		search: {'v\': 0, '\': 1, 'v': 1, '_': 0}},
-	'<': {pair: '>', space: 1, type: ['tex'], cmap: 0},
-	'/*': {pair: '*/', space: 1, type: ['c', 'cpp', 'css'], cmap: 0},
-	'「': {pair: '」'},
-	'『': {pair: '』'},
-	'【': {pair: '】'},
-	}
-g:pairquote = {
-	'"': {},
-	'''': {},
-	'`': {},
-	'$': {type: ['tex']},
-	'*': {type: ['help', 'markdown'], cmap: 0}, # tag と強調
-	'|': {type: ['help'],             cmap: 0}, # link
-	'_': {type: ['markdown'],         cmap: 0}, # 強調
-	'~': {type: ['markdown'],         cmap: 0}, # 下付き添字
-	'^': {type: ['markdown'],         cmap: 0}, # 上付き添字
-	# ↓ ', " 自体の反応が遅くなる
-	# "'''": {},
-	# '"""': {},
-	}
 augroup SetPairBracket
 	autocmd!
-	autocmd InsertEnter,CmdlineEnter * packadd pair_bracket
+	autocmd InsertEnter,CmdlineEnter * set_pair_bracket#main()
 		| autocmd_delete([{group: 'SetPairBracket'}])
 augroup END
 
@@ -229,6 +164,16 @@ augroup END
 # *.vim で再設定されてしまう分は $MYVIMDIR/after/ftplugin/vim.vim
 nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 # nnoremap <silent>gf :TabEdit <cfile><CR> " ← 存在しなくても開く <C-R><C-F> と同じ
+
+
+# $MYVIMDIR/pack/*/{stat,opt}/* でプラグインを管理する上で、便利な関数 $MYVIMDIR/pack/my-plug/start/pack-manage {{{1
+augroup loadPackManage
+	autocmd!
+	autocmd FuncUndefined pack_manage#* packadd pack-manage
+		| autocmd_delete([{group: 'loadPackManage'}])
+	autocmd CmdlineEnter : packadd pack-manage
+		| autocmd_delete([{group: 'loadPackManage'}])
+augroup END
 
 # grep で幾つかのオプションをデフォルトで付けたり、補完を可能にする $MYVIMDIR/pack/my-plug/opt/gnu-grep/ {{{2
 # statusline  w:quickfix_title 変更は $MYVIMDIR/ftplugin/qf.vim
@@ -279,8 +224,10 @@ augroup SetPackOpt
 
 	# 出力を quickfix に取り込む $MYVIMDIR/pack/my-plug/opt/output2qf {{{2
 	# Man コマンドを使用可能にする $MYVIMDIR/pack/my-plug/opt/man {{{2
+	# 小文字で始まるコマンドを定義可能に https://github.com/kana/vim-altercmd {{{2
 	autocmd CmdlineEnter : ++once packadd man
 		| packadd output2qf
+		| set_altercmd#main()
 
 	# カーソル位置の Syntax の情報を表示する $MYVIMDIR/pack/my-plug/opt/syntax_info/ {{{2 http://cohama.hateblo.jp/entry/2013/08/11/020849 を参考にした
 	autocmd CmdUndefined SyntaxInfo ++once packadd syntax_info

@@ -69,15 +69,3 @@ xnoremap ac <Plug>(textobj-syntax-a)
 
 # 折りたたみをテキストオプジェクト化 https://github.com/kana/vim-textobj-fold {{{1
 # キーマップ iz, az
-
-# $MYVIMDIR/pack/*/{stat,opt}/* でプラグインを管理する上で、便利な関数 $MYVIMDIR/pack/my-plug/start/pack-manage {{{1
-# 遅延読み込みにすると、補完が使えない
-# augroup loadPackManage
-# 	autocmd!
-# 	autocmd FuncUndefined pack_manage#* packadd pack-manage
-# 		| autocmd! loadPackManage
-# 		| augroup! loadPackManage
-# 	autocmd CmdUndefined ReinstallPack packadd pack-manage
-# 		| autocmd! loadPackManage
-# 		| augroup! loadPackManage
-# augroup END
