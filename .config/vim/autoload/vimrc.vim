@@ -158,12 +158,14 @@ export def StatusLine(): string # set statusline=%!vimrc#StatusLine() で利用�
 		var p: string = getbufinfo(bufnr)[0].name
 		if buftype ==# 'help'
 			p = substitute(p, '.*/', '', '')
+		elseif buftype ==# 'terminal'
+			p = substitute(getcwd(), '^' .. $HOME, '~', '') .. '/'
 		else
 			p = substitute(p, '^' .. $HOME, '~', '')
 		endif
 		if p ==# ''
 			# return '[No Name]'
-			return ' %<' .. substitute(execute('pwd')[1 : ] .. '/', '^' .. $HOME .. '/', '~/', '')
+			return ' %<' .. substitute(getcwd() .. '/', '^' .. $HOME .. '/', '~/', '')
 		else
 			return ' %<' .. p
 		endif
@@ -282,7 +284,7 @@ export def StatusLine(): string # set statusline=%!vimrc#StatusLine() で利用�
 		endif
 		return s .. ' [Command Line Window]%) %#StatusLine#%<' .. StatusRight()
 	elseif buftype ==# 'terminal'
-		s ..= ' [Term]'
+		return s .. ' [Term]%)' .. StatusKind() .. GetPath() .. StatusRight()
 	elseif buftype ==# 'help'
 		s ..= ' [Help]'
 	elseif filetype ==# 'fugitive' || filetype ==# 'git'

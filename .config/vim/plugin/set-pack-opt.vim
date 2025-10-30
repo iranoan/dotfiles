@@ -269,6 +269,9 @@ augroup END
 augroup SetPackOpt
 	autocmd!
 
+	# :terminal のカレントディレクトリをシェルのそれと動悸する https://github.com/tyru/sync-term-cwd.vim {{{2
+	autocmd TerminalOpen * ++once packadd sync-term-cwd.vim
+
 	# ディレクトリを再帰的に diff https://github.com/will133/vim-dirdiff {{{2
 	autocmd CmdUndefined DirDiff ++once g:DirDiffForceLang = 'C LC_MESSAGES=C'
 		| g:DirDiffExcludes = ".git,.*.swp"

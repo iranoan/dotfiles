@@ -67,7 +67,13 @@ if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
 		linux) [ "$FBTERM" ] && export TERM=fbterm && color_prompt=yes;;
 		fbterm) color_prompt=yes;;
 		xterm-color|*-256color) color_prompt=yes;;
-		*) color_prompt= ;;
+		*)
+			if [ "$VIM_TERMINAL" ]; then
+				color_prompt=yes
+			else
+				color_prompt=
+			fi
+			;;
 	esac
 else
 	color_prompt=
@@ -90,6 +96,12 @@ else
 		# PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 		# ↑ユーザー名+ホスト名表示
 	fi
+fi
+if [ "$VIM_TERMINAL" ] ; then # Vim の :terminal で Vim カレント・ディレクトリをシェルのそれを同期するための準備
+	_synctermcwd_ps1() {
+		printf '\e]51;["call","Tapi_SyncTermCwd","%s"]\x07' "$PWD"
+	}
+	PS1="\$(_synctermcwd_ps1)$PS1"
 fi
 unset color_prompt debian_chroot
 
