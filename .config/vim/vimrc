@@ -387,7 +387,8 @@ set termwinscroll=30000                        # ターミナルで遡れる行�
 # 個人的なキー割り当て keymap キーマップ {{{1
 # tmux で <prefix> が重なると端末で使えないので注意
 # 設定の切り替え {{{2
-nnoremap <silent><leader>cb <Cmd>setlocal linebreak! linebreak?<CR>
+nnoremap <silent><leader>cl <Cmd>setlocal linebreak! linebreak?<CR>
+nnoremap <silent><leader>cb <Cmd>let &background = ( &background == 'dark' ? 'light' : 'dark')<CR>
 nnoremap <silent><leader>cc <Cmd>set showcmd! showcmd?<CR>
 nnoremap <silent><leader>cd <Cmd>call vimrc#Lcd() <Bar>pwd<CR>
 nnoremap <silent><leader>cm <Cmd>set more! more?<CR>
@@ -399,10 +400,10 @@ nnoremap <silent><leader>cw <Cmd>setlocal wrap! wrap?<CR>
 # nnoremap <leader>cT <Cmd>call gvimrc#Toolbar()<CR>
 # 日付と時刻入力 {{{2
 # 一度プレフィックスに<C-J>にしたが、補完の移動でタイムラグが有り上手く動作しなくなる
-inoremap <silent><expr><C-\>d     strftime('%Y/%m/%d')
-inoremap <silent><expr><C-\>t     strftime('%H:%M:%S')
-nnoremap <silent><expr><C-\>d     'i' .. strftime('%Y/%m/%d') .. '<Esc>'
-nnoremap <silent><expr><C-\>t     'i' .. strftime('%H:%M:%S') .. '<Esc>'
+inoremap <silent><expr><C-\>d strftime('%Y/%m/%d')
+inoremap <silent><expr><C-\>t strftime('%H:%M:%S')
+nnoremap <silent><expr><C-\>d 'i' .. strftime('%Y/%m/%d') .. '<Esc>'
+nnoremap <silent><expr><C-\>t 'i' .. strftime('%H:%M:%S') .. '<Esc>'
 # スクロール {{{2
 # nnoremap <Space> <PageDown> # → $MYVIMDIR/pack/my-plug/opt/page-down
 nnoremap <S-Space> <PageUp>
