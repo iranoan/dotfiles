@@ -25,6 +25,7 @@ elif command -v tmux > /dev/null 2>&1 ; then # シェル開始時に tmux 起動
 		else
 			exec tmux attach -t "$detach_tmux"
 		fi
+		unset detach_tmux
 	fi
 fi
 
@@ -73,16 +74,24 @@ else
 fi
 
 if [ "$color_prompt" = yes ]; then
-	PS1='${debian_chroot:+($debian_chroot)}\[\e]0;\w\a\]\[\e[1;31m\]\w\[\e[0;0m\]\$ '
-	#                                                # ^ここまでが、ターミナル・アプリのタイトルバーになる
-	# PS1='${debian_chroot:+($debian_chroot)}\[\e]0;\w\a\]\[\e[0;32m\]\u@\h\[\e[0;0m\]:\[\e[1;31m\]\w\[\e[0;0m\]\$ '
-	# ↑ユーザー名+ホスト名表示
+	if [ "$TERM_PROGRAM" = 'tmux' ]; then
+		PS1='\[\e[1;32m\]\$\[\e[0;0m\] '
+	else
+		PS1='${debian_chroot:+($debian_chroot)}\[\e]0;\u@\h:\w\a\]\[\e[1;31m\]\w\[\e[0;0m\]\$ '
+		#                                                   # ^ここまでが、ターミナル・アプリのタイトルバーになる
+		# PS1='${debian_chroot:+($debian_chroot)}\[\e]0;\w\a\]\[\e[0;32m\]\u@\h\[\e[0;0m\]:\[\e[1;31m\]\w\[\e[0;0m\]\$ '
+		# ↑ユーザー名+ホスト名表示
+	fi
 else
-	PS1='${debian_chroot:+($debian_chroot)}\w\$ '
-	# PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-	# ↑ユーザー名+ホスト名表示
+	if [ "$TERM_PROGRAM" = 'tmux' ]; then
+		PS1='$ '
+	else
+		PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+		# PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+		# ↑ユーザー名+ホスト名表示
+	fi
 fi
-unset color_prompt
+unset color_prompt debian_chroot
 
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
