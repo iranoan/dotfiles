@@ -7,7 +7,7 @@ set lines=999 columns=168           # columns width of the display
 # 	highlight Normal guifg=#eee8d5 guibg=#002b36
 # endif
 if has('unix')            # 使用フォント(最初に見つかったフォントを使う)
-	if has('GUI_GTK') # GTK GUI では不正な名前でもエラにならない→:help gui-font
+	if has('GUI_GTK') # GTK GUI では不正な名前でもエラーにならない→:help gui-font
 		var fc: list<string> = systemlist('fc-list :lang=ja:style=Regular')
 			->map((_, v) => substitute(v, '^[^:]\+: \([^:]\+\):style=.\+', '\1', ''))
 		for f in ['UDEV Gothic NF', 'Noto Mono', 'Monospace']
