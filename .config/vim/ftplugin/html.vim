@@ -8,8 +8,7 @@ endif
 b:did_ftplugin_user = 1
 
 # ファイルタイプ別のグローバル設定 {{{1
-if !exists('g:html_ftplugin_plugin') # ↓設定済みか? に流用
-	g:html_ftplugin_plugin = 1
+if !exists('g:html_syntax_folding') # ↓設定済みか? に流用
 	g:html_syntax_folding = 1 # :help html-folding
 	# :help html-indent
 	g:html_indent_script1 = 'auto'

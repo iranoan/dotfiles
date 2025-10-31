@@ -4,8 +4,7 @@ scriptencoding utf-8
 # 幾つかはデフォルトで上書きされるので $MYVIMDIR/after/ftplugin/markdown.vim
 
 # ファイルタイプ別のグローバル設定 {{{1
-if !exists('g:did_ftplugin_html')
-	g:did_ftplugin_markdown = 1
+if !exists('g:markdown_folding') # ↓を流用
 	g:markdown_folding = 1  # Markdown で折りたたみ
 	g:markdown_fenced_languages = ['sh', 'vim', 'bash=sh'] # コード・ブロック内で syntax を適用
 	textobj#user#plugin('markdown', {
