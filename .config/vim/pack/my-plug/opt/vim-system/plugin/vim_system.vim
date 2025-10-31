@@ -1,9 +1,9 @@
 vim9script
 
-if exists('g:transform')
+if exists('g:vim_system')
 	finish
 endif
-g:transform = 1
+g:vim_system = 1
 
 command VimSystem     vim_system#Write()
 command VimSystemEcho vim_system#Echo()
