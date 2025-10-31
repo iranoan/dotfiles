@@ -12,7 +12,8 @@ License: GPL Ver.3.
                                                       *pack_manage-configration*
 概要~
 
-~/.vim/vimrc, ~/.vim/gvimrc, ~/.vim/plugin/*.vim, ~/.vim/autoload/*.vim に >vim
+~/.vim/vimrc, ~/.vim/gvimrc, ~/.vim/plugin/*.vim, ~/.vim/autoload/*.vim,
+~/.vim/ftplugin/*.vim, ~/.vim/after/ftplugin/*.vim に >vim
 	" [comment] http://github.com/author/plugin {{{
 	" do-setup: make
 <や >vim

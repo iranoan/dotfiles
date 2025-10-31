@@ -202,7 +202,7 @@ def List(): void
 enddef
 
 def Get_pack_ls(): dict<any> # プラグインの名称、リポジトリ、インストール先取得
-	var Packadd_ls: func(string): list<any> = (f: string) => # packadd plugin で書かれたプラグイン読み込みを探す
+	var Packadd_ls = (f: string): list<any> => # packadd plugin で書かれたプラグイン読み込みを探す
 		GrepList('\<packadd\>', f, false)
 			->filter((_, v) => v !~# '^[\t ]*["#]') # 行頭コメント削除
 			->map((_, v) => substitute(v, '\("\(\"\|[^"]\)*"\|''\(''\|[^'']\)*''\)', '', '')) # 文字列削除
@@ -211,7 +211,7 @@ def Get_pack_ls(): dict<any> # プラグインの名称、リポジトリ、イ�
 			->map((_, v) => substitute(v, '\c^.*\<packadd[ \t]\+\([a-z0-9_.-]\+\).*', '\1', ''))
 
 	def Get_packages(f: string, p: list<string>): dict<any> # ファイル f に書かれたプラグインの名称、リポジトリ、インストール先取得
-		def GetPack(file: string): list<dict<any>> # 外部プログラム無しの grep もどき
+		def GetPack(file: string): list<dict<any>>
 			var ret: list<dict<any>>
 			var d: dict<any>
 			var lines: list<string>
@@ -286,15 +286,25 @@ def Get_pack_ls(): dict<any> # プラグインの名称、リポジトリ、イ�
 
 	var packages: dict<any>
 
-	var packadds: list<string> = Packadd_ls($MYVIMDIR .. 'plugin/*.vim')
-	extend(packadds, Packadd_ls($MYVIMDIR .. 'autoload/*.vim'))
+	var packadds: list<string> = Packadd_ls($MYVIMDIR .. 'vimrc')
+		->extend(Packadd_ls($MYVIMDIR .. 'gvimrc'))
+		->extend(Packadd_ls($MYVIMDIR .. 'plugin/*.vim'))
+		->extend(Packadd_ls($MYVIMDIR .. 'autoload/*.vim'))
+		->extend(Packadd_ls($MYVIMDIR .. 'ftplugin/*.vim'))
+		->extend(Packadd_ls($MYVIMDIR .. 'after/ftplugin/*.vim'))
+		->extend(Map_ls($MYVIMDIR .. 'vimrc'))
+		->extend(Map_ls($MYVIMDIR .. 'gvimrc'))
 		->extend(Map_ls($MYVIMDIR .. 'plugin/*.vim'))
 		->extend(Map_ls($MYVIMDIR .. 'autoload/*.vim'))
+		->extend(Map_ls($MYVIMDIR .. 'ftplugin/*.vim'))
+		->extend(Map_ls($MYVIMDIR .. 'after/ftplugin/*.vim'))
 		->uniq()
 	ExtendDic(packages, Get_packages($MYVIMDIR .. 'vimrc', packadds))
 	ExtendDic(packages, Get_packages($MYVIMDIR .. 'gvimrc', packadds))
 	ExtendDic(packages, Get_packages($MYVIMDIR .. 'autoload/*.vim', packadds))
 	ExtendDic(packages, Get_packages($MYVIMDIR .. 'plugin/*.vim', packadds))
+	ExtendDic(packages, Get_packages($MYVIMDIR .. 'ftplugin/*.vim', packadds))
+	ExtendDic(packages, Get_packages($MYVIMDIR .. 'after/ftplugin/*.vim', packadds))
 	return packages
 enddef
 
