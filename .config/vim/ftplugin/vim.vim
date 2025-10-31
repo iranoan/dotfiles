@@ -9,10 +9,11 @@ b:did_ftplugin_user = 1
 # ファイルタイプ別のグローバル設定 {{{1
 if !exists('g:vim_plugin')
 	g:vim_plugin = 1
-
+	packadd vim-ft-vim_fold
 	augroup myVIM
 		autocmd!
 		autocmd CursorMoved,InsertLeave * if &filetype ==# 'vim' | call ftplugin#vim#ChangeVim9VimL() | endif
+		autocmd CmdUndefined VimHelpGenerator ++once packadd vimhelpgenerator
 	augroup END
 endif
 

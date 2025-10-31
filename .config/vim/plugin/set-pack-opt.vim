@@ -41,12 +41,13 @@ nnoremap <C-A>  <Plug>SpeedDatingUp
 # またこのファイルの処理自体に時間がかかるようになるので、遅延処理の美味みがない
 # + 独自の定義を追加したい
 # →読み込み明示
+# ファイルタイプ別の設定は、基本 $MYVIMDIR/ftplugin/*.vim
 packadd vim-textobj-user
+# 以下のような日付や時間のテキストオブジェクト化 {{{3
 # 2025/04/06 20:53:41
 # 2025-04-06T20:53:41
 # 2025/04/06
 # 20:53:41
-# といった日付や時間のテキストオブジェクト化
 textobj#user#plugin('datetime', {
 	datetime: {
 		pattern: '\<\(\(\(\d\d\)\?\d\d[-/]\)\?\d\d\?[-/]\d\d\?\([ T]\d\d:\d\d\(:\d\d\)\?\)\?\|\d\d:\d\d\(:\d\d\)\?\)\>',
@@ -54,7 +55,7 @@ textobj#user#plugin('datetime', {
 		select: ['ad', 'id'],
 	},
 })
-# パスや URL
+# パスや URL {{{3
 textobj#user#plugin('uri', {
 	uri: {
 		pattern: '\%(\%(\%(https\=\|ftp\|gopher\)://\|\%(mailto\|file\|news\):\)[^][{}()'' \t<>"]\+\|\%(www\|web\|w3\)[a-z0-9_-]*\.[a-z0-9._-]\+\.[^][{}()'' \t<>"]\+\)[a-z0-9/]\|\%(\~\=/\)\=\%([-A-Za-z._0-9]\+/\)*[-A-Za-z._0-9]\+\%(\.\a\%([A-Za-z0-9]\{,3}\)\|/\)\?',
@@ -62,53 +63,31 @@ textobj#user#plugin('uri', {
 		select: ['au', 'iu'],
 	},
 })
-# CSV/TSV のセル内
+# CSV/TSV のセル内 {{{3
 textobj#user#plugin('spreadsheet', {
 	value-a: {
 		pattern: '\(^[^\t]\+\ze\t\|\t\zs[^\t]\+\ze\(\t\|$\)\|\(^\|,\)"\zs\(""\|[^"]\)\+\ze"\(,\|$\)\|^[^,]\+\ze,\|,\zs[^,]\+\ze\(,\|$\)\)',
 		scan: 'line',
-		select: ['av'],
+		select: [],
 	},
 	value-i: {
 		pattern: '\(^\s*\zs[^\t]\{-}\ze\s*\t\|\t\s*\zs[^\t]\{-}\%#[^\t]\{-}\ze\s*\(\t\|$\)\|\(^\|,\)"\s*\zs\(""\|[^"]\)\{-}\%#\(""\|[^"]\)\{-}\ze\s*"\(,\|$\)\|^\s*\zs[^,]\{-}\%#[^,]\{-}\ze\s*,\|,\s*\zs[^,]\{-}\%#[^,]\{-}\ze\s*\(,\|$\)\)',
 		scan: 'line',
-		select: ['iv'],
+		select: [],
 	},
 	# value-i はセル内データの先頭に空白が有り、そこにカーソルが有るとそれ移行の空白も含まれてしまうのが欠点
 })
-# markdown
-textobj#user#plugin('markdown', {
-	strong-a: {
-		pattern: '\*\(\\\*\|[^*]\)\+\*',
-		scan: 'line',
-		select: ['a*']
-	},
-	strong-i: {
-		pattern: '\*\zs\(\\\*\|[^*]\)\+\ze\*',
-		scan: 'line',
-		select: ['i*']
-	},
-	emphasis-a: {
-		pattern: '_\(\\_\|[^_]\)\+_',
-		scan: 'line',
-		select: ['a_']
-	},
-	emphasis-i: {
-		pattern: '_\zs\(\\_\|[^_]\)\+\ze_',
-		scan: 'line',
-		select: ['i_']
-	},
-	cancel-a: {
-		pattern: '\~\~\(\\\~\|[^~]\)\+\~\~',
-		scan: 'line',
-		select: ['as']
-	},
-	cancel-i: {
-		pattern: '\~\~\zs\(\\\~\|[^~]\)\+\ze\~\~',
-		scan: 'line',
-		select: ['is']
-	},
-}) # a~, i~ といったマップは効かなかった
+augroup spreadsheet_textobj
+	autocmd!
+	autocmd FileType csv,tsv,notmuch-thread call textobj#user#map('spreadsheet', {
+		\ 	value-a: {
+		\ 		select: '<buffer> av',
+		\ 	},
+		\ 	value-i: {
+		\ 		select: '<buffer> iv',
+		\ 	},
+		\ })
+augroup END
 
 # テキストオブジェクトで (), {} "", '' を区別せずにカーソル近くで判定して、全て b で扱えるようにする https://github.com/osyo-manga/vim-textobj-multiblock {{{2
 # キーマップしないと ", ' の指定が働かない
@@ -225,22 +204,16 @@ augroup SetPackOpt
 	# 出力を quickfix に取り込む $MYVIMDIR/pack/my-plug/opt/output2qf {{{2
 	# Man コマンドを使用可能にする $MYVIMDIR/pack/my-plug/opt/man {{{2
 	# 小文字で始まるコマンドを定義可能に https://github.com/kana/vim-altercmd {{{2
+	# カーソル位置の Syntax の情報を表示する $MYVIMDIR/pack/my-plug/opt/syntax_info/ {{{2 http://cohama.hateblo.jp/entry/2013/08/11/020849 を参考にした
+	# Vim の環境を出力する $MYVIMDIR/pack/my-plug/opt/vim-system/ {{{2
 	autocmd CmdlineEnter : ++once packadd man
 		| packadd output2qf
 		| set_altercmd#main()
-
-	# カーソル位置の Syntax の情報を表示する $MYVIMDIR/pack/my-plug/opt/syntax_info/ {{{2 http://cohama.hateblo.jp/entry/2013/08/11/020849 を参考にした
-	autocmd CmdUndefined SyntaxInfo ++once packadd syntax_info
+		| packadd syntax_info
+		| packadd vim-system
 
 	# dog と cat の入れ替えなどサイクリックに置換する関数などの定義 $MYVIMDIR/pack/my-plug/opt/replace-cyclic {{{2
 	autocmd FuncUndefined replace#* ++once packadd replace-cyclic
-
-	# Vim の環境を出力する $MYVIMDIR/pack/my-plug/opt/vim-system/ {{{2
-	autocmd FuncUndefined vim_system#* ++once packadd vim-system
-		| autocmd! SetPackOpt CmdUndefined VimSystem,VimSystemEcho,System,SystemEcho
-	autocmd CmdUndefined VimSystem,VimSystemEcho,System,SystemEcho ++once packadd vim-system
-		| autocmd! SetPackOpt FuncUndefined vim_system#*
-		| autocmd! SetPackOpt CmdUndefined VimSystem,VimSystemEcho,System,SystemEcho
 
 	# *.docx をまとめて epub 用のファイルに変換 $MYVIMDIR/pack/my-plug/opt/docx2xhtml {{{2
 	# カレント・ディレクトリに有る Google Document を使って OCR したファイルを前提とし、自作シェル・スクリプトや LibreOffice も呼び出しているごく個人的なスクリプト
@@ -250,24 +223,21 @@ augroup SetPackOpt
 	autocmd CmdUndefined PrintBuffer ++once packadd print
 
 	# vim のヘルプ・ファイルから Readme.md を作成する https://github.com/LeafCage/vimhelpgenerator {{{2
-	autocmd CmdUndefined VimHelpGenerator ++once packadd vimhelpgenerator
+	# 実際の読み込みは $MYVIMDIR/ftplugin/vim.vim
 
 	# タグで挟む $MYVIMDIR/pack/my-plug/opt/surroundTag/ {{{2
 	# vim-surround では複数のタグを一度につけたり、クラス指定まで含む場合タイプ量が多くなる
-	# 実際のキーマップは $MYVIMDIR/ftplugin/html.vim
-	autocmd CmdUndefined SurroundTag ++once packadd surroundTag
+	# 実際のキーマップ等は $MYVIMDIR/ftplugin/html.vim
 
 	# Markdown マッピング $MYVIMDIR/pack/my-plug/opt/map-markdown/ {{{2
-	# 実際のキーマップは $MYVIMDIR/ftplugin/markdown.vim
-	autocmd FuncUndefined map_markdown#* ++once packadd map-markdown
+	# 実際のキーマップ等は $MYVIMDIR/ftplugin/markdown.vim
 
 	# 編集中の Markdown をブラウザでプレビュー https://github.com/iamcco/markdown-preview.nvim {{{2
 	# do-setup: npx --yes yarn install
 	# && NODE_OPTIONS=--openssl-legacy-provider npx --yes yarn build
 	# ↑不要?
 	# help がないので上記 URL か $MYVIMDIR/pack/github/opt/markdown-preview.nvim/README.md
-	# 実際のキーマップは $MYVIMDIR/ftplugin/markdown.vim
-	autocmd FuncUndefined mkdp#* ++once set_md_preview#main()
+	# 実際のキーマップ等は $MYVIMDIR/ftplugin/markdown.vim
 
 	# conky シンタックス https://github.com/smancill/conky-syntax.vim {{{2 ←署名を見ると同じ開発元だが、標準パッケージに含まれているものだと上手く動作しない
 	autocmd BufNewFile,BufRead conkyrc,conky.conf ++once packadd conky-syntax.vim
@@ -277,10 +247,10 @@ augroup SetPackOpt
 	# 		| autocmd! SetPackOpt BufRead ~/.getmail/*,~/.config/getmail/*
 
 	# vim 折りたたみ fold $MYVIMDIR/pack/my-plug/opt/vim-ft-vim_fold/ {{{2 https://github.com/thinca/vim-ft-vim_fold を組み合わせ追加のために置き換え
-	autocmd FileType vim ++once packadd vim-ft-vim_fold
+	# 実際の読み込みは $MYVIMDIR/ftplugin/vim.vim
 
 	# CSS シンタックス https://github.com/hail2u/vim-css3-syntax {{{2
-	autocmd FileType css ++once packadd vim-css3-syntax
+	# 実際の読み込みは $MYVIMDIR/ftplugin/css.vim
 
 	# LaTeX をテキストオプジェクト化 https://github.com/rbonvall/vim-textobj-latex {{{2
 	# depends = ['vim-textobj-user']
@@ -291,8 +261,7 @@ augroup SetPackOpt
 	# aQ 	iQ 	Double-quoted text ``like this''.
 	# ae 	ie 	Environment \begin{…} to \end{…}
 	# LaTeX fold 折りたたみ https://github.com/matze/vim-tex-fold {{{2
-	autocmd FileType tex ++once packadd vim-textobj-latex
-		| set_vim_tex_fold#main()
+	# 実際の読み込みは $MYVIMDIR/ftplugin/tex.vim
 
 augroup END # }}}1
 
@@ -342,12 +311,7 @@ augroup END
 # C/C++シンタックス https://github.com/vim-jp/vim-cpp {{{2
 # #ifdef 〜 #endif をテキストオプジェクト化→a#, i# https://github.com/anyakichi/vim-textobj-ifdef {{{2
 # depends = ['vim-textobj-user']
-augroup loadVimTextObjIfdef
-	autocmd!
-	autocmd FileType c,cpp packadd vim-textobj-ifdef | packadd vim-cpp
-		| autocmd_delete([{group: 'loadVimTextObjIfdef'}])
-augroup END
-# a#, i# に割当
+# 実際の読み込みは $MYVIMDIR/ftplugin/c.vim
 
 # 判定にシンタックスを用いる https://github.com/haya14busa/vim-textobj-function-syntax {{{2
 # depends = ['vim-textobj-user']

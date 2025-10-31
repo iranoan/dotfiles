@@ -10,6 +10,18 @@ b:did_ftplugin_user = 1
 # ファイルタイプ別のグローバル設定 {{{1
 if !exists('g:help_example_languages')
 	g:help_example_languages = {vim: 'vim', sh: 'sh', bash: 'sh', python: 'python'}
+	textobj#user#plugin('help', {
+		tag-link-a: {
+			pattern: '\([*|]\)[^|]\+\1',
+			scan: 'line',
+			select: [],
+		},
+		tag-link-i: {
+			pattern: '\([*|]\)\zs[^|]\+\ze\1',
+			scan: 'line',
+			select: [],
+		},
+	})
 	# augroup FileTypeHELP
 	# 	autocmd!
 	# 	autocmd BufWinEnter * setlocal foldlevel=99
@@ -17,6 +29,14 @@ if !exists('g:help_example_languages')
 endif
 
 # ファイルタイプ別ローカル設定 {{{1
+textobj#user#map('help', {
+		tag-link-a: {
+			select: ['<buffer> at', '<buffer> a*', '<buffer> a:', '<buffer> a\|', '<buffer> a\'],
+		},
+		tag-link-i: {
+			select: ['<buffer> it', '<buffer> i*', '<buffer> i:', '<buffer> i\|', '<buffer> i\'],
+		},
+})
 setlocal foldmethod=expr foldexpr=help#fold#Level() foldtext=help#fold#Text()
 setlocal makeprg=textlint\ --format\ compact\ \"%\"
 setlocal errorformat=%f:\ line\ %l\\,\ col\ %c\\,\ %trror\ -\ %m

@@ -8,6 +8,11 @@ let b:did_ftplugin_user = 1
 " ファイルタイプ別のグローバル設定 {{{1
 if !exists('g:tex_plugin')
 	let g:tex_plugin = 1
+	packadd vim-textobj-latex
+	packadd vim-tex-fold
+	let g:tex_fold_additional_envs = ['itemize', 'description', 'enumerate', 'center', 'gather', 'minipage', 'tikzpicture', 'scope', 'spacing']
+	" To disable matching environments at all set: >
+	" let g:tex_fold_ignore_envs = 1
 	augroup myTeX
 		autocmd!
 		autocmd!

@@ -14,7 +14,7 @@ if !exists('g:html_ftplugin_plugin') # ↓設定済みか? に流用
 	# :help html-indent
 	g:html_indent_script1 = 'auto'
 	g:html_indent_style1 = 'auto'
-
+	packadd surroundTag
 endif
 # }}}1
 
