@@ -206,7 +206,8 @@ export def Goto(): void # 関数や変数の定義場所に移動
 			return getbufline(b.n, 1, '$')
 				->map((i, v) => ({n: b.n, lnum: i + 1, filename: b.filename, text: v}))
 				->filter((_, v) =>
-					v.text =~# '^\s*' .. (exp ? '\%(export\s\+\)\=' : '') .. '\%(def\|fu\%[nction]\)!\=\s\+\%(' .. prefix .. '\)\=' .. f_name .. '('
+					v.text =~# '^\s*\%(' .. (exp ? '\%(export\s\+\)\=' : '') .. '\%(def\|fu\%[nction]\)!\=\s\+\%(' .. prefix .. '\)\=' .. f_name .. '(' # 通常の関数
+					.. '\|let\s\+' .. f_name .. '\s\+=\s\+{\s*\%(\w\+,\s*\)*\%(\w\+\s*\)\=->.\+}\|var\s\+' .. f_name .. '\s*=\s*(\%(\w\+,\s*\)*\%(\w\+\s*\)\=)\%(:\s*[a-z<>]\+\)\=\s*=>\)' # ラムダ関数
 					&& Filter_b(b.n, v))
 		enddef
 
@@ -264,12 +265,14 @@ export def Goto(): void # 関数や変数の定義場所に移動
 				->map((_, v) => ({filename: resolve(v.name), n: v.bufnr}))[0],
 				false, 's:\|<[Ss][Ii][Dd]>', ss,
 				(_, v: dict<any>): bool => (getline(1) ==# 'vim9script'
-						|| v.text =~# '^\s*\%(def\|fu\%[nction]\)!\=\s\+s:' .. ss .. '('))
+					|| v.text =~# '^\s*\%(\%(def\|fu\%[nction]\)!\=\s\+s:' .. ss .. '(' # 通常の関数
+							.. '\|let\s\+' .. ss .. '\s\+=\s\+{\s*\%(\w\+,\s*\)*\%(\w\+\s*\)\=->.\+}\|var\s\+' .. ss .. '\s*=\s*(\%(\w\+,\s*\)*\%(\w\+\s*\)\=)\%(:\s*[a-z<>]\+\)\=\s*=>\)' # ラムダ関数
+				))
 			->filter((_, v) => IsGlobalScript(v, 's:'))
 			->GotoPos2(ss)
 		enddef
 
-		def Local(ss: string): bool # 関数内ローカル→スクリプト・ローカル→グローバルの順で探す→関数内ローカル手つかず
+		def Local(ss: string): bool # 関数内ローカル→スクリプト・ローカル→グローバルの順で探す
 			def GetRange(ls: list<dict<any>>, l: number): list<any>
 				var i: number = 0
 				var def_start: number # l 行の関数の開始インデックス
@@ -294,16 +297,18 @@ export def Goto(): void # 関数や変数の定義場所に移動
 			enddef
 
 			var func: string = ss[ : -2 ]
-			var reg_func: string = '^\s*\%(def\|fu\%[nction]\)!\=\s\+' .. func .. '('
+			var reg_func: string = '^\s*\%(\%(def\|fu\%[nction]\)!\=\s\+' .. func .. '(\|let\s\+' .. func .. '\s\+=\s\+{\s*\%(\w%(:s*[a-z<>]+)=\+,\s*\)*\%(\w%(:s*[a-z<>]+)=\+\s*\)\=->.\+}\|var\s\+' .. func .. '\s*=\s*(\%(\w%(:s*[a-z<>]+)=\+,\s*\)*\%(\w%(:s*[a-z<>]+)=\+\s*\)\=)\%(:\s*[a-z<>]\+\)\=\s*=>\)'
 			var bufnr: number = bufnr()
 			var f: string = resolve(expand('%:p'))
 			var c_line: number = line('.') - 1 # 何かのチェックに用いる行番号
 			var def_all: list<dict<any>> = getline(1, '$') # カレント・バッファの全関数の最初と最後のペア
 				->map((i, v) => ({lnum: i, text: v, n: bufnr, filename: f}))
-				->filter((_, v) => v.text =~# '^\s*\%(\%(export\s\+\)\=\%(def\|fu\%[nction]\)!\=\s\+\w\+(\|enddef\>\|endf\%[unction]\>\)')
+				->filter((_, v) => v.text =~# '^\s*\%(\%(export\s\+\)\=\%(def\|fu\%[nction]\)!\=\s\+\w\+(\|enddef\>\|endf\%[unction]\>\|let\s\+\w\+\s\+=\s\+{\s*\%(\w\+,\s*\)*\%(\w\+\s*\)\=->.\+}\|var\s\+\w\+\s*=\s*(\%(\w%(:s*[a-z<>]+)=\+,\s*\)*\%(\w%(:s*[a-z<>]+)=\+\s*\)\=)\%(:\s*[a-z<>]\+\)\=\s*=>\)')
 				->map((_, v) => v->extend({kind:  # 行ごとの種類
 					v.text =~# '^\s*\%(export\s\+\)\=\%(def\|fu\%[nction]\)!\=' # 関数始まり
 						? 1
+					: v.text =~# '^\s*\%(let\s\+\w\+\s\+=\s\+{\s*\%(\w\+,\s*\)*\%(\w\+\s*\)\=->.\+}\|var\s\+\w\+\s*=\s*(\%(\w%(:s*[a-z<>]+)=\+,\s*\)*\%(\w%(:s*[a-z<>]+)=\+\s*\)\=)\%(:\s*[a-z<>]\+\)\=\s*=>\)' # ラムダ関数
+						? 0
 						: -1}))
 			var def_root: list<number> = filter(copy(def_all), (_, v) => v.lnum < c_line) # 現在行までに開始の有る関数
 				->RemoveFunction() # 現在行の前に終わっている関数を削除→直接含む関数とその親関数を最初まで辿る
@@ -478,9 +483,6 @@ export def Goto(): void # 関数や変数の定義場所に移動
 		.. '\%([sg]:\|<[Ss][Ii][Dd]>\|\%(\w\+#\)\+\|\%(\w\+\.\)\+\)\=\w\+(\|' # 関数 (スクリプト・ローカル、autoload、辞書、プレフィックス無しの順)
 		.. '\%([vawbgsl]:\|&\)\=\w\+\%(\["\%([^"]\|\"\)\+"\]\|\[''\%([^'']\|''''\)\+''\]\|\[\w\+\]\|\.\w\+\)*\)', # 変数
 		m_end)
-		# ↓探す時
-		# .. 'let\s\+\%([sl]:\)\=\w\+\s*=\s*{\%(\%(\w\+\s*,\s*\)\w\+\)\=\s*->[^}]*}\|' # VimL Lambda
-		# .. 'var\s\+\w\+\s*=\s*(\%(\w\+\%(:\s*\w\+\)\s*,\s*\)*\%(\w\+\|\.\.\._\)\s*)\%(:\s*\w\+\)\=\s*=>\|' # Vim9 Lambda
 		if m_start == -1
 			return
 		endif
