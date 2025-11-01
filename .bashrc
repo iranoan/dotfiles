@@ -101,7 +101,7 @@ if [ "$VIM_TERMINAL" ] ; then # Vim の :terminal で Vim カレント・ディ�
 	_synctermcwd_ps1() {
 		printf '\e]51;["call","Tapi_SyncTermCwd","%s"]\x07' "$PWD"
 	}
-	PS1="\$(_synctermcwd_ps1)$PS1"
+	PS1="\$(_synctermcwd_ps1)\[\e[1;32m\]\$\[\e[0;0m\] "
 fi
 unset color_prompt debian_chroot
 
