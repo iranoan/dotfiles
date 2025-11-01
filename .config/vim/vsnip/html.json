@@ -5,7 +5,7 @@
 			"<!DOCTYPE html>",
 			"<html lang=\"$1ja\">",
 			"<head>",
-			"\t<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">",
+			"\t<meta charset=\"utf-8\">",
 			"\t<link rel=\"stylesheet\" type=\"text/css\" href=\"default.css\">",
 			"\t<title>$2</title>",
 			"</head>",
