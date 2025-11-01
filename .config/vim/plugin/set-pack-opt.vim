@@ -2,7 +2,6 @@ vim9script
 scriptencoding utf-8
 
 # コマンドを使うなどの理由で $MYVIMDIR/pack/*/opt においているが、起動時に packadd しているために遅延にならない分 {{{1
-
 # 2019-03-31 14:51 などの日付や時刻もうまい具合に Ctrl-a/x で加算減算する https://github.com/tpope/vim-speeddating {{{2
 # 日時フォーマットを追加したいので、start に置かない
 # 遅延読み込みにすると
@@ -145,7 +144,7 @@ nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 # nnoremap <silent>gf :TabEdit <cfile><CR> " ← 存在しなくても開く <C-R><C-F> と同じ
 
 
-# $MYVIMDIR/pack/*/{stat,opt}/* でプラグインを管理する上で、便利な関数 $MYVIMDIR/pack/my-plug/start/pack-manage {{{1
+# $MYVIMDIR/pack/*/{stat,opt}/* でプラグインを管理する上で、便利な関数 $MYVIMDIR/pack/my-plug/start/pack-manage {{{2
 augroup loadPackManage
 	autocmd!
 	autocmd FuncUndefined pack_manage#* packadd pack-manage

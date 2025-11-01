@@ -12,11 +12,11 @@ scriptencoding utf-8
 # * https://github.com/cohama/lexima.vim は、対応括弧を追加設定して使うと CmdlineLeave が働いてしまう+他は全角未対応
 # 	- → $MYVIMDIR/pack/my-plug/start/pair_bracket/ に置き換え
 # * 選択範囲をテキストオブジェクトで広げたり、狭めたり https://github.com/terryma/vim-expand-region
-#		- 反応が遅く、なれると直接テキスト・オブジェクトを使うように変わった
+# 	- 反応が遅く、なれると直接テキスト・オブジェクトを使うように変わった
 # * https://github.com/rbonvall/vim-textobj-css
-#		- CSS をテキストオプジェクト化 ← vim-textobj-fold で代用できるしカーソルの桁位置でも変わるので、使いづらい
+# 	- CSS をテキストオプジェクト化 ← vim-textobj-fold で代用できるしカーソルの桁位置でも変わるので、使いづらい
 # * netfw を Fern に入れ替え https://github.com/lambdalisue/fern-hijack.vim
-#		- TabEdit でディレクトリなら、Fern を起動するように変更
+# 	- TabEdit でディレクトリなら、Fern を起動するように変更
 
 # vim-surround などのプラグインでも . リピートを可能にする https://github.com/tpope/vim-repeat {{{1
 # }}}1
