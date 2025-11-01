@@ -1,6 +1,6 @@
 scriptencoding utf-8
 
-function set_surround#main(cmd) abort
+function set_surround#main(cmd, feed = '') abort
 	" カッコ以外に次のアルファベットが使える
 	" ) b
 	" } B
@@ -64,5 +64,8 @@ function set_surround#main(cmd) abort
 				endif
 		endfor
 	endfor
+	if a:feed != ''
+		call feedkeys(a:feed)
+	endif
 	call timer_start(1, {->execute('delfunction set_surround#main')})
 endfunction

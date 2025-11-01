@@ -527,22 +527,22 @@ var qq1: string
 var qq2: string
 for [n, q] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>'})
 	qq1 = q == "'" ? "''" : q
-	execute 'nnoremap ds'  .. n .. ' <Cmd>call set_surround#main(''Dsurround'') <Bar> call feedkeys(''' .. qq1 .. ''')<CR>'
-	execute 'nnoremap ys4' .. n .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''$' .. qq1 .. ''')<CR>'
-	execute 'nnoremap ys4' .. q .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''$' .. qq1 .. ''')<CR>'
-	execute 'nnoremap ys$' .. n .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''$' .. qq1 .. ''')<CR>'
+	execute 'nnoremap ds'  .. n .. ' <Cmd>call set_surround#main(''Dsurround'', ''' .. qq1 .. ''')<CR>'
+	execute 'nnoremap ys4' .. n .. ' <Cmd>call set_surround#main(''Ysurround'', ''$' .. qq1 .. ''')<CR>'
+	execute 'nnoremap ys4' .. q .. ' <Cmd>call set_surround#main(''Ysurround'', ''$' .. qq1 .. ''')<CR>'
+	execute 'nnoremap ys$' .. n .. ' <Cmd>call set_surround#main(''Ysurround'', ''$' .. qq1 .. ''')<CR>'
 endfor
 for q in ['[', ']', '{', '}']
-	execute 'nnoremap ys4' .. q .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''$' .. q .. ''')<CR>'
+	execute 'nnoremap ys4' .. q .. ' <Cmd>call set_surround#main(''Ysurround'', ''$' .. q .. ''')<CR>'
 endfor
 for [n1, q1] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '"': '"', "'": "'", '(': '(', ')': ')', '`': '`', '<': '<', '>': '>', '[': '[', ']': ']', '{': '{', '}': '}'})
 	for [n2, q2] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '>', '"': '"', "'": "'", '(': '(', ')': ')', '`': '`', '<': '<', '>': '>', '[': '[', ']': ']', '{': '{', '}': '}'})
 		qq1 = q1 == "'" ? "''" : q1
 		qq2 = q2 == "'" ? "''" : q2
-		execute 'nnoremap ysi' .. n1 .. n2 .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''i' .. qq1 .. qq2 .. ''')<CR>'
-		execute 'nnoremap ysa' .. n1 .. n2 .. ' <Cmd>call set_surround#main(''Ysurround'') <Bar> call feedkeys(''a' .. qq1 .. qq2 .. ''')<CR>'
+		execute 'nnoremap ysi' .. n1 .. n2 .. ' <Cmd>call set_surround#main(''Ysurround'', ''i' .. qq1 .. qq2 .. ''')<CR>'
+		execute 'nnoremap ysa' .. n1 .. n2 .. ' <Cmd>call set_surround#main(''Ysurround'', ''a' .. qq1 .. qq2 .. ''')<CR>'
 		if n1 !=# n2 && q1 !=# q2 && n1 !=# q2 && q1 !=# n2
-			execute 'nnoremap cs' .. n1 .. n2 .. ' <Cmd>call set_surround#main(''Csurround'') <Bar> call feedkeys(''' .. qq1 .. qq2 .. ''')<CR>'
+			execute 'nnoremap cs' .. n1 .. n2 .. ' <Cmd>call set_surround#main(''Csurround'', ''' .. qq1 .. qq2 .. ''')<CR>'
 		endif
 	endfor
 endfor
