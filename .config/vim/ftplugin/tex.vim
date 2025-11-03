@@ -6,7 +6,7 @@ endif
 let b:did_ftplugin_user = 1
 
 " ファイルタイプ別のグローバル設定 {{{1
-if !exists('g:tex_fold_additional_envs') # ↓を流用
+if !exists('g:tex_fold_additional_envs') " ↓を流用
 	packadd vim-textobj-latex
 	packadd vim-tex-fold
 	let g:tex_fold_additional_envs = ['itemize', 'description', 'enumerate', 'center', 'gather', 'minipage', 'tikzpicture', 'scope', 'spacing']
