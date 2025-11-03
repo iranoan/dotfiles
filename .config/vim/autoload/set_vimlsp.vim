@@ -28,13 +28,12 @@ function set_vimlsp#main() abort
 	" call lsp#register_server(#{
 	" 			\ name: 'efm-langserver',
 	" 			\ cmd: {server_info->['efm-langserver']},
-	" 			\ allowlist: ['json', 'markdown', 'html', 'xhtml', 'css', 'tex'],
-	" 			\ }) " 現状 ALE を使ったほうが反応が速い+バッファを開いた時にチェックしてくれない
-	" }}}
-	call lsp#register_server({
-				\ 'name': 'awk-language-server',
-				\ 'cmd': {server_info->['awk-language-server']},
-				\ 'allowlist': ['awk'],
+	" 			\ allowlist: ['json', 'markdown', 'html', 'xhtml', 'css', 'tex', 'yaml'],
+	" 			\ }) " 現状+バッファを開いた時にチェックしてくれない+保存も必要
+	call lsp#register_server(#{
+				\ name: 'awk-language-server',
+				\ cmd: {server_info->['awk-language-server']},
+				\ allowlist: ['awk'],
 				\ })
 	" vim-lsp の自動設定 https://github.com/mattn/vim-lsp-settings {{{
 	" vim-lsp-settings は &filetype == sh に対応しているが bash は未対応、html には対応しているが xhtml には未対応
@@ -48,18 +47,10 @@ function set_vimlsp#main() abort
 				\ 		pylsp: #{
 				\ 			configurationSources: ['flake8'],
 				\ 			plugins: #{
-				\ 				flake8: #{
-				\ 					enabled: 1
-				\ 				},
-				\ 				mccabe: #{
-				\ 					enabled: 0
-				\ 				},
-				\ 				pycodestyle: #{
-				\ 					enabled: 0
-				\ 				},
-				\ 				pyflakes: #{
-				\ 					enabled: 0
-				\ 				},
+				\ 				flake8: #{enabled: 1},
+				\ 				mccabe: #{enabled: 0},
+				\ 				pycodestyle: #{enabled: 0},
+				\ 				pyflakes: #{enabled: 0},
 				\ 			}
 				\ 		}
 				\ 	}
@@ -71,8 +62,9 @@ function set_vimlsp#main() abort
 				" 		\ usePlaceholders: v:true,
 				" 	\ },
 				" \ }
-			" TeX では LSP を使わないし、digestif はエラーが発生する
+			" TeX では texlab, digestif 読み込みファイル (\input) が多くなるとは遅く、digestif はエラーも発生する→やるなら lint で文法チェックのみ
 	packadd vim-lsp-settings
+	call lsp_settings#init()
 	" }}}
 	" LSP との連携 https://github.com/prabirshrestha/asyncomplete-lsp.vim {{{
 	" if !pack_manage#IsInstalled('asyncomplete.vim') " ←asyncomplete.vim 自身を opt に置いても対応できる方法が見つかったらこちらにする
@@ -82,7 +74,7 @@ function set_vimlsp#main() abort
 		augroup! SetAsyncomplete
 	endif
 	packadd asyncomplete-lsp.vim
-	call lsp#activate()
+	" call lsp#activate()
 	" }}}
 	" command! LspDebug let lsp_log_verbose=1 | let lsp_log_file = expand('~/lsp.log')
 	augroup set_lsp_install
@@ -93,14 +85,15 @@ function set_vimlsp#main() abort
 		" 			\ foldmethod=expr
 		" 			\ foldexpr=lsp#ui#vim#folding#foldexpr()
 		" 			\ foldtext=lsp#ui#vim#folding#foldtext()
-		" ↓packadd を使う場合、これがないと開いた既存のウィンドウでバッファを開いた時に有効にならない (TeX はファイルが多いと遅くなるので使わない)
-		autocmd FileType awk,c,cpp,python,lua,vim,ruby,yaml,markdown,html,xhtml,css,sh,bash,go,conf if !s:check_run_lsp() | call lsp#activate() | endif
+		" ↓packadd を使う場合、これがないと開いた既存のウィンドウでバッファを開いた時に有効にならない
+		autocmd FileType awk,c,cpp,python,lua,vim,ruby,markdown,html,xhtml,css,sh,bash,go,conf if !s:check_run_lsp() | call lsp#activate() | endif
 		autocmd BufAdd *
-					\ if index(['awk','c', 'cpp', 'python', 'lua', 'vim', 'ruby', 'yaml', 'markdown', 'html', 'xhtml', 'css', 'sh', 'bash', 'go', 'conf'], &filetype) != -1
+					\ if index(['awk','c', 'cpp', 'python', 'lua', 'vim', 'ruby', 'tex', 'markdown', 'html', 'xhtml', 'css', 'sh', 'bash', 'go', 'conf'], &filetype) != -1
 					\ | if !s:check_run_lsp()
 					\ | 	call lsp#activate()
 					\ | endif
 					\ | endif
+		autocmd FileType css if bufname() !~# '\.css$' | call lsp#stop_server('vscode-css-language-server') | endif
 	augroup END
 	call timer_start(1, {->execute('delfunction set_vimlsp#main')})
 endfunction
@@ -150,14 +143,14 @@ def s:on_lsp_buffer_enabled(): void
 	var s_info: dict<any>
 	for s in lsp#get_server_names()
 		s_info = lsp#get_server_info(s)
-		if index(s_info.allowlist, &filetype) != -1
+		if index(get(s_info, 'allowlist', []), &filetype) != -1 || index(get(s_info, 'whitelist', []), &filetype) != -1
+			while lsp#get_server_status(s_info.name) !=? 'running' && lsp#get_server_status(s_info.name) !=? 'starting'
+				lsp#stop_server(s_info.name)
+				break
+			endwhile
 			break
 		endif
 	endfor
-	while lsp#get_server_status(s_info.name) !=? 'running' && lsp#get_server_status(s_info.name) !=? 'starting'
-		lsp#stop_server(s_info.name)
-		break
-	endwhile
 	lsp#enable()
 enddef
 
@@ -168,7 +161,7 @@ def s:check_run_lsp(): bool # 後から同じウィンドウに開いた時以�
 	var servers_name = lsp#get_server_names()
 	for s in servers_name
 		i = lsp#get_server_info(s)
-		if index(i.allowlist, &filetype) != -1
+		if index(get(i, 'allowlist', []), &filetype) != -1 || index(get(i, 'whitelist', []), &filetype) != -1
 			if lsp#get_server_status(i.name) ==? 'running'
 				return true
 			endif

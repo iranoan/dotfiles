@@ -1,7 +1,7 @@
 version: 2
 # root-markers:
 #   - .git/
-# lint-debounce: 0s
+lint-debounce: 1s
 
 tools:
   any-excitetranslate: &any-excitetranslate
@@ -271,8 +271,8 @@ languages:
 
   css:
     - <<: *stylelint
-    # - <<: *css-validator
-    - <<: *css-validator-stdin
+    - <<: *css-validator
+    # - <<: *css-validator-stdin
     # - <<: *css-prettier
 
   csv:
@@ -342,8 +342,8 @@ languages:
     - <<: *sh-shfmt
 
   tex:
-    - <<: *lacheck-stdin
-    # - <<: *lacheck
+    # - <<: *lacheck-stdin
+    - <<: *lacheck
     - <<: *chktex
 
   vim:
