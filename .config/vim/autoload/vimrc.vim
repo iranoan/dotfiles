@@ -93,6 +93,9 @@ enddef
 export def Insert_template(s: string): void # ~/Templates/ からテンプレート挿入
 	# 普通に r を使うと空行ができる
 	# ついでに適当な位置にカーソル移動
+	if line('$') != 1 || getline(1) !=# '' # この条件がないと空のバッファから開くと、既存のファイルでもテンプレートを入れてしまう
+		return
+	endif
 	execute ':1r ++encoding=utf-8 ~/Templates/' .. s
 	:-join
 	if &filetype ==# 'css' || &filetype ==# 'python'
