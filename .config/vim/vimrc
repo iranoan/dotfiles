@@ -222,6 +222,13 @@ if !has('gui_running')
 	&t_SI = "\e[5 q"                           # 挿入:    縦棒
 	&t_EI = "\e[1 q"                           # ノーマル:箱型
 	&t_SR = "\e[3 q"                           # 置換:    下線
+	if $TERM_PROGRAM ==# 'tmux'                # tmux 内では tmux のステータス・バーを OFF
+		augroup TMUX
+			autocmd!
+			autocmd VimEnter * silent !tmux set-option -t $(tmux display-message -p '\#{pane_id}') status off
+			autocmd VimLeave * silent !tmux set-option -t $(tmux display-message -p '\#{pane_id}') status on
+		augroup END
+	endif
 endif
 # ステータス・バー {{{2
 set laststatus=2                               # 表示
