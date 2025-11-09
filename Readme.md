@@ -66,10 +66,8 @@ install.sh
     * [aliases](.config/bash/aliases)
     * [completion](.config/bash/completion)
   * [.cshrc](.cshrc)
-  * [.config/dircolors/](.config/dircolors/) ← use in [.bashrc](.bashrc)
-    * [solarized](.config/dircolors/solarized)
-  * [.inputrc](.config/dircolors/.inputrc)
-  * [.profile](.config/dircolors/.profile)
+  * [.inputrc](.inputrc)
+  * [.profile](.profile)
 * stylelint
   * [.stylelintrc](.stylelintrc)
 * TeX
