@@ -52,7 +52,8 @@ export EDITOR=vim
 # TeX の log で強制改行される位置の指定。デフォルトだと 79 桁←環境変数じゃないと効かない
 export max_print_line=1000
 # man コマンドに Vim を使いたいが、Man コマンドとの両使いでは使いづらい
-# export MANPAGER="vim -M +MANPAGER +'setlocal nolist nospell foldmethod=indent foldenable | %foldopen! ' -"
+# export MANPAGER="vim --not-a-term -M +MANPAGER +'setlocal nolist nospell shiftwidth=7 foldmethod=indent foldenable foldlevel=99 nonumber foldcolumn=1 keywordprg=:Man | nnoremap <buffer><nowait>q <Cmd>quit<CR>' -"
+export MANROFFOPT="-rHY=0" # man コマンドでハイフネーション禁止
 
 if [ -f "$HOME/.config/bash/history" ]; then # bash の一部の履歴を削除
 	tac "$HOME/.config/bash/history" |

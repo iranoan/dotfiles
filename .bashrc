@@ -215,10 +215,6 @@ man() {
 	command man "$@"
 }
 
-# man() { # man に vim の Man コマンドを使う
-# 	vim +Man\ $@ +1bwipeout
-# }
-
 stty stop undef
 # .inputrc で vi モードにしている
 #元に戻すには

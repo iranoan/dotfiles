@@ -32,3 +32,4 @@ alias grep='command grep --color=auto --directories=skip --binary-files=without-
 alias grep-no-exclude='command grep --color=auto --directories=skip --binary-files=without-match --exclude-dir=.git'
 alias ls='ls --color=auto --hide={*.o,*.fls,*.synctex.gz,*.fdb_latexmk,*.toc,*.out,*.dvi,*.aux,*.nav,*.snm,*.swp}'
 alias fd='fdfind --hidden --follow --no-ignore --ignore-file ~/.config/fd/ignore '
+# alias man='MANWIDTH=$(($(tput cols) - 2)) man'

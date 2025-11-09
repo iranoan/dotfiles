@@ -23,7 +23,9 @@ for h in split(&runtimepath, ',')
 		# let g:ft_man_open_mode = 'tab'
 		augroup myMAN
 			autocmd!
-			autocmd FileType man nnoremap <buffer><nowait>q <Cmd>bwipeout!<CR>
+		autocmd FileType man $MANWIDTH = &columns - ( &number ? 3 : 0 ) - &foldcolumn - ( &signcolumn !=# 'no' ? 1 : 0 )
+					| nnoremap <buffer><nowait>q <Cmd>bwipeout!<CR>
 		augroup END
 	endif
 endfor
+$MANWIDTH = &columns - ( &number ? 3 : 0 ) - &foldcolumn - ( &signcolumn !=# 'no' ? 1 : 0 )
