@@ -83,17 +83,17 @@ if [ "$color_prompt" = yes ]; then
 	if [ "$TERM_PROGRAM" = 'tmux' ]; then
 		PS1='\[\e[1;32m\]\$\[\e[0;0m\] '
 	else
-		PS1='${debian_chroot:+($debian_chroot)}\[\e]0;\u@\h:\w\a\]\[\e[1;31m\]\w\[\e[0;0m\]\$ '
+		PS1='\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h\a\]\[\e[1;31m\]\w\[\e[0;0m\]\[\e[1;32m\]\$\[\e[0;0m\] '
 		#                                                   # ^ここまでが、ターミナル・アプリのタイトルバーになる
-		# PS1='${debian_chroot:+($debian_chroot)}\[\e]0;\w\a\]\[\e[0;32m\]\u@\h\[\e[0;0m\]:\[\e[1;31m\]\w\[\e[0;0m\]\$ '
+		# PS1='\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h\a\]\[\e[1;33m\]\u@\h\[\e[0;0m\]:\[\e[1;31m\]\w\[\e[0;0m\]\[\e[1;32m\]\$\[\e[0;0m\] '
 		# ↑ユーザー名+ホスト名表示
 	fi
 else
 	if [ "$TERM_PROGRAM" = 'tmux' ]; then
 		PS1='$ '
 	else
-		PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
-		# PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+		PS1='\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h\a\]\w\$ '
+		# PS1='\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h\a\]\u@\h:\w\$ '
 		# ↑ユーザー名+ホスト名表示
 	fi
 fi
