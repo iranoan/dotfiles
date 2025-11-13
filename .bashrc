@@ -198,22 +198,26 @@ fi
 # man コマンドを使った less でカラー表示
 # http://yanor.net/wiki/?UNIX%2Fless%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%81%A7ls%E3%82%84man%E3%82%92%E8%89%B2%E4%BB%98%E3%81%8D%E8%A1%A8%E7%A4%BA%E3%81%99%E3%82%8B
 # http://www.mt.cs.keio.ac.jp/person/narita/lv/index_ja.html#color
-man() {
-	GROFF_NO_SGR=1 \
-	LESS_TERMCAP_mb=$'\e[01;33m' \
-	LESS_TERMCAP_md=$'\e[01;31m' \
-	LESS_TERMCAP_me=$'\e[0m' \
-	LESS_TERMCAP_se=$'\e[0m' \
-	LESS_TERMCAP_so=$'\e[38;1;7m' \
-	LESS_TERMCAP_ue=$'\e[0m' \
-	LESS_TERMCAP_us=$'\e[04;34m' \
-	LESS_TERMCAP_mr=$(tput rev) \
-	LESS_TERMCAP_mh=$(tput dim) \
-	LESS_TERMCAP_ZN=$(tput ssubm) \
-	LESS_TERMCAP_ZV=$(tput rsubm) \
-	LESS_TERMCAP_ZO=$(tput ssupm) \
-	LESS_TERMCAP_ZW=$(tput rsupm) \
-	command man "$@"
+# man() {
+# 	GROFF_NO_SGR=1 \
+# 	LESS_TERMCAP_mb=$'\e[01;33m' \
+# 	LESS_TERMCAP_md=$'\e[01;31m' \
+# 	LESS_TERMCAP_me=$'\e[0m' \
+# 	LESS_TERMCAP_se=$'\e[0m' \
+# 	LESS_TERMCAP_so=$'\e[38;1;7m' \
+# 	LESS_TERMCAP_ue=$'\e[0m' \
+# 	LESS_TERMCAP_us=$'\e[04;34m' \
+# 	LESS_TERMCAP_mr=$(tput rev) \
+# 	LESS_TERMCAP_mh=$(tput dim) \
+# 	LESS_TERMCAP_ZN=$(tput ssubm) \
+# 	LESS_TERMCAP_ZV=$(tput rsubm) \
+# 	LESS_TERMCAP_ZO=$(tput ssupm) \
+# 	LESS_TERMCAP_ZW=$(tput rsupm) \
+# 	command man "$@"
+# }
+
+man() { # Vim の Man コマンドを使う
+	vim +Man\ "$*" +1bwipeout
 }
 
 stty stop undef
