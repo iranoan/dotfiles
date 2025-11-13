@@ -94,6 +94,7 @@ function set_vimlsp#main() abort
 					\ | endif
 					\ | endif
 		autocmd FileType css if bufname() !~# '\.css$' | call lsp#stop_server('vscode-css-language-server') | endif
+		autocmd FileType awk if bufname() !~# '\.awk$' | call lsp#stop_server('awk-language-server') | endif
 	augroup END
 	call timer_start(1, {->execute('delfunction set_vimlsp#main')})
 endfunction
