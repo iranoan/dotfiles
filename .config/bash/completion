@@ -82,7 +82,8 @@ _fdfind(){ # fd/fdfind completion
 		grep -Ei -o '^\s{,6}--?[0-9a-z-]+(, --[0-9a-z-]+)?' --color=never |
 		awk -F'[,]' '{gsub(/ +/, "", $1); gsub(/ +/, "", $2); print $0}')
 	if [[ "$cur" == -* ]]; then
-		COMPREPLY=( $( compgen -o default -W "${commands}" -- "$cur" ) )
+		COMPREPLY=( $( compgen -o default -W "--and --base-directory --batch-size --changed-before --changed-within --exact-depth --format --hyperlink --ignore-file --max-results --min-depth --no-ignore-parent --no-ignore-vcs --no-require-git --one-file-system --mount --xdev --path-separator --prune --regex --search-path --show-errors --strip-cwd-prefix -0 --print0 -1 -E --exclude -F --fixed-strings -H --hidden -I --no-ignore -L --follow -S --size -V --version -X --exec-batch -a --absolute-path -c --color -d --max-depth -e --extension -g --glob -h --help -i --ignore-case -j --threads -l --list-details -o --owner -p --full-path -q --quiet -s --case-sensitive -t --type -u --unrestricted -x --exec" -- "$cur" ) )
+
 	else
 		local IFS=$'\n'
 		compopt -o filenames
