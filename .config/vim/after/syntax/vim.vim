@@ -71,3 +71,6 @@ syn keyword	vimMap	no[remap]	skipwhite nextgroup=vimMapBang,vimMapMod,vimMapLhs
 " GEN_SYN_VIM: vimCommand mapclear, START_STR='syn keyword vimMap', END_STR='skipwhite nextgroup=vimMapMod'
 syn keyword vimMap cmapc[lear] imapc[lear] lmapc[lear] nmapc[lear] omapc[lear] smapc[lear] tmapc[lear] vmapc[lear] xmapc[lear] skipwhite nextgroup=vimMapMod
 syn keyword	vimMap	mapc[lear]	skipwhite nextgroup=vimMapBang,vimMapMod
+" コメント内に " があると途切れる
+syn region	vimLineComment	start=+^[ \t:]*\zs".*$+ end="$" contains=@vimCommentGroup,vimCommentString,vimCommentTitle extend
+syn region	vim9LineComment	start=+^[ \t:]*\zs#.*$+ end="$" contains=@vimCommentGroup,vimCommentString,vim9CommentTitle extend
