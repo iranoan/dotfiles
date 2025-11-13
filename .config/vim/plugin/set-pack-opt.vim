@@ -188,6 +188,15 @@ augroup SetNeoyank
 		| autocmd_delete([{group: 'SetNeoyank'}])
 augroup END
 
+	# Man コマンドを使用可能にする $MYVIMDIR/pack/my-plug/opt/color-man {{{2
+augroup ColorMan
+	autocmd!
+	autocmd CmdUndefined Man packadd color-man # シェルで vim +Man 有効にするため
+		| autocmd_delete([{group: 'ColorMan'}])
+	autocmd CmdlineEnter : packadd color-man # 最初の使用時に補完を有効にするため
+		| autocmd_delete([{group: 'ColorMan'}])
+augroup END
+
 # autocmd 削除を纏められる→++once が使えるタイプ {{{1
 augroup SetPackOpt
 	autocmd!
@@ -201,12 +210,10 @@ augroup SetPackOpt
 		| packadd vim-dirdiff
 
 	# 出力を quickfix に取り込む $MYVIMDIR/pack/my-plug/opt/output2qf {{{2
-	# Man コマンドを使用可能にする $MYVIMDIR/pack/my-plug/opt/man {{{2
 	# 小文字で始まるコマンドを定義可能に https://github.com/kana/vim-altercmd {{{2
 	# カーソル位置の Syntax の情報を表示する $MYVIMDIR/pack/my-plug/opt/syntax_info/ {{{2 http://cohama.hateblo.jp/entry/2013/08/11/020849 を参考にした
 	# Vim の環境を出力する $MYVIMDIR/pack/my-plug/opt/vim-system/ {{{2
-	autocmd CmdlineEnter : ++once packadd man
-		| packadd output2qf
+	autocmd CmdlineEnter : ++once packadd output2qf
 		| set_altercmd#main()
 		| packadd syntax_info
 		| packadd vim-system

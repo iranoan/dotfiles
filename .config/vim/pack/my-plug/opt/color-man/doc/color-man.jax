@@ -1,0 +1,111 @@
+*color-man* マニュアルページをカラー表示
+
+Author:  Iranoan <iranoan+vim@gmail.com>
+License: GPL Ver.3.
+
+==============================================================================
+                                                             *color-man-contents*
+目次~
+
+==============================================================================
+                                                         *color-man-introduction*
+概要~
+
+Vim でマニュアルページを表示する |ft-man-plugin| を置き換える
+シェルで >sh
+	man
+<を使ったときに、太字・斜体や下線表示になる部分をカラー表示させる
+
+標準では次と組み合わせにする
+	太字:       manBold     →|hl-Special|
+	            manSection  →|hl-Title|+bold+underline
+	斜体・下線: manUnderline→|hl-Function|
+	            manHeader   →|hl-Statusline|
+	URL:        manURL      ->|hl-Directory|+underline
+
+==============================================================================
+                                                             *color-man-require*
+要件~
+
+* NeoVim では動作しない
+* Ver. 9.0 以上
+
+==============================================================================
+                                                       *:ColorMan* *color-man-use*
+使用方法~
+                                                            *color-mann-command*
+コマンド~
+:[|<q-mods>| ]ColorMan [{man_option}] [[{number}] {name}]
+:[|<q-mods>| ]ColorMan [{man_option}] [{name}.{number}]
+:[|<q-mods>| ]ColorMan [{man_option}] [{name}({number})]
+	* おおよそシェルの >sh
+			man [man options] [[section] page ...]
+<		コマンドと同じ動作をする
+		- {name} (page) についてのマニュアルページを表示する
+		- {name} を省略した場合は man のページを表示する
+		- {number} を付けると {namber} section の {name} のページを表示する
+	* どれも |:tab|, |:vertical| 等を前置できる (→|<q-mods>|)
+		- ウィンドウを開く・分割に関係ない |<q-mods>| でも指定が有れば新たなウィンド
+			ウを開く
+		- 指定が無く、既存の man ウィンドウが有れば、それを使う
+	* シェルでの実行と次が違う
+		- 次の様なページの複数指定はできない >sh
+				man cp mv
+<		* [man_options] 後に書いても良い
+		* スペース区切りの [[{number}] {name}] は逆でも良い
+		* [{name}({number})] のセクション指定は「"」「'」で挟んでも挟まなくても良い
+
+                                                    *color-mann-replace-command*
+代価コマンド~
+	* 公式で用意されているパッケージ (→|ft-man-plugin|) >vim
+			runtime ftplugin/man.vim
+<		をしていない、もしくはこのプラグインの読み込みが後なら、|:ColorMan| の代わりに
+		:Man が使える
+
+                                                                *color-mann-map*
+ローカルキーマップ~
+q             マニュアルを閉じる
+o
+K
+<C-]>         カーソル位置のキーワードの
+                - 説明箇所を探す
+                - マニュアルページを開く
+<Tab>         次のキーワード記載箇所に移動
+<S-Tab>       前のキーワード記載箇所に移動
+*             ANSI エスケープ・コードを考慮した * (|star|)
+#             ANSI エスケープ・コードを考慮した |#|
+
+==============================================================================
+                                                                *color-man-fold*
+折り畳み~
+
+|'foldmethod'|, |'foldexpr'| を設定し、空白を除く行頭のキーワードとインデント量に基
+づいた |foldlevel()| を計算している
+
+==============================================================================
+                                                              *color-man-option*
+オプション~
+
+*g:no_man_maps*
+	Type: |Bool|
+	Default: `v:false`
+
+	* v:true にするとマップ (|color-mann-map|) を変更しない
+
+*g:ft_man_open_mode*
+	Type: |String|
+	Default: `''`
+
+	* マニュアルページの開き方の指定
+		vert: 水平の代わりに垂直分割を使用する
+		tab:  新しいタブを使用する
+
+*g:ft_man_max_width*
+	Type: |Number|
+	Default: `100`
+
+	* マニュアルページの最大折り返し桁の指定
+	* ウィンドウの幅がこの設定より大きい場合は、この値で改行する
+	* 0 以下の値にすると、常にウィンドウ幅に合わせる
+
+vim:tw=78:ts=2:ft=help:norl:noet:fen:
