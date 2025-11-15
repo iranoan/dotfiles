@@ -49,6 +49,7 @@ nnoremap <buffer><nowait><expr><silent>q  &buftype ==# 'help' ? ':bwipeout!<CR>'
 nnoremap <buffer><expr>o                  &buftype ==# 'help' ? '<C-]>' : 'o'
 nnoremap <buffer><expr>i                  &buftype ==# 'help' ? '<C-]>' : 'i'
 nnoremap <buffer><expr>p                  &buftype ==# 'help' ? '<C-o>' : 'p'
+nnoremap <buffer><Leader>ch               <Cmd>let &conceallevel = (&conceallevel != 0 ? 0 : 2)<CR>
 # タグに移動
 nnoremap <buffer><tab>                    <Cmd>call search('\|\zs.\{-}\|', 'w')<CR>:nohlsearch<CR>
 nnoremap <buffer><S-tab>                  <Cmd>call search('\|\zs.\{-}\|', 'wb')<CR>:nohlsearch<CR>
