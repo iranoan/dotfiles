@@ -238,12 +238,18 @@ augroup SetPackOpt
 	# Markdown マッピング $MYVIMDIR/pack/my-plug/opt/map-markdown/ {{{2
 	# 実際のキーマップ等は $MYVIMDIR/ftplugin/markdown.vim
 
-	# 編集中の Markdown をブラウザでプレビュー https://github.com/iamcco/markdown-preview.nvim {{{2
-	# do-setup: npx --yes yarn install
-	# && NODE_OPTIONS=--openssl-legacy-provider npx --yes yarn build
-	# ↑不要?
+	# 編集中の Markdown をブラウザでプレビューhttps://github.com/ribru17/markdown-preview.nvim  {{{2
+	# do-setup: cd app && npx --yes yarn install
+	# clone 直後では cd が失敗するが対処法が見つからず
 	# help がないので上記 URL か $MYVIMDIR/pack/github/opt/markdown-preview.nvim/README.md
 	# 実際のキーマップ等は $MYVIMDIR/ftplugin/markdown.vim
+	# オリジナルの
+	# https://github.com/iamcco/markdown-preview.nvim
+	# は↓のエラーが発生する
+	# Error detected while processing BufHidden Autocommands for "<buffer=1>"..function mkdp#rpc#preview_close[11]..mkdp#autocmd#clear_buf:
+	# line    1:
+	# E216: No such group or event: MKDP_REFRESH_INIT10
+	# →https://github.com/iamcco/markdown-preview.nvim/pull/576#issuecomment-3160302264
 
 	# conky シンタックス https://github.com/smancill/conky-syntax.vim {{{2 ←署名を見ると同じ開発元だが、標準パッケージに含まれているものだと上手く動作しない
 	autocmd BufNewFile,BufRead conkyrc,conky.conf ++once packadd conky-syntax.vim
