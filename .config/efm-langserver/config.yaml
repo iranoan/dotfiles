@@ -33,10 +33,12 @@ tools:
 
   stylelint: &stylelint
     prefix: stylelint
-    lint-command: 'stylelint -f unix --stdin --stdin-filename ${INPUT}'
+    lint-command: 'stylelint -f compact --stdin --stdin-filename ${INPUT}'
     lint-stdin: true
     lint-formats:
-      - '%f:%l:%c: %m [%t%*[a-z]]'
+      - "%f: line %l, col %c, %trror - %m"
+      - "%f: line %l, col %c, %tarning - %m"
+      - "%f: line %l, col %c, %tnfo - %m"
 
   csv-csvlint: &csv-csvlint
     lint-command: 'csvlint'
@@ -72,6 +74,14 @@ tools:
       - "%f(%l,%c): %tarning %m"
       - "%f(%l,%c): %rror %m"
 
+  json-eslint: &json-eslint
+   lint-command: "eslint --stdin --stdin-filename ${INPUT}"  # ✅
+   lint-source: "eslint"
+   lint-stdin: true
+   lint-formats:
+     - "\ \ %l:%c\ \ %trror\ \ %m"
+     - "\ \ %l:%c\ \ %tarning\ \ %m"
+
   json-fixjson: &json-fixjson
     format-command: 'fixjson'
 
@@ -80,13 +90,6 @@ tools:
     lint-command: 'jq .'
     lint-formats:
       - '%s %trror: %m at line %l, column %c'
-
-  jsonlint: &jsonlint
-    prefix: jsonlint
-    lint-command: 'jsonlint -c'
-    lint-stdin: true
-    lint-formats:
-      - 'line %l, col %c, found: %m'
 
   json-prettier: &json-prettier
     format-command: './node_modules/.bin/prettier ${--tab-width:tabWidth} --parser json'
@@ -240,7 +243,6 @@ tools:
       - ':%l.%c-%e.%k: info %tarning: %m'
       - ':%l.%c-%e.%k: %tarning: %m'
       - ':%l.%c-%e.%k: %tnfo: %m'
-      - ':%l.%c-%e.%k: %trror: %m'
 
   lacheck: &lacheck
     prefix: lacheck
@@ -292,7 +294,7 @@ languages:
 
   html:
     # - <<: *html-prettier
-    - <<:  *vnu-jar
+    - <<: *vnu-jar
 
   xhtml:
     - <<:  *vnu-jar
@@ -304,8 +306,8 @@ languages:
   json:
     # - <<: *json-fixjson
     # - <<: *json-jq
-    - <<: *jsonlint
     # - <<: *json-prettier
+    - <<: *json-eslint
 
   lua:
     - <<: *lua-lua-format

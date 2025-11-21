@@ -1,16 +1,13 @@
 {
 	"filters" : {
 		"allowlist": {
-			"allow": "- 無視する要素:行頭の-と空白の後ろに実際に無視する要素→連続して書く時は、行末に,を忘れずに",
 			"allow": [
 			],
-			"allowlistConfigPaths": "無視する用語のリストファイル $HOME からの相対パスかカレントディレクトリからの ./hoge/hoge.yml で指定",
 			"allowlistConfigPaths": [
 				"textlint/allow.yml"
 			]
 		}
 	},
-	"plugins": "プラグイン",
 	"plugins": {
 		"@textlint/text": {
 			"extensions": [".jax"]
@@ -18,35 +15,21 @@
 		"html": true,
 		"latex2e": true
 	},
-	"rules": "使用するルール",
 	"rules": {
-		"prefer-tari-tari": "「〜たり〜たり」をチェック",
 		"prefer-tari-tari": true,
-		"ja-yahoo-kousei": "Yahoo API を用いてチェック←うるさすぎる+HTMやTeXなどプラグインを介すファイルで行番号がずれるので普段使わない",
-		"ja-yahoo-kousei": {
-			"appID": "dj00aiZpPXJsSHdJWUNERzZWdCZzPWNvbnN1bWVyc2VjcmV0Jng9NzM-"
-		},
-		"ja-yahoo-kousei": false,
-		"preset-japanese": "max-ten が効かなくなるので、普段使わない技術文書で利用するためのルール集 https://www.npmjs.com/package/textlint-rule-preset-japanese",
 		"preset-japanese": {
-			"max-ten": "一つの文に含まれる最大の、の個数",
 			"max-ten": {
 				"max" : 5
 			}
 		},
-		"no-doubled-joshi": "文中に同じ助詞が複数出てくるのをチェック",
 		"no-doubled-joshi": {
 			"min_interval" : 1,
 			"strict": false,
 			"allow": []
 		},
-		"no-dropping-the-ra": "ら抜き言葉チェック",
 		"no-dropping-the-ra": true,
-		"no-doubled-conjunction":	"同じ接続詞が連続して出現していないかどうかをチェック",
 		"no-doubled-conjunction": true,
-		"no-mix-dearu-desumasu": "「である」「です」が混在していないか?",
 		"no-mix-dearu-desumasu": true,
-		"preset-jtf-style": "JTF のスタイルに準拠しているか? https://github.com/textlint-ja/textlint-rule-preset-JTF-style",
 		"preset-jtf-style": {
 			"1.2.1.句点(。)と読点(、)": false,
 			"1.2.2.ピリオド（.）とカンマ（,）": false,
@@ -66,11 +49,8 @@
 			"4.3.7.山かっこ<>": false,
 			"4.3.8.一重引用符' '": false
 		},
-		"ja-unnatural-alphabet": "不自然なアルファベットを検知する",
 		"ja-unnatural-alphabet": true,
-		"ja-no-abusage": "よくある誤用をチェック",
 		"ja-no-abusage": true,
-		"@textlint-ja/textlint-rule-no-insert-dropping-sa": "サ抜き、サ入れ表現の誤用をチェック",
 		"@textlint-ja/textlint-rule-no-insert-dropping-sa": true
 	}
 }

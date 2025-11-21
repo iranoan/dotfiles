@@ -25,16 +25,34 @@ function set_vimlsp#main() abort
 	" let g:lsp_document_code_action_signs_hint = {'text': '💡', 'icon': l:icon_dir .. 'hint' .. l:icon_ext}
 	let g:lsp_fold_enabled = 0
 	let g:lsp_text_edit_enabled = 1
-	" call lsp#register_server(#{
-	" 			\ name: 'efm-langserver',
-	" 			\ cmd: {server_info->['efm-langserver']},
-	" 			\ allowlist: ['json', 'markdown', 'html', 'xhtml', 'css', 'tex', 'yaml'],
-	" 			\ }) " 現状+バッファを開いた時にチェックしてくれない+保存も必要
+	call lsp#register_server(#{
+				\ name: 'efm-langserver',
+				\ cmd: {server_info->['efm-langserver']},
+				\ allowlist: ['json'],
+				\ }) " CSS や HTML は現状+バッファを開いた時にチェックしない+遅い+保存も必要
+				" \ allowlist: ['json', 'markdown', 'html', 'xhtml', 'css', 'tex', 'yaml'],
 	call lsp#register_server(#{
 				\ name: 'awk-language-server',
 				\ cmd: {server_info->['awk-language-server']},
 				\ allowlist: ['awk'],
 				\ })
+	" ↓diagnostics が効かない
+	" call lsp#register_server(#{
+	" 			\ name: 'eslint-language-server',
+	" 			\ cmd: {server_info->['vscode-eslint-language-server', '--stdio']},
+	" 			\ allowlist: ['javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'json'],
+	" 			\ workspace_config: #{
+	" 			\ 	eslint: #{
+	" 			\ 		validate: [
+	" 			\ 			'javascript',
+	" 			\ 			'javascriptreact',
+	" 			\ 			'typescript',
+	" 			\ 			'typescriptreact',
+	" 			\ 			'json'
+	" 			\ 		]
+	" 			\ 	}
+	" 			\ }
+	" 			\ })
 	" vim-lsp の自動設定 https://github.com/mattn/vim-lsp-settings {{{
 	" vim-lsp-settings は &filetype == sh に対応しているが bash は未対応、html には対応しているが xhtml には未対応
 	" let g:lsp_settings は packadd の前に指定する必要あり
@@ -42,6 +60,7 @@ function set_vimlsp#main() abort
 				\ vscode-html-language-server: #{allowlist: ['html', 'xhtml']},
 				\ bash-language-server: #{allowlist: ['sh', 'bash']},
 				\ digestif: #{disabled: 1},
+				\ efm-langserver: #{allowlist: ['json', 'jsonc']},
 				\ pylsp: #{
 				\ 	workspace_config: #{
 				\ 		pylsp: #{
@@ -86,9 +105,9 @@ function set_vimlsp#main() abort
 		" 			\ foldexpr=lsp#ui#vim#folding#foldexpr()
 		" 			\ foldtext=lsp#ui#vim#folding#foldtext()
 		" ↓packadd を使う場合、これがないと開いた既存のウィンドウでバッファを開いた時に有効にならない
-		autocmd FileType awk,c,cpp,python,lua,vim,ruby,markdown,html,xhtml,css,sh,bash,go,conf if !s:check_run_lsp() | call lsp#activate() | endif
+		autocmd FileType awk,c,cpp,python,lua,vim,ruby,markdown,html,xhtml,css,sh,bash,go,conf,json if !s:check_run_lsp() | call lsp#activate() | endif
 		autocmd BufAdd *
-					\ if index(['awk','c', 'cpp', 'python', 'lua', 'vim', 'ruby', 'tex', 'markdown', 'html', 'xhtml', 'css', 'sh', 'bash', 'go', 'conf'], &filetype) != -1
+					\ if index(['awk','c', 'cpp', 'python', 'lua', 'vim', 'ruby', 'tex', 'markdown', 'html', 'xhtml', 'css', 'sh', 'bash', 'go', 'conf', 'json'], &filetype) != -1
 					\ | if !s:check_run_lsp()
 					\ | 	call lsp#activate()
 					\ | endif
@@ -107,7 +126,7 @@ def s:on_lsp_buffer_enabled(): void
 		setlocal tagfunc=lsp#tagfunc
 	endif
 	# ALE を優先させるか両方使うか {{{
-	if index(['vim', 'sh', 'bash', 'python'], &filetype) != -1
+	if index(['vim', 'sh', 'bash', 'python', 'json'], &filetype) != -1
 		b:ale_enabled = 0 # ALE 不使用
 		nnoremap <buffer>[a        <Plug>(lsp-previous-diagnostic)
 		nnoremap <buffer>]a        <Plug>(lsp-next-diagnostic)
@@ -137,21 +156,24 @@ def s:on_lsp_buffer_enabled(): void
 	# nnoremap <buffer>gi        <Plug>(lsp-implementation)
 	# nnoremap <buffer>gt        <Plug>(lsp-type-definition)
 	# }}}
-	# 次の条件の時、うまく動かない (running で起動しているのに Diagnostic 系が動作しない) ケースが有るので、一度止めてから再度有効にする
+	# 次の条件の時、うまく動かない (running で起動しているのに Diagnostic 系が動作しない) ケースが有るので、一度止めてから再度有効にする←不要になった?
 	# * まだ LSP が動作していない
 	# * 空のバッファに LSP を使用するファイルを開く
-	# 例えば、空のバッファで起動後 :edit ~/.config/bash/history した時
-	var s_info: dict<any>
-	for s in lsp#get_server_names()
-		s_info = lsp#get_server_info(s)
-		if index(get(s_info, 'allowlist', []), &filetype) != -1 || index(get(s_info, 'whitelist', []), &filetype) != -1
-			while lsp#get_server_status(s_info.name) !=? 'running' && lsp#get_server_status(s_info.name) !=? 'starting'
-				lsp#stop_server(s_info.name)
-				break
-			endwhile
-			break
-		endif
-	endfor
+	# # 例えば、空のバッファで起動後 :edit ~/.config/bash/history した時
+	# var s_info: dict<any>
+	# for s in lsp#get_server_names()
+	# 	s_info = lsp#get_server_info(s)
+	# 	if index(get(s_info, 'allowlist', get(s_info, 'whitelist', [])), &filetype) != -1
+	# 		while index(['running', 'starting'], lsp#get_server_status(s_info.name)) != -1
+	# 			if index(['efm-langserver', 'json-languageserver'], s_info.name) != -1
+	# 				break
+	# 			endif
+	# 			lsp#stop_server(s_info.name)
+	# 			break
+	# 		endwhile
+	# 		break
+	# 	endif
+	# endfor
 	lsp#enable()
 enddef
 

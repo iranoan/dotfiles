@@ -296,6 +296,7 @@ augroup ResetFiletype
 			tex: '*.tex',
 			sh: '*.sh',
 			bash: '*.bash,.bash_history,.bashrc,~/dotfiles/.config/bash/*,~/.config/bash/*',
+			json: '*.json,.textlintrc,.stylelintrc,.htmlhintrc',
 			markdown: '*.md',
 			go: '*.go',
 			conkyrc: 'conkyrc,conky.conf'
@@ -315,8 +316,8 @@ augroup END
 # 各種言語の構文チェック https://github.com/dense-analysis/ale {{{2
 augroup loadALE
 	autocmd!
-	# autocmd FileType c,cpp,python,ruby,yaml,markdown,html,xhtml,css,tex,help,json
-	autocmd FileType c,cpp,ruby,yaml,markdown,html,xhtml,css,tex,help,json set_ale#main()
+	# autocmd FileType c,cpp,python,ruby,yaml,markdown,html,xhtml,css,tex,help
+	autocmd FileType c,cpp,ruby,yaml,markdown,html,xhtml,css,tex,help set_ale#main()
 		| autocmd_delete([{group: 'loadALE'}])
 augroup END
 
@@ -339,7 +340,7 @@ augroup END
 # https://github.com/prabirshrestha/vim-lsp {{{2
 augroup loadvimlsp
 	autocmd!
-	autocmd FileType awk,c,cpp,python,vim,lua,ruby,yaml,markdown,html,xhtml,css,sh,bash,go,conf set_vimlsp#main()
+	autocmd FileType awk,c,cpp,python,vim,lua,ruby,yaml,markdown,html,xhtml,css,sh,bash,go,conf,json set_vimlsp#main()
 		| autocmd_delete([{group: 'loadvimlsp'}])
 augroup END
 

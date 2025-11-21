@@ -49,7 +49,6 @@ function set_ale#main()
 				\ css:    ['css-validator', 'stylelint-v16'],
 				\ html:   ['nu-html-checker'],
 				\ tex:    ['lacheck', 'chktex'],
-				\ json:   ['jsonlint'],
 				\ }
 				" \ python: ['flake8'], " LSP に任せる (加えて ~/.config/flake8, ~/.flake8 の設定が無視される)
 				" \ tex   : ['textlint'],
@@ -75,7 +74,7 @@ function set_ale#main()
 endfunction
 
 def set_ale#on(): void
-	if index(['c', 'cpp', 'ruby', 'yaml', 'markdown', 'html', 'xhtml', 'css', 'tex', 'help', 'json'], &filetype) == -1
+	if index(['c', 'cpp', 'ruby', 'yaml', 'markdown', 'html', 'xhtml', 'css', 'tex', 'help'], &filetype) == -1
 		return
 	endif
 	b:ale_enabled = 1
