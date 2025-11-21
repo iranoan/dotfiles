@@ -89,8 +89,7 @@ function set_vimlsp#main() abort
 	" if !pack_manage#IsInstalled('asyncomplete.vim') " ←asyncomplete.vim 自身を opt に置いても対応できる方法が見つかったらこちらにする
 	if !len(asyncomplete#get_source_names())
 		call set_asyncomplete#main() " 先に設定しておかないと補完候補に現れない
-		autocmd! SetAsyncomplete
-		augroup! SetAsyncomplete
+		call autocmd_delete([#{group: 'SetAsyncomplete'}])
 	endif
 	packadd asyncomplete-lsp.vim
 	" call lsp#activate()
@@ -108,12 +107,13 @@ function set_vimlsp#main() abort
 		autocmd FileType awk,c,cpp,python,lua,vim,ruby,markdown,html,xhtml,css,sh,bash,go,conf,json if !s:check_run_lsp() | call lsp#activate() | endif
 		autocmd BufAdd *
 					\ if index(['awk','c', 'cpp', 'python', 'lua', 'vim', 'ruby', 'tex', 'markdown', 'html', 'xhtml', 'css', 'sh', 'bash', 'go', 'conf', 'json'], &filetype) != -1
-					\ | if !s:check_run_lsp()
-					\ | 	call lsp#activate()
-					\ | endif
+					\ | 	if !s:check_run_lsp() | call lsp#activate() | endif
 					\ | endif
 		autocmd FileType css if bufname() !~# '\.css$' | call lsp#stop_server('vscode-css-language-server') | endif
 		autocmd FileType awk if bufname() !~# '\.awk$' | call lsp#stop_server('awk-language-server') | endif
+		autocmd FileType sh,bash if bufname() !~# '\.\%(ba\)\=sh$' && bufname() !=# '.bashrc' && expand('%:p') !~# '/bash/'
+					\ | 	call lsp#stop_server('bash-language-server')
+					\ | endif
 	augroup END
 	call timer_start(1, {->execute('delfunction set_vimlsp#main')})
 endfunction
