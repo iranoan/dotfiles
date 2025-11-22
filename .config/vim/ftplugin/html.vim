@@ -23,7 +23,13 @@ setlocal spelloptions=camel
 setlocal omnifunc=htmlcomplete#CompleteTags
 setlocal iskeyword=a-z,A-Z,48-57,_,- # class, id 名に - が使える。タグの補完では <, > を加えたほうが都合が良いが、加えると = による整形で上手くインデントできなくなる
 setlocal makeprg=html-check.sh\ \"%\"
-setlocal errorformat=%f:%l:%c:\ %trror:\ %m,%f:%l:%c:\ info\ %tarning:\ %m,%f:%l:%c:\ %tnfo\ warning:\ %m,%f:%l:%c:\ %m,%f:%l:%m
+setlocal errorformat=
+	\%f:%l:%c:\ %trror:\ %m,
+	\%f:%l:%c:\ info\ %tarning:\ %m,
+	\%f:%l:%c:\ %trror\ %m,
+	\%f:%l:%c:\ info\ %tarning\ %m,
+	\%f:%l:%c:\ %m,
+	\%f:%l:%m
 setlocal formatlistpat=^\\s*<\\(li\\\|dt\\\|dd\\)\\(>\\\|\\s\\+\\ze[^>]\\+\\)
 setlocal breakindentopt=list:4
 # ファイルタイプ別 map {{{
