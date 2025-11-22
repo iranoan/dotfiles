@@ -311,5 +311,9 @@
 	"ruby": {
 		"prefix": "ruby",
 		"body": "<ruby>${1}<rp>(</rp><rt>${2}</rt><rp>)</rp></ruby>${3}"
+	},
+	"charset": {
+		"prefix": ["charset", "meta:charset"],
+		"body": "<meta charset=\"utf-8\">"
 	}
 }
