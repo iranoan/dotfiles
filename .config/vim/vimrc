@@ -452,9 +452,11 @@ nnoremap <silent>]t        gt
 nnoremap <silent>[t        gT
 noremap  <silent><C-Tab>   gt
 tnoremap <silent><C-Tab>   <C-W>gt
+tnoremap <silent><C-W>]t   <C-W>gt
 inoremap <silent><C-Tab>   <C-PageDown>
 noremap  <silent><S-C-Tab> gT
 tnoremap <silent><S-C-Tab> <C-W>gT
+tnoremap <silent><C-W>[t   <C-W>gT
 inoremap <silent><S-C-Tab> <C-PageUp>
 # dh, dl は使わない (それぞれ x, X と同じ) ので、diff で使う {{{2
 # diff のバッファが3つまでに対応し、dh で上/左から、dl で下/右から差分を取得
