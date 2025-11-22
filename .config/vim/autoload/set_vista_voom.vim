@@ -53,8 +53,7 @@ endfunction
 function set_vista_voom#Vista() abort
 	if !pack_manage#IsInstalled('vim-lsp')
 		call set_vimlsp#main()
-		autocmd! loadvimlsp
-		augroup! loadvimlsp
+		call autocmd_delete([{group: 'loadvimlsp'}])
 	endif
 	" if !pack_manage#IsInstalled('ale') " 通常不要
 	" 	call set_ale#main()
