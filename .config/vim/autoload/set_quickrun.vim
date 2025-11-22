@@ -29,16 +29,16 @@ function set_quickrun#main() abort
 				\} "outputter/quickfix/into		デフォルト: 0 0 以外を指定すると、結果が出た際に |quickfix-window| へカーソルを移動します。
 	" 言語毎の設定
 	"C コンパイラは clang 優先 (*.cpp に対しては、おそらく既にそうなっている) {{{
-	let g:quickrun_config.c = {
-				\ 'type':
+	let g:quickrun_config.c = #{
+				\ type:
 				\   executable('clang') ? 'c/clang' :
 				\   executable('gcc')   ? 'c/gcc' :
 				\                         ' ',
-				\ 'cmdopt':
+				\ cmdopt:
 				\   executable('clang') ? '-lm -W -Wall' :
 				\   executable('gcc')   ? '-lm -Wall' :
 				\                         ' ',
-				\ 'runner'                : 'system'
+				\ runner                : 'system'
 				\}" vimproc のままだと成功時、コンパイル・エラー時のファイル名:行番号の出力の取り込みの両対応ができない
 	" }}}
 	"gnuplot 成功時は出力しない {{{
@@ -51,13 +51,14 @@ function set_quickrun#main() abort
 				" \ 'exec'                    : ['%c %o %s']
 				" \ 'cmdopt'                  : '--persist',
 	" }}}
-	" HTML 使用しているスクリプトは元々エラー以外は何も出力しない {{{
+	" HTML/XHTML 使用しているスクリプトは元々エラー以外は何も出力しない {{{
 	let g:quickrun_config.html = {
 				\ 'outputter/error/success' : 'quickfix',
 				\ 'command'                 : 'html-check.sh',
 				\ 'cmdopt'                  : '',
 				\ 'exec'                    : ['%c %s']
 				\}
+	let g:quickrun_config.xhtml = g:quickrun_config.html
 	" }}}
 	" TeX 設定 途中エラーが有っても止めない+zathura が複数起動するので、-pv 無しオプション{{{
 	" zathura_sync.sh 内部で処理をしようとすると、非同期処理ができないので止めた
