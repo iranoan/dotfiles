@@ -6,13 +6,6 @@ function set_fzf#main() abort
 	packadd fzf
 	" }}}
 	let g:fzf_layout = #{ window: #{ width: 1, height: 1, xoffset: 0 , yoffset: 0 } }
-	if has('gui_running')
-		call set_fzf#solarized()
-		augroup FZF_Vim_Solaraized
-			autocmd!
-			autocmd ColorScheme * call set_fzf#solarized()
-		augroup END
-	endif
 	let g:fzf_colors = {
 				\ 'fg':  ['fg', 'Pmenu'],
 				\ 'bg':  ['bg', 'Pmenu'],
@@ -95,9 +88,6 @@ function set_fzf#vim(cmd) abort
 						\ '--bind', 'ctrl-o:execute-silent(xdg-open {})',
 						\ '--footer', 'Ctrl-]/R/K/^:Preview On/Off/Up/Down/[No]Wrap｜F/B:PageUP/Down｜G:Sxiv｜O:Open｜V:Vim｜W:[No]Wrap'
 						\ ]
-	if get(g:, 'colors_name', '') ==# 'solarized'
-		let s:fzf_options += ['--color', &background] " ↑上の色指定が無視される
-	endif
 	let $FZF_DEFAULT_COMMAND = executable("fdfind")
 						\ ? 'fdfind --hidden --follow --no-ignore --ignore-file ~/.config/fd/ignore --ignore-file ~/.config/fd/noedit --type file --type symlink --type directory .'
 						\ : 'find -L . -type d \( -name .texlive2023 -o -name .npm -o -name .thumbnails -o -name thumbnails -o -name .log -o -name .tmp -o -path "$HOME/Mail/.*/new" -o -path "$HOME/Mail/.*/cur" -o -path "$HOME/Mail/.*/tmp" -o -path "$HOME/Mail/.notmuch/xapian" -o -path .local/share/Trash -o -path node_modules -o -path go/pkg -o -path "$HOME/PDF" -o -path "$HOME/img/スクリーンショット" -o -name .git -o -name cache -o -name .cache -o -name .Trash -o -name .ecryptfs -o -name .Private -o -name kpeoplevcard \) -prune -o \( -type f -o -type l \) ! -name "*.aux" ! -name "*.snm" ! -name "*.nav" ! -name "*.synctex.gz" ! -name "*.cer" ! -name "*.chm" ! -name "*.chw" ! -name "*.crt" ! -name "*.dll" ! -name "*.dvi" ! -name "*.exe" ! -name "*.fdb_latexmk" ! -name "*.gpg" ! -name "*.hlp" ! -name "*.hmereg" ! -name "*.o" ! -name "*.obj" ! -name "*.oll" ! -name "*.opp" ! -name "*.pfa" ! -name "*.pl3" ! -name "*.ppm" ! -name "*.reg" ! -name "*.sqlite" ! -name "*.tfm" ! -name "*.ttf" ! -name "*.vf" ! -name ".*.sw?" ! -name a.out ! -name "*.jar" ! -name "*.pyc" ! -name "*.vbox" ! -name "*.nvram" ! -name "*.cur" ! -name "*.class" ! -name "*.vbox-prev" ! -name "*.fls" ! -name .viminfo ! -name viminfo ! -name "*.ltjruby" ! -name ".~lock.*#" -printf "%P\n" 2> /dev/null' "-prune 前の -path が効いていないが、シェルに設定した FZF_DEFAULT_COMMAND に合わせてある
@@ -121,6 +111,7 @@ function set_fzf#vim(cmd) abort
 					\ <bang>0
 					\ )
 				\ )
+	call filter(v:oldfiles, {_, v -> filereadable(expand(v))}) " 削除・移動ファイルを除外
 	let $FZF_DEFAULT_OPTS = substitute($FZF_DEFAULT_OPTS, '--footer \zs\("[^"]\+"\|''[^'']\+''\)', '"<C-]/R/K/^>:Preview On/Off/Up/Down｜<C-F/B>:PageUP/Down｜<C-G>:edit｜<C-T>/<Enter>:tabedit｜<C-S>:split｜<C-V>:vsplit｜<C-O>:Open｜W:[No]Wrap"', 'g')
 	" let g:fzf_vim = #{
 	" 			\ buffers_jump: 1,
@@ -202,13 +193,4 @@ def set_fzf#FZF_open(arg: list<string>): void
 			tabedit#Tabedit(f)
 		endif
 	endfor
-enddef
-
-def set_fzf#solarized(): void
-	if get(g:, 'colors_name', '') ==# 'solarized'
-		g:terminal_ansi_colors = [
-						'#073642', '#dc322f', '#859900', '#b58900', '#268bd2', '#d33682', '#2aa198', '#eee8d5',
-						'#002b36', '#cb4b16', '#586e75', '#657b83', '#839496', '#6c71c4', '#93a1a1', '#fdf6e3'
-					]
-	endif
 enddef
