@@ -1,61 +1,6 @@
 vim9script
 
 export def ColorMan(mod: string, ...args: list<string>)
-	var topic: list<string>
-	var opt: list<string>
-
-	def GetCmd(): list<any>
-		var cmd: string
-		var sec: number = 0
-
-		def Parse(arg: string): void # 'man(7)' man(7) "man(7)" man.7 をパース
-			var sec_sb: string
-			var sec_sp: string
-
-			if matchlist(arg, '^\([''"]\)\=\([][A-Za-z0-9_:.+@-]\+\)\%((\(\d\))\|\.\(\d\)\)\=\1') == []
-				cmd = arg
-				return
-			endif
-			[cmd, sec_sb, sec_sp] = matchlist(arg, '^\([''"]\)\=\([][A-Za-z0-9_:.+@-]\+\)\%((\(\d\))\|\.\(\d\)\)\=\1')[2 : 4]
-			if sec_sb !=# ''
-				sec = str2nr(sec_sb)
-			elseif sec_sp !=# ''
-				sec = str2nr(sec_sp)
-			endif
-			return
-		enddef
-
-		if len(topic) == 0
-			cmd = 'man'
-		elseif len(topic) == 1
-			Parse(topic[0])
-		elseif len(topic) == 2
-			sec = str2nr(topic[1])
-			if '' .. sec ==# topic[1] # 数値変換後も元の文字列と同じ
-					&& (sec >= 1 && sec <= 9) # セクションとコマンドが逆扱いにする
-				cmd = topic[0]
-			else
-				# sec = str2nr(topic[0])
-				# if '' .. sec !=# topic[0] || sec < 1 || sec > 9
-				cmd = topic[1]
-			endif
-		else
-			return []
-		endif
-
-		if opt == []
-			return [
-				sec == 0 ? cmd : sec .. ' ' .. cmd,
-				$HOME .. '/' .. cmd .. '.' .. (sec == 0 ? '' : sec) .. '~'
-			]
-		else
-			return [
-				join(opt) .. ' ' .. (sec == 0 ? cmd : sec .. ' ' .. cmd),
-				$HOME .. '/' .. cmd .. ' ' .. join(opt) .. '.' .. (sec == 0 ? '' : sec) .. '~'
-			]
-		endif
-	enddef
-
 	def OpenWay(name: string): string # ウィンドウの開き方
 		var bufnr: number
 		var man_buf: number = (getbufinfo()->filter((_, v) => v.name == name) + [{bufnr: 0}])[0].bufnr
@@ -104,52 +49,146 @@ export def ColorMan(mod: string, ...args: list<string>)
 		endif
 	enddef
 
-	def GetOpt(): void
-		var argv: number = len(args)
-		var i: number = -1
-		var s: string
+	def GetOptPages(): list<any>
+		def GetPages(arg: list<string>): list<dict<string>> # [section] page のペアにする
+			def Parse(s: string): dict<string> # 'man(7)' man(7) "man(7)" man.7 をパース
+				var cmd: string
+				var sec: number = 0
+				var sec_sb: string
+				var sec_sp: string
 
-		while i < argv
-			i += 1
+				if matchlist(s, '^\([''"]\)\=\([][A-Za-z0-9_:.+@-]\+\)\%((\(\d\))\|\.\(\d\)\)\=\1') == []
+					return {page: s}
+				endif
+				[cmd, sec_sb, sec_sp] = matchlist(s, '^\([''"]\)\=\([][A-Za-z0-9_:.+@-]\+\)\%((\(\d\))\|\.\(\d\)\)\=\1')[2 : 4]
+				if cmd =~# '\.\d\+$'
+					[cmd, sec_sb] = matchlist(cmd, '^\([][A-Za-z0-9_:.+@-]\{-}\)\.\(\d\+\)$')[1 : 2]
+				endif
+				return {page: cmd .. (sec_sb ==# '' ? sec_sp : '.' .. sec_sb)}
+			enddef
+
+			var pages: list<dict<string>>
+			var page: dict<any>
+			var argv: number = len(arg)
+			var s: string
+			var i: number
+			var sec: number = 0
+
+			while i < argv
+				s = arg[i]
+				sec = str2nr(s)
+				if '' .. sec ==# s # 数値変換後も元の文字列と同じ→数値→[section] 部分
+					if i < (argv - 1)
+						s = arg[i + 1]
+						page = Parse(s)
+						if page.section == ''
+							add(pages, {page: s, name: s .. '.'})
+						else # sec は無視する
+							add(pages, extend(page, {name: page.page .. '.' .. page.section .. '.'}))
+						endif
+					endif
+					i += 1
+				else
+					page = Parse(s)
+					if page.page !~# '\.\d\+$'
+						add(pages, extend(page, {name: page.page .. '.'}))
+					elseif i < (argv - 1)
+						s = arg[i + 1]
+						sec = str2nr(s)
+						if '' .. sec ==# s
+							add(pages, {page: page.page, section: s, name: page.page .. '.' .. s .. '.'})
+							i += 1
+						else
+							add(pages, extend(page, {name: page.page .. '.'}))
+						endif
+					else
+						add(pages, extend(page, {name: page.page .. '.'}))
+					endif
+				endif
+				i += 1
+			endwhile
+			return sort(pages)->uniq()
+		enddef
+
+		var argv: number = len(args)
+		var i: number
+		var s: string
+		var topic: list<string>
+		var opt: list<string>
+
+		while i < argv # オプションだけ取り出す
 			s = args[i]
 			# 無視するオプション
-			if args[i] =~# '\(-H[^ ]*\|--html\(=[^ ]\+\)\=\|--pager\(=[^ ]\+\)\=\|-T[^ ]*\|--troff-device\(=[^ ]\+\)\=\|-X[^ ]*\|--gxdietview\(=[^ ]\+\)\=\|-W\|--where-cat\|--location-cat-w\|--where\|--path\|--location-Z\|--ditroff\)'
-				i += 1
-			elseif args[i] ==# '-P' # P pager
-				i += 2
+			if args[i] =~# '\(-H[^ ]*\|--html\(=[^ ]\+\)\=\|--pager\(=[^ ]\+\)\=\|-T[^ ]*\|--troff-device\(=[^ ]\+\)\=\|-X[^ ]*\|--gxdietview\(=[^ ]\+\)\=\|-[PW]\|--where-cat\|--location-cat-w\|--where\|--path\|--location-Z\|--ditroff\)'
 			elseif s =~# '^-[CELMRSsempr]' # 引数有りのプション
+				# -k, -f -l は一覧で、次に来るのがキーワードなのでオプション固有の引数ではない
 				add(opt, s .. ' ' .. args[i + 1])
-				i += 2
+				i += 1
 			elseif s =~# '^-' # オプション
 				add(opt, s)
-				i += 1
 			else
 				add(topic, s)
-				i += 1
 			endif
+			i += 1
 		endwhile
+		if topic == []
+			return [opt, [{page: 'man', name: 'man.'}]]
+		endif
+		return [opt, GetPages(topic)]
 	enddef
 
-	var cmd: string # man コマンドに渡す引数
+	var opts: list<string> # オプション
+	var exe: string
+	var pages: list<dict<string>> # [section] page などを要素に持つ辞書リスト
+	var width: number
+	var max_width: number
 	var name: string # 仮のバッファ名
+	var open: string # 開き方
+	var out: list<string> # man の出力
+	var ret: list<string> # man の出力
+	var err: list<string> # エラー出力
 
-	GetOpt()
-	[cmd, name] = GetCmd()
-	var open: string = OpenWay(name)
-	if open ==# ''
+	[opts, pages] = GetOptPages()
+	name = $HOME .. '/' .. copy(pages)->map((_, v) => v.name)->join('|') .. '~'
+	open = OpenWay(name)
+	if open ==# '' # 同じ page を既に開いている
 		return
 	endif
-	var width: number = (&columns / (open =~# '\<\(vert\%[ical]\|vsplit\)\>' ? 2 : 1) - ( &number ? 3 : 0 ) - &foldcolumn - ( &signcolumn !=# 'no' ? 1 : 0 ) - 2)
-	var max_width: number = get(g:, 'ft_man_max_width', 100)
 
+	width = (&columns / (open =~# '\<\(vert\%[ical]\|vsplit\)\>' ? 2 : 1) - ( &number ? 3 : 0 ) - &foldcolumn - ( &signcolumn !=# 'no' ? 1 : 0 ) - 2)
+	max_width = get(g:, 'ft_man_max_width', 100)
 	if max_width > 0 && width > max_width
 		width = max_width
 	endif
-
-	var out: list<string> = systemlist('MANWIDTH=' .. width .. ' MANPAGER=cat MAN_KEEP_FORMATTING=1 man ' .. cmd .. ' 2> /dev/null')
-		->map((_, v) => v->substitute('[\r \t]\+$', '', ''))
-	if out == []
-		var err: list<string> = systemlist('man ' .. cmd)->map((_, v) => v->substitute('[\r \t]\+$', '', ''))
+	exe = 'MANWIDTH=' .. width .. ' MANPAGER=cat MAN_KEEP_FORMATTING=1 man ' .. join(opts) .. ' '
+	if index(opts, '-k') != -1 || index(opts, '--apropos') != -1
+		|| index(opts, '-f') != -1 || index(opts, '--whatis') != -1
+		|| index(opts, '-l') != -1 || index(opts, '--local-file') != -1
+		var tmp: string = tempname()
+		out = systemlist(exe .. copy(pages)->map((_, v) => v.page)->join() .. ' 2> ' .. tmp)
+		err = readfile(tmp)
+		delete(tmp)
+	else
+		for p in pages
+			ret = systemlist(exe .. p.page .. ' 2> /dev/null')
+			if ret == []
+				err += systemlist(exe .. p.page)
+			else
+				out += ret
+			endif
+		endfor
+	endif
+	if out != []
+		execute open .. escape(name, '|')
+		setlocal buftype=nofile noswapfile
+		setlocal filetype=man
+		setlocal modifiable
+		append(0, out)
+		keepjumps :$delete
+		setpos('.', [0, 1, 1, 0])
+		setlocal nomodifiable
+	endif
+	if err != []
 		if has('popupwin')
 			popup_notification(err, {borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'], pos: 'center'})
 		else
@@ -159,18 +198,7 @@ export def ColorMan(mod: string, ...args: list<string>)
 			endfor
 			echohl None
 		endif
-		return
 	endif
-	execute open .. name
-	setlocal buftype=nofile noswapfile
-	setlocal filetype=man
-	setlocal modifiable
-
-	append(0, out)
-	keepjumps :$delete
-	setpos('.', [0, 1, 1, 0])
-
-	setlocal nomodifiable
 enddef
 
 export def Jump(): void
