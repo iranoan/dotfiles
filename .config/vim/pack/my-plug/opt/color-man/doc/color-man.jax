@@ -64,7 +64,7 @@ Vim でマニュアルページを表示する |ft-man-plugin| を置き換え�
 <		をしていない、もしくはこのプラグインの読み込みが後なら、|:ColorMan| の代わりに
 		:Man が使える
 
-                                                                *color-mann-map*
+                                                                 *color-man-map*
 ローカルキーマップ~
 q             マニュアルを閉じる
 o
@@ -92,15 +92,20 @@ K
 	Type: |Bool|
 	Default: `v:false`
 
-	* v:true にするとマップ (|color-mann-map|) を変更しない
+	* v:true にするとマップ (|color-man-map|) を変更しない
 
 *g:ft_man_open_mode*
 	Type: |String|
 	Default: `''`
 
 	* マニュアルページの開き方の指定
-		vert: 水平の代わりに垂直分割を使用する
-		tab:  新しいタブを使用する
+		        無指定で水平分割 (|:split|)
+		vert:   水平の代わりに垂直分割を使用する (|:vsplit|)
+		tab:    新しいタブを使用する (|:tabedit|)
+		top:    一番上に最大幅で開く (|:topleft| |horizontal|)
+		bottom: 一番下に最大幅で開く (|:botright| |horizontal|)
+		left:   一番左に最大高さで開く (|:topleft| |vertical|)
+		right:  一番右に最大高さで開く (|:botright| |vertical|)
 
 *g:ft_man_max_width*
 	Type: |Number|

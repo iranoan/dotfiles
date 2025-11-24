@@ -8,7 +8,7 @@ export def ColorMan(mod: string, ...args: list<string>)
 		# 開き方の指定有り
 		if mod =~# '\<tab\>'
 			return 'tabedit '
-		elseif mod =~ '\<\(vert\%[ical]\|hor\%[izontal]\)\>'
+		elseif mod =~ '\<\(vert\%[ical]\|hor\%[izontal]\|lefta\%[bove]\|abo\%[veleft]\|rightb\%[elow]\|bel\%[owright]\|to\%[pleft]\)\>'
 			return mod .. ' split '
 		endif
 		# 開き方の指定無し
@@ -39,6 +39,14 @@ export def ColorMan(mod: string, ...args: list<string>)
 		if exists("g:ft_man_open_mode")
 			if g:ft_man_open_mode == 'vert'
 				return 'vsplit '
+			elseif g:ft_man_open_mode == 'top'
+				return 'topleft split '
+			elseif g:ft_man_open_mode == 'left'
+				return 'topleft vsplit '
+			elseif g:ft_man_open_mode == 'bottom'
+				return ':botright split '
+			elseif g:ft_man_open_mode == 'right'
+				return ':botright vsplit '
 			elseif g:ft_man_open_mode == 'tab'
 				return 'tabedit '
 			else
