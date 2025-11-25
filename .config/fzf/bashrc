@@ -23,7 +23,7 @@ f(){ # ファイル検索して fzf
 				fzf='fzf'
 				break
 				;;
-			nvim-qt|gvim|mlterm|xterm|tilda|guake|gnome-terminal*) # それ以外は fzf-tmux を使う
+			nvim-qt|gvim|mlterm|xterm|tilda|guake|ptyxis-agent|ptyxis|gnome-terminal*) # それ以外は fzf-tmux を使う
 				# fzf='fzf-tmux -p 100%,100%' 本当はこちらを使いたいが、become() とシェルスクリプト内の & (バックグラウンド) 起動を試みると起動しない
 				fzf='fzf'
 				break
@@ -41,11 +41,16 @@ f(){ # ファイル検索して fzf
 				ppid=$( tmux list-clients -F '#{session_activity}:#{client_pid}' | sort | tail -n 1 | cut -d: -f2 )
 				continue
 				;;
+			tmux:client)
+				continue
+				;;
 			flatpak-session)
 				ppid=$( ps --cols 1000 xo ppid,args | grep -E '^ *[0-9]+ +flatpak-spawn .+ --env=TERM_PROGRAM=' | awk '{print $1}')
 				continue
 				;;
-			*) continue ;;
+			*)
+				continue
+				;;
 		esac
 		break
 	done
