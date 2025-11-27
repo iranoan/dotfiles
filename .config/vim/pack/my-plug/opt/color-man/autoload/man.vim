@@ -1,6 +1,40 @@
 vim9script
 
+export def ShellMan(...args: list<string>)
+	var err: list<string> = ManCore('topleft', true, args)
+	if err != []
+		if getline(1) != ''
+			DisplayErr(err)
+		else
+			execute 'silent !echo ' .. join(err, "\n")
+			quit
+		endif
+	else
+		delcommand ShellMan
+	endif
+enddef
+
 export def ColorMan(mod: string, ...args: list<string>)
+	var err: list<string> = ManCore(mod, false, args)
+	delcommand ShellMan
+	if err != []
+		DisplayErr(err)
+	endif
+enddef
+
+def DisplayErr(err: list<string>): void
+	if has('popupwin')
+		popup_notification(err, {borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'], pos: 'center'})
+	else
+		echohl WarningMsg
+		for s in err
+			echomsg s
+		endfor
+		echohl None
+	endif
+enddef
+
+def ManCore(mod: string, shell: bool, args: list<string>): list<string>
 	def OpenWay(name: string): string # ウィンドウの開き方
 		var bufnr: number
 		var man_buf: number = (getbufinfo()->filter((_, v) => v.name == name) + [{bufnr: 0}])[0].bufnr
@@ -145,6 +179,17 @@ export def ColorMan(mod: string, ...args: list<string>)
 		return [opt, GetPages(topic)]
 	enddef
 
+	def GetName(s: list<dict<string>>): string
+		var all_page = systemlist('man -k .')
+		               	->map((_, v) => substitute(v, ' .*', '', ''))
+		return $HOME .. '/'
+		       	.. copy(s)
+		           	->filter((_, v) => index(all_page, v.page) != -1)
+		           	->map((_, v) => v.name)
+		           	->join('|')
+		       	.. '~'
+	enddef
+
 	var opts: list<string> # オプション
 	var exe: string
 	var pages: list<dict<string>> # [section] page などを要素に持つ辞書リスト
@@ -157,10 +202,14 @@ export def ColorMan(mod: string, ...args: list<string>)
 	var err: list<string> # エラー出力
 
 	[opts, pages] = GetOptPages()
-	name = $HOME .. '/' .. copy(pages)->map((_, v) => v.name)->join('|') .. '~'
-	open = OpenWay(name)
-	if open ==# '' # 同じ page を既に開いている
-		return
+	name = GetName(pages)
+	if shell
+		open = 'silent file! '
+	else
+		open = OpenWay(name)
+		if open ==# '' # 同じ page を既に開いている
+			return []
+		endif
 	endif
 
 	width = (&columns / (open =~# '\<\(vert\%[ical]\|vsplit\)\>' ? 2 : 1) - ( &number ? 3 : 0 ) - &foldcolumn - ( &signcolumn !=# 'no' ? 1 : 0 ) - 2)
@@ -196,17 +245,7 @@ export def ColorMan(mod: string, ...args: list<string>)
 		setpos('.', [0, 1, 1, 0])
 		setlocal nomodifiable
 	endif
-	if err != []
-		if has('popupwin')
-			popup_notification(err, {borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'], pos: 'center'})
-		else
-			echohl WarningMsg
-			for s in err
-				echomsg s
-			endfor
-			echohl None
-		endif
-	endif
+	return err
 enddef
 
 export def Jump(): void

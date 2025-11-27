@@ -191,7 +191,7 @@ augroup END
 	# Man コマンドを使用可能にする $MYVIMDIR/pack/my-plug/opt/color-man {{{2
 augroup ColorMan
 	autocmd!
-	autocmd CmdUndefined Man packadd color-man # シェルで vim +Man 有効にするため
+	autocmd CmdUndefined ShellMan packadd color-man # シェルで vim +ShellMan 有効にするため
 		| autocmd_delete([{group: 'ColorMan'}])
 	autocmd CmdlineEnter : packadd color-man # 最初の使用時に補完を有効にするため
 		| autocmd_delete([{group: 'ColorMan'}])

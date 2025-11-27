@@ -217,7 +217,7 @@ fi
 # }
 
 man() { # Vim の Man コマンドを使う
-	vim +Man\ "$*" +1bwipeout
+	vim +ShellMan\ "$*"
 }
 
 stty stop undef
