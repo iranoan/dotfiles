@@ -179,10 +179,16 @@ def ManCore(mod: string, shell: bool, args: list<string>): list<string>
 		return [opt, GetPages(topic)]
 	enddef
 
-	def GetName(s: list<dict<string>>): string
+	def GetName(o: list<string>, s: list<dict<string>>): string
+		if index(o, '-k') != -1 || index(o, '--apropos') != -1
+			|| index(o, '-f') != -1 || index(o, '--whatis') != -1
+			|| index(o, '-l') != -1 || index(o, '--local-file') != -1
+			return $HOME .. '/' .. (o + copy(s)->map((_, v) => v.page))->join('*') .. '.~'
+		endif
 		var all_page = systemlist('man -k .')
 		               	->map((_, v) => substitute(v, ' .*', '', ''))
-		return $HOME .. '/'
+
+		return $HOME .. '/' .. (o == [] ? '' : join(o, '*') .. '*')
 		       	.. copy(s)
 		           	->filter((_, v) => index(all_page, v.page) != -1)
 		           	->map((_, v) => v.name)
@@ -202,7 +208,7 @@ def ManCore(mod: string, shell: bool, args: list<string>): list<string>
 	var err: list<string> # エラー出力
 
 	[opts, pages] = GetOptPages()
-	name = GetName(pages)
+	name = GetName(opts, pages)
 	if shell
 		open = 'silent file! '
 	else
