@@ -4,24 +4,37 @@ Author:  Iranoan <iranoan+vim@gmail.com>
 License: GPL Ver.3.
 
 ==============================================================================
-                                                             *color-man-contents*
+                                                            *color-man-contents*
 目次~
 
+	* 概要                                             |color-man-introduction|
+	* 要件                                             |color-man-require|
+	* 使用方法                                         |color-man-use|
+		- コマンド                                       |color-man-command|
+		- ローカル・キーマップ                           |color-man-map|
+		- 代価コマンド                                   |color-man-replace-command|
+		- 特殊コマンド                                   |color-man-shell-command|
+		- 折り畳み                                       |color-man-fold|
+	* オプション                                       |color-man-option|
+		- キーマップ                                     |g:no_man_maps|
+		- 開き方                                         |g:ft_man_open_mode|
+		- 最大表示桁                                     |g:ft_man_max_width|
+
 ==============================================================================
-                                                         *color-man-introduction*
+                                                        *color-man-introduction*
 概要~
 
 Vim でマニュアルページを表示する |ft-man-plugin| を置き換える
 シェルで >sh
-	man
+	man man
 <を使ったときに、太字・斜体や下線表示になる部分をカラー表示させる
 
 標準では次と組み合わせにする
-	太字:       manBold     →|hl-Special|
-	            manSection  →|hl-Title|+bold+underline
-	斜体・下線: manUnderline→|hl-Function|
-	            manHeader   →|hl-Statusline|
-	URL:        manURL      ->|hl-Directory|+underline
+	太字:             manBold     →|hl-Special|
+	     の内章題     manSection  →|hl-Title|+bold+underline
+	斜体・下線:       manUnderline→|hl-Function|
+	     の内ページ名 manHeader   →|hl-Statusline|
+	URL:              manURL      →|hl-Directory|+underline
 
 ==============================================================================
                                                              *color-man-require*
@@ -34,7 +47,9 @@ Vim でマニュアルページを表示する |ft-man-plugin| を置き換え�
 ==============================================================================
                                                        *:ColorMan* *color-man-use*
 使用方法~
-                                                            *color-mann-command*
+
+------------------------------------------------------------------------------
+                                                             *color-man-command*
 コマンド~
 :[|<q-mods>| ]ColorMan [{man_option}] [[{number}] {name}]
 :[|<q-mods>| ]ColorMan [{man_option}] [{name}.{number}]
@@ -58,8 +73,9 @@ Vim でマニュアルページを表示する |ft-man-plugin| を置き換え�
 			-W, --where-cat, --location-cat, -w, --where, --path, --location,
 			-Z, --ditroff
 <
+------------------------------------------------------------------------------
                                                                  *color-man-map*
-ローカルキーマップ~
+ローカル・キーマップ~
 q             マニュアルを閉じる
 o
 K
@@ -71,14 +87,16 @@ K
 *             ANSI エスケープ・コードを考慮した * (|star|)
 #             ANSI エスケープ・コードを考慮した |#|
 
-                                                    *color-mann-replace-command*
+------------------------------------------------------------------------------
+                                                     *color-man-replace-command*
 代価コマンド~
 	* 公式で用意されているパッケージ (→|ft-man-plugin|) >vim
 			runtime ftplugin/man.vim
 <		をしていない、もしくはこのプラグインの読み込みが後なら、|:ColorMan| の代わりに
 		:Man が使える
 
-                                                      *color-mann-shell-command*
+------------------------------------------------------------------------------
+                                                       *color-man-shell-command*
 特殊コマンド~
 	* シェルの man コマンドを置き換えるための >sh
 		vim +'ShellMan man'
@@ -92,7 +110,7 @@ K
 		- エラーはシェルに出力する
 		- ColorMan, ShellMan 使用後このコマンドは削除される
 
-==============================================================================
+------------------------------------------------------------------------------
                                                                 *color-man-fold*
 折り畳み~
 
