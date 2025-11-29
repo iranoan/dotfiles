@@ -59,7 +59,7 @@ sxiv_sixel(){ # 環境によって sxiv と Sixel を使い分ける
 	win_id=$( wmctrl -lGp | grep -E "^0x[0-9a-f]+ +-?[0-9]+ +$1 " )
 	if [ -n "$win_id" ]; then
 		width=$(( $( echo "$win_id" | awk '{print $6}' ) / 2 ))
-		d_height=$(( 14 * 2 * 2 * 72 / 96 )) # フォント・サイズ 14pt を基準としたオフセット
+		d_height=$(( 14 * 2 * 2 * 72 * $4 / 96 )) # フォント・サイズ 14pt を基準としたオフセット
 		height=$(($( echo "$win_id" | awk '{print $7}') - d_height))
 		win_id=$( echo "$win_id" | awk '{print $1}' )
 		if [ -n "$sxiv" ]; then
@@ -96,13 +96,17 @@ preview_img(){ # 呼び出し元アプリ名の取得し画像プレビューを
 		ppid=$( echo "$pid" | awk '{print $2}')
 		pid=$( echo "$pid" | awk '{print $1}')
 		case "$app" in # 呼び出し元として使っているアプリを並べる
-			gvim|nvim-qt|mlterm|xterm|tilda|wezterm|wezterm-gui|gnome-terminal*|guake|ptyxis-agent|ptyxis)
-				sxiv_sixel "$pid" "$app" "$1"
+			tilda|wezterm|wezterm-gui)
+				sxiv_sixel "$pid" "$app" "$1" 1
+				return $?
+				;;
+			gvim|nvim-qt|mlterm|xterm|gnome-terminal*|guake|ptyxis-agent|ptyxis)
+				sxiv_sixel "$pid" "$app" "$1" 2
 				return $?
 				;;
 			vim|nvim)
 				if ps --cols 1000 xo pid,comm,args | grep -E "^ *$pid +n?vim " | grep -qE ' -g\>' ; then # -g オプション付きで起動した Vim→GVim
-					sxiv_sixel "$pid" "$app" "$1"
+					sxiv_sixel "$pid" "$app" "$1" 2
 					return $?
 				else
 					continue
@@ -126,7 +130,9 @@ if [ "$mime" = "inode/directory" ]; then
 	ls --color=always --group-directories-first -lhG "$f"
 	exit 0
 fi
-find "${f%/*}" -name "${f##*/}" -printf "%p\n%TF %TR %s\n"
+printf '%s %s\n' \
+	"$( find "${f%/*}" -name "${f##*/}" -printf "%p\n%TF %TR %s" | sed -E "s<^$HOME<~<" )" \
+	"$( namei "$@" | grep -E '^ l ' | sed -E -e 's/^ l //' -e "s< -> $HOME< -> ~<")"
 case "${f##*/}" in # ファイル名による分岐
 	vimrc|gvimrc )
 		source-highlight --tab=2 --failsafe -f esc --lang-def=vim.lang --style-file=esc.style -i "$f" ;;
