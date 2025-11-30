@@ -44,18 +44,21 @@ export def Grep(kind: bool, add: bool, bang: string, ...args: list<string>): voi
 			action = 'a'
 		endif
 		var exe_cmd: string = split(&grepprg)[0] .. s .. ' /dev/null'
+		var exe_ret: list<string> = systemlist(exe_cmd)
 		if kind
-			setqflist([], action, {title: ':' .. exe_cmd, lines: systemlist(exe_cmd), efm: '%f'})
+			setqflist([], action, {title: ':' .. exe_cmd, lines: exe_ret, efm: '%f'})
 			GrepAutoCmd('grep')
 		else
-			setloclist(0, [], action, {title: ':' .. exe_cmd, lines: systemlist(exe_cmd), efm: '%f'})
+			setloclist(0, [], action, {title: ':' .. exe_cmd, lines: exe_ret, efm: '%f'})
 			GrepAutoCmd('lgrep')
 		endif
-		if !add || bang !=# '!'
-			if kind
-				:cc 1
-			else
-				:ll 1
+		if exe_ret != []
+			if !add || bang !=# '!'
+				if kind
+					:cc 1
+				else
+					:ll 1
+				endif
 			endif
 		endif
 	enddef
