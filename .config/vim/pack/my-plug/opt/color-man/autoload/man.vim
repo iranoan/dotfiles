@@ -1,5 +1,7 @@
 vim9script
 
+timer_start(1000, (_) => execute('delcommand ShellMan'))
+
 export def ShellMan(...args: list<string>)
 	var err: list<string> = ManCore('topleft', true, args)
 	if err != []
@@ -9,14 +11,11 @@ export def ShellMan(...args: list<string>)
 			execute 'silent !echo ' .. join(err, "\n")
 			quit
 		endif
-	else
-		delcommand ShellMan
 	endif
 enddef
 
 export def ColorMan(mod: string, ...args: list<string>)
 	var err: list<string> = ManCore(mod, false, args)
-	delcommand ShellMan
 	if err != []
 		DisplayErr(err)
 	endif
