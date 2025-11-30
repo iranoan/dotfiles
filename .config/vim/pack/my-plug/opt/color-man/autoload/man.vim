@@ -35,6 +35,8 @@ def DisplayErr(err: list<string>): void
 enddef
 
 def ManCore(mod: string, shell: bool, args: list<string>): list<string>
+	var builtin: list<string> = systemlist('bash -c "help -d \"*\"" 2> /dev/null')->filter((_, v) => v =~# '^[a-z]\+ ')->map((_, v) => substitute(v, '\(\w\+\).\+', '\1', ''))
+
 	def OpenWay(name: string): string # ウィンドウの開き方
 		var bufnr: number
 		var man_buf: number = (getbufinfo()->filter((_, v) => v.name == name) + [{bufnr: 0}])[0].bufnr
@@ -190,7 +192,7 @@ def ManCore(mod: string, shell: bool, args: list<string>): list<string>
 
 		return $HOME .. '/' .. (o == [] ? '' : join(o, '*') .. '*')
 		       	.. copy(s)
-		           	->filter((_, v) => index(all_page, v.page) != -1)
+		           	->filter((_, v) => index(all_page + builtin, v.page) != -1)
 		           	->map((_, v) => v.name)
 		           	->join('|')
 		       	.. '~'
@@ -233,10 +235,18 @@ def ManCore(mod: string, shell: bool, args: list<string>): list<string>
 		delete(tmp)
 	else
 		for p in pages
-			ret = systemlist(exe .. p.page .. ' 2> /dev/null')
+			if p.page ==# 'bash-builtins' # bash-builtins の指定は、LANG に関係なく英語ページが使われる
+				ret = systemlist(exe .. 'cd 2> /dev/null')
+			else
+				ret = systemlist(exe .. p.page .. ' 2> /dev/null')
+			endif
 			if ret == []
 				err += systemlist(exe .. p.page)
 			else
+				if index(builtin, p.page) != -1 && ret[0] =~# "^\e\\[4mBASH_BUILTINS\e\\[24m(1)"
+					ret = ret[0 : 1] + ret[matchstrlist(ret, "^\\s\\{4,8}\e\\[1m" .. p.page .. '\>')[0].idx : ]
+					ret = ret[ : matchstrlist(ret, "^\\s\\{4,8}\e\\[1m\\(" .. p.page .. '\>\)\@!', )[0].idx - 1]
+				endif
 				out += ret
 			endif
 		endfor
