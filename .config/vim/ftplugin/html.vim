@@ -55,6 +55,7 @@ inoremap <expr><buffer>\\          &filetype ==# 'html' ? '&yen;'    : '&#177;'
 inoremap <expr><buffer>+-          &filetype ==# 'html' ? '&plusmn;' : '&#215;'
 inoremap <expr><buffer>==          &filetype ==# 'html' ? '&equiv;'  : '&#8801;'
 nnoremap <buffer>gf                <Cmd>call ftplugin#html#GF()<CR>
+nnoremap <buffer><C-]>             <Cmd>call ftplugin#html#GF()<CR>
 # }}}
 # }}}1
 

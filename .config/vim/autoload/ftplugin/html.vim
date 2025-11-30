@@ -45,9 +45,14 @@ export def GF(): void # path#id の記述があった時、path を開いた後 
 		if hash != 0
 			execute('TabEdit ' .. expand('%:p:h') .. '/' .. str[0 : hash - 1])
 		endif
-		str = '<[A-Za-z]\+[^>]*\sid=\(\zs' .. id .. '\>\|"\zs' .. id .. '"\|''\zs' .. id .. '''\)'
-		var pos: list<dict<any>> = matchbufline(bufnr('%'), str, 1, line('$'))
+		var pos: list<dict<any>> = matchbufline(bufnr('%'),
+			'<[A-Za-z]\+[^>]*\sid=\(\zs' .. id .. '\>\|"\zs' .. id .. '"\|''\zs' .. id .. '''\)', 1, line('$'))
 		if pos == []
+			if has('popupwin')
+				popup_notification('<id="' .. id .. '">が見つからない', {borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰']})
+			else
+				echohl WarningMsg | echomsg '<id="' .. id .. '">が見つからない' | echohl None
+			endif
 			return
 		endif
 		setpos('.', [0, pos[0].lnum, pos[0].byteidx, 0])
