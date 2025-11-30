@@ -57,10 +57,11 @@ function set_vimlsp#main() abort
 	" vim-lsp-settings は &filetype == sh に対応しているが bash は未対応、html には対応しているが xhtml には未対応
 	" let g:lsp_settings は packadd の前に指定する必要あり
 	let g:lsp_settings = #{
-				\ vscode-html-language-server: #{allowlist: ['html', 'xhtml']},
 				\ bash-language-server: #{allowlist: ['sh', 'bash']},
 				\ digestif: #{disabled: 1},
 				\ efm-langserver: #{allowlist: ['json', 'jsonc']},
+				\ vscode-html-language-server: #{disabled: 1},
+				\ vscode-css-language-server: #{disabled: 1},
 				\ pylsp: #{
 				\ 	workspace_config: #{
 				\ 		pylsp: #{
@@ -104,14 +105,14 @@ function set_vimlsp#main() abort
 		" 			\ foldexpr=lsp#ui#vim#folding#foldexpr()
 		" 			\ foldtext=lsp#ui#vim#folding#foldtext()
 		" ↓packadd を使う場合、これがないと開いた既存のウィンドウでバッファを開いた時に有効にならない
-		autocmd FileType awk,c,cpp,python,lua,vim,ruby,markdown,html,xhtml,css,sh,bash,go,conf,json if !s:check_run_lsp() | call lsp#activate() | endif
+		autocmd FileType awk,bash,sh,c,cpp,conf,go,json,lua,markdown,python,ruby,tex,vim, if !s:check_run_lsp() | call lsp#activate() | endif
 		autocmd BufAdd *
-					\ if index(['awk','c', 'cpp', 'python', 'lua', 'vim', 'ruby', 'tex', 'markdown', 'html', 'xhtml', 'css', 'sh', 'bash', 'go', 'conf', 'json'], &filetype) != -1
+					\ if index(['awk', 'bash', 'sh', 'c', 'cpp', 'conf', 'go', 'json', 'lua', 'markdown', 'python', 'ruby', 'tex', 'vim'], &filetype) != -1
 					\ | 	if !s:check_run_lsp() | call lsp#activate() | endif
 					\ | endif
-		autocmd FileType css if bufname() !~# '\.css$' | call lsp#stop_server('vscode-css-language-server') | endif
+		" autocmd FileType css if bufname() !~# '\.css$' | call lsp#stop_server('vscode-css-language-server') | endif
 		autocmd FileType awk if bufname() !~# '\.awk$' | call lsp#stop_server('awk-language-server') | endif
-		autocmd FileType sh,bash if bufname() !~# '\.\%(ba\)\=sh$' && bufname() !=# '.bashrc' && expand('%:p') !~# '/bash/'
+		autocmd FileType sh,bash if bufname() !~# '\.\%([bd]\=a\|t\=c\|[kz]\|fi\)\=sh$' && bufname() !=# '.bashrc' && expand('%:p') !~# '/bash/'
 					\ | 	call lsp#stop_server('bash-language-server')
 					\ | endif
 	augroup END
@@ -119,9 +120,9 @@ function set_vimlsp#main() abort
 endfunction
 
 def s:on_lsp_buffer_enabled(): void
-	if index(['html', 'xhtml', 'css'], &filetype) == -1
-		setlocal omnifunc=lsp#complete
-	endif
+	# if index(['html', 'xhtml', 'css'], &filetype) == -1
+	# 	setlocal omnifunc=lsp#complete
+	# endif
 	if exists('+tagfunc')
 		setlocal tagfunc=lsp#tagfunc
 	endif
@@ -131,7 +132,7 @@ def s:on_lsp_buffer_enabled(): void
 		nnoremap <buffer>[a        <Plug>(lsp-previous-diagnostic)
 		nnoremap <buffer>]a        <Plug>(lsp-next-diagnostic)
 		nnoremap <buffer><leader>p <Plug>(lsp-document-diagnostics)
-	elseif index(['css', 'c', 'cpp', 'html', 'xhtml'], &filetype) != -1
+	elseif index(['c', 'cpp'], &filetype) != -1
 		b:lsp_diagnostics_enabled = 0
 		# clang 以外で行末の;無しで次の行がエラー扱いになる
 		# TeX では lacheck, CSS では css-validator が標準入力で扱えない+efm-langserver を介すとファイルを保存のタイミングでしかチェックしない
@@ -151,7 +152,7 @@ def s:on_lsp_buffer_enabled(): void
 	# # テキスト整形
 	# nnoremap <leader>s          <Plug>(lsp-document-format)
 	# # Lint結果をQuickFixで表示
-	nnoremap <buffer><expr>K     &filetype ==# 'vim' ? '<Cmd>call ftplugin#vim#VimHelp()<CR>' : (&filetype =~# '\(ba\|c\|z\)\=sh' ? 'K' : '<Plug>(lsp-hover)')
+	nnoremap <buffer><expr>K     &filetype ==# 'vim' ? '<Cmd>call ftplugin#vim#VimHelp()<CR>' : (&filetype =~# '\%([bd]\=a\|t\=c\|[kz]\|fi\)\=sh' ? 'K' : '<Plug>(lsp-hover)')
 	nnoremap <buffer><expr><C-]> &filetype ==# 'vim' ? '<Cmd>call ftplugin#vim#Goto()<CR>' : '<Plug>(lsp-definition)'
 	# nnoremap <buffer>gi        <Plug>(lsp-implementation)
 	# nnoremap <buffer>gt        <Plug>(lsp-type-definition)
@@ -188,17 +189,17 @@ def s:check_run_lsp(): bool # 後から同じウィンドウに開いた時以�
 			if lsp#get_server_status(i.name) ==? 'running'
 				return true
 			endif
-			if &filetype ==? 'css' # HTML の style 属性では一度 HTML の LSP を止めないとうまく働いてくれない
-				# まだ不完全で、再度 style 属性に入り直さないとうまく動作しない
-				var j: dict<any>
-				for h in servers_name
-					j = lsp#get_server_info(h)
-					if index(j.allowlist, 'html') != -1
-						lsp#stop_server(j.name)
-						return false
-					endif
-				endfor
-			endif
+			# if &filetype ==? 'css' # HTML の style 属性では一度 HTML の LSP を止めないとうまく働いてくれない
+			# 	# まだ不完全で、再度 style 属性に入り直さないとうまく動作しない
+			# 	var j: dict<any>
+			# 	for h in servers_name
+			# 		j = lsp#get_server_info(h)
+			# 		if index(j.allowlist, 'html') != -1
+			# 			lsp#stop_server(j.name)
+			# 			return false
+			# 		endif
+			# 	endfor
+			# endif
 			return false
 		endif
 		endfor

@@ -340,7 +340,7 @@ augroup END
 # https://github.com/prabirshrestha/vim-lsp {{{2
 augroup loadvimlsp
 	autocmd!
-	autocmd FileType awk,c,cpp,python,vim,lua,ruby,yaml,markdown,html,xhtml,css,sh,bash,go,conf,json set_vimlsp#main()
+	autocmd FileType awk,c,cpp,python,vim,lua,ruby,yaml,markdown,sh,bash,go,conf,json set_vimlsp#main()
 		| autocmd_delete([{group: 'loadvimlsp'}])
 augroup END
 
