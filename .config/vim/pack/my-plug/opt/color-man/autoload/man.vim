@@ -252,7 +252,7 @@ def ManCore(mod: string, shell: bool, args: list<string>): list<string>
 	endif
 	if out != []
 		execute 'silent ' .. open .. escape(name, '|')
-		setlocal buftype=nofile noswapfile
+		setlocal buftype=nofile noswapfile sidescroll=1
 		setlocal filetype=man
 		setlocal modifiable
 		append(0, out)
@@ -279,15 +279,10 @@ export def Jump(): void
 			break
 		endif
 	endwhile
-	if s !~# '-' && system('man ' .. s .. ' 2> /dev/null') != ''
-		ColorMan('', s)
+	if s !~# '-' && system('man "' .. s .. '" 2> /dev/null') != ''
+		ManCore('', false, [s])
 	else
 		search('\C^\s*\%(\e\[1m\%(\w\+\|\%(-\w\|--[A-Za-z_-]\+\)\%(\%([ =]\|\e\[\d\+m\)\+\%([][,.A-Za-z_-]\|\e\[\d\+m\)\+\)\=\)\%(\e\[\d\+m\)\=, *\)*\e\[1m\zs' .. s, 'csw')
-		# c = line('.')
-		# b = search('\C^\s*\%(\e\[1m\%(\w\+\|\%(-\w\|--[A-Za-z_-]\+\)\%(\%([ =]\|\e\[\d\+m\)\+\%([][,.A-Za-z_-]\|\e\[\d\+m\)\+\)\=\)\%(\e\[\d\+m\)\=, *\)*\e\[1m\zs' .. s, 'csw')
-		# if b == 0 # || b == c
-		# 	ColorMan('', s)
-		# endif
 	endif
 enddef
 
