@@ -211,7 +211,7 @@ def ManCore(mod: string, shell: bool, args: list<string>): list<string>
 	[opts, pages] = GetOptPages()
 	name = GetName(opts, pages)
 	if shell
-		open = 'silent file! '
+		open = 'file! '
 	else
 		open = OpenWay(name)
 		if open ==# '' # 同じ page を既に開いている
@@ -251,7 +251,7 @@ def ManCore(mod: string, shell: bool, args: list<string>): list<string>
 		endfor
 	endif
 	if out != []
-		execute open .. escape(name, '|')
+		execute 'silent ' .. open .. escape(name, '|')
 		setlocal buftype=nofile noswapfile
 		setlocal filetype=man
 		setlocal modifiable
