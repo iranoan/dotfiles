@@ -29,6 +29,7 @@ syntax region manHeader start=/^\e\[4m[A-Z0-9_:.+@-]\+\e\[24m(\d)/ end=/\e\[4m[A
 syntax match manFooter /^[^\s\e].\+\e\[4m[A-Z0-9_:.+@-]\+\e\[24m(\d)$/ contains=manConceal
 
 syntax match manURL '\(\<\(\(\(https\=\|ftp\|gopher\)://\|\(mailto\|file\|news\):\)[^'' \t<>"]\+\|\(www\|web\|w3\)[a-z0-9_-]*\.[a-z0-9._-]\+\.[!#-&*-;=?-Z\\^-z|~]\+\)[a-z0-9/]\)' contains=@NoSpell
+syntax match manEmail '\v[_=a-z\./+0-9-]+\@[a-z0-9._-]+\a{2}' contains=@NoSpell
 
 highlight! default link manBold Special
 highlight! default link manUnderline Function
@@ -37,7 +38,9 @@ highlight! default link manUnderline Function
 highlight! default link manNone Normal
 hlset(
 	hlget('Title')->map((_, v) => v->extend({name: 'manSection', cterm: {bold: true, underline: true}, gui: {bold: true, underline: true}}))
-	+ hlget('Directory')->map((_, v) => v->extend({name: 'manURL', cterm: {underline: true}, gui: {underline: true}})))
+	+ hlget('Directory')->map((_, v) => v->extend({name: 'manURL', cterm: {underline: true}, gui: {underline: true}}))
+	+ hlget('Constant')->map((_, v) => v->extend({name: 'manEmail', cterm: {underline: true}, gui: {underline: true}}))
+)
 highlight! default link manHeader Statusline
 highlight! default link manFooter PreProc
 

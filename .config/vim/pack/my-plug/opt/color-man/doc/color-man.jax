@@ -30,11 +30,12 @@ Vim でマニュアルページを表示する |ft-man-plugin| を置き換え�
 <を使ったときに、太字・斜体や下線表示になる部分をカラー表示させる
 
 標準では次と組み合わせにする
-	太字:             manBold     →|hl-Special|
+	太字:             manBold     →Special (→|group-name|)
 	     の内章題     manSection  →|hl-Title|+bold+underline
-	斜体・下線:       manUnderline→|hl-Function|
+	斜体・下線:       manUnderline→Function (→|group-name|)
 	     の内ページ名 manHeader   →|hl-Statusline|
 	URL:              manURL      →|hl-Directory|+underline
+	メールアドレス:   manEmail    →Constant (→|group-name|)+underline
 
 ==============================================================================
                                                              *color-man-require*
