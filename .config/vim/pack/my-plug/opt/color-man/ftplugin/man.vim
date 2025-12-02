@@ -1,6 +1,11 @@
 vim9script
 scriptencoding utf-8
 
+if exists('b:did_ftplugin')
+	finish
+endif
+b:did_ftplugin = 1
+
 setlocal nonumber norelativenumber
 setlocal foldenable
 setlocal nolist
@@ -11,6 +16,7 @@ setlocal nobuflisted
 setlocal conceallevel=2 concealcursor=nvic
 setlocal foldmethod=expr foldexpr=man#Fold() foldtext=man#FoldText()
 setlocal foldlevelstart=99 foldcolumn=1
+setlocal iskeyword=48-57,_,a-z,A-Z,-,+,:,.,@-@
 
 if get(g:, 'no_man_maps', 0) != 1
 	nnoremap <buffer>q       <Cmd>quit!<CR>
@@ -25,9 +31,9 @@ endif
 
 # Undo {{{1
 if exists('b:undo_ftplugin')
-	b:undo_ftplugin ..= ' | mapclear <buffer> | setlocal bufhidden< buflisted< buftype< concealcursor< conceallevel< filetype< foldcolumn< foldenable< foldexpr< foldmethod< foldtext< list< modifiable< number< relativenumber< spell< swapfile< wrap<'
+	b:undo_ftplugin ..= ' | mapclear <buffer> | setlocal bufhidden< buflisted< buftype< concealcursor< conceallevel< filetype< foldcolumn< foldenable< foldexpr< foldmethod< foldtext< iskeyword< list< modifiable< number< relativenumber< spell< swapfile< wrap<'
 
 else
-	b:undo_ftplugin = 'mapclear <buffer> | setlocal bufhidden< buflisted< buftype< concealcursor< conceallevel< filetype< foldcolumn< foldenable< foldexpr< foldmethod< foldtext< list< modifiable< number< relativenumber< spell< swapfile< wrap<'
+	b:undo_ftplugin = 'mapclear <buffer> | setlocal bufhidden< buflisted< buftype< concealcursor< conceallevel< filetype< foldcolumn< foldenable< foldexpr< foldmethod< foldtext< iskeyword< list< modifiable< number< relativenumber< spell< swapfile< wrap<'
 endif
 
