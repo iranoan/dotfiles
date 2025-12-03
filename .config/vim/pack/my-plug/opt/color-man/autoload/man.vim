@@ -279,7 +279,7 @@ export def Jump(): void
 			break
 		endif
 	endwhile
-	if s !~# '-' && system('man "' .. s .. '" 2> /dev/null') != ''
+	if s !~# '^-' && system('man "' .. s .. '" 2> /dev/null') != ''
 		ManCore('', false, [s])
 	else
 		search('\C^\s*\%(\e\[1m\%(\w\+\|\%(-\w\|--[A-Za-z_-]\+\)\%(\%([ =]\|\e\[\d\+m\)\+\%([][,.A-Za-z_-]\|\e\[\d\+m\)\+\)\=\)\%(\e\[\d\+m\)\=, *\)*\e\[1m\zs' .. s, 'csw')
