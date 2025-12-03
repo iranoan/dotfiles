@@ -228,6 +228,10 @@ augroup SetPackOpt
 	# 印刷 $MYVIMDIR/pack/my-plug/opt/print/ {{{2
 	autocmd CmdUndefined PrintBuffer ++once packadd print
 
+	# notmuch-python-Vim $MYVIMDIR/pack/my-plug/opt/notmuch-py-vim/ {{{2
+	autocmd CmdUndefined Notmuch ++once set_notmuchpy#main()
+	nnoremap <silent><Leader>m <Cmd>Notmuch start<CR>
+
 	# vim のヘルプ・ファイルから Readme.md を作成する https://github.com/LeafCage/vimhelpgenerator {{{2
 	# 実際の読み込みは $MYVIMDIR/ftplugin/vim.vim
 
@@ -469,9 +473,6 @@ nnoremap <Leader>ft <Cmd>call set_fzf#tabs()<CR>
 vnoremap <Leader>ft <Cmd>call set_fzf#tabs()<CR>
 nnoremap <Leader>fb <Cmd>call set_fzf#tabs()<CR>
 nnoremap <Leader>fw <Cmd>call set_fzf#tabs()<CR>
-
-# notmuch-python-Vim $MYVIMDIR/pack/my-plug/opt/notmuch-py-vim/ {{{2
-nnoremap <silent><Leader>m <Cmd>call set_notmuchpy#main()<CR>
 
 # ソースの実行結果を別バッファに表示 https://github.com/thinca/vim-quickrun {{{2
 nnoremap <silent><Leader>qr  <Cmd>call set_quickrun#main()<CR>
