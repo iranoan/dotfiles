@@ -28,8 +28,8 @@ syntax region manSection    start=/^\s\{,4}\zs\e\[1m/ end=/\ze\e\[\(22\|0\)m$/ o
 syntax region manHeader start=/^\e\[4m[A-Z0-9_:.+@-]\+\e\[24m(\d)/ end=/\e\[4m[A-Z0-9_:.+@-]\+\e\[24m(\d)/ oneline contains=manConceal
 syntax match manFooter /^[^\s\e].\+\e\[4m[A-Z0-9_:.+@-]\+\e\[24m(\d)$/ contains=manConceal
 
-syntax match manURL '\(\<\(\(\(https\=\|ftp\|gopher\)://\|\(mailto\|file\|news\):\)[^'' \t<>"]\+\|\(www\|web\|w3\)[a-z0-9_-]*\.[a-z0-9._-]\+\.[!#-&*-;=?-Z\\^-z|~]\+\)[a-z0-9/]\)' contains=@NoSpell
-syntax match manEmail '\v[_=a-z\./+0-9-]+\@[a-z0-9._-]+\a{2}' contains=@NoSpell
+syntax match manURL '\%(\<\%(\%(\%(https\=\|ftp\|gopher\)://\|\%(mailto\|file\|news\):\)[^'' \t<>"]\+\)[A-Za-z0-9/]\)' contains=@NoSpell
+syntax match manEmail '[_=A-Za-z./+0-9-]\+@[A-Za-z0-9._-]\+\.\a\{2,3}' contains=@NoSpell
 
 highlight! default link manBold Special
 highlight! default link manUnderline Function

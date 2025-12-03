@@ -270,11 +270,31 @@ export def Jump(): void
 	var e: number
 	var c: number = col('.')
 	while true
-		[s, b, e] = matchstrpos(l, '\%(\e\[\d\+m\)*\([-A-Za-z0-9_]\+\)\s*\%(\e\[\d\+m\)*\%((\(\e\[\d\+m\)*\d\(\e\[\d\+m\)*)\|\.\(\e\[\d\+m\)*\d\(\e\[\d\+m\)*\)*', e)
+		[s, b, e] = matchstrpos(l, '\%(\%(\<\%(\%(\%(https\=\|ftp\|gopher\)://\|\%(mailto\|file\|news\):\)[^'' \t<>"]\+\)[A-Za-z0-9/]\)\|[_=A-Za-z./+0-9-]\+@[A-Za-z0-9._-]\+\.\a\{2,3}\|\%(\e\[\d\+m\)*\%([-A-Za-z0-9_]\+\)\s*\%(\e\[\d\+m\)*\%((\%(\e\[\d\+m\)*\d\%(\e\[\d\+m\)*)\|\.\%(\e\[\d\+m\)*\d\%(\e\[\d\+m\)*\)*\)', e)
 		e -= len(matchstr(s, '\e\[\dm\(\e\[\d\+m\)*')) # 末尾に \e[\dm (\d:1桁) が有れば、次のキーワードの始まり部分
 		if b == -1 || b > c
 			break
 		elseif e >= c # && b <= c
+			if s =~# '^\%(\%(\%(\%(https\=\|ftp\|gopher\)://\|\%(mailto\|file\|news\):\)[^'' \t<>"]\+\)[A-Za-z0-9/]\)'
+				if has('unix')
+					system('xdg-open "' .. s .. '" &')
+				elseif has('win32') || has('win32unix')
+					system('start "' .. s .. '"')
+				elseif has('mac')
+					system('open "' .. s .. '" &')
+				endif
+				return
+			endif
+			if s =~# '@'
+				if has('unix')
+					system('xdg-open "mailto:' .. s .. '" &')
+				elseif has('win32') || has('win32unix')
+					system('start "mailto:' .. s .. '"')
+				elseif has('mac')
+					system('open "mailto:' .. s .. '" &')
+				endif
+				return
+			endif
 			s = substitute(s, '\e\[\d\+m', '', 'g')->substitute('\s\+$', '', '')
 			break
 		endif
