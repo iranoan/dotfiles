@@ -14,9 +14,9 @@ function set_altercmd#main()
 	AlterCommand windo      silent\ windo
 	AlterCommand argdo      silent\ argdo
 	AlterCommand cdo        silent\ cdo
-	AlterCommand cfdo       silent\ cfdo
+	AlterCommand cfd[o]     silent\ cfdo
 	AlterCommand ld[o]      silent\ ldo
-	AlterCommand lfdo       silent\ lfdo
+	AlterCommand lfd[o]     silent\ lfdo
 	AlterCommand ter[minal] topleft\ terminal
 	AlterCommand man        Man
 	AlterCommand p[rint]    PrintBuffer
