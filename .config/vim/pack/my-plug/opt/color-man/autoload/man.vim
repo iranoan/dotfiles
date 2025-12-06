@@ -221,6 +221,7 @@ def ManCore(mod: string, shell: bool, args: list<string>): list<string>
 
 	if getbufinfo()->filter((_, v) => v.name ==# name) != [] # 既存のバッファにページがある
 		execute 'silent ' .. open .. ' | buffer ' .. escape(name, '|')
+		return []
 	else
 		width = (&columns / (open =~# '\<\(vert\%[ical]\|vsplit\)\>' ? 2 : 1) - ( &number ? 3 : 0 ) - &foldcolumn - ( &signcolumn !=# 'no' ? 1 : 0 ) - 2)
 		max_width = get(g:, 'ft_man_max_width', 100)
@@ -253,18 +254,18 @@ def ManCore(mod: string, shell: bool, args: list<string>): list<string>
 				endif
 			endfor
 		endif
+		if out != []
+			execute 'silent ' .. open .. escape(name, '|')
+			setlocal buftype=nofile noswapfile sidescroll=1
+			setlocal filetype=man
+			setlocal modifiable
+			append(0, out)
+			keepjumps :$delete
+			setpos('.', [0, 1, 1, 0])
+			setlocal nomodifiable
+		endif
+		return err
 	endif
-	if out != []
-		execute 'silent ' .. open .. escape(name, '|')
-		setlocal buftype=nofile noswapfile sidescroll=1
-		setlocal filetype=man
-		setlocal modifiable
-		append(0, out)
-		keepjumps :$delete
-		setpos('.', [0, 1, 1, 0])
-		setlocal nomodifiable
-	endif
-	return err
 enddef
 
 export def Jump(): void
