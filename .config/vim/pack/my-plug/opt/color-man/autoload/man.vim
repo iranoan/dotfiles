@@ -55,7 +55,7 @@ def ManCore(mod: string, shell: bool, args: list<string>): list<string>
 				endif
 			endfor
 		endif
-		for W in windows # &filetype == 'man' のウィンドウが有るか?
+		for W in windows # カレント・タブページに &filetype == 'man' のウィンドウが有るか?
 			bufnr = winbufnr(W)
 			if getbufvar(bufnr, '&filetype') ==# 'man' # 見つかった
 				for w in getbufinfo(bufnr)[0].windows
@@ -219,36 +219,40 @@ def ManCore(mod: string, shell: bool, args: list<string>): list<string>
 		endif
 	endif
 
-	width = (&columns / (open =~# '\<\(vert\%[ical]\|vsplit\)\>' ? 2 : 1) - ( &number ? 3 : 0 ) - &foldcolumn - ( &signcolumn !=# 'no' ? 1 : 0 ) - 2)
-	max_width = get(g:, 'ft_man_max_width', 100)
-	if max_width > 0 && width > max_width
-		width = max_width
-	endif
-	exe = 'MANWIDTH=' .. width .. ' MANPAGER=cat MAN_KEEP_FORMATTING=1 man ' .. join(opts) .. ' '
-	if index(opts, '-k') != -1 || index(opts, '--apropos') != -1
-		|| index(opts, '-f') != -1 || index(opts, '--whatis') != -1
-		|| index(opts, '-l') != -1 || index(opts, '--local-file') != -1
-		var tmp: string = tempname()
-		out = systemlist(exe .. copy(pages)->map((_, v) => v.page)->join() .. ' 2> ' .. tmp)
-		err = readfile(tmp)
-		delete(tmp)
+	if getbufinfo()->filter((_, v) => v.name ==# name) != [] # 既存のバッファにページがある
+		execute 'silent ' .. open .. ' | buffer ' .. escape(name, '|')
 	else
-		for p in pages
-			if p.page ==# 'bash-builtins' # bash-builtins の指定は、LANG に関係なく英語ページが使われる
-				ret = systemlist(exe .. 'cd 2> /dev/null')
-			else
-				ret = systemlist(exe .. p.page .. ' 2> /dev/null')
-			endif
-			if ret == []
-				err += systemlist(exe .. p.page)
-			else
-				if index(builtin, p.page) != -1 && ret[0] =~# "^\e\\[4mBASH_BUILTINS\e\\[24m(1)"
-					ret = ret[0 : 1] + ret[matchstrlist(ret, "^\\s\\{4,8}\e\\[1m" .. p.page .. '\>')[0].idx : ]
-					ret = ret[ : matchstrlist(ret, "^\\s\\{4,8}\e\\[1m\\(" .. p.page .. '\>\)\@!', )[0].idx - 1]
+		width = (&columns / (open =~# '\<\(vert\%[ical]\|vsplit\)\>' ? 2 : 1) - ( &number ? 3 : 0 ) - &foldcolumn - ( &signcolumn !=# 'no' ? 1 : 0 ) - 2)
+		max_width = get(g:, 'ft_man_max_width', 100)
+		if max_width > 0 && width > max_width
+			width = max_width
+		endif
+		exe = 'MANWIDTH=' .. width .. ' MANPAGER=cat MAN_KEEP_FORMATTING=1 man ' .. join(opts) .. ' '
+		if index(opts, '-k') != -1 || index(opts, '--apropos') != -1
+				|| index(opts, '-f') != -1 || index(opts, '--whatis') != -1
+				|| index(opts, '-l') != -1 || index(opts, '--local-file') != -1
+			var tmp: string = tempname()
+			out = systemlist(exe .. copy(pages)->map((_, v) => v.page)->join() .. ' 2> ' .. tmp)
+			err = readfile(tmp)
+			delete(tmp)
+		else
+			for p in pages
+				if p.page ==# 'bash-builtins' # bash-builtins の指定は、LANG に関係なく英語ページが使われる
+					ret = systemlist(exe .. 'cd 2> /dev/null')
+				else
+					ret = systemlist(exe .. p.page .. ' 2> /dev/null')
 				endif
-				out += ret
-			endif
-		endfor
+				if ret == []
+					err += systemlist(exe .. p.page)
+				else
+					if index(builtin, p.page) != -1 && ret[0] =~# "^\e\\[4mBASH_BUILTINS\e\\[24m(1)"
+						ret = ret[0 : 1] + ret[matchstrlist(ret, "^\\s\\{4,8}\e\\[1m" .. p.page .. '\>')[0].idx : ]
+						ret = ret[ : matchstrlist(ret, "^\\s\\{4,8}\e\\[1m\\(" .. p.page .. '\>\)\@!', )[0].idx - 1]
+					endif
+					out += ret
+				endif
+			endfor
+		endif
 	endif
 	if out != []
 		execute 'silent ' .. open .. escape(name, '|')
