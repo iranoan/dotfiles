@@ -275,8 +275,8 @@ export def Jump(): void
 	var e: number
 	var c: number = col('.')
 	while true
-		[s, b, e] = matchstrpos(l, '\%(\%(\<\%(\%(\%(https\=\|ftp\|gopher\)://\|\%(mailto\|file\|news\):\)[^'' \t<>"]\+\)[A-Za-z0-9/]\)\|[_=A-Za-z./+0-9-]\+@[A-Za-z0-9._-]\+\.\a\{2,3}\|\%(\e\[\d\+m\)*\%([-A-Za-z0-9_]\+\)\s*\%(\e\[\d\+m\)*\%((\%(\e\[\d\+m\)*\d\%(\e\[\d\+m\)*)\|\.\%(\e\[\d\+m\)*\d\%(\e\[\d\+m\)*\)*\)', e)
-		e -= len(matchstr(s, '\e\[\dm\(\e\[\d\+m\)*')) # 末尾に \e[\dm (\d:1桁) が有れば、次のキーワードの始まり部分
+		[s, b, e] = matchstrpos(l, '\%(\%(\<\%(\%(\%(https\=\|ftp\|gopher\)://\|\%(mailto\|file\|news\):\)[^'' \t<>"]\+\)[A-Za-z0-9/]\)\|[_=A-Za-z./+0-9-]\+@[A-Za-z0-9._-]\+\.\a\{2,3}\|\%(\e\[\d\+m\)*\%([^ ]\+\)\s*\%(\e\[\d\+m\)*\%((\%(\e\[\d\+m\)*\d\%(\e\[\d\+m\)*)\|\.\%(\e\[\d\+m\)*\d\%(\e\[\d\+m\)*\)*\)', e)
+		e -= len(matchstr(s, '\e\[\d\+m\(\e\[\d\+m\)*$')) # 末尾に \e[\dm (\d:1桁) が有れば、次のキーワードの始まり部分
 		if b == -1 || b > c
 			break
 		elseif e >= c # && b <= c
@@ -300,7 +300,7 @@ export def Jump(): void
 				endif
 				return
 			endif
-			s = substitute(s, '\e\[\d\+m', '', 'g')->substitute('\s\+$', '', '')
+			s = substitute(s, '\e\[\d\+m', '', 'g')->substitute('\s\+$', '', '')->substitute("'", '', 'g')
 			break
 		endif
 	endwhile
@@ -312,7 +312,7 @@ export def Jump(): void
 enddef
 
 export def Tag(f: bool): void
-	search('\C\e\[[14]m\%(\e\[\d\+m\)*\zs[/_.A-Za-z0-9-]', 'w' .. (f ? 'b' : 'cz'))
+	search('\C\e\[[14]m\%(\e\[\d\+m\)*\zs.', 'w' .. (f ? 'b' : 'cz'))
 enddef
 
 export def SearchWord(f: bool): void # ANCI escape code も含める形でカーソル位置の単語を見かけ上の表記で単語検索する
