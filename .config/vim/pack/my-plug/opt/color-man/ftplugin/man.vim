@@ -19,7 +19,7 @@ setlocal foldlevelstart=99 foldcolumn=1
 setlocal iskeyword=48-57,_,a-z,A-Z,-,+,:,.,@-@
 
 if get(g:, 'no_man_maps', 0) != 1
-	nnoremap <buffer>q       <Cmd>quit!<CR>
+	nnoremap <buffer>q       <Cmd>quit<CR>
 	nnoremap <buffer>o       <Cmd>call man#Jump()<CR>
 	nnoremap <buffer>K       <Cmd>call man#Jump()<CR>
 	nnoremap <buffer><C-]>   <Cmd>call man#Jump()<CR>
