@@ -191,7 +191,7 @@ def ManCore(mod: string, shell: bool, args: list<string>): list<string>
 
 		return $HOME .. '/' .. (o == [] ? '' : join(o, '*') .. '*')
 		       	.. copy(s)
-		           	->filter((_, v) => index(all_page + builtin, v.page) != -1)
+		           	->filter((_, v) => index(all_page + builtin, substitute(v.page, '\.\d\+$', '', '')) != -1)
 		           	->map((_, v) => v.name)
 		           	->join('|')
 		       	.. '~'
