@@ -38,6 +38,8 @@ install.sh
   * [.ctags](.ctags)
 * efm-langserver
   * [.config/efm-langserver/](.config/efm-langserver/)
+* eslint
+  * [eslint.config.js](eslint.config.js)
 * FbTerm
   * [.fbtermrc](.fbtermrc)
 * fd (fdfind)
