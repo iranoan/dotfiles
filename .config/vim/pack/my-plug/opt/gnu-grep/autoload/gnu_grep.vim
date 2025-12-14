@@ -175,9 +175,9 @@ export def GrepComp(ArgLead: string, CmdLine: string, CursorPos: number): list<s
 	enddef
 	var cmd_space_end: bool = CmdLine[ : CursorPos - 1] =~# '\s$'
 	var args_all: list<string> = SplitArg(substitute(CmdLine, '[\n\r]\+', ' ', 'g')
-		->substitute('^Grep\s\+', '', '')) # コマンドライン全体の引数
+		->substitute('^L\=Grep\%(add\)\=\s\+', '', '')) # コマンドライン全体の引数
 	var args_cursor: list<string> = SplitArg(substitute(CmdLine[ : CursorPos - 1], '[\n\r]\+', ' ', 'g')
-		->substitute('^Grep\s\+', '', '')) # コマンドラインのカーソルまでの引数
+		->substitute('^L\=Grep\%(add\)\=\s\+', '', '')) # コマンドラインのカーソルまでの引数
 	var i: number
 	var opt: list<string> = [
 		'-A', '--after-context=',     '-B',         '--before-context=',
