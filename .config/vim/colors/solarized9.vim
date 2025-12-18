@@ -59,8 +59,11 @@ if &background ==# 'dark'
 	hi ALEInfoSignLineNr term=NONE cterm=NONE gui=NONE ctermfg=0 guifg=#073642 ctermbg=6 guibg=#2aa198 ctermul=NONE guisp=NONE
 	hi ALEWarningSign term=NONE cterm=bold gui=bold ctermfg=3 guifg=#b58900 ctermbg=0 guibg=#073642 ctermul=NONE guisp=NONE
 	hi ALEWarningSignLineNr term=NONE cterm=NONE gui=NONE ctermfg=0 guifg=#073642 ctermbg=3 guibg=#b58900 ctermul=NONE guisp=NONE
+	hi GitGutterAdd term=bold cterm=bold gui=bold ctermfg=2 guifg=#859900 ctermbg=0 guibg=#073642 ctermul=NONE guisp=NONE
 	hi GitGutterAddInvisible term=NONE cterm=NONE gui=NONE ctermfg=0 guifg=#073642 ctermbg=0 guibg=#073642 ctermul=NONE guisp=NONE
+	hi GitGutterChange term=bold cterm=bold gui=bold ctermfg=3 guifg=#b58900 ctermbg=0 guibg=#073642 ctermul=NONE guisp=NONE
 	hi GitGutterChangeInvisible term=NONE cterm=NONE gui=NONE ctermfg=0 guifg=#073642 ctermbg=0 guibg=#073642 ctermul=NONE guisp=NONE
+	hi GitGutterDelete term=bold cterm=bold gui=bold ctermfg=1 guifg=#dc322f ctermbg=0 guibg=#073642 ctermul=NONE guisp=NONE
 	hi GitGutterDeleteInvisible term=NONE cterm=NONE gui=NONE ctermfg=0 guifg=#073642 ctermbg=0 guibg=#073642 ctermul=NONE guisp=NONE
 	hi GlyphPalette0 term=NONE cterm=NONE gui=NONE ctermfg=0 guifg=#073642 ctermbg=NONE guibg=NONE ctermul=NONE guisp=NONE
 	hi GlyphPalette15 term=NONE cterm=NONE gui=NONE ctermfg=15 guifg=#fdf6e3 ctermbg=NONE guibg=NONE ctermul=NONE guisp=NONE
@@ -119,8 +122,11 @@ else # light
 	hi ALEInfoSignLineNr term=NONE cterm=NONE gui=NONE ctermfg=15 guifg=#fdf6e3 ctermbg=6 guibg=#2aa198 ctermul=NONE guisp=NONE
 	hi ALEWarningSign term=NONE cterm=bold gui=bold ctermfg=3 guifg=#b58900 ctermbg=15 guibg=#fdf6e3 ctermul=NONE guisp=NONE
 	hi ALEWarningSignLineNr term=NONE cterm=NONE gui=NONE ctermfg=15 guifg=#fdf6e3 ctermbg=3 guibg=#b58900 ctermul=NONE guisp=NONE
+	hi GitGutterAdd term=bold cterm=bold gui=bold ctermfg=2 guifg=#859900 ctermbg=7 guibg=#eee8d5 ctermul=NONE guisp=NONE
 	hi GitGutterAddInvisible term=NONE cterm=NONE gui=NONE ctermfg=15 guifg=#fdf6e3 ctermbg=15 guibg=#fdf6e3 ctermul=NONE guisp=NONE
+	hi GitGutterChange term=bold cterm=bold gui=bold ctermfg=3 guifg=#b58900 ctermbg=7 guibg=#eee8d5 ctermul=NONE guisp=NONE
 	hi GitGutterChangeInvisible term=NONE cterm=NONE gui=NONE ctermfg=15 guifg=#fdf6e3 ctermbg=15 guibg=#fdf6e3 ctermul=NONE guisp=NONE
+	hi GitGutterDelete term=bold cterm=bold gui=bold ctermfg=1 guifg=#dc322f ctermbg=7 guibg=#eee8d5 ctermul=NONE guisp=NONE
 	hi GitGutterDeleteInvisible term=NONE cterm=NONE gui=NONE ctermfg=15 guifg=#fdf6e3 ctermbg=15 guibg=#fdf6e3 ctermul=NONE guisp=NONE
 	hi GlyphPalette0 term=NONE cterm=NONE gui=NONE ctermfg=15 guifg=#fdf6e3 ctermbg=NONE guibg=NONE ctermul=NONE guisp=NONE
 	hi GlyphPalette15 term=NONE cterm=NONE gui=NONE ctermfg=0 guifg=#073642 ctermbg=NONE guibg=NONE ctermul=NONE guisp=NONE
@@ -185,10 +191,7 @@ hi gitcommitselectedtype term=NONE cterm=NONE gui=NONE ctermfg=2 guifg=#859900 c
 hi gitcommitUnmerged term=NONE cterm=bold gui=bold ctermfg=2 guifg=#859900 ctermbg=NONE guibg=NONE ctermul=NONE guisp=NONE
 hi gitcommitUnmergedFile term=NONE cterm=bold gui=bold ctermfg=3 guifg=#b58900 ctermbg=NONE guibg=NONE ctermul=NONE guisp=NONE
 hi gitcommitUntrackedFile term=NONE cterm=bold gui=bold ctermfg=6 guifg=#2aa198 ctermbg=NONE guibg=NONE ctermul=NONE guisp=NONE
-hi GitGutterAdd term=bold cterm=bold gui=bold ctermfg=2 guifg=#859900 ctermbg=NONE guibg=NONE ctermul=NONE guisp=NONE
 hi GitGutterAddIntraLine term=NONE cterm=reverse gui=reverse ctermfg=NONE guifg=NONE ctermbg=NONE guibg=NONE ctermul=NONE guisp=NONE
-hi GitGutterChange term=bold cterm=bold gui=bold ctermfg=3 guifg=#b58900 ctermbg=NONE guibg=NONE ctermul=NONE guisp=NONE
-hi GitGutterDelete term=bold cterm=bold gui=bold ctermfg=1 guifg=#dc322f ctermbg=NONE guibg=NONE ctermul=NONE guisp=NONE
 hi GitGutterDeleteIntraLine term=NONE cterm=reverse gui=reverse ctermfg=NONE guifg=NONE ctermbg=NONE guibg=NONE ctermul=NONE guisp=NONE
 hi GlyphPalette1 term=NONE cterm=NONE gui=NONE ctermfg=1 guifg=#dc322f ctermbg=NONE guibg=NONE ctermul=NONE guisp=NONE
 hi GlyphPalette10 term=NONE cterm=NONE gui=NONE ctermfg=10 guifg=#586e75 ctermbg=NONE guibg=NONE ctermul=NONE guisp=NONE
