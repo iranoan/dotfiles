@@ -1,0 +1,5 @@
+vim9script
+scriptencoding utf-8
+
+# conky setting keyword
+syn keyword ConkyrcSetting console_bar_fill console_bar_unfill console_graph_ticks default_bar_height default_bar_width default_gauge_height default_gauge_width default_graph_height default_graph_width detect_battery disable_auto_reload draw_blended fontN forced_redraw github_token graph_gradient_mode hddtemp_host hddtemp_port http_port http_refresh lowercase lua_mouse_hook minimum_height minimum_width mysql_db mysql_host mysql_password mysql_port mysql_user out_to_http out_to_wayland store_graph_data_explicitly templateN top_name_verbose units_spacer xinerama_head
