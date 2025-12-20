@@ -127,7 +127,7 @@ def s:on_lsp_buffer_enabled(): void
 		setlocal tagfunc=lsp#tagfunc
 	endif
 	# ALE を優先させるか両方使うか {{{
-	if index(['vim', 'sh', 'bash', 'python', 'json'], &filetype) != -1
+	if index(['vim', 'sh', 'bash', 'python', 'json', 'lua'], &filetype) != -1
 		b:ale_enabled = 0 # ALE 不使用
 		nnoremap <buffer>[a        <Plug>(lsp-previous-diagnostic)
 		nnoremap <buffer>]a        <Plug>(lsp-next-diagnostic)
