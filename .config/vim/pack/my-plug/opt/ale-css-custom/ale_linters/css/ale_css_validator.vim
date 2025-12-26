@@ -1,30 +1,12 @@
 scriptencoding utf-8
 
-function! s:css_validator() abort
-	let jar = get(g:, 'als_css_validator_use_global', expand('$HOME/bin/jar'))
-	if jar !~# '[/\\]$'
-		let jar ..= '/'
-	endif
-	return jar .. 'css-validator.jar:'
-				\ .. jar .. 'tagsoup-1.2.1.jar:'
-				\ .. jar .. 'xercesImpl.jar:'
-				\ .. jar .. 'commons-collections-3.2.1.jar:'
-				\ .. jar .. 'commons-lang-2.6.jar:'
-				\ .. jar .. 'jigsaw.jar:'
-				\ .. jar .. 'velocity-1.7.jar:'
-				\ .. jar .. 'xml-apis.jar'
-endfunction
-
 call ale#linter#Define('css', #{
 			\ name: 'css-validator',
 			\ output_stream: 'stdout',
 			\ executable: exepath('java'),
-			\ command: '%e -jar "' ..  get(g:, 'als_css_validator_use_global', '$HOME/bin/jar/css-validator.jar') .. '" --output=json --profile=css3 --lang=ja --vextwarning=true file:%t',
+			\ command: '%e -jar "' ..  get(g:, 'als_css_validator_use_global', '$HOME/bin/jar/css-validator.jar') .. '" --output=json --profile=css3 --lang=' .. v:lang[0 : 1] .. ' --vextwarning=true file:%t',
 			\ callback: 'ale_linters#css#ale_css_validator#Handle',
 			\ })
-			" \ command: '%e -classpath "' .. s:css_validator() .. '" --output=json --profile=css3 --lang=ja --vextwarning=true file:%t',
-
-delfunction s:css_validator
 
 def ale_linters#css#ale_css_validator#Handle(b: number, lines: list<string>): list<dict<any>>
 	var output: list<dict<any>>
@@ -45,6 +27,9 @@ def ale_linters#css#ale_css_validator#Handle(b: number, lines: list<string>): li
 
 	for [k, v] in items({errors: 'E', warnings: 'W'})
 		for i in get(ret, k, [])
+			if has_key(i, 'type') && i.type ==# 'unsupported-import'
+				continue
+			endif
 			mes = (has_key(i, 'context') ? i.context .. ': ' : '') .. i.message .. (has_key(i, 'type') ? ' [' .. i.type .. ']' : '')
 			obj = {
 				lnum: i.line,
@@ -57,7 +42,7 @@ def ale_linters#css#ale_css_validator#Handle(b: number, lines: list<string>): li
 			}
 			# 未使用要素
 			# 'level': 0,
-			# 'source': 'file:/home/hiroyuki/downloads/test/sample.css',
+			# 'source': 'file:/home/xxx/sample.css',
 			add(output, obj)
 		endfor
 	endfor
