@@ -1,0 +1,164 @@
+@charset "utf-8";
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap');
+
+html, body, .text-paragraph{
+	font-family: serif;
+	color: #073642;
+	background-color: #fdf6e3;
+	border-color: #93a1a1;
+}
+
+html{
+	padding: 0;
+	margin: 0;
+}
+
+body{
+	padding: 0.1px;
+	margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6{
+	font-family: sans-serif;
+	color: #cb4b16;
+}
+
+h1{
+	text-align: center;
+}
+
+a:link {
+	color: #6c71c4;
+}
+
+a:visited {
+	color: #d33682;
+}
+
+div{
+	font-family: 'Roboto Mono', monospace;
+}
+
+table, th {
+	border-style: solid none;
+	border-width: 1px;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+th, td {
+	padding: 1px 1ex;
+	empty-cells: show;
+}
+
+th{
+	font-family: sans-serif;
+	font-weight: bold;
+	text-align: center;
+	background-color: #eee8d5;
+}
+
+td{
+	font-family: serif;
+}
+
+table.speed td{
+	text-align: center;
+	border-style: solid none;
+	border-width: 1px;
+}
+
+table.solarized tr td:nth-child(2) {
+	font-family: 'Roboto Mono', monospace;
+}
+
+table.solarized tr td:nth-child(3) {
+	width: 3em;
+}
+
+table.solarized tr td:nth-child(4) {
+	text-align: center;
+}
+
+table.speed tr:nth-child(2n) td:nth-child(3),
+table.speed tr:nth-child(2n+1) td:nth-child(2) {
+	padding-right: 1.5ex;
+	font-variant-numeric: tabular-nums;
+	text-align: right;
+}
+
+svg > path:first-child {
+	fill: #eee8d5;
+}
+
+svg tspan {
+	font-size: 706px;
+	white-space: pre;
+	fill: #073642;
+	stroke: none;
+}
+
+svg path.border {
+	white-space: pre;
+	stroke: #93a1a1;
+	stroke-linejoin: round;
+}
+
+svg path.solarized {
+	white-space: pre;
+	fill: #6c71c4;
+	stroke: none;
+	stroke-linejoin: round;
+}
+
+svg path.solarized8 {
+	white-space: pre;
+	fill: #cb4b16;
+	stroke: none;
+	stroke-linejoin: round;
+}
+
+svg path.solarized9 {
+	white-space: pre;
+	fill: #b58900;
+	stroke: none;
+	stroke-linejoin: round;
+}
+
+.yellow {
+	color: #b58900;
+}
+
+.blue {
+	color: #268bd2;
+}
+
+.orange{
+	color: #cb4b16;
+}
+
+.underline{
+	text-decoration: underline wavy #dc322f;
+}
+
+@media (prefers-color-scheme: dark) {
+	html, body, .text-paragraph {
+		color: #eee8d5;
+		background-color: #002b36;
+	}
+
+	th{
+		background-color: #073642;
+	}
+
+	svg tspan {
+		fill: #eee8d5;
+	}
+
+	svg > path:first-child {
+		fill: #073642;
+	}
+}

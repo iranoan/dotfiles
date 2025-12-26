@@ -35,6 +35,9 @@
 /.config/vim/spell/
 /.config/vim/undo/
 /.config/vim/viminfo
+/.config/vim/cache/
+/.config/vim/colors/solarized9.ods
+/.config/vim/colors/solarized9.svg
 /.config/tmux/plugins/
 
 # 履歴

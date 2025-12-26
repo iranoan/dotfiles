@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" href="solarized9.css">
+<title>Solarized9</title>
+</head>
+<body>
+<h1>Solarized9</h1>
+<h2>Introduction</h2>
+<ul>
+	<li><a href="https://github.com/altercation/vim-colors-solarized">Solarized</a> base</li>
+	<li>Use invert 'set background=light/dark' background color to make the default (Normal) text color.</li>
+	<li>Do not use italic, for default.
+	<ul>
+		<li>Because it became difficult to read when wide character are used.<br>
+		To use italic:
+		<div><span class="yellow">let</span> <span class="blue">g:solarized9</span> = <span class="orange">#{</span><span class="blue">italic</span>: <span class="blue underline">v:true</span>, <span class="blue">transparent</span>: <span class="blue">v:true</span><span class="orange">}</span></div>
+		</li>
+	</ul>
+	</li>
+	<li>In terminal, support transparency.
+	<ul>
+		<li>To use the transparency effect, you need to
+		<ul>
+			<li>use enable transparency terminal</li>
+			<li>set the Solarized theme in the terminal. This is because it uses the terminal's background color.</li>
+		</ul>
+		Solarize9 set
+		<div><span class="yellow">highlight</span> <span class="blue" style="font-weight: bold;">Normal</span> <span class="yellow">ctermbg</span>=<span class="orange">NONE</span> <span class="yellow">guibg</span>=<span class="orange">NONE</span></div></li>
+		<li>To disable transparency:
+		<div><span class="yellow">let</span> <span class="blue">g:solarized9</span> = <span class="orange">#{</span><span class="blue">italic</span>: <span class="blue">v:false</span>, <span class="blue">transparent</span>: <span class="blue underline">v:false</span><span class="orange">}</span></div>
+		</li>
+		</ul>
+	</li>
+</ul>
+<h2>Change highlight</h2>
+<table class="solarized">
+	<caption>contrast</caption>
+	<tr><th id=TH>Solarized9</th>     <th>HEX</th>    <th>color</th>                                  <th>term</th><th>syntax</th></tr>
+	<tr><td>base3</td>                <td>#fdf6e3</td><td style="background: #fdf6e3 !important"></td><td>15</td><td>light Normal ctermbg/guibg</td></tr>
+	<tr><td>base2</td>                <td>#eee8d5</td><td style="background: #eee8d5 !important"></td><td>7</td> <td>Solarized9 dark Normal ctermfg/guifg</td></tr>
+	<tr><td>base1</td>                <td>#93a1a1</td><td style="background: #93a1a1 !important"></td><td>14</td><td>sub light</td></tr>
+	<tr><td>base0</td>                <td>#839496</td><td style="background: #839496 !important"></td><td>12</td><td>remove (<a href="https://github.com/altercation/vim-colors-solarized">Solarized</a> dark Normal ctermfg/guifg)</td></tr>
+	<tr><td>base00</td>               <td>#657b83</td><td style="background: #657b83 !important"></td><td>11</td><td>remove (<a href="https://github.com/altercation/vim-colors-solarized">Solarized</a> light Normal ctermfg/guifg)</td></tr>
+	<tr><td>base01</td>               <td>#586e75</td><td style="background: #586e75 !important"></td><td>10</td><td>sub dark</td></tr>
+	<tr><td>base02</td>               <td>#073642</td><td style="background: #073642 !important"></td><td>0</td> <td>Solarized9 light Normal ctermfg/guifg</td></tr>
+	<tr><td>base03</td>               <td>#002b36</td><td style="background: #002b36 !important"></td><td>8</td> <td>dark Normal ctermbg/guibg</td></tr>
+	<tr><td>red</td>                  <td>#dc322f</td><td style="background: #dc322f !important"></td><td>1</td> <td></td></tr>
+	<tr><td>green</td>                <td>#859900</td><td style="background: #859900 !important"></td><td>2</td> <td></td></tr>
+	<tr><td>yellow</td>               <td>#b58900</td><td style="background: #b58900 !important"></td><td>3</td> <td></td></tr>
+	<tr><td>blue</td>                 <td>#268bd2</td><td style="background: #268bd2 !important"></td><td>4</td> <td></td></tr>
+	<tr><td>magenta</td>              <td>#d33682</td><td style="background: #d33682 !important"></td><td>5</td> <td></td></tr>
+	<tr><td>cyan</td>                 <td>#2aa198</td><td style="background: #2aa198 !important"></td><td>6</td> <td></td></tr>
+	<tr><td>orange</td>               <td>#cb4b16</td><td style="background: #cb4b16 !important"></td><td>9</td> <td></td></tr>
+	<tr><td>citrine</td><td>#b3ad00</td><td style="background: #b3ad00 !important"></td><td>11</td><td>add accent color (do not use for <a href="https://vim-jp.org/vimdoc-ja/syntax.html#:highlight-default">highlight-default</a>)</td></tr>
+	<tr><td>viridian</td><td>#26ab7b</td><td style="background: #26ab7b !important"></td><td>12</td><td>add accent color (do not use for <a href="https://vim-jp.org/vimdoc-ja/syntax.html#:highlight-default">highlight-default</a>)</td></tr>
+	<tr><td>violet</td>               <td>#6c71c4</td><td style="background: #6c71c4 !important"></td><td>13</td><td></td></tr>
+</table>
+<h2>Speed</h2>
+<table class="speed" style="float: left; margin-right: 1em; float: left; margin: 0 1ex 1ex 0;">
+<caption>The result of running 100 times [sec]</caption>
+<tr><th style="width: 13ex;"></th><th>background</th><th><a href="https://github.com/altercation/vim-colors-solarized">Solarized</a>
+	</th><th><a href="https://github.com/lifepillar/vim-solarized8">Solarized8</a></th><th>Solarized9</th></tr>
+<tr><th rowspan="2">GUI</th>
+	  <th>light</th><td>15.657230</td><td>0.679889</td> <td>0.532318</td></tr>
+<tr><th>dark</th> <td>5.498374</td> <td>0.573975</td> <td>0.539823</td></tr>
+<tr><th rowspan="2">Terminal <a href="https://vim-jp.org/vimdoc-ja/options.html#'termguicolors'">termguicolors</a></th>
+	  <th>light</th><td>2.261044</td> <td>0.614248</td> <td>0.514461</td></tr>
+<tr><th>dark</th> <td>1.092072</td> <td>0.560551</td> <td>0.496234</td></tr>
+<tr><th rowspan="2">Terminal <a href="https://vim-jp.org/vimdoc-ja/options.html#'termguicolors'">notermguicolors</a></th>
+	  <th>light</th><td>2.165700</td> <td>0.515403</td> <td>0.421293</td></tr>
+<tr><th>dark</th> <td>0.995944</td> <td>0.459711</td> <td>0.417183</td></tr>
+</table>
+<svg width="61ex" viewBox="0 0 21700 12700" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" stroke-width="28.222" stroke-linejoin="round" xml:space="preserve">
+	<path d="M 10859,12734 L -13,12734 -13,-13 21731,-13 21731,12734 10859,12734 Z "/>
+	<path class="border" d="M 1489,10421 L 1489,9291 "/>
+	<path class="border" d="M 4790,10421 L 4790,9291 "/>
+	<path class="border" d="M 8092,10421 L 8092,9291 "/>
+	<path class="border" d="M 11392,10421 L 11392,9291 "/>
+	<path class="border" d="M 14694,10421 L 14694,9291 "/>
+	<path class="border" d="M 17995,10421 L 17995,9291 "/>
+	<path class="border" d="M 21297,10421 L 21297,9291 "/>
+	<path class="border" d="M 1489,12380 L 1489,9291 "/>
+	<path class="border" d="M 8092,12380 L 8092,9291 "/>
+	<path class="border" d="M 14694,12380 L 14694,9291 "/>
+	<path class="border" d="M 21297,12380 L 21297,9291 "/>
+	<path class="border" d="M 1489,9441 L 1489,9291 "/>
+	<path class="border" d="M 1489,9441 L 1489,9291 "/>
+	<path class="border" d="M 4790,9441 L 4790,9291 "/>
+	<path class="border" d="M 4790,9441 L 4790,9291 "/>
+	<path class="border" d="M 8092,9441 L 8092,9291 "/>
+	<path class="border" d="M 8092,9441 L 8092,9291 "/>
+	<path class="border" d="M 11392,9441 L 11392,9291 "/>
+	<path class="border" d="M 11392,9441 L 11392,9291 "/>
+	<path class="border" d="M 14694,9441 L 14694,9291 "/>
+	<path class="border" d="M 14694,9441 L 14694,9291 "/>
+	<path class="border" d="M 17995,9441 L 17995,9291 "/>
+	<path class="border" d="M 17995,9441 L 17995,9291 "/>
+	<path class="border" d="M 21297,9441 L 21297,9291 "/>
+	<path class="border" d="M 21297,9441 L 21297,9291 "/>
+	<path class="border" d="M 1489,9291 L 21297,9291 "/>
+	<path class="border" d="M 1339,9291 L 1489,9291 "/>
+	<path class="border" d="M 1339,9291 L 1489,9291 "/>
+	<path class="border" d="M 1339,8220 L 1489,8220 "/>
+	<path class="border" d="M 1339,8220 L 1489,8220 "/>
+	<path class="border" d="M 1339,7150 L 1489,7150 "/>
+	<path class="border" d="M 1339,7150 L 1489,7150 "/>
+	<path class="border" d="M 1339,6081 L 1489,6081 "/>
+	<path class="border" d="M 1339,6081 L 1489,6081 "/>
+	<path class="border" d="M 1339,5011 L 1489,5011 "/>
+	<path class="border" d="M 1339,5011 L 1489,5011 "/>
+	<path class="border" d="M 1339,3940 L 1489,3940 "/>
+	<path class="border" d="M 1339,3940 L 1489,3940 "/>
+	<path class="border" d="M 1339,2870 L 1489,2870 "/>
+	<path class="border" d="M 1339,2870 L 1489,2870 "/>
+	<path class="border" d="M 1339,1800 L 1489,1800 "/>
+	<path class="border" d="M 1339,1800 L 1489,1800 "/>
+	<path class="border" d="M 1339,730 L 1489,730 "/>
+	<path class="border" d="M 1339,730 L 1489,730 "/>
+	<path class="border" d="M 1489,9291 L 1489,730 "/>
+	<path class="solarized" d="M 1901,9291 L 2727,9291 2727,913 1901,913 1901,9291 Z "/>
+	<path class="solarized" d="M 5203,9291 L 6028,9291 6028,6349 5203,6349 5203,9291 Z "/>
+	<path class="solarized" d="M 8504,9291 L 9330,9291 9330,8081 8504,8081 8504,9291 Z "/>
+	<path class="solarized" d="M 11805,9291 L 12630,9291 12630,8706 11805,8706 11805,9291 Z "/>
+	<path class="solarized" d="M 15106,9291 L 15932,9291 15932,8132 15106,8132 15106,9291 Z "/>
+	<path class="solarized" d="M 18408,9291 L 19233,9291 19233,8758 18408,8758 18408,9291 Z "/>
+	<path class="solarized8" d="M 2727,9291 L 3552,9291 3552,8927 2727,8927 2727,9291 Z "/>
+	<path class="solarized8" d="M 6028,9291 L 6853,9291 6853,8983 6028,8983 6028,9291 Z "/>
+	<path class="solarized8" d="M 9330,9291 L 10155,9291 10155,8962 9330,8962 9330,9291 Z "/>
+	<path class="solarized8" d="M 12630,9291 L 13455,9291 13455,8991 12630,8991 12630,9291 Z "/>
+	<path class="solarized8" d="M 15932,9291 L 16757,9291 16757,9015 15932,9015 15932,9291 Z "/>
+	<path class="solarized8" d="M 19233,9291 L 20058,9291 20058,9044 19233,9044 19233,9291 Z "/>
+	<path class="solarized9" d="M 3552,9291 L 4377,9291 4377,9006 3552,9006 3552,9291 Z "/>
+	<path class="solarized9" d="M 6853,9291 L 7679,9291 7679,9002 6853,9002 6853,9291 Z "/>
+	<path class="solarized9" d="M 10155,9291 L 10979,9291 10979,9015 10155,9015 10155,9291 Z "/>
+	<path class="solarized9" d="M 13455,9291 L 14281,9291 14281,9025 13455,9025 13455,9291 Z "/>
+	<path class="solarized9" d="M 16757,9291 L 17582,9291 17582,9065 16757,9065 16757,9291 Z "/>
+	<path class="solarized9" d="M 20058,9291 L 20884,9291 20884,9067 20058,9067 20058,9291 Z "/>
+	<text class="SVGTextShape"><tspan class="TextParagraph TextPosition" x="2398" y="10308" lengthAdjust="spacingAndGlyphs">light</tspan></text>
+	<text class="SVGTextShape"><tspan class="TextParagraph TextPosition" x="5687" y="10308" lengthAdjust="spacingAndGlyphs">dark</tspan></text>
+	<text class="SVGTextShape"><tspan class="TextParagraph TextPosition" x="9001" y="10308" lengthAdjust="spacingAndGlyphs">light</tspan></text>
+	<text class="SVGTextShape"><tspan class="TextParagraph TextPosition" x="12289" y="10308" lengthAdjust="spacingAndGlyphs">dark</tspan></text>
+	<text class="SVGTextShape"><tspan class="TextParagraph TextPosition" x="15603" y="10308" lengthAdjust="spacingAndGlyphs">light</tspan></text>
+	<text class="SVGTextShape"><tspan class="TextParagraph TextPosition" x="18892" y="10308" lengthAdjust="spacingAndGlyphs">dark</tspan></text>
+	<text class="SVGTextShape"><tspan class="TextParagraph TextPosition" x="4181" y="11288" lengthAdjust="spacingAndGlyphs">GUI</tspan></text>
+	<text class="SVGTextShape"><tspan class="TextParagraph TextPosition" x="9912" y="11288" lengthAdjust="spacingAndGlyphs">Terminal </tspan><tspan class="TextPosition" x="9078" y="12267" lengthAdjust="spacingAndGlyphs">termguicolors</tspan></text>
+	<text class="SVGTextShape"><tspan class="TextParagraph TextPosition" x="16513" y="11288" lengthAdjust="spacingAndGlyphs">Terminal </tspan><tspan class="TextPosition" x="15256" y="12267" lengthAdjust="spacingAndGlyphs">notermguicolors</tspan></text>
+	<text class="SVGTextShape"><tspan class="TextParagraph TextPosition" x="830" y="9569" lengthAdjust="spacingAndGlyphs">0</tspan></text>
+	<text class="SVGTextShape"><tspan class="TextParagraph TextPosition" x="830" y="8498" lengthAdjust="spacingAndGlyphs">2</tspan></text>
+	<text class="SVGTextShape"><tspan class="TextParagraph TextPosition" x="830" y="7428" lengthAdjust="spacingAndGlyphs">4</tspan></text>
+	<text class="SVGTextShape"><tspan class="TextParagraph TextPosition" x="830" y="6359" lengthAdjust="spacingAndGlyphs">6</tspan></text>
+	<text class="SVGTextShape"><tspan class="TextParagraph TextPosition" x="830" y="5289" lengthAdjust="spacingAndGlyphs">8</tspan></text>
+	<text class="SVGTextShape"><tspan class="TextParagraph TextPosition" x="422" y="4218" lengthAdjust="spacingAndGlyphs">10</tspan></text>
+	<text class="SVGTextShape"><tspan class="TextParagraph TextPosition" x="422" y="3148" lengthAdjust="spacingAndGlyphs">12</tspan></text>
+	<text class="SVGTextShape"><tspan class="TextParagraph TextPosition" x="422" y="2078" lengthAdjust="spacingAndGlyphs">14</tspan></text>
+	<text class="SVGTextShape"><tspan class="TextParagraph TextPosition" x="422" y="1008" lengthAdjust="spacingAndGlyphs">16</tspan></text>
+	<path class="solarized" d="M 16203,1930 L 15991,1930 15991,1507 16414,1507 16414,1930 16203,1930 Z "/>
+	<path class="solarized8" d="M 16203,3181 L 15991,3181 15991,2758 16414,2758 16414,3181 16203,3181 Z "/>
+	<path class="solarized9" d="M 16203,4432 L 15991,4432 15991,4009 16414,4009 16414,4432 16203,4432 Z "/>
+	<text class="SVGTextShape"><tspan class="TextParagraph TextPosition" x="16569" y="1996" lengthAdjust="spacingAndGlyphs">Solarized</tspan></text>
+	<text class="SVGTextShape"><tspan class="TextParagraph TextPosition" x="16569" y="3247" lengthAdjust="spacingAndGlyphs">Solarized8</tspan></text>
+	<text class="SVGTextShape"><tspan class="TextParagraph TextPosition" x="16569" y="4498" lengthAdjust="spacingAndGlyphs">Solarized9</tspan></text>
+</svg>
+<h2>Setting order</h2>
+<ol style="list-style: decimal;">
+	<li>Normal</li>
+	<li><a href="https://vim-jp.org/vimdoc-ja/syntax.html#:highlight-default">highlight-default</a> OR <a href="https://vim-jp.org/vimdoc-ja/syntax.html#group-name">group-name</a> (not a link)
+	<ul>
+		<li>not italic or italic</li>
+	</ul>
+	</li>
+	<li>other (not a link)</li>
+	<li><a href="https://vim-jp.org/vimdoc-ja/syntax.html#:highlight-default">highlight-default</a> OR <a href="https://vim-jp.org/vimdoc-ja/syntax.html#group-name">group-name</a> (link)</li>
+	<li>other (link)</li>
+</ol>
+<ul>
+	<li>1-3: Order is dark&nbsp;&gt;&nbsp;light&nbsp;&gt;&nbsp;common.</li>
+	<li>1-3: Sort alphabetically for each category: dark, light and common.
+	<ul>
+		<li>Prioritize <a href="https://vim-jp.org/vimdoc-ja/syntax.html#:highlight-default">highlight-default</a> and 'suggested group names'.</li>
+	</ul>
+	</li>
+	<li>4-5: Sort by link destination.
+	<ul>
+		<li>Prioritize <a href="https://vim-jp.org/vimdoc-ja/syntax.html#:highlight-default">highlight-default</a> and 'suggested group names'.</li>
+	</ul>
+	</li>
+</ul>
+</body>
+</html>
