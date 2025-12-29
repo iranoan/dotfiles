@@ -162,7 +162,8 @@ endif
 # 表示関係 {{{1
 syntax enable                                  # カラー表示 ON
 set background=dark
-colorscheme solarized9
+# colorscheme solarized9
+colorscheme shodo
 set conceallevel=0                             # 個々のファイルタイプごとで、文字を省略したり置き換える機能は使わない
 set nomore                                     # メッセージが一杯になっても一旦停止せずそのまま続ける
 set noshowcmd                                  # コマンドラインに選択中の文字数などを表示する
