@@ -397,7 +397,7 @@ set termwinscroll=30000                        # ターミナルで遡れる行�
 # tmux で <prefix> が重なると端末で使えないので注意
 # 設定の切り替え {{{2
 nnoremap <silent><leader>cl <Cmd>setlocal linebreak! linebreak?<CR>
-nnoremap <silent><leader>cb <Cmd>let &background = ( &background == 'dark' ? 'light' : 'dark')<CR>
+nnoremap <silent><leader>cb <Cmd>call vimrc#ToggleLightDark()<CR>
 nnoremap <silent><leader>cc <Cmd>set showcmd! showcmd?<CR>
 nnoremap <silent><leader>cd <Cmd>call vimrc#Lcd() <Bar>pwd<CR>
 nnoremap <silent><leader>cm <Cmd>set more! more?<CR>
