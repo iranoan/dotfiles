@@ -513,3 +513,9 @@ export def ToggleLightDark(): void # toggle light/dark and set transparent in CL
 		set background=dark
 	endif
 enddef
+
+export def UpdateAll(): void
+	var c_buf_nr: number = bufnr()
+	bufdo update
+	execute 'buffer ' .. c_buf_nr
+enddef

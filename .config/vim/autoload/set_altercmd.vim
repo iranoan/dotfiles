@@ -23,7 +23,7 @@ function set_altercmd#main()
 	" ↑:print は使わないので、印刷に置き換え
 	AlterCommand u[pdate]   update
 	" ↑:update の短縮形は :up で :u は :undo だがまず使わない
-	AlterCommand ua[ll]     bufdo\ update
+	AlterCommand ua[ll]     call\ vimrc#UpdateAll()
 	AlterCommand helpt[ags] PackManage\ tags
 	AlterCommand bc         .!bc\ -l\ -q\ ~/.config/bc\ <Bar>\ sed\ -E\ -e\ 's/^\\\./0./g'\ -e\ 's/(\\\.[0-9]*[1-9])0+/\\\1/g'\ -e\ 's/\\\.$//g'
 	AlterCommand bi[nary]   if\ !&binary\ <Bar>\ execute('setlocal\ binary\ <Bar>\ %!xxd')\ <Bar>\ endif
