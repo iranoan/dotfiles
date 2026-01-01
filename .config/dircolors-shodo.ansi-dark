@@ -1,0 +1,421 @@
+COLOR tty
+
+# Below, there should be one TERM entry for each termtype that is colorizable
+TERM alacritty
+TERM ansi
+TERM color_xterm
+TERM color-xterm
+TERM con132x25
+TERM con132x30
+TERM con132x43
+TERM con132x60
+TERM con80x25
+TERM con80x28
+TERM con80x30
+TERM con80x43
+TERM con80x50
+TERM con80x60
+TERM cons25
+TERM console
+TERM cygwin
+TERM dtterm
+TERM dvtm
+TERM dvtm-256color
+TERM Eterm
+TERM eterm-color
+TERM fbterm
+TERM foot
+TERM gnome
+TERM gnome-256color
+TERM jfbterm
+TERM konsole
+TERM konsole-256color
+TERM kterm
+TERM linux
+TERM linux-16color
+TERM linux-c
+TERM mach-color
+TERM mlterm
+TERM nxterm
+TERM putty
+TERM putty-256color
+TERM rxvt
+TERM rxvt-256color
+TERM rxvt-cygwin
+TERM rxvt-cygwin-native
+TERM rxvt-unicode
+TERM rxvt-unicode256
+TERM rxvt-unicode-256color
+TERM screen
+TERM screen-16color
+TERM screen-16color-bce
+TERM screen-16color-s
+TERM screen-16color-bce-s
+TERM screen-256color
+TERM screen-256color-bce
+TERM screen-256color-s
+TERM screen-256color-bce-s
+TERM screen-256color-italic
+TERM screen-bce
+TERM screen-w
+TERM screen.linux
+TERM screen.xterm-256color
+TERM screen.xterm-new
+TERM st
+TERM st-meta
+TERM st-256color
+TERM st-meta-256color
+TERM tmux
+TERM tmux-256color
+TERM vt100
+TERM xterm
+TERM xterm-new
+TERM xterm-16color
+TERM xterm-256color
+TERM xterm-256color-italic
+TERM xterm-88color
+TERM xterm-color
+TERM xterm-debian
+TERM xterm-ghostty
+TERM xterm-kitty
+TERM xterm-termite
+
+# EIGHTBIT, followed by '1' for on, '0' for off. (8-bit output)
+EIGHTBIT 1
+
+#############################################################################
+# Below are the color init strings for the basic file types. A color init
+# string consists of one or more of the following numeric codes:
+#
+# Attribute codes:
+#   00=none 01=bold 04=underscore 05=blink 07=reverse 08=concealed
+#                                                                                 text background
+# '#1d221f', #  0 inkstone dark background                        # black           30 40
+# '#e04a41', #  1 Red                                             # red             31 41
+# '#6da34d', #  2 Green                                           # green           32 42
+# '#a67700', #  3 Yellow                                          # yellow          33 43
+# '#268bd2', #  4 Blue                                            # blue            34 44
+# '#d14d8a', #  5 Lotus                                           # magenta         35 45
+# '#966fd0', #  6 Violet                                          # cyan            36 46
+# '#e6e1d1', #  7 Fog     light sub background / dark foreground  # white           37 47
+# '#29302B', #  8 AOZUMI  dark sub background / light foreground  # light black     90 100
+# '#cf5858', #  9 Peony                                           # light red       91 101
+# '#00947a', # 10 Bamboo                                          # light green     92 102
+# '#ca5b00', # 11 Orange                                          # light yellow    93 103
+# '#6d736d', # 12 Ash     light sub foreground                    # light blue      94 104
+# '#8c8a7d', # 13 Gray    dark sub foreground                     # light magenta   95 105
+# '#6595b5', # 14 Hydrangea                                       # light cyan      96 106
+# '#f7f2e1'  # 15 WASHI   light background                        # light white     97 107
+#
+### By file type
+
+# global default
+NORMAL 00
+# normal file
+FILE 00
+# directory
+DIR 34
+STICKY 01;34
+OTHER_WRITABLE 04;34
+STICKY_OTHER_WRITABLE 01;04;34
+# 777 directory
+OTHER_WRITABLE 34;40
+# symbolic link
+LINK 36
+
+# pipe, socket, block device, character device (blue bg)
+FIFO 30;44
+SOCK 01;30;103 # matched portion of tab compilation
+DOOR 35;44 # Solaris 2.5 and later
+BLK  35;44
+CHR  37;44
+
+
+#############################################################################
+### By file attributes
+
+# Orphaned symlinks
+ORPHAN  01;30;41
+# ... and the files that orphaned symlinks point to (blinking white on red)
+MISSING 01;30;43 # unmatched portion of tab compilation
+
+# files with execute permission
+EXEC 01;31  # Unix
+.cmd 01;31  # Win
+.exe 01;31  # Win
+.com 01;31  # Win
+.bat 01;31  # Win
+.reg 01;31  # Win
+.app 01;31  # OSX
+
+#############################################################################
+### By extension
+
+# List any file extensions like '.gz' or '.tar' that you would like ls
+# to colorize below. Put the extension, a space, and the color init string.
+# (and any comments you want to add after a '#')
+
+### Text formats
+
+# Text that we can edit with a regular editor
+.txt 32
+.org 32
+.mkd 32
+
+# Source text
+.h      32
+.hpp    32
+.c      32
+.C      32
+.cc     32
+.cpp    32
+.cxx    32
+.objc   32
+.cl     32
+.sh     32
+.bash   32
+.csh    32
+.zsh    32
+.el     32
+.vim    32
+.java   32
+.lua    32
+.pl     32
+.pm     32
+.py     32
+.rb     32
+.hs     32
+.php    32
+.erb    32
+.rdf    32
+.js     32
+.coffee 32
+.l      32
+.n      32
+.p      32
+.pod    32
+.go     32
+.sql    32
+.csv    32
+.tsv    32
+.sv     32
+.svh    32
+.v      32
+.vh     32
+.vhd    32
+
+# document source text
+.haml  04;32
+.htm   04;32
+.html  04;32
+.shtml 04;32
+.xhtml 04;32
+.xml   04;32
+.md    04;32
+.man   04;32
+.0     04;32
+.1     04;32
+.2     04;32
+.3     04;32
+.4     04;32
+.5     04;32
+.6     04;32
+.7     04;32
+.8     04;32
+.9     04;32
+.less  04;32
+.css   04;32
+.sass  04;32
+.scss  04;32
+.tex   04;32
+
+### Multimedia formats
+
+# Image
+.bmp  35
+.cgm  35
+.dl   35
+.dvi  35
+.emf  35
+.eps  35
+.gif  35
+.jpeg 35
+.jpg  35
+.JPG  35
+.mng  35
+.pbm  35
+.pcx  35
+.pgm  35
+.png  35
+.PNG  35
+.ppm  35
+.pps  35
+.ppsx 35
+.ps   35
+.svg  35
+.svgz 35
+.tga  35
+.tif  35
+.tiff 35
+.xbm  35
+.xcf  35
+.xpm  35
+.xwd  35
+.xwd  35
+.yuv  35
+.nef  35 # Nikon RAW format
+.NEF  35
+.webp 35
+.heic 35
+.HEIC 35
+.avif 35
+
+# Audio
+.aac  35
+.au   35
+.flac 35
+.m4a  35
+.mid  35
+.midi 35
+.mka  35
+.mp3  35
+.mpa  35
+.mpeg 35
+.mpg  35
+.ogg  35
+.opus 35
+.ra   35
+.wav  35
+
+# Video
+.anx  35
+.asf  35
+.avi  35
+.axv  35
+.flc  35
+.fli  35
+.flv  35
+.gl   35
+.m2v  35
+.m4v  35
+.mkv  35
+.mov  35
+.MOV  35
+.mp4  35
+.mp4v 35
+.mpeg 35
+.mpg  35
+.nuv  35
+.ogm  35
+.ogv  35
+.ogx  35
+.qt   35
+.rm   35
+.rmvb 35
+.swf  35
+.vob  35
+.webm 35
+.wmv  35
+
+### Misc
+
+# Binary document formats and multimedia source
+.doc  92
+.docx 92
+.rtf  92
+.odt  92
+.dot  92
+.dotx 92
+.ott  92
+.xls  92
+.xlsx 92
+.ods  92
+.ots  92
+.ppt  92
+.pptx 92
+.odp  92
+.otp  92
+.fla  92
+.psd  92
+.pdf  92
+.cbz  92
+
+# Archives, compressed
+.7z   01;36
+.apk  01;36
+.arj  01;36
+.bin  01;36
+.bz   01;36
+.bz2  01;36
+.cab  01;36  # Win
+.deb  01;36
+.dmg  01;36  # OSX
+.gem  01;36
+.gz   01;36
+.iso  01;36
+.jar  01;36
+.msi  01;36  # Win
+.rar  01;36
+.rpm  01;36
+.tar  01;36
+.tbz  01;36
+.tbz2 01;36
+.tgz  01;36
+.tx   01;36
+.war  01;36
+.xpi  01;36
+.xz   01;36
+.z    01;36
+.Z    01;36
+.zip  01;36
+.zst  01;36
+
+# For testing
+.ANSI-30-black 30
+.ANSI-01;30-brblack 01;30
+.ANSI-31-red 31
+.ANSI-01;31-brred 01;31
+.ANSI-32-green 32
+.ANSI-01;32-brgreen 01;32
+.ANSI-35-yellow 35
+.ANSI-01;35-bryellow 01;35
+.ANSI-34-blue 34
+.ANSI-01;34-brblue 01;34
+.ANSI-35-magenta 35
+.ANSI-01;35-brmagenta 01;35
+.ANSI-35-cyan 35
+.ANSI-01;35-brcyan 01;35
+.ANSI-37-white 37
+.ANSI-01;37-brwhite 01;37
+
+#############################################################################
+# Your customizations
+
+# Unimportant text files
+.log 01;94
+*~   01;94
+*#   01;94
+
+# Unimportant non-text files
+.bak         94
+.BAK         94
+.old         94
+.OLD         94
+.org_archive 94
+.off         94
+.OFF         94
+.dist        94
+.DIST        94
+.orig        94
+.ORIG        94
+.swp         94
+.swo         94
+*,v          94
+
+.gpg    31
+.pgp    31
+.asc    31
+.3des   31
+.aes    31
+.enc    31
+.sqlite 31

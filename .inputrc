@@ -5,7 +5,9 @@ $if mode=vi
 	set keymap vi-insert
 $endif
 # [Tab] 補完でカラー表示
+set colored-completion-prefix on
 set colored-stats on
+set mark-directories on
 # [Tab] 補完でディレクトリへのシンボリックなら末尾に / を付ける
 set mark-symlinked-directories on
 # 編集モードではvi, emacs どちらのモードでも同じにする為、一部設定がかぶっている
