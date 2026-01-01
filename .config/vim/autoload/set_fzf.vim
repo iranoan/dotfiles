@@ -68,7 +68,7 @@ function set_fzf#tabs() abort
 	if !pack_manage#IsInstalled('fzf')
 		call set_fzf#main()
 	endif
-	let g:fzf_tabs_options = ['--preview', '~/bin/fzf-preview.sh {2}', '--footer', 'Ctrl-]/R/K/^:Preview On/Off/Up/Down/[No]Wrap｜F/B:PageUP/Down｜G:Sxiv｜O:Open｜V:Vim｜W:[No]Wrap']
+	let g:fzf_tabs_options = ['--preview', '~/bin/fzf-preview.sh {2}', '--footer', 'Ctrl-]/K/R/^:Preview On/Off/Up/Down/[No]Wrap｜F/B:PageUP/Down｜G:Sxiv｜O:Open｜V:Vim｜W:[No]Wrap']
 	call pack_manage#SetMAP('fzf-tabs', 'FZFTabOpen', [
 				\ #{mode: 'n', key: '<Leader>ft', method: 1, cmd: 'FZFTabOpen'},
 				\ #{mode: 'v', key: '<Leader>ft', method: 1, cmd: 'FZFTabOpen'},
@@ -86,7 +86,7 @@ function set_fzf#vim(cmd) abort
 						\ '--multi', '--margin=0%', '--padding=0%',
 						\ '--preview', '~/bin/fzf-preview.sh {}',
 						\ '--bind', 'ctrl-o:execute-silent(xdg-open {})',
-						\ '--footer', 'Ctrl-]/R/K/^:Preview On/Off/Up/Down/[No]Wrap｜F/B:PageUP/Down｜G:Sxiv｜O:Open｜V:Vim｜W:[No]Wrap'
+						\ '--footer', 'Ctrl-]/K/R/^:Preview On/Off/Up/Down/[No]Wrap｜F/B:PageUP/Down｜G:Sxiv｜O:Open｜V:Vim｜W:[No]Wrap'
 						\ ]
 	let $FZF_DEFAULT_COMMAND = executable("fdfind")
 						\ ? 'fdfind --hidden --follow --no-ignore --ignore-file ~/.config/fd/ignore --ignore-file ~/.config/fd/noedit --type file --type symlink --type directory .'
