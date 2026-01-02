@@ -206,7 +206,7 @@ set formatlistpat=^\\c\\s*\\(([0-9a-z]\\+)\\\|\\[[0-9a-z]\\]\\\|[a-z][]\ :.)]\\\
 # カーソル行 {{{2
 augroup CoursolLineColumn # 挿入モードでは、カーソール行桁背景色無し、ノーマル・モードでは付ける
 	autocmd!
-	autocmd WinEnter,InsertLeave,TabEnter * set cursorline cursorcolumn
+	autocmd WinEnter,InsertLeave,TabEnter * if &filetype !=# 'notmuch-show' | set cursorline cursorcolumn | endif
 	autocmd WinLeave,InsertEnter          * set nocursorline nocursorcolumn
 augroup END
 set cursorline cursorcolumn                    # 起動時は、カーソール行桁背景色付ける

@@ -20,6 +20,7 @@ xnoremap <buffer><silent><Leader>s <Cmd>call set_google_search#main() <Bar> delf
 # setlocal keywordprg=:call\ set_eblook#searchWord()
 setlocal tabstop=8
 setlocal nolinebreak
+setlocal nocursorline nocursorcolumn
 # :NoMatchParen " 対応するカッコの ON/OFF {{{2
 autocmd MatchParen WinLeave,TabLeave,BufWinLeave <buffer> execute('DoMatchParen')
 autocmd MatchParen WinEnter,TabEnter,BufWinEnter <buffer> execute('NoMatchParen')
