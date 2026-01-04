@@ -8,11 +8,11 @@ function set_fzf#main() abort
 	let g:fzf_layout = #{ window: #{ width: 1, height: 1, xoffset: 0 , yoffset: 0 } }
 	let g:fzf_colors = {
 				\ 'fg':  ['fg', 'Pmenu'],
-				\ 'bg':  ['bg', 'Pmenu'],
+				\ 'bg':  ['bg', 'PmenuSel'],
 				\ 'hl':  ['fg', 'PmenuMatch'],
 				\ 'fg+': ['fg', 'PmenuSel'],
+				\ 'bg+': ['bg', 'Pmenu'],
 				\ 'hl+': ['fg', 'PmenuMatchSel'],
-				\ 'bg+': ['bg', 'PmenuSel'],
 				\ }
 	let g:fzf_action = {
 				\ 'ctrl-g': 'edit',
