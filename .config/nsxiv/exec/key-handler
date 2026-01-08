@@ -72,8 +72,8 @@ while read -r file ; do
 		"C-c")      echo "$file" | $xcopy ;;
 		"d")        trash-put "$file" ;;
 		"C-d")      trash-put "$file" ;;
-		"g")        geeqie "$file" & ;;
-		"C-g")      geeqie "$file" & ;;
+		"g")        geeqie -r "$file" & ;;
+		"C-g")      geeqie -r "$file" & ;;
 		"e")        edit "$file" ;;
 		"C-e")      edit "$file" ;;
 		"s")        sushi "$file" & ;;
