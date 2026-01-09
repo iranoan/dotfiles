@@ -183,7 +183,7 @@ set linebreak                                  # wrap at 'breakat
 set breakat=\ \	!/?)}>                         # break point for linebreak (set breakat-=*-+;:,. breakat+=)}>) (日本語は全角文字に空白が余分に表示されてしまう←helpに8bit文字のみとある)
 # 対応するカッコ {{{2
 set cpoptions+=I                               # 対応するカッコで、\によるエスケープを除外+インデントの自動削除なしに
-set matchpairs+=<:>,「:」,（:）,『:』,【:】,‘:’,“:” # 対応括弧に<と>のペアやカギカッコを追加
+set matchpairs+=<:>,「:」,（:）,『:』,【:】,‘:’,“:”,《:》,〈:〉 # 対応括弧に<と>のペアやカギカッコを追加
 # タブ、空白、改行の可視化 {{{2
 set list                                       # 通常は空白文字表示↓代わりに表示する記号
 set listchars=tab:»\ ,trail:␣,eol:⏎,extends:»,precedes:«,space:␣,nbsp:%
