@@ -4,7 +4,7 @@ call ale#linter#Define('css', #{
 			\ name: 'css-validator',
 			\ output_stream: 'stdout',
 			\ executable: exepath('java'),
-			\ command: '%e -jar "' ..  get(g:, 'als_css_validator_use_global', '$HOME/bin/jar/css-validator.jar') .. '" --output=json --profile=css3 --lang=' .. v:lang[0 : 1] .. ' --vextwarning=true file:%t',
+			\ command: '%e -jar "' ..  get(g:, 'als_css_validator_use_global', '$HOME/bin/jar/css-validator.jar') .. '" --output=json --profile=css3svg --lang=' .. v:lang[0 : 1] .. ' --vextwarning=true file:%t',
 			\ callback: 'ale_linters#css#ale_css_validator#Handle',
 			\ })
 
