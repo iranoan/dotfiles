@@ -491,7 +491,7 @@ enddef
 export def ToggleLightDark(): void # toggle light/dark and set transparent in CLI
 	if &background ==# 'dark'
 		if !has('gui_running')
-			if g:colors_name ==# 'solarized9' || g:colors_name ==# 'shodo'
+			if g:colors_name ==# 'solarized9' || g:colors_name ==# 'suiboku'
 				if exists('g:' .. g:colors_name)
 					execute 'g:' .. g:colors_name .. '.transparent = false'
 				else
@@ -502,7 +502,7 @@ export def ToggleLightDark(): void # toggle light/dark and set transparent in CL
 		set background=light
 	else
 		if !has('gui_running')
-			if g:colors_name ==# 'solarized9' || g:colors_name ==# 'shodo'
+			if g:colors_name ==# 'solarized9' || g:colors_name ==# 'suiboku'
 				if exists('g:' .. g:colors_name)
 					execute 'g:' .. g:colors_name .. '.transparent = true'
 				else

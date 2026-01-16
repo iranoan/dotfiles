@@ -2,7 +2,7 @@ vim9script
 scriptencoding utf-8
 
 hi clear
-g:colors_name = 'shodo'
+g:colors_name = 'suiboku'
 
 g:terminal_ansi_colors = [                                   # Term general color text background
 	'#1d221f', #  0 Inkstone dark background                        # black           30 40
@@ -27,8 +27,8 @@ if !&termguicolors
 	set t_Co=16
 endif
 
-var shodo = get(g:, 'shodo', {italic: false, transparent: true})
-var italic = get(shodo, 'italic', false)
+var suiboku = get(g:, 'suiboku', {italic: false, transparent: true})
+var italic = get(suiboku, 'italic', false)
 
 if &background ==# 'dark'
 	if has('gui_running')
@@ -37,7 +37,7 @@ if &background ==# 'dark'
 		if !&termguicolors
 			set t_Co=16
 		endif
-		if get(get(g:, 'shodo', {}), 'transparent', true)
+		if get(get(g:, 'suiboku', {}), 'transparent', true)
 			hi Normal term=NONE cterm=NONE ctermfg=7 ctermbg=NONE ctermul=NONE gui=NONE guifg=#e6e1d1 guibg=NONE guisp=NONE
 		else
 			hi Normal term=NONE cterm=NONE ctermfg=7 ctermbg=0 ctermul=NONE gui=NONE guifg=#e6e1d1 guibg=#1d221f guisp=NONE
@@ -112,7 +112,7 @@ else # light
 		if !&termguicolors
 			set t_Co=16
 		endif
-		if get(get(g:, 'shodo', {}), 'transparent', true)
+		if get(get(g:, 'suiboku', {}), 'transparent', true)
 			hi Normal term=NONE cterm=NONE ctermfg=8 ctermbg=NONE ctermul=NONE gui=NONE guifg=#29302B guibg=NONE guisp=NONE
 		else
 			hi Normal term=NONE cterm=NONE ctermfg=8 ctermbg=15 ctermul=NONE gui=NONE guifg=#29302B guibg=#f7f2e1 guisp=NONE
