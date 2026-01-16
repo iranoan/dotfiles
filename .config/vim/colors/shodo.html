@@ -15,7 +15,7 @@
 			<dt>WASHI</dt>   <dd>traditional Japanese paper (light background)</dd>
 			<dt>AOZUMI</dt>  <dd>SHODO's ink (light foreground)</dd>
 			<dt>Ash</dt>     <dd>light sub foreground</dd>
-			<dt>INKSTONE</dt><dd>SHODO's inkstone (dark background)</dd>
+			<dt>Inkstone</dt><dd>SHODO's inkstone (dark background)</dd>
 			<dt>Fog</dt>     <dd>soft paper-like light (dark foreground)</dd>
 			<dt>Gray</dt>    <dd>dark sub foreground</dd>
 		</dl>
@@ -26,11 +26,11 @@
 		<li>Support both light/dark mode.<br>
 		<figure class="light-dark">
 		<img src="shodo-light.png" alt="">
-		<figcaption><span class="yellow">set</span> <span class="red">background</span><span class="green">=</span>light</figcaption>
+		<figcaption><span class="ochre">set</span> <span class="vermilion">background</span><span class="green">=</span>light</figcaption>
 		</figure>
 		<figure class="light-dark">
 		<img src="shodo-dark.png" alt="">
-		<figcaption><span class="yellow">set</span> <span class="red">background</span><span class="green">=</span>dark</figcaption>
+		<figcaption><span class="ochre">set</span> <span class="vermilion">background</span><span class="green">=</span>dark</figcaption>
 		</figure>
 		</li>
 	</ul>
@@ -39,7 +39,7 @@
 	<ul>
 		<li>Because it became difficult to read when wide character are used.<br>
 		To use italic:
-		<div><span class="yellow">let</span> <span class="blue">g:shodo</span> = <span class="orange">#{</span><span class="blue">italic</span>: <span class="blue underline">v:true</span>, <span class="blue">transparent</span>: <span class="blue">v:true</span><span class="orange">}</span></div>
+		<div><span class="ochre">let</span> <span class="seiran">g:shodo</span> = <span class="persimmon">#{</span><span class="seiran">italic</span>: <span class="seiran underline">v:true</span>, <span class="seiran">transparent</span>: <span class="seiran">v:true</span><span class="persimmon">}</span></div>
 		</li>
 	</ul>
 	</li>
@@ -51,9 +51,9 @@
 			<li>set background color.</li>
 		</ul>
 		the colorscheme set
-		<div><span class="yellow">highlight</span> <span class="blue" style="font-weight: bold;">Normal</span> <span class="yellow">ctermbg</span>=<span class="orange">NONE</span> <span class="yellow">guibg</span>=<span class="orange">NONE</span></div></li>
+		<div><span class="ochre">highlight</span> <span class="seiran" style="font-weight: bold;">Normal</span> <span class="ochre">ctermbg</span>=<span class="persimmon">NONE</span> <span class="ochre">guibg</span>=<span class="persimmon">NONE</span></div></li>
 		<li>To disable transparency:
-		<div><span class="yellow">let</span> <span class="blue">g:shodo</span> = <span class="orange">#{</span><span class="blue">italic</span>: <span class="blue">v:false</span>, <span class="blue">transparent</span>: <span class="blue underline">v:false</span><span class="orange">}</span></div>
+		<div><span class="ochre">let</span> <span class="seiran">g:shodo</span> = <span class="persimmon">#{</span><span class="seiran">italic</span>: <span class="seiran">v:false</span>, <span class="seiran">transparent</span>: <span class="seiran underline">v:false</span><span class="persimmon">}</span></div>
 		</li>
 		</ul>
 	</li>
@@ -61,43 +61,43 @@
 <h2>Color</h2>
 <table class="shodo">
 	<caption>contrast</caption>
-	<tr><th rowspan="2" colspan="2">name</th><th rowspan="2">HEX</th><th rowspan="2">color</th><th rowspan="2">term</th><th colspan="2"><a href="https://apcacontrast.com/">APCA Lc</a></th> <th rowspan="2">syntax</th></tr>
+	<tr><th rowspan="2" colspan="2">name</th><th rowspan="2">HEX</th><th rowspan="2">color</th><th rowspan="2">term</th><th colspan="2"><a href="https://apcacontrast.com/">APCA Lc</a></th> <th rowspan="2">syntax</th><th rowspan="2">和名</th></tr>
 	<tr>                                                                                                    <th>light</th><th>dark</th></tr>
-	<tr><td>inkstone</td> <td>inkstone</td> <td>#1d221f</td><td style="background: #1d221f;"></td><td>0</td> <td>95.3</td><td>―</td>   <td>dark background (硯)</td></tr>
-	<tr><td>Red</td>      <td>Red</td>      <td>#e04a41</td><td style="background: #e04a41;"></td><td>1</td> <td>58.6</td><td>-33.0</td><td></td></tr>
-	<tr><td>Green</td>    <td>Green</td>    <td>#6da34d</td><td style="background: #6da34d;"></td><td>2</td> <td>48.8</td><td>-43.0</td><td></td></tr>
-	<tr><td>Yellow</td>   <td>Yellow</td>   <td>#a67700</td><td style="background: #a67700;"></td><td>3</td> <td>59.2</td><td>-32.4</td><td></td></tr>
-	<tr><td>Blue</td>     <td>Blue</td>     <td>#268bd2</td><td style="background: #268bd2;"></td><td>4</td> <td>56.1</td><td>-35.5</td><td></td></tr>
-	<tr><td>Lotus</td>    <td>Lotus</td>    <td>#d14d8a</td><td style="background: #d14d8a;"></td><td>5</td> <td>59.4</td><td>-32.2</td><td></td></tr>
-	<tr><td>Violet</td>   <td>Violet</td>   <td>#966fd0</td><td style="background: #966fd0;"></td><td>6</td> <td>57.8</td><td>-33.8</td><td></td></tr>
-	<tr><td>Fog</td>      <td>Fog</td>      <td>#e6e1d1</td><td style="background: #e6e1d1;"></td><td>7</td> <td>7.5</td> <td>-86.3</td><td>light sub background / dark foreground</td></tr>
-	<tr><td>AOZUMI</td>   <td>AOZUMI</td>   <td>#29302B</td><td style="background: #29302B;"></td><td>8</td> <td>92.2</td><td>0.0</td>  <td>light foreground / dark sub background (青墨)</td></tr>
-	<tr><td>Peony</td>    <td>Peony</td>    <td>#cf5858</td><td style="background: #cf5858;"></td><td>9</td> <td>59.2</td><td>-32.4</td><td></td></tr>
-	<tr><td>Bamboo</td>   <td>Bamboo</td>   <td>#00947a</td><td style="background: #00947a;"></td><td>10</td><td>57.2</td><td>-34.5</td><td></td></tr>
-	<tr><td>Orange</td>   <td>Orange</td>   <td>#ca5b00</td><td style="background: #ca5b00;"></td><td>11</td><td>60.4</td><td>-31.3</td><td></td></tr>
-	<tr><td>Ash</td>      <td>Ash</td>      <td>#6d736d</td><td style="background: #6d736d;"></td><td>12</td><td>65.9</td><td>-25.7</td><td>light sub foreground</td></tr>
-	<tr><td>Gray</td>     <td>Gray</td>     <td>#8c8a7d</td><td style="background: #8c8a7d;"></td><td>13</td><td>54.5</td><td>-37.1</td><td>dark sub foreground</td></tr>
-	<tr><td>Hydrangea</td><td>Hydrangea</td><td>#6595b5</td><td style="background: #6595b5;"></td><td>14</td><td>51.6</td><td>-40.1</td><td></td></tr>
-	<tr><td>WASHI</td>    <td>WASHI</td>    <td>#f7f2e1</td><td style="background: #f7f2e1;"></td><td>15</td><td>―</td>  <td>-97.0</td><td>light background (和紙)</td></tr>
+	<tr><td>Inkstone</td> <td>Inkstone</td> <td>#1d221f</td><td style="background: #1d221f;"></td><td>0</td> <td>95.3</td><td>―</td>   <td>dark background</td>                       <td>硯</td></tr>
+	<tr><td>Vermilion</td><td>Vermilion</td><td>#e04a41</td><td style="background: #e04a41;"></td><td>1</td> <td>58.6</td><td>-33.0</td><td></td>                                      <td>朱</td></tr>
+	<tr><td>Green</td>    <td>Green</td>    <td>#6da34d</td><td style="background: #6da34d;"></td><td>2</td> <td>48.8</td><td>-43.0</td><td></td>                                      <td>新緑</td></tr>
+	<tr><td>Ochre</td>    <td>Ochre</td>    <td>#a67700</td><td style="background: #a67700;"></td><td>3</td> <td>59.2</td><td>-32.4</td><td></td>                                      <td>黄土</td></tr>
+	<tr><td>SEIRAN</td>   <td>SEIRAN</td>   <td>#268bd2</td><td style="background: #268bd2;"></td><td>4</td> <td>56.1</td><td>-35.5</td><td></td>                                      <td>青藍</td></tr>
+	<tr><td>Lotus</td>    <td>Lotus</td>    <td>#d14d8a</td><td style="background: #d14d8a;"></td><td>5</td> <td>59.4</td><td>-32.2</td><td></td>                                      <td>蓮</td></tr>
+	<tr><td>Violet</td>   <td>Violet</td>   <td>#966fd0</td><td style="background: #966fd0;"></td><td>6</td> <td>57.8</td><td>-33.8</td><td></td>                                      <td>菫</td></tr>
+	<tr><td>Fog</td>      <td>Fog</td>      <td>#e6e1d1</td><td style="background: #e6e1d1;"></td><td>7</td> <td>7.5</td> <td>-86.3</td><td>light sub background / dark foreground</td><td>霧</td></tr>
+	<tr><td>AOZUMI</td>   <td>AOZUMI</td>   <td>#29302B</td><td style="background: #29302B;"></td><td>8</td> <td>92.2</td><td>0.0</td>  <td>light foreground / dark sub background</td><td>青墨</td></tr>
+	<tr><td>Peony</td>    <td>Peony</td>    <td>#cf5858</td><td style="background: #cf5858;"></td><td>9</td> <td>59.2</td><td>-32.4</td><td></td>                                      <td>牡丹</td></tr>
+	<tr><td>Bamboo</td>   <td>Bamboo</td>   <td>#00947a</td><td style="background: #00947a;"></td><td>10</td><td>57.2</td><td>-34.5</td><td></td>                                      <td>竹</td></tr>
+	<tr><td>Persimmon</td><td>Persimmon</td><td>#ca5b00</td><td style="background: #ca5b00;"></td><td>11</td><td>60.4</td><td>-31.3</td><td></td>                                      <td>柿</td></tr>
+	<tr><td>Ash</td>      <td>Ash</td>      <td>#6d736d</td><td style="background: #6d736d;"></td><td>12</td><td>65.9</td><td>-25.7</td><td>light sub foreground</td>                  <td>火山灰</td></tr>
+	<tr><td>Gray</td>     <td>Gray</td>     <td>#8c8a7d</td><td style="background: #8c8a7d;"></td><td>13</td><td>54.5</td><td>-37.1</td><td>dark sub foreground</td>                   <td>灰</td></tr>
+	<tr><td>Hydrangea</td><td>Hydrangea</td><td>#6595b5</td><td style="background: #6595b5;"></td><td>14</td><td>51.6</td><td>-40.1</td><td></td>                                      <td>紫陽花</td></tr>
+	<tr><td>WASHI</td>    <td>WASHI</td>    <td>#f7f2e1</td><td style="background: #f7f2e1;"></td><td>15</td><td>―</td>  <td>-97.0</td><td>light background</td>                      <td>和紙</td></tr>
 </table>
 <table class="color-difference">
 	<caption>color difference</caption>
-	<tr><th>name</th>     <th>inkstone</th><th>Red</th> <th>Green</th><th>Yellow</th><th>Blue</th><th>Lotus</th><th>Bamboo</th><th>Gray</th><th>AOZUMI</th><th>Orange</th><th>Ash</th> <th>Peony</th><th>Hydrangea</th><th>Violet</th><th>Fog</th> </tr>
-	<tr><th>Red</th>      <td>81.7</td>    <td>―</td>  <td></td>     <td></td>      <td></td>    <td></td>     <td></td>      <td></td>    <td></td>      <td></td>      <td></td>    <td></td>     <td></td>         <td></td>      <td></td>    </tr>
-	<tr><th>Green</th>    <td>68.8</td>    <td>91.7</td><td>―</td>   <td></td>      <td></td>    <td></td>     <td></td>      <td></td>    <td></td>      <td></td>      <td></td>    <td></td>     <td></td>         <td></td>      <td></td>    </tr>
-	<tr><th>Yellow</th>   <td>72.2</td>    <td>52.4</td><td>48.9</td> <td>―</td>    <td></td>    <td></td>     <td></td>      <td></td>    <td></td>      <td></td>      <td></td>    <td></td>     <td></td>         <td></td>      <td></td>    </tr>
-	<tr><th>Blue</th>     <td>62.7</td>    <td>102</td> <td>88.7</td> <td>105</td>   <td>―</td>  <td></td>     <td></td>      <td></td>    <td></td>      <td></td>      <td></td>    <td></td>     <td></td>         <td></td>      <td></td>    </tr>
-	<tr><th>Lotus</th>    <td>73.0</td>    <td>44.2</td><td>102</td>  <td>81.2</td>  <td>71.9</td><td>―</td>   <td></td>      <td></td>    <td></td>      <td></td>      <td></td>    <td></td>     <td></td>         <td></td>      <td></td>    </tr>
-	<tr><th>Bamboo</th>   <td>55.9</td>    <td>103</td> <td>35.6</td> <td>74.2</td>  <td>60.9</td><td>97.9</td> <td>―</td>    <td></td>    <td></td>      <td></td>      <td></td>    <td></td>     <td></td>         <td></td>      <td></td>    </tr>
-	<tr><th>Gray</th>     <td>45.1</td>    <td>66.9</td><td>45.1</td> <td>53.7</td>  <td>51.7</td><td>60.9</td> <td>38.3</td>  <td>―</td>  <td></td>      <td></td>      <td></td>    <td></td>     <td></td>         <td></td>      <td></td>    </tr>
-	<tr><th>AOZUMI</th>   <td>6.60</td>     <td>79.2</td><td>63.3</td> <td>68.2</td>  <td>59.2</td><td>70.8</td> <td>50.3</td>  <td>38.7</td><td>―</td>    <td></td>      <td></td>    <td></td>     <td></td>         <td></td>      <td></td>    </tr>
-	<tr><th>Orange</th>   <td>83.8</td>    <td>28.8</td><td>78.0</td> <td>30.7</td>  <td>114</td> <td>69.4</td> <td>98.3</td>  <td>68.6</td><td>80.9</td>  <td>―</td>    <td></td>    <td></td>     <td></td>         <td></td>      <td></td>    </tr>
-	<tr><th>Ash</th>      <td>35.2</td>    <td>70.9</td><td>49.1</td> <td>58.8</td>  <td>47.6</td><td>61.9</td> <td>37.0</td>  <td>10.8</td><td>28.7</td>  <td>73.3</td>  <td>―</td>  <td></td>     <td></td>         <td></td>      <td></td>    </tr>
-	<tr><th>Peony</th>    <td>68.2</td>    <td>17.6</td><td>82.6</td> <td>51.6</td>  <td>84.9</td><td>31.8</td> <td>89.1</td>  <td>51.8</td><td>65.3</td>  <td>37.8</td>  <td>55.2</td><td>―</td>   <td></td>         <td></td>      <td></td>    </tr>
-	<tr><th>Hydrangea</th><td>52.4</td>    <td>88.6</td><td>65.9</td> <td>83.3</td>  <td>23.4</td><td>67.3</td> <td>41.8</td>  <td>29.6</td><td>47.1</td>  <td>96.0</td>  <td>27.3</td><td>71.5</td> <td>―</td>       <td></td>      <td></td>    </tr>
-	<tr><th>Violet</th>   <td>73.1</td>    <td>85.6</td><td>109</td>  <td>107</td>   <td>38.7</td><td>44.4</td> <td>89.8</td>  <td>63.8</td><td>70.9</td>  <td>106</td>   <td>61.5</td><td>69.6</td> <td>48.9</td>     <td>―</td>    <td></td>    </tr>
-	<tr><th>Fog</th>      <td>77.2</td>    <td>75.1</td><td>52.5</td> <td>63.6</td>  <td>62.8</td><td>70.8</td> <td>52.3</td>  <td>32.2</td><td>70.8</td>  <td>76.9</td>  <td>42.2</td><td>62.5</td> <td>43.0</td>     <td>73.3</td>  <td>―</td>  </tr>
-	<tr><th>WASHI</th>    <td>83.2</td>    <td>78.1</td><td>55.6</td> <td>66.9</td>  <td>66.5</td><td>74.2</td> <td>56.4</td>  <td>38.2</td><td>76.8</td>  <td>79.8</td>  <td>48.2</td><td>66.1</td> <td>47.6</td>     <td>76.7</td>  <td>5.95</td></tr>
+	<tr><th>name</th>     <th>Inkstone</th><th>Vermilion</th><th>Green</th><th>Ochre</th><th>SEIRAN</th><th>Lotus</th><th>Bamboo</th><th>Gray</th><th>AOZUMI</th><th>Persimmon</th><th>Ash</th> <th>Peony</th><th>Hydrangea</th><th>Violet</th><th>Fog</th> </tr>
+	<tr><th>Vermilion</th><td>81.7</td>    <td>―</td>       <td></td>     <td></td>     <td></td>      <td></td>     <td></td>      <td></td>    <td></td>      <td></td>         <td></td>    <td></td>     <td></td>         <td></td>      <td></td>    </tr>
+	<tr><th>Green</th>    <td>68.8</td>    <td>91.7</td>     <td>―</td>   <td></td>     <td></td>      <td></td>     <td></td>      <td></td>    <td></td>      <td></td>         <td></td>    <td></td>     <td></td>         <td></td>      <td></td>    </tr>
+	<tr><th>Ochre</th>    <td>72.2</td>    <td>52.4</td>     <td>48.9</td> <td>―</td>   <td></td>      <td></td>     <td></td>      <td></td>    <td></td>      <td></td>         <td></td>    <td></td>     <td></td>         <td></td>      <td></td>    </tr>
+	<tr><th>SEIRAN</th>   <td>62.7</td>    <td>102</td>      <td>88.7</td> <td>105</td>  <td>―</td>    <td></td>     <td></td>      <td></td>    <td></td>      <td></td>         <td></td>    <td></td>     <td></td>         <td></td>      <td></td>    </tr>
+	<tr><th>Lotus</th>    <td>73.0</td>    <td>44.2</td>     <td>102</td>  <td>81.2</td> <td>71.9</td>  <td>―</td>   <td></td>      <td></td>    <td></td>      <td></td>         <td></td>    <td></td>     <td></td>         <td></td>      <td></td>    </tr>
+	<tr><th>Bamboo</th>   <td>55.9</td>    <td>103</td>      <td>35.6</td> <td>74.2</td> <td>60.9</td>  <td>97.9</td> <td>―</td>    <td></td>    <td></td>      <td></td>         <td></td>    <td></td>     <td></td>         <td></td>      <td></td>    </tr>
+	<tr><th>Gray</th>     <td>45.1</td>    <td>66.9</td>     <td>45.1</td> <td>53.7</td> <td>51.7</td>  <td>60.9</td> <td>38.3</td>  <td>―</td>  <td></td>      <td></td>         <td></td>    <td></td>     <td></td>         <td></td>      <td></td>    </tr>
+	<tr><th>AOZUMI</th>   <td>6.60</td>    <td>79.2</td>     <td>63.3</td> <td>68.2</td> <td>59.2</td>  <td>70.8</td> <td>50.3</td>  <td>38.7</td><td>―</td>    <td></td>         <td></td>    <td></td>     <td></td>         <td></td>      <td></td>    </tr>
+	<tr><th>Persimmon</th><td>83.8</td>    <td>28.8</td>     <td>78.0</td> <td>30.7</td> <td>114</td>   <td>69.4</td> <td>98.3</td>  <td>68.6</td><td>80.9</td>  <td>―</td>       <td></td>    <td></td>     <td></td>         <td></td>      <td></td>    </tr>
+	<tr><th>Ash</th>      <td>35.2</td>    <td>70.9</td>     <td>49.1</td> <td>58.8</td> <td>47.6</td>  <td>61.9</td> <td>37.0</td>  <td>10.8</td><td>28.7</td>  <td>73.3</td>     <td>―</td>  <td></td>     <td></td>         <td></td>      <td></td>    </tr>
+	<tr><th>Peony</th>    <td>68.2</td>    <td>17.6</td>     <td>82.6</td> <td>51.6</td> <td>84.9</td>  <td>31.8</td> <td>89.1</td>  <td>51.8</td><td>65.3</td>  <td>37.8</td>     <td>55.2</td><td>―</td>   <td></td>         <td></td>      <td></td>    </tr>
+	<tr><th>Hydrangea</th><td>52.4</td>    <td>88.6</td>     <td>65.9</td> <td>83.3</td> <td>23.4</td>  <td>67.3</td> <td>41.8</td>  <td>29.6</td><td>47.1</td>  <td>96.0</td>     <td>27.3</td><td>71.5</td> <td>―</td>       <td></td>      <td></td>    </tr>
+	<tr><th>Violet</th>   <td>73.1</td>    <td>85.6</td>     <td>109</td>  <td>107</td>  <td>38.7</td>  <td>44.4</td> <td>89.8</td>  <td>63.8</td><td>70.9</td>  <td>106</td>      <td>61.5</td><td>69.6</td> <td>48.9</td>     <td>―</td>    <td></td>    </tr>
+	<tr><th>Fog</th>      <td>77.2</td>    <td>75.1</td>     <td>52.5</td> <td>63.6</td> <td>62.8</td>  <td>70.8</td> <td>52.3</td>  <td>32.2</td><td>70.8</td>  <td>76.9</td>     <td>42.2</td><td>62.5</td> <td>43.0</td>     <td>73.3</td>  <td>―</td>  </tr>
+	<tr><th>WASHI</th>    <td>83.2</td>    <td>78.1</td>     <td>55.6</td> <td>66.9</td> <td>66.5</td>  <td>74.2</td> <td>56.4</td>  <td>38.2</td><td>76.8</td>  <td>79.8</td>     <td>48.2</td><td>66.1</td> <td>47.6</td>     <td>76.7</td>  <td>5.95</td></tr>
 </table>
 </body>
 </html>

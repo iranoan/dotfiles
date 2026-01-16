@@ -8,16 +8,16 @@ import math
 
 # 比較対象
 colors = {
-    '#1d221f': 'inkstone',
-    '#e04a41': 'Red',
+    '#1d221f': 'Inkstone',
+    '#e04a41': 'Vermilion',
     '#6da34d': 'Green',
-    '#a67700': 'Yellow',
-    '#268bd2': 'Blue',
+    '#a67700': 'Ochre',
+    '#268bd2': 'SEIRAN',
     '#d14d8a': 'Lotus',
     '#00947a': 'Bamboo',
     '#8c8a7d': 'Gray',
     '#29302B': 'AOZUMI',
-    '#ca5b00': 'Orange',
+    '#ca5b00': 'Persimmon',
     '#6d736d': 'Ash',
     '#cf5858': 'Peony',
     '#6595b5': 'Hydrangea',
@@ -100,9 +100,9 @@ for i, c0 in enumerate(colors.keys()):
             print(f"{get_delta_e_2000(c0, c1):.3g}", end="\t")
     print('')
 print("")
-inkstone, *_, WASHI = colors.keys()
+Inkstone, *_, WASHI = colors.keys()
 for v in colors.keys():
     print(v,
           apca_lc(v, WASHI) if v != WASHI else '―',
-          apca_lc(v, inkstone) if v != inkstone else '―',
+          apca_lc(v, Inkstone) if v != Inkstone else '―',
           sep="\t")
