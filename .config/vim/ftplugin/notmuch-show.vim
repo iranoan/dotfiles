@@ -14,8 +14,8 @@ endif
 # キーマップ {{{2
 # nnoremap <buffer><silent><Leader>s :Notmuch mail-send<CR>
 # に割り当てられているのが notmuch-show は Google 検索に割当し直し
-nnoremap <buffer><silent><Leader>s <Cmd>call set_google_search#main() <Bar> delfunction set_google_search#main<CR>
-xnoremap <buffer><silent><Leader>s <Cmd>call set_google_search#main() <Bar> delfunction set_google_search#main<CR>
+nnoremap <buffer><silent><Leader>s <Cmd>call set_web_search#main('SearchByGoogle')<CR>
+xnoremap <buffer><silent><Leader>s <Cmd>call set_web_search#main('SearchByGoogle')<CR>
 # set {{{2
 # setlocal keywordprg=:call\ set_eblook#searchWord()
 setlocal tabstop=8

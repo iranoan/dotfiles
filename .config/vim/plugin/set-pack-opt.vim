@@ -363,9 +363,13 @@ augroup loadFileTypeFold
 augroup END
 
 # キーマップし読み込みもする分 {{{1
-# カーソル位置の単語を Google で検索 $MYVIMDIR/pack/my-plug/opt/google-search/ {{{2 https://www.rasukarusan.com/entry/2019/03/09/011630 を参考にした
-nnoremap <silent><Leader>s <Cmd>call set_google_search#main()<CR>
-xnoremap <silent><Leader>s <Cmd>call set_google_search#main()<CR>
+# カーソル位置の単語を Web で検索 $MYVIMDIR/pack/my-plug/opt/web-search/ {{{2 https://www.rasukarusan.com/entry/2019/03/09/011630 を参考にした
+nnoremap <silent><Leader>s <Cmd>call set_web_search#main('SearchByGoogle')<CR>
+xnoremap <silent><Leader>s <Cmd>call set_web_search#main('SearchByGoogle')<CR>
+nnoremap <silent><Leader>sa <Cmd>call set_web_search#main('SearchByAmazon')<CR>
+xnoremap <silent><Leader>sa <Cmd>call set_web_search#main('SearchByAmazon')<CR>
+nnoremap <silent><Leader>sw <Cmd>call set_web_search#main('SearchByWikiPedia')<CR>
+xnoremap <silent><Leader>sw <Cmd>call set_web_search#main('SearchByWikiPedia')<CR>
 
 # ctags や LSP を使った list https://github.com/liuchengxu/vista.vim {{{2
 # アウトライン https://github.com/vim-voom/VOoM {{{2
