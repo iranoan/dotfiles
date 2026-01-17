@@ -10,7 +10,7 @@ import math
 colors = {
     '#1d221f': 'Inkstone',
     '#e04a41': 'Vermilion',
-    '#6da34d': 'Green',
+    '#6da34d': 'KOSHIABURA',
     '#a67700': 'Ochre',
     '#268bd2': 'SEIRAN',
     '#d14d8a': 'Lotus',

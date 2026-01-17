@@ -7,7 +7,7 @@ g:colors_name = 'suiboku'
 g:terminal_ansi_colors = [                                   # Term general color text background
 	'#1d221f', #  0 Inkstone dark background                        # black           30 40
 	'#e04a41', #  1 Vermilion                                       # red             31 41
-	'#6da34d', #  2 Green                                           # green           32 42
+	'#6da34d', #  2 KOSHIABURA                                             # green           32 42
 	'#a67700', #  3 Ochre                                           # yellow          33 43
 	'#268bd2', #  4 SEIRAN                                          # blue            34 44
 	'#d14d8a', #  5 Lotus                                           # magenta         35 45
