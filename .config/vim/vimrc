@@ -416,7 +416,7 @@ nnoremap <silent><expr><C-\>t 'i' .. strftime('%H:%M:%S') .. '<Esc>'
 # スクロール {{{2
 # nnoremap <Space> <PageDown> # → $MYVIMDIR/pack/my-plug/opt/page-down
 nnoremap <S-Space> <PageUp>
-nnoremap <BS> <PageUp>
+nnoremap <BS> <Cmd>execute 'normal! ' .. (line('w0') - 1) .. 'z-H'<CR>
 xnoremap <Space> <C-D>
 xnoremap <S-Space> <C-U>
 xnoremap <BS> <C-U>
