@@ -13,6 +13,7 @@ function set_fzf#main() abort
 				\ 'fg+': ['fg', 'PmenuSel'],
 				\ 'bg+': ['bg', 'Pmenu'],
 				\ 'hl+': ['fg', 'PmenuMatchSel'],
+				\ 'border': ['fg', 'Normal'],
 				\ }
 	let g:fzf_action = {
 				\ 'ctrl-g': 'edit',
