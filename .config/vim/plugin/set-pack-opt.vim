@@ -503,6 +503,8 @@ xnoremap <Enter>    <Cmd>call set_easy_align#main()<CR>
 xnoremap <Leader>ea <Cmd>call set_easy_align#main()<CR>
 nnoremap <Leader>ea <Cmd>call set_easy_align#main()<CR>
 # ↑全て対象を全体 * にしたいが、nmap の <Leader>eaip などテキストオブジェクトの場合の方法がわからない
+# タブ文字で桁揃えしたい時は、vip<Enter> の直後に <C-x> で正規表現モードに入り、\t を入力
+# →:help easy-align-using-regular-expressions
 
 # EPWING の辞書を呼び出す https://github.com/deton/eblook.vim {{{2
 xnoremap <silent><Leader>eb <Cmd>call set_eblook#SearchVisual()<CR>
