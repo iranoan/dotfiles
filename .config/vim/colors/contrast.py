@@ -6,7 +6,6 @@
 
 import math
 
-# 比較対象
 colors = {
     '#1d221f': 'Inkstone',
     '#e04a41': 'Vermilion',
@@ -14,15 +13,15 @@ colors = {
     '#a67700': 'Ochre',
     '#268bd2': 'SEIRAN',
     '#d14d8a': 'Lotus',
-    '#00947a': 'Bamboo',
-    '#8c8a7d': 'Gray',
-    '#29302B': 'AOZUMI',
-    '#ca5b00': 'Persimmon',
-    '#6d736d': 'Ash',
-    '#cf5858': 'Peony',
-    '#6595b5': 'Hydrangea',
     '#966fd0': 'Violet',
     '#e6e1d1': 'Fog',
+    '#29302B': 'AOZUMI',
+    '#cf5858': 'Peony',
+    '#00947a': 'Bamboo',
+    '#ca5b00': 'Persimmon',
+    '#6d736d': 'Ash',
+    '#8c8a7d': 'Gray',
+    '#6595b5': 'Hydrangea',
     '#f7f2e1': 'WASHI',
 }
 
@@ -68,7 +67,7 @@ def apca_lc(text_rgb, bg_rgb) -> float:  # 簡易版
     return Lc
 
 
-def get_delta_e_2000(hex1, hex2):
+def get_delta_e_2000(hex1, hex2):  # 厳密な CIEDE2000 (ISO/CIE 11664-6:2014) 実装
     def rgb_to_lab(h):
         def f(t):
             return math.pow(t, 1 / 3) if t > 0.008856 else 7.787 * t + 16 / 116
@@ -80,29 +79,82 @@ def get_delta_e_2000(hex1, hex2):
         return 116 * f(y) - 16, 500 * (f(x) - f(y)), 200 * (f(y) - f(z))
 
     L1, a1, b1 = rgb_to_lab(hex1)
-    L2, a2, b2 = rgb_to_lab(hex2)  # 簡易版色差（ユークリッド距離ではなく、知覚的な色差近似）
-    return math.sqrt(math.pow(L2 - L1, 2) + math.pow(a2 - a1, 2) + math.pow(b2 - b1, 2))
+    L2, a2, b2 = rgb_to_lab(hex2)
+
+    # --- CIEDE2000 Constants & Calculations ---
+    C1 = math.sqrt(a1**2 + b1**2)
+    C2 = math.sqrt(a2**2 + b2**2)
+    mean_C = (C1 + C2) / 2
+
+    G = 0.5 * (1 - math.sqrt(mean_C**7 / (mean_C**7 + 25**7)))
+    a1p = (1 + G) * a1
+    a2p = (1 + G) * a2
+
+    Cp1 = math.sqrt(a1p**2 + b1**2)
+    Cp2 = math.sqrt(a2p**2 + b2**2)
+
+    hp1 = math.degrees(math.atan2(b1, a1p)) % 360
+    hp2 = math.degrees(math.atan2(b2, a2p)) % 360
+
+    dL = L2 - L1
+    dCp = Cp2 - Cp1
+
+    if Cp1 * Cp2 == 0:
+        dhp = 0
+    else:
+        dhp = hp2 - hp1
+        if dhp > 180:
+            dhp -= 360
+        elif dhp < -180:
+            dhp += 360
+
+    dHp = 2 * math.sqrt(Cp1 * Cp2) * math.sin(math.radians(dhp / 2))
+
+    mean_L = (L1 + L2) / 2
+    mean_Cp = (Cp1 + Cp2) / 2
+
+    if Cp1 * Cp2 == 0:
+        mean_hp = hp1 + hp2
+    else:
+        mean_hp = (hp1 + hp2) / 2
+        if abs(hp1 - hp2) > 180:
+            if hp1 + hp2 < 360:
+                mean_hp += 180
+            else:
+                mean_hp -= 180
+
+    T = 1 - 0.17 * math.cos(math.radians(mean_hp - 30)) + \
+        0.24 * math.cos(math.radians(2 * mean_hp)) + \
+        0.32 * math.cos(math.radians(3 * mean_hp + 6)) - \
+        0.20 * math.cos(math.radians(4 * mean_hp - 63))
+
+    SL = 1 + (0.015 * (mean_L - 50)**2) / math.sqrt(20 + (mean_L - 50)**2)
+    SC = 1 + 0.045 * mean_Cp
+    SH = 1 + 0.015 * mean_Cp * T
+
+    RT = -2 * math.sqrt(mean_Cp**7 / (mean_Cp**7 + 25**7)) * \
+        math.sin(math.radians(60 * math.exp(-((mean_hp - 275) / 25)**2)))
+
+    return math.sqrt((dL / SL)**2 + (dCp / SC)**2 + (dHp / SH)**2 + RT * (dCp / SC) * (dHp / SH))
 
 
-for i in colors.values():
-    print(i, end="\t")
+# 出力処理
+print("\t", "light", "dark", sep="\t", end="\t")
+for name in colors.values():
+    print(name, end="\t")
 print("")
-for i, c0 in enumerate(colors.keys()):
-    c0 = c0.lstrip('#')
-    for j, c1 in enumerate(colors):
+Inkstone, *_, WASHI = colors.keys()
+for i, (c0, v) in enumerate(colors.items()):
+    print(v, c0,
+          f"{apca_lc(c0, WASHI):#.3g}" if v != 'WASHI' else '―',
+          f"{apca_lc(c0, Inkstone):#.3g}" if v != 'Inkstone' else '―',
+          sep="\t", end="\t")
+    for j, (c1, _) in enumerate(colors.items()):
         if i < j:
             print("\t", end="")
             continue
-        c1 = c1.lstrip('#')
         if c0 == c1:
             print('―', end="\t")
         else:
-            print(f"{get_delta_e_2000(c0, c1):.3g}", end="\t")
+            print(f"{get_delta_e_2000(c0, c1):#.3g}", end="\t")
     print('')
-print("")
-Inkstone, *_, WASHI = colors.keys()
-for v in colors.keys():
-    print(v,
-          apca_lc(v, WASHI) if v != WASHI else '―',
-          apca_lc(v, Inkstone) if v != Inkstone else '―',
-          sep="\t")
