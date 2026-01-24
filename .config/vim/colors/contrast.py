@@ -21,7 +21,7 @@ colors = {
     '#ca5b00': 'Persimmon',
     '#6d736d': 'Ash',
     '#8c8a7d': 'Gray',
-    '#6595b5': 'Hydrangea',
+    '#6091be': 'Hydrangea',
     '#f7f2e1': 'WASHI',
 }
 
