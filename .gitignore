@@ -51,3 +51,10 @@
 /.config/mlterm/emoji
 /.config/mlterm/challenge
 /.config/mlterm/pts_*.six
+
+# LibreOfficeのスワップ
+.~lock.*.odt#
+.~lock.*.ods#
+.~lock.*.odp#
+.~lock.*.odg#
+.~lock.*.odf#
