@@ -112,11 +112,11 @@ caption{
 }
 
 .koshiabura{
-	color: #40a33d;
+	color: #309c00;
 }
 
 .underline{
-	text-decoration: underline wavy #dc322f;
+	text-decoration: underline wavy #e44036;
 }
 
 table.color-difference tr td{
@@ -177,7 +177,7 @@ table.suiboku tr:nth-child(4) td:nth-child(2) {
 
 table.suiboku tr:nth-child(5) td:nth-child(1),
 table.suiboku tr:nth-child(5) td:nth-child(2) {
-	color: #40a33d;
+	color: #309c00;
 }
 
 table.suiboku tr:nth-child(6) td:nth-child(1),
@@ -197,7 +197,7 @@ table.suiboku tr:nth-child(8) td:nth-child(2) {
 
 table.suiboku tr:nth-child(9) td:nth-child(1),
 table.suiboku tr:nth-child(9) td:nth-child(2) {
-	color: #966fe1;
+	color: #148fa4;
 }
 
 table.suiboku tr:nth-child(10) td:nth-child(2) {
@@ -223,7 +223,7 @@ table.suiboku tr:nth-child(12) td:nth-child(2) {
 
 table.suiboku tr:nth-child(13) td:nth-child(1),
 table.suiboku tr:nth-child(13) td:nth-child(2) {
-	color: #00988b;
+	color: #00886a;
 }
 
 table.suiboku tr:nth-child(14) td:nth-child(1),
@@ -238,12 +238,12 @@ table.suiboku tr:nth-child(15) td:nth-child(2) {
 
 table.suiboku tr:nth-child(16) td:nth-child(1),
 table.suiboku tr:nth-child(16) td:nth-child(2) {
-	color: #8c8a7d;
+	color: #966fe1;
 }
 
 table.suiboku tr:nth-child(17) td:nth-child(1),
 table.suiboku tr:nth-child(17) td:nth-child(2) {
-	color: #1684a8;
+	color: #8c8a7d;
 }
 
 figure.light-dark{

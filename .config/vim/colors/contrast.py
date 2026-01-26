@@ -9,19 +9,19 @@ import math
 colors = {
     '#1d221f': 'Inkstone',
     '#e44036': 'Vermilion',
-    '#40a33d': 'KOSHIABURA',
+    '#309c00': 'KOSHIABURA',
     '#c08000': 'Ochre',
     '#2280e4': 'SEIRAN',
     '#e14080': 'Lotus',
-    '#966fe1': 'Violet',
+    '#148fa4': 'Kingfisher',
     '#e6e1d1': 'Fog',
     '#29302b': 'AOZUMI',
     '#ca5e5e': 'Peony',
-    '#00988b': 'Bamboo',
+    '#00886a': 'Bamboo',
     '#ca5b00': 'Persimmon',
     '#6d736d': 'Ash',
+    '#966fe1': 'Violet',
     '#8c8a7d': 'Gray',
-    '#1684a8': 'Kingfisher',
     '#f7f2e1': 'WASHI',
 }
 

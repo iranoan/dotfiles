@@ -90,22 +90,22 @@ EIGHTBIT 1
 # Attribute codes:
 #   00=none 01=bold 04=underscore 05=blink 07=reverse 08=concealed
 #                                                                                 text background
-# '#1d221f', #  0 inkstone dark background                        # black           30 40
-# '#e04a41', #  1 Red                                             # red             31 41
-# '#6da34d', #  2 Green                                           # green           32 42
-# '#a67700', #  3 Yellow                                          # yellow          33 43
-# '#268bd2', #  4 Blue                                            # blue            34 44
-# '#d14d8a', #  5 Lotus                                           # magenta         35 45
-# '#966fd0', #  6 Violet                                          # cyan            36 46
-# '#e6e1d1', #  7 Fog     light sub background / dark foreground  # white           37 47
-# '#29302B', #  8 AOZUMI  dark sub background / light foreground  # light black     90 100
-# '#cf5858', #  9 Peony                                           # light red       91 101
-# '#00947a', # 10 Bamboo                                          # light green     92 102
-# '#ca5b00', # 11 Orange                                          # light yellow    93 103
-# '#6d736d', # 12 Ash     light sub foreground                    # light blue      94 104
-# '#8c8a7d', # 13 Gray    dark sub foreground                     # light magenta   95 105
-# '#6595b5', # 14 Hydrangea                                       # light cyan      96 106
-# '#f7f2e1'  # 15 WASHI   light background                        # light white     97 107
+# '#1d221f', #  0 Inkstone   dark background                        # black           30 40
+# '#e44036', #  1 Vermilion                                         # red             31 41
+# '#309c00', #  2 KOSHIABURA                                        # green           32 42
+# '#c08000', #  3 Ochre                                             # yellow          33 43
+# '#2280e4', #  4 SEIRAN                                            # blue            34 44
+# '#e14080', #  5 Lotus                                             # magenta         35 45
+# '#148fa4', #  6 Kingfisher                                        # light cyan      36 46
+# '#e6e1d1', #  7 Fog        light sub background / dark foreground # white           37 47
+# '#29302B', #  8 AOZUMI     dark sub background / light foreground # light black     90 100
+# '#ca5e5e', #  9 Peony                                             # light red       91 101
+# '#00886a', # 10 Bamboo                                            # light green     92 102
+# '#ca5b00', # 11 Persimmon                                         # light yellow    93 103
+# '#6d736d', # 12 Ash        light sub foreground    unmatch term→ # light blue      94 104
+# '#966fe1', # 13 Violet                                            # cyan            95 105
+# '#8c8a7d', # 14 Gray       dark sub foreground     unmatch term→ # light magenta   96 106
+# '#f7f2e1'  # 15 WASHI      light background                       # light white     97 107
 #
 ### By file type
 
@@ -121,7 +121,7 @@ STICKY_OTHER_WRITABLE 01;04;34
 # 777 directory
 OTHER_WRITABLE 34;40
 # symbolic link
-LINK 36
+LINK 95
 
 # pipe, socket, block device, character device (blue bg)
 FIFO 30;44
@@ -341,34 +341,34 @@ EXEC 01;31  # Unix
 .cbz  92
 
 # Archives, compressed
-.7z   01;36
-.apk  01;36
-.arj  01;36
-.bin  01;36
-.bz   01;36
-.bz2  01;36
-.cab  01;36  # Win
-.deb  01;36
-.dmg  01;36  # OSX
-.gem  01;36
-.gz   01;36
-.iso  01;36
-.jar  01;36
-.msi  01;36  # Win
-.rar  01;36
-.rpm  01;36
-.tar  01;36
-.tbz  01;36
-.tbz2 01;36
-.tgz  01;36
-.tx   01;36
-.war  01;36
-.xpi  01;36
-.xz   01;36
-.z    01;36
-.Z    01;36
-.zip  01;36
-.zst  01;36
+.7z   01;95
+.apk  01;95
+.arj  01;95
+.bin  01;95
+.bz   01;95
+.bz2  01;95
+.cab  01;95  # Win
+.deb  01;95
+.dmg  01;95  # OSX
+.gem  01;95
+.gz   01;95
+.iso  01;95
+.jar  01;95
+.msi  01;95  # Win
+.rar  01;95
+.rpm  01;95
+.tar  01;95
+.tbz  01;95
+.tbz2 01;95
+.tgz  01;95
+.tx   01;95
+.war  01;95
+.xpi  01;95
+.xz   01;95
+.z    01;95
+.Z    01;95
+.zip  01;95
+.zst  01;95
 
 # For testing
 .ANSI-30-black 30
