@@ -186,7 +186,8 @@ if italic
 	hi Changed term=italic,bold cterm=NONE ctermfg=3 ctermbg=NONE ctermul=NONE gui=NONE guifg=#b48000 guibg=NONE guisp=NONE
 	hi Constant term=italic,bold cterm=NONE ctermfg=10 ctermbg=NONE ctermul=NONE gui=NONE guifg=#00886a guibg=NONE guisp=NONE
 	hi CursorLineNr term=bold,italic,reverse,underline cterm=bold ctermfg=3 ctermbg=NONE ctermul=NONE gui=bold guifg=#b48000 guibg=NONE guisp=NONE
-	hi Identifier term=italic cterm=NONE ctermfg=4 ctermbg=NONE ctermul=NONE gui=NONE guifg=#2280e4 guibg=NONE guisp=NONE
+	hi Identifier term=italic cterm=NONE ctermfg=6 ctermbg=NONE ctermul=NONE gui=NONE guifg=#148fa4 guibg=NONE guisp=NONE
+	hi Function term=italic cterm=NONE ctermfg=4 ctermbg=NONE ctermul=NONE gui=NONE guifg=#2280e4 guibg=NONE guisp=NONE
 	hi IncSearch term=italic,standout cterm=standout ctermfg=11 ctermbg=NONE ctermul=NONE gui=standout guifg=#e65310 guibg=NONE guisp=NONE
 	hi PreProc term=italic cterm=NONE ctermfg=11 ctermbg=NONE ctermul=NONE gui=NONE guifg=#e65310 guibg=NONE guisp=NONE
 	hi Search term=italic,reverse cterm=reverse ctermfg=3 ctermbg=NONE ctermul=NONE gui=reverse guifg=#b48000 guibg=NONE guisp=NONE
@@ -205,7 +206,8 @@ else
 	hi Changed term=bold cterm=NONE ctermfg=3 ctermbg=NONE ctermul=NONE gui=NONE guifg=#b48000 guibg=NONE guisp=NONE
 	hi Constant term=bold cterm=NONE ctermfg=10 ctermbg=NONE ctermul=NONE gui=NONE guifg=#00886a guibg=NONE guisp=NONE
 	hi CursorLineNr term=bold,reverse,underline cterm=bold ctermfg=3 ctermbg=NONE ctermul=NONE gui=bold guifg=#b48000 guibg=NONE guisp=NONE
-	hi Identifier term=NONE cterm=NONE ctermfg=4 ctermbg=NONE ctermul=NONE gui=NONE guifg=#2280e4 guibg=NONE guisp=NONE
+	hi Identifier term=NONE cterm=NONE ctermfg=6 ctermbg=NONE ctermul=NONE gui=NONE guifg=#148fa4 guibg=NONE guisp=NONE
+	hi Function term=NONE cterm=NONE ctermfg=4 ctermbg=NONE ctermul=NONE gui=NONE guifg=#2280e4 guibg=NONE guisp=NONE
 	hi IncSearch term=standout cterm=standout ctermfg=11 ctermbg=NONE ctermul=NONE gui=standout guifg=#e65310 guibg=NONE guisp=NONE
 	hi PreProc term=NONE cterm=NONE ctermfg=11 ctermbg=NONE ctermul=NONE gui=NONE guifg=#e65310 guibg=NONE guisp=NONE
 	hi Search term=reverse cterm=reverse ctermfg=3 ctermbg=NONE ctermul=NONE gui=reverse guifg=#b48000 guibg=NONE guisp=NONE
@@ -406,7 +408,6 @@ hi! link DiffTextAdd DiffText
 hi! link EndOfBuffer NonText
 hi! link Exception Statement
 hi! link Float Number
-hi! link Function Identifier
 hi! link Include PreProc
 hi! link Keyword Statement
 hi! link Label Statement
