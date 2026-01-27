@@ -91,17 +91,17 @@ EIGHTBIT 1
 #   00=none 01=bold 04=underscore 05=blink 07=reverse 08=concealed
 #                                                                                 text background
 # '#1d221f', #  0 Inkstone   dark background                        # black           30 40
-# '#e44036', #  1 Vermilion                                         # red             31 41
+# '#e41436', #  1 Vermilion                                         # red             31 41
 # '#309c00', #  2 KOSHIABURA                                        # green           32 42
-# '#c08000', #  3 Ochre                                             # yellow          33 43
+# '#b48000', #  3 Ochre                                             # yellow          33 43
 # '#2280e4', #  4 SEIRAN                                            # blue            34 44
-# '#e14080', #  5 Lotus                                             # magenta         35 45
+# '#e14096', #  5 Lotus                                             # magenta         35 45
 # '#148fa4', #  6 Kingfisher                                        # light cyan      36 46
 # '#e6e1d1', #  7 Fog        light sub background / dark foreground # white           37 47
 # '#29302B', #  8 AOZUMI     dark sub background / light foreground # light black     90 100
-# '#ca5e5e', #  9 Peony                                             # light red       91 101
+# '#ca6e64', #  9 Peony                                             # light red       91 101
 # '#00886a', # 10 Bamboo                                            # light green     92 102
-# '#ca5b00', # 11 Persimmon                                         # light yellow    93 103
+# '#e65310', # 11 Persimmon                                         # light yellow    93 103
 # '#6d736d', # 12 Ash        light sub foreground    unmatch term→ # light blue      94 104
 # '#966fe1', # 13 Violet                                            # cyan            95 105
 # '#8c8a7d', # 14 Gray       dark sub foreground     unmatch term→ # light magenta   96 106
