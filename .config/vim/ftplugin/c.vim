@@ -7,7 +7,11 @@ endif
 b:did_ftplugin_user = 1
 
 # ファイルタイプ別のグローバル設定 {{{1
-if !exists('g:loaded_textobj_ifdef') # ↓内の変数を流用
+if !exists('g:c_gnu') # ↓内の変数を流用
+	g:c_gnu = 1
+	g:c_comment_strings = 1
+	g:c_functions = 1
+	g:c_function_pointers = 1
 	packadd vim-textobj-ifdef
 	unmap a#
 	unmap a3
