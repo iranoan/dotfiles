@@ -185,6 +185,7 @@ endif
 if italic
 	hi Changed term=italic,bold cterm=NONE ctermfg=3 ctermbg=NONE ctermul=NONE gui=NONE guifg=#b48000 guibg=NONE guisp=NONE
 	hi Constant term=italic,bold cterm=NONE ctermfg=10 ctermbg=NONE ctermul=NONE gui=NONE guifg=#00886a guibg=NONE guisp=NONE
+	hi Boolean term=italic,bold cterm=NONE ctermfg=6 ctermbg=NONE ctermul=NONE gui=NONE guifg=#4f5fdf guibg=NONE guisp=NONE
 	hi CursorLineNr term=bold,italic,reverse,underline cterm=bold ctermfg=3 ctermbg=NONE ctermul=NONE gui=bold guifg=#b48000 guibg=NONE guisp=NONE
 	hi Identifier term=italic cterm=NONE ctermfg=13 ctermbg=NONE ctermul=NONE gui=NONE guifg=#966fe1 guibg=NONE guisp=NONE
 	hi Function term=italic cterm=NONE ctermfg=4 ctermbg=NONE ctermul=NONE gui=NONE guifg=#2280e4 guibg=NONE guisp=NONE
@@ -205,6 +206,7 @@ if italic
 else
 	hi Changed term=bold cterm=NONE ctermfg=3 ctermbg=NONE ctermul=NONE gui=NONE guifg=#b48000 guibg=NONE guisp=NONE
 	hi Constant term=bold cterm=NONE ctermfg=10 ctermbg=NONE ctermul=NONE gui=NONE guifg=#00886a guibg=NONE guisp=NONE
+	hi Boolean term=bold cterm=NONE ctermfg=6 ctermbg=NONE ctermul=NONE gui=NONE guifg=#4f5fdf guibg=NONE guisp=NONE
 	hi CursorLineNr term=bold,reverse,underline cterm=bold ctermfg=3 ctermbg=NONE ctermul=NONE gui=bold guifg=#b48000 guibg=NONE guisp=NONE
 	hi Identifier term=NONE cterm=NONE ctermfg=13 ctermbg=NONE ctermul=NONE gui=NONE guifg=#966fe1 guibg=NONE guisp=NONE
 	hi Function term=NONE cterm=NONE ctermfg=4 ctermbg=NONE ctermul=NONE gui=NONE guifg=#2280e4 guibg=NONE guisp=NONE
@@ -395,7 +397,6 @@ hi! link GitGutterDelete DiffDelete
 # GitGutterAddInvisible<-reverve SignColumn
 hi! link GitGutterChangeInvisible GitGutterAddInvisible
 hi! link GitGutterDeleteInvisible GitGutterAddInvisible
-hi! link Boolean Constant
 hi! link Character Constant
 hi! link Conditional Statement
 hi! link CurSearch IncSearch
