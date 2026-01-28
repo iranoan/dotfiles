@@ -13,7 +13,7 @@ colors = {
     '#b48000': 'Ochre',
     '#2280e4': 'SEIRAN',
     '#e14096': 'Lotus',
-    '#148fa4': 'Kingfisher',
+    '#4f5fdf': 'Iris',
     '#e6e1d1': 'Fog',
     '#29302b': 'AOZUMI',
     '#ff786e': 'Peony',
@@ -24,7 +24,6 @@ colors = {
     '#8c8a7d': 'Gray',
     '#f7f2e1': 'WASHI',
 }
-
 
 def apca_lc(text_rgb, bg_rgb) -> float:  # 簡易版
     def relative_luminance(rgb):
@@ -139,7 +138,7 @@ def get_delta_e_2000(hex1, hex2):  # 厳密な CIEDE2000 (ISO/CIE 11664-6:2014) 
 
 
 # 出力処理
-print("\t", "light", "dark", sep="\t", end="\t")
+print("name", "RGB", "light", "dark", sep="\t", end="\t")
 for name in colors.values():
     print(name, end="\t")
 print("")

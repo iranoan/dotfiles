@@ -95,24 +95,41 @@ caption{
 	text-align: center;
 }
 
-.ochre {
+.vim-command, .vim-oper {
+	color: #309c00;
+}
+
+.vim-var-scope {
+	color: #966fe1;
+}
+
+.vim-string {
+	color: #00886a;
+}
+
+.vim-hl-rgb {
 	color: #b48000;
 }
 
-.seiran {
+.vim-boolean {
+	color: #4f5fdf;
+}
+
+.vim-hl-group {
+	font-weight: bold;
 	color: #2280e4;
 }
 
-.persimmon{
+.vim-sep{
+	color: #ff786e;
+}
+
+.vim-hi-attrib{
 	color: #e65310;
 }
 
-.vermilion{
+.vim-option{
 	color: #dc322f;
-}
-
-.koshiabura{
-	color: #309c00;
 }
 
 .underline{
@@ -197,7 +214,7 @@ table.suiboku tr:nth-child(8) td:nth-child(2) {
 
 table.suiboku tr:nth-child(9) td:nth-child(1),
 table.suiboku tr:nth-child(9) td:nth-child(2) {
-	color: #148fa4;
+	color: #4f5fdf;
 }
 
 table.suiboku tr:nth-child(10) td:nth-child(2) {
