@@ -29,7 +29,7 @@ h1{
 }
 
 a:link {
-	color: #2280e4;
+	color: #0080bd;
 }
 
 a:visited {
@@ -112,12 +112,12 @@ caption{
 }
 
 .vim-boolean {
-	color: #4f5fdf;
+	color: #4f5fff;
 }
 
 .vim-hl-group {
 	font-weight: bold;
-	color: #2280e4;
+	color: #0080bd;
 }
 
 .vim-sep{
@@ -204,7 +204,7 @@ table.suiboku tr:nth-child(6) td:nth-child(2) {
 
 table.suiboku tr:nth-child(7) td:nth-child(1),
 table.suiboku tr:nth-child(7) td:nth-child(2) {
-	color: #2280e4;
+	color: #0080bd;
 }
 
 table.suiboku tr:nth-child(8) td:nth-child(1),
@@ -214,7 +214,7 @@ table.suiboku tr:nth-child(8) td:nth-child(2) {
 
 table.suiboku tr:nth-child(9) td:nth-child(1),
 table.suiboku tr:nth-child(9) td:nth-child(2) {
-	color: #4f5fdf;
+	color: #4f5fff;
 }
 
 table.suiboku tr:nth-child(10) td:nth-child(2) {

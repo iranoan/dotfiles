@@ -11,9 +11,9 @@ colors = {
     '#dc322f': 'Vermilion',
     '#309c00': 'KOSHIABURA',
     '#b48000': 'Ochre',
-    '#2280e4': 'SEIRAN',
+    '#0080bd': 'SEIRAN',
     '#e14096': 'Lotus',
-    '#4f5fdf': 'Iris',
+    '#4f5fff': 'Iris',
     '#e6e1d1': 'Fog',
     '#29302b': 'AOZUMI',
     '#ff786e': 'Peony',
@@ -24,6 +24,7 @@ colors = {
     '#8c8a7d': 'Gray',
     '#f7f2e1': 'WASHI',
 }
+
 
 def apca_lc(text_rgb, bg_rgb) -> float:  # 簡易版
     def relative_luminance(rgb):

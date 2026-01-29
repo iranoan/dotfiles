@@ -94,9 +94,9 @@ EIGHTBIT 1
 # '#e41436', #  1 Vermilion                                         # red             31 41
 # '#309c00', #  2 KOSHIABURA                                        # green           32 42
 # '#b48000', #  3 Ochre                                             # yellow          33 43
-# '#2280e4', #  4 SEIRAN                                            # blue            34 44
+# '#0080bd', #  4 SEIRAN                                            # blue            34 44
 # '#e14096', #  5 Lotus                                             # magenta         35 45
-# '#4f5fdf', #  6 Iris                                              # light cyan      36 46
+# '#4f5fff', #  6 Iris                                              # light cyan      36 46
 # '#e6e1d1', #  7 Fog        light sub background / dark foreground # white           37 47
 # '#29302B', #  8 AOZUMI     dark sub background / light foreground # light black     90 100
 # '#ca6e64', #  9 Peony                                             # light red       91 101
