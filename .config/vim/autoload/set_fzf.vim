@@ -7,23 +7,32 @@ function set_fzf#main() abort
 	" }}}
 	let g:fzf_layout = #{ window: #{ width: 1, height: 1, xoffset: 0 , yoffset: 0 } }
 	let g:fzf_colors = {
-				\ 'fg':  ['fg', 'Pmenu'],
-				\ 'bg':  ['bg', 'PmenuSel'],
-				\ 'hl':  ['fg', 'PmenuMatch'],
-				\ 'fg+': ['fg', 'PmenuSel'],
-				\ 'bg+': ['bg', 'Pmenu'],
-				\ 'hl+': ['fg', 'PmenuMatchSel'],
-				\ 'border': ['fg', 'Normal'],
+				\ 'fg':       ['fg', 'Pmenu'],
+				\ 'bg':       ['bg', 'PmenuSel'],
+				\ 'hl':       ['fg', 'PmenuMatch'],
+				\ 'fg+':      ['fg', 'PmenuSel'],
+				\ 'bg+':      ['bg', 'Pmenu'],
+				\ 'hl+':      ['fg', 'PmenuMatch'],
+				\ 'gutter':   ['fg', 'LineNr'],
+				\ 'pointer':  ['fg', 'Removed'],
+				\ 'marker':   ['fg', 'Removed'],
+				\ 'border':   ['fg', 'Normal'],
+				\ 'header':   ['fg', 'Normal'],
+				\ 'info':     ['fg', 'Type'],
+				\ 'spinner':  ['fg', 'Added'],
+				\ 'query':    ['fg', 'Normal'],
+				\ 'disabled': ['fg', 'Comment'],
+				\ 'prompt':   ['fg', 'Function'],
 				\ }
-	let g:fzf_action = {
-				\ 'ctrl-g': 'edit',
-				\ 'ctrl-t': function('set_fzf#FZF_open'),
-				\ 'ctrl-s': 'split',
-				\ 'ctrl-v': 'vsplit',
-				\ 'enter': function('set_fzf#FZF_open'),
-				\ 'ctrl-o': function('set_fzf#FZF_open')
+	let g:fzf_action = #{
+				\ ctrl-g: 'edit',
+				\ ctrl-t: function('set_fzf#FZF_open'),
+				\ ctrl-s: 'split',
+				\ ctrl-v: 'vsplit',
+				\ enter:  function('set_fzf#FZF_open'),
+				\ ctrl-o: function('set_fzf#FZF_open')
 				\ } " 他で sink を使うと、この設定は無視されるので注意←:help fzf-global-options-supported-by-fzf#wrap
-				" \ 'ctrl-e': 'edit', カーソルを入力の末尾移動と重なる
+				" \ ctrl-e: 'edit', カーソルを入力の末尾移動と重なる
 	let $FZF_DEFAULT_OPTS = substitute($FZF_DEFAULT_OPTS, '--footer "[^"]\+"', '', 'g')
 	call timer_start(1, {->execute('delfunction set_fzf#main')})
 endfunction
@@ -92,23 +101,15 @@ function set_fzf#vim(cmd) abort
 	let $FZF_DEFAULT_COMMAND = executable("fdfind")
 						\ ? 'fdfind --hidden --follow --no-ignore --ignore-file ~/.config/fd/ignore --ignore-file ~/.config/fd/noedit --type file --type symlink --type directory .'
 						\ : 'find -L . -type d \( -name .texlive2023 -o -name .npm -o -name .thumbnails -o -name thumbnails -o -name .log -o -name .tmp -o -path "$HOME/Mail/.*/new" -o -path "$HOME/Mail/.*/cur" -o -path "$HOME/Mail/.*/tmp" -o -path "$HOME/Mail/.notmuch/xapian" -o -path .local/share/Trash -o -path node_modules -o -path go/pkg -o -path "$HOME/PDF" -o -path "$HOME/img/スクリーンショット" -o -name .git -o -name cache -o -name .cache -o -name .Trash -o -name .ecryptfs -o -name .Private -o -name kpeoplevcard \) -prune -o \( -type f -o -type l \) ! -name "*.aux" ! -name "*.snm" ! -name "*.nav" ! -name "*.synctex.gz" ! -name "*.cer" ! -name "*.chm" ! -name "*.chw" ! -name "*.crt" ! -name "*.dll" ! -name "*.dvi" ! -name "*.exe" ! -name "*.fdb_latexmk" ! -name "*.gpg" ! -name "*.hlp" ! -name "*.hmereg" ! -name "*.o" ! -name "*.obj" ! -name "*.oll" ! -name "*.opp" ! -name "*.pfa" ! -name "*.pl3" ! -name "*.ppm" ! -name "*.reg" ! -name "*.sqlite" ! -name "*.tfm" ! -name "*.ttf" ! -name "*.vf" ! -name ".*.sw?" ! -name a.out ! -name "*.jar" ! -name "*.pyc" ! -name "*.vbox" ! -name "*.nvram" ! -name "*.cur" ! -name "*.class" ! -name "*.vbox-prev" ! -name "*.fls" ! -name .viminfo ! -name viminfo ! -name "*.ltjruby" ! -name ".~lock.*#" -printf "%P\n" 2> /dev/null' "-prune 前の -path が効いていないが、シェルに設定した FZF_DEFAULT_COMMAND に合わせてある
-	command! -bang -nargs=? -complete=dir Files call fzf#vim#files(
-				\ <q-args>, {
-					\ 'options': s:fzf_options + ['--prompt', 'Files> '],
-					\ },
-					\ <bang>0
-				\ )
+	command! -bang -nargs=? -complete=dir Files call fzf#vim#files( <q-args>, #{options: s:fzf_options + ['--prompt', 'Files> ']}, <bang>0)
 					" バイナリ・ファイルとメールを除外 (メールはファイル名だけ見ても分らない)
 	" TabEdit が --multi に対応したつもり History そのものは、コマンドや検索履歴で使うので、上書きしない
 	command! -bang -nargs=* HISTORY call fzf#run(
 				\ fzf#wrap(
-					\ {
-						\ 'options': s:fzf_options + [
-							\ '--header-lines', !empty(expand('%')),
-							\ '--prompt', 'Hist> ',
-						\ ],
-						\ 'source':  fzf#vim#_recent_files(),
-					\},
+					\ #{
+						\ options: s:fzf_options + ['--header-lines', !empty(expand('%')), '--prompt', 'Hist> '],
+						\ source:  fzf#vim#_recent_files(),
+					\ },
 					\ <bang>0
 					\ )
 				\ )
