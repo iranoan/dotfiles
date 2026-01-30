@@ -65,13 +65,13 @@ if &background ==# 'dark'
 	hi Error term=bold cterm=reverse,bold ctermfg=1 ctermbg=15 ctermul=NONE gui=reverse,bold guifg=#dc322f guibg=#f7f2e1 guisp=NONE
 	hi FoldColumn term=reverse cterm=NONE ctermfg=14 ctermbg=8 ctermul=NONE gui=NONE guifg=#8c8a7d guibg=#29302b guisp=NONE
 	hi LineNr term=reverse cterm=NONE ctermfg=12 ctermbg=8 ctermul=NONE gui=NONE guifg=#6d736d guibg=#29302b guisp=NONE
-	hi NonText term=bold cterm=bold ctermfg=14 ctermbg=8 ctermul=NONE gui=bold guifg=#6d736d guibg=NONE guisp=NONE
+	hi NonText term=bold cterm=bold ctermfg=12 ctermbg=NONE ctermul=NONE gui=bold guifg=#6d736d guibg=NONE guisp=NONE
 	hi Pmenu term=NONE cterm=NONE ctermfg=14 ctermbg=8 ctermul=NONE gui=NONE guifg=#8c8a7d guibg=#29302b guisp=NONE
 	hi PmenuSel term=NONE cterm=NONE ctermfg=7 ctermbg=0 ctermul=NONE gui=NONE guifg=#e6e1d1 guibg=#1d221f guisp=NONE
 	hi PmenuSbar term=reverse cterm=NONE ctermfg=NONE ctermbg=12 ctermul=NONE gui=NONE guifg=NONE guibg=#6d736d guisp=NONE
 	hi PmenuThumb term=reverse cterm=NONE ctermfg=NONE ctermbg=14 ctermul=NONE gui=NONE guifg=NONE guibg=#8c8a7d guisp=NONE
 	hi SignColumn term=reverse cterm=NONE ctermfg=14 ctermbg=8 ctermul=NONE gui=NONE guifg=#8c8a7d guibg=#29302b guisp=NONE
-	hi SpecialKey term=bold cterm=bold ctermfg=14 ctermbg=8 ctermul=NONE gui=bold guifg=#6d736d guibg=NONE guisp=NONE
+	hi SpecialKey term=bold cterm=bold ctermfg=12 ctermbg=NONE ctermul=NONE gui=bold guifg=#6d736d guibg=NONE guisp=NONE
 	hi StatusLine term=bold cterm=bold ctermfg=0 ctermbg=14 ctermul=NONE gui=bold guifg=#1d221f guibg=#8c8a7d guisp=NONE
 	hi StatusLineNC term=NONE cterm=NONE ctermfg=8 ctermbg=12 ctermul=NONE gui=NONE guifg=#29302b guibg=#6d736d guisp=NONE
 	hi TabLineSel term=underline,bold cterm=underline,bold ctermfg=7 ctermbg=0 ctermul=NONE gui=underline,bold guifg=#e6e1d1 guibg=#1d221f guisp=NONE
@@ -136,13 +136,13 @@ else # light
 	hi Error term=bold cterm=reverse,bold ctermfg=1 ctermbg=0 ctermul=NONE gui=reverse,bold guifg=#dc322f guibg=#1d221f guisp=NONE
 	hi FoldColumn term=reverse cterm=NONE ctermfg=12 ctermbg=7 ctermul=NONE gui=NONE guifg=#6d736d guibg=#e6e1d1 guisp=NONE
 	hi LineNr term=reverse cterm=NONE ctermfg=14 ctermbg=7 ctermul=NONE gui=NONE guifg=#8c8a7d guibg=#e6e1d1 guisp=NONE
-	hi NonText term=bold cterm=bold ctermfg=14 ctermbg=NONE ctermul=NONE gui=bold guifg=#8c8a7d guibg=NONE guisp=NONE
+	hi NonText term=bold cterm=bold ctermfg=12 ctermbg=NONE ctermul=NONE gui=bold guifg=#8c8a7d guibg=NONE guisp=NONE
 	hi Pmenu term=NONE cterm=NONE ctermfg=12 ctermbg=15 ctermul=NONE gui=NONE guifg=#6d736d guibg=#f7f2e1 guisp=NONE
 	hi PmenuSel term=NONE cterm=NONE ctermfg=0 ctermbg=7 ctermul=NONE gui=NONE guifg=#1d221f guibg=#e6e1d1 guisp=NONE
 	hi PmenuSbar term=reverse cterm=NONE ctermfg=NONE ctermbg=14 ctermul=NONE gui=NONE guifg=NONE guibg=#8c8a7d guisp=NONE
 	hi PmenuThumb term=reverse cterm=NONE ctermfg=NONE ctermbg=12 ctermul=NONE gui=NONE guifg=NONE guibg=#6d736d guisp=NONE
 	hi SignColumn term=reverse cterm=NONE ctermfg=12 ctermbg=7 ctermul=NONE gui=NONE guifg=#6d736d guibg=#e6e1d1 guisp=NONE
-	hi SpecialKey term=bold cterm=bold ctermfg=14 ctermbg=8 ctermul=NONE gui=bold guifg=#8c8a7d guibg=NONE guisp=NONE
+	hi SpecialKey term=bold cterm=bold ctermfg=14 ctermbg=NONE ctermul=NONE gui=bold guifg=#8c8a7d guibg=NONE guisp=NONE
 	hi StatusLine term=bold cterm=bold ctermfg=15 ctermbg=12 ctermul=NONE gui=bold guifg=#f7f2e1 guibg=#6d736d guisp=NONE
 	hi StatusLineNC term=NONE cterm=NONE ctermfg=7 ctermbg=14 ctermul=NONE gui=NONE guifg=#e6e1d1 guibg=#8c8a7d guisp=NONE
 	hi TabLineSel term=underline,bold cterm=underline,bold ctermfg=8 ctermbg=15 ctermul=NONE gui=underline,bold guifg=#29302b guibg=#f7f2e1 guisp=NONE
