@@ -2,7 +2,59 @@ vim9script
 # scriptencoding utf-8
 
 export def TabOpen(): void
+	var normal_fg: string
+	var normal_bg: string
+
+	def GetDefaultOpts(): dict<string>
+		var color: dict<string>
+		var name_v: list<string>
+
+		for c in matchstr($FZF_DEFAULT_OPTS, '--color=\zs[^ ]\+')->split(',')
+			name_v = split(c, ':')
+			if len(name_v) == 1
+				color[name_v[0]] = ''
+			else
+				color[get({'current-fg': 'fg+', 'current-bg': 'bg+', 'current-hl': 'hl+', 'header-fg': 'header'}, name_v[0], name_v[0])] = name_v[1]
+			endif
+		endfor
+		return color
+	enddef
+
+	def GetNormal(is_base16: bool): list<string>
+		var hl: dict<any> = hlget('Normal', true)[0]
+		if is_base16
+			return [get(hl, 'ctermfg', &background ==# 'dark' ? '7' : '0'),
+			        get(hl, 'ctermbg', &background ==# 'dark' ? '0' : '7')]
+		endif
+		return [get(hl, 'guifg', get(hl, 'ctermfg', &background ==# 'dark' ? '7' : '0')),
+			      get(hl, 'guibg', get(hl, 'ctermbg', &background ==# 'dark' ? '0' : '7'))]
+	enddef
+
+	def GetColor(name: string, group_names: list<string>, is_base16: bool): string
+		var groups: list<string> = get(g:, 'fzf_colors', {name: group_names[0] ==# 'fg' ? ['fg', normal_fg] : ['bg', normal_bg]})
+			                        	->get(name, group_names[0] ==# 'fg' ? ['fg', normal_fg] : ['bg', normal_bg])
+		var fb: string = groups[0]
+		var hl: list<dict<any>>
+
+		for g in groups[1 : ]
+			hl = hlget(g, true)
+			if hl == []
+				continue
+			endif
+			if is_base16
+				return get(hl[0], 'cterm' .. fb, ((&background ==# 'dark') == (fb ==# 'bg')) ? '0' : '7')
+			endif
+			return get(hl[0], 'gui' .. fb, get(hl[0], 'cterm' .. fb, ((&background ==# 'dark') == (fb ==# 'bg')) ? '0' : '7'))
+		endfor
+		return ''
+	enddef
+
+	var colors: dict<string> = GetDefaultOpts()
+	var is_base16: bool = !has('gui_running') || has_key(colors, 'base16') || has_key(colors, '16')
+	var color_str: string
 	var sink_ls: list<string> = GetBufList()
+
+	[normal_fg, normal_bg] = GetNormal(is_base16)
 	if len(sink_ls) == 1 && len(sink_ls[0]->split('\n')) == 1
 		if has('popupwin')
 			popup_create('Only One Tab/One Window', {
@@ -24,10 +76,28 @@ export def TabOpen(): void
 		endif
 		return
 	endif
+	for [k, v] in items(get(g:, 'fzf_colors', {}))
+		colors[k] = GetColor(k, v, is_base16)
+	endfor
+	if colors == {}
+		color_str = '--color=' .. &background .. ','
+	else
+		color_str = '--color='
+		for s in ['dark', 'light', 'base16', '16, ''bw']
+			if has_key(colors, s)
+				color_str ..= s .. ','
+				remove(colors, s)
+			endif
+		endfor
+	endif
+	for [k, v] in items(colors)
+		color_str ..= k .. ':' .. v .. ','
+	endfor
+	color_str = color_str[ : -2 ]
 	fzf#run({
 				source: sink_ls,
 				sink:    function('BufListSink'),
-				options: ['--delimiter', '\t', '--no-multi', '--header-lines=1', '--prompt', " tab win_id buf  \tfilename > ", '--tabstop', 2] + g:fzf_tabs_options,
+				options: ['--delimiter', '\t', '--no-multi', '--prompt', " tab win_id buf  \tfilename > ", '--tabstop', 2] + g:fzf_tabs_options + [color_str],
 				window: get(g:, 'fzf_layout', {window: {width: 0.9, height: 0.6}})->get('window', {width: 0.9, height: 0.6})
 	})
 enddef
