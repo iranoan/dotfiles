@@ -156,12 +156,12 @@ def Calculate(bufnr: number): dict<any>
 				break
 			endif
 			if o_pos >= 0 && ( c_pos < 0 || o_pos < c_pos )
-				if synIDattr(synIDtrans(synID(lnum, o_pos + 1, 1)), 'name') ==# 'vimCommand'
+				if index(['vimNotFunc', 'vimDef', 'vimFunction', 'vim9Export', 'vimCommand', 'vimAugroupKey', 'vimCatch'], synIDattr(synID(lnum, o_pos + 1, 1), 'name')) != -1
 					ch_lv += 1
 				endif
 				col = oe_pos + 1
 			elseif c_pos >= 0
-				if synIDattr(synIDtrans(synID(lnum, c_pos + 1, 1)), 'name') ==# 'vimCommand'
+				if index(['vimEndif', 'vimCommand', 'vimAugroupKey'], synIDattr(synID(lnum, c_pos + 1, 1), 'name')) != -1
 					ch_lv -= 1
 				endif
 				col = ce_pos + 1
