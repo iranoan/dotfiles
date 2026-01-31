@@ -47,12 +47,12 @@ if &background ==# 'dark'
 		hi Comment term=italic cterm=italic ctermfg=14 ctermbg=NONE ctermul=NONE gui=italic guifg=#8c8a7d guibg=NONE guisp=NONE
 		hi ErrorMsg term=italic,reverse,bold cterm=reverse ctermfg=1 ctermbg=15 ctermul=NONE gui=reverse guifg=#dc322f guibg=#f7f2e1 guisp=NONE
 		hi Folded term=italic,reverse,underline cterm=bold ctermfg=14 ctermbg=8 ctermul=NONE gui=bold guifg=#8c8a7d guibg=#29302b guisp=NONE
-		hi TabLine term=italic,underline cterm=italic,underline ctermfg=14 ctermbg=8 ctermul=NONE gui=italic,underline guifg=#8c8a7d guibg=#29302b guisp=NONE
+		hi TabLine term=italic cterm=italic ctermfg=14 ctermbg=8 ctermul=NONE gui=italic guifg=#8c8a7d guibg=#29302b guisp=NONE
 	else
 		hi Comment term=NONE cterm=NONE ctermfg=14 ctermbg=NONE ctermul=NONE gui=NONE guifg=#8c8a7d guibg=NONE guisp=NONE
 		hi ErrorMsg term=reverse,bold cterm=reverse ctermfg=1 ctermbg=15 ctermul=NONE gui=reverse guifg=#dc322f guibg=#f7f2e1 guisp=NONE
 		hi Folded term=reverse,underline cterm=bold ctermfg=14 ctermbg=8 ctermul=NONE gui=bold guifg=#8c8a7d guibg=#29302b guisp=NONE
-		hi TabLine term=underline cterm=underline ctermfg=14 ctermbg=8 ctermul=NONE gui=underline guifg=#8c8a7d guibg=#29302b guisp=NONE
+		hi TabLine term=NONE cterm=NONE ctermfg=14 ctermbg=8 ctermul=NONE gui=NONE guifg=#8c8a7d guibg=#29302b guisp=NONE
 	endif
 	hi ColorColumn term=reverse cterm=NONE ctermfg=NONE ctermbg=8 ctermul=NONE gui=NONE guifg=NONE guibg=#29302b guisp=NONE
 	hi Cursor term=NONE cterm=NONE ctermfg=0 ctermbg=14 ctermul=NONE gui=NONE guifg=#1d221f guibg=#8c8a7d guisp=NONE
@@ -66,15 +66,13 @@ if &background ==# 'dark'
 	hi FoldColumn term=reverse cterm=NONE ctermfg=14 ctermbg=8 ctermul=NONE gui=NONE guifg=#8c8a7d guibg=#29302b guisp=NONE
 	hi LineNr term=reverse cterm=NONE ctermfg=12 ctermbg=8 ctermul=NONE gui=NONE guifg=#6d736d guibg=#29302b guisp=NONE
 	hi NonText term=bold cterm=bold ctermfg=12 ctermbg=NONE ctermul=NONE gui=bold guifg=#6d736d guibg=NONE guisp=NONE
-	hi Pmenu term=NONE cterm=NONE ctermfg=14 ctermbg=8 ctermul=NONE gui=NONE guifg=#8c8a7d guibg=#29302b guisp=NONE
-	hi PmenuSel term=NONE cterm=NONE ctermfg=7 ctermbg=0 ctermul=NONE gui=NONE guifg=#e6e1d1 guibg=#1d221f guisp=NONE
 	hi PmenuSbar term=reverse cterm=NONE ctermfg=NONE ctermbg=12 ctermul=NONE gui=NONE guifg=NONE guibg=#6d736d guisp=NONE
 	hi PmenuThumb term=reverse cterm=NONE ctermfg=NONE ctermbg=14 ctermul=NONE gui=NONE guifg=NONE guibg=#8c8a7d guisp=NONE
 	hi SignColumn term=reverse cterm=NONE ctermfg=14 ctermbg=8 ctermul=NONE gui=NONE guifg=#8c8a7d guibg=#29302b guisp=NONE
 	hi SpecialKey term=bold cterm=bold ctermfg=12 ctermbg=NONE ctermul=NONE gui=bold guifg=#6d736d guibg=NONE guisp=NONE
 	hi StatusLine term=bold cterm=bold ctermfg=0 ctermbg=14 ctermul=NONE gui=bold guifg=#1d221f guibg=#8c8a7d guisp=NONE
 	hi StatusLineNC term=NONE cterm=NONE ctermfg=8 ctermbg=12 ctermul=NONE gui=NONE guifg=#29302b guibg=#6d736d guisp=NONE
-	hi TabLineSel term=underline,bold cterm=underline,bold ctermfg=7 ctermbg=0 ctermul=NONE gui=underline,bold guifg=#e6e1d1 guibg=#1d221f guisp=NONE
+	hi TabLineSel term=bold cterm=bold ctermfg=7 ctermbg=0 ctermul=NONE gui=bold guifg=#e6e1d1 guibg=#1d221f guisp=NONE
 	hi ToolbarButton term=bold,reverse cterm=bold ctermfg=14 ctermbg=8 ctermul=NONE gui=bold guifg=#8c8a7d guibg=#29302b guisp=NONE
 	hi ToolbarLine term=reverse cterm=NONE ctermfg=NONE ctermbg=8 ctermul=NONE gui=NONE guifg=NONE guibg=#29302b guisp=NONE
 	hi VertSplit term=NONE cterm=NONE ctermfg=12 ctermbg=12 ctermul=NONE gui=NONE guifg=#6d736d guibg=#6d736d guisp=NONE
@@ -118,12 +116,12 @@ else # light
 		hi Comment term=italic cterm=italic ctermfg=12 ctermbg=NONE ctermul=NONE gui=italic guifg=#6d736d guibg=NONE guisp=NONE
 		hi ErrorMsg term=italic,reverse,bold cterm=reverse ctermfg=1 ctermbg=0 ctermul=NONE gui=reverse guifg=#dc322f guibg=#1d221f guisp=NONE
 		hi Folded term=italic,underline,reverse cterm=bold ctermfg=12 ctermbg=7 ctermul=NONE gui=bold guifg=#6d736d guibg=#e6e1d1 guisp=NONE
-		hi TabLine term=italic,underline cterm=italic,underline ctermfg=12 ctermbg=7 ctermul=NONE gui=italic,underline guifg=#6d736d guibg=#e6e1d1 guisp=NONE
+		hi TabLine term=italic cterm=italic ctermfg=12 ctermbg=7 ctermul=NONE gui=italic guifg=#6d736d guibg=#e6e1d1 guisp=NONE
 	else
 		hi Comment term=NONE cterm=NONE ctermfg=12 ctermbg=NONE ctermul=NONE gui=NONE guifg=#6d736d guibg=NONE guisp=NONE
 		hi ErrorMsg term=reverse,bold cterm=reverse ctermfg=1 ctermbg=0 ctermul=NONE gui=reverse guifg=#dc322f guibg=#1d221f guisp=NONE
 		hi Folded term=underline,reverse cterm=bold ctermfg=12 ctermbg=7 ctermul=NONE gui=bold guifg=#6d736d guibg=#e6e1d1 guisp=NONE
-		hi TabLine term=underline cterm=underline ctermfg=12 ctermbg=7 ctermul=NONE gui=underline guifg=#6d736d guibg=#e6e1d1 guisp=NONE
+		hi TabLine term=NONE cterm=NONE ctermfg=12 ctermbg=7 ctermul=NONE gui=NONE guifg=#6d736d guibg=#e6e1d1 guisp=NONE
 	endif
 	hi ColorColumn term=reverse cterm=NONE ctermfg=NONE ctermbg=7 ctermul=NONE gui=NONE guifg=NONE guibg=#e6e1d1 guisp=NONE
 	hi Cursor term=NONE cterm=NONE ctermfg=7 ctermbg=12 ctermul=NONE gui=NONE guifg=#e6e1d1 guibg=#6d736d guisp=NONE
@@ -137,15 +135,13 @@ else # light
 	hi FoldColumn term=reverse cterm=NONE ctermfg=12 ctermbg=7 ctermul=NONE gui=NONE guifg=#6d736d guibg=#e6e1d1 guisp=NONE
 	hi LineNr term=reverse cterm=NONE ctermfg=14 ctermbg=7 ctermul=NONE gui=NONE guifg=#8c8a7d guibg=#e6e1d1 guisp=NONE
 	hi NonText term=bold cterm=bold ctermfg=12 ctermbg=NONE ctermul=NONE gui=bold guifg=#8c8a7d guibg=NONE guisp=NONE
-	hi Pmenu term=NONE cterm=NONE ctermfg=12 ctermbg=7 ctermul=NONE gui=NONE guifg=#6d736d guibg=#e6e1d1 guisp=NONE
-	hi PmenuSel term=NONE cterm=NONE ctermfg=8 ctermbg=15 ctermul=NONE gui=NONE guifg=#29302b guibg=#f7f2e1 guisp=NONE
 	hi PmenuSbar term=reverse cterm=NONE ctermfg=NONE ctermbg=14 ctermul=NONE gui=NONE guifg=NONE guibg=#8c8a7d guisp=NONE
 	hi PmenuThumb term=reverse cterm=NONE ctermfg=NONE ctermbg=12 ctermul=NONE gui=NONE guifg=NONE guibg=#6d736d guisp=NONE
 	hi SignColumn term=reverse cterm=NONE ctermfg=12 ctermbg=7 ctermul=NONE gui=NONE guifg=#6d736d guibg=#e6e1d1 guisp=NONE
 	hi SpecialKey term=bold cterm=bold ctermfg=14 ctermbg=NONE ctermul=NONE gui=bold guifg=#8c8a7d guibg=NONE guisp=NONE
 	hi StatusLine term=bold cterm=bold ctermfg=15 ctermbg=12 ctermul=NONE gui=bold guifg=#f7f2e1 guibg=#6d736d guisp=NONE
 	hi StatusLineNC term=NONE cterm=NONE ctermfg=7 ctermbg=14 ctermul=NONE gui=NONE guifg=#e6e1d1 guibg=#8c8a7d guisp=NONE
-	hi TabLineSel term=underline,bold cterm=underline,bold ctermfg=8 ctermbg=15 ctermul=NONE gui=underline,bold guifg=#29302b guibg=#f7f2e1 guisp=NONE
+	hi TabLineSel term=bold cterm=bold ctermfg=8 ctermbg=15 ctermul=NONE gui=bold guifg=#29302b guibg=#f7f2e1 guisp=NONE
 	hi ToolbarButton term=bold,reverse cterm=bold ctermfg=14 ctermbg=15 ctermul=NONE gui=bold guifg=#8c8a7d guibg=#f7f2e1 guisp=NONE
 	hi ToolbarLine term=reverse cterm=NONE ctermfg=NONE ctermbg=15 ctermul=NONE gui=NONE guifg=NONE guibg=#f7f2e1 guisp=NONE
 	hi VertSplit term=NONE cterm=NONE ctermfg=14 ctermbg=14 ctermul=NONE gui=NONE guifg=#8c8a7d guibg=#8c8a7d guisp=NONE
@@ -280,14 +276,16 @@ hi! link Macro PreProc
 hi! link MessageWindow WarningMsg
 hi! link Number Constant
 hi! link Operator Statement
-hi! link PmenuExtra Pmenu
-hi! link PmenuExtraSel PmenuSel
-hi! link PmenuKind Pmenu
-hi! link PmenuKindSel PmenuSel
+hi! link Pmenu TabLine
+hi! link PmenuSel TabLineSel
+hi! link PmenuExtra TabLine
+hi! link PmenuExtraSel TabLineSel
+hi! link PmenuKind TabLine
+hi! link PmenuKindSel TabLineSel
 hi! link PmenuMatch Type
 hi! link PmenuMatchSel Type
 hi! link PopupNotification WarningMsg
-hi! link PopupSelected PmenuSel
+hi! link PopupSelected TabLineSel
 hi! link PreCondit PreProc
 hi! link PopupSelected Added
 hi! link QuickFixLine CursorLine
@@ -301,7 +299,7 @@ hi! link String Constant
 hi! link Structure Type
 hi! link TabLineFill TabLine
 hi! link TabPanel TabLine
-hi! link TabPanelFill TabLineFill
+hi! link TabPanelFill TabLine
 hi! link TabPanelSel TabLineSel
 hi! link Tag Special
 hi! link Terminal Normal
