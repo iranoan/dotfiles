@@ -86,10 +86,6 @@ if &background ==# 'dark'
 	hi ALEWarningSign term=NONE cterm=bold ctermfg=3 ctermbg=8 ctermul=NONE gui=bold guifg=#b48000 guibg=#29302b guisp=NONE
 	hi ALEWarningSignLineNr term=NONE cterm=NONE ctermfg=8 ctermbg=3 ctermul=NONE gui=NONE guifg=#29302b guibg=#b48000 guisp=NONE
 	hi GitGutterAddInvisible term=reverse cterm=NONE ctermfg=8 ctermbg=14 ctermul=NONE gui=NONE guifg=#29302b guibg=#8c8a7d guisp=NONE
-	hi GlyphPalette0 term=NONE cterm=NONE ctermfg=8 ctermbg=NONE ctermul=NONE gui=NONE guifg=#29302b guibg=NONE guisp=NONE
-	hi GlyphPalette7 term=NONE cterm=NONE ctermfg=7 ctermbg=NONE ctermul=NONE gui=NONE guifg=#e6e1d1 guibg=NONE guisp=NONE
-	hi GlyphPalette8 term=NONE cterm=NONE ctermfg=0 ctermbg=NONE ctermul=NONE gui=NONE guifg=#1d221f guibg=NONE guisp=NONE
-	hi GlyphPalette15 term=NONE cterm=NONE ctermfg=7 ctermbg=NONE ctermul=NONE gui=NONE guifg=#e6e1d1 guibg=NONE guisp=NONE
 	hi pandocTableZebraDark term=NONE cterm=NONE ctermfg=4 ctermbg=8 ctermul=NONE gui=NONE guifg=#0080bd guibg=#29302b guisp=NONE
 	hi pandocTableZebraLight term=NONE cterm=NONE ctermfg=4 ctermbg=0 ctermul=NONE gui=NONE guifg=#0080bd guibg=#1d221f guisp=NONE
 	hi SignatureMarkText term=bold cterm=bold ctermfg=7 ctermbg=8 ctermul=NONE gui=bold guifg=#e6e1d1 guibg=#29302b guisp=NONE
@@ -155,10 +151,6 @@ else # light
 	hi ALEWarningSign term=NONE cterm=bold ctermfg=3 ctermbg=15 ctermul=NONE gui=bold guifg=#b48000 guibg=#f7f2e1 guisp=NONE
 	hi ALEWarningSignLineNr term=NONE cterm=NONE ctermfg=7 ctermbg=3 ctermul=NONE gui=NONE guifg=#e6e1d1 guibg=#b48000 guisp=NONE
 	hi GitGutterAddInvisible term=reverse cterm=NONE ctermfg=7 ctermbg=12 ctermul=NONE gui=NONE guifg=#e6e1d1 guibg=#6d736d guisp=NONE
-	hi GlyphPalette0 term=NONE cterm=NONE ctermfg=7 ctermbg=NONE ctermul=NONE gui=NONE guifg=#e6e1d1 guibg=NONE guisp=NONE
-	hi GlyphPalette7 term=NONE cterm=NONE ctermfg=8 ctermbg=NONE ctermul=NONE gui=NONE guifg=#29302b guibg=NONE guisp=NONE
-	hi GlyphPalette8 term=NONE cterm=NONE ctermfg=7 ctermbg=NONE ctermul=NONE gui=NONE guifg=#e6e1d1 guibg=NONE guisp=NONE
-	hi GlyphPalette15 term=NONE cterm=NONE ctermfg=8 ctermbg=NONE ctermul=NONE gui=NONE guifg=#29302b guibg=NONE guisp=NONE
 	hi pandocTableZebraDark term=NONE cterm=NONE ctermfg=4 ctermbg=15 ctermul=NONE gui=NONE guifg=#0080bd guibg=#f7f2e1 guisp=NONE
 	hi pandocTableZebraLight term=NONE cterm=NONE ctermfg=4 ctermbg=7 ctermul=NONE gui=NONE guifg=#0080bd guibg=#e6e1d1 guisp=NONE
 	hi SignatureMarkText term=bold cterm=bold ctermfg=8 ctermbg=15 ctermul=NONE gui=bold guifg=#29302b guibg=#f7f2e1 guisp=NONE
@@ -316,18 +308,22 @@ hi! link GitGutterChange DiffChange
 hi! link GitGutterChangeInvisible GitGutterAddInvisible
 hi! link GitGutterDelete DiffDelete
 hi! link GitGutterDeleteInvisible GitGutterAddInvisible
+hi! link GlyphPalette0 Normal
 hi! link GlyphPalette1 Removed
 hi! link GlyphPalette2 Statement
 hi! link GlyphPalette3 Type
 hi! link GlyphPalette4 Conceal
 hi! link GlyphPalette5 helpNote
-hi! link GlyphPalette6 helpOption
-hi! link GlyphPalette9 hs_DeclareFunction
-hi! link GlyphPalette10 helpExample
-hi! link GlyphPalette11 Special
-hi! link GlyphPalette12 Boolean
-hi! link GlyphPalette13 pandocDefinitionBlock
-hi! link GlyphPalette14 Todo
+hi! link GlyphPalette6 pandocDefinitionBlock
+hi! link GlyphPalette7 Normal
+hi! link GlyphPalette8 Comment
+hi! link GlyphPalette9 Special
+hi! link GlyphPalette10 helpOption
+hi! link GlyphPalette11 hs_DeclareFunction
+hi! link GlyphPalette12 gitcommitOnBranch
+hi! link GlyphPalette13 Boolean
+hi! link GlyphPalette14 helpExample
+hi! link GlyphPalette15 Comment
 hi! link helpHyperTextEntry Statement
 hi! link helpHyperTextJump Conceal
 hi! link helpSpecial Special
