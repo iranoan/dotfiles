@@ -93,23 +93,25 @@ export def VimHelp(): void
 	# 	Help(tmp)
 	# 	return
 	# endif
-	[keyword, m_start, m_end] = matchstrpos(line, '^\c\v\s*\zs[a-z0-9]+')
+	[keyword, m_start, m_end] = matchstrpos(line, '^\s*\zs[A-Za-z0-9]\+')
 	if m_start != -1 && column <= m_end && column >= m_start # 行頭→コマンド
 		Help(':' .. keyword)
 		return
 	endif
 	while true
-		[keyword, m_start, m_end] = matchstrpos(line, '\v((<[bgv]:|\&)?[a-z0-9_]+(\(|\s*\=)?|\<[-0-9a-z_]+\>)', i)
+		[keyword, m_start, m_end] = matchstrpos(line, '\(\(\<[bgv]:\|\&\)\=[A-Za-z0-9_]\+\((\|\s*=\)\=\|<[-0-9A-Za-z_]+>\)', i)
 		if m_start == -1
 			Help('' .. "\<C-r>\<C-w>")
 			break
 		elseif column <= m_end && column >= m_start
-			if keyword =~# '^\v\<[-a-z]+\>$' # 特殊キー
+			if keyword =~? '^<[-a-z]\+>$' # 特殊キー
 				Help('' .. keyword)
-			elseif keyword =~# '^(\<bar\>|\|)' # コマンド
-				Help('' .. matchstr(keyword, '[a-z0-9_]\+$'))
+			elseif keyword =~? '^\(<bar>\||\)' # コマンド
+				Help('' .. matchstr(keyword, '[A-Za-z0-9_]\+$'))
+			elseif keyword =~# '^\<[bgv]:[A-Za-z0-9_]\+' # 変数
+				Help('''' .. matchstr(keyword, '^\<[bgv]:[A-Za-z0-9_]\+'))
 			elseif keyword =~# '^&' || keyword =~# '=$' # オプション
-				Help('''' .. matchstr(keyword, '[a-z0-9_]\+'))
+				Help('''' .. matchstr(keyword, '[A-Za-z0-9_]\+'))
 			elseif keyword =~# '($' # 関数
 				# syntax だけで行おうとすると、
 				# inoremap <expr><C-P> pumvisible() ? '<C-P>' : '<C-R>"'
