@@ -215,7 +215,7 @@ export def StatusLine(): string # set statusline=%!vimrc#StatusLine() で利用�
 				endfor
 			else # leaf
 				if ls[1] == id
-					count += 1 # 確認するまで泣く diff
+					count += 1 # 確認するまで無く diff
 					ret = {
 						vert: vert,
 						n: count,
@@ -241,7 +241,6 @@ export def StatusLine(): string # set statusline=%!vimrc#StatusLine() で利用�
 	elseif win_type ==# 'quickfix'
 		return s .. ' [QuickFix]%) ' .. StatusKind() .. '%<' .. getwinvar(g:statusline_winid, 'quickfix_title') .. '%=%#StatusLineRight#' .. curline .. '/%L%4p%%'
 	elseif diff # diff モード縦分割を用いていウィンドウ幅が狭いので表示する情報を減らす
-		# echomsg [g:statusline_winid, DiffPostion(g:statusline_winid)]
 		var k: dict<any> = DiffPostion(g:statusline_winid)
 		var f: string = GetFlag()
 		if !(k.vert) # 縦分割されていない
