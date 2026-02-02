@@ -65,7 +65,7 @@ if &background ==# 'dark'
 	hi Error term=bold cterm=reverse,bold ctermfg=1 ctermbg=15 ctermul=NONE gui=reverse,bold guifg=#dc322f guibg=#f7f2e1 guisp=NONE
 	hi FoldColumn term=reverse cterm=NONE ctermfg=14 ctermbg=8 ctermul=NONE gui=NONE guifg=#8c8a7d guibg=#29302b guisp=NONE
 	hi LineNr term=reverse cterm=NONE ctermfg=12 ctermbg=8 ctermul=NONE gui=NONE guifg=#6d736d guibg=#29302b guisp=NONE
-	hi NonText term=bold cterm=bold ctermfg=12 ctermbg=NONE ctermul=NONE gui=bold guifg=#6d736d guibg=NONE guisp=NONE
+	hi NonText term=NONE cterm=NONE ctermfg=12 ctermbg=NONE ctermul=NONE gui=NONE guifg=#6d736d guibg=NONE guisp=NONE
 	hi PmenuSbar term=reverse cterm=NONE ctermfg=NONE ctermbg=12 ctermul=NONE gui=NONE guifg=NONE guibg=#6d736d guisp=NONE
 	hi PmenuThumb term=reverse cterm=NONE ctermfg=NONE ctermbg=14 ctermul=NONE gui=NONE guifg=NONE guibg=#8c8a7d guisp=NONE
 	hi SignColumn term=reverse cterm=NONE ctermfg=14 ctermbg=8 ctermul=NONE gui=NONE guifg=#8c8a7d guibg=#29302b guisp=NONE
@@ -94,7 +94,6 @@ if &background ==# 'dark'
 	hi StatusLineLeft term=bold cterm=bold ctermfg=0 ctermbg=2 gui=bold guifg=#1d221f guibg=#309c00
 	hi StatusLineRight term=bold cterm=bold ctermfg=0 ctermbg=3 gui=bold guifg=#1d221f guibg=#b48000
 	hi StatusGit term=bold cterm=bold ctermfg=0 ctermbg=10 gui=bold guifg=#1d221f guibg=#00886a
-	hi helpExample term=NONE cterm=NONE ctermfg=14 ctermbg=NONE ctermul=NONE gui=NONE guifg=#8c8a7d guibg=NONE guisp=NONE
 else # light
 	if has('gui_running')
 		hi Normal term=NONE cterm=NONE ctermfg=8 ctermbg=15 ctermul=NONE gui=NONE guifg=#29302b guibg=#f7f2e1 guisp=NONE
@@ -130,7 +129,7 @@ else # light
 	hi Error term=bold cterm=reverse,bold ctermfg=1 ctermbg=0 ctermul=NONE gui=reverse,bold guifg=#dc322f guibg=#1d221f guisp=NONE
 	hi FoldColumn term=reverse cterm=NONE ctermfg=12 ctermbg=7 ctermul=NONE gui=NONE guifg=#6d736d guibg=#e6e1d1 guisp=NONE
 	hi LineNr term=reverse cterm=NONE ctermfg=14 ctermbg=7 ctermul=NONE gui=NONE guifg=#8c8a7d guibg=#e6e1d1 guisp=NONE
-	hi NonText term=bold cterm=bold ctermfg=12 ctermbg=NONE ctermul=NONE gui=bold guifg=#8c8a7d guibg=NONE guisp=NONE
+	hi NonText term=NONE cterm=NONE ctermfg=12 ctermbg=NONE ctermul=NONE gui=NONE guifg=#8c8a7d guibg=NONE guisp=NONE
 	hi PmenuSbar term=reverse cterm=NONE ctermfg=NONE ctermbg=14 ctermul=NONE gui=NONE guifg=NONE guibg=#8c8a7d guisp=NONE
 	hi PmenuThumb term=reverse cterm=NONE ctermfg=NONE ctermbg=12 ctermul=NONE gui=NONE guifg=NONE guibg=#6d736d guisp=NONE
 	hi SignColumn term=reverse cterm=NONE ctermfg=12 ctermbg=7 ctermul=NONE gui=NONE guifg=#6d736d guibg=#e6e1d1 guisp=NONE
@@ -159,7 +158,6 @@ else # light
 	hi StatusLineLeft term=bold cterm=bold ctermfg=15 ctermbg=2 gui=bold guifg=#f7f2e1 guibg=#309c00
 	hi StatusLineRight term=bold cterm=bold ctermfg=15 ctermbg=3 gui=bold guifg=#f7f2e1 guibg=#b48000
 	hi StatusGit term=bold cterm=bold ctermfg=7 ctermbg=10 gui=bold guifg=#e6e1d1 guibg=#00886a
-	hi helpExample term=NONE cterm=NONE ctermfg=12 ctermbg=NONE ctermul=NONE gui=NONE guifg=#6d736d guibg=NONE guisp=NONE
 endif
 # common {{{
 if italic
@@ -300,7 +298,7 @@ hi! link ConId Type
 hi! link gitcommitBranch Todo
 hi! link gitcommitComment Comment
 hi! link gitcommitdiscardedtype Removed
-hi! link gitcommitHeader helpExample
+hi! link gitcommitHeader Comment
 hi! link gitcommitselectedtype Statement
 hi! link gitcommitUnmerged gitcommitSelectedFile
 hi! link GitGutterAdd DiffAdd
@@ -322,7 +320,7 @@ hi! link GlyphPalette10 helpOption
 hi! link GlyphPalette11 hs_DeclareFunction
 hi! link GlyphPalette12 gitcommitOnBranch
 hi! link GlyphPalette13 Boolean
-hi! link GlyphPalette14 helpExample
+hi! link GlyphPalette14 NonText
 hi! link GlyphPalette15 Comment
 hi! link helpHyperTextEntry Statement
 hi! link helpHyperTextJump Conceal
@@ -330,20 +328,21 @@ hi! link helpSpecial Special
 hi! link helpVim helpNote
 hi! link hs_hlFunctionName Conceal
 hi! link hs_OpFunctionName Type
+hi! link helpExample Comment
 hi! link hsImport helpNote
 hi! link hsImportLabel helpOption
 hi! link hsModuleName Statement
 hi! link hsNiceOperator helpOption
 hi! link hsStatement helpOption
-hi! link hsString helpExample
+hi! link hsString Comment
 hi! link hsStructure helpOption
 hi! link hsType Type
 hi! link hsTypedef helpOption
 hi! link hsVarSym helpOption
-hi! link htmlArg helpExample
-hi! link htmlEndTag helpExample
+hi! link htmlArg Comment
+hi! link htmlEndTag Comment
 hi! link htmlSpecialTagName Tag
-hi! link htmlTag helpExample
+hi! link htmlTag Comment
 hi! link javaScript Type
 hi! link pandocBlockQuote Conceal
 hi! link pandocBlockQuoteLeader1 Conceal
@@ -351,7 +350,7 @@ hi! link pandocBlockQuoteLeader2 helpOption
 hi! link pandocBlockQuoteLeader3 Type
 hi! link pandocBlockQuoteLeader4 Removed
 hi! link pandocBlockQuoteLeader5 pandocEmphasisNested
-hi! link pandocBlockQuoteLeader6 helpExample
+hi! link pandocBlockQuoteLeader6 Comment
 hi! link pandocCitation helpNote
 hi! link pandocCitationDelim helpNote
 hi! link pandocCitationID helpNote
@@ -370,15 +369,15 @@ hi! link pandocHeading pandocEmphasisHeading
 hi! link pandocHeadingMarker pandocEmphasisHeading
 hi! link pandocImageCaption gitcommitFile
 hi! link pandocLinkDefinitionID htmlTagName
-hi! link pandocLinkDelim helpExample
+hi! link pandocLinkDelim Comment
 hi! link pandocLinkLabel Conceal
 hi! link pandocLinkText Conceal
-hi! link pandocLinkTitle helpExample
-hi! link pandocLinkURL helpExample
+hi! link pandocLinkTitle Comment
+hi! link pandocLinkURL Comment
 hi! link pandocListMarker helpNote
 hi! link pandocListReference helpNote
 hi! link pandocMetadata htmlTagName
-hi! link pandocMetadataDelim helpExample
+hi! link pandocMetadataDelim Comment
 hi! link pandocMetadataKey Conceal
 hi! link pandocRule htmlTagName
 hi! link pandocRuleLine htmlTagName
@@ -394,7 +393,7 @@ hi! link pandocStrongEmphasisNestedDefinition gitcommitFile
 hi! link pandocStrongEmphasisNestedHeading pandocEmphasisHeading
 hi! link pandocStrongEmphasisNestedTable htmlTagName
 hi! link pandocStrongEmphasisTable htmlTagName
-hi! link pandocStyleDelim helpExample
+hi! link pandocStyleDelim Comment
 hi! link pandocSubscript pandocDefinitionBlock
 hi! link pandocSubscriptDefinition pandocDefinitionBlock
 hi! link pandocSubscriptHeading pandocEmphasisHeading
@@ -413,7 +412,7 @@ hi! link pandocVerbatimInline Type
 hi! link pandocVerbatimInlineDefinition pandocDefinitionBlock
 hi! link pandocVerbatimInlineHeading pandocEmphasisHeading
 hi! link pandocVerbatimInlineTable Conceal
-hi! link perlHereDoc helpExample
+hi! link perlHereDoc Comment
 hi! link perlStatementFileDesc helpOption
 hi! link perlVarPlain Type
 hi! link rubyBoolean Boolean
@@ -425,6 +424,6 @@ hi! link vimCommentString String
 hi! link vimGroup htmlTagName
 hi! link vimHiGroup Conceal
 hi! link vimHiLink Conceal
-hi! link vimIsCommand helpExample
+hi! link vimIsCommand Comment
 hi! link vimSynMtchOpt Type
 hi! link vimSynType helpOption
