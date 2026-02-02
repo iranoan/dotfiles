@@ -1,0 +1,71 @@
+*tabpanel-nerd* |tabpanel| の表示項目
+
+==============================================================================
+                                                           *tabpanel-nerd-index*
+目次~
+
+概要                                                             |tabpanel-nerd|
+表示内容                                                 |tabpanel-nerd-display|
+要件                                                     |tabpanel-nerd-require|
+使用方法                                                     |tabpanel-nerd-use|
+
+==============================================================================
+                                                            *tabpanel-nerd-abst*
+概要~
+
+|tabpanel| の表示する内容を出力する 'tabpanel' 指定用
+
+==============================================================================
+                                                         *tabpanel-nerd-display*
+表示内容~
+
+* アイコン
+* バッファ番号
+	隠しバッファの場合のみ
+* ファイル名
+	- 長い場合は後ろが省略され末尾に > が付く
+* ディレクトリ
+	- カレント・ディレクトリにあるファイルでは省略される
+	- ファイル名との間に < が付く
+	- 長い場合は前が省略される
+	- ただし |diff| モードでは後ろを省略する
+
+それぞれをタブ・ページの番号の後に、そのタブ・ページごとに纏めて表示し、その後に
+隠しバッファ (|hidden-buffer|) を表示する
+
+==============================================================================
+                                                         *tabpanel-nerd-require*
+要件~
+
+* https://github.com/ryanoasis/nerd-fonts
+	のアイコンを追加したフォントが必要
+
+==============================================================================
+                                                             *tabpanel-nerd-use*
+使用方法~
+
+	使用方法: >vim
+		set tabpanel=%!tabpanel_nerd#TabPanel()
+		set showtabpanel=2
+<                                          *g:tabpanel_icons* *tabpanel-nerd-color*
+* カラー表示させるには次を導入するか
+	https://github.com/lambdalisue/glyph-palette.vim
+>vim
+	let g:tabpanel_icons = #{
+		\ c:          #{icon: '', cur_hl: 'Function'},
+		\ DIFF:       #{icon: '', cur_hl: 'Type'},
+		\ HELP:       #{icon: '󰞋', cur_hl: 'Type'},
+		\ sh:         #{icon: '', cur_hl: 'Special'},
+		\ TERMINAL:   #{icon: '', cur_hl: 'Normal'},
+		\ tex:        #{icon: '', cur_hl: 'Function'},
+		\ vim:        #{icon: '', cur_hl: 'Statement'},
+	}
+<
+	の要領で、ファイル・タイプ別にアイコンに使用する文字列と |highlight-groups|,
+	|group-name| を指定する必要がる
+	- カスタマイズや追加も同様にできる
+	- DIFF, HELP, TERMINAL (全て大文字) のキーはは特殊で、それぞれ |diff| モード、
+		ヘルプ・モード (|:help| で開き 'buftype' が help の時)、|terminal| ウィンド
+		ウに対する指定
+
+vim:tw=78:ts=2:ft=help:norl:noet:fen:

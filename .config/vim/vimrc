@@ -242,6 +242,10 @@ set statusline=%!vimrc#StatusLine()
 # 	augroup END
 # 	highlight ZenkakuSpace cterm=reverse ctermfg=Black gui=reverse guifg=#CCCCCC
 # endif
+# タブ・パネル (サイド・バー) {{{2
+set tabpanel=%!tabpanel_nerd#TabPanel()
+set tabpanelopt=columns:32,align:right
+# set showtabpanel=2
 # 編集関係 {{{1
 set completeopt=menuone,noinsert,popup,noselect # 補完の挙動
 set delcombine                                 # 結合文字を別々に削除する
@@ -401,7 +405,8 @@ nnoremap <silent><leader>cb <Cmd>call vimrc#ToggleLightDark()<CR>
 nnoremap <silent><leader>cc <Cmd>set showcmd! showcmd?<CR>
 nnoremap <silent><leader>cd <Cmd>call vimrc#Lcd() <Bar>pwd<CR>
 nnoremap <silent><leader>cm <Cmd>set more! more?<CR>
-nnoremap <silent><leader>cs <Cmd>let &l:scrolloff = ( &scrolloff ? 0 : ( &lines > 20 ? &lines / 4 : 5 ) ) <Bar> setlocal scrolloff?<CR>
+nnoremap <silent><leader>cp <Cmd>let &l:scrolloff = ( &scrolloff ? 0 : ( &lines > 20 ? &lines / 4 : 5 ) ) <Bar> setlocal scrolloff?<CR>
+nnoremap <silent><leader>cs <Cmd>let &showtabpanel = ( &showtabpanel == 0 ? 2 : 0 ) <Bar> set showtabpanel?<CR>
 nnoremap <silent><leader>ct <Cmd>call vimrc#ToggleTabLine()<CR>
 nnoremap <silent><leader>cw <Cmd>setlocal wrap! wrap?<CR>
 # gvimrc.vim に書かれた分 {{{3
