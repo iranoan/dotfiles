@@ -10,7 +10,9 @@ var icon_infos: dict<dict<string>> = {
 	css:           {icon: '', cur_hl: 'GlyphPalette4'},
 	csv:           {icon: '', cur_hl: 'GlyphPalette2'},
 	DIFF:          {icon: '', cur_hl: 'GlyphPalette3'},
+	dirdiff:       {icon: '', cur_hl: 'GlyphPalette7'},
 	fern:          {icon: '', cur_hl: 'GlyphPalette3'},
+	fugitive:      {icon: '', cur_hl: 'GlyphPalette1'},
 	git:           {icon: '', cur_hl: 'GlyphPalette1'},
 	gitattributes: {icon: '', cur_hl: 'GlyphPalette1'},
 	gitconfig:     {icon: '', cur_hl: 'GlyphPalette1'},
@@ -93,20 +95,16 @@ augroup TabPanel
 augroup END
 
 export def TabPanel(): string
-	def BufLabel(b: dict<any>, active: bool): string
+	def BufLabel(b: dict<any>, w: number, active: bool): string
 		const hl = active ? '%*' : '%#TabPanel#'
-		var ft: string = getbufvar(b.bufnr, '&filetype')
-		ft = &diff ? 'DIFF' : get({help: 'HELP', terminal: 'TERMINAL'}, getbufvar(b.bufnr, '&buftype'), ft)
+		const ft: string = (w != 0 && gettabwinvar(g:actual_curtabpage, w, '&diff'))
+			? 'DIFF'
+			: get({help: 'HELP', terminal: 'TERMINAL'}, getbufvar(b.bufnr, '&buftype'), getbufvar(b.bufnr, '&filetype'))
 		const path: string = fnamemodify(b.name, ':p')->substitute('^' .. $HOME .. '\ze[/\\]', '~', '')
-		var name: string = fnamemodify(path, ':t')
+		var name: string = ft ==# 'dirdiff' ? '' : fnamemodify(path, ':t')
 		var name_len: number = strdisplaywidth(name)
 		var c_dir: string = fnamemodify(expand('%'), ':p:h')->substitute('^' .. $HOME .. '\ze[/\\]', '~', '')
-		var dir: string = ft ==# 'netrw'
-			? path
-			: (name ==# ''
-				? c_dir
-				: fnamemodify(path, ':h')->substitute('^' .. $HOME .. '\ze[/\\]', '~', '')
-				)
+		var dir: string
 		var width: number = matchstr(&tabpanelopt, '\(columns:\)\@<=\d\+')->str2nr()
 		if b.hidden
 			name_len = strdisplaywidth(name) + strdisplaywidth(printf('%2d', b.bufnr)) + 1
@@ -114,17 +112,21 @@ export def TabPanel(): string
 		endif
 		const icon_info: dict<string> = get(icon_infos, ft, {icon: '', cur_hl: 'TabPanelSel', nocur_hl: 'TabPanel'})
 		const icon: string = $'%#{get(icon_info, (active ? 'cur_hl' : 'nocur_hl'), (active ? 'TabPanelSel' : 'TabPanel'))}#{get(icon_info, 'icon', '')}{hl}'
+		if ft ==# 'netrw'
+			dir = path
+		elseif ft ==# 'fugitive'
+			dir = fnamemodify(path[ 11 : ], ':h:h')->substitute('^' .. $HOME .. '\ze[/\\]', '~', '')
+		elseif ft ==# 'DIFF'
+			dir = vimrc#DiffPath(w)
+		# elseif ft ==# 'TERMINAL' # terminal のカレントディレクトリの取得方法がない
+		# 	# dir = substitute(getcwd(), '^' .. $HOME .. '\ze[/\\]', '~', '')
+		# 	dir = fnamemodify(path, ':h:h')->substitute('^' .. $HOME .. '\ze[/\\]', '~', '')
+		elseif name ==# '' && ft !=# 'dirdiff'
+			dir = c_dir
+		else
+			dir = fnamemodify(path, ':h')->substitute('^' .. $HOME .. '\ze[/\\]', '~', '')
+		endif
 		width = (width == 0 ? 20 : width) - (match(&tabpanelopt, '[,=]vert\>') == -1 ? 0 : 1 )
-		# if ft ==# 'TERMINAL' # terminal のカレントディレクトリの取得方法がない {{{
-		# 	if b.windows == []
-		# 		dir = ''
-		# 	else
-		# 		# dir = substitute(getcwd(), '^' .. $HOME .. '\ze[/\\]', '~', '')
-		# 		dir = fnamemodify(path, ':h:h')->substitute('^' .. $HOME .. '\ze[/\\]', '~', '')
-		# 	endif
-		# else
-		# 	dir = fnamemodify(path, ':h')->substitute('^' .. $HOME .. '\ze[/\\]', '~', '')
-		# endif # }}}
 		if ft ==# 'TERMINAL' || dir ==# c_dir
 			if name_len + 2 > width
 				return icon .. substitute(name, $'\%{width - 2}v.*', $'%#TabPanelColor0#>{hl}', '')
@@ -134,16 +136,16 @@ export def TabPanel(): string
 			return icon .. substitute(name, $'\%{width - 2}v.*', $'%#TabPanelColor0#>{hl}', '')
 		endif
 		width = width - name_len
-		if ft ==# 'DIFF' || (strdisplaywidth(dir) - width + 4 < 0)
-			return icon .. name .. $'%#TabPanelColor0#<{hl}' .. substitute(dir, $'\%{width}v.*', '', '')
+		if strdisplaywidth(dir) - width + 4 < 0
+			return $'{icon}{name}%#TabPanelColor0#<{hl}{dir}'
 		else
-			return icon .. name .. $'%#TabPanelColor0#<{hl}' .. substitute(dir, $'.*\%{strdisplaywidth(dir) - width + 4}v', '', '')
+			return $'{icon}{name}%#TabPanelColor0#<{hl}{substitute(dir, $'.*\%{strdisplaywidth(dir) - width + 4}v', '', '')}'
 		endif
 	enddef
 
 	var label = [$'{g:actual_curtabpage}']
-	for b in tabpagebuflist(g:actual_curtabpage)
-		add(label, BufLabel(getbufinfo(b)[0], tabpagenr() == g:actual_curtabpage))
+	for w in gettabinfo(g:actual_curtabpage)[0].windows
+		add(label, BufLabel(getbufinfo(getwininfo(w)[0].bufnr)[0], w, tabpagenr() == g:actual_curtabpage))
 	endfor
 
 	# Show Hiddens
@@ -152,7 +154,7 @@ export def TabPanel(): string
 		if !!hiddens
 			label->add('%#TabPanel#Hidden')
 			for h in hiddens
-				label->add(BufLabel(h, false))
+				label->add(BufLabel(h, 0, false))
 			endfor
 		endif
 	endif

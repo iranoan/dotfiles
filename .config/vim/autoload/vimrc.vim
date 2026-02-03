@@ -109,6 +109,63 @@ export def Insert_template(s: string): void # ~/Templates/ からテンプレー
 	endif
 enddef
 
+export def DiffPath(winid: number): string # winid は &diff ウィンドウ前提で、対となるバッファのパス前後一致する部分を除いたパスの一部を返す
+	var c_path0: string = fnamemodify(getbufinfo(getwininfo(winid)[0].bufnr)[0].name, ':h')
+	var c_path: list<string> = split(c_path0, '/')
+	var path: list<list<string>>
+	var match: bool = true
+	var idx: number = -1
+	var min_len: number
+
+	if !getwinvar(winid, '&diff')
+		return c_path0
+	endif
+	for t in gettabinfo()
+		for w in t.windows
+			if gettabwinvar(t.tabnr, w, '&diff') && w != winid
+				path = add(path, fnamemodify(getbufinfo(getwininfo(w)[0].bufnr)[0].name, ':h')
+					->split('/'))
+			endif
+		endfor
+	endfor
+	if len(path) == 0
+		return c_path0
+	endif
+	min_len = -min(([c_path] + path)->mapnew((_, v) => len(v)))
+	# 後ろの共通部分削除
+	while idx >= min_len && match
+		for p in path
+			if c_path[idx] !=# p[idx]
+				match = false
+				break
+			endif
+		endfor
+		--idx
+	endwhile
+	c_path = c_path[ : idx + 1]
+	# 前の共通部分削除
+	idx = 0
+	min_len = -max([-len(c_path), min_len])
+	match = true
+	while idx <= min_len && match
+		for p in path
+			if c_path[idx] !=# p[idx]
+				match = false
+				break
+			endif
+		endfor
+		++idx
+	endwhile
+	c_path = c_path[ idx - 1 : ]
+	if c_path == []
+		return ''
+	elseif idx ==# 1
+		return $'/{join(c_path, '/')}/'->substitute('^' .. $HOME .. '\ze\([/\\]\|$\)', '~', '')
+	else
+		return join(c_path, '/') .. '/'
+	endif
+enddef
+
 export def StatusLine(): string # set statusline=%!vimrc#StatusLine() で利用する
 	# 表示するのは大雑把に↓
 	# tabpagenr()/tabpagenr('$') bufnr filetype modified etc.|git|path|column bytes:number:word-count/file word-count:bytes line current/full % code charset:cr/lf
@@ -235,58 +292,56 @@ export def StatusLine(): string # set statusline=%!vimrc#StatusLine() で利用�
 		return ret
 	enddef
 
-	var s: string = '%#StatusLineLeft#%-19.(' .. tabpagenr() .. '/' .. tabpagenr('$') .. ':%n'
+	var s: string = $'%#StatusLineLeft#%-19.({tabpagenr()}/{tabpagenr('$')}:%n'
 	if win_type ==# 'loclist' # quickfix は編集することはないので、表示する情報を減らす
-		return s .. ' [Location]%) ' .. StatusKind() .. '%<' .. getwinvar(g:statusline_winid, 'quickfix_title') .. '%=%#StatusLineRight#' .. curline .. '/%L%4p%%'
+		return $'{s} [Location]%) {StatusKind()}%<{getwinvar(g:statusline_winid, 'quickfix_title')}%=%#StatusLineRight#{curline}/%L%4p%%'
 	elseif win_type ==# 'quickfix'
-		return s .. ' [QuickFix]%) ' .. StatusKind() .. '%<' .. getwinvar(g:statusline_winid, 'quickfix_title') .. '%=%#StatusLineRight#' .. curline .. '/%L%4p%%'
+		return $'{s} [QuickFix]%) {StatusKind()}%<{getwinvar(g:statusline_winid, 'quickfix_title')}%=%#StatusLineRight#{curline}/%L%4p%%'
 	elseif diff # diff モード縦分割を用いていウィンドウ幅が狭いので表示する情報を減らす
 		var k: dict<any> = DiffPostion(g:statusline_winid)
 		var f: string = GetFlag()
 		if !(k.vert) # 縦分割されていない
 			if f ==# ''
-				return s .. ' [Diff]%)' .. statusGit .. ' ' .. StatusKind() .. GetPath() .. StatusRight()
+				return $'{s} [Diff]%){statusGit} {StatusKind()}{DiffPath(g:statusline_winid)}{StatusRight()}'
 			else
-				return s .. ' [Diff:' .. f .. ']%)' .. statusGit .. ' ' .. StatusKind() .. GetPath() .. StatusRight()
+				return $'{s} [Diff:{f}]%){statusGit} {StatusKind()}%< {DiffPath(g:statusline_winid)}{StatusRight()}'
 			endif
 		elseif k.exist_hor # 縦分割されていない diff が他に有る
 			if f ==# ''
-				return '%#StatusLineLeft#%n ' .. statusGit .. StatusKind() .. GetPath()
+				return $'%#StatusLineLeft#%n {statusGit}{StatusKind()}%< {DiffPath(g:statusline_winid)}'
 			else
-				return '%#StatusLineLeft#%n[' .. f .. '] ' .. statusGit .. StatusKind() .. GetPath()
+				return $'%#StatusLineLeft#%n[{f}] {statusGit}{StatusKind()}%< {DiffPath(g:statusline_winid)}'
 			endif
 		elseif k.n == 1 # 最初の diff
 			if f ==# ''
-				return '%#StatusLineLeft#' .. tabpagenr() .. '/' .. tabpagenr('$')
-					.. ':%n [Diff] ' .. statusGit .. StatusKind() .. GetPath()
+				return $'%#StatusLineLeft#{tabpagenr()}/{tabpagenr("$")}:%n [Diff] {statusGit}{StatusKind()}%< {DiffPath(g:statusline_winid)}'
 			else
-				return '%#StatusLineLeft#' .. tabpagenr() .. '/' .. tabpagenr('$')
-					.. ':%n [Diff:' .. f .. '] ' .. statusGit .. StatusKind() .. GetPath()
+				return $'%#StatusLineLeft#{tabpagenr()}/{tabpagenr('$')}:%n [Diff:{f}] {statusGit}{StatusKind()}%< {DiffPath(g:statusline_winid)}'
 			endif
 		elseif k.n == k.all # 最後の diff
 			if f ==# ''
-				return '%#StatusLineLeft#%n ' .. statusGit .. StatusKind() .. GetPath() .. '%=%#StatusLineRight#%3p%% 0x%04B'
+				return $'%#StatusLineLeft#%n {statusGit}{StatusKind()}%< {DiffPath(g:statusline_winid)}%=%#StatusLineRight#%3p%% 0x%04B'
 			else
-				return '%#StatusLineLeft#%n[' .. f .. '] ' .. statusGit .. StatusKind() .. GetPath() .. '%=%#StatusLineRight#%3p%% 0x%04B'
+				return $'%#StatusLineLeft#%n[{f}] {statusGit}{StatusKind()}%< {DiffPath(g:statusline_winid)}%=%#StatusLineRight#%3p%% 0x%04B'
 			endif
 		endif
 		if f ==# ''
-			return '%#StatusLineLeft#%n ' .. statusGit .. StatusKind() .. GetPath()
+			return $'%#StatusLineLeft#%n {statusGit}{StatusKind()}%< {DiffPath(g:statusline_winid)}'
 		else
-			return '%#StatusLineLeft#%n[' .. f .. '] ' .. statusGit .. StatusKind() .. GetPath()
+			return $'%#StatusLineLeft#%n[{f}] {statusGit}{StatusKind()}%< {DiffPath(g:statusline_winid)}'
 		endif
 	elseif win_type ==# 'command'
 		win_type = win_execute(g:statusline_winid, 'echo getcmdwintype()')
 		if win_type =~# ':'
-			return s .. ' [Command Line Window]%) %#StatusLine#%< Ex command' .. StatusRight()
+			return $'{s} [Command Line Window]%) %#StatusLine#%< Ex command{StatusRight()}'
 		elseif win_type =~# '/'
-			return s .. ' [Command Line Window]%) %#StatusLine#%< Search forward' .. StatusRight()
+			return $'{s} [Command Line Window]%) %#StatusLine#%< Search forward{StatusRight()}'
 		elseif win_type =~# '?'
-			return s .. ' [Command Line Window]%) %#StatusLine#%< Search backward' .. StatusRight()
+			return $'{s} [Command Line Window]%) %#StatusLine#%< Search backward{StatusRight()}'
 		endif
-		return s .. ' [Command Line Window]%) %#StatusLine#%<' .. StatusRight()
+		return $'{s} [Command Line Window]%) %#StatusLine#%<{StatusRight()}'
 	elseif buftype ==# 'terminal'
-		return s .. ' [Term]%)' .. StatusKind() .. GetPath() .. StatusRight()
+		return $'{s} [Term]%){StatusKind()}{GetPath()}{StatusRight()}'
 	elseif buftype ==# 'help'
 		s ..= ' [Help]'
 	elseif filetype ==# 'fugitive' || filetype ==# 'git'
@@ -294,7 +349,7 @@ export def StatusLine(): string # set statusline=%!vimrc#StatusLine() で利用�
 	else
 		s ..= GetFlag()
 	endif
-	return s .. '%)' .. statusGit .. ' ' .. StatusKind() .. GetPath() .. StatusRight()
+	return $'{s}%){statusGit} {StatusKind()}{GetPath()}{StatusRight()}'
 enddef
 
 export def KillTerminal(): void # :terminal は一つに
