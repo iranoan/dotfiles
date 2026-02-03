@@ -227,5 +227,5 @@ export def Vim(): void # Vim script のエラー内容を Quickfix に取り込�
 	endif
 	b:qflist = qflist
 	setqflist(qflist, 'r')
-	cwindow
+	botright cwindow
 enddef
