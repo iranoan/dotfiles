@@ -425,5 +425,6 @@ hi! link vimGroup htmlTagName
 hi! link vimHiGroup Conceal
 hi! link vimHiLink Conceal
 hi! link vimIsCommand Comment
+hi! link vimOper helpNote
 hi! link vimSynMtchOpt Type
 hi! link vimSynType helpOption
