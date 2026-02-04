@@ -31,17 +31,17 @@ syntax match manFooter /^[^\s\e].\+\e\[4m[A-Z0-9_:.+@-]\+\e\[24m(\d)$/ contains=
 syntax match manURL '\%(\<\%(\%(\%(https\=\|ftp\|gopher\)://\|\%(mailto\|file\|news\):\)[^'' \t<>"]\+\)[A-Za-z0-9/]\)' contains=@NoSpell
 syntax match manEmail '[_=A-Za-z./+0-9-]\+@[A-Za-z0-9._-]\+\.\a\{2,3}' contains=@NoSpell
 
-highlight! default link manBold Special
-highlight! default link manUnderline Function
-# highlight! default link manBold2 Constant
-# highlight! default link manUnderline2 Type
-highlight! default link manNone Normal
-hlset(
-	hlget('Title')->map((_, v) => v->extend({name: 'manSection', cterm: {bold: true, underline: true}, gui: {bold: true, underline: true}}))
-	+ hlget('Directory')->map((_, v) => v->extend({name: 'manURL', cterm: {underline: true}, gui: {underline: true}}))
-	+ hlget('Constant')->map((_, v) => v->extend({name: 'manEmail', cterm: {underline: true}, gui: {underline: true}}))
-)
-highlight! default link manHeader Statusline
-highlight! default link manFooter PreProc
+highlight! link manBold Special
+highlight! link manUnderline Function
+# highlight! link manBold2 Constant
+# highlight! link manUnderline2 Type
+highlight! link manNone Normal
+hlset([
+	hlget('Title')[0]->extend({name: 'manSection', font: '', tterm: {bold: true, underline: true}, cterm: {bold: true, underline: true}, gui: {bold: true, underline: true}}),
+	hlget('Title')[0]->extend({name: 'manHeader', font: '', term: {bold: true, reverse: true}, cterm: {bold: true, reverse: true}, gui: {bold: true, reverse: true}}),
+	hlget('Directory')[0]->extend({name: 'manURL', font: '', term: {underline: true}, cterm: {underline: true}, gui: {underline: true}}),
+	hlget('Constant')[0]->extend({name: 'manEmail', font: '', term: {underline: true}, cterm: {underline: true}, gui: {underline: true}})
+])
+highlight! link manFooter PreProc
 
 b:current_syntax = 1
