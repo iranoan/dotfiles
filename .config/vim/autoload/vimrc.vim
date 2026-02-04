@@ -110,9 +110,11 @@ export def InsertTemplate(s: string): void # ~/Templates/ からテンプレー�
 enddef
 
 export def DiffPath(winid: number): string # winid は &diff ウィンドウ前提で、対となるバッファのパス前後一致する部分を除いたパスの一部を返す
+	var count_fugitive = 0 # fugitive ウィンドウの数
 	var c_path0: string = fnamemodify(getbufinfo(getwininfo(winid)[0].bufnr)[0].name, ':h')
 	var c_path: list<string> = split(c_path0, '/')
 	var path: list<list<string>>
+	var path_s: string
 	var match: bool = true
 	var idx: number = -1
 	var min_len: number
@@ -120,15 +122,31 @@ export def DiffPath(winid: number): string # winid は &diff ウィンドウ前�
 	if !getwinvar(winid, '&diff')
 		return c_path0
 	endif
+	if c_path0 =~# '^fugitive://'
+		c_path0 = matchstr(c_path0, '/\.git//\zs[^/]\+\ze/')
+		if c_path0 ==# '0'
+			return 'fugitive://HEAD'
+		endif
+		return 'fugitive://' .. systemlist('git name-rev ' .. c_path0)[0][41 : ]
+		# commit ID の (上7桁)は fugitive#statusline() を使えば良い→statusline の %f 相当以外の場所で表示している
+	endif
 	for t in gettabinfo()
+		if index(t.windows, winid) == -1
+			continue
+		endif
 		for w in t.windows
 			if gettabwinvar(t.tabnr, w, '&diff') && w != winid
-				path = add(path, fnamemodify(getbufinfo(getwininfo(w)[0].bufnr)[0].name, ':h')
+				path_s = getbufinfo(getwininfo(w)[0].bufnr)[0].name
+				if path_s =~# '^fugitive://'
+					++count_fugitive
+					path_s = substitute(path_s, '^fugitive://\(.\+\)/\.git//[^/]\+\(/.\+\)', '\1\2', '')
+				endif
+				path = add(path, fnamemodify(path_s, ':h')
 					->split('/'))
 			endif
 		endfor
 	endfor
-	if len(path) == 0
+	if len(path) == 0 || (len(path) == count_fugitive)
 		return c_path0
 	endif
 	min_len = -min(([c_path] + path)->mapnew((_, v) => len(v)))
@@ -142,6 +160,9 @@ export def DiffPath(winid: number): string # winid は &diff ウィンドウ前�
 		endfor
 		--idx
 	endwhile
+	if len(c_path) == idx + 1
+		return ''
+	endif
 	c_path = c_path[ : idx + 1]
 	# 前の共通部分削除
 	idx = 0
@@ -156,6 +177,9 @@ export def DiffPath(winid: number): string # winid は &diff ウィンドウ前�
 		endfor
 		++idx
 	endwhile
+	if len(c_path) == idx - 1
+		return ''
+	endif
 	c_path = c_path[ idx - 1 : ]
 	if c_path == []
 		return ''
