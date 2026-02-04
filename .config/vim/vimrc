@@ -334,13 +334,13 @@ augroup VIMRC
 	autocmd BufReadPre tags  set fileencodings=utf-8
 	autocmd BufRead    tags  &fileencodings = fileencodings
 	# 新規作成時にテンプレートを挿入
-	autocmd BufNewFile *.sh         vimrc#Insert_template('sh.sh')
-	autocmd BufNewFile *.tex        vimrc#Insert_template('TeX.tex')
-	autocmd BufNewFile *.htm,*.html vimrc#Insert_template('HTML.html')
-	autocmd BufNewFile *.plt        vimrc#Insert_template('Gnuplot.plt')
-	autocmd BufNewFile *.py         vimrc#Insert_template('Python.py')
-	autocmd BufNewFile *.css        vimrc#Insert_template('CSS.css')
-	autocmd BufNewFile *.vim        vimrc#Insert_template('vim.vim')
+	autocmd BufNewFile *.sh         vimrc#InsertTemplate('sh.sh')
+	autocmd BufNewFile *.tex        vimrc#InsertTemplate('TeX.tex')
+	autocmd BufNewFile *.htm,*.html vimrc#InsertTemplate('HTML.html')
+	autocmd BufNewFile *.plt        vimrc#InsertTemplate('Gnuplot.plt')
+	autocmd BufNewFile *.py         vimrc#InsertTemplate('Python.py')
+	autocmd BufNewFile *.css        vimrc#InsertTemplate('CSS.css')
+	autocmd BufNewFile *.vim        vimrc#InsertTemplate('vim.vim')
 	autocmd CmdwinLeave,CmdlineLeave,TabLeave,WinLeave,InsertEnter * vimrc#ChangeScrolloff()
 	autocmd VimLeave * vimrc#BackupViminfo()
 augroup END

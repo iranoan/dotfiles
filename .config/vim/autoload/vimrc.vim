@@ -90,7 +90,7 @@ export def MoveChanged(move_rear: bool): void # カーソルリストの前後�
 	setpos('.', [bufnr(), pos.lnum, pos.col + 1, 0])
 enddef
 
-export def Insert_template(s: string): void # ~/Templates/ からテンプレート挿入
+export def InsertTemplate(s: string): void # ~/Templates/ からテンプレート挿入
 	# 普通に r を使うと空行ができる
 	# ついでに適当な位置にカーソル移動
 	if line('$') != 1 || getline(1) !=# '' # この条件がないと空のバッファから開くと、既存のファイルでもテンプレートを入れてしまう
