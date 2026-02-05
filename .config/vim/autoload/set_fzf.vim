@@ -26,11 +26,11 @@ function set_fzf#main() abort
 				\ }
 	let g:fzf_action = #{
 				\ ctrl-g: 'edit',
-				\ ctrl-t: function('set_fzf#FZF_open'),
+				\ ctrl-t: function('s:fzfOpen'),
 				\ ctrl-s: 'split',
 				\ ctrl-v: 'vsplit',
-				\ enter:  function('set_fzf#FZF_open'),
-				\ ctrl-o: function('set_fzf#FZF_open')
+				\ enter:  function('s:fzfOpen'),
+				\ ctrl-o: function('s:fzfOpen')
 				\ } " 他で sink を使うと、この設定は無視されるので注意←:help fzf-global-options-supported-by-fzf#wrap
 				" \ ctrl-e: 'edit', カーソルを入力の末尾移動と重なる
 	let $FZF_DEFAULT_OPTS = substitute($FZF_DEFAULT_OPTS, '--footer "[^"]\+"', '', 'g')
@@ -183,10 +183,47 @@ function set_fzf#vim(cmd) abort
 " \ ↑ vim-signature のデフォルト・キーマップをこちらに再定義
 	delcommand GitFiles " vim-fugitive の :Git と重なり使いにくくなる
 	delcommand Helptags
+	command! Colors call s:colors(<bang>0)
 	call timer_start(1, {->execute('delfunction set_fzf#vim')})
 endfunction
 
-def set_fzf#FZF_open(arg: list<string>): void
+function s:colors(...)
+	" :Colors 用の関数
+	" 本来の関数は罫線の幅や colorscheme の個数を考慮していない幅なので、それを直す
+	let colors = split(globpath(&rtp, "colors/*.vim"), "\n")
+	if has('packages')
+		let colors += split(globpath(&packpath, "pack/*/opt/*/colors/*.vim"), "\n")
+	endif
+	let colors = fzf#vim#_uniq(map(colors, "fnamemodify(v:val, ':t')[:-5]"))
+
+	" Put the current colorscheme at the top
+	if exists('g:colors_name')
+		let s:colors_name = g:colors_name
+		let colors = [g:colors_name] + filter(colors, 'g:colors_name != v:val')
+	endif
+
+	let spec = {
+				\ 'source':  colors,
+				\ 'sink':    'colo',
+				\ 'options': ['+m', '--prompt', 'Colors> ']
+				\}
+
+	let snr = $'<SNR>{getscriptinfo(#{name: '/fzf.vim/autoload/fzf/vim.vim$'})[0].sid}_'
+	if !a:1 " We can't set up IPC in fullscreen mode in Vim
+		let fifo = fzf#vim#ipc#start({ msg -> execute('colo '.msg) })
+		let len_colors = len(colors)
+		if len(fifo)
+			call extend(spec.options, ['--no-tmux', '--no-padding', '--no-margin', '--bind', 'focus:execute-silent:echo {} > '.fifo])
+			let spec.exit = function(snr .. 'colors_exit')
+			let maxwidth = max(map(copy(colors), 'strwidth(v:val)'))
+			let spec.window = { 'width': maxwidth + 8 + 2 + 2 * len('' .. len_colors) + 1, 'height': len(colors) + 5 }
+		endif
+	endif
+
+	call call(snr .. 'fzf', ['colors', spec, a:000])
+endfunction
+
+def s:fzfOpen(arg: list<string>): void
 	var dir: string = getcwd() .. '/'
 	for f in arg
 		if match(f, '^[~/]') != 0
