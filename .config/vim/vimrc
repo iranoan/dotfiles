@@ -579,12 +579,23 @@ for [n, q] in items({ 2: '"', 7: "'", 8: '(', 9: ')', '@': '`', ',': '<', '.': '
 	execute 'onoremap i' .. n .. ' i' .. q
 	execute 'xnoremap i' .. n .. ' i' .. q
 endfor
+# abbreviate {{2
+# バッファ全体を対象に全置換の入力準備 {{{ https://zenn.dev/vim_jp/articles/2023-06-30-vim-substitute-tips
+# s だけだと、カーソル行だけの置換を指定しにくい
+# カーソル位置の単語を取り込み検索語としつつ、 (コマンド・ラインで「ss/」「ss<Space>」等で発火) ←
+cnoreabbrev <expr> ss getcmdtype() .. getcmdline() ==# ':ss' ? [getchar(), ''][1] .. '%s/\<<C-R><C-W>\>//g<Left><Left>' : 'ss'
+# 直前の検索語を使う
+cnoreabbrev <expr> S  getcmdtype() .. getcmdline() ==# ':S' ? [getchar(), ''][1] .. '%s///g<Left><Left>' : 'S'
+# }}}
 # abbreviate の代わり {{2
 cnoremap <expr> ~vim $MYVIMDIR
 inoremap <expr> ~vim getcmdwintype() =~# '[?/:]' ? $MYVIMDIR : '~vim'
-# Quoted-Printのデコード {{{2
+# デコード {{{2
+# Quoted-Print {{{
 nnoremap <silent><silent><Leader>hq :let b:pos=getpos(".")<CR>:%s/\v\=\?utf-8\?Q\?(.+)\?\=/\1/g<CR>:%!perl -M'MIME::QuotedPrint' -e 'while (<STDIN>) { print decode_qp($_); }'<CR>:call setpos('.',b:pos)<CR>:set fileencoding=<CR>
 xnoremap <silent><silent><Leader>hq :!perl -M'MIME::QuotedPrint' -e 'while (<STDIN>) { print decode_qp($_); }'<CR>:set fileencoding=<CR>
-# dase64 のデコード←範囲選択しないと上手くいかない {{{2
+# }}}
+# dase64 ←範囲選択しないと上手くいかない {{{
 nnoremap <silent><silent><Leader>hb :let b:pos=getpos(".") <CR>:%!base64 -di -w 0 -<CR>
 xnoremap <silent><silent><Leader>hb :!base64 -di -w 0 -<CR>
+# }}}
