@@ -93,7 +93,7 @@ export def VimHelp(): void
 	# 	Help(tmp)
 	# 	return
 	# endif
-	[keyword, m_start, m_end] = matchstrpos(line, '^\s*\zs[A-Za-z0-9]\+')
+	[keyword, m_start, m_end] = matchstrpos(line, '^\s*\zs[A-Za-z0-9_]\+')
 	if m_start != -1 && column <= m_end && column >= m_start # 行頭→コマンド
 		Help(':' .. keyword)
 		return
