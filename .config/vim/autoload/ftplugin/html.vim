@@ -23,6 +23,13 @@ export def CloseTag(): void # completeopt 次第で候補が一つでも確定�
 enddef
 
 export def GF(): void # path#id の記述があった時、path を開いた後 id の位置にカーソル移動 (path が存在しなくても開く)
+	def ViewMes(s: list<string>): void
+			if has('popupwin')
+				popup_notification(s, {borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'], col: "cursor", line: "cursor"})
+			else
+				echohl WarningMsg | echomsg s | echohl None
+			endif
+	enddef
 	# 内部で TaEdit コマンドを使っている
 	var str: string
 	var start: number = 0
@@ -39,21 +46,32 @@ export def GF(): void # path#id の記述があった時、path を開いた後 
 	endwhile
 	var hash: number = match(str, '#')
 	if hash == -1
+			if !filereadable(str)
+				ViewMes(['<' .. str .. '>が存在しない/読み込み不可'])
+				return
+			endif
 		execute('TabEdit ' .. str)
 	else
 		var id: string = str[hash + 1 :]
-		if hash != 0
-			execute('TabEdit ' .. expand('%:p:h') .. '/' .. str[0 : hash - 1])
+		var path: string = str[0 : hash - 1]
+		var f_path: string = resolve(expand('%:p:h') .. '/' .. path)
+		if hash != 0 && f_path !=# resolve(expand('%:p'))
+			if !filereadable(f_path)
+				ViewMes(['<' .. path .. '>が存在しない/読み込み不可'])
+				return
+			endif
+			execute('TabEdit ' .. f_path)
 		endif
 		var pos: list<dict<any>> = matchbufline(bufnr('%'),
-			'<[A-Za-z]\+[^>]*\sid=\(\zs' .. id .. '\>\|"\zs' .. id .. '"\|''\zs' .. id .. '''\)', 1, line('$'))
+			'\C<[A-Za-z]\+[^>]*\s[Ii][Dd]=\(\zs' .. id .. '\>\|"\zs' .. id .. '"\|''\zs' .. id .. '''\)', 1, line('$'))
 		if pos == []
-			if has('popupwin')
-				popup_notification('<id="' .. id .. '">が見つからない', {borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰']})
-			else
-				echohl WarningMsg | echomsg '<id="' .. id .. '">が見つからない' | echohl None
+			# 大文字小文字区別なしで探し直す
+			pos = matchbufline(bufnr('%'), '<[A-Za-z]\+[^>]*\s[Ii][Dd]=\(\zs' .. id .. '\>\|"\zs' .. id .. '"\|''\zs' .. id .. '''\)', 1, line('$'))
+			if pos == []
+				ViewMes(['<id=' .. id .. '>が存在しない/読み込み不可'])
+				return
 			endif
-			return
+			ViewMes(['<id=' .. id .. '>が存在しない/読み込み不可', '大文字/小文字区別なしが存在する'])
 		endif
 		setpos('.', [0, pos[0].lnum, pos[0].byteidx, 0])
 	endif
