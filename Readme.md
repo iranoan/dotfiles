@@ -28,10 +28,10 @@ install.sh
   * [sxiv.sh](bin/sxiv.sh)
   * [sh-list.sh](bin/sh-list.sh)
   * [ssconvert.sh](bin/ssconvert.sh)
-    * use [ssconvert](https://help.gnome.org/users/gnumeric/stable/sect-files-ssconvert.html.en)
+    * use [ssconvert](https://gnome.pages.gitlab.gnome.org/gnumeric-web/)
   * [tsv2table.awk](bin/tsv2table.awk)
   * [xlsx2table.sh](bin/xlsx2table.sh)
-    * use [ssconvert](https://help.gnome.org/users/gnumeric/stable/sect-files-ssconvert.html.en)
+    * use [ssconvert](https://gnome.pages.gitlab.gnome.org/gnumeric-web/)
 * clang-format
   * [.clang-format](.clang-format)
 * Ctags
