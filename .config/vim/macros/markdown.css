@@ -1,19 +1,19 @@
 @charset "utf-8";
 
 html, header#page-header {
-	color: #586e75 !important;
+	color: #29302b !important;
 	text-align: justify !important;
-	background-color: #fdf6e3 !important;
-	border-color: #586e75 !important;
+	background-color: #f7f2e1 !important;
+	border-color: #29302b !important;
 }
 
 body, div#page-ctn, main {
 	font-size: 1em;
 	line-height: 1.2;
-	color: #586e75;
+	color: #29302b;
 	text-align: justify;
-	background-color: #fdf6e3;
-	border-color: #586e75;
+	background-color: #f7f2e1;
+	border-color: #29302b;
 }
 
 div#page-ctn {
@@ -28,14 +28,14 @@ h1 {
 
 strong {
 	font-weight: bold;
-	color: #DC322F;
-	border-color: #DC322F;
+	color: #dc322f;
+	border-color: #dc322f;
 }
 
 em {
 	font-style: italic;
-	color: #268BD2;
-	border-color: #268BD2;
+	color: #0080bd;
+	border-color: #0080bd;
 }
 
 del {
@@ -44,7 +44,7 @@ del {
 }
 
 ins {
-	color: #586E75;
+	color: #29302b;
 	text-decoration: none;
 }
 
@@ -53,21 +53,21 @@ img{
 }
 
 a:link {
-	color: #268BD2;
+	color: #0080bd;
 }
 
 a:active {
-	color: #859900;
+	color: #b48000;
 }
 
 a:visited {
-	color: #D33682;
+	color: #e14096;
 }
 
 a[href]:hover {
 	font-size: 105%;
-	color: #D33682;
-	background-color: #B58900;
+	color: #1d221f;
+	background-color: #b48000;
 }
 
 pre.hljs {
@@ -90,7 +90,7 @@ h3,
 h4,
 h5,
 h6 {
-  border-bottom: 1px solid #586e75;
+  border-bottom: 1px solid #29302b;
 }
 
 h1 .anchor,
@@ -128,19 +128,23 @@ td {
 
 @media (prefers-color-scheme: dark) {/* ダークモード */
 	html, header#page-header {
-		color: #EEE8D5 !important;
-		background-color: #002B36 !important;
-		border-color: #EEE8D5 !important;
+		color: #e6e1d1 !important;
+		background-color: #1d221f !important;
+		border-color: #e6e1d1 !important;
 	}
 
 	body, div#page-ctn, main, header#page-header {
-		color: #EEE8D5;
-		background-color: #002B36;
-		border-color: #EEE8D5;
+		color: #e6e1d1;
+		background-color: #1d221f;
+		border-color: #e6e1d1;
+	}
+
+	a[href]:hover {
+		color: #f7f2e1;
 	}
 
 	ins {
-		color: #EEE8D5;
+		color: #e6e1d1;
 	}
 }
 
@@ -156,7 +160,7 @@ td {
 	}
 
 	a:visited {
-		color: #268BD2;
+		color: #0080bd;
 	}
 
 	h2,
