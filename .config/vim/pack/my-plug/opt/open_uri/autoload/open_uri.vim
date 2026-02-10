@@ -1,5 +1,5 @@
 scriptencoding utf-8
-" カーソル行に書かれたフォルダや関連付けられたアプリケーションで開く (URL またはフォルダは最後が/、ファイルは拡張子があること)
+" カーソル行に書かれたフォルダや関連付けられたアプリケーションで開く (URL またはフォルダは最後が/、ファイルは拡張子 (4文字まで) があること)
 
 let s:save_cpo = &cpoptions
 set cpoptions&vim
@@ -10,15 +10,15 @@ function open_uri#main()
 	let urls = []
 	let only_urls = []
 	while 1
-		let [url, m_start, m_end] = matchstrpos(line_str, '\v<(((https?|ftp|gopher)://|(mailto|file|news):)[^][{}()'' \t<>"]+|(www|web|w3)[a-z0-9_-]*\.[a-z0-9._-]+\.[^][{}()'' \t<>"]+)[a-z0-9/]|(\~?/)?([-A-Za-z._0-9]+/)*[-A-Za-z._0-9]+(\.\a([A-Za-z0-9]{,3})|/)?', m_end)
+		let [url, m_start, m_end] = matchstrpos(line_str, '\<\%(\%(\%(https\=\|ftp\|gopher\)://\|\%(mailto\|file\|news\):\)[^][{}()'' \t<>"]\+\|\%(www\|web\|w3\)[A-Za-z0-9_-]*\.[A-Za-z0-9._-]\+\.[^][{}()'' \t<>"]\+\)[A-Za-z0-9/]\|\%(\~\=/\)\=\%([-A-Za-z._0-9]\+/\)*[-A-Za-z._0-9]\+\%(\.\a\%([A-Za-z0-9]\{,4}\)\|/\)\=', m_end)
 		if m_start == -1
 			break
 		endif
-		if url !~# '\v^(((https?|ftp|gopher)://|(mailto|file|news):)[^][{}()'' \t<>"]+|(www|web|w3)[a-z0-9_-]*\.[a-z0-9._-]+\.[^][{}()'' \t<>"]+)[a-z0-9/]'
+		if url !~# '^\%(\%(\%(https\=\|ftp\|gopher\)://\|\%(mailto\|file\|news\):\)[^][{}()'' \t<>"]\+\|\%(www\|web\|w3\)[a-z0-9_-]*\.[A-Za-z0-9._-]\+\.[^][{}()'' \t<>"]\+\)[A-Za-z0-9/]'
 			if glob(url) == ''
 				continue
 			endif
-		elseif url =~# '\v^(www|web|w3)[a-z0-9_-]*\.[a-z0-9._-]+\.[^][{}()'' \t<>"]+[a-z0-9/]'
+		elseif url =~# '^\%(www\|web\|w3\)[a-z0-9_-]*\.[A-Za-z0-9._-]\+\.[^][{}()'' \t<>"]\+[A-Za-z0-9/]'
 			let url = 'https://' .. url
 		endif
 		if index(only_urls, url) == -1
