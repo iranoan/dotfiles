@@ -47,6 +47,8 @@ inoremap <expr><buffer><S-Enter>   pumvisible#Insert('\item<Tab>')
 inoremap <expr><buffer><S-C-Enter> pumvisible#Insert_after('\\')
 inoremap <expr><buffer><C-Enter>   pumvisible#Insert("\\clearpage\n")
 nnoremap <buffer><leader>bb       <Cmd>call ftplugin#tex#XBB()<CR>
+" % で行き来できる記号
+setlocal matchpairs+=<:>
 "--------------------------------
 "gfなどで、拡張子を補完
 setlocal suffixesadd=.tex,.cls,.sty

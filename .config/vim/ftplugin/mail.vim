@@ -17,3 +17,5 @@ let b:did_ftplugin_user = 1
 
 " ファイルタイプ別のローカル設定 {{{1
 setlocal foldmethod=syntax commentstring=>%s
+" % で行き来できる記号
+setlocal matchpairs+=<:>

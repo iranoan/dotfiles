@@ -27,13 +27,6 @@ textobj#user#map('ifdef', {
 		'select-i': ["<buffer> i#", '<buffer> i3'],
 	},
 })
-# % で行き来できる記号
-setlocal matchpairs-=<:>     # C/C++ で <> をペアで使うのは #include ぐらいで、他は大小記号やアロー演算子
-# setlocal matchpairs+==:;     # = (代入) と行末間で移動
-# 対応するカッコの入力 {{{2 ←lexima.vim に
-# inoremap <buffer> " ""<Left>
-# inoremap <buffer> ' ''<Left>
-# inoremap <buffer> /* /*  */<Left><Left><Left>
 # コンパイルして実行 {{{2
 nnoremap <buffer><Leader>gcc :setlocal fileencoding= \| w! \| !gcc -W -Wall "%" -lm && ./a.out < ~/Information/slide/C/data/a.txt && ./a.out < ~/Information/slide/C/data/b.txt && ./a.out < ~/Information/slide/C/data/c.txt && ./a.out < ~/Information/slide/C/data/d.txt<CR>
 # --------------------------------

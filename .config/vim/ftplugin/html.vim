@@ -18,6 +18,8 @@ endif
 # }}}1
 
 # ファイルタイプ別ローカル設定 {{{1
+# % で行き来できる記号
+setlocal matchpairs+=<:>
 setlocal foldmethod=syntax
 setlocal spelloptions=camel
 setlocal omnifunc=htmlcomplete#CompleteTags
