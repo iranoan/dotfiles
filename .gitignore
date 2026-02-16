@@ -12,12 +12,11 @@
 # 個人的なファイル
 /.config/vim/ftplugin/notmuch-edit.vim
 /.config/vim/autoload/set_notmuchpy.vim
+/.config/conky/zipcode.json
 
 # スワップ・ファイルを再度除外
-/.*.sw?
-/.sw?
-/.config/**/.*.sw?
-/.config/**/.sw?
+.*.sw?
+.sw?
 
 # プラグイン管理下ファイル (いつでもダウンロードできる)+履歴ファイルは無視
 /.config/fzf/completion.bash

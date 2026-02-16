@@ -7,6 +7,8 @@
 import requests
 import re
 import sys
+import json
+import os
 from bs4 import BeautifulSoup
 from requests.exceptions import Timeout
 
@@ -35,12 +37,21 @@ def get_weather_by_zipcode(zipcode):
     if zipcode is None:
         Error('Not get ZIP code')
         return
+    zipcode_file = os.path.join(os.path.dirname(__file__), 'zipcode.json')
+    # ↑https://tenki.jp で見つけられない郵便番号とそれを補うための近隣の郵便番号を対応させた JSON ファイル
+    with open(zipcode_file, 'r', encoding='utf-8') as f:
+        zipcode_data = json.load(f)
+    zipcode = zipcode_data.get(zipcode, zipcode)
+    url = None
     try:
         res = requests.get(f'https://tenki.jp/search/?keyword={zipcode}', timeout=(3.0, 7.5))
         for s in BeautifulSoup(res.text, 'html.parser').find_all(['a', 'p'], class_='search-entry-data'):
             url = s.find('a').get('href')
             if url is not None:
                 break
+        if url is None:
+            Error('Not get tenki.jp page')
+            return
     except Timeout:
         Error('tenki.jp TimeOut')
         return
