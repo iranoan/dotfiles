@@ -460,12 +460,13 @@ enddef
 
 export def BackupViminfo(): void # $MYVIMDIR/cache/viminfo をバックアップ
 	var viminfo: string = &viminfofile # $MYVIMDIR .. 'cache/viminfo'
+	var default_viminfo = $HOME .. '/.viminfo'
 	if viminfo ==# 'NONE'
 		return
 	elseif viminfo ==# ''
 		viminfo = matchstr(&viminfo, '\(\(^\|,\)n\zs[^,]\+\ze,\|\(^\|,\)n\zs[^,]\+$\)')
 		if viminfo ==# ''
-			viminfo = $HOME .. '/.viminfo'
+			viminfo = default_viminfo
 		endif
 	endif
 	if systemlist('cmp -s ' .. viminfo .. ' ' .. viminfo .. '.0 ; echo $?') == ['0']
@@ -477,6 +478,9 @@ export def BackupViminfo(): void # $MYVIMDIR/cache/viminfo をバックアップ
 		endif
 	endfor
 	filecopy(viminfo, viminfo .. '.0')
+	if viminfo !=# default_viminfo && getfperm(default_viminfo) =~# '^[-r][-w]'
+		delete(default_viminfo)
+	endif
 enddef
 
 export def DiffGet(n: number): void
