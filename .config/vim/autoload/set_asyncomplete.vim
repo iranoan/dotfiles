@@ -136,7 +136,7 @@ def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>):
 
 	var l_items: list<dict<any>>
 	var startcols: list<number>
-	var has_matchfuzzypos: bool = exists('*matchfuzzypos')
+	var has_matchfuzzypos: bool = exists('*matchfuzzypos') && g:asyncomplete_matchfuzzy
 	var sources: dict<any>
 	var startcol: number
 	var priority: number
@@ -154,7 +154,14 @@ def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>):
 		else
 			priority = get(asyncomplete#get_source_info(source_name), 'priority', 50)
 		endif
-		if has_key(sources, 'filter')
+		if sources.name ==# 'spell' # スペルチェックは matchfuzzypos() によるフィルタリングをしない←折角の補完候補が途中の綴違いでフィルタリングされてしまう
+			for item in matches.items
+				item.priority = priority
+				item.startcol = startcol
+				item.matche_score = 50
+				add(l_items, item)
+			endfor
+		elseif has_key(sources, 'filter')
 			for m in matches.items
 				m.priority = priority
 				m.startcol = startcol
@@ -163,8 +170,7 @@ def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>):
 				else
 					matche_score = matchfuzzypos([m.word], base)[2]
 					if !matche_score
-						m.word = ''
-						m.matche_score = -100
+						m.matche_score = -10
 					else
 						m.matche_score = matche_score[0]
 					endif
@@ -179,7 +185,7 @@ def s:asyncomplete_preprocessor(options: dict<any>, a_matches: dict<dict<any>>):
 					item.matche_score = 50
 					add(l_items, StripPairCharacters(item))
 				endfor
-			elseif has_matchfuzzypos && g:asyncomplete_matchfuzzy
+			elseif has_matchfuzzypos
 				for m in [matchfuzzypos(matches.items, base, {key: 'word'})]
 					if !m[0]
 						continue
