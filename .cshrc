@@ -1,3 +1,4 @@
+#!/bin/csh
 # /etc/csh.cshrc: system-wide .cshrc file for csh(1) and tcsh(1)
 # コメントアウト
 
