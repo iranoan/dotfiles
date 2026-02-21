@@ -2,9 +2,8 @@
 	"filters" : {
 		"allowlist": {
 			"allow": [
-			],
-			"allowlistConfigPaths": [
-				"textlint/allow.yml"
+				"/web/i",
+				"/html/i"
 			]
 		}
 	},
