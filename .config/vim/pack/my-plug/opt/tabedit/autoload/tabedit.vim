@@ -177,3 +177,26 @@ export def Tabedit(...arg: list<string>): void
 	win_gotoid(win_id)
 	redraw  # これが無いとタグが切り替わったように見えない
 enddef
+
+export def CompFile(arg: string, cmd: string, pos: number): list<string>
+	# ファイル・パスの補完候補を返す
+	# ただしカレント・ファイルは除外
+	var c_f: string = expand('%:p')
+	var args: string = matchstr(cmd[ : pos ], 'TabEdit\s\+\zs.*')
+	if args =~# ' $' && args !~# '\\ $'
+		args = ''
+	else
+		args = split(args, '[^\\]\zs ')[-1]
+	endif
+	var len_args: number = len(args)
+	if args ==# '~'
+		args ..= '/'
+	endif
+	var files: list<string> = getcompletion(expand(args->substitute('\\ ', ' ', 'g')), 'file')
+	                          ->filter((_, v) => fnamemodify(v, ':p') !=# c_f)
+	                          ->map((_, v) => substitute(v, ' ', '\\ ', ''))
+	if args =~# '^\~/'
+		map(files, (_, v) => substitute(v, $'^{$HOME}/', '\~/', ''))
+	endif
+	return files
+enddef
