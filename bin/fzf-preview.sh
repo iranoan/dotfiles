@@ -142,9 +142,9 @@ case "${f##*/}" in # ファイル名による分岐
 		source-highlight --tab=2 --failsafe -f esc --lang-def=zsh.lang --style-file=esc.style -i "$f" ;;
 	.*rc|.gitconfig|.gitattributes|.gitignore )
 		source-highlight --tab=2 --failsafe -f esc --lang-def=conf.lang --style-file=esc.style -i "$f" ;;
-	*ChangeLog|*changelog)
+	ChangeLog|changelog)
 		source-highlight --failsafe -f esc --lang-def=changelog.lang --style-file=esc.style -i "$f" ;;
-	*Makefile|*makefile)
+	Makefile|makefile)
 		source-highlight --failsafe -f esc --lang-def=makefile.lang --style-file=esc.style -i "$f" ;;
 	*)
 		case "${f%/*}" in # ディレクトリ名による分岐

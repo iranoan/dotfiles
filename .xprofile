@@ -7,17 +7,17 @@ umask 077
 
 # set PATH so it includes user's private bin if it exists
 if [ -d "$HOME/bin" ] && echo "$PATH" | grep -qvE "(^|:)$HOME/bin($|:)"; then
-		PATH="$PATH:$HOME/bin"
+	PATH="$PATH:$HOME/bin"
 fi
 if [ -d "$HOME/go/bin" ] && echo "$PATH" | grep -qvE "(^|:)$HOME/go/bin($|:)"; then
-		PATH="$PATH:$HOME/go/bin"
+	PATH="$PATH:$HOME/go/bin"
 fi
 if [ -d "$HOME/.local/bin" ] && echo "$PATH" | grep -qvE "(^|:)$HOME/.local/bin($|:)"; then
-		PATH="$PATH:$HOME/.local/bin"
+	PATH="$PATH:$HOME/.local/bin"
 fi
 if [ -d "$HOME/node_modules/.bin" ] && echo "$PATH" | grep -qvE "^$HOME/node_modules/.bin:"; then
-		# node はユーザー・ローカルを優先させる
-		PATH="$HOME/node_modules/.bin:$PATH"
+	# node はユーザー・ローカルを優先させる
+	PATH="$HOME/node_modules/.bin:$PATH"
 fi
 
 # Fzf
@@ -39,9 +39,11 @@ export FZF_DEFAULT_OPTS='--layout=reverse --info=inline --multi --color=base16,f
 # LESS の設定
 # ~/.lesskey だと、$HOME などの環境変数や ~ が効かない。条件分岐が出来ないなどの理由で一部はこちらで設定
 export LESSHISTFILE="$HOME/.local/share/log/lesshist"
-export LESS='--tabs=2 --no-init --quit-if-one-screen --RAW-CONTROL-CHARS --IGNORE-CASE --LONG-PROMPT --jump-target=5 --ignore-case'
-if [ -x /usr/share/source-highlight/src-hilite-lesspipe.sh ]; then
-	export LESSOPEN='| /usr/share/source-highlight/src-hilite-lesspipe.sh %s'
+export LESS='--tab=2 --no-init --quit-if-one-screen --RAW-CONTROL-CHARS --IGNORE-CASE --LONG-PROMPT --jump-target=5 --ignore-case'
+# if [ -x /usr/share/source-highlight/src-hilite-lesspipe.sh ]; then
+if command -v source-highlight > /dev/null 2>&1 ; then
+	# export LESSOPEN='| /usr/share/source-highlight/src-hilite-lesspipe.sh %s'
+	export LESSOPEN='| "$HOME/bin/src-hilite-lesspipe.sh" %s'
 elif [ -x /usr/bin/lesspipe ]; then
 	eval "$(SHELL=/bin/sh lesspipe)"
 fi
