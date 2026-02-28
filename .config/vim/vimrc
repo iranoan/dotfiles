@@ -102,10 +102,8 @@ set foldlevelstart=99                          # ファイル・オープン時�
 set foldcolumn=3                               # 折りたたみ状態を表示する左カラムの数
 g:sh_fold_enabled = 7                          # シェルスクリプトの折りたたみ方法 $MYVIMDIR/ftplugin/sh.vim で指定すると $ vim ~/.bashrc 等引数で開くと設定が反映されない
 # Undo アンドゥ {{{1
-if has('persistent_undo')
-	set undodir=$MYVIMDIR/undo
-	set undofile
-endif
+set undodir=$MYVIMDIR/undo
+set undofile
 # IME {{{1
 set iminsert=0 imsearch=-1                     # 挿入モード/検索開始時 IME OFF
 # set imdisable                                  # Vim による IM 制御を使わない
@@ -216,36 +214,39 @@ set showtabline=0 tabpagemax=500               # 常にタブを非表示+上限
 # set tabclose=uselast                           # タブ・ページを閉じた時、以前に使用したタブページに移動←gt で連続して編集していく時に不便
 if has('gui_running')
 	set guitablabel=%!mk_tabline#GUI()           # タブページの書式変更
+	set visualbell                               # Gvim は効かないが音は消すため
 else
 	set tabline=%!mk_tabline#CUI()
 	# CUI のカーソル形状
-	&t_SI = "\e[5 q"                           # 挿入:    縦棒
-	&t_EI = "\e[1 q"                           # ノーマル:箱型
-	&t_SR = "\e[3 q"                           # 置換:    下線
-	if $TERM_PROGRAM ==# 'tmux'                # tmux 内では tmux のステータス・バーを OFF
+	&t_SI = "\e[5 q"                             # 挿入:    縦棒
+	&t_EI = "\e[1 q"                             # ノーマル:箱型
+	&t_SR = "\e[3 q"                             # 置換:    下線
+	if $TERM_PROGRAM ==# 'tmux'                  # tmux 内では tmux のステータス・バーを OFF
 		augroup TMUX
 			autocmd!
 			autocmd VimEnter * silent !tmux set-option -t $(tmux display-message -p '\#{pane_id}') status off
 			autocmd VimLeave * silent !tmux set-option -t $(tmux display-message -p '\#{pane_id}') status on
 		augroup END
+	else
+		set visualbell                             # tmux 効かないので tumx 側で visual-bell on
 	endif
 endif
 # ステータス・バー {{{2
 set laststatus=2                               # 表示
 set statusline=%!vimrc#StatusLine()
 # # 全角スペースをハイライト表示←フォントで対応したのですべてコメント・アウト {{{2
-# if has('syntax') && !has('gui_running')        # 全角空白が可視化されるフォントを使っている
-# 	augroup ZenkakuSpace
-# 		autocmd!
-# 		autocmd ColorScheme       * highlight ZenkakuSpace cterm=reverse ctermfg=Black gui=reverse guifg=#CCCCCC
-# 		autocmd VimEnter,WinEnter * match ZenkakuSpace /　/
-# 	augroup END
-# 	highlight ZenkakuSpace cterm=reverse ctermfg=Black gui=reverse guifg=#CCCCCC
-# endif
+# augroup ZenkakuSpace
+# 	autocmd!
+# 	autocmd ColorScheme       * highlight ZenkakuSpace cterm=reverse ctermfg=Black gui=reverse guifg=#CCCCCC
+# 	autocmd VimEnter,WinEnter * match ZenkakuSpace /　/
+# augroup END
+# highlight ZenkakuSpace cterm=reverse ctermfg=Black gui=reverse guifg=#CCCCCC
 # タブ・パネル (サイド・バー) {{{2
-set tabpanel=%!tabpanel_nerd#TabPanel()
-set tabpanelopt=columns:32,align:right
-# set showtabpanel=2
+if has('patch-9.1.1391')
+	set tabpanel=%!tabpanel_nerd#TabPanel()
+	set tabpanelopt=columns:32,align:right
+	# set showtabpanel=2
+endif
 # 編集関係 {{{1
 set completeopt=menuone,noinsert,popup,noselect # 補完の挙動
 set delcombine                                 # 結合文字を別々に削除する
@@ -391,9 +392,6 @@ endif
 set path+=~/bin,~/Templates,
 set tags+=tags;$HOME/                          # tags ファイルは $HOME まで辿る :help file-searching
 set belloff=backspace,cursor,esc,ex,insertmode # 音を消す
-if $TERM_PROGRAM !=# 'tmux' || has('gui_running')
-	set visualbell                               # tmux 効かないので tumx 側で visual-bell on, Gvim も効かないが音は消したい
-endif
 set mouse=a                                    # マウスの設定全てのモードで有効に
 set history=500                                # コマンド履歴の保存数 (あまり大きくすると q: 等で時間がかかるようになる)
 set termwinscroll=30000                        # ターミナルで遡れる行数
