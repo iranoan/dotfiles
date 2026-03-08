@@ -111,7 +111,8 @@ enddef
 
 export def DiffPath(winid: number): string # winid は &diff ウィンドウ前提で、対となるバッファのパス前後一致する部分を除いたパスの一部を返す
 	var count_fugitive = 0 # fugitive ウィンドウの数
-	var c_path0: string = fnamemodify(getbufinfo(getwininfo(winid)[0].bufnr)[0].name, ':h')
+	var c_path1: string = getbufinfo(getwininfo(winid)[0].bufnr)[0].name
+	var c_path0: string = fnamemodify(c_path1, ':h')
 	var c_path: list<string> = split(c_path0, '/')
 	var path: list<list<string>>
 	var path_s: string
@@ -160,8 +161,10 @@ export def DiffPath(winid: number): string # winid は &diff ウィンドウ前�
 		endfor
 		--idx
 	endwhile
-	if len(c_path) == idx + 1
-		return ''
+	# if len(c_path) == idx + 1
+	if len(c_path) == -(idx + 1)
+		# return ''
+		return fnamemodify(c_path1, ':t')
 	endif
 	c_path = c_path[ : idx + 1]
 	# 前の共通部分削除
@@ -178,7 +181,8 @@ export def DiffPath(winid: number): string # winid は &diff ウィンドウ前�
 		++idx
 	endwhile
 	if len(c_path) == idx - 1
-		return ''
+		# return ''
+		return fnamemodify(c_path1, ':t')
 	endif
 	c_path = c_path[ idx - 1 : ]
 	if c_path == []
