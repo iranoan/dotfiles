@@ -185,7 +185,7 @@ export def CompFile(arg: string, cmd: string, pos: number): list<string>
 	var args: string = matchstr(cmd[ : pos ], 'TabEdit\s\+\zs.*')
 	if args =~# ' $' && args !~# '\\ $'
 		args = ''
-	else
+	elseif args !=# ''
 		args = split(args, '[^\\]\zs ')[-1]
 	endif
 	var len_args: number = len(args)
