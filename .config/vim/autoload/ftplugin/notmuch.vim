@@ -45,9 +45,10 @@ export def ReformMail(): void # ML の広告を削除する個人的な関数
 		DelBlock('日経ニュースメール　\d\+/\d\+ [朝昼夕]版', '━　注目ニュース　━━━━━━━', 2, -2)
 		DelBlock('■このメールは送信専用メールアドレスから配信されています。', '■配信元：日本経済新聞社', 0, -1)
 	elseif from ==? 'atmarkit_newarrivals@noreply.itmedia.co.jp'
-		DelBlock('==PR-\+', '-\+==', 0, 1)
+		DelBlock('==\[\=PR\]\=-\+', '-\+==', 0, 1)
 		DelBlock('注目ホワイトペーパー━━\+〈PR〉', '━━\+', 0, 1)
-		silent :%s/ \ze「//g
+		DelBlock('== TechTarget info --\+', '--\+==', 0, 1)
+		silent :%s/ \ze「//ge
 		silent execute ':1 | :/^＠ITの新着記事をお届けします。$/+1,/^--- NewsInsight -- 今日のニュース --\+$/-2delete | :/^━＠ITソーシャルアカウント━━━━━━━━━━━━━━━━━━━━━━━━━$/,/^発行：アイティメディア株式会社$/-2delete'
 		setline('.', '-- ')
 	elseif from ==? 'mailmag@mag2tegami.com'
