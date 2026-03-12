@@ -39,7 +39,7 @@ export FZF_DEFAULT_OPTS='--layout=reverse --info=inline --multi --color=base16,f
 # LESS の設定
 # ~/.lesskey だと、$HOME などの環境変数や ~ が効かない。条件分岐が出来ないなどの理由で一部はこちらで設定
 export LESSHISTFILE="$HOME/.local/share/log/lesshist"
-export LESS='--tab=2 --no-init --quit-if-one-screen --RAW-CONTROL-CHARS --IGNORE-CASE --LONG-PROMPT --jump-target=5 --ignore-case'
+export LESS='--tab=2 --no-init --quit-if-one-screen --RAW-CONTROL-CHARS --LONG-PROMPT --jump-target=5 --ignore-case'
 # if [ -x /usr/share/source-highlight/src-hilite-lesspipe.sh ]; then
 if command -v source-highlight > /dev/null 2>&1 ; then
 	# export LESSOPEN='| /usr/share/source-highlight/src-hilite-lesspipe.sh %s'
