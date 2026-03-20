@@ -26,6 +26,9 @@
 
 --recurse=yes
 
+--sort=yes
+--input-encoding=utf-8
+
 --langdef=latex
 --langmap=latex:.tex
 --regex-latex=/^\\part[[:space:]]*(\[[^]]*\])?[[:space:]]*\{(([^}]|\\}|\{([^}]+)\})+)\}/\2/b,part/
