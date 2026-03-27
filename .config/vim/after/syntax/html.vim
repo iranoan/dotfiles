@@ -5,5 +5,7 @@ if &filetype ==# 'markdown' " デフォルトで markdown でも読み込まれ�
 	finish
 endif
 
-syntax clear htmlFold
+if hlexists('htmlFold')
+	syntax clear htmlFold
+endif
 syntax region htmlFold start="<\z(\<\%(li\|dt\|dd\|area\|base\|br\|col\|command\|embed\|hr\|img\|input\|keygen\|link\|meta\|param\|source\|track\|wbr\>\)\@![a-z-]\+\>\)\%(\_s*\_[^/]\?>\|\_s\_[^>]*\_[^>/]>\)" end="</\z1\_s*>" fold transparent keepend extend containedin=htmlHead,htmlH\d
