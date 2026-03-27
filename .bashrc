@@ -9,10 +9,15 @@ case $- in
 	*) return;;
 esac
 
-if [[ $( tty ) =~ /dev/tty.* ]]; then # 仮想コンソールでは、そのままでは日本語が使えないので fbterm 起動
-	if command -v fbterm > /dev/null 2>&1 ; then
+if [[ $( tty ) =~ /dev/tty.* ]]; then # 仮想コンソールでは、そのままでは日本語が使えないので kmscon/fbterm 起動
+	if command -v kmscon > /dev/null 2>&1 ; then
+		kmscon "--vt=%I" --seats=seat0 --no-switchvt --login -- /sbin/agetty -o '-p -- \\u' - xterm-256color
+		exit
+	elif command -v fbterm > /dev/null 2>&1 ; then
 		FBTERM=1 fbterm -- "$HOME/bin/fbterm.sh"
 	fi
+elif ps -p $PPID -o comm= | grep -q "login" && [ "$TERM" == "xterm-256color" ] && [ -z "$UIM_FEP_PID" ]; then # kmscon
+	exec uim-fep
 elif command -v tmux > /dev/null 2>&1 ; then # シェル開始時に tmux 起動 (デタッチされたセッションがあればそちらに繋げる)
 	[[ $- != *i* ]] && return
 	export FZF_TMUX=1
@@ -21,7 +26,11 @@ elif command -v tmux > /dev/null 2>&1 ; then # シェル開始時に tmux 起動
 		# VS code と Vim の terminal は除外
 		detach_tmux="$( tmux ls | grep -v attached | tail --lines=1 | cut -d: -f1 )"
 		if [ -z "$detach_tmux" ]; then
-			exec tmux new-session
+			if [ -n "$UIM_FEP_PID" ]; then
+				exec tmux new-session 'echo "IME On/Off [Ctrl]+[\\]"; exec $SHELL'
+			else
+				exec tmux new-session
+			fi
 		else
 			exec tmux attach -t "$detach_tmux"
 		fi
@@ -66,6 +75,7 @@ if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
 	case "$TERM" in
 		linux) [ "$FBTERM" ] && export TERM=fbterm && color_prompt=yes;;
 		fbterm) color_prompt=yes;;
+		kmscon) color_prompt=yes;;
 		xterm-color|*-256color) color_prompt=yes;;
 		*)
 			if [ "$VIM_TERMINAL" ]; then
@@ -181,7 +191,7 @@ export HISTCONTROL=erasedups #重複歴を記録しない
 export HISTFILE="$HOME/.config/bash/history"
 
 if command -v vim > /dev/null ; then
-	if [[ $( tty ) =~ /dev/tty.* ]] || ps x | awk '{print $5}' | grep -qE '\<[f]bterm\>' ; then # 仮想コンソール→非 GUI
+	if [[ $( tty ) =~ /dev/tty.* ]] || ps -U "$USER" -u "$USER" -o comm= | grep -qE '\<([f]bterm|kmscon)\>' ; then # 仮想コンソール→非 GUI
 		export TEXEDIT='vim -p --remote-tab-silent +%d "%s"'
 	else
 		if command -v gvim > /dev/null ; then
