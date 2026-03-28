@@ -15,6 +15,7 @@ if [[ $( tty ) =~ /dev/tty.* ]]; then # 仮想コンソールでは、そのま�
 		exit
 	elif command -v fbterm > /dev/null 2>&1 ; then
 		FBTERM=1 fbterm -- "$HOME/bin/fbterm.sh"
+		exit
 	fi
 elif ps -p $PPID -o comm= | grep -q "login" && [ "$TERM" == "xterm-256color" ] && [ -z "$UIM_FEP_PID" ]; then # kmscon
 	exec uim-fep
