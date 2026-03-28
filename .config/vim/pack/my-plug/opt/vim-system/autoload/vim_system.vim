@@ -1,7 +1,7 @@
 vim9script
 scriptencoding utf-8
 
-def Enviroment(): list<string>
+def System(): list<string>
 	var mes: list<string>
 	if has('unix')
 		if getftype('/etc/os-release') !=# ''
@@ -63,26 +63,54 @@ def Desktop(): list<string>
 	return mes
 enddef
 
-def System(): list<string>
+def VimVersion(): list<string>
 	var mes: list<string> = [ ( ( has('win32') || has('win64') ) ? '>' : '$' ) .. ' vim --version' ]
 	extend(mes, split(execute('version'), '\n'))
 	mes[3] = substitute(mes[3], $USER .. '@' .. systemlist('hostname')[0], 'xxx@xxx', '')
-	extend(mes, Enviroment())
 	return mes
 enddef
 
-export def Write(): void
-	append(line('.'), System())
+def GDK_BACKEND(): list<string>
+	if $XDG_SESSION_TYPE !=# 'wayland'
+		return []
+	endif
+	var mes: list<string> = ['$ echo $GDK_BACKEND']
+	extend(mes, systemlist('echo $GDK_BACKEND'))
+	return mes
 enddef
 
-export def Echo(): void
-	echo join(System(), "\n")
+def VimSystem(): list<string>
+	return VimVersion() + System()
+enddef
+
+export def VimWrite(): void
+	append(line('.'), VimSystem())
+enddef
+
+export def VimEcho(): void
+	echo join(VimSystem(), "\n")
+enddef
+
+def GVimSystem(): list<string>
+	return VimVersion() + Desktop() + GDK_BACKEND() + System()
+enddef
+
+export def GVimWrite(): void
+	append(line('.'), GVimSystem())
+enddef
+
+export def GVimEcho(): void
+	echo join(GVimSystem(), "\n")
+enddef
+
+export def Env():  list<string>
+	return System() + Desktop()
 enddef
 
 export def EnvWrite(): void
-	append(line('.'), Enviroment() + Desktop())
+	append(line('.'), Env())
 enddef
 
 export def EnvEcho(): void
-	echo join(Enviroment() + Desktop(), "\n")
+	echo join(Env(), "\n")
 enddef
