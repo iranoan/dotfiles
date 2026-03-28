@@ -25,10 +25,10 @@ elif command -v tmux > /dev/null 2>&1 ; then # シェル開始時に tmux 起動
 	export FZF_TMUX_OPTS="-p 95%,95%"
 	if [[ -z "$TMUX" && -z $VSCODE_PID && -z "$VSCODE_GIT_ASKPASS_NODE" && -z "$MYVIMRC" ]]; then
 		# VS code と Vim の terminal は除外
-		detach_tmux="$( tmux ls | grep -v attached | tail --lines=1 | cut -d: -f1 )"
+		detach_tmux="$( tmux list-sessions | grep -v attached | tail --lines=1 | cut -d: -f1 )"
 		if [ -z "$detach_tmux" ]; then
 			if [ -n "$UIM_FEP_PID" ]; then
-				exec tmux new-session 'echo "IME On/Off [Ctrl]+[\\]"; exec $SHELL'
+				exec tmux new-session "echo 'IME On/Off [Ctrl]+[\\]'; exec $SHELL"
 			else
 				exec tmux new-session
 			fi
