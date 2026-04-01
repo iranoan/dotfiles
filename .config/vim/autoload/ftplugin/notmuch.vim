@@ -4,13 +4,11 @@ set_transform#main('')
 
 export def ReformMail(): void # ML の広告を削除する個人的な関数
 	def DelBlock(s: string, e: string, i: number, j: number): void # s, e 両方の文字列 (行) が有ったときのみ、その範囲を削除
-		var buf: list<string>
-		var start: number
+		var buf: list<string> = getline(0, '$')
+		var start: number = match(buf, '^$')
 		var s_pos: number
 		var l: number = 1
 		while true
-			buf = getline(l, '$')
-			start = match(buf, '^$')
 			s_pos = match(buf, '^' .. s .. '$', start) + 1
 			if !s_pos
 				return
@@ -23,6 +21,8 @@ export def ReformMail(): void # ML の広告を削除する個人的な関数
 			s_pos += i
 			e_pos += 1 + j
 			silent execute ':' .. s_pos .. ',' .. e_pos .. 'delete _'
+			start = s_pos - 1
+			buf = getline(0, '$')
 		endwhile
 	enddef
 
@@ -45,12 +45,12 @@ export def ReformMail(): void # ML の広告を削除する個人的な関数
 		DelBlock('日経ニュースメール　\d\+/\d\+ [朝昼夕]版', '━　注目ニュース　━━━━━━━', 2, -2)
 		DelBlock('■このメールは送信専用メールアドレスから配信されています。', '■配信元：日本経済新聞社', 0, -1)
 	elseif from ==? 'atmarkit_newarrivals@noreply.itmedia.co.jp'
-		DelBlock('==\[\=PR\]\=-\+', '-\+==', 0, 1)
-		DelBlock('注目ホワイトペーパー━━\+〈PR〉', '━━\+', 0, 1)
-		DelBlock('== TechTarget info --\+', '--\+==', 0, 1)
+		DelBlock('━ 今日のイチ推し ≪[^≫]\+≫━━\+', '', 0, 0)
+		DelBlock('==\[\=PR\]\=-\+', '-\+==', 0, 0)
+		DelBlock('━━ 過去30日間人気記事\s*トップ5\s*≪[^≫]\+≫\s*━\+', '', 0, 1)
+		DelBlock('━＠ITソーシャルアカウント━\+', '発行：アイティメディア株式会社', 0, -1)
 		silent :%s/ \ze「//ge
-		silent execute ':1 | :/^＠ITの新着記事をお届けします。$/+1,/^--- NewsInsight -- 今日のニュース --\+$/-2delete | :/^━＠ITソーシャルアカウント━━━━━━━━━━━━━━━━━━━━━━━━━$/,/^発行：アイティメディア株式会社$/-2delete'
-		setline('.', '-- ')
+		append(line('$') - 5, '-- ')
 	elseif from ==? 'mailmag@mag2tegami.com'
 		silent :/\%^/,/^$/s/^From: *mag2 *0000013455 *<mailmag@mag2tegami.com>/From: Liyn-an <info@Liyn-an.com>/
 		silent :/^☆Ｏｏｏｏ.... 紅 茶 通 信 ☆ Liyn-an Tea TIMES ....ｏｏＯ☆/+2;$delete _
@@ -59,9 +59,10 @@ export def ReformMail(): void # ML の広告を削除する個人的な関数
 		DelBlock('', '◇日経デジタルヘルスNEWS', 0, -3)
 	elseif from ==? 'xtech-ac@nikkeibp.co.jp'
 		silent :1 | :/^$/,/^$/+1delete | silent :%s/^　//ge
-		DelBlock('□■　注目のセミナー', '', 0, -1)
+		DelBlock('□■　注目の\(無料\)\=セミナー', '□■　.\+', 0, -1)
 		DelBlock('□■　.\+ランキング　\d\{1,2}/\d\{1,2}', '', 0, -1)
 		DelBlock('□■　お知らせ', '', 0, -1)
+		DelBlock('▼貴社のお困りごとを解決します　【日経BP 総合研究所】', '', 0, 0)
 		DelBlock('◆登録内容の変更や配信停止は', 'Copyright (C)\d\{4}、日経BP', 0, -1)
 	elseif from ==? 'xtech-pcmobile@nikkeibp.co.jp'
 		DelBlock('-PR-', '-PR-', -1, 1)
