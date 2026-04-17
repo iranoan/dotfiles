@@ -29,9 +29,7 @@ def get_current_zipcode():
 def get_weather_by_zipcode(zipcode):
     '''郵便番号を使ってtenki.jpから天気を取得する'''
     def Error(s):
-        print(s)
-        print('')
-        print('')
+        print(s + '\n' * max(0, 2 - s.count('\n')), end='')
         sys.exit()
 
     if zipcode is None:
@@ -50,13 +48,13 @@ def get_weather_by_zipcode(zipcode):
             if url is not None:
                 break
         if url is None:
-            Error('Not get tenki.jp page')
+            Error('Not get tenki.jp page.\nzipcode: {}'.format(zipcode))
             return
     except Timeout:
         Error('tenki.jp TimeOut')
         return
     except Exception:
-        Error('Not get tenki.jp page')
+        Error('Not get tenki.jp page.\nzipcode: {}'.format(zipcode))
         return
     try:
         html = requests.get(f'https://tenki.jp{url}10days.html', timeout=(3.0, 7.5))
