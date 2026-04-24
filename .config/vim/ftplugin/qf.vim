@@ -13,18 +13,7 @@ if !exists("g:qf_disable_statusline") # :help qf.vim にある statusline を変
 	gnu_grep#SetQfTitle() # 2度めからは autocmd
 	augroup QuickFix
 		autocmd!
-		autocmd WinEnter *
-					\ if winnr('$') == 1 && getbufvar(winbufnr(0), '&buftype') == 'quickfix'
-					| 	if tabpagenr('$') == 1
-					| 		quit
-					| 	else
-					| 		var qfwin: number = bufnr('')
-					| 		tabnext
-					| 		execute 'bwipeout ' .. qfwin
-					| 	endif
-					| endif # QuickFix だけなら閉じる
-		# ↑複数のタブ・ページがあり、複数回 :grep したときなどでエラーになるが、改善方法不明
-		# $MYVIMDIR/pack/ のファイルタイプ別グローバル設定 {{{2
+		autocmd WinClosed * timer_start(0, (_) => ftplugin#qf#CloseQf())
 		autocmd QuickFixCmdPost grep,grepadd,lgrep,lgrepadd gnu_grep#SetQfTitle()
 	augroup END
 endif
