@@ -170,9 +170,7 @@ set shortmess+=IWc shortmess-=S                # I 起動時にファイル未�
                                                # W ファイルの書き込み時に "書込み" や "[w]" を表示しない。
                                                # c 補完関連のメッセージを表示しない
                                                # S 検索ヒット件数表示←コマンドラインに検索のヒット位置、総個数を [?/?] で表示し、ファイルの先頭・終端になった時のメッセージが一瞬で消える
-if has('patch-9.1.1535')
-	set maxsearchcount=500                       # shortmess による検索個数の最大表示数
-endif
+set maxsearchcount=500                       # shortmess による検索個数の最大表示数
 set textwidth=0                                # 自動改行させない
 set display+=lastline                          # 画面最後の行をできる限り表示
 set wrap                                       # 長い行は折り返し表示
@@ -242,11 +240,9 @@ set statusline=%!vimrc#StatusLine()
 # augroup END
 # highlight ZenkakuSpace cterm=reverse ctermfg=Black gui=reverse guifg=#CCCCCC
 # タブ・パネル (サイド・バー) {{{2
-if has('patch-9.1.1391')
-	set tabpanel=%!tabpanel_nerd#TabPanel()
-	set tabpanelopt=columns:32,align:right
-	# set showtabpanel=2
-endif
+set tabpanel=%!tabpanel_nerd#TabPanel()
+set tabpanelopt=columns:32,align:right
+# set showtabpanel=2
 # 編集関係 {{{1
 set completeopt=menuone,noinsert,popup,noselect # 補完の挙動
 set delcombine                                 # 結合文字を別々に削除する
@@ -384,11 +380,7 @@ set timeout timeoutlen=500 ttimeoutlen=100     # マップの入力待ち 0.5s�
 set modeline
 # set modeline modelineexpr
 set shellslash                                 # Windowsでもパス区切りにスラッシュを使える
-if has('patch-9.1.1557')
-	set diffopt=algorithm:histogram,closeoff,context:2,filler,followwrap,iblank,indent-heuristic,internal,iwhite,linematch:60,vertical #差分表示オプション
-else
-	set diffopt=algorithm:histogram,closeoff,context:2,filler,followwrap,iblank,indent-heuristic,internal,iwhite,vertical
-endif
+set diffopt=algorithm:histogram,closeoff,context:2,filler,followwrap,iblank,indent-heuristic,internal,iwhite,linematch:60,vertical #差分表示オプション
 set path+=~/bin,~/Templates,
 set tags+=tags;$HOME/                          # tags ファイルは $HOME まで辿る :help file-searching
 set belloff=backspace,cursor,esc,ex,insertmode # 音を消す
