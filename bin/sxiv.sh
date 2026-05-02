@@ -98,7 +98,7 @@ open_img(){
 			echo "$1"
 		fi
 		) |
-			sort --uniq --ignore-case )
+			sort --unique --ignore-case --version-sort )
 	if [ -z "$list" ]; then
 		error_msg
 	fi
