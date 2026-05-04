@@ -69,3 +69,20 @@ xnoremap ac <Plug>(textobj-syntax-a)
 
 # 折りたたみをテキストオプジェクト化 https://github.com/kana/vim-textobj-fold {{{1
 # キーマップ iz, az
+
+# tabpanelでアイコン表示 $MYVIMDIR/pack/my-plug/start/tabpanel-nerd {{{1
+#
+# ブラウザのテキスト・エリアを Vim で編集する https://github.com/raghur/vim-ghost {{{1
+# do-setup: :GhostInstall
+	# https://github.com/roxma/vim-hug-neovim-rpc {{{3
+	# https://github.com/roxma/nvim-yarp {{{3
+	# do-setup: pip install -r requirements.txt
+	# 3}}}
+g:ghost_cmd = 'tabedit'
+augroup vim-ghost
+	autocmd!
+	if has('gui_running') || has('python3')
+		autocmd VimEnter * GhostStart
+	endif
+	autocmd User vim-ghost#connected set_ghost#SetGhostText()
+augroup END
