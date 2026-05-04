@@ -4,7 +4,7 @@ scriptencoding utf-8
 let s:save_cpo = &cpoptions
 set cpoptions&vim
 
-function open_uri#main()
+function! open_uri#main()
 	let line_str = getline('.')
 	let m_end = 0
 	let urls = []
@@ -49,10 +49,10 @@ function open_uri#main()
 		let item = 1
 		let msg = ''
 		for urls_i in urls
-			let msg = msg .  item . ' ' . urls_i[0]. "\n"
+			let msg = msg ..  item .. ' ' .. urls_i[0]. "\n"
 			let item += 1
 		endfor
-		let item = input(msg . 'Select open URL/File [1-' . (item-1) . '] ')
+		let item = input(msg .. 'Select open URL/File [1-' .. (item-1) .. '] ')
 		if item ==? ''
 			return
 		endif
@@ -64,20 +64,20 @@ function open_uri#main()
 	endif
 	if getftype(url) ==# ''
 		if match(url, '^[A-Za-z0-9_.+-]\+@[A-Za-z0-9.-]\+[a-z]\{2,\}$') == 0
-			let url = 'mailto:' . url
+			let url = 'mailto:' .. url
 		endif
 	endif
 	if has('unix')
-		let result = system('xdg-open "' . url . '"')
+		let result = systemlist('xdg-open "' .. url .. '"')
 	elseif has('win32') || has('win32unix')
-		let result = system('start "' . url . '"')
+		let result = systemlist('start "' .. url .. '"')
 	elseif has('mac')
-		let result = system('open "' . url . '"')
+		let result = systemlist('open "' .. url .. '"')
 	endif
-	if result !=? ''
+	if result == []
 		echo result
 	else
-		echo 'open ' . url
+		echo 'open ' .. url
 	endif
 	return
 endfunction
