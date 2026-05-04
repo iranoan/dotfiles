@@ -88,10 +88,13 @@ setup                                                    *pack_manage-sub_setup*
 		インストールしない
 	* これに続く連続するコメント行頭に                      *pack_manage-do-setup*  >vim
 		" do-setup: make
+		" do-setup: :InstallPlugin
 <		や >vim
 		# do-setup: ./install
-<		の様な do-setup: の記載が有れば、インストール先のディレクトリをワーキング・
-		ディレクトリして、それより後ろの部分を |:!|{cmd} として実行する
+<		の様な do-setup: の記載が有れば、それより後ろの部分の
+		- 先頭が「:」の場合は Vim のコマンドとして実行
+		- そうでない場合は、インストール先のディレクトリをワーキング・ディレクトリとし
+			て、|:!|{cmd} として実行する
 	* 記載されたプラグインの内 >vim
 		packadd plugin
 <		やキーマップ用の関数で >vim

@@ -420,7 +420,10 @@ def Make(ls: list<dict<any>>): void # make や別途インストールが必要�
 		endif
 		chdir(d)
 		for c in l.setup
-			if !Executable(c)
+			if c =~# '^:'
+				packadd split(d, '/')[-1]
+				execute(c[1 : ])
+			elseif !Executable(c)
 				echohl WarningMsg | echomsg 'do not run ' .. c | echohl None
 				continue
 			endif
