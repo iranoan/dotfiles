@@ -179,6 +179,7 @@ set linebreak                                  # wrap at 'breakat
 set breakat=\ \	!/?                            # 日本語は全角文字に空白が余分に表示されてしまう←helpに8bit文字のみとある
 set number signcolumn=yes                      # 行番号、sign (マーク表示桁) 表示
 tabdo set cmdheight=1                          # コマンドバー行数
+set previewpopup=height:20,width:80,resize:on,border:custom:─;│;─;│;╭;╮;╯;╰
 # 対応するカッコ {{{2
 set cpoptions+=I                               # 対応するカッコで、\によるエスケープを除外+インデントの自動削除なしに
 set matchpairs+=「:」,（:）,『:』,【:】,‘:’,“:”,《:》,〈:〉 # 対応括弧に<と>のペアやカギカッコを追加
