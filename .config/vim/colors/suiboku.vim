@@ -56,6 +56,7 @@ if &background ==# 'dark'
 	endif
 	hi ColorColumn term=reverse cterm=NONE ctermfg=NONE ctermbg=8 ctermul=NONE gui=NONE guifg=NONE guibg=#29302b guisp=NONE
 	hi Cursor term=NONE cterm=NONE ctermfg=0 ctermbg=14 ctermul=NONE gui=NONE guifg=#1d221f guibg=#8c8a7d guisp=NONE
+	hi lCursor term=NONE cterm=NONE ctermfg=0 ctermbg=7 ctermul=NONE gui=NONE guifg=#1d221f guibg=#e6e1d1 guisp=NONE
 	hi CursorColumn term=reverse cterm=NONE ctermfg=NONE ctermbg=8 ctermul=NONE gui=NONE guifg=NONE guibg=#29302b guisp=NONE
 	hi CursorLine term=NONE cterm=NONE ctermfg=NONE ctermbg=8 ctermul=NONE gui=NONE guifg=NONE guibg=#29302b guisp=NONE
 	hi DiffAdd term=underline,reverse cterm=NONE ctermfg=2 ctermbg=8 ctermul=2 gui=NONE guifg=#309c00 guibg=#29302b guisp=#309c00
@@ -120,6 +121,7 @@ else # light
 	endif
 	hi ColorColumn term=reverse cterm=NONE ctermfg=NONE ctermbg=7 ctermul=NONE gui=NONE guifg=NONE guibg=#e6e1d1 guisp=NONE
 	hi Cursor term=NONE cterm=NONE ctermfg=7 ctermbg=12 ctermul=NONE gui=NONE guifg=#e6e1d1 guibg=#6d736d guisp=NONE
+	hi lCursor term=NONE cterm=NONE ctermfg=7 ctermbg=8 ctermul=NONE gui=NONE guifg=#e6e1d1 guibg=#29302b guisp=NONE
 	hi CursorColumn term=reverse cterm=NONE ctermfg=NONE ctermbg=7 ctermul=NONE gui=NONE guifg=NONE guibg=#e6e1d1 guisp=NONE
 	hi CursorLine term=NONE cterm=NONE ctermfg=NONE ctermbg=7 ctermul=NONE gui=NONE guifg=NONE guibg=#e6e1d1 guisp=NONE
 	hi DiffAdd term=underline,reverse cterm=NONE ctermfg=2 ctermbg=7 ctermul=2 gui=NONE guifg=#309c00 guibg=#e6e1d1 guisp=#309c00
@@ -206,7 +208,6 @@ hi CursorIM term=NONE cterm=NONE ctermfg=NONE ctermbg=NONE ctermul=NONE gui=NONE
 hi Directory term=NONE cterm=NONE ctermfg=4 ctermbg=NONE ctermul=NONE gui=NONE guifg=#0080bd guibg=NONE guisp=NONE
 hi Ignore term=NONE cterm=NONE ctermfg=NONE ctermbg=NONE ctermul=NONE gui=NONE guifg=NONE guibg=NONE guisp=NONE
 hi Italic term=italic cterm=italic ctermul=NONE gui=italic guisp=NONE
-hi lCursor term=NONE cterm=NONE ctermfg=NONE ctermbg=fg ctermul=NONE gui=NONE guifg=NONE guibg=fg guisp=NONE
 hi MatchParen term=reverse,bold cterm=reverse,bold ctermfg=NONE ctermbg=NONE ctermul=NONE gui=reverse,bold guifg=NONE guibg=NONE guisp=NONE
 hi ModeMsg term=NONE cterm=NONE ctermfg=4 ctermbg=NONE ctermul=NONE gui=bold guifg=#0080bd guibg=NONE guisp=NONE
 hi MoreMsg term=NONE cterm=NONE ctermfg=4 ctermbg=NONE ctermul=NONE gui=bold guifg=#0080bd guibg=NONE guisp=NONE
