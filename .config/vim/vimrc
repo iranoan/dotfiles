@@ -170,7 +170,7 @@ set shortmess+=IWc shortmess-=S                # I 起動時にファイル未�
                                                # W ファイルの書き込み時に "書込み" や "[w]" を表示しない。
                                                # c 補完関連のメッセージを表示しない
                                                # S 検索ヒット件数表示←コマンドラインに検索のヒット位置、総個数を [?/?] で表示し、ファイルの先頭・終端になった時のメッセージが一瞬で消える
-set maxsearchcount=500                       # shortmess による検索個数の最大表示数
+set maxsearchcount=500                         # shortmess による検索個数の最大表示数
 set textwidth=0                                # 自動改行させない
 set display+=lastline                          # 画面最後の行をできる限り表示
 set wrap                                       # 長い行は折り返し表示
@@ -578,7 +578,7 @@ endfor
 # を素早く入力
 # 前に silent や tabdo/window/argdo/bufdo/cfdo/lfdo があっても良いが、cdo/ldo は除外している (全体なら cfdo/lfdo を使う)
 # 参照サイトのままの s だけだと、カーソル行だけの置換を指定しにくい
-# カーソル位置の単語を取り込み検索語としつつ、 (コマンド・ラインで「ss/」「ss<Space>」等で発火)
+# カーソル位置の単語を取り込み検索語としつつ、(コマンド・ラインで「ss/」「ss<Space>」等で発火)
 cnoreabbrev <expr> ss getcmdtype() .. getcmdline() =~# '^:\%(sil\%[ent]!\=\s\+\)\=\%(\%(\d\+,\d\+\)\=\%(\%(tabdo\=\<Bar>windo\<Bar>\%(arg\<Bar>buf\)do!\=\)\s\+\)\<Bar>[cl]fdo\=!\=\s\+\)\=ss' ? [getchar(), ''][1] .. '%s/\<<C-R><C-W>\>//g<Left><Left>' : 'ss'
 # 直前の検索語を使う
 cnoreabbrev <expr> S  getcmdtype() .. getcmdline() =~# '^:\%(sil\%[ent]!\=\s\+\)\=\%(\%(\d\+,\d\+\)\=\%(\%(tabdo\=\<Bar>windo\<Bar>\%(arg\<Bar>buf\)do!\=\)\s\+\)\<Bar>[cl]fdo\=!\=\s\+\)\=S'   ? [getchar(), ''][1] .. '%s///g<Left><Left>' : 'S'
