@@ -54,8 +54,6 @@ install.sh
   * [.config/gdb/](.config/gdb/)
 * gnuplot
   * [.config/gnuplot/](.config/gnuplot/)
-* Gromit-MPX
-  * [.config/gromit-mpx.cfg](.config/gromit-mpx.cfg)
 * LanguageTool
   * [.languagetool-ooo.cfg](.languagetool-ooo.cfg)
 * less
