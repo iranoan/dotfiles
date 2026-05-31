@@ -581,7 +581,7 @@ endfor
 # カーソル位置の単語を取り込み検索語としつつ、(コマンド・ラインで「ss/」「ss<Space>」等で発火)
 cnoreabbrev <expr> ss getcmdtype() .. getcmdline() =~# '^:\%(sil\%[ent]!\=\s\+\)\=\%(\%(\d\+,\d\+\)\=\%(\%(tabdo\=\<Bar>windo\<Bar>\%(arg\<Bar>buf\)do!\=\)\s\+\)\<Bar>[cl]fdo\=!\=\s\+\)\=ss' ? [getchar(), ''][1] .. '%s/\<<C-R><C-W>\>//g<Left><Left>' : 'ss'
 # 直前の検索語を使う
-cnoreabbrev <expr> S  getcmdtype() .. getcmdline() =~# '^:\%(sil\%[ent]!\=\s\+\)\=\%(\%(\d\+,\d\+\)\=\%(\%(tabdo\=\<Bar>windo\<Bar>\%(arg\<Bar>buf\)do!\=\)\s\+\)\<Bar>[cl]fdo\=!\=\s\+\)\=S'   ? [getchar(), ''][1] .. '%s///g<Left><Left>' : 'S'
+cnoreabbrev <expr> S  getcmdtype() .. getcmdline() =~# '^:\%(sil\%[ent]!\=\s\+\)\=\%(\%(\d\+,\d\+\)\=\%(\%(tabdo\=\<Bar>windo\<Bar>\%(arg\<Bar>buf\)do!\=\)\s\+\)\<Bar>[cl]fdo\=!\=\s\+\)\=S'  ? [getchar(), ''][1] .. '%s///g<Left><Left>' : 'S'
 # }}}
 # abbreviate の代わり {{2
 cnoremap <expr> ~vim $MYVIMDIR
