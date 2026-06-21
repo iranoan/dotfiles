@@ -28,7 +28,7 @@ textobj#user#map('ifdef', {
 	},
 })
 # コンパイルして実行 {{{2
-nnoremap <buffer><Leader>gcc :setlocal fileencoding= \| w! \| !gcc -W -Wall "%" -lm && ./a.out < ~/Information/slide/C/data/a.txt && ./a.out < ~/Information/slide/C/data/b.txt && ./a.out < ~/Information/slide/C/data/c.txt && ./a.out < ~/Information/slide/C/data/d.txt<CR>
+nnoremap <buffer><Leader>gcc <Cmd>call personal#Gcc()<CR>
 # --------------------------------
 # その他 {{{2
 # setlocal keywordprg=:terminal\ ++close\ man\ 3 " ヘルプ
