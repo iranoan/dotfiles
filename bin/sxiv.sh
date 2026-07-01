@@ -71,11 +71,11 @@ open_img(){
 	if command -v fdfind > /dev/null ; then
 		cmd0="fdfind --hidden --follow --no-ignore --base-directory "
 		cmd1=" --absolute-path --ignore-file ~/.config/fd/ignore \
-			-e avif -e bmp -e cgm -e cr2 -e dl -e emf -e eps -e gif -e ico -e j2c -e j2k -e jp2 -e jpeg -e jpf -e jpg -e jpx -e mng -e nef -e pbm -e pcx -e pgm -e png -e ppm -e svg -e svgz -e tga -e tiff -e webp -e xbm -e xcf -e xpm -e xwd -e yuv -e cur"
+			-e avif -e bmp -e cgm -e cr2 -e dl -e emf -e eps -e gif -e ico -e j2c -e j2k -e jp2 -e jpeg -e jxl -e jpf -e jpg -e jpx -e mng -e nef -e pbm -e pcx -e pgm -e png -e ppm -e svg -e svgz -e tga -e tiff -e webp -e xbm -e xcf -e xpm -e xwd -e yuv -e cur"
 	else
 		cmd0="find -L "
 		cmd1="-type d \( -name .thumbnails -o -name thumbnails -o -name .cache -o -name cache -o -name .log -o -name log -o -name _log -o -name .tmp -o -name tmp -o -name .Trash -o -name Trash \) -prune -o -type f \( \
-			-iname '*.avif'  -iname '*.bmp ' -o -iname '*.cgm' -o -iname '*.cr2' -o -iname '*.dl' -o -iname '*.emf' -o -iname '*.eps' -o -iname '*.gif' -o -iname '*.ico' -o -iname '*.j2c' -o -iname '*.j2k' -o -iname '*.jp2' -o -iname '*.jpeg' -o -iname '*.jpf' -o -iname '*.jpg' -o -iname '*.jpx' -o -iname '*.mng' -o -iname '*.nef' -o -iname '*.pbm' -o -iname '*.pcx' -o -iname '*.pgm' -o -iname '*.png' -o -iname '*.ppm' -o -iname '*.svg' -o -iname '*.svgz' -o -iname '*.tga' -o -iname '*.tif' -o -iname '*.tiff' -o -iname '*.webp' -o -iname '*.xbm' -o -iname '*.xcf' -o -iname '*.xpm' -o -iname '*.xwd' -o -iname '*.yuv' -o -iname '*.cur' \
+			-iname '*.avif'  -iname '*.bmp ' -o -iname '*.cgm' -o -iname '*.cr2' -o -iname '*.dl' -o -iname '*.emf' -o -iname '*.eps' -o -iname '*.gif' -o -iname '*.ico' -o -iname '*.j2c' -o -iname '*.j2k' -o -iname '*.jp2' -o -iname '*.jpeg' -o -iname '*.jxl' -o -iname '*.jpf' -o -iname '*.jpg' -o -iname '*.jpx' -o -iname '*.mng' -o -iname '*.nef' -o -iname '*.pbm' -o -iname '*.pcx' -o -iname '*.pgm' -o -iname '*.png' -o -iname '*.ppm' -o -iname '*.svg' -o -iname '*.svgz' -o -iname '*.tga' -o -iname '*.tif' -o -iname '*.tiff' -o -iname '*.webp' -o -iname '*.xbm' -o -iname '*.xcf' -o -iname '*.xpm' -o -iname '*.xwd' -o -iname '*.yuv' -o -iname '*.cur' \
 		\) -print 2> /dev/null"
 	fi
 	if [ -d "$1" ]; then # ディレクトリではサブディレクトリまで含めてサムネイル表示
