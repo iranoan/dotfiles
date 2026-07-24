@@ -3,35 +3,13 @@
 # 次をその候補にしている
 # ・編集・閲覧の対象にしないファイル
 # ・編集・閲覧の対象であっても、ファイル名で探すことはないファイル (メール・ファイル等)
-/.bsfilter/
-/.texlive2[0-9][0-9][0-9]/
-/.npm/
-/node_modules/
-/Mail/.notmuch/xapian/
-/Mail/.*/{new,cur,tmp}/
-/.ecryptfs/
-/.Private/
-/.local/share/geeqie/metadata/
-/.local/share/kpeoplevcard/
-/.local/share/Trash/
-/.config/lftp/
-/.vscode/extensions/
-/go/pkg/
 .thumbnails/
 thumbnails/
-/img/スクリーンショット/
-/.wine/drive_c/users/hiroyuki/Downloads/
-/.wine/drive_c/users/hiroyuki/Documents/
-/.wine/drive_c/users/hiroyuki/Desktop/
-/.wine/drive_c/users/hiroyuki/Videos/
-/.wine/drive_c/users/hiroyuki/Pictures/
-/.wine/drive_c/users/hiroyuki/Music/
-/.wine/dosdevices/
-/PDF/
-/.local/share/log/
 _log/
-/.local/state/tmp/
-.git/
+.git/hooks/
+.git/info/
+.git/logs/
+.git/objects/
 cache/
 .cache/
 _cache/

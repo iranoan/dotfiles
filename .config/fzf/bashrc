@@ -79,7 +79,7 @@ f(){ # ファイル検索して fzf
 			dir="${*// /\\ }"
 		fi
 		dir="${dir//\"/\\\"}"
-		eval "${FZF_DEFAULT_COMMAND% .} $dir" |
+		eval "${FZF_DEFAULT_COMMAND} $dir" |
 			$fzf --prompt 'Files> ' --preview "$HOME/bin/fzf-preview.sh {}" --multi |
 			xargs -I{} xdg-open "{}"
 	else

@@ -1,0 +1,34 @@
+# fdfind でホーム・ディレクトリを検索したときに対象にしないディレクトリ
+/.bsfilter/
+/.texlive2[0-9][0-9][0-9]/
+/.npm/
+/node_modules/
+/Mail/.notmuch/xapian/
+/Mail/.*/{new,cur,tmp}/
+/.ecryptfs/
+/.Private/
+/.local/share/geeqie/metadata/
+/.local/share/kpeoplevcard/
+/.local/share/Trash/
+/.config/lftp/
+/.vscode/extensions/
+/go/pkg/
+/img/スクリーンショット/
+/.wine/drive_c/users/hiroyuki/Downloads/
+/.wine/drive_c/users/hiroyuki/Documents/
+/.wine/drive_c/users/hiroyuki/Desktop/
+/.wine/drive_c/users/hiroyuki/Videos/
+/.wine/drive_c/users/hiroyuki/Pictures/
+/.wine/drive_c/users/hiroyuki/Music/
+/.wine/dosdevices/
+/PDF/
+/removable/
+/.local/share/log/
+/.local/state/tmp/
+/.mozilla/firefox/Crash Reports/
+/.mozilla/firefox/*.*/bookmarkbackups/
+/.mozilla/firefox/*.*/sessionstore-backups/
+/.mozilla/firefox/*.*/crashes/
+/.mozilla/firefox/*.*/mozilla-media-cache/
+/.mozilla/firefox/*.*/datareporting/
+/.mozilla/firefox/*.*/storage/

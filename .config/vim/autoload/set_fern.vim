@@ -217,6 +217,13 @@ def s:init_fern(): void
 	else
 		b:undo_ftplugin = 'call set_fern#undo_ftplugin()'
 	endif
+	# augroup hook_gitgutter " git の warning を無視するように関数をフックする
+	# 	autocmd!
+	# 	autocmd FuncUndefined gitgutter#*
+	# hook_function#main($MYVIMDIR .. 'pack/github/opt/fern-preview.vim/autoload/fern_preview.vim', $MYVIMDIR .. 'autoload/personal.vim', 'open', 'FernPreview')
+	# 				\ | autocmd! hook_gitgutter
+	# 				\ | augroup! hook_gitgutter
+	# augroup END
 enddef
 
 def g:Fern_mapping_fzf_customize_option(spec: dict<any>): dict<any>

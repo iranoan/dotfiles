@@ -69,8 +69,8 @@ xrandr --current |
 open_img(){
 	geometry=$( get_geometry )
 	if command -v fdfind > /dev/null ; then
-		cmd0="fdfind --hidden --follow --no-ignore --base-directory "
-		cmd1=" --absolute-path --ignore-file ~/.config/fd/ignore \
+		cmd0="fdfind --hidden --follow --base-directory "
+		cmd1=" --absolute-path \
 			-e avif -e bmp -e cgm -e cr2 -e dl -e emf -e eps -e gif -e ico -e j2c -e j2k -e jp2 -e jpeg -e jxl -e jpf -e jpg -e jpx -e mng -e nef -e pbm -e pcx -e pgm -e png -e ppm -e svg -e svgz -e tga -e tiff -e webp -e xbm -e xcf -e xpm -e xwd -e yuv -e cur"
 	else
 		cmd0="find -L "
