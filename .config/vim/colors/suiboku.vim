@@ -276,9 +276,8 @@ hi! link PmenuKindSel TabLineSel
 hi! link PmenuMatch Type
 hi! link PmenuMatchSel Type
 hi! link PopupNotification WarningMsg
-hi! link PopupSelected TabLineSel
+hi! link PopupSelected PmenuSel
 hi! link PreCondit PreProc
-hi! link PopupSelected Added
 hi! link QuickFixLine CursorLine
 hi! link Repeat Statement
 hi! link SpecialChar Special
