@@ -478,6 +478,13 @@ vnoremap <Leader>ft <Cmd>call set_fzf#tabs()<CR>
 nnoremap <Leader>fb <Cmd>call set_fzf#tabs()<CR>
 nnoremap <Leader>fw <Cmd>call set_fzf#tabs()<CR>
 
+# GVim なら環境に関係なく画像プレピュー可能な fuzzy file finder $MYVIMDIR/pack/my-plug/opt/fuzzy-file-finder/ {{{2
+augroup Fuzzy_File_Finder # tabedit, fern.vim, fzf.vim サイクリック依存
+	autocmd!
+	autocmd FuncUndefined fff#* set_fff#main()
+		| autocmd_delete([{group: 'Fuzzy_File_Finder'}])
+augroup END
+
 # ソースの実行結果を別バッファに表示 https://github.com/thinca/vim-quickrun {{{2
 nnoremap <silent><Leader>qr  <Cmd>call set_quickrun#main()<CR>
 xnoremap <silent><Leader>qr  <Cmd>call set_quickrun#main()<CR>

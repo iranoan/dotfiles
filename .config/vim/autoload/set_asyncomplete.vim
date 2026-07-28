@@ -46,7 +46,7 @@ function set_asyncomplete#main() abort
 				\ filter: function('s:FilterOmni'),
 				\ priority: 60,
 				\ allowlist: ['*'],
-				\ blocklist: ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'css', 'tex', 'sh', 'go','notmuch-draft'],
+				\ blocklist: ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'css', 'tex', 'sh', 'go','notmuch-draft', 'fuzzy-file-finder'],
 				\ completor: function('asyncomplete#sources#omni#completor'),
 				\ config: #{
 				\ 	show_source_kind: 1
@@ -62,7 +62,7 @@ function set_asyncomplete#main() abort
 				\ filter: function('s:FilterFile'),
 				\ priority: 50,
 				\ allowlist: ['*'],
-				\ blocklist: ['notmuch-draft'],
+				\ blocklist: ['notmuch-draft', 'fuzzy-file-finder'],
 				\ completor: function('asyncomplete#sources#file#completor')
 				\ }))
 			" }}}
@@ -72,7 +72,7 @@ function set_asyncomplete#main() abort
 				\ name: 'buffer',
 				\ priority: 30,
 				\ allowlist: ['*'],
-				\ blocklist: ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'css', 'tex', 'sh', 'go','notmuch-draft'],
+				\ blocklist: ['c', 'cpp', 'python', 'vim', 'ruby', 'yaml', 'markdown', 'css', 'tex', 'sh', 'go','notmuch-draft', 'fuzzy-file-finder'],
 				\ completor: function('asyncomplete#sources#buffer#completor'),
 				\ config: #{
 				\ 	max_buffer_size: 500000
