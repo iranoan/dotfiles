@@ -53,7 +53,7 @@ sxiv_sixel(){ # 環境によって sxiv と Sixel を使い分ける
 			*)                                sixel=0 ;;
 		esac
 	fi
-	i_width="$( identify "$3" | awk '{print $3}' )"
+	i_width="$( ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=s=x:p=0 "$3" )"
 	i_height=$( echo "$i_width" | awk -F'x' '{print $2}' )
 	i_width=$( echo "$i_width" | awk -F'x' '{print $1}' )
 	win_id=$( wmctrl -lGp | grep -E "^0x[0-9a-f]+ +-?[0-9]+ +$1 " )
