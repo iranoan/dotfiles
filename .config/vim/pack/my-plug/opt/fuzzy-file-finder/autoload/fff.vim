@@ -56,8 +56,9 @@ g:fuzzy_file_finder = extend(deepcopy({
 		# Video
 		'anx', 'asf', 'avi', 'axv', 'flc', 'fli', 'flv', 'gl', 'm2v', 'm4v', 'mkv', 'mov', 'mp4', 'mp4v', 'mpeg', 'mpg',
 		'nuv', 'ogm', 'ogv', 'ogx', 'qt', 'rm', 'rmvb', 'swf', 'vob', 'webm', 'wmv',
-		# Image
-		'avif', 'bmp', 'cgm', 'cr2', 'cur', 'dl', 'dvi', 'emf', 'eps', 'gif', 'ico', 'j2c', 'j2k', 'jp2', 'jpeg', 'jpg',
+		# Image 'eps',
+		# EPS は変換ツール不明
+		'avif', 'bmp', 'cgm', 'cr2', 'cur', 'dl', 'dvi', 'emf', 'gif', 'ico', 'j2c', 'j2k', 'jp2', 'jpeg', 'jpg',
 		'jpf', 'jpx', 'jxl', 'mng', 'nef', 'pbm', 'pcx', 'pgm', 'png', 'ppm', 'svg', 'svgz', 'tga', 'tiff', 'webp',
 		'xbm', 'xcf', 'xpm', 'xwd', 'yuv',
 		# PNG
@@ -78,7 +79,8 @@ g:fuzzy_file_finder = extend(deepcopy({
 		rar: 'unrar l',
 		lzma: 'lzma -l',
 	},
-	open: 'edit'
+	open: 'edit',
+	dir: true,
 	}
 ), get(g:, 'fuzzy_file_finder', {}), 'force')
 
@@ -247,26 +249,12 @@ def IsBinary(path: string): bool
 enddef
 
 def UpdatePreview(s: dict<any>): void
-	def ClearImage(id: number): void
-		if get(popup_getoptions(id), 'image', {}) != {}
-			popup_setoptions(id, {
-				image: {},
-				border: [1, 0, 0, 0],
-				minwidth: s.preview_width,
-				maxwidth: s.preview_width,
-				minheight: s.preview_height,
-				maxheight: s.preview_height,
-			})
-			redraw!
-		endif
-	enddef
-
-	if empty(s.matches) || s.selected_idx >= len(s.matches)
+	if s.selected_idx >= len(s.matches)
 		setbufline(s.preview_buf, 1, ["<No selection>"])
 		deletebufline(s.preview_buf, 2, "$")
 		setbufvar(s.preview_buf, '&filetype', '')
 		setbufvar(s.preview_buf, '&modified', false)
-		ClearImage(s.preview_winid)
+		popup_image#Clear(s.preview_winid)
 		return
 	endif
 
@@ -275,13 +263,13 @@ def UpdatePreview(s: dict<any>): void
 	if s.preview_path ==# p
 		return
 	endif
-	ClearImage(s.preview_winid)
+	popup_image#Clear(s.preview_winid)
+	setbufvar(s.preview_buf, '&filetype', '')
 	deletebufline(s.preview_buf, 1, "$")
 	s.preview_path = p
 	if isdirectory(p)
 		var files: list<dict<any>> = GetFileInfo(p)
 		var max_len: number = max(files->mapnew((_, v) => len(v.size_s)))
-		setbufvar(s.preview_buf, '&filetype', '')
 		setbufline(s.preview_buf, 1, sort(files, (v0, v1) =>
 		                                         v0.time > v1.time ? -1 : v0.time < v1.time ? 1 : # 更新日時降順
 		                                         v0.lower_name < v1.lower_name ? -1 : v0.lower_name > v1.lower_name ? 1 : # ファイル名順 (大小文字区別なし)
@@ -292,9 +280,10 @@ def UpdatePreview(s: dict<any>): void
 		)
 	elseif filereadable(p)
 		if index(g:fuzzy_file_finder.image, tolower(fnamemodify(p, ':e'))) != -1
-			PreviewImage(p, s)
+			if !popup_image#Preview(s.preview_winid, p)
+				setbufline(s.preview_buf, 1, '<Broken file>')
+			endif
 		elseif index(keys(g:fuzzy_file_finder.filter), type) != -1
-			setbufvar(s.preview_buf, '&filetype', '')
 			setbufline(s.preview_buf, 1, systemlist($'{g:fuzzy_file_finder.filter[type]} {p}'))
 		elseif IsBinary(p)
 			setbufline(s.preview_buf, 1, [" <Binary file> "])
@@ -303,55 +292,9 @@ def UpdatePreview(s: dict<any>): void
 			setbufvar(s.preview_buf, '&filetype', type)
 		endif
 	else
-		setbufline(s.preview_buf, 1, [" <Unreadable file> "])
+		setbufline(s.preview_buf, 1, [$' <Unreadable file>: {p}'])
 	endif
 	setbufvar(s.preview_buf, '&modified', false)
-enddef
-
-def PreviewImage(f: string, s: dict<any>): void # パス f の画像、動画、PDF を表示
-	def ScaleImage(w: number, h: number, c: number, l: number): list<number>
-		var scale: float = min([c * 8.0 / w * 96 / 72, l * 16.0 / h * 96 / 72] )
-
-		if scale > 1
-			return [w, h]
-		endif
-		return [float2nr(round(w * scale)), float2nr(round(h * scale))]
-	enddef
-
-	var p: string = shellescape(resolve(expand(f)))
-	var w: number
-	var h: number
-	var t: string
-	var ft: string = systemlist('file --mime-type --brief ' .. p)[0]
-	var img_data: blob
-	var ppm: list<string>
-
-	setbufvar(s.preview_buf, '&filetype', '')
-	if ft =~# '^video/'
-		t = '-ss ' .. str2nr(system('ffprobe -v error -show_entries format=duration -of csv=p=0 ' .. p )) / 10.0
-	elseif ft !=# 'application/pdf' && ft !~# '^image/'
-		return
-	endif
-	if ft ==# 'application/pdf'
-		[w, h] = systemlist('pdfinfo ' ..  p)
-			->filter((_, v) => v =~ '^Page size: ')[0]
-			->matchlist('^Page size: \+\zs\(\d\+\.\?\d*\) x \(\d\+\.\?\d*\) pts')[1 : 2]
-			->map((_, v) => float2nr(round(str2float(v) * 80 / 72)))
-		[w, h] = ScaleImage(w, h, s.preview_width, s.preview_height)
-		ppm = systemlist($'pdftoppm -f 1 -l 1 -r 80 -scale-to-x {w} -scale-to-y {h} {p}')
-		# [w, h] = split(ppm[1])->map((_, v) => str2nr(v)) # pdfinfo と pdftoppm では微妙に違うので横縦サイズを再取得
-		img_data = str2blob(ppm[3 : ])
-	else
-		[w, h] = split(system('ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 ' .. p), ',')
-		         	->map((_, v) => str2nr(v))
-		[w, h] = ScaleImage(w, h, s.preview_width, s.preview_height)
-		img_data = str2blob(systemlist($'ffmpeg {t} -i {p} -vf ''scale={w}:{h}'' -vframes 1 -f rawvideo -pix_fmt rgb24 - 2> /dev/null'))
-	endif
-	if len(img_data) != w * h * 3
-		setbufline(s.preview_buf, 1, '<Broken file>')
-		return
-	endif
-	popup_setoptions(s.preview_winid, {image: {data: img_data, width: w, height: h}, border: [0, 0, 0, 0]})
 enddef
 
 def SetListTitle(s: dict<any>): void
@@ -494,7 +437,7 @@ def Confirm(s: dict<any>): void
 	Cleanup(s) # これでカレント・ディレクトリが変わることがあるので、この後でフル・パス変換はダメ
 	if !empty(files_to_open)
 		for f in files_to_open
-			if index(img, tolower(fnamemodify(f, ':e'))) != -1 || IsBinary(f)
+			if index(img, tolower(fnamemodify(f, ':e'))) != -1 || isdirectory(f) || IsBinary(f)
 				if open_b ==# ''
 					echohl ErrorMsg
 					echo $"Binary file: {f}"
