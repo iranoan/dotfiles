@@ -221,8 +221,8 @@ enddef
 def UpdatePreview(s: dict<any>): void
 	if empty(s.matches)
 		s.preview_path = ''
-		setbufline(s.preview_buf, 1, '<No selection>')
 		deletebufline(s.preview_buf, 2, '$')
+		setbufline(s.preview_buf, 1, '<No selection>')
 		setbufvar(s.preview_buf, '&filetype', '')
 		setbufvar(s.preview_buf, '&modified', false)
 		popup_image#Clear(s.preview_winid)
@@ -299,8 +299,8 @@ def Render(s: dict<any>): void
 	})
 	SetListTitle(s)
 
+	deletebufline(s.list_buf, 1, '$')
 	setbufline(s.list_buf, 1, display_matches)
-	deletebufline(s.list_buf, len(display_matches) + 1, '$')
 	setbufvar(s.list_buf, '&modified', false)
 	UpdatePreview(s)
 	win_execute(s.list_winid, $'call cursor({cursor_idx}, 1)')
