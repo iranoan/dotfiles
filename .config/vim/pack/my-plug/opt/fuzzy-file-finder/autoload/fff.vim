@@ -454,16 +454,16 @@ export def Bridge(cmd: string): void
 enddef
 
 export def Open(dir: string = ''): void
-	var target_dir: string = dir ==# '' ? getcwd() : expand(dir, true)
+	var target_dir: string = fnamemodify(dir ==# '' ? getcwd() : expand(dir, true), ':p')
+	var target_len: number = len(target_dir)
 	var main_width: number = &columns * 45 / 100
 	var preview_width: number = &columns - main_width - 3
-	var home_prefix: string = $HOME .. '/'
-	var home_len: number = len(home_prefix)
 	var line_height: number = &lines - 2 - (&laststatus != 0 ? 1 : 0) - &cmdheight
 	var cmd_place_folder: number = index(g:fuzzy_file_finder.cmd, '<>')
 	var cmd: list<string> = cmd_place_folder == -1 ?  g:fuzzy_file_finder.cmd + [target_dir] :
 		cmd_place_folder == len(g:fuzzy_file_finder.cmd) ? g:fuzzy_file_finder.cmd[ : - 2 ] + [target_dir] :
 		g:fuzzy_file_finder.cmd[ : cmd_place_folder - 1 ] + [target_dir] + g:fuzzy_file_finder.cmd[ cmd_place_folder + 1 : ]
+
 	if !isdirectory(target_dir)
 		echohl ErrorMsg
 		echo $'Not a directory: {target_dir}'
@@ -527,7 +527,7 @@ export def Open(dir: string = ''): void
 			if s.canceled # canceled フラグを立てたら、出力を読み飛ばすようにする
 				return
 			endif
-			add(s.all_files, stridx(msg, home_prefix) == 0 ? '~/' .. msg[home_len :] : msg)
+			add(s.all_files, stridx(msg, target_dir) == 0 ? msg[target_len :] : msg)
 			var count_out_cb: number = len(s.all_files)
 			if count_out_cb <= &lines || count_out_cb % 1000 == 0
 				RequestRenderThrottle(s)
