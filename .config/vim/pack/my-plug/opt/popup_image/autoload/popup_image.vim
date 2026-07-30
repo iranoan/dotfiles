@@ -12,17 +12,16 @@ var popup_options: dict<any> = {
 
 export def Clear(id: number): void
 	if has_key(popup_getoptions(id), 'image')
-		popup_setoptions(id, extendnew(popup_options, {image: {}}))
+		popup_setoptions(id, popup_options)
 		redraw!
 	endif
 enddef
 
 export def Preview(id: number, f: string): bool # パス f の画像、動画、PDF を表示
-	popup_options = popup_getoptions(id)
-	var max_w: number = popup_options.maxwidth
-	var max_h: number = popup_options.maxheight
-	var min_w: number = popup_options.minwidth
-	var min_h: number = popup_options.minheight
+	var opts: dict<any> = popup_getoptions(id)
+	var max_w: number = opts.maxwidth ==  0 ? &columns : opts.maxwidth
+	var max_h: number = opts.maxheight == 0 ? &lines   : opts.maxheight
+
 	def ScaleImage(w: number, h: number): list<number>
 		var scale: float = min([max_w * 5.0 / w * g:popup_image_pt2px.x / 72, max_h * 10.0 / h * g:popup_image_pt2px.y / 72] )
 
@@ -40,6 +39,11 @@ export def Preview(id: number, f: string): bool # パス f の画像、動画、
 	var img_data: blob
 	var w_h: list<number>
 
+	if get(opts, 'image', {}) == {}
+		popup_options = extendnew(opts, {image: {}})
+	else # 連続して呼び出されたときに、消さないと後ろに残る
+		Clear(id)
+	endif
 	if ft =~# '^video/'
 		t = '-ss ' .. str2nr(system('ffprobe -v error -show_entries format=duration -of csv=p=0 ' .. p )) / 10.0
 	elseif ft !=# 'application/pdf' && ft !~# '^image/' && ft !=# 'application/postscript'
@@ -67,7 +71,13 @@ export def Preview(id: number, f: string): bool # パス f の画像、動画、
 	if len(img_data) != w * h * 3
 		return false
 	endif
-	popup_setoptions(id, {image: {data: img_data, width: w, height: h}, border: [0, 0, 0, 0], padding: [0, 0, 0, 0], opacity: 0})
+	popup_setoptions(id, {
+		image: {data: img_data, width: w, height: h},
+		maxwidth: max_w, # 縦横サイズを指定しないと、連続して使われたときに直前に表示された画像サイズに引きずられる
+		maxheight: max_h,
+		border: [0, 0, 0, 0],
+		padding: [0, 0, 0, 0], opacity: 0
+	})
 	return true
 enddef
 

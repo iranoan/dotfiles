@@ -362,7 +362,7 @@ def MoveSelection(s: dict<any>, delta: any): void
 	endif
 	if new_idx >= 0 && new_idx < max_idx
 		f = s.matches[s.selected_idx]
-		setbufline(s.list_buf, s.selected_idx + 1, $' {has_key(s.marked_files, f) ? '[*]' : '[ ]'} {f}')
+		setbufline(s.list_buf, s.selected_idx + 1, $'  {has_key(s.marked_files, f) ? '[*]' : '[ ]'} {f}')
 		f = s.matches[new_idx]
 		setbufline(s.list_buf, new_idx + 1, $'> {has_key(s.marked_files, f) ? '[*]' : '[ ]'} {f}')
 		win_execute(s.list_winid, $'call cursor({new_idx + 1}, 1)')
