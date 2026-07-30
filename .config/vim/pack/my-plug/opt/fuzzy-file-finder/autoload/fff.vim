@@ -141,35 +141,6 @@ def GetFileType(p: string): string
 	return ext !=# '' ? ext : 'text'
 enddef
 
-# def GetFileType(p: string): string
-# 	var path = expand(p)
-# 	if !filereadable(path) && !isdirectory(path)
-# 		return ''
-# 	endif
-#
-# 	# var winid = bufwinid('.')
-# 	var type: string
-# 	var exist: bool = bufexists(path)
-# 	var listed: bool = bufloaded(path)
-# 	var buf: number = bufadd(path)
-#
-# 	if !listed
-# 		bufload(buf)
-# 	endif
-# 	type = getbufvar(buf, '&filetype')
-# 	if !listed
-# 		setbufvar(buf, '&buflisted', false)
-# 		setbufvar(buf, '&swapfile', false)
-# 		# execute $'bunload! {buf}'
-# 	endif
-# 	if !exist
-# 		setbufvar(buf, '&buftype', 'nofile')
-# 		setbufvar(buf, '&bufhidden', 'wipe')
-# 		execute $'bwipeout! {buf}'
-# 	endif
-# 	# win_gotoid(winid)
-# 	return type
-# enddef
 
 def GetFileInfo(dir: string): list<dict<any>>
 	var info: list<dict<any>>
@@ -249,7 +220,8 @@ def IsBinary(path: string): bool
 enddef
 
 def UpdatePreview(s: dict<any>): void
-	if s.selected_idx >= len(s.matches)
+	if empty(s.matches)
+		s.preview_path = ''
 		setbufline(s.preview_buf, 1, ["<No selection>"])
 		deletebufline(s.preview_buf, 2, "$")
 		setbufvar(s.preview_buf, '&filetype', '')
@@ -317,15 +289,12 @@ def Render(s: dict<any>): void
 		                  stridx(s.preview_path, $HOME .. '/') == 0 ?
 		                  '~/' .. s.preview_path[len($HOME .. '/') :] :
 		                  s.preview_path)
-	if empty(s.matches)
-		cursor_idx = 1
-	elseif preview_idx == -1
+	if preview_idx == -1
 		s.selected_idx = 0
-		cursor_idx = 1
 	else
 		s.selected_idx = preview_idx
-		cursor_idx = preview_idx + 1
 	endif
+	cursor_idx = preview_idx + 1
 	var display_matches: list<string> = mapnew(s.matches, (idx, val) => {
 		return $'{(idx == s.selected_idx) ? '>' : ' '} {has_key(s.marked_files, val) ? '[*]' : '[ ]'} {val}'
 	})
@@ -372,12 +341,13 @@ def MoveSelection(s: dict<any>, delta: any): void
 	var max_idx = len(s.matches)
 	var new_idx: number
 	var f: string
+	var h: number = popup_getoptions(s.list_winid).maxheight
 
 	if type(delta) == 1
 		if delta ==# 'PageUp'
-			new_idx = s.selected_idx - (s.preview_height - 1)
+			new_idx = s.selected_idx - (h - 1)
 		elseif delta ==# 'PageDown'
-			new_idx = s.selected_idx + (s.preview_height - 1)
+			new_idx = s.selected_idx + (h - 1)
 		elseif delta ==# '$'
 			new_idx = max_idx - 1
 		else
@@ -551,11 +521,6 @@ export def Open(dir: string = ''): void
 		borderchars: ['-', '|', '-', '|', '+', '+', '+', '+'],
 		image: {}
 	})
-	# s.timer_id = timer_start(50, (t) => {
-	# 	if s.is_dirty
-	# 		Render(s)
-	# 	endif
-	# }, {repeat: -1})
 	s.canceled = false
 	s.job = job_start(cmd, {
 		out_cb: (ch, msg) => {
