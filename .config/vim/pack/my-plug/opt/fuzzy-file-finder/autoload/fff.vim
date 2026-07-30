@@ -389,6 +389,7 @@ def Confirm(s: dict<any>): void
 	var open: string = g:fuzzy_file_finder.open
 	var open_b: string
 	var img: list<string> = g:fuzzy_file_finder.image
+	var netrw: bool = g:fuzzy_file_finder.dir
 
 	if has('unix')
 		open_b = 'xdg-open'
@@ -406,7 +407,9 @@ def Confirm(s: dict<any>): void
 	Cleanup(s) # これでカレント・ディレクトリが変わることがあるので、この後でフル・パス変換はダメ
 	if !empty(files_to_open)
 		for f in files_to_open
-			if index(img, tolower(fnamemodify(f, ':e'))) != -1 || isdirectory(f) || IsBinary(f)
+			if isdirectory(f) && netrw
+				execute $'{open} {fnameescape(f)}'
+			elseif index(img, tolower(fnamemodify(f, ':e'))) != -1 || isdirectory(f) || IsBinary(f)
 				if open_b ==# ''
 					echohl ErrorMsg
 					echo $"Binary file: {f}"
