@@ -38,11 +38,12 @@ export def Preview(id: number, f: string): bool # パス f の画像、動画、
 	var t: string
 	var ft: string = systemlist('file --mime-type --brief ' .. p)[0]
 	var img_data: blob
+	var w_h: list<number>
 
 	if ft =~# '^video/'
 		t = '-ss ' .. str2nr(system('ffprobe -v error -show_entries format=duration -of csv=p=0 ' .. p )) / 10.0
-	elseif ft !=# 'application/pdf' && ft !~# '^image/'
-		return false
+	elseif ft !=# 'application/pdf' && ft !~# '^image/' && ft !=# 'application/postscript'
+		return true
 	endif
 	if ft ==# 'application/pdf'
 		[w, h] = systemlist('pdfinfo ' ..  p)
@@ -51,6 +52,12 @@ export def Preview(id: number, f: string): bool # パス f の画像、動画、
 			->map((_, v) => float2nr(round(str2float(v) * 80 / 72)))
 		[w, h] = ScaleImage(w, h)
 		img_data = str2blob(systemlist($'pdftoppm -f 1 -l 1 -r 80 -scale-to-x {w} -scale-to-y {h} {p}')[3 : ])
+	elseif ft ==# 'application/postscript'
+		w_h = systemlist($'gs -dQUIET -dBATCH -dNOPAUSE -sDEVICE=bbox {p} 2>&1')
+			->matchlist('^%%BoundingBox: \+\zs\(\d\+\.\?\d*\) \(\d\+\.\?\d*\) \(\d\+\.\?\d*\) \(\d\+\.\?\d*\)')[1 : ]
+			->map((_, v) => float2nr(round(str2float(v) * 300 / 72)))
+		[w, h] = ScaleImage(w_h[2] - w_h[0], w_h[3] - w_h[1])
+		img_data = str2blob(systemlist($'gs -dQUIET -dBATCH -dNOPAUSE -dNOPROMPT -sDEVICE=png16m -r300 -sOutputFile=- {p} | ffmpeg -i - -f rawvideo -vf ''scale={w}:{h}'' -pix_fmt rgb24 - 2> /dev/null'))
 	else
 		[w, h] = split(system('ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 ' .. p), ',')
 		         	->map((_, v) => str2nr(v))

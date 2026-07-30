@@ -56,9 +56,8 @@ g:fuzzy_file_finder = extend(deepcopy({
 		# Video
 		'anx', 'asf', 'avi', 'axv', 'flc', 'fli', 'flv', 'gl', 'm2v', 'm4v', 'mkv', 'mov', 'mp4', 'mp4v', 'mpeg', 'mpg',
 		'nuv', 'ogm', 'ogv', 'ogx', 'qt', 'rm', 'rmvb', 'swf', 'vob', 'webm', 'wmv',
-		# Image 'eps',
-		# EPS は変換ツール不明
-		'avif', 'bmp', 'cgm', 'cr2', 'cur', 'dl', 'dvi', 'emf', 'gif', 'ico', 'j2c', 'j2k', 'jp2', 'jpeg', 'jpg',
+		# Image
+		'avif', 'bmp', 'cgm', 'cr2', 'cur', 'dl', 'dvi', 'emf', 'eps', 'gif', 'ico', 'j2c', 'j2k', 'jp2', 'jpeg', 'jpg',
 		'jpf', 'jpx', 'jxl', 'mng', 'nef', 'pbm', 'pcx', 'pgm', 'png', 'ppm', 'svg', 'svgz', 'tga', 'tiff', 'webp',
 		'xbm', 'xcf', 'xpm', 'xwd', 'yuv',
 		# PNG
@@ -483,8 +482,6 @@ export def Open(dir: string = ''): void
 		target: stridx(target_dir, $'{$HOME}/') == 0 ? '~/' .. target_dir[len($'{$HOME}/') :] : target_dir,
 		list_winid: 0,
 		preview_winid: 0,
-		preview_height: line_height,
-		preview_width: preview_width,
 		render_timer: 0,
 		is_dirty: false,
 		job: null_job
