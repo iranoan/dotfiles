@@ -1,7 +1,7 @@
 scriptencoding utf-8
 
 function set_fff#main() abort
-	let g:popup_image_pt2px = #{x: 131, y: 154}
+	let g:popup_image_options = #{pt2px: #{x: 131, y: 154}}
 	packadd popup_image
 	let g:fuzzy_file_finder = #{cmd: ['fdfind.sh'], open: 'TabEdit'}
 	packadd fuzzy-file-finder

@@ -1,7 +1,7 @@
 vim9script
 scriptencoding utf-8
 
-g:popup_image_pt2px = extend(deepcopy({x: 96, y: 96}), get(g:, 'popup_image_pt2px', {}), 'force')
+g:popup_image_options = extend(deepcopy({pt2px: {x: 96, y: 96}, min_size: {x: 5, y: 5}}), get(g:, 'popup_image_options', {}), 'force')
 
 var popup_options: dict<any> = {
 	image: {},
@@ -23,9 +23,13 @@ export def Preview(id: number, f: string): bool # パス f の画像、動画、
 	var max_h: number = opts.maxheight == 0 ? &lines   : opts.maxheight
 
 	def ScaleImage(w: number, h: number): list<number>
-		var scale: float = min([max_w * 5.0 / w * g:popup_image_pt2px.x / 72, max_h * 10.0 / h * g:popup_image_pt2px.y / 72] )
+		var scale: float = min([max_w * 5.0 / w * g:popup_image_options.pt2px.x / 72, max_h * 10.0 / h * g:popup_image_options.pt2px.y / 72])
 
 		if scale > 1
+			scale = max([g:popup_image_options.min_size.x * 5.0 / w * g:popup_image_options.pt2px.x / 72, g:popup_image_options.min_size.y * 10.0 / h * g:popup_image_options.pt2px.y / 72])
+			if scale > 1
+				return [float2nr(round(w * scale)), float2nr(round(h * scale))]
+			endif
 			return [w, h]
 		endif
 		return [float2nr(round(w * scale)), float2nr(round(h * scale))]
