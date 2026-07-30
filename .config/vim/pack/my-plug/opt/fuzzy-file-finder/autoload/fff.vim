@@ -88,10 +88,10 @@ def Cleanup(s: dict<any>): void
 		timer_stop(s.render_timer)
 		s.render_timer = 0
 	endif
-	if has_key(s, 'job') && job_status(s.job) == "run"
+	if has_key(s, 'job') && job_status(s.job) == 'run'
 		s.canceled = true
 		var ch = job_getchannel(s.job)
-		if ch_status(ch) != "closed"
+		if ch_status(ch) != 'closed'
 			ch_close_in(ch)
 		endif
 		job_stop(s.job, 'kill')
@@ -109,13 +109,13 @@ def Cleanup(s: dict<any>): void
 		tabclose
 	endif
 	if bufexists(s.filter_buf)
-		execute $"silent! bwipeout! {s.filter_buf}"
+		execute $'silent! bwipeout! {s.filter_buf}'
 	endif
 	if bufexists(s.list_buf)
-		execute $"silent! bwipeout! {s.list_buf}"
+		execute $'silent! bwipeout! {s.list_buf}'
 	endif
 	if bufexists(s.preview_buf)
-		execute $"silent! wbipeout! {s.preview_buf}"
+		execute $'silent! wbipeout! {s.preview_buf}'
 	endif
 	stopinsert
 enddef
@@ -221,8 +221,8 @@ enddef
 def UpdatePreview(s: dict<any>): void
 	if empty(s.matches)
 		s.preview_path = ''
-		setbufline(s.preview_buf, 1, ["<No selection>"])
-		deletebufline(s.preview_buf, 2, "$")
+		setbufline(s.preview_buf, 1, '<No selection>')
+		deletebufline(s.preview_buf, 2, '$')
 		setbufvar(s.preview_buf, '&filetype', '')
 		setbufvar(s.preview_buf, '&modified', false)
 		popup_image#Clear(s.preview_winid)
@@ -236,7 +236,7 @@ def UpdatePreview(s: dict<any>): void
 	endif
 	popup_image#Clear(s.preview_winid)
 	setbufvar(s.preview_buf, '&filetype', '')
-	deletebufline(s.preview_buf, 1, "$")
+	deletebufline(s.preview_buf, 1, '$')
 	s.preview_path = p
 	if isdirectory(p)
 		var files: list<dict<any>> = GetFileInfo(p)
@@ -247,7 +247,7 @@ def UpdatePreview(s: dict<any>): void
 		                                         v0.name < v1.name ? -1 : 1 ) # 大文字先
 		                              ->mapnew((_, v) =>
 		                                        printf($'%s %{max_len}s %s %s%s',
-		                                        	v.permission, v.size_s, v.time_iso, v.name, v.type ==# 'link' ? $" -> {v.link}" : ''))
+		                                        	v.permission, v.size_s, v.time_iso, v.name, v.type ==# 'link' ? $' -> {v.link}' : ''))
 		)
 	elseif filereadable(p)
 		if index(g:fuzzy_file_finder.image, tolower(fnamemodify(p, ':e'))) != -1
@@ -257,7 +257,7 @@ def UpdatePreview(s: dict<any>): void
 		elseif index(keys(g:fuzzy_file_finder.filter), type) != -1
 			setbufline(s.preview_buf, 1, systemlist($'{g:fuzzy_file_finder.filter[type]} {p}'))
 		elseif IsBinary(p)
-			setbufline(s.preview_buf, 1, " <Binary file> ")
+			setbufline(s.preview_buf, 1, ' <Binary file> ')
 		else
 			setbufline(s.preview_buf, 1, readfile(p))
 			setbufvar(s.preview_buf, '&filetype', type)
@@ -270,7 +270,7 @@ enddef
 
 def SetListTitle(s: dict<any>): void
 	var marked_count: number = len(s.marked_files)
-	var status: string = (exists('s.job') && job_status(s.job) == 'run') ? $' [Loading... {len(s.all_files)}]' : ''
+	var status: string = (has_key(s, 'job') && job_status(s.job) == 'run') ? $' [Loading... {len(s.all_files)}]' : ''
 	popup_setoptions(s.list_winid, {title: $' [{s.target}] {len(s.matches)}/{len(s.all_files)}{status}{marked_count > 0 ? $' ({marked_count} selected)' : ''}'})
 enddef
 
@@ -317,7 +317,7 @@ def RequestRender(s: dict<any>): void
 		if s.is_dirty
 			if line('$') > 1
 				setline(1, getline(1, '$'))
-				execute ":2,$delete"
+				execute ':2,$delete'
 			endif
 			Render(s)
 		endif
@@ -362,7 +362,7 @@ def MoveSelection(s: dict<any>, delta: any): void
 	endif
 	if new_idx >= 0 && new_idx < max_idx
 		f = s.matches[s.selected_idx]
-		setbufline(s.list_buf, s.selected_idx + 1, $'  {has_key(s.marked_files, f) ? '[*]' : '[ ]'} {f}')
+		setbufline(s.list_buf, s.selected_idx + 1, $' {has_key(s.marked_files, f) ? '[*]' : '[ ]'} {f}')
 		f = s.matches[new_idx]
 		setbufline(s.list_buf, new_idx + 1, $'> {has_key(s.marked_files, f) ? '[*]' : '[ ]'} {f}')
 		win_execute(s.list_winid, $'call cursor({new_idx + 1}, 1)')
@@ -412,11 +412,11 @@ def Confirm(s: dict<any>): void
 			elseif index(img, tolower(fnamemodify(f, ':e'))) != -1 || isdirectory(f) || IsBinary(f)
 				if open_b ==# ''
 					echohl ErrorMsg
-					echo $"Binary file: {f}"
+					echo $'Binary file: {f}'
 					echohl None
 				endif
 					echohl ErrorMsg
-					echo systemlist($'{open_b} {fnameescape(f)}')->join("\n")
+					echo systemlist($'{open_b} {fnameescape(f)}')->join('\n')
 					echohl None
 			else
 				execute $'{open} {fnameescape(f)}'
@@ -448,7 +448,7 @@ export def Bridge(cmd: string): void
 		RequestRender(b:fuzzy_state)
 	else
 		echohl ErrorMsg
-		echo "No command!"
+		echo 'No command!'
 		echohl None
 	endif
 enddef
@@ -466,7 +466,7 @@ export def Open(dir: string = ''): void
 		g:fuzzy_file_finder.cmd[ : cmd_place_folder - 1 ] + [target_dir] + g:fuzzy_file_finder.cmd[ cmd_place_folder + 1 : ]
 	if !isdirectory(target_dir)
 		echohl ErrorMsg
-		echo $"Not a directory: {target_dir}"
+		echo $'Not a directory: {target_dir}'
 		echohl None
 		return
 	endif
@@ -498,7 +498,7 @@ export def Open(dir: string = ''): void
 	setbufvar(s.preview_buf, '&buftype', 'nofile')
 	setbufvar(s.preview_buf, '&bufhidden', 'wipe')
 	s.list_winid = popup_create(s.list_buf, {
-		title: $" [{s.target}] 0/0",
+		title: $' [{s.target}] 0/0',
 		line: 2,
 		col: 1,
 		minwidth: main_width,
@@ -510,7 +510,7 @@ export def Open(dir: string = ''): void
 		cursorline: true
 	})
 	s.preview_winid = popup_create(s.preview_buf, {
-		title: " Preview ",
+		title: ' Preview ',
 		line: 2,
 		col: main_width + 3,
 		minwidth: preview_width,
