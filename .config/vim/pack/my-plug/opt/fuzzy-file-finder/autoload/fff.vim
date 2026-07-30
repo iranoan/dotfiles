@@ -229,7 +229,7 @@ def UpdatePreview(s: dict<any>): void
 		return
 	endif
 
-	var p: string = expand(s.matches[s.selected_idx])
+	var p: string = expand(s.matches[s.selected_idx], true)
 	var type: string = GetFileType(p)
 	if s.preview_path ==# p
 		return
@@ -257,13 +257,13 @@ def UpdatePreview(s: dict<any>): void
 		elseif index(keys(g:fuzzy_file_finder.filter), type) != -1
 			setbufline(s.preview_buf, 1, systemlist($'{g:fuzzy_file_finder.filter[type]} {p}'))
 		elseif IsBinary(p)
-			setbufline(s.preview_buf, 1, [" <Binary file> "])
+			setbufline(s.preview_buf, 1, " <Binary file> ")
 		else
 			setbufline(s.preview_buf, 1, readfile(p))
 			setbufvar(s.preview_buf, '&filetype', type)
 		endif
 	else
-		setbufline(s.preview_buf, 1, [$' <Unreadable file>: {p}'])
+		setbufline(s.preview_buf, 1, ' <Unreadable file>')
 	endif
 	setbufvar(s.preview_buf, '&modified', false)
 enddef
@@ -454,7 +454,7 @@ export def Bridge(cmd: string): void
 enddef
 
 export def Open(dir: string = ''): void
-	var target_dir: string = dir ==# '' ? getcwd() : expand(dir)
+	var target_dir: string = dir ==# '' ? getcwd() : expand(dir, true)
 	var main_width: number = &columns * 45 / 100
 	var preview_width: number = &columns - main_width - 3
 	var home_prefix: string = $HOME .. '/'

@@ -32,7 +32,7 @@ export def Preview(id: number, f: string): bool # パス f の画像、動画、
 		return [float2nr(round(w * scale)), float2nr(round(h * scale))]
 	enddef
 
-	var p: string = shellescape(resolve(expand(f)))
+	var p: string = shellescape(resolve(expand(f, true)))
 	var w: number
 	var h: number
 	var t: string
