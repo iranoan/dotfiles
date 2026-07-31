@@ -1,6 +1,40 @@
 vim9script
 scriptencoding utf-8
 
+if !executable('file')
+	|| !executable('ffprobe')
+	|| !executable('pdfinfo')
+	|| !executable('pdftoppm')
+	|| !executable('gs')
+	|| !executable('ffmpeg')
+	popup_notification([
+		'All:        all video/image files use ''file'' command',
+		'image:      FFmgeg (ffmpeg/ffprobe command)',
+		'video:      FFmgeg (ffmpeg/ffprobe command)',
+		'PDF:        Poppler (pdfinfo/pdftoppm command)',
+		'PostScript: Ghostscript and FFmgeg (gs/ffmpeg command)',
+	], {title: ' Need following tools '})
+	# makee dummy function
+	export def Clear(id: number): void
+		return
+	enddef
+	export def Preview(id: number, f: string): bool
+		popup_settext(id, [
+			'        Need following tools',
+			'All:        all video/image files use ''file'' command',
+			'image:      FFmgeg (ffmpeg/ffprobe command)',
+			'video:      FFmgeg (ffmpeg/ffprobe command)',
+			'PDF:        Poppler (pdfinfo/pdftoppm command)',
+			'PostScript: Ghostscript and FFmgeg (gs/ffmpeg command)',
+		] )
+		return true
+	enddef
+	export def ResetPreview(id: number, f: string): void
+		return
+	enddef
+	finish
+endif
+
 g:popup_image_options = extend(deepcopy({pt2px: {x: 96, y: 96}, min_size: {x: 5, y: 5}}), get(g:, 'popup_image_options', {}), 'force')
 
 var popup_options: dict<any> = {
