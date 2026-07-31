@@ -1,7 +1,7 @@
 vim9script
 scriptencoding utf-8
 
-g:fuzzy_file_finder = extend(deepcopy({
+g:fuzzy_file_finder = extendnew({
 	cmd: ['fdfind', '--hidden', '--follow', '--type', 'file', '--type', 'symlink', '--type', 'directory', '--search-path'],
 	type: {
 		ext: {
@@ -82,8 +82,7 @@ g:fuzzy_file_finder = extend(deepcopy({
 	},
 	open: 'edit',
 	dir: true,
-	}
-), get(g:, 'fuzzy_file_finder', {}), 'force')
+}, get(g:, 'fuzzy_file_finder', {}), 'force')
 
 def Cleanup(s: dict<any>): void
 	if s.render_timer != 0
@@ -257,7 +256,12 @@ def UpdatePreview(s: dict<any>): void
 				setbufline(s.preview_buf, 1, '<Broken file>')
 			endif
 		elseif index(keys(g:fuzzy_file_finder.filter), type) != -1
-			setbufline(s.preview_buf, 1, systemlist($'{g:fuzzy_file_finder.filter[type]} {p}'))
+			var filter: string = g:fuzzy_file_finder.filter[type]
+			var filter_place_folder: number = match(filter, '<>')
+			p = shellescape(resolve(expand(p, true)))
+			filter = filter_place_folder == -1 ? $'{filter} {p}' :
+				$'{filter[ : filter_place_folder - 1 ]} {p} {filter[ filter_place_folder + 2 : ]}'
+			setbufline(s.preview_buf, 1, systemlist($'{filter}'))
 		elseif IsBinary(p)
 			setbufline(s.preview_buf, 1, ' <Binary file> ')
 		else
@@ -485,7 +489,7 @@ export def Open(dir: string = ''): void
 	var preview_width: number = &columns - main_width - 3
 	var line_height: number = &lines - 2 - (&laststatus != 0 ? 1 : 0) - &cmdheight
 	var cmd_place_folder: number = index(g:fuzzy_file_finder.cmd, '<>')
-	var cmd: list<string> = cmd_place_folder == -1 ?  g:fuzzy_file_finder.cmd + [target_dir] :
+	var cmd: list<string> = cmd_place_folder == -1 ? g:fuzzy_file_finder.cmd + [target_dir] :
 		cmd_place_folder == len(g:fuzzy_file_finder.cmd) ? g:fuzzy_file_finder.cmd[ : - 2 ] + [target_dir] :
 		g:fuzzy_file_finder.cmd[ : cmd_place_folder - 1 ] + [target_dir] + g:fuzzy_file_finder.cmd[ cmd_place_folder + 1 : ]
 
