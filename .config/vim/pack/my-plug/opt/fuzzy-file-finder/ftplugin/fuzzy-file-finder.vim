@@ -11,6 +11,8 @@ if !exists('g:fuzzy_file_finder_plugin')
 	augroup FuzzyFileFinder
 		autocmd!
 		autocmd FuzzyFileFinder VimResized * fff#Bridge('VimResized')
+		autocmd FuzzyFileFinder CmdwinEnter * fff#Bridge('CmdwinEnter')
+		autocmd FuzzyFileFinder CmdwinLeave * fff#Bridge('CmdwinLeave')
 	augroup END
 endif
 

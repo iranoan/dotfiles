@@ -447,12 +447,31 @@ export def Bridge(cmd: string): void
 	elseif cmd ==# 'Render'
 		RequestRender(b:fuzzy_state)
 	elseif cmd ==# 'VimResized'
-		ChangePopupSize()
+		ChangePopupSize(0)
+	elseif cmd ==# 'CmdwinLeave'
+		if CheckFuzzyFileFinderWin()
+			ChangePopupSize(0)
+		endif
+	elseif cmd ==# 'CmdwinEnter'
+		if CheckFuzzyFileFinderWin()
+			ChangePopupSize(&cmdwinheight + (&laststatus != 0 ? 1 : 0))
+		endif
 	else
 		echohl ErrorMsg
 		echo 'No command!'
 		echohl None
 	endif
+enddef
+
+def CheckFuzzyFileFinderWin(): bool
+	var tabnr: number = tabpagenr()
+
+	for b in tabpagebuflist()
+		if has_key(getbufinfo(b)[0].variables, 'fuzzy_state')
+			return true
+		endif
+	endfor
+	return false
 enddef
 
 export def Open(dir: string = ''): void
@@ -546,10 +565,10 @@ export def Open(dir: string = ''): void
 	startinsert
 enddef
 
-def ChangePopupSize(): void
+def ChangePopupSize(n: number): void
 	var main_width: number = &columns * 45 / 100
 	var preview_width: number = &columns - main_width - 3
-	var line_height: number = &lines - 2 - (&laststatus != 0 ? 1 : 0) - &cmdheight
+	var line_height: number = &lines - 2 - (&laststatus != 0 ? 1 : 0) - &cmdheight - n
 	var winid: number
 	var opts: dict<any>
 
