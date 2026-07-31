@@ -67,7 +67,7 @@ export def Tabedit(...arg: list<string>): void
 		return false
 	enddef
 
-	def Open(f: any, pwd: string): void
+	def Open(f: any): void
 		def AssociateCore(subf: string): void
 			if has('unix')
 				system('xdg-open "' .. subf .. '" &')
@@ -116,45 +116,25 @@ export def Tabedit(...arg: list<string>): void
 			win_id = win_id != 0 ? win_id : winnr()
 		enddef
 
-		def ToFullpath(subf: string, dir: string): string # フルパスに変換
-			# 単純に full = fnamemodify(subf, ':p') だと、複数ファイルを開くときに先に開いたファイルに左右される
-			if has('win32') || has('win32unix')
-				if match(subf, '^\w:') == 0
-					return subf
-				endif
-				return dir .. '/' .. subf
-			else
-				if match(subf, '^/') == 0
-					return subf
-				endif
-				if match(subf, '^\~/') == 0
-					return getenv('HOME') .. strpart(subf, 1)
-				else
-					return dir .. '/' .. subf
-				endif
-			endif
-		enddef
-
-		var full: string = ToFullpath(f, pwd)
-		var ftype: string = getftype(full)
+		var ftype: string = getftype(f)
 		if ftype ==# 'file' || ftype ==# 'link'  # ファイルが存在するなら無条件で開く
-			OpenFile(full)
+			OpenFile(f)
 		elseif ftype ==# 'dir'  # ディレクトリなら Fern で開く
 			var cmd: list<any> = get(g:, 'tabedit_dir', [])
 			if cmd == []
-				AssociateCore(full)
+				AssociateCore(f)
 			else
 				if cmd[1]
-					call(function(cmd[0], [full]), [])
+					call(function(cmd[0], [f]), [])
 				else
-					execute cmd[0] .. ' ' .. full
+					execute cmd[0] .. ' ' .. f
 				endif
 			endif
 		else
 			if wordcount().bytes == 0 && &modified == false && len(tabpagebuflist()) == 1
-				execute 'silent edit ' .. full
+				execute 'silent edit ' .. f
 			else
-				execute 'silent tabedit ' .. full
+				execute 'silent tabedit ' .. f
 			endif
 		endif
 	enddef
@@ -163,14 +143,13 @@ export def Tabedit(...arg: list<string>): void
 		tabedit
 		return
 	endif
-	var pwd: string = getcwd()
-	for files in arg
+	for files in map(arg, (_, v) => fnamemodify(v, ':p'))
 		var fs: list<string> = glob(files, true, true, true)
 		if fs ==# [] # 存在しないファイル
-			Open(files, pwd)
+			Open(files)
 		else
 			for f in fs
-				Open(f, pwd)
+				Open(f)
 			endfor
 		endif
 	endfor
