@@ -174,7 +174,7 @@ case "${f##*/}" in # ファイル名による分岐
 							echo "$mime"
 						fi
 						;;
-					audio/* )                      ffmpeg -hide_banner -i "$f" -f metadata - | tail -n +2 ;;
+					audio/* )                      ffprobe -hide_banner "$f";;
 					text/csv)                      nkf -wd "$f" | ~/bin/csv2tsv.awk | ~/bin/tsv2table.awk ;;
 					text/tab-separated-values|text/tsv) nkf -wd "$f" | ~/bin/tsv2table.awk ;;
 					text/*|application/xhtml+xml|application/javascript|application/rdf+xml|application/toml|application/x-awk|application/x-desktop|application/x-gnuplot|application/x-perl|application/x-php|application/x-ruby|application/x-shellscript|application/x-troff-man|application/x-yaml|application/xml )
