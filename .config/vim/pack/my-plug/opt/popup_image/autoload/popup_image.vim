@@ -116,6 +116,7 @@ export def Preview(id: number, f: string): bool # パス f の画像、動画、
 		border: [0, 0, 0, 0],
 		padding: [0, 0, 0, 0], opacity: 0
 	})
+	redraw
 	return true
 enddef
 
