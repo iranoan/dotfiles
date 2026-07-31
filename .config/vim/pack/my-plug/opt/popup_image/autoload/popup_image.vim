@@ -35,8 +35,6 @@ if !executable('file')
 	finish
 endif
 
-g:popup_image_options = extend(deepcopy({pt2px: {x: 96, y: 96}, min_size: {x: 5, y: 5}}), get(g:, 'popup_image_options', {}), 'force')
-
 var popup_options: dict<any> = {
 	image: {},
 	border: [1, 1, 1, 1],
