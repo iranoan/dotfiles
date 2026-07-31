@@ -45,5 +45,5 @@ nnoremap <buffer> <silent> <PageUp>   <Cmd>call fff#Bridge('MovePageUp')<CR>
 nnoremap <buffer> <silent> <C-b>      <Cmd>call fff#Bridge('MovePageUp')<CR>
 inoremap <buffer> <silent> <PageUp>   <Cmd>call fff#Bridge('MovePageUp')<CR>
 inoremap <buffer> <silent> <C-b>      <Cmd>call fff#Bridge('MovePageUp')<CR>
-# nnoremap <buffer> <silent> <C-]>      <Cmd>call fff#Bridge('VimResized')<CR>
-# inoremap <buffer> <silent> <C-]>      <Cmd>call fff#Bridge('VimResized')<CR>
+nnoremap <buffer> <silent> <C-]>      <Cmd>call fff#Bridge('TogglePreview')<CR>
+inoremap <buffer> <silent> <C-]>      <Cmd>call fff#Bridge('TogglePreview')<CR>

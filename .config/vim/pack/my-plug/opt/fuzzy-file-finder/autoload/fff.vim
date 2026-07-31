@@ -9,6 +9,8 @@ g:fuzzy_file_finder = extend(deepcopy({
 			c: 'c',
 			cc: 'cpp',
 			cpp: 'cpp',
+			csv: 'csv',
+			tsv: 'tsv',
 			go: 'go',
 			h: 'c',
 			htm: 'html',
@@ -60,7 +62,7 @@ g:fuzzy_file_finder = extend(deepcopy({
 		'avif', 'bmp', 'cgm', 'cr2', 'cur', 'dl', 'dvi', 'emf', 'eps', 'gif', 'ico', 'j2c', 'j2k', 'jp2', 'jpeg', 'jpg',
 		'jpf', 'jpx', 'jxl', 'mng', 'nef', 'pbm', 'pcx', 'pgm', 'png', 'ppm', 'svg', 'svgz', 'tga', 'tiff', 'webp',
 		'xbm', 'xcf', 'xpm', 'xwd', 'yuv',
-		# PNG
+		# PDF
 		'pdf'
 	],
 	filter: {
@@ -447,15 +449,17 @@ export def Bridge(cmd: string): void
 	elseif cmd ==# 'Render'
 		RequestRender(b:fuzzy_state)
 	elseif cmd ==# 'VimResized'
-		ChangePopupSize(0)
+		ChangePopupSize(false)
 	elseif cmd ==# 'CmdwinLeave'
 		if CheckFuzzyFileFinderWin()
-			ChangePopupSize(0)
+			ChangePopupSize(false)
 		endif
 	elseif cmd ==# 'CmdwinEnter'
 		if CheckFuzzyFileFinderWin()
-			ChangePopupSize(&cmdwinheight + (&laststatus != 0 ? 1 : 0))
+			ChangePopupSize(true)
 		endif
+	elseif cmd ==# 'TogglePreview'
+		TogglePreview(b:fuzzy_state)
 	else
 		echohl ErrorMsg
 		echo 'No command!'
@@ -506,6 +510,7 @@ export def Open(dir: string = ''): void
 		target: stridx(target_dir, $'{$HOME}/') == 0 ? '~/' .. target_dir[len($'{$HOME}/') :] : target_dir,
 		list_winid: 0,
 		preview_winid: 0,
+		preview_on: true,
 		render_timer: 0,
 		is_dirty: false,
 		job: null_job
@@ -514,7 +519,9 @@ export def Open(dir: string = ''): void
 	bufload(s.list_buf)
 	setbufvar(s.list_buf, '&buftype', 'nofile')
 	setbufvar(s.list_buf, '&bufhidden', 'wipe')
-	# setbufvar(s.list_buf, '&formatlistpat', '^[> ] \[[ *]\] ')
+	# setbufvar(s.list_buf, '&breakindent', 1)
+	# setbufvar(s.list_buf, '&breakindentopt', 'list:-1')
+	# setbufvar(s.list_buf, '&formatlistpat', '^[[] >*]\+')
 	bufload(s.preview_buf)
 	setbufvar(s.preview_buf, '&buftype', 'nofile')
 	setbufvar(s.preview_buf, '&bufhidden', 'wipe')
@@ -565,38 +572,72 @@ export def Open(dir: string = ''): void
 	startinsert
 enddef
 
-def ChangePopupSize(n: number): void
-	var main_width: number = &columns * 45 / 100
-	var preview_width: number = &columns - main_width - 3
-	var line_height: number = &lines - 2 - (&laststatus != 0 ? 1 : 0) - &cmdheight - n
+def ChangePopupSize(cmdwin: bool): void
+	var main_width: number
+	var preview_width: number
+	var line_height: number
 	var winid: number
 	var opts: dict<any>
 
+	if cmdwin
+			|| gettabinfo()[0].windows->map((_, v) => win_gettype(v))->index('command') != -1 # コマンド・ライン・ウィンドウがある
+		line_height = &lines - 2 - (&laststatus != 0 ? 1 : 0) - &cmdheight - (&cmdwinheight + (&laststatus != 0 ? 1 : 0))
+	else
+		line_height = &lines - 2 - (&laststatus != 0 ? 1 : 0) - &cmdheight
+	endif
 	for v in getbufinfo()
 			->filter((_, v) => has_key(v.variables, 'fuzzy_state'))
 			->map((_, v) => v.variables.fuzzy_state)
+		if v.preview_on # プレビューが表示されている
+			main_width = &columns * 45 / 100
+			preview_width = &columns - main_width - 3
+			winid = v.preview_winid
+			if winbufnr(winid) != -1
+				opts = popup_getoptions(winid)
+				if opts.maxwidth != preview_width || opts.maxheight != line_height
+					popup_setoptions(winid, extendnew(opts, {
+						col: main_width + 3,
+						minwidth: preview_width,
+						maxwidth: preview_width,
+						minheight: line_height,
+						maxheight: line_height
+					}))
+					if get(opts, 'image', {}) != {}
+						popup_image#ResetPreview(winid, v.matches[v.selected_idx])
+					endif
+				endif
+			endif
+		else
+			main_width = &columns
+		endif
 		winid = v.list_winid
 		if winbufnr(winid) != -1
-			popup_setoptions(winid, extendnew(popup_getoptions(winid), {
-				minwidth: main_width,
-				maxwidth: main_width,
-				minheight: line_height,
-				maxheight: line_height
-			}))
-		endif
-		winid = v.preview_winid
-		if winbufnr(winid) != -1
 			opts = popup_getoptions(winid)
-			popup_setoptions(winid, extendnew(opts, {
-				col: main_width + 3,
-				minwidth: preview_width,
-				maxwidth: preview_width,
-				minheight: line_height,
-				maxheight: line_height
-			}))
-			if get(opts, 'image', {}) != {}
-				popup_image#ResetPreview(winid, v.matches[v.selected_idx])
+			if opts.maxwidth != main_width || opts.maxheight != line_height
+				popup_setoptions(winid, extendnew(opts, {
+					minwidth: main_width,
+					maxwidth: main_width,
+					minheight: line_height,
+					maxheight: line_height
+				}))
 			endif
 		endif
 	endfor
+enddef
+
+def TogglePreview(s: dict<any>): void
+	var winid: number = s.preview_winid
+	var opts: dict<any>
+
+	if winid == -1
+		return
+	endif
+	if s.preview_on
+		popup_hide(winid)
+		s.preview_on = false
+	else
+		popup_show(winid)
+		s.preview_on = true
+	endif
+	ChangePopupSize(false)
 enddef
