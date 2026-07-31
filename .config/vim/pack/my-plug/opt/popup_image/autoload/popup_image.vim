@@ -85,3 +85,12 @@ export def Preview(id: number, f: string): bool # パス f の画像、動画、
 	return true
 enddef
 
+export def ResetPreview(id: number, f: string): void
+	popup_options = extendnew(popup_getoptions(id), {image: {}})
+	popup_setoptions(id, popup_options)
+	if tabpagenr() == getwininfo(id)[0].tabnr
+		Preview(id, f)
+	else
+		execute $'autocmd FuzzyFileFinder TabEnter * ++once if tabpagenr() == {getwininfo(id)[0].tabnr} | call popup_image#Preview({id}, ''{f}'') | endif'
+	endif
+enddef

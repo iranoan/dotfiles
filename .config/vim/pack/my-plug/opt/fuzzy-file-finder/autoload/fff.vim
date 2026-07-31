@@ -446,6 +446,8 @@ export def Bridge(cmd: string): void
 		Cleanup(b:fuzzy_state)
 	elseif cmd ==# 'Render'
 		RequestRender(b:fuzzy_state)
+	elseif cmd ==# 'VimResized'
+		ChangePopupSize()
 	else
 		echohl ErrorMsg
 		echo 'No command!'
@@ -511,6 +513,7 @@ export def Open(dir: string = ''): void
 	})
 	s.preview_winid = popup_create(s.preview_buf, {
 		title: ' Preview ',
+		wrap: false,
 		line: 2,
 		col: main_width + 3,
 		minwidth: preview_width,
@@ -521,6 +524,7 @@ export def Open(dir: string = ''): void
 		borderchars: ['-', '|', '-', '|', '+', '+', '+', '+'],
 		image: {}
 	})
+	execute $'colorscheme {g:colors_name}' # これがないと画像表示状態で ChangePopupSize() が起きると、テキスト背景が標準色 (黒/白) になる (filetype を変えるため)
 	s.canceled = false
 	s.job = job_start(cmd, {
 		out_cb: (ch, msg) => {
@@ -540,4 +544,40 @@ export def Open(dir: string = ''): void
 	b:fuzzy_state = s
 	Render(s)
 	startinsert
+enddef
+
+def ChangePopupSize(): void
+	var main_width: number = &columns * 45 / 100
+	var preview_width: number = &columns - main_width - 3
+	var line_height: number = &lines - 2 - (&laststatus != 0 ? 1 : 0) - &cmdheight
+	var winid: number
+	var opts: dict<any>
+
+	for v in getbufinfo()
+			->filter((_, v) => has_key(v.variables, 'fuzzy_state'))
+			->map((_, v) => v.variables.fuzzy_state)
+		winid = v.list_winid
+		if winbufnr(winid) != -1
+			popup_setoptions(winid, extendnew(popup_getoptions(winid), {
+				minwidth: main_width,
+				maxwidth: main_width,
+				minheight: line_height,
+				maxheight: line_height
+			}))
+		endif
+		winid = v.preview_winid
+		if winbufnr(winid) != -1
+			opts = popup_getoptions(winid)
+			popup_setoptions(winid, extendnew(opts, {
+				col: main_width + 3,
+				minwidth: preview_width,
+				maxwidth: preview_width,
+				minheight: line_height,
+				maxheight: line_height
+			}))
+			if get(opts, 'image', {}) != {}
+				popup_image#ResetPreview(winid, v.matches[v.selected_idx])
+			endif
+		endif
+	endfor
 enddef

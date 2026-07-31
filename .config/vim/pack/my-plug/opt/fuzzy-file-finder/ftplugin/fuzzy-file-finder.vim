@@ -10,6 +10,7 @@ if !exists('g:fuzzy_file_finder_plugin')
 	g:fuzzy_file_finder_plugin = 1
 	augroup FuzzyFileFinder
 		autocmd!
+		autocmd FuzzyFileFinder VimResized * fff#Bridge('VimResized')
 	augroup END
 endif
 
@@ -42,3 +43,5 @@ nnoremap <buffer> <silent> <PageUp>   <Cmd>call fff#Bridge('MovePageUp')<CR>
 nnoremap <buffer> <silent> <C-b>      <Cmd>call fff#Bridge('MovePageUp')<CR>
 inoremap <buffer> <silent> <PageUp>   <Cmd>call fff#Bridge('MovePageUp')<CR>
 inoremap <buffer> <silent> <C-b>      <Cmd>call fff#Bridge('MovePageUp')<CR>
+# nnoremap <buffer> <silent> <C-]>      <Cmd>call fff#Bridge('VimResized')<CR>
+# inoremap <buffer> <silent> <C-]>      <Cmd>call fff#Bridge('VimResized')<CR>
