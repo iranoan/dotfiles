@@ -61,7 +61,7 @@ g:fuzzy_file_finder = extendnew({
 		# Image
 		'avif', 'bmp', 'cgm', 'cr2', 'cur', 'dl', 'dvi', 'emf', 'eps', 'gif', 'ico', 'j2c', 'j2k', 'jp2', 'jpeg', 'jpg',
 		'jpf', 'jpx', 'jxl', 'mng', 'nef', 'pbm', 'pcx', 'pgm', 'png', 'ppm', 'svg', 'svgz', 'tga', 'tiff', 'webp',
-		'xbm', 'xcf', 'xpm', 'xwd', 'yuv',
+		'xcf', 'xpm', 'xwd', 'yuv',
 		# PDF
 		'pdf'
 	],

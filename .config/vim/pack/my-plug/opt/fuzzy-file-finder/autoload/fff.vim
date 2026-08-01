@@ -139,8 +139,7 @@ enddef
 def UpdatePreview(s: dict<any>): void
 	if empty(s.matches)
 		s.preview_path = ''
-		deletebufline(s.preview_buf, 2, '$')
-		setbufline(s.preview_buf, 1, '<No selection>')
+		popup_settext(s.preview_winid, '<No selection>')
 		setbufvar(s.preview_buf, '&filetype', '')
 		setbufvar(s.preview_buf, '&modified', false)
 		popup_image#Clear(s.preview_winid)
@@ -154,12 +153,12 @@ def UpdatePreview(s: dict<any>): void
 	endif
 	popup_image#Clear(s.preview_winid)
 	setbufvar(s.preview_buf, '&filetype', '')
-	deletebufline(s.preview_buf, 1, '$')
+	# deletebufline(s.preview_winid, [])
 	s.preview_path = p
 	if isdirectory(p)
 		var files: list<dict<any>> = GetFileInfo(p)
 		var max_len: number = max(files->mapnew((_, v) => len(v.size_s)))
-		setbufline(s.preview_buf, 1, sort(files, (v0, v1) =>
+		popup_settext(s.preview_winid, sort(files, (v0, v1) =>
 		                                         v0.time > v1.time ? -1 : v0.time < v1.time ? 1 : # 更新日時降順
 		                                         v0.lower_name < v1.lower_name ? -1 : v0.lower_name > v1.lower_name ? 1 : # ファイル名順 (大小文字区別なし)
 		                                         v0.name < v1.name ? -1 : 1 ) # 大文字先
@@ -169,24 +168,25 @@ def UpdatePreview(s: dict<any>): void
 		)
 	elseif filereadable(p)
 		if index(g:fuzzy_file_finder.image, tolower(fnamemodify(p, ':e'))) != -1
-			if !popup_image#Preview(s.preview_winid, p)
-				setbufline(s.preview_buf, 1, '<Broken file>')
-			endif
+			# if !popup_image#Preview(s.preview_winid, p)
+			# 	popup_settext(s.preview_winid, '<Broken file>')
+			# endif
+			popup_image#Preview(s.preview_winid, p)
 		elseif index(keys(g:fuzzy_file_finder.filter), type) != -1
 			var filter: string = g:fuzzy_file_finder.filter[type]
 			var filter_place_folder: number = match(filter, '<>')
 			p = shellescape(resolve(expand(p, true)))
 			filter = filter_place_folder == -1 ? $'{filter} {p}' :
 				$'{filter[ : filter_place_folder - 1 ]} {p} {filter[ filter_place_folder + 2 : ]}'
-			setbufline(s.preview_buf, 1, systemlist($'{filter}'))
+			popup_settext(s.preview_winid, systemlist($'{filter}'))
 		elseif IsBinary(p)
-			setbufline(s.preview_buf, 1, ' <Binary file> ')
+			popup_settext(s.preview_winid, ' <Binary file> ')
 		else
-			setbufline(s.preview_buf, 1, readfile(p))
+			popup_settext(s.preview_winid, readfile(p))
 			setbufvar(s.preview_buf, '&filetype', type)
 		endif
 	else
-		setbufline(s.preview_buf, 1, ' <Unreadable file>')
+		popup_settext(s.preview_winid, ' <Unreadable file>')
 	endif
 	setbufvar(s.preview_buf, '&modified', false)
 enddef
@@ -222,8 +222,7 @@ def Render(s: dict<any>): void
 	})
 	SetListTitle(s)
 
-	deletebufline(s.list_buf, 1, '$')
-	setbufline(s.list_buf, 1, display_matches)
+	popup_settext(s.list_winid, display_matches)
 	setbufvar(s.list_buf, '&modified', false)
 	UpdatePreview(s)
 	win_execute(s.list_winid, $'call cursor({cursor_idx}, 1)')
@@ -456,6 +455,7 @@ export def Open(dir: string = ''): void
 		maxheight: line_height,
 		border: [1, 1, 0, 0],
 		borderchars: ['-', '|', '-', '|', '+', '+', '+', '+'],
+		padding: [0, 0, 0, 0],
 		cursorline: true
 	})
 	s.preview_winid = popup_create(s.preview_buf, {
@@ -469,7 +469,7 @@ export def Open(dir: string = ''): void
 		maxheight: line_height,
 		border: [1, 0, 0, 0],
 		borderchars: ['-', '|', '-', '|', '+', '+', '+', '+'],
-		image: {}
+		padding: [0, 0, 0, 0],
 	})
 	execute $'colorscheme {g:colors_name}' # これがないと画像表示状態で ChangePopupSize() が起きると、テキスト背景が標準色 (黒/白) になる (filetype を変えるため)
 	s.canceled = false
