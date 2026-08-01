@@ -27,7 +27,8 @@ if !executable('file')
 			'PDF:        Poppler (pdfinfo/pdftoppm command)',
 			'PostScript: Ghostscript and FFmgeg (gs/ffmpeg command)',
 		] )
-		return true
+		popup_setoptions(id, {highlight: 'WarningMsg'})
+		return false
 	enddef
 	export def ResetPreview(id: number, f: string): void
 		return
@@ -35,16 +36,31 @@ if !executable('file')
 	finish
 endif
 
-var popup_options: dict<any> = {
-	image: {},
-	border: [1, 1, 1, 1],
-	padding: [1, 1, 1, 1],
-	opacity: 100
+var popup_image: dict<any> = {
+	clear: {}, # クリアする時に設定するオプション
+	options: { # イメージ表示で変更するオプション
+		border: [1, 1, 1, 1],
+		opacity: 100
+	}
 }
 
 export def Clear(id: number): void
-	if has_key(popup_getoptions(id), 'image')
-		popup_setoptions(id, popup_options)
+	var opts: dict<any> = popup_getoptions(id)
+	# if get(opts, 'image', {}) == {}
+	if !has_key(opts, 'image')
+		if popup_image.clear ==# {}
+			popup_image.clear = {
+				highlight: opts.highlight ==# '' ? 'Pmenu' : opts.highlight,
+				highlights: opts.highlights ==# '' ? '' : opts.highlights,
+				image: {}
+			}
+		endif
+		extend(popup_image.options, extendnew(opts, popup_image.clear))
+		popup_setoptions(id, popup_image.options)
+	# elseif get(opts, 'image', {}) == {}
+	# 	popup_setoptions(id, extendnew(popup_image.options, popup_image.clear))
+	else
+		popup_setoptions(id, extendnew(popup_image.options, popup_image.clear))
 		redraw!
 	endif
 enddef
@@ -75,15 +91,16 @@ export def Preview(id: number, f: string): bool # パス f の画像、動画、
 	var img_data: blob
 	var w_h: list<number>
 
-	if get(opts, 'image', {}) == {}
-		popup_options = extendnew(opts, {image: {}})
-	else # 連続して呼び出されたときに、消さないと後ろに残る
-		Clear(id)
+	if has_key(opts, 'image') # 連続して呼び出されたときに、消さないと後ろに残る
+		popup_setoptions(id, {image: {}})
+		redraw
 	endif
 	if ft =~# '^video/'
 		t = '-ss ' .. str2nr(system('ffprobe -v error -show_entries format=duration -of csv=p=0 ' .. p )) / 10.0
 	elseif ft !=# 'application/pdf' && ft !~# '^image/' && ft !=# 'application/postscript'
-		return true
+		popup_settext(id, ['support mimetype video/*, image/*, application/pdf, application/postscript'])
+		popup_setoptions(id, {highlight: 'WarningMsg'})
+		return false
 	endif
 	if ft ==# 'application/pdf'
 		[w, h] = systemlist('pdfinfo ' ..  p)
@@ -105,22 +122,31 @@ export def Preview(id: number, f: string): bool # パス f の画像、動画、
 		img_data = str2blob(systemlist($'ffmpeg {t} -i {p} -vf ''scale={w}:{h}'' -vframes 1 -f rawvideo -pix_fmt rgb24 - 2> /dev/null'))
 	endif
 	if len(img_data) != w * h * 3
+		popup_settext(id, [
+			'''data size'' is not eqal ''width x height x 3''',
+			$'data size:          {len(img_data)}',
+			$'width:              {w}',
+			$'height:             {h}',
+			$'width x height x 3: {w * h * 3}',
+		])
+		popup_setoptions(id, {highlight: 'WarningMsg'})
 		return false
 	endif
-	popup_setoptions(id, {
+	popup_setoptions(id, extendnew(popup_image.options, {
 		image: {data: img_data, width: w, height: h},
 		maxwidth: max_w, # 縦横サイズを指定しないと、連続して使われたときに直前に表示された画像サイズに引きずられる
 		maxheight: max_h,
 		border: [0, 0, 0, 0],
-		padding: [0, 0, 0, 0], opacity: 0
-	})
+		opacity: 0
+	}))
+	popup_settext(id, [])
 	redraw
 	return true
 enddef
 
 export def ResetPreview(id: number, f: string): void
-	popup_options = extendnew(popup_getoptions(id), {image: {}})
-	popup_setoptions(id, popup_options)
+	popup_image.options = extendnew(popup_getoptions(id), {image: {}})
+	popup_setoptions(id, popup_image.options)
 	if tabpagenr() == getwininfo(id)[0].tabnr
 		Preview(id, f)
 	else
