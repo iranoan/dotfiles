@@ -4,14 +4,14 @@ scriptencoding utf-8
 if !executable('file')
 	|| !executable('ffprobe')
 	|| !executable('pdfinfo')
-	|| !executable('pdftoppm')
+	|| !executable('magick')
 	|| !executable('gs')
 	|| !executable('ffmpeg')
 	popup_notification([
 		'All:        all video/image files use ''file'' command',
 		'image:      FFmgeg (ffmpeg/ffprobe command)',
 		'video:      FFmgeg (ffmpeg/ffprobe command)',
-		'PDF:        Poppler (pdfinfo/pdftoppm command)',
+		'PDF:        ImageMagick (magick command)',
 		'PostScript: Ghostscript and FFmgeg (gs/ffmpeg command)',
 	], {title: ' Need following tools '})
 	# makee dummy function
@@ -24,7 +24,7 @@ if !executable('file')
 			'All:        all video/image files use ''file'' command',
 			'image:      FFmgeg (ffmpeg/ffprobe command)',
 			'video:      FFmgeg (ffmpeg/ffprobe command)',
-			'PDF:        Poppler (pdfinfo/pdftoppm command)',
+			'PDF:        ImageMagick (magick command)',
 			'PostScript: Ghostscript and FFmgeg (gs/ffmpeg command)',
 		] )
 		popup_setoptions(id, {highlight: 'WarningMsg'})
@@ -65,9 +65,22 @@ export def Clear(id: number): void
 	endif
 enddef
 
+def Str2Blob(cmd: string): blob
+	if has('unix')
+		silent return str2blob([system(substitute(cmd, '<>', '-', ''))])
+	else
+		var tmp: string = tempname()
+		var b: blob
+		silent system(substitute(cmd, '<>', $'{escape(shellescape(tmp), '\')}', ''))
+		b = readblob(tmp)
+		delete(tmp)
+		return b
+	endif
+enddef
+
 export def Preview(id: number, f: string): bool # パス f の画像、動画、PDF を表示
 	var opts: dict<any> = popup_getoptions(id)
-	var max_w: number = opts.maxwidth ==  0 ? &columns : opts.maxwidth
+	var max_w: number = opts.maxwidth  == 0 ? &columns : opts.maxwidth
 	var max_h: number = opts.maxheight == 0 ? &lines   : opts.maxheight
 
 	def ScaleImage(w: number, h: number): list<number>
@@ -87,7 +100,7 @@ export def Preview(id: number, f: string): bool # パス f の画像、動画、
 	var w: number
 	var h: number
 	var t: string
-	var ft: string = systemlist('file --mime-type --brief ' .. p)[0]
+	silent var ft: string = systemlist('file --mime-type --brief ' .. p)[0]
 	var img_data: blob
 	var w_h: list<number>
 
@@ -96,30 +109,29 @@ export def Preview(id: number, f: string): bool # パス f の画像、動画、
 		redraw
 	endif
 	if ft =~# '^video/'
-		t = '-ss ' .. str2nr(system('ffprobe -v error -show_entries format=duration -of csv=p=0 ' .. p )) / 10.0
+		silent t = '-ss ' .. str2nr(system('ffprobe -v error -show_entries format=duration -of csv=p=0 ' .. p )) / 10.0
 	elseif ft !=# 'application/pdf' && ft !~# '^image/' && ft !=# 'application/postscript'
 		popup_settext(id, ['support mimetype video/*, image/*, application/pdf, application/postscript'])
 		popup_setoptions(id, {highlight: 'WarningMsg'})
 		return false
 	endif
 	if ft ==# 'application/pdf'
-		[w, h] = systemlist('pdfinfo ' ..  p)
-			->filter((_, v) => v =~ '^Page size: ')[0]
-			->matchlist('^Page size: \+\zs\(\d\+\.\?\d*\) x \(\d\+\.\?\d*\) pts')[1 : 2]
-			->map((_, v) => float2nr(round(str2float(v) * 80 / 72)))
+		silent [w, h] = systemlist($'magick identify -format "%w %h\n" {p}[0]')[0]
+			->matchlist($'\(\d\+\) \(\d\+\)')[1 : 2]
+			->map((_, v) => str2nr(v) * 5)
 		[w, h] = ScaleImage(w, h)
-		img_data = str2blob(systemlist($'pdftoppm -f 1 -l 1 -r 80 -scale-to-x {w} -scale-to-y {h} {p}')[3 : ])
+		img_data = Str2Blob($'magick convert -density 300 -depth 8 -resize {w}x{h}! {p}[0] -background white -alpha remove rgb:<>')
 	elseif ft ==# 'application/postscript'
-		w_h = systemlist($'gs -dQUIET -dBATCH -dNOPAUSE -sDEVICE=bbox {p} 2>&1')
+		silent w_h = systemlist($'gs -dQUIET -dBATCH -dNOPAUSE -sDEVICE=bbox {p} 2>&1')
 			->matchlist('^%%BoundingBox: \+\zs\(\d\+\.\?\d*\) \(\d\+\.\?\d*\) \(\d\+\.\?\d*\) \(\d\+\.\?\d*\)')[1 : ]
 			->map((_, v) => float2nr(round(str2float(v) * 300 / 72)))
 		[w, h] = ScaleImage(w_h[2] - w_h[0], w_h[3] - w_h[1])
-		img_data = str2blob(systemlist($'gs -dQUIET -dBATCH -dNOPAUSE -dNOPROMPT -sDEVICE=png16m -r300 -sOutputFile=- {p} | ffmpeg -i - -f rawvideo -vf ''scale={w}:{h}'' -pix_fmt rgb24 - 2> /dev/null'))
+		img_data = Str2Blob($'gs -dQUIET -dBATCH -dNOPAUSE -dNOPROMPT -sDEVICE=png16m -r300 -g{w_h[2]}x{w_h[3]} -sOutputFile=- {p} | ffmpeg -i - -f rawvideo -vf ''scale={w}:{h}'' -pix_fmt rgb24 <> 2> /dev/null')
 	else
-		[w, h] = split(system('ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 ' .. p), ',')
-		         	->map((_, v) => str2nr(v))
+		silent [w, h] = split(system($'ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 {p}'), ',')
+			->map((_, v) => str2nr(v))
 		[w, h] = ScaleImage(w, h)
-		img_data = str2blob(systemlist($'ffmpeg {t} -i {p} -vf ''scale={w}:{h}'' -vframes 1 -f rawvideo -pix_fmt rgb24 - 2> /dev/null'))
+		img_data = Str2Blob($'ffmpeg {t} -i {p} -vf ''scale={w}:{h}'' -vframes 1 -f rawvideo -pix_fmt rgb24 <> 2> /dev/null')
 	endif
 	if len(img_data) != w * h * 3
 		popup_settext(id, [
