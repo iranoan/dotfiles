@@ -34,31 +34,28 @@ if !executable('mimetype')
 	finish
 endif
 
-var popup_image: dict<any> = {
-	clear: {}, # クリアする時に設定するオプション
-	options: { # イメージ表示で変更するオプション
-		border: [1, 1, 1, 1],
-		opacity: 100
-	}
-}
-
 export def Clear(id: number): void
 	var opts: dict<any> = popup_getoptions(id)
-	# if get(opts, 'image', {}) == {}
 	if !has_key(opts, 'image')
-		if popup_image.clear ==# {}
-			popup_image.clear = {
-				highlight: opts.highlight ==# '' ? 'Pmenu' : opts.highlight,
-				highlights: opts.highlights ==# '' ? '' : opts.highlights,
-				image: {}
-			}
+		if getwinvar(id, 'popup_image', {}) ==# {}
+			setwinvar(id, 'popup_image', {
+				clear: { # クリアする時に設定するオプション
+					highlight: opts.highlight ==# '' ? 'Pmenu' : opts.highlight,
+					highlights: opts.highlights ==# '' ? '' : opts.highlights,
+					image: {}
+				},
+				options: { # イメージ表示で変更するオプション
+					border: [1, 1, 1, 1],
+					opacity: 100
+				}
+			})
 		endif
-		extend(popup_image.options, extendnew(opts, popup_image.clear))
-		popup_setoptions(id, popup_image.options)
-	# elseif get(opts, 'image', {}) == {}
-	# 	popup_setoptions(id, extendnew(popup_image.options, popup_image.clear))
+		var default_opts: dict<any> = getwinvar(id, 'popup_image', {})
+		extend(default_opts.options, extendnew(opts, default_opts.clear))
+		popup_setoptions(id, default_opts.options)
+		setwinvar(id, 'popup_image', default_opts)
 	else
-		popup_setoptions(id, extendnew(popup_image.options, popup_image.clear))
+		popup_setoptions(id, extendnew(getwinvar(id, 'popup_image', {options: {}}).options, getwinvar(id, 'popup_image', {clear: {}}).clear))
 		redraw!
 	endif
 enddef
@@ -141,7 +138,7 @@ export def Preview(id: number, f: string): bool # パス f の画像、動画、
 		popup_setoptions(id, {highlight: 'WarningMsg'})
 		return false
 	endif
-	popup_setoptions(id, extendnew(popup_image.options, {
+	popup_setoptions(id, extendnew(getwinvar(id, 'popup_image', {options: {}}).options, {
 		image: {data: img_data, width: w, height: h},
 		maxwidth: max_w, # 縦横サイズを指定しないと、連続して使われたときに直前に表示された画像サイズに引きずられる
 		maxheight: max_h,
@@ -154,8 +151,10 @@ export def Preview(id: number, f: string): bool # パス f の画像、動画、
 enddef
 
 export def ResetPreview(id: number, f: string): void
-	popup_image.options = extendnew(popup_getoptions(id), {image: {}})
-	popup_setoptions(id, popup_image.options)
+	var opts: dict<any> = getwinvar(id, 'popup_image', {options: {}})
+
+	opts.options = extendnew(popup_getoptions(id), {image: {}})
+	popup_setoptions(id, getwinvar(id, 'popup_image', {options: {}}).options)
 	if tabpagenr() == getwininfo(id)[0].tabnr
 		Preview(id, f)
 	else
