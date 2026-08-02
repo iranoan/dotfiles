@@ -1,0 +1,104 @@
+*popup_image* 動画・画像をプレビュー
+
+Author:  Iranoan <iranoan+vim@gmail.com>
+Repository: https://github.com/iranoan/popup_image
+License: GPL Ver.3.
+
+
+==============================================================================
+                                                          *popup_image-contents*
+目次~
+
+* 概要                                                |popup_image-introduction|
+* 要件                                                     |popup_image-require|
+* インストール                                             |popup_image-install|
+* 使用方法                                                     |popup_image-use|
+* 設定/オプション                                           |popup_image-custom|
+  - pt2px                                            |popup_image_options-pt2px|
+  - min_size                                      |popup_image_options-min_size|
+
+==============================================================================
+                                                           *popup_image-require*
+要件~
+
+* 全てのファイルで mimetype コマンド
+* 画像/動画は FFmgeg (ffmpeg/ffprobe コマンド)
+* PDF/PostScript は ImageMagick (magick コマンド)
+
+==============================================================================
+                                                       *popup_image-introduction*
+概要~
+
+ポップアップ・ウィンドウに画像・動画などのプレビューを表示する
+|popup-image| を利用しているので、CUI 環境では実際に表示されるかどうかは使用して
+いるターミナルに依存する
+
+==============================================================================
+                                                           *popup_image-install*
+インストール~
+
+使用しているパッケージ・マネージャに従えば良い
+
+==============================================================================
+                                                               *popup_image-use*
+使用方法~
+
+>vim
+	let g:popup_image_options = #{pt2px: #{x: 131, y: 154}}
+	packadd popup_image
+	let id = popup_create(bufadd(''), #{filter: {id, _ -> popup_close(id)}})
+	call popup_image#Preview(id, "sample.jpg")
+<
+
+>vim
+	vim9script
+	g:popup_image_options = {pt2px: {x: 131, y: 154}}
+	packadd popup_image
+	var id: number = popup_create(bufadd(""), {filter: (id, _) => {
+	    popup_close(id)
+	    return
+	    }})
+	popup_image#Preview(id, "sample.jpg")
+<
+
+上記の例では、カレントディレクトリにある sample.jpg を表示し、何らかの入力があ
+れば閉じる
+
+どこにどのような大きさで表示するかは、|popup_create()|, |popup_setoptions()|
+によって制御する
+
+ただし
+* ボーダー非表示
+* パディング無しは固定
+* 画像表示の最大の大きさは、ウィンドウの幅と高さ
+  実際には設定 (|popup_image_options-pt2px|)に依存し、収まりきらないときは縮小
+  表示する
+* 小さすぎるものは拡大 (→|popup_image_options-min_size|)
+
+==============================================================================
+                                                            *popup_image-custom*
+設定/オプション~
+
+g:popup_image_options の以下のキーで変更できる
+
+全体のデフォルトは
+>vim
+	g:popup_image_options = {pt2px: {x: 96, y: 96}, min_size: {x: 5, y: 5}}
+<
+                                                     *popup_image_options-pt2px*
+pt2px~
+	Type: |Dictionary|
+	Default: `{x: 96, y: 96}`
+
+	ポイントからピクセルへの横 (x) と縦 (y) 変換と倍率を表す数値
+	10pt を基本した数値を初期値としてあるので、環境・使用フォントサイズに合わせ
+	て指定する
+
+                                                  *popup_image_options-min_size*
+min_size~
+	Type: |Dictionary|
+	Default: `{x: 5, y: 5}`
+
+	画像の最小表示サイズ
+
+vim:tw=78:ts=2:ft=help:norl:noet:fen:
