@@ -6,8 +6,8 @@ if exists('b:did_ftplugin_user')
 endif
 b:did_ftplugin_user = 1
 
-if !exists('g:fuzzy_file_finder_plugin')
-	g:fuzzy_file_finder_plugin = 1
+if !get(g:fuzzy_file_finder, 'ftplugin', false)
+	g:fuzzy_file_finder.ftplugin = true
 	augroup FuzzyFileFinder
 		autocmd!
 		autocmd FuzzyFileFinder VimResized * fff#Bridge('VimResized')
@@ -18,6 +18,11 @@ endif
 
 setlocal nonumber signcolumn=no foldcolumn=0
 autocmd FuzzyFileFinder TextChangedI,TextChangedP,TextChanged <buffer> fff#Bridge('Render')
+
+if !get(g:fuzzy_file_finder, 'mapping', true)
+	finish
+endif
+
 # Normal モード
 nnoremap <buffer> <silent> <Esc>      <Cmd>call fff#Bridge('Cleanup')<CR>
 nnoremap <buffer> <silent> gg         <Cmd>call fff#Bridge('MoveTop')<CR>
@@ -29,10 +34,12 @@ inoremap <buffer> <silent> <CR>       <Cmd>call fff#Bridge('Confirm')<CR>
 nnoremap <buffer> <silent> <CR>       <Cmd>call fff#Bridge('Confirm')<CR>
 inoremap <buffer> <silent> <C-j>      <Cmd>call fff#Bridge('MoveDown')<CR>
 inoremap <buffer> <silent> <C-n>      <Cmd>call fff#Bridge('MoveDown')<CR>
+nnoremap <buffer> <silent> <Down>     <Cmd>call fff#Bridge('MoveDown')<CR>
 inoremap <buffer> <silent> <Down>     <Cmd>call fff#Bridge('MoveDown')<CR>
 nnoremap <buffer> <silent> j          <Cmd>call fff#Bridge('MoveDown')<CR>
 inoremap <buffer> <silent> <C-k>      <Cmd>call fff#Bridge('MoveUp')<CR>
 inoremap <buffer> <silent> <C-p>      <Cmd>call fff#Bridge('MoveUp')<CR>
+nnoremap <buffer> <silent> <Up>       <Cmd>call fff#Bridge('MoveUp')<CR>
 inoremap <buffer> <silent> <Up>       <Cmd>call fff#Bridge('MoveUp')<CR>
 nnoremap <buffer> <silent> k          <Cmd>call fff#Bridge('MoveUp')<CR>
 inoremap <buffer> <silent> <Tab>      <Cmd>call fff#Bridge('ToggleMark')<CR>
