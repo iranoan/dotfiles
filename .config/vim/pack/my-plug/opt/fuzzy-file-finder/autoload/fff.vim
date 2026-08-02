@@ -168,17 +168,14 @@ def UpdatePreview(s: dict<any>): void
 		)
 	elseif filereadable(p)
 		if index(g:fuzzy_file_finder.image, tolower(fnamemodify(p, ':e'))) != -1
-			# if !popup_image#Preview(s.preview_winid, p)
-			# 	popup_settext(s.preview_winid, '<Broken file>')
-			# endif
 			popup_image#Preview(s.preview_winid, p)
 		elseif index(keys(g:fuzzy_file_finder.filter), type) != -1
-			var filter: string = g:fuzzy_file_finder.filter[type]
-			var filter_place_folder: number = match(filter, '<>')
-			p = shellescape(resolve(expand(p, true)))
-			filter = filter_place_folder == -1 ? $'{filter} {p}' :
-				$'{filter[ : filter_place_folder - 1 ]} {p} {filter[ filter_place_folder + 2 : ]}'
-			popup_settext(s.preview_winid, systemlist($'{filter}'))
+			var filter: list<string> = g:fuzzy_file_finder.filter[type]
+			var filter_place_folder: number = index(filter, '<>')
+			filter = filter_place_folder == -1 ? filter + [p] :
+				filter_place_folder == len(filter) ? filter[ : -2 ] + [p] :
+				filter[ : filter_place_folder - 1 ] + [p] + filter[ filter_place_folder + 1 : ]
+			popup_settext(s.preview_winid, systemlist(filter))
 		elseif IsBinary(p)
 			popup_settext(s.preview_winid, ' <Binary file> ')
 		else
@@ -338,7 +335,7 @@ def Confirm(s: dict<any>): void
 					echohl None
 				endif
 					echohl ErrorMsg
-					echo systemlist($'{open_b} {fnameescape(f)}')->join('\n')
+					echo systemlist([open_b, f])->join('\n')
 					echohl None
 			else
 				execute $'{open} {fnameescape(f)}'
