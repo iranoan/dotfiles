@@ -1,0 +1,144 @@
+*fuzzy-file-finder* ファイルをあいまい検索して開く
+
+Author:  Iranoan <iranoan+vim@gmail.com>
+Repository: https://github.com/iranoan/fuzzy-file-finder
+License: GPL Ver.3.
+
+
+==============================================================================
+                                                    *fuzzy-file-finder-contents*
+目次~
+
+* 概要                                          |fuzzy-file-finder-introduction|
+* インストール                                       |fuzzy-file-finder-install|
+* 使用方法                                               |fuzzy-file-finder-use|
+  - デフォルト・キー                             |fuzzy-file-finder-default-key|
+* 設定/オプション                                     |fuzzy-file-finder-custom|
+
+==============================================================================
+                                                *fuzzy-file-finder-introduction*
+概要~
+
+ファイルをあいまい検索して、関連付けられたアプリもしくは Vim で開く
+
+==============================================================================
+                                                      *fuzzy-file-finder-install*
+インストール~
+
+使用しているパッケージ・マネージャに従えば良い
+
+==============================================================================
+                                                         *fuzzy-file-finder-use*
+使用方法~
+
+>vim
+	call fff#Open('~/')
+<
+
+fff#Open({dir}) の {dir} が未指定や空文字の場合は、カレント・ディレクトリをそ
+うでなければ、指定された {dir} 配下のファイルを検索し、入力文字により絞り込む
+
+実行すると新たにタブ・ページを開き、次の配置にする
+
+* 先頭行: フィルター文字列の入力
+* 左下:   フィルター文字にマッチするファイル一覧
+          フィルター文字列が空の場合は、{dir} 配下の全ファイル一覧
+          デフォルト検索方法は (|fuzzy-file-finder-cmd|) >sh
+          fdfind --hidden --follow --type file --type symlink --type directory --search-path
+<* 右下:   ファイル一覧のカーソル行のプレビュー
+
+左右下部分は、実際にはポップアップ・ウィンドウ
+
+--------------------------------------------------------------------------------
+                                                    *fuzzy-file-finder-default-key*
+デフォルト・キー~
+
+ノーマル・モード~
+<Esc>      終了
+gg         ファイル一覧先頭に移動
+G          ファイル一覧最後に移動
+O          行頭から入力
+o          行末から入力
+j          ファイル一覧で次を選択
+k          ファイル一覧で次を選択
+
+インサート/ノーマル・モード共通~
+<CR>       選択されている、選択されているファイルが一つもなければファイル一覧
+           のおけるカーソル位置のファイルを開く
+<C-j>      ファイル一覧で次を選択
+<C-n>
+<Down>
+<C-k>      ファイル一覧で前を選択
+<C-p>
+<Up>
+<C-]>      プレビュー On/Off
+<C-b>      ファイル一覧のページ・アップ
+<PageUp>
+<C-f>      ファイル一覧のページ・ダウン
+<PageDown>
+<Tab>      ファイルの選択/選択解除
+
+
+==============================================================================
+                                                      *fuzzy-file-finder-custom*
+設定/オプション~
+
+g:fuzzy_file_finder の以下のキーで変更できる
+                                                      *fuzzy-file-finder-cmd*
+cmd~
+	Type: |list<string>|
+	Default: `['fdfind', '--hidden', '--follow', '--type', 'file', '--type', 'symlink', '--type', 'directory', '--search-path']`
+
+	ファイル一覧を作成するコマンド
+
+type~
+	次のキーがあり、ファイルの種類の判定やプレビュー時のハイライトと |'filetype'|
+	を指定
+
+	ext~
+		Type: |dict<string>|
+
+		拡張子ごとの |'filetype'| を指定
+
+	name~
+		Type: |dict<string>|
+
+		ファイル名ごとの |'filetype'| を指定
+
+	path~
+		Type: |list<dict<string>>|
+
+		パスごとの |'filetype'| を指定
+		{reg: '^\~/.config/fd/[^/]\+$', type: 'gitignore'},
+		のように、reg キーで正規表現を type で |'filetype'| のペアの辞書
+
+	image~
+	Type: |list<string>|
+
+	画像プレビューさせる拡張子のリスト
+	実際に画像表示させるには |popup_image| プラグインが必要
+
+	filter~
+		Type: |dict<list<string>>|
+
+		拡張子ごとのプレビュー一覧に表示するフィルタープログラム
+		zip: ['unzip', '-l']
+		のように、拡張子とフィルター・プログラム (必ず list<string>) のペア指定する
+
+open~
+	Type: |string|
+	Default: |:edit|
+
+	上記の image 未登録、ディレクトリ、バイナリ・ファイル以外を Vim で開く時に用
+	いるコマンド
+
+dir~
+	Type: |bool|
+	Default: |true|
+
+	ディレクトリを Vim で開くか?
+	実際に Vim でディレクトリを開く動作がどうなるかは使用しているプラグインに
+	よって変わる
+
+
+vim:tw=78:ts=2:ft=help:norl:noet:fen:
