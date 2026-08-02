@@ -65,17 +65,22 @@ export def Clear(id: number): void
 	endif
 enddef
 
-def Str2Blob(cmd: string): blob
-	if has('unix')
-		silent return str2blob([system(substitute(cmd, '<>', '-', ''))])
-	else
-		var tmp: string = tempname()
-		var b: blob
-		silent system(substitute(cmd, '<>', $'{escape(shellescape(tmp), '\')}', ''))
-		b = readblob(tmp)
-		delete(tmp)
-		return b
-	endif
+def SystemBlob(cmd: list<string>): blob
+	var img: blob
+	var job = job_start(cmd, {
+		out_io: 'pipe',
+		out_mode: 'raw',
+		mode: 'raw',
+		err_io: 'null',
+	})
+	var ch = job_getchannel(job)
+	while job_status(job) ==# 'run'
+		var b = ch_readblob(ch)
+		if len(b) > 0
+			img = img + b
+		endif
+	endwhile
+	return img
 enddef
 
 export def Preview(id: number, f: string): bool # パス f の画像、動画、PDF を表示
@@ -96,11 +101,11 @@ export def Preview(id: number, f: string): bool # パス f の画像、動画、
 		return [float2nr(round(w * scale)), float2nr(round(h * scale))]
 	enddef
 
-	var p: string = shellescape(resolve(expand(f, true)))
+	var p: string = resolve(expand(f, true))
 	var w: number
 	var h: number
-	var t: string
-	silent var ft: string = systemlist('file --mime-type --brief ' .. p)[0]
+	var t: list<string>
+	silent var ft: string = systemlist(['mimetype', '--brief', p])[0]
 	var img_data: blob
 	var w_h: list<number>
 
@@ -109,29 +114,29 @@ export def Preview(id: number, f: string): bool # パス f の画像、動画、
 		redraw
 	endif
 	if ft =~# '^video/'
-		silent t = '-ss ' .. str2nr(system('ffprobe -v error -show_entries format=duration -of csv=p=0 ' .. p )) / 10.0
+		silent t = ['-ss', $'{str2nr(system([ 'ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', p ])) / 10.0}']
 	elseif ft !=# 'application/pdf' && ft !~# '^image/' && ft !=# 'application/postscript'
-		popup_settext(id, ['support mimetype video/*, image/*, application/pdf, application/postscript'])
+		popup_settext(id, ['support mimetype', 'video/*', 'image/*', 'application/pdf', 'application/postscript'])
 		popup_setoptions(id, {highlight: 'WarningMsg'})
 		return false
 	endif
 	if ft ==# 'application/pdf'
-		silent [w, h] = systemlist($'magick identify -format "%w %h\n" {p}[0]')[0]
+		silent [w, h] = systemlist(['magick', 'identify', '-format', '%w %h\n', $'{p}[0]'])[0]
 			->matchlist($'\(\d\+\) \(\d\+\)')[1 : 2]
 			->map((_, v) => str2nr(v) * 5)
 		[w, h] = ScaleImage(w, h)
-		img_data = Str2Blob($'magick convert -density 300 -depth 8 -resize {w}x{h}! {p}[0] -background white -alpha remove rgb:<>')
-	elseif ft ==# 'application/postscript'
-		silent w_h = systemlist($'gs -dQUIET -dBATCH -dNOPAUSE -sDEVICE=bbox {p} 2>&1')
+		img_data = SystemBlob(['magick', 'convert', '-density', '300', '-depth', '8', '-resize', $'{w}x{h}!', $'{p}[0]', '-background', 'white', '-alpha', 'remove', 'rgb:-'])
+	elseif ft ==# 'image/x-eps' || ft ==# 'image/eps' || ft ==# 'application/postscript'
+		silent w_h = systemlist(['gs', '-dQUIET', '-dBATCH', '-dNOPAUSE', '-sDEVICE=bbox', p])
 			->matchlist('^%%BoundingBox: \+\zs\(\d\+\.\?\d*\) \(\d\+\.\?\d*\) \(\d\+\.\?\d*\) \(\d\+\.\?\d*\)')[1 : ]
 			->map((_, v) => float2nr(round(str2float(v) * 300 / 72)))
 		[w, h] = ScaleImage(w_h[2] - w_h[0], w_h[3] - w_h[1])
-		img_data = Str2Blob($'gs -dQUIET -dBATCH -dNOPAUSE -dNOPROMPT -sDEVICE=png16m -r300 -g{w_h[2]}x{w_h[3]} -sOutputFile=- {p} | ffmpeg -i - -f rawvideo -vf ''scale={w}:{h}'' -pix_fmt rgb24 <> 2> /dev/null')
+		img_data = SystemBlob(['magick', 'convert', '-density', '300', '-depth', '8', '-resize', $'{w}x{h}!', $'{p}[0]', '-background', 'white', '-alpha', 'remove', 'rgb:-'])
 	else
-		silent [w, h] = split(system($'ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 {p}'), ',')
+		silent [w, h] = split(system(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height', '-of', 'csv=p=0', p]), ',')
 			->map((_, v) => str2nr(v))
 		[w, h] = ScaleImage(w, h)
-		img_data = Str2Blob($'ffmpeg {t} -i {p} -vf ''scale={w}:{h}'' -vframes 1 -f rawvideo -pix_fmt rgb24 <> 2> /dev/null')
+		img_data = SystemBlob(['ffmpeg'] + t + ['-i', p, '-vf', $'scale={w}:{h}', '-vframes', '1', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'])
 	endif
 	if len(img_data) != w * h * 3
 		popup_settext(id, [
