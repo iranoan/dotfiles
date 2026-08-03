@@ -87,6 +87,10 @@ def SystemBlob(cmd: list<string>): blob
 enddef
 
 export def Preview(id: number, f: string): bool # パス f の画像、動画、PDF を表示
+	if !executable('mimetype')
+		AddErrorMessage(id, ['Need ''mimetype'' command'])
+		return false
+	endif
 	var opts: dict<any> = popup_getoptions(id)
 	var max_w: number = opts.maxwidth  == 0 ? &columns : opts.maxwidth
 	var max_h: number = opts.maxheight == 0 ? &lines   : opts.maxheight
@@ -116,11 +120,22 @@ export def Preview(id: number, f: string): bool # パス f の画像、動画、
 		popup_setoptions(id, {image: {}})
 		redraw
 	endif
-	if ft =~# '^video/'
-		silent t = ['-ss', $'{str2nr(system([ 'ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', p ])) / 10.0}']
-	elseif ft !=# 'application/pdf' && ft !~# '^image/' && ft !=# 'application/postscript'
+	if ft ==# 'application/pdf' || ft ==# 'image/x-eps' || ft ==# 'image/eps' || ft ==# 'application/postscript'
+		if !executable('magick')
+			AddErrorMessage(id, ['Need ''ImageMagick'' for image/video/eps/postscript'])
+			return false
+		endif
+	elseif ft =~# '^video/' || ft =~# '^image/'
+		if !executable('ffprobe') || !executable('ffmpeg')
+			AddErrorMessage(id, ['Need ''FFmpeg'' for image/video'])
+			return false
+		endif
+	else
 		AddErrorMessage(id, ['support mimetype', 'video/*', 'image/*', 'application/pdf', 'application/postscript'])
 		return false
+	endif
+	if ft =~# '^video/' # video の最初の一割時点の時刻
+		silent t = ['-ss', $'{str2nr(system([ 'ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', p ])) / 10.0}']
 	endif
 	if ft ==# 'application/pdf' || ft ==# 'image/x-eps' || ft ==# 'image/eps' || ft ==# 'application/postscript'
 		silent [w, h] = systemlist(['magick', 'identify', '-format', '%w %h\n', $'{p}[0]'])[0]
