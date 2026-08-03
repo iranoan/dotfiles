@@ -144,7 +144,9 @@ def UpdatePreview(s: dict<any>): void
 		popup_setoptions(id, {highlight: 'WarningMsg'})
 		setbufvar(s.preview_buf, '&filetype', '')
 		setbufvar(s.preview_buf, '&modified', false)
-		popup_image#Clear(s.preview_winid)
+		if s.display_image
+			popup_image#Clear(s.preview_winid)
+		endif
 		return
 	endif
 
@@ -153,7 +155,9 @@ def UpdatePreview(s: dict<any>): void
 	if s.preview_path ==# p
 		return
 	endif
-	popup_image#Clear(id)
+	if s.display_image
+		popup_image#Clear(id)
+	endif
 	popup_setoptions(id, {highlight: 'Pmenu', highlights: ''})
 	setbufvar(s.preview_buf, '&filetype', '')
 	s.preview_path = p
@@ -170,8 +174,21 @@ def UpdatePreview(s: dict<any>): void
 		)
 	elseif filereadable(p)
 		if index(g:fuzzy_file_finder.image, tolower(fnamemodify(p, ':e'))) != -1
-			if !popup_image#Preview(id, p)
-				popup_image#WarningMsg(id)
+			if s.display_image
+				if !popup_image#Preview(id, p)
+					popup_image#WarningMsg(id)
+				endif
+			else
+				popup_settext(id, [
+					'<Image/Video/PDF/PostScript file>',
+					'',
+					'Need popup_image plugin and Need following tools',
+					'All video/image: ''mimetype'' command',
+					'image:           FFmgeg (ffmpeg/ffprobe command)',
+					'video:           FFmgeg (ffmpeg/ffprobe command)',
+					'PDF/PostScript:  ImageMagick (magick command)',
+				])
+				popup_setoptions(id, {highlight: 'WarningMsg'})
 			endif
 		elseif index(keys(g:fuzzy_file_finder.filter), type) != -1
 			var filter: list<string> = g:fuzzy_file_finder.filter[type]
@@ -181,7 +198,7 @@ def UpdatePreview(s: dict<any>): void
 				filter[ : filter_place_folder - 1 ] + [p] + filter[ filter_place_folder + 1 : ]
 			popup_settext(id, systemlist(filter))
 		elseif IsBinary(p)
-			popup_settext(id, '<Binary file> ')
+			popup_settext(id, '<Binary file>')
 			popup_setoptions(id, {highlight: 'WarningMsg'})
 		else
 			popup_settext(id, readfile(p))
@@ -436,6 +453,7 @@ export def Open(dir: string = ''): void
 	tabnew
 	execute $'lcd {target_dir}'
 	var s = {
+		display_image: getscriptinfo({name: '/plugin/popup_image.vim'}) != [],
 		tabnr: tabpagenr(),
 		filter_buf: bufnr('%'),
 		list_buf: bufadd(''),
