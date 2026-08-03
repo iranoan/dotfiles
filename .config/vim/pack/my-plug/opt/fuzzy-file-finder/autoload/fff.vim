@@ -63,13 +63,27 @@ def GetFileInfo(dir: string): list<dict<any>>
 	var info: list<dict<any>>
 	var size: number
 	var size_s: string
-	var type: string
+	var type: string = getfperm(dir)
 	var name: string
 	var lower_name: string
 	var time: number
 	var time_iso: number
 
-	for p in glob($'{match(dir, '/$') != -1 ? dir[ : -2 ] : dir}/*', true, true, true)
+	if type !~# '^r........$' # 読み取り権限がない→ディクトリ自身の情報のみ返す
+		time = getftime(dir)
+		return [{
+			type: 'dir',
+			permission: $'d{type}',
+			size: 0,
+			size_s: 0,
+			time: time,
+			time_iso: strftime('%F %T', time),
+			name: './',
+			lower_name: './',
+			link: ''
+		}]
+	endif
+	for p in readdir(dir)
 		type = getftype(p)
 		name = fnamemodify(p, ':t')
 		lower_name = tolower(name)
