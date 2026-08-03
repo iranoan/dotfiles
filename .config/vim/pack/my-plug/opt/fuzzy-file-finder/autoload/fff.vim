@@ -196,7 +196,16 @@ def UpdatePreview(s: dict<any>): void
 			filter = filter_place_folder == -1 ? filter + [p] :
 				filter_place_folder == len(filter) ? filter[ : -2 ] + [p] :
 				filter[ : filter_place_folder - 1 ] + [p] + filter[ filter_place_folder + 1 : ]
-			popup_settext(id, systemlist(filter))
+			if executable(filter[0])
+				popup_settext(id, systemlist(filter))
+				if v:shell_error != 0
+					popup_settext(id, [ $'<Failed to execute ''{join(filter)}''>'])
+					popup_setoptions(id, {highlight: 'WarningMsg'})
+				endif
+			else
+				popup_settext(id, [ $'<filter command ''{filter[0]}'' can not executable>'])
+				popup_setoptions(id, {highlight: 'WarningMsg'})
+			endif
 		elseif IsBinary(p)
 			popup_settext(id, '<Binary file>')
 			popup_setoptions(id, {highlight: 'WarningMsg'})
