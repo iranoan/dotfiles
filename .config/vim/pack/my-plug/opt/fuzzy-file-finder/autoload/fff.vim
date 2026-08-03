@@ -206,7 +206,7 @@ enddef
 def SetListTitle(s: dict<any>): void
 	var marked_count: number = len(s.marked_files)
 	var status: string = (has_key(s, 'job') && job_status(s.job) == 'run') ? $' [Loading... {len(s.all_files)}]' : ''
-	popup_setoptions(s.list_winid, {title: $' [{s.target}] {len(s.matches)}/{len(s.all_files)}{status}{marked_count > 0 ? $' ({marked_count} selected)' : ''}'})
+	popup_setoptions(s.list_winid, {title: $' [{s.target}] {len(s.matches)}/{len(s.all_files)}{status}{marked_count > 0 ? $' ({marked_count} selected)' : ''} '})
 enddef
 
 def Render(s: dict<any>): void
@@ -401,7 +401,7 @@ export def Open(dir: string = ''): void
 	var target_dir: string = fnamemodify(dir ==# '' ? getcwd() : expand(dir, true), ':p')
 	var target_len: number = len(target_dir)
 	var main_width: number = &columns * 45 / 100
-	var preview_width: number = &columns - main_width - 3
+	var preview_width: number = &columns - main_width - 6
 	var line_height: number = &lines - 2 - (&laststatus != 0 ? 1 : 0) - &cmdheight
 	var cmd_place_folder: number = index(g:fuzzy_file_finder.cmd, '<>')
 	var cmd: list<string> = cmd_place_folder == -1 ? g:fuzzy_file_finder.cmd + [target_dir] :
@@ -419,6 +419,7 @@ export def Open(dir: string = ''): void
 			zindex: 300,
 			drag: 1,
 			highlight: 'WarningMsg',
+			border: [1, 1, 1, 1,],
 			borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
 			close: 'click',
 			padding: [0, 1, 0, 1],
@@ -461,7 +462,7 @@ export def Open(dir: string = ''): void
 	setbufvar(s.preview_buf, '&buftype', 'nofile')
 	setbufvar(s.preview_buf, '&bufhidden', 'wipe')
 	s.list_winid = popup_create(s.list_buf, {
-		title: $' [{s.target}] 0/0',
+		title: $' [{s.target}] 0/0 ',
 		line: 2,
 		col: 1,
 		minwidth: main_width,
@@ -469,8 +470,8 @@ export def Open(dir: string = ''): void
 		minheight: line_height,
 		maxheight: line_height,
 		border: [1, 1, 0, 0],
-		borderchars: ['-', '|', '-', '|', '+', '+', '+', '+'],
-		padding: [0, 0, 0, 0],
+		borderchars: ['─', '│', '─', '│', '╭', '┬', '╯', '╰'],
+		padding: [0, 0, 0, 1],
 		cursorline: true
 	})
 	s.preview_winid = popup_create(s.preview_buf, {
@@ -483,8 +484,8 @@ export def Open(dir: string = ''): void
 		minheight: line_height,
 		maxheight: line_height,
 		border: [1, 0, 0, 0],
-		borderchars: ['-', '|', '-', '|', '+', '+', '+', '+'],
-		padding: [0, 0, 0, 0],
+		borderchars: ['─', '│', '─', '│', '┬', '╮', '╯', '╰'],
+		padding: [0, 1, 0, 2],
 	})
 	execute $'colorscheme {g:colors_name}' # これがないと画像表示状態で ChangePopupSize() が起きると、テキスト背景が標準色 (黒/白) になる (filetype を変えるため)
 	s.canceled = false
