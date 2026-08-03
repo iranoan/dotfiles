@@ -147,18 +147,19 @@ def UpdatePreview(s: dict<any>): void
 	endif
 
 	var p: string = s.matches[s.selected_idx]
+	var id: number = s.preview_winid
 	var type: string = GetFileType(p)
 	if s.preview_path ==# p
 		return
 	endif
-	popup_image#Clear(s.preview_winid)
+	popup_image#Clear(id)
+	popup_setoptions(id, {highlight: 'Pmenu', highlights: ''})
 	setbufvar(s.preview_buf, '&filetype', '')
-	# deletebufline(s.preview_winid, [])
 	s.preview_path = p
 	if isdirectory(p)
 		var files: list<dict<any>> = GetFileInfo(p)
 		var max_len: number = max(files->mapnew((_, v) => len(v.size_s)))
-		popup_settext(s.preview_winid, sort(files, (v0, v1) =>
+		popup_settext(id, sort(files, (v0, v1) =>
 		                                         v0.time > v1.time ? -1 : v0.time < v1.time ? 1 : # 更新日時降順
 		                                         v0.lower_name < v1.lower_name ? -1 : v0.lower_name > v1.lower_name ? 1 : # ファイル名順 (大小文字区別なし)
 		                                         v0.name < v1.name ? -1 : 1 ) # 大文字先
@@ -168,22 +169,24 @@ def UpdatePreview(s: dict<any>): void
 		)
 	elseif filereadable(p)
 		if index(g:fuzzy_file_finder.image, tolower(fnamemodify(p, ':e'))) != -1
-			popup_image#Preview(s.preview_winid, p)
+			if !popup_image#Preview(id, p)
+				popup_image#WarningMsg(id)
+			endif
 		elseif index(keys(g:fuzzy_file_finder.filter), type) != -1
 			var filter: list<string> = g:fuzzy_file_finder.filter[type]
 			var filter_place_folder: number = index(filter, '<>')
 			filter = filter_place_folder == -1 ? filter + [p] :
 				filter_place_folder == len(filter) ? filter[ : -2 ] + [p] :
 				filter[ : filter_place_folder - 1 ] + [p] + filter[ filter_place_folder + 1 : ]
-			popup_settext(s.preview_winid, systemlist(filter))
+			popup_settext(id, systemlist(filter))
 		elseif IsBinary(p)
-			popup_settext(s.preview_winid, ' <Binary file> ')
+			popup_settext(id, ' <Binary file> ')
 		else
-			popup_settext(s.preview_winid, readfile(p))
+			popup_settext(id, readfile(p))
 			setbufvar(s.preview_buf, '&filetype', type)
 		endif
 	else
-		popup_settext(s.preview_winid, ' <Unreadable file>')
+		popup_settext(id, ' <Unreadable file>')
 	endif
 	setbufvar(s.preview_buf, '&modified', false)
 enddef
