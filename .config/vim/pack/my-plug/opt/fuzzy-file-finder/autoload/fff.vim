@@ -137,9 +137,11 @@ def IsBinary(path: string): bool
 enddef
 
 def UpdatePreview(s: dict<any>): void
+	var id: number = s.preview_winid
 	if empty(s.matches)
 		s.preview_path = ''
 		popup_settext(s.preview_winid, '<No selection>')
+		popup_setoptions(id, {highlight: 'WarningMsg'})
 		setbufvar(s.preview_buf, '&filetype', '')
 		setbufvar(s.preview_buf, '&modified', false)
 		popup_image#Clear(s.preview_winid)
@@ -147,7 +149,6 @@ def UpdatePreview(s: dict<any>): void
 	endif
 
 	var p: string = s.matches[s.selected_idx]
-	var id: number = s.preview_winid
 	var type: string = GetFileType(p)
 	if s.preview_path ==# p
 		return
@@ -180,13 +181,15 @@ def UpdatePreview(s: dict<any>): void
 				filter[ : filter_place_folder - 1 ] + [p] + filter[ filter_place_folder + 1 : ]
 			popup_settext(id, systemlist(filter))
 		elseif IsBinary(p)
-			popup_settext(id, ' <Binary file> ')
+			popup_settext(id, '<Binary file> ')
+			popup_setoptions(id, {highlight: 'WarningMsg'})
 		else
 			popup_settext(id, readfile(p))
 			setbufvar(s.preview_buf, '&filetype', type)
 		endif
 	else
-		popup_settext(id, ' <Unreadable file>')
+		popup_settext(id, '<Unreadable file>')
+		popup_setoptions(id, {highlight: 'WarningMsg'})
 	endif
 	setbufvar(s.preview_buf, '&modified', false)
 enddef
@@ -485,6 +488,7 @@ export def Open(dir: string = ''): void
 		maxheight: line_height,
 		border: [1, 0, 0, 0],
 		borderchars: ['─', '│', '─', '│', '┬', '╮', '╯', '╰'],
+		borderhighlight: ['Pmenu', 'Pmenu', 'Pmenu', 'Pmenu'],
 		padding: [0, 1, 0, 2],
 	})
 	execute $'colorscheme {g:colors_name}' # これがないと画像表示状態で ChangePopupSize() が起きると、テキスト背景が標準色 (黒/白) になる (filetype を変えるため)
