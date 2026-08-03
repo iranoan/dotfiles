@@ -1,38 +1,11 @@
 vim9script
 scriptencoding utf-8
 
-if !executable('mimetype')
-	|| !executable('ffprobe')
-	|| !executable('pdfinfo')
-	|| !executable('magick')
-	|| !executable('gs')
-	|| !executable('ffmpeg')
-	popup_notification([
-		'All video/image: ''mimetype'' command',
-		'image:           FFmgeg (ffmpeg/ffprobe command)',
-		'video:           FFmgeg (ffmpeg/ffprobe command)',
-		'PDF/PostScript:  ImageMagick (magick command)',
-	], {title: ' Need following tools '})
-	# makee dummy function
-	export def Clear(id: number): void
-		return
-	enddef
-	export def Preview(id: number, f: string): bool
-		popup_settext(id, [
-			' Need following tools',
-			'All video/image: ''mimetype'' command',
-			'image:           FFmgeg (ffmpeg/ffprobe command)',
-			'video:           FFmgeg (ffmpeg/ffprobe command)',
-			'PDF/PostScript:  ImageMagick (magick command)',
-		] )
-		popup_setoptions(id, {highlight: 'WarningMsg'})
-		return false
-	enddef
-	export def ResetPreview(id: number, f: string): void
-		return
-	enddef
-	finish
-endif
+def AddErrorMessage(id: number, err_msg: list<string>): void
+	var var: dict<any> = getwinvar(id, 'popup_image', {err_msg: []})
+
+	setwinvar(id, 'popup_image', extendnew(var, {err_msg: get(var, 'err_msg', []) + [err_msg]}))
+enddef
 
 export def Clear(id: number): void
 	var opts: dict<any> = popup_getoptions(id)
@@ -44,6 +17,7 @@ export def Clear(id: number): void
 					highlights: opts.highlights ==# '' ? '' : opts.highlights,
 					image: {}
 				},
+				err_msg: [],
 				options: { # イメージ表示で変更するオプション
 					border: [1, 1, 1, 1],
 					opacity: 100
@@ -59,6 +33,40 @@ export def Clear(id: number): void
 		redraw!
 	endif
 enddef
+
+export def WarningMsg(id: number): void
+	popup_settext(id, remove(getwinvar(id, 'popup_image', {err_msg: []}).err_msg, -1))
+	popup_setoptions(id, {highlight: 'WarningMsg'})
+enddef
+
+if !executable('mimetype')
+	|| !executable('ffprobe')
+	|| !executable('pdfinfo')
+	|| !executable('magick')
+	|| !executable('gs')
+	|| !executable('ffmpeg')
+	popup_notification([
+		'All video/image: ''mimetype'' command',
+		'image:           FFmgeg (ffmpeg/ffprobe command)',
+		'video:           FFmgeg (ffmpeg/ffprobe command)',
+		'PDF/PostScript:  ImageMagick (magick command)',
+	], {title: 'Need following tools ', highlight: 'ErrorMsg', borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'], padding: [0, 1, 0, 1]})
+	# makee dummy function
+	export def Preview(id: number, f: string): bool
+		AddErrorMessage(id, [
+			'Need following tools',
+			'All video/image: ''mimetype'' command',
+			'image:           FFmgeg (ffmpeg/ffprobe command)',
+			'video:           FFmgeg (ffmpeg/ffprobe command)',
+			'PDF/PostScript:  ImageMagick (magick command)',
+		])
+		return false
+	enddef
+	export def ResetPreview(id: number, f: string): void
+		return
+	enddef
+	finish
+endif
 
 def SystemBlob(cmd: list<string>): blob
 	var img: blob
@@ -111,8 +119,7 @@ export def Preview(id: number, f: string): bool # パス f の画像、動画、
 	if ft =~# '^video/'
 		silent t = ['-ss', $'{str2nr(system([ 'ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', p ])) / 10.0}']
 	elseif ft !=# 'application/pdf' && ft !~# '^image/' && ft !=# 'application/postscript'
-		popup_settext(id, ['support mimetype', 'video/*', 'image/*', 'application/pdf', 'application/postscript'])
-		popup_setoptions(id, {highlight: 'WarningMsg'})
+		AddErrorMessage(id, ['support mimetype', 'video/*', 'image/*', 'application/pdf', 'application/postscript'])
 		return false
 	endif
 	if ft ==# 'application/pdf' || ft ==# 'image/x-eps' || ft ==# 'image/eps' || ft ==# 'application/postscript'
@@ -128,14 +135,13 @@ export def Preview(id: number, f: string): bool # パス f の画像、動画、
 		img_data = SystemBlob(['ffmpeg'] + t + ['-i', p, '-vf', $'scale={w}:{h}', '-vframes', '1', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'])
 	endif
 	if len(img_data) != w * h * 3
-		popup_settext(id, [
+		AddErrorMessage(id, [
 			'''data size'' is not eqal ''width x height x 3''',
 			$'data size:          {len(img_data)}',
 			$'width:              {w}',
 			$'height:             {h}',
 			$'width x height x 3: {w * h * 3}',
 		])
-		popup_setoptions(id, {highlight: 'WarningMsg'})
 		return false
 	endif
 	popup_setoptions(id, extendnew(getwinvar(id, 'popup_image', {options: {}}).options, {
