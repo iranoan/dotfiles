@@ -268,17 +268,11 @@ def MoveSelection(s: dict<any>, delta: any): void
 			new_idx = s.selected_idx + (h - 1)
 		elseif delta ==# '$'
 			new_idx = max_idx - 1
-		else
-			new_idx = s.selected_idx
-		endif
-		if new_idx < 0
-			new_idx = 0
-		elseif new_idx >= max_idx
-			new_idx = max_idx - 1
 		endif
 	else
 		new_idx = delta == 0 ? 0 : s.selected_idx + delta
 	endif
+	new_idx = max([0, min([new_idx, max_idx - 1])])
 	if new_idx >= 0 && new_idx < max_idx
 		f = s.matches[s.selected_idx]
 		setbufline(s.list_buf, s.selected_idx + 1, $'  {has_key(s.marked_files, f) ? '[*]' : '[ ]'} {f}')
