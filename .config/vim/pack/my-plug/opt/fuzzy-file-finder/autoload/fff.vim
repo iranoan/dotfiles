@@ -197,32 +197,25 @@ enddef
 def Render(s: dict<any>): void
 	var prompt: string = getbufline(s.filter_buf, 1)->join()
 	var preview_idx: number
-	var cursor_idx: number
+	var display_matches: list<string>
 
 	if prompt ==# ''
 		s.matches = copy(s.all_files)
 	else
 		s.matches = matchfuzzy(s.all_files, prompt)
 	endif
-	preview_idx = index(s.matches,
-		                  stridx(s.preview_path, $HOME .. '/') == 0 ?
-		                  '~/' .. s.preview_path[len($HOME .. '/') :] :
-		                  s.preview_path)
+	preview_idx = index(s.matches, s.preview_path)
 	if preview_idx == -1
-		s.selected_idx = 0
+		preview_idx = 0
 	else
-		s.selected_idx = preview_idx
 	endif
-	cursor_idx = preview_idx + 1
-	var display_matches: list<string> = mapnew(s.matches, (idx, val) => {
-		return $'{(idx == s.selected_idx) ? '>' : ' '} {has_key(s.marked_files, val) ? '[*]' : '[ ]'} {val}'
-	})
+	s.selected_idx = preview_idx
+	display_matches = mapnew(s.matches, (i, v) => $'{(i == preview_idx) ? '>' : ' '} {has_key(s.marked_files, v) ? '[*]' : '[ ]'} {v}')
 	SetListTitle(s)
-
 	popup_settext(s.list_winid, display_matches)
 	setbufvar(s.list_buf, '&modified', false)
 	UpdatePreview(s)
-	win_execute(s.list_winid, $'call cursor({cursor_idx}, 1)')
+	win_execute(s.list_winid, $'call cursor({preview_idx + 1}, 1)')
 	s.is_dirty = false
 enddef
 
