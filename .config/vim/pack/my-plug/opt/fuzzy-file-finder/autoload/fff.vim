@@ -146,7 +146,7 @@ def UpdatePreview(s: dict<any>): void
 		return
 	endif
 
-	var p: string = expand(s.matches[s.selected_idx], true)
+	var p: string = s.matches[s.selected_idx]
 	var type: string = GetFileType(p)
 	if s.preview_path ==# p
 		return
@@ -188,6 +188,18 @@ def UpdatePreview(s: dict<any>): void
 	setbufvar(s.preview_buf, '&modified', false)
 enddef
 
+def SchedulePreview(s: dict<any>, delay: number = 50): void
+	if s.timer_id != 0
+		timer_stop(s.timer_id)
+		s.timer_id = 0
+	endif
+
+	s.timer_id = timer_start(delay, (_) => {
+		s.timer_id = 0
+		UpdatePreview(s)
+	})
+enddef
+
 def SetListTitle(s: dict<any>): void
 	var marked_count: number = len(s.marked_files)
 	var status: string = (has_key(s, 'job') && job_status(s.job) == 'run') ? $' [Loading... {len(s.all_files)}]' : ''
@@ -214,7 +226,7 @@ def Render(s: dict<any>): void
 	SetListTitle(s)
 	popup_settext(s.list_winid, display_matches)
 	setbufvar(s.list_buf, '&modified', false)
-	UpdatePreview(s)
+	SchedulePreview(s, 100)
 	win_execute(s.list_winid, $'call cursor({preview_idx + 1}, 1)')
 	s.is_dirty = false
 enddef
@@ -273,7 +285,7 @@ def MoveSelection(s: dict<any>, delta: any): void
 		setbufline(s.list_buf, new_idx + 1, $'> {has_key(s.marked_files, f) ? '[*]' : '[ ]'} {f}')
 		win_execute(s.list_winid, $'call cursor({new_idx + 1}, 1)')
 		s.selected_idx = new_idx
-		UpdatePreview(s)
+		SchedulePreview(s)
 	endif
 enddef
 
@@ -416,6 +428,7 @@ export def Open(dir: string = ''): void
 		preview_winid: 0,
 		preview_on: true,
 		render_timer: 0,
+		timer_id: 0,
 		is_dirty: false,
 		job: null_job
 	}
