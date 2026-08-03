@@ -406,9 +406,24 @@ export def Open(dir: string = ''): void
 		g:fuzzy_file_finder.cmd[ : cmd_place_folder - 1 ] + [target_dir] + g:fuzzy_file_finder.cmd[ cmd_place_folder + 1 : ]
 
 	if !isdirectory(target_dir)
-		echohl ErrorMsg
-		echo $'Not a directory: {target_dir}'
-		echohl None
+		popup_create($'Not a directory: {target_dir}', {
+			title: ' Fuzzy File Finder Warning ',
+			line: 'cursor+1',
+			col: 'cursor',
+			minwidth: 20,
+			time: 5000,
+			tabpage: -1,
+			zindex: 300,
+			drag: 1,
+			highlight: 'WarningMsg',
+			borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
+			close: 'click',
+			padding: [0, 1, 0, 1],
+			filter: (id, _) => {
+				popup_close(id)
+				return
+			}
+		})
 		return
 	endif
 	tabnew
