@@ -64,10 +64,10 @@ def GetFileInfo(dir: string): list<dict<any>>
 	var size: number
 	var size_s: string
 	var type: string = getfperm(dir)
-	var name: string
 	var lower_name: string
 	var time: number
 	var time_iso: number
+	var f: string
 
 	if type !~# '^r........$' # 読み取り権限がない→ディクトリ自身の情報のみ返す
 		time = getftime(dir)
@@ -84,19 +84,20 @@ def GetFileInfo(dir: string): list<dict<any>>
 		}]
 	endif
 	for p in readdir(dir)
-		type = getftype(p)
-		name = fnamemodify(p, ':t')
-		lower_name = tolower(name)
-		time = getftime(p)
+		f = fnamemodify($'{dir}{p}', ':p')
+		f = f[-1] =~# '[/\\]$' ? f[ : -2 ] : f
+		type = getftype(f)
+		lower_name = tolower(p)
+		time = getftime(f)
 		if type ==# 'dir'
 			add(info, {
 				type: type,
-				permission: $'d{getfperm(p)}',
+				permission: $'d{getfperm(f)}',
 				size: 0,
 				size_s: '0',
 				time: time,
 				time_iso: strftime('%F %T', time),
-				name: name,
+				name: p,
 				lower_name: lower_name,
 				link: ''
 			})
@@ -108,12 +109,12 @@ def GetFileInfo(dir: string): list<dict<any>>
 				size_s: '0',
 				time: time,
 				time_iso: strftime('%F %T', time),
-				name: name,
+				name: p,
 				lower_name: lower_name,
-				link: resolve(p)
+				link: resolve(f)
 			})
 		else
-			size = getfsize(p)
+			size = getfsize(f)
 			if size > 1099511627776 # T
 				size_s = printf('%.1fT', size / 1099511627776.0)
 			elseif size > 1073741824 # G
@@ -127,12 +128,12 @@ def GetFileInfo(dir: string): list<dict<any>>
 			endif
 			add(info, {
 				type: type,
-				permission: $'-{getfperm(p)}',
+				permission: $'-{getfperm(f)}',
 				size: size,
 				size_s: size_s,
 				time: time,
 				time_iso: strftime('%F %T', time),
-				name: name,
+				name: p,
 				lower_name: lower_name,
 				link: ''
 			})
