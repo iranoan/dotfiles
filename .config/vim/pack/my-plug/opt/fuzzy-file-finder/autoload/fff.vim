@@ -256,14 +256,64 @@ def SetListTitle(s: dict<any>): void
 enddef
 
 def Render(s: dict<any>): void
-	var prompt: string = getbufline(s.filter_buf, 1)->join()
+	var prompt: list<string> = getbufline(s.filter_buf, 1)->join()->split()
+	var special_s: list<string>
+	var special_c: string
+	var match_idx: number
 	var preview_idx: number
 	var display_matches: list<string>
+	var matches: list<string>
 
-	if prompt ==# ''
-		s.matches = copy(s.all_files)
+	matches = copy(s.all_files)
+	while true # ! ←これだけ否定マッチ
+		match_idx = match(prompt, '^!')
+		if match_idx == -1
+			break
+		endif
+		special_c = remove(prompt, match_idx)[1 : ]
+		if special_c =~# '\$$'
+			add(special_s, $'{escape(special_c[ : -2 ], '\.*$~')}$')
+		else
+			add(special_s, escape(special_c, '\.*$~'))
+		endif
+	endwhile
+	for str in special_s
+		filter(matches, (_, v) => v !~? str)
+	endfor
+	special_s = []
+	while true # ^
+		match_idx = match(prompt, '^\^.')
+		if match_idx == -1
+			break
+		endif
+		add(special_s, remove(prompt, match_idx)->escape('\.*$~'))
+	endwhile
+	while true # '
+		match_idx = match(prompt, '^''')
+		if match_idx == -1
+			break
+		endif
+		special_c = remove(prompt, match_idx)
+		if special_c =~# '''$'
+			add(special_s, $'\<{special_c[1 : -2]->escape('^\.*$~')}\>')
+		else
+			add(special_s, special_c[1 : ]->escape('^\.*$~'))
+		endif
+	endwhile
+	while true # $
+		match_idx = match(prompt, '.\$$')
+		if match_idx == -1
+			break
+		endif
+		add(special_s, remove(prompt, match_idx)->escape('^\.*~'))
+	endwhile
+	for str in special_s
+		filter(matches, (_, v) => v =~? str)
+	endfor
+	if prompt == []
+		s.matches = copy(matches)
 	else
-		s.matches = matchfuzzy(s.all_files, prompt)
+		s.matches = matchfuzzy(matches, join(prompt))
 	endif
 	preview_idx = index(s.matches, s.preview_path)
 	if preview_idx == -1
