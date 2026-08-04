@@ -494,19 +494,8 @@ def CheckFuzzyFileFinderWin(): bool
 	return false
 enddef
 
-export def Open(dir: string = ''): void
-	var target_dir: string = fnamemodify(dir ==# '' ? getcwd() : expand(dir, true), ':p')
-	var target_len: number = len(target_dir)
-	var main_width: number = &columns * 45 / 100
-	var preview_width: number = &columns - main_width - 6
-	var line_height: number = &lines - 2 - (&laststatus != 0 ? 1 : 0) - &cmdheight
-	var cmd_place_folder: number = index(g:fuzzy_file_finder.cmd, '.')
-	var cmd: list<string> = cmd_place_folder == -1 ? g:fuzzy_file_finder.cmd + [target_dir] :
-		cmd_place_folder == len(g:fuzzy_file_finder.cmd) ? g:fuzzy_file_finder.cmd[ : - 2 ] + [target_dir] :
-		g:fuzzy_file_finder.cmd[ : cmd_place_folder - 1 ] + [target_dir] + g:fuzzy_file_finder.cmd[ cmd_place_folder + 1 : ]
-
-	if !isdirectory(target_dir)
-		popup_create($'Not a directory: {target_dir}', {
+def WarningMsg(s: string): void
+		popup_create(s, {
 			title: ' Fuzzy File Finder Warning ',
 			line: 'cursor+1',
 			col: 'cursor',
@@ -525,6 +514,24 @@ export def Open(dir: string = ''): void
 				return
 			}
 		})
+enddef
+
+export def Open(dir: string = ''): void
+	var target_dir: string = fnamemodify(dir ==# '' ? getcwd() : expand(dir, true), ':p')
+	var target_len: number = len(target_dir)
+	var main_width: number = &columns * 45 / 100
+	var preview_width: number = &columns - main_width - 6
+	var line_height: number = &lines - 2 - (&laststatus != 0 ? 1 : 0) - &cmdheight
+	var cmd_place_folder: number = index(g:fuzzy_file_finder.cmd, '.')
+	var cmd: list<string> = cmd_place_folder == -1 ? g:fuzzy_file_finder.cmd + [target_dir] :
+		cmd_place_folder == len(g:fuzzy_file_finder.cmd) ? g:fuzzy_file_finder.cmd[ : - 2 ] + [target_dir] :
+		g:fuzzy_file_finder.cmd[ : cmd_place_folder - 1 ] + [target_dir] + g:fuzzy_file_finder.cmd[ cmd_place_folder + 1 : ]
+
+	if !isdirectory(target_dir)
+		WarningMsg($'Not a directory: {target_dir}')
+		return
+	elseif !executable(cmd[0])
+		WarningMsg($'Not execute: {cmd[0]}')
 		return
 	endif
 	tabnew
