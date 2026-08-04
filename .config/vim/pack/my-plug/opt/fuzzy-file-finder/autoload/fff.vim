@@ -189,9 +189,11 @@ def UpdatePreview(s: dict<any>): void
 	elseif filereadable(p)
 		if index(g:fuzzy_file_finder.image, tolower(fnamemodify(p, ':e'))) != -1
 			if s.display_image
-				if !popup_image#Preview(id, p)
-					popup_image#WarningMsg(id)
-				endif
+				popup_image#Preview(id, p, (v) => {
+					if !v
+						popup_image#WarningMsg(id)
+					endif
+				})
 			else
 				popup_settext(id, [
 					'<Image/Video/PDF/PostScript file>',
