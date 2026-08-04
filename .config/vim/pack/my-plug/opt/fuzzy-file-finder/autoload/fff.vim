@@ -177,7 +177,7 @@ def UpdatePreview(s: dict<any>): void
 	setbufvar(s.preview_buf, '&filetype', '')
 	s.preview_path = p
 	if isdirectory(p)
-		var files: list<dict<any>> = GetFileInfo(p)
+		var files: list<dict<any>> = GetFileInfo(p =~# '/$' ? p : $'{p}/')
 		var max_len: number = max(files->mapnew((_, v) => len(v.size_s)))
 		popup_settext(id, sort(files, (v0, v1) =>
 		                                         v0.time > v1.time ? -1 : v0.time < v1.time ? 1 : # 更新日時降順

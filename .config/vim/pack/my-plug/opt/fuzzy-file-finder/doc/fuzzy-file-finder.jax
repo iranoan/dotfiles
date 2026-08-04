@@ -84,10 +84,10 @@ k          ファイル一覧で次を選択
 設定/オプション~
 
 g:fuzzy_file_finder の以下のキーで変更できる
-                                                      *fuzzy-file-finder-cmd*
+                                                         *fuzzy-file-finder-cmd*
 cmd~
 	Type: |list<string>|
-	Default: `['fdfind', '--hidden', '--follow', '--type', 'file', '--type', 'symlink', '--type', 'directory', '--search-path']`
+	Default: `['find', '-L', '.', '-mindepth', '1', '(', '-type', 'd', '-o', '-type', 'f', '-o', '-type', 'l', ')', '-printf', '%P\n']`
 
 	ファイル一覧を作成するコマンド
 
