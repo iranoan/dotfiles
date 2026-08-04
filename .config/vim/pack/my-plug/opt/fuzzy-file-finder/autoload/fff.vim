@@ -60,17 +60,18 @@ enddef
 
 
 def GetFileInfo(dir: string): list<dict<any>>
+	var d: string = dir =~# '/$' ? dir : $'{dir}/'
 	var info: list<dict<any>>
 	var size: number
 	var size_s: string
-	var type: string = getfperm(dir)
+	var type: string = getfperm(d)
 	var lower_name: string
 	var time: number
 	var time_iso: number
 	var f: string
 
 	if type !~# '^r........$' # 読み取り権限がない→ディクトリ自身の情報のみ返す
-		time = getftime(dir)
+		time = getftime(d)
 		return [{
 			type: 'dir',
 			permission: $'d{type}',
@@ -83,9 +84,9 @@ def GetFileInfo(dir: string): list<dict<any>>
 			link: ''
 		}]
 	endif
-	for p in readdir(dir)
-		f = fnamemodify($'{dir}{p}', ':p')
-		f = f[-1] =~# '[/\\]$' ? f[ : -2 ] : f
+	for p in readdir(d)
+		f = fnamemodify($'{d}{p}', ':p')
+		f = f =~# '[/\\]$' ? f[ : -2 ] : f # 末尾に / があると、シンボリックリンクでも dir 扱いになる
 		type = getftype(f)
 		lower_name = tolower(p)
 		time = getftime(f)
@@ -177,7 +178,7 @@ def UpdatePreview(s: dict<any>): void
 	setbufvar(s.preview_buf, '&filetype', '')
 	s.preview_path = p
 	if isdirectory(p)
-		var files: list<dict<any>> = GetFileInfo(p =~# '/$' ? p : $'{p}/')
+		var files: list<dict<any>> = GetFileInfo(p)
 		var max_len: number = max(files->mapnew((_, v) => len(v.size_s)))
 		popup_settext(id, sort(files, (v0, v1) =>
 		                                         v0.time > v1.time ? -1 : v0.time < v1.time ? 1 : # 更新日時降順
