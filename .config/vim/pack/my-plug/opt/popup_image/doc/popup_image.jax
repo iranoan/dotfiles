@@ -74,7 +74,13 @@ License: GPL Ver.3.
   実際には設定 (|popup_image_options-pt2px|)に依存し、収まりきらないときは縮小
   表示する
 * 小さすぎるものは拡大 (→|popup_image_options-min_size|)
-
+* 変換の成否を得たいときは、次のようにする >vim
+		popup_image#Preview(id, 'sample.jpg', (v) => {
+		    if !v
+		        popup_image#WarningMsg(id)
+		    endif
+		})
+<
 ==============================================================================
                                                             *popup_image-custom*
 設定/オプション~

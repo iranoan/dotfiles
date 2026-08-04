@@ -67,23 +67,45 @@ endif
 
 def SystemBlob(cmd: list<string>): blob
 	var img: blob
-	var job = job_start(cmd, {
+	var b: blob
+	var job: job = job_start(cmd, {
 		out_io: 'pipe',
 		out_mode: 'raw',
-		mode: 'raw',
 		err_io: 'null',
 	})
-	var ch = job_getchannel(job)
-	while job_status(job) ==# 'run'
-		var b = ch_readblob(ch)
+	var ch: channel = job_getchannel(job)
+
+	while ch_status(ch) ==# 'open' || ch_status(ch) ==# 'buffered'
+		b = ch_readblob(ch)
 		if len(b) > 0
-			img = img + b
+			img += b
+		else
+			sleep 1m  # CPU100%消費の張り付き防止
 		endif
 	endwhile
 	return img
 enddef
 
-export def Preview(id: number, f: string): bool # パス f の画像、動画、PDF を表示
+def DummyDone(_: bool)
+enddef
+
+export def Preview(id: number, f: string, OnDone: func(bool) = DummyDone): bool
+	popup_settext(id, ['making image data...'])
+	popup_setoptions(id, {highlight: 'WarningMsg'})
+	redraw
+
+	timer_start(1, (_) => {
+		var success = GenerateAndSetImage(id, f)
+
+		if OnDone != null
+			OnDone(success)
+		endif
+	})
+
+	return true
+enddef
+
+def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動画、PDF を表示
 	if !executable('mimetype')
 		AddErrorMessage(id, ['Need ''mimetype'' command'])
 		return false
