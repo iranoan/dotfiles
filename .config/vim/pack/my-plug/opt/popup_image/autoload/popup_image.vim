@@ -191,7 +191,7 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 		maxwidth: max_w, # 縦横サイズを指定しないと、連続して使われたときに直前に表示された画像サイズに引きずられる
 		maxheight: max_h,
 		border: has_key(opts, 'title') && opts.title !=# '' ? opts.border : [0, 0, 0, 0],
-		opacity: 0
+		opacity: 100
 	}))
 	popup_settext(id, [])
 	redraw
