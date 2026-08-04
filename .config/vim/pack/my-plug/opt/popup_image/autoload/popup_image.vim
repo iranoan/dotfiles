@@ -41,24 +41,21 @@ enddef
 
 if !executable('mimetype')
 	|| !executable('ffprobe')
-	|| !executable('pdfinfo')
-	|| !executable('magick')
-	|| !executable('gs')
 	|| !executable('ffmpeg')
+	|| !executable('gs')
 	popup_notification([
 		'All video/image: ''mimetype'' command',
 		'image:           FFmgeg (ffmpeg/ffprobe command)',
 		'video:           FFmgeg (ffmpeg/ffprobe command)',
-		'PDF/PostScript:  ImageMagick (magick command)',
+		'PDF/PostScript:  and GhostScript (gs command)',
 	], {title: 'Need following tools ', highlight: 'ErrorMsg', borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'], padding: [0, 1, 0, 1]})
-	# makee dummy function
 	export def Preview(id: number, f: string): bool
 		AddErrorMessage(id, [
 			'Need following tools',
 			'All video/image: ''mimetype'' command',
 			'image:           FFmgeg (ffmpeg/ffprobe command)',
 			'video:           FFmgeg (ffmpeg/ffprobe command)',
-			'PDF/PostScript:  ImageMagick (magick command)',
+			'PDF/PostScript:  and GhostScript (gs command)',
 		])
 		return false
 	enddef
@@ -121,8 +118,8 @@ export def Preview(id: number, f: string): bool # パス f の画像、動画、
 		redraw
 	endif
 	if ft ==# 'application/pdf' || ft ==# 'image/x-eps' || ft ==# 'image/eps' || ft ==# 'application/postscript'
-		if !executable('magick')
-			AddErrorMessage(id, ['Need ''ImageMagick'' for image/video/eps/postscript'])
+		if !executable('gs') && !executable('ffmpeg')
+			AddErrorMessage(id, ['Need ''GhostScript'' and ''FFmpeg'' for PDF/eps/postscript'])
 			return false
 		endif
 	elseif ft =~# '^video/' || ft =~# '^image/'
@@ -138,11 +135,18 @@ export def Preview(id: number, f: string): bool # パス f の画像、動画、
 		silent t = ['-ss', $'{str2nr(system([ 'ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', p ])) / 10.0}']
 	endif
 	if ft ==# 'application/pdf' || ft ==# 'image/x-eps' || ft ==# 'image/eps' || ft ==# 'application/postscript'
-		silent [w, h] = systemlist(['magick', 'identify', '-format', '%w %h\n', $'{p}[0]'])[0]
-			->matchlist($'\(\d\+\) \(\d\+\)')[1 : 2]
-			->map((_, v) => str2nr(v) * (ft ==# 'application/pdf' || ft ==# 'application/postscript' ? 5 : 1))
-		[w, h] = ScaleImage(w, h)
-		img_data = SystemBlob(['magick', 'convert', '-density', '300', '-depth', '8', '-resize', $'{w}x{h}!', $'{p}[0]', '-background', 'white', '-alpha', 'remove', 'rgb:-'])
+		var resolution: number
+		var resolution_s: string
+		if ft ==# 'application/pdf' || ft ==# 'application/postscript'
+			resolution = 600
+		else
+			resolution = 72
+		endif
+		w_h = systemlist(['gs', '-dQUIET', '-dBATCH', '-dNOPAUSE', '-sDEVICE=bbox', p])
+			->matchlist('^%%BoundingBox: \+\zs\(\d\+\.\?\d*\) \(\d\+\.\?\d*\) \(\d\+\.\?\d*\) \(\d\+\.\?\d*\)')[1 : ]
+			->map((_, v) => float2nr(round(str2float(v) * resolution / 72)))
+		[w, h] = ScaleImage(w_h[2] - w_h[0], w_h[3] - w_h[1])
+			img_data = SystemBlob(['sh', '-c', $'gs -q -dNOPAUSE -dBATCH -dEPSCrop -sDEVICE=ppmraw -r600 -dFirstPage=1 -dLastPage=1 -sOutputFile=- {shellescape(p)} | ffmpeg -v error -i - -vf scale={w}:{h} -f rawvideo -pix_fmt rgb24 -'])
 	else
 		silent [w, h] = split(system(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height', '-of', 'csv=p=0', p]), ',')
 			->map((_, v) => str2nr(v))

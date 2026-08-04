@@ -23,7 +23,7 @@ License: GPL Ver.3.
 
 * 全てのファイルで mimetype コマンド
 * 画像/動画は FFmgeg (ffmpeg/ffprobe コマンド)
-* PDF/PostScript は ImageMagick (magick コマンド)
+* PDF/PostScript は加えて GhostScript (gs コマンド)
 
 ==============================================================================
                                                        *popup_image-introduction*
