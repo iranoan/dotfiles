@@ -185,11 +185,12 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 		])
 		return false
 	endif
-	popup_setoptions(id, extendnew(getwinvar(id, 'popup_image', {options: {}}).options, {
+	opts = getwinvar(id, 'popup_image', {options: {}}).options
+	popup_setoptions(id, extendnew(opts, {
 		image: {data: img_data, width: w, height: h},
 		maxwidth: max_w, # 縦横サイズを指定しないと、連続して使われたときに直前に表示された画像サイズに引きずられる
 		maxheight: max_h,
-		border: [0, 0, 0, 0],
+		border: has_key(opts, 'title') && opts.title !=# '' ? opts.border : [0, 0, 0, 0],
 		opacity: 0
 	}))
 	popup_settext(id, [])
