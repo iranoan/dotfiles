@@ -209,7 +209,7 @@ def UpdatePreview(s: dict<any>): void
 			endif
 		elseif index(keys(g:fuzzy_file_finder.filter), type) != -1
 			var filter: list<string> = g:fuzzy_file_finder.filter[type]
-			var filter_place_folder: number = index(filter, '<>')
+			var filter_place_folder: number = index(filter, '.')
 			filter = filter_place_folder == -1 ? filter + [p] :
 				filter_place_folder == len(filter) ? filter[ : -2 ] + [p] :
 				filter[ : filter_place_folder - 1 ] + [p] + filter[ filter_place_folder + 1 : ]
@@ -449,7 +449,7 @@ export def Open(dir: string = ''): void
 	var main_width: number = &columns * 45 / 100
 	var preview_width: number = &columns - main_width - 6
 	var line_height: number = &lines - 2 - (&laststatus != 0 ? 1 : 0) - &cmdheight
-	var cmd_place_folder: number = index(g:fuzzy_file_finder.cmd, '<>')
+	var cmd_place_folder: number = index(g:fuzzy_file_finder.cmd, '.')
 	var cmd: list<string> = cmd_place_folder == -1 ? g:fuzzy_file_finder.cmd + [target_dir] :
 		cmd_place_folder == len(g:fuzzy_file_finder.cmd) ? g:fuzzy_file_finder.cmd[ : - 2 ] + [target_dir] :
 		g:fuzzy_file_finder.cmd[ : cmd_place_folder - 1 ] + [target_dir] + g:fuzzy_file_finder.cmd[ cmd_place_folder + 1 : ]
