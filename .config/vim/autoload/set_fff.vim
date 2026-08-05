@@ -6,6 +6,15 @@ function set_fff#main() abort
 	let g:fuzzy_file_finder = #{
 				\ cmd: ['fdfind.sh'],
 				\ open: 'TabEdit',
+				\ image: [
+					\ 'anx', 'asf', 'avi', 'axv', 'flc', 'fli', 'flv', 'gl', 'm2v', 'm4v', 'mkv', 'mov', 'mp4', 'mp4v', 'mpeg', 'mpg',
+					\ 'nuv', 'ogm', 'ogv', 'ogx', 'qt', 'rm', 'rmvb', 'swf', 'vob', 'webm', 'wmv',
+					\ 'avif', 'bmp', 'cgm', 'cr2', 'cur', 'dl', 'dvi', 'emf', 'eps', 'gif', 'ico', 'j2c', 'j2k', 'jp2', 'jpeg', 'jpg',
+					\ 'jpf', 'jpx', 'jxl', 'mng', 'nef', 'pbm', 'pcx', 'pgm', 'png', 'ppm', 'svg', 'svgz', 'tga', 'tiff', 'webp',
+					\ 'xcf', 'xbm', 'xpm', 'xwd', 'yuv',
+					\ 'pdf', 'ps',
+					\ 'epub'
+				\ ],
 				\ filter: {
 					\ 	'zip': ['unzip', '-l'],
 					\ 	'cbz': ['unzip', '-l'],
