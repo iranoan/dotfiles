@@ -633,7 +633,7 @@ def ChangePopupSize(cmdwin: bool): void
 			->map((_, v) => v.variables.fuzzy_state)
 		if v.preview_on # プレビューが表示されている
 			main_width = &columns * 45 / 100
-			preview_width = &columns - main_width - 3
+			preview_width = &columns - main_width - 6
 			winid = v.preview_winid
 			if winbufnr(winid) != -1
 				opts = popup_getoptions(winid)
@@ -650,7 +650,9 @@ def ChangePopupSize(cmdwin: bool): void
 					endif
 				endif
 			endif
+			popup_show(winid)
 		else
+			popup_close(winid)
 			main_width = &columns
 		endif
 		winid = v.list_winid
