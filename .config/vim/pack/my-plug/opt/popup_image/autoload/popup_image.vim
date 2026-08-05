@@ -139,7 +139,7 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 		popup_setoptions(id, {image: {}})
 		redraw
 	endif
-	if ft ==# 'application/pdf' || ft ==# 'image/x-eps' || ft ==# 'image/eps' || ft ==# 'application/postscript'
+	if ft ==# 'application/pdf' || ft ==# 'image/x-eps' || ft ==# 'image/eps' || ft ==# 'application/postscript' || ft == 'application/epub+zip'
 		if !executable('gs') && !executable('ffmpeg')
 			AddErrorMessage(id, ['Need ''GhostScript'' and ''FFmpeg'' for PDF/eps/postscript'])
 			return false
@@ -170,10 +170,24 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 		[w, h] = ScaleImage(w_h[2] - w_h[0], w_h[3] - w_h[1])
 			img_data = SystemBlob(['sh', '-c', $'gs -q -dNOPAUSE -dBATCH -dEPSCrop -sDEVICE=ppmraw -r600 -dFirstPage=1 -dLastPage=1 -sOutputFile=- {shellescape(p)} | ffmpeg -v error -i - -vf scale={w}:{h} -f rawvideo -pix_fmt rgb24 -'])
 	else
+		var temp: string
+		if ft ==# 'application/epub+zip' # Epub は隠し対応
+			if executable('gnome-epub-thumbnailer')
+				temp = $'{tempname()}.png'
+				systemlist(['gnome-epub-thumbnailer', $'{p}', $'{temp}'])
+				p = temp
+			else
+				AddErrorMessage(id, ['Epub need ''gnome-epub-thumbnailer'''])
+				return false
+			endif
+		endif
 		silent [w, h] = split(system(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height', '-of', 'csv=p=0', p]), ',')
 			->map((_, v) => str2nr(v))
 		[w, h] = ScaleImage(w, h)
 		img_data = SystemBlob(['ffmpeg'] + t + ['-i', p, '-vf', $'scale={w}:{h}', '-vframes', '1', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'])
+		if temp !=# ''
+			delete(temp)
+		endif
 	endif
 	if len(img_data) != w * h * 3
 		AddErrorMessage(id, [
