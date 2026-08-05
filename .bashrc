@@ -77,6 +77,7 @@ if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
 		linux) [ "$FBTERM" ] && export TERM=fbterm && color_prompt=yes;;
 		fbterm) color_prompt=yes;;
 		kmscon) color_prompt=yes;;
+		foot) color_prompt=yes;;
 		xterm-color|*-256color) color_prompt=yes;;
 		*)
 			if [ "$VIM_TERMINAL" ]; then
