@@ -623,7 +623,7 @@ def ChangePopupSize(cmdwin: bool): void
 	var opts: dict<any>
 
 	if cmdwin
-			|| gettabinfo()[0].windows->map((_, v) => win_gettype(v))->index('command') != -1 # コマンド・ライン・ウィンドウがある
+			|| gettabinfo(tabpagenr())[0].windows->map((_, v) => win_gettype(v))->index('command') != -1 # コマンド・ライン・ウィンドウがある
 		line_height = &lines - 2 - (&laststatus != 0 ? 1 : 0) - &cmdheight - (&cmdwinheight + (&laststatus != 0 ? 1 : 0))
 	else
 		line_height = &lines - 2 - (&laststatus != 0 ? 1 : 0) - &cmdheight
