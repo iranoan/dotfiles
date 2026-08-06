@@ -520,7 +520,8 @@ export def Open(dir: string = ''): void
 	var target_dir: string = fnamemodify(dir ==# '' ? getcwd() : expand(dir, true), ':p')
 	var target_len: number = len(target_dir)
 	var main_width: number = &columns * 45 / 100
-	var preview_width: number = &columns - main_width - 6
+	# var preview_width: number = &columns - main_width - 6
+	var preview_width: number = &columns - main_width - 10 # E340
 	var line_height: number = &lines - 2 - (&laststatus != 0 ? 1 : 0) - &cmdheight
 	var cmd_place_folder: number = index(g:fuzzy_file_finder.cmd, '.')
 	var cmd: list<string> = cmd_place_folder == -1 ? g:fuzzy_file_finder.cmd + [target_dir] :
@@ -574,23 +575,28 @@ export def Open(dir: string = ''): void
 		maxwidth: main_width,
 		minheight: line_height,
 		maxheight: line_height,
-		border: [1, 1, 0, 0],
-		borderchars: ['─', '│', '─', '│', '╭', '┬', '╯', '╰'],
+		# border: [1, 1, 0, 0],
+		border: [1, 1, 1, 1], # E340
+		borderchars: ['─', '│', '─', '│', '╭', '┬', '┴', '╰'], # E340
 		padding: [0, 0, 0, 1],
+		zindex: 50, # E340
 		cursorline: true
 	})
 	s.preview_winid = popup_create(s.preview_buf, {
 		title: ' Preview ',
 		wrap: false,
 		line: 2,
-		col: main_width + 3,
+		# col: main_width + 3,
+		col: main_width + 4, # E340
 		minwidth: preview_width,
 		maxwidth: preview_width,
 		minheight: line_height,
 		maxheight: line_height,
-		border: [1, 0, 0, 0],
-		borderchars: ['─', '│', '─', '│', '┬', '╮', '╯', '╰'],
+		# border: [1, 0, 0, 0],
+		border: [1, 1, 1, 1], # E340
+		borderchars: ['─', '│', '─', '│', '┬', '╮', '╯', '┴'], # E340
 		borderhighlight: ['Pmenu', 'Pmenu', 'Pmenu', 'Pmenu'],
+		zindex: 51, # E340
 		padding: [0, 1, 0, 2],
 	})
 	execute $'colorscheme {g:colors_name}' # これがないと画像表示状態で ChangePopupSize() が起きると、テキスト背景が標準色 (黒/白) になる (filetype を変えるため)
@@ -633,13 +639,18 @@ def ChangePopupSize(cmdwin: bool): void # cmdwin 現在の状態でコマンド�
 			->map((_, v) => v.variables.fuzzy_state)
 		if v.preview_on # プレビューが表示されている
 			main_width = &columns * 45 / 100
-			preview_width = &columns - main_width - 6
+			# preview_width = &columns - main_width - 6
+			preview_width = &columns - main_width - 10 # E340
 			winid = v.preview_winid
 			if winbufnr(winid) != -1
 				opts = popup_getoptions(winid)
 				if opts.maxwidth != preview_width || opts.maxheight != line_height
 					popup_setoptions(winid, extendnew(opts, {
-						col: main_width + 3,
+						# 元は次の2つは無し
+						border: [1, 1, 1, 1,], # E340
+						borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '┴'], # E340
+						col: main_width + 4, # E340
+						# col: main_width + 3,
 						minwidth: preview_width,
 						maxwidth: preview_width,
 						minheight: line_height,
