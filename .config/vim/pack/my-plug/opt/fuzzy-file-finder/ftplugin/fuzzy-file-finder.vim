@@ -10,9 +10,9 @@ if !get(g:fuzzy_file_finder, 'ftplugin', false)
 	g:fuzzy_file_finder.ftplugin = true
 	augroup FuzzyFileFinder
 		autocmd!
-		autocmd FuzzyFileFinder VimResized * fff#Bridge('VimResized')
-		autocmd FuzzyFileFinder CmdwinEnter * fff#Bridge('CmdwinEnter')
-		autocmd FuzzyFileFinder CmdwinLeave * fff#Bridge('CmdwinLeave')
+		autocmd VimResized * fff#Bridge('VimResized')
+		autocmd CmdwinEnter * fff#Bridge('CmdwinEnter')
+		autocmd CmdwinLeave * fff#Bridge('CmdwinLeave')
 	augroup END
 endif
 
