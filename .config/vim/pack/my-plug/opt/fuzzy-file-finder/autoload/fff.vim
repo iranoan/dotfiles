@@ -465,7 +465,7 @@ export def Bridge(cmd: string): void
 	elseif cmd ==# 'Render'
 		RequestRender(b:fuzzy_state)
 	elseif cmd ==# 'VimResized'
-		ChangePopupSize(false)
+		ChangePopupSize(true)
 	elseif cmd ==# 'CmdwinLeave'
 		if CheckFuzzyFileFinderWin()
 			ChangePopupSize(false)
@@ -615,7 +615,7 @@ export def Open(dir: string = ''): void
 	startinsert
 enddef
 
-def ChangePopupSize(cmdwin: bool): void
+def ChangePopupSize(cmdwin: bool): void # cmdwin 現在の状態でコマンド・ライン・ウィンドウで判定するか?→false なら完全に無し扱い
 	var main_width: number
 	var preview_width: number
 	var line_height: number
@@ -623,7 +623,7 @@ def ChangePopupSize(cmdwin: bool): void
 	var opts: dict<any>
 
 	if cmdwin
-			|| gettabinfo(tabpagenr())[0].windows->map((_, v) => win_gettype(v))->index('command') != -1 # コマンド・ライン・ウィンドウがある
+			&& gettabinfo(tabpagenr())[0].windows->map((_, v) => win_gettype(v))->index('command') != -1 # コマンド・ライン・ウィンドウがある
 		line_height = &lines - 2 - (&laststatus != 0 ? 1 : 0) - &cmdheight - (&cmdwinheight + (&laststatus != 0 ? 1 : 0))
 	else
 		line_height = &lines - 2 - (&laststatus != 0 ? 1 : 0) - &cmdheight
@@ -684,5 +684,5 @@ def TogglePreview(s: dict<any>): void
 		popup_show(winid)
 		s.preview_on = true
 	endif
-	ChangePopupSize(false)
+	ChangePopupSize(true)
 enddef
