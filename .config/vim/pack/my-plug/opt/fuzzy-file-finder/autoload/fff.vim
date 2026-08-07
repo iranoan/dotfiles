@@ -157,7 +157,7 @@ def UpdatePreview(s: dict<any>): void
 	if empty(s.matches)
 		s.preview_path = ''
 		popup_settext(s.preview_winid, '<No selection>')
-		popup_setoptions(id, {highlight: 'WarningMsg'})
+		popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
 		setbufvar(s.preview_buf, '&filetype', '')
 		setbufvar(s.preview_buf, '&modified', false)
 		if s.display_image
@@ -174,7 +174,7 @@ def UpdatePreview(s: dict<any>): void
 	if s.display_image
 		popup_image#Clear(id)
 	endif
-	popup_setoptions(id, {highlight: 'Pmenu', highlights: ''})
+	popup_setoptions(id, {highlight: 'Pmenu', highlights: 'PopupTitle:Pmenu,Popup:Pmenu'})
 	setbufvar(s.preview_buf, '&filetype', '')
 	s.preview_path = p
 	if isdirectory(p)
@@ -206,7 +206,7 @@ def UpdatePreview(s: dict<any>): void
 					'video:           FFmgeg (ffmpeg/ffprobe command)',
 					'PDF/PostScript:  ImageMagick (magick command)',
 				])
-				popup_setoptions(id, {highlight: 'WarningMsg'})
+				popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
 			endif
 		elseif index(keys(g:fuzzy_file_finder.filter), type) != -1
 			var filter: list<string> = g:fuzzy_file_finder.filter[type]
@@ -218,22 +218,22 @@ def UpdatePreview(s: dict<any>): void
 				popup_settext(id, systemlist(filter))
 				if v:shell_error != 0
 					popup_settext(id, [ $'<Failed to execute ''{join(filter)}''>'])
-					popup_setoptions(id, {highlight: 'WarningMsg'})
+					popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
 				endif
 			else
 				popup_settext(id, [ $'<filter command ''{filter[0]}'' can not executable>'])
-				popup_setoptions(id, {highlight: 'WarningMsg'})
+				popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
 			endif
 		elseif IsBinary(p)
 			popup_settext(id, '<Binary file>')
-			popup_setoptions(id, {highlight: 'WarningMsg'})
+			popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
 		else
 			popup_settext(id, readfile(p))
 			setbufvar(s.preview_buf, '&filetype', type)
 		endif
 	else
 		popup_settext(id, '<Unreadable file>')
-		popup_setoptions(id, {highlight: 'WarningMsg'})
+		popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
 	endif
 	setbufvar(s.preview_buf, '&modified', false)
 enddef
