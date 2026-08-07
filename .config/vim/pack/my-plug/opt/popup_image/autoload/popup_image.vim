@@ -111,6 +111,7 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 		return false
 	endif
 	var opts: dict<any> = popup_getoptions(id)
+	var opts_win: dict<any> = getwinvar(id, 'popup_image', {options: {}}).options
 	var max_w: number = opts.maxwidth  == 0 ? &columns : opts.maxwidth
 	var max_h: number = opts.maxheight == 0 ? &lines   : opts.maxheight
 
@@ -134,7 +135,8 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 	silent var ft: string = systemlist(['mimetype', '--brief', p])[0]
 	var img_data: blob
 	var w_h: list<number>
-	var padding: list<number>
+	var border: number = get(opts, 'border', []) == [] ? 1 : opts.border[0]
+	var padding: list<number> = get(opts, 'padding', [0, 0, 0, 0])
 
 	if has_key(opts, 'image') # 連続して呼び出されたときに、消さないと後ろに残る
 		popup_setoptions(id, {image: {}})
@@ -200,14 +202,12 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 		])
 		return false
 	endif
-	opts = getwinvar(id, 'popup_image', {options: {}}).options
-	padding = get(opts, 'padding', [0, 0, 0, 0])
-	popup_setoptions(id, extendnew(opts, {
+	popup_setoptions(id, extendnew(opts_win, {
 		image: {data: img_data, width: w, height: h},
 		maxwidth: max_w, # 縦横サイズを指定しないと、連続して使われたときに直前に表示された画像サイズに引きずられる
 		maxheight: max_h,
-		border: has_key(opts, 'title') && opts.title !=# '' ? opts.border : [0, 0, 0, 0],
-		padding: padding[0] == 0 && get(opts, 'title', '') !=# '' ? [1, padding[1], padding[2], padding[2]] : padding,
+		border: has_key(opts_win, 'title') && opts_win.title !=# '' ? opts_win.border : [0, 0, 0, 0],
+		padding: (border == 0 && get(opts, 'title', '') !=# '') ? [1, padding[1], padding[2], padding[3]] : padding,
 		opacity: 100
 	}))
 	popup_settext(id, [])
