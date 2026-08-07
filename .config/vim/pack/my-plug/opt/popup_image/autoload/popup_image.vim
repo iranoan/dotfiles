@@ -13,13 +13,13 @@ export def Clear(id: number): void
 		if getwinvar(id, 'popup_image', {}) ==# {}
 			setwinvar(id, 'popup_image', {
 				clear: { # クリアする時に設定するオプション
-					highlight: opts.highlight ==# '' ? 'Pmenu' : opts.highlight,
-					highlights: opts.highlights ==# '' ? '' : opts.highlights,
+					highlight: (opts.highlight ==# '' || opts.highlight ==# 'WarningMsg') ? 'Pmenu' : opts.highlight,
+					highlights: (opts.highlights ==# '' || opts.highlights ==# 'PopupTitle:Pmenu,Popup:WarningMsg') ? '' : opts.highlights,
 					image: {}
 				},
 				err_msg: [],
 				options: { # イメージ表示で変更するオプション
-					border: [1, 1, 1, 1],
+					border: get(opts, 'border', [0, 0, 0, 0]),
 					opacity: 100
 				}
 			})
@@ -36,7 +36,7 @@ enddef
 
 export def WarningMsg(id: number): void
 	popup_settext(id, remove(getwinvar(id, 'popup_image', {err_msg: []}).err_msg, -1))
-	popup_setoptions(id, {highlight: 'WarningMsg'})
+	popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
 enddef
 
 if !executable('mimetype')
@@ -91,7 +91,7 @@ enddef
 
 export def Preview(id: number, f: string, OnDone: func(bool) = DummyDone): bool
 	popup_settext(id, ['making image data...'])
-	popup_setoptions(id, {highlight: 'WarningMsg'})
+	popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
 	redraw
 
 	timer_start(1, (_) => {
@@ -134,6 +134,7 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 	silent var ft: string = systemlist(['mimetype', '--brief', p])[0]
 	var img_data: blob
 	var w_h: list<number>
+	var padding: list<number>
 
 	if has_key(opts, 'image') # 連続して呼び出されたときに、消さないと後ろに残る
 		popup_setoptions(id, {image: {}})
@@ -200,11 +201,13 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 		return false
 	endif
 	opts = getwinvar(id, 'popup_image', {options: {}}).options
+	padding = get(opts, 'padding', [0, 0, 0, 0])
 	popup_setoptions(id, extendnew(opts, {
 		image: {data: img_data, width: w, height: h},
 		maxwidth: max_w, # 縦横サイズを指定しないと、連続して使われたときに直前に表示された画像サイズに引きずられる
 		maxheight: max_h,
 		border: has_key(opts, 'title') && opts.title !=# '' ? opts.border : [0, 0, 0, 0],
+		padding: padding[0] == 0 && get(opts, 'title', '') !=# '' ? [1, padding[1], padding[2], padding[2]] : padding,
 		opacity: 100
 	}))
 	popup_settext(id, [])
