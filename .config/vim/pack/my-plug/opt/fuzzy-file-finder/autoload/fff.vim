@@ -480,11 +480,9 @@ def Confirm(s: dict<any>): void
 					echo $'Binary file: {f}'
 					echohl None
 				endif
-				echohl ErrorMsg
-				echo systemlist([open_b, f])->join('\n')
-				echohl None
+				job_start([open_b, f])
 			else
-				execute $'{open} {fnameescape(f)}'
+				execute $'{open} {f}'
 			endif
 		endfor
 	endif
