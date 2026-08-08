@@ -150,31 +150,34 @@ type~
 		Type: |dict<string>|
 
 		* 拡張子ごとの |'filetype'| を指定
+		  Ex. {vim: 'vim'}
 
 	name~
 		Type: |dict<string>|
 
 		* ファイル名ごとの |'filetype'| を指定
+		  Ex. {vimrc: 'vim', gvimrc: 'vim'}
 
 	path~
 		Type: |list<dict<string>>|
 
 		* パスごとの |'filetype'| を指定
-		* {reg: '^\~/.config/fd/[^/]\+$', type: 'gitignore'},
-		  のように、reg キーで正規表現を type で |'filetype'| のペアの辞書
+		* Ex. {reg: '^\~/.config/fd/[^/]\+$', type: 'gitignore'},
+		  reg キーで正規表現を type で |'filetype'| のペアの辞書
 
 	image~
 	Type: |list<string>|
 
 	* 画像プレビューさせる拡張子のリスト
+	  Ex. ['jpg', 'jpeg', 'png']
 	* 実際に画像表示させるには |popup_image| プラグインが必要
 
 	filter~
 		Type: |dict<list<string>>|
 
 		* 拡張子ごとのプレビュー枠に表示するフィルタープログラム
-		* zip: ['unzip', '-l']
-		  のように、拡張子とフィルター・プログラム (必ず list<string>) のペア指定する
+		* Ex. {zip: ['unzip', '-l']}
+		  拡張子とフィルター・プログラム (必ず list<string>) のペア指定する
 		* '.' があればそれが操作ファイルに置き換わる
 
 open~
@@ -183,6 +186,7 @@ open~
 
 	* 上記の image 未登録、ディレクトリ、バイナリ・ファイル以外を Vim で開く時に用
 	  いるコマンド
+	  Ex. open: 'tabedit'
 
 dir~
 	Type: |bool|
