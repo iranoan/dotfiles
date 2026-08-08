@@ -415,30 +415,6 @@ xnoremap <Leader>hH <Cmd>call set_transform#main('Kata2hira')<CR>
 # nnoremap <Leader>hb :Base64<CR>
 
 # https://github.com/junegunn/fzf.vim {{{2 # tabedit, fern.vim, fzf.vim サイクリック依存
-nnoremap <silent><Leader>fr <Cmd>call set_fzf#vim('Files ~')<CR>
-xnoremap <silent><Leader>fr <Cmd>call set_fzf#vim('Files ~')<CR>
-nnoremap <silent><Leader>ff <Cmd>call set_fzf#vim('Files')<CR>
-xnoremap <silent><Leader>ff <Cmd>call set_fzf#vim('Files')<CR>
-nnoremap <silent><Leader>fu <Cmd>call set_fzf#vim('Files ..')<CR>
-xnoremap <silent><Leader>fu <Cmd>call set_fzf#vim('Files ..')<CR>
-nnoremap <silent><Leader>f. <Cmd>call set_fzf#vim('Files ~/dotfiles')<CR>
-xnoremap <silent><Leader>f. <Cmd>call set_fzf#vim('Files ~/dotfiles')<CR>
-nnoremap <silent><Leader>fv <Cmd>call set_fzf#vim('Files $MYVIMDIR')<CR>
-xnoremap <silent><Leader>fv <Cmd>call set_fzf#vim('Files $MYVIMDIR')<CR>
-nnoremap <silent><Leader>fs <Cmd>call set_fzf#vim('Files ~/src')<CR>
-xnoremap <silent><Leader>fs <Cmd>call set_fzf#vim('Files ~/src')<CR>
-nnoremap <silent><Leader>fx <Cmd>call set_fzf#vim('Files ~/bin')<CR>
-xnoremap <silent><Leader>fx <Cmd>call set_fzf#vim('Files ~/bin')<CR>
-nnoremap <silent><Leader>fe <Cmd>call set_fzf#vim('Files ~/book/epub')<CR>
-xnoremap <silent><Leader>fe <Cmd>call set_fzf#vim('Files ~/book/epub')<CR>
-nnoremap <silent><Leader>fd <Cmd>call set_fzf#vim('Files ~/downloads')<CR>
-xnoremap <silent><Leader>fd <Cmd>call set_fzf#vim('Files ~/downloads')<CR>
-nnoremap <silent><Leader>fD <Cmd>call set_fzf#vim('Files ~/Document')<CR>
-xnoremap <silent><Leader>fD <Cmd>call set_fzf#vim('Files ~/Document')<CR>
-nnoremap <silent><Leader>fp <Cmd>call set_fzf#vim('Files ~/public_html/iranoan')<CR>
-xnoremap <silent><Leader>fp <Cmd>call set_fzf#vim('Files ~/public_html/iranoan')<CR>
-nnoremap <silent><Leader>fi <Cmd>call set_fzf#vim('Files ~/Information/slide')<CR>
-xnoremap <silent><Leader>fi <Cmd>call set_fzf#vim('Files ~/Information/slide')<CR>
 # nnoremap <silent><Leader>fb <Cmd>call set_fzf#vim('Buffers')<CR>
 # xnoremap <silent><Leader>fb <Cmd>call set_fzf#vim('Buffers')<CR>
 nnoremap <silent><Leader>fc <Cmd>call set_fzf#vim('Commands')<CR>
@@ -479,11 +455,35 @@ nnoremap <Leader>fb <Cmd>call set_fzf#tabs()<CR>
 nnoremap <Leader>fw <Cmd>call set_fzf#tabs()<CR>
 
 # GVim なら環境に関係なく画像プレピュー可能な fuzzy file finder $MYVIMDIR/pack/my-plug/opt/fuzzy-file-finder/ {{{2
-augroup Fuzzy_File_Finder # tabedit, fern.vim, fzf.vim サイクリック依存
-	autocmd!
-	autocmd FuncUndefined fff#* set_fff#main()
-		| autocmd_delete([{group: 'Fuzzy_File_Finder'}])
-augroup END
+nnoremap <silent><Leader>fr <Cmd>call set_fff#main('call fff#Open("~")')<CR>
+xnoremap <silent><Leader>fr <Cmd>call set_fff#main('call fff#Open("~")')<CR>
+nnoremap <silent><Leader>ff <Cmd>call set_fff#main('call fff#Open()')<CR>
+xnoremap <silent><Leader>ff <Cmd>call set_fff#main('call fff#Open()')<CR>
+nnoremap <silent><Leader>fu <Cmd>call set_fff#main('call fff#Open("..")')<CR>
+xnoremap <silent><Leader>fu <Cmd>call set_fff#main('call fff#Open("..")')<CR>
+nnoremap <silent><Leader>f. <Cmd>call set_fff#main('call fff#Open("~/dotfiles")')<CR>
+xnoremap <silent><Leader>f. <Cmd>call set_fff#main('call fff#Open("~/dotfiles")')<CR>
+nnoremap <silent><Leader>fv <Cmd>call set_fff#main('call fff#Open("$MYVIMDIR")')<CR>
+xnoremap <silent><Leader>fv <Cmd>call set_fff#main('call fff#Open("$MYVIMDIR")')<CR>
+nnoremap <silent><Leader>fs <Cmd>call set_fff#main('call fff#Open("~/src")')<CR>
+xnoremap <silent><Leader>fs <Cmd>call set_fff#main('call fff#Open("~/src")')<CR>
+nnoremap <silent><Leader>fx <Cmd>call set_fff#main('call fff#Open("~/bin")')<CR>
+xnoremap <silent><Leader>fx <Cmd>call set_fff#main('call fff#Open("~/bin")')<CR>
+nnoremap <silent><Leader>fe <Cmd>call set_fff#main('call fff#Open("~/book/epub")')<CR>
+xnoremap <silent><Leader>fe <Cmd>call set_fff#main('call fff#Open("~/book/epub")')<CR>
+nnoremap <silent><Leader>fd <Cmd>call set_fff#main('call fff#Open("~/downloads")')<CR>
+xnoremap <silent><Leader>fd <Cmd>call set_fff#main('call fff#Open("~/downloads")')<CR>
+nnoremap <silent><Leader>fD <Cmd>call set_fff#main('call fff#Open("~/Document")')<CR>
+xnoremap <silent><Leader>fD <Cmd>call set_fff#main('call fff#Open("~/Document")')<CR>
+nnoremap <silent><Leader>fp <Cmd>call set_fff#main('call fff#Open("~/public_html/iranoan")')<CR>
+xnoremap <silent><Leader>fp <Cmd>call set_fff#main('call fff#Open("~/public_html/iranoan")')<CR>
+nnoremap <silent><Leader>fi <Cmd>call set_fff#main('call fff#Open("~/Information/slide")')<CR>
+xnoremap <silent><Leader>fi <Cmd>call set_fff#main('call fff#Open("~/Information/slide")')<CR>
+# augroup Fuzzy_File_Finder
+# 	autocmd!
+# 	autocmd FuncUndefined fff#* set_fff#main()
+# 		| autocmd_delete([{group: 'Fuzzy_File_Finder'}])
+# augroup END
 
 # ソースの実行結果を別バッファに表示 https://github.com/thinca/vim-quickrun {{{2
 nnoremap <silent><Leader>qr  <Cmd>call set_quickrun#main()<CR>
