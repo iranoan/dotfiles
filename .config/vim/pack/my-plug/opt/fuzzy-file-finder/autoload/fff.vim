@@ -602,8 +602,8 @@ var ListBorder = (v: list<number>): list<number> => # 右側のプレビュー�
 	g:fuzzy_file_finder.preview_border[3] == 1 ? [v[0], 0] + v[2 : ] : v
 
 export def Open(dir: string = ''): void
-	var target_dir: string = fnamemodify(dir ==# '' ? getcwd() : expand(dir, true), ':p')
-	var target_len: number = len(target_dir)
+	var target_dir: string = $'{fnamemodify(dir ==# '' ? getcwd() : expand(dir, true), ':p')->resolve()}'
+	var target_len: number
 	var list_width: number
 	var preview_width: number
 	var line_height: number
@@ -613,6 +613,8 @@ export def Open(dir: string = ''): void
 		cmd_place_folder == len(g:fuzzy_file_finder.cmd) ? g:fuzzy_file_finder.cmd[ : - 2 ] + [target_dir] :
 		g:fuzzy_file_finder.cmd[ : cmd_place_folder - 1 ] + [target_dir] + g:fuzzy_file_finder.cmd[ cmd_place_folder + 1 : ]
 
+	target_dir = target_dir =~# '/$' ? target_dir : $'{target_dir}/'
+	target_len = len(target_dir)
 	if !isdirectory(target_dir)
 		WarningMsg($'Not a directory: {target_dir}')
 		return
@@ -634,7 +636,7 @@ export def Open(dir: string = ''): void
 		matches: [],
 		selected_idx: 0,
 		marked_files: {},
-		target: stridx(target_dir, $'{$HOME}/') == 0 ? '~/' .. target_dir[len($'{$HOME}/') :] : target_dir,
+		target: stridx(target_dir, $'{$HOME}/') == 0 ? '~/' .. target_dir[len($'{$HOME}/') : ] : target_dir,
 		list_winid: 0,
 		preview_winid: 0,
 		preview_on: true,
