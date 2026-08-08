@@ -516,13 +516,51 @@ def WarningMsg(s: string): void
 		})
 enddef
 
+def GetWindowSize(prev_on: bool, cmdwin: bool): list<number>
+	var list_width: number
+	var preview_width: number
+	var line_height: number
+	var ls_border: list<number> = g:fuzzy_file_finder.list_border
+	var pv_border: list<number> = g:fuzzy_file_finder.preview_border
+	var ls_border_c: list<string>
+	var pv_border_c: list<string> = g:fuzzy_file_finder.preview_borderchars
+	var slide: number
+
+	ls_border = ls_border == [] ? [1, 1, 1, 1] : ls_border
+	if cmdwin
+			&& gettabinfo(tabpagenr())[0].windows->map((_, v) => win_gettype(v))->index('command') != -1 # コマンド・ライン・ウィンドウがある
+		line_height = &lines - ls_border[2] - (&laststatus != 0 ? 1 : 0) - &cmdheight - (&cmdwinheight + (&laststatus != 0 ? 1 : 0)) - 2 # タイトルとフィルター入力の為 1 行ずらしている合わせて 2 行分は必ず減る
+	else
+		line_height = &lines - ls_border[2] - (&laststatus != 0 ? 1 : 0) - &cmdheight - 2
+	endif
+	if prev_on
+		ls_border_c = g:fuzzy_file_finder.list_borderchars
+		list_width = &columns * 45 / 100
+	else
+		ls_border_c = g:fuzzy_file_finder.list_borderchars
+		list_width = &columns - ls_border[1] * strdisplaywidth(ls_border_c[1]) - ls_border[3] * strdisplaywidth(ls_border_c[3]) - 2 + ls_border[1] * ls_border[3] # スクロール・バーの分
+	endif
+	preview_width = &columns - list_width - 5 # スクロール・バーとパディングの分 (プレビュー枠がズレたり (ambiwidth=single)、右端に〉が表示される (ambiwidth=double) する分の微調整)
+		- (
+			  ls_border[1] * strdisplaywidth(ls_border_c[1])
+			+ pv_border[1] * strdisplaywidth(pv_border_c[1])
+			+ pv_border[3] * strdisplaywidth(pv_border_c[3])
+			+ (pv_border[3] * strdisplaywidth(pv_border_c[3]) == 1 ? 1 : 0)
+		)
+	slide = list_width + 3 + ls_border[3]
+	return [list_width, preview_width, line_height, slide]
+enddef
+
+var ListBorder = (v: list<number>): list<number> => # 右側のプレビュー枠左側に罫線があれば、左側のリスト枠右側は強制的に無しにする (重ねたように見せつつ余分な領域をなくす)
+	g:fuzzy_file_finder.preview_border[3] == 1 ? [v[0], 0] + v[2 : ] : v
+
 export def Open(dir: string = ''): void
 	var target_dir: string = fnamemodify(dir ==# '' ? getcwd() : expand(dir, true), ':p')
 	var target_len: number = len(target_dir)
-	var main_width: number = &columns * 45 / 100
-	# var preview_width: number = &columns - main_width - 6
-	var preview_width: number = &columns - main_width - 10 # E340
-	var line_height: number = &lines - 2 - (&laststatus != 0 ? 1 : 0) - &cmdheight
+	var list_width: number
+	var preview_width: number
+	var line_height: number
+	var slide: number
 	var cmd_place_folder: number = index(g:fuzzy_file_finder.cmd, '.')
 	var cmd: list<string> = cmd_place_folder == -1 ? g:fuzzy_file_finder.cmd + [target_dir] :
 		cmd_place_folder == len(g:fuzzy_file_finder.cmd) ? g:fuzzy_file_finder.cmd[ : - 2 ] + [target_dir] :
@@ -537,6 +575,7 @@ export def Open(dir: string = ''): void
 	endif
 	tabnew
 	execute $'lcd {target_dir}'
+	[list_width, preview_width, line_height, slide] = GetWindowSize(true, true)
 	var s = {
 		display_image: getscriptinfo({name: '/plugin/popup_image.vim'}) != [],
 		tabnr: tabpagenr(),
@@ -571,33 +610,30 @@ export def Open(dir: string = ''): void
 		title: $' [{s.target}] 0/0 ',
 		line: 2,
 		col: 1,
-		minwidth: main_width,
-		maxwidth: main_width,
+		minwidth: list_width,
+		maxwidth: list_width,
 		minheight: line_height,
 		maxheight: line_height,
-		# border: [1, 1, 0, 0],
-		border: [1, 1, 1, 1], # E340
-		borderchars: ['─', '│', '─', '│', '╭', '┬', '┴', '╰'], # E340
+		border: ListBorder(g:fuzzy_file_finder.list_border),
+		borderchars: g:fuzzy_file_finder.list_borderchars,
 		padding: [0, 0, 0, 1],
-		zindex: 50, # E340
+		zindex: 50,
 		cursorline: true
 	})
 	s.preview_winid = popup_create(s.preview_buf, {
 		title: ' Preview ',
 		wrap: false,
 		line: 2,
-		# col: main_width + 3,
-		col: main_width + 4, # E340
+		col: slide,
 		minwidth: preview_width,
 		maxwidth: preview_width,
 		minheight: line_height,
 		maxheight: line_height,
-		# border: [1, 0, 0, 0],
-		border: [1, 1, 1, 1], # E340
-		borderchars: ['─', '│', '─', '│', '┬', '╮', '╯', '┴'], # E340
+		border: g:fuzzy_file_finder.preview_border,
+		borderchars: g:fuzzy_file_finder.preview_borderchars,
 		borderhighlight: ['Pmenu', 'Pmenu', 'Pmenu', 'Pmenu'],
-		zindex: 51, # E340
-		padding: [0, 1, 0, 2],
+		zindex: 51,
+		padding: [0, 1, 0, 1],
 	})
 	execute $'colorscheme {g:colors_name}' # これがないと画像表示状態で ChangePopupSize() が起きると、テキスト背景が標準色 (黒/白) になる (filetype を変えるため)
 	s.canceled = false
@@ -622,60 +658,55 @@ export def Open(dir: string = ''): void
 enddef
 
 def ChangePopupSize(cmdwin: bool): void # cmdwin 現在の状態でコマンド・ライン・ウィンドウで判定するか?→false なら完全に無し扱い
-	var main_width: number
+	var list_width: number
 	var preview_width: number
 	var line_height: number
 	var winid: number
 	var opts: dict<any>
+	var slide: number
+	var border: list<number>
 
-	if cmdwin
-			&& gettabinfo(tabpagenr())[0].windows->map((_, v) => win_gettype(v))->index('command') != -1 # コマンド・ライン・ウィンドウがある
-		line_height = &lines - 2 - (&laststatus != 0 ? 1 : 0) - &cmdheight - (&cmdwinheight + (&laststatus != 0 ? 1 : 0))
-	else
-		line_height = &lines - 2 - (&laststatus != 0 ? 1 : 0) - &cmdheight
-	endif
 	for v in getbufinfo()
 			->filter((_, v) => has_key(v.variables, 'fuzzy_state'))
 			->map((_, v) => v.variables.fuzzy_state)
 		if v.preview_on # プレビューが表示されている
-			main_width = &columns * 45 / 100
-			# preview_width = &columns - main_width - 6
-			preview_width = &columns - main_width - 10 # E340
+			[list_width, preview_width, line_height, slide] = GetWindowSize(true, cmdwin)
 			winid = v.preview_winid
 			if winbufnr(winid) != -1
 				opts = popup_getoptions(winid)
 				if opts.maxwidth != preview_width || opts.maxheight != line_height
-					popup_setoptions(winid, extendnew(opts, {
-						# 元は次の2つは無し
-						border: [1, 1, 1, 1,], # E340
-						borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '┴'], # E340
-						col: main_width + 4, # E340
-						# col: main_width + 3,
+					popup_setoptions(winid, {
+						border: g:fuzzy_file_finder.preview_border,
+						col: slide,
 						minwidth: preview_width,
 						maxwidth: preview_width,
 						minheight: line_height,
 						maxheight: line_height
-					}))
+					})
 					if get(opts, 'image', {}) != {}
 						popup_image#ResetPreview(winid, v.matches[v.selected_idx])
 					endif
 				endif
 			endif
 			popup_show(winid)
+			border = ListBorder(g:fuzzy_file_finder.list_border)
 		else
+			border = g:fuzzy_file_finder.list_border
+			[list_width, preview_width, line_height, slide] = GetWindowSize(false, cmdwin)
 			popup_close(winid)
-			main_width = &columns
 		endif
 		winid = v.list_winid
 		if winbufnr(winid) != -1
 			opts = popup_getoptions(winid)
-			if opts.maxwidth != main_width || opts.maxheight != line_height
-				popup_setoptions(winid, extendnew(opts, {
-					minwidth: main_width,
-					maxwidth: main_width,
+			if opts.maxwidth != list_width || opts.maxheight != line_height
+				popup_setoptions(winid, {
+					border: border,
+					borderchars: g:fuzzy_file_finder.list_borderchars,
+					minwidth: list_width,
+					maxwidth: list_width,
 					minheight: line_height,
 					maxheight: line_height
-				}))
+				})
 			endif
 		endif
 	endfor

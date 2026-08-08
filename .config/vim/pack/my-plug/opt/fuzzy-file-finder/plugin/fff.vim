@@ -3,6 +3,10 @@ scriptencoding utf-8
 
 g:fuzzy_file_finder = extendnew({
 	cmd: ['find', '-L', '.', '-mindepth', '1', '(', '-type', 'd', '-o', '-type', 'f', '-o', '-type', 'l', ')', '-printf', '%P\n'],
+	list_border: [1, 1, 1, 1],
+	preview_border: [1, 1, 1, 1],
+	list_borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
+	preview_borderchars: ['─', '│', '─', '│', '┬', '╮', '╯', '┴'],
 	type: {
 		ext: {
 			awk: 'awk',
