@@ -387,7 +387,7 @@ def RequestRender(s: dict<any>): void
 		s.render_timer = 0
 		if s.is_dirty
 			if line('$') > 1
-				setline(1, getline(1, '$'))
+				setline(1, getline(1, '$')->join())
 				execute ':2,$delete'
 			endif
 			Render(s)
