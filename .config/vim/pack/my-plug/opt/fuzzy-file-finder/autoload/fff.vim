@@ -256,6 +256,30 @@ def SetListTitle(s: dict<any>): void
 	popup_setoptions(s.list_winid, {title: $' [{s.target}] {len(s.matches)}/{len(s.all_files)}{status}{marked_count > 0 ? $' ({marked_count} selected)' : ''} '})
 enddef
 
+def RegErrMsg(e: list<dict<any>>): void
+	if e == []
+		return
+	endif
+	var max_len: number = mapnew(e, (_, v) => strdisplaywidth(v.expression))->max() + 1
+
+	popup_create(mapnew(e, (_, v) => printf($'%-{max_len}S%s', v.expression, v.error)), {
+		title: ' Filter Regular RExpression Error ',
+		line: 'cursor+1',
+		col: 1,
+		minwidth: 35,
+		tabpage: -1,
+		zindex: 300,
+		highlight: 'WarningMsg',
+		border: [1, 1, 1, 1,],
+		borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
+		padding: [0, 1, 0, 1],
+		filter: (id, _) => {
+			popup_close(id)
+			return
+		}
+	})
+enddef
+
 def Render(s: dict<any>): void
 	var prompt: list<string> = getbufline(s.filter_buf, 1)->join()->split()
 	var special_s: list<string>
@@ -264,6 +288,7 @@ def Render(s: dict<any>): void
 	var preview_idx: number
 	var display_matches: list<string>
 	var matches: list<string>
+	var reg_err: list<dict<string>>
 
 	matches = copy(s.all_files)
 	while true # ! ←これだけ否定マッチ
@@ -272,13 +297,21 @@ def Render(s: dict<any>): void
 			break
 		endif
 		special_c = remove(prompt, match_idx)[1 : ]
-		if special_c =~# '\$$'
+		if special_c =~# '^\\.'
+			add(special_s, special_c[ 1 : ])
+		elseif special_c =~# '\$$'
 			add(special_s, $'{escape(special_c[ : -2 ], '\.*$~')}$')
-		else
+		else # !^ も含めて処理できる
 			add(special_s, escape(special_c, '\.*$~'))
 		endif
 	endwhile
 	for str in special_s
+		try
+			match('', str)
+		catch /^Vim\%((\a\+)\)\=:E/
+			add(reg_err, {expression: str, error: v:exception[4 : ]})
+			continue
+		endtry
 		filter(matches, (_, v) => v !~? str)
 	endfor
 	special_s = []
@@ -301,6 +334,13 @@ def Render(s: dict<any>): void
 			add(special_s, special_c[1 : ]->escape('^\.*$~'))
 		endif
 	endwhile
+	while true # \
+		match_idx = match(prompt, '^\\.')
+		if match_idx == -1
+			break
+		endif
+		add(special_s, remove(prompt, match_idx)[1 : ])
+	endwhile
 	while true # $
 		match_idx = match(prompt, '.\$$')
 		if match_idx == -1
@@ -309,6 +349,12 @@ def Render(s: dict<any>): void
 		add(special_s, remove(prompt, match_idx)->escape('^\.*~'))
 	endwhile
 	for str in special_s
+		try
+			match('', str)
+		catch /^Vim\%((\a\+)\)\=:E/
+			add(reg_err, {expression: str, error: v:exception[4 : ]})
+			continue
+		endtry
 		filter(matches, (_, v) => v =~? str)
 	endfor
 	if prompt == []
@@ -316,6 +362,7 @@ def Render(s: dict<any>): void
 	else
 		s.matches = matchfuzzy(matches, join(prompt))
 	endif
+	RegErrMsg(reg_err)
 	preview_idx = index(s.matches, s.preview_path)
 	if preview_idx == -1
 		preview_idx = 0
@@ -433,9 +480,9 @@ def Confirm(s: dict<any>): void
 					echo $'Binary file: {f}'
 					echohl None
 				endif
-					echohl ErrorMsg
-					echo systemlist([open_b, f])->join('\n')
-					echohl None
+				echohl ErrorMsg
+				echo systemlist([open_b, f])->join('\n')
+				echohl None
 			else
 				execute $'{open} {fnameescape(f)}'
 			endif
@@ -495,25 +542,25 @@ def CheckFuzzyFileFinderWin(): bool
 enddef
 
 def WarningMsg(s: string): void
-		popup_create(s, {
-			title: ' Fuzzy File Finder Warning ',
-			line: 'cursor+1',
-			col: 'cursor',
-			minwidth: 20,
-			time: 5000,
-			tabpage: -1,
-			zindex: 300,
-			drag: 1,
-			highlight: 'WarningMsg',
-			border: [1, 1, 1, 1,],
-			borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
-			close: 'click',
-			padding: [0, 1, 0, 1],
-			filter: (id, _) => {
-				popup_close(id)
-				return
-			}
-		})
+	popup_create(s, {
+		title: ' Fuzzy File Finder Warning ',
+		line: 'cursor+1',
+		col: 'cursor',
+		minwidth: 20,
+		time: 5000,
+		tabpage: -1,
+		zindex: 300,
+		drag: 1,
+		highlight: 'WarningMsg',
+		border: [1, 1, 1, 1,],
+		borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
+		close: 'click',
+		padding: [0, 1, 0, 1],
+		filter: (id, _) => {
+			popup_close(id)
+			return
+		}
+	})
 enddef
 
 def GetWindowSize(prev_on: bool, cmdwin: bool): list<number>

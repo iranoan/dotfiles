@@ -54,9 +54,9 @@ fff#Open({dir}) の {dir} が未指定や空文字の場合は、カレント・
 特殊記号~
 
 入力された文字列をスペースで区切った文字列をトークンと呼び、そのトークンごとで、
-', $, ^, ! は特別な意味を持つ場合があり、その時トークンはあいまい検索でなく完
-全一致で判定される
-
+', $, \, ^, ! は特別な意味を持つ場合があり、その時トークンはあいまい検索でなく
+完全一致で判定される
+                                          *fuzzy-file-finder-special-character'*
 '~
 完全一致にする
   Ex. 'vim
@@ -64,28 +64,39 @@ fff#Open({dir}) の {dir} が未指定や空文字の場合は、カレント・
   * 特別な場合として末尾も ' のときは単語検索になる
     Ex. 'vim'
       vimfiles はヒットしない
-
+                                          *fuzzy-file-finder-special-character$*
 $~
 トークンが末尾のときのみ意味があり、トークンが末尾のパスのみにする
   Ex. .vim$
     末尾が .vim のディレクトリ、ファイル名のみリストアップする
-
+                                          *fuzzy-file-finder-special-character^*
 ^~
 トークンが先頭のときのみ意味があり、トークンが先頭のパスのみにする
   Ex. ^.vim
     先頭が .vim のディレクトリ、ファイル名のみリストアップする
-
+                                          *fuzzy-file-finder-special-character\*
+\~
+トークンが先頭のときのみ意味があり、Vim の検索に従って絞り込む
+  Ex. \\.\(htm\|html\)$
+    末尾が .htm もしくは .html のみに絞り込む
+  * 設定に関係なく 'ignorecase', 'magic' は ON、'smartcase'が OFF を基本として
+    検索する
+    * 変更したいときは |\C|, |\M|, |\v| |\V| を使う
+                                          *fuzzy-file-finder-special-character!*
 !~
 トークンが先頭のときのみ意味があり、トークンが含まれるパスを除外する
   Ex. !.vim
     .vim のディレクトリ、ファイルを除外する
-  * ^, $ と組み合わせられる
-    Ex. !^.vim
+  * \, ^, $ と組み合わせられる
+    Ex. !\\.\(htm\|html\)$               *fuzzy-file-finder-special-character!\*
+      末尾が .html もしくは .html の両方を除外する
+    Ex. !^.vim                           *fuzzy-file-finder-special-character!^*
       .vim は除外されるが、.config/.vim は除外されない
-    Ex. !.vim$
+    Ex. !.vim$                           *fuzzy-file-finder-special-character!$*
       末尾が .vim のディレクトリ、ファイル名を除外する
 
 多くのファジー・ファインダーに用意されている OR は用意していない
+代わりに \, !\ を用いた Vim の検索が使える
 
 ------------------------------------------------------------------------------
                                                  *fuzzy-file-finder-default-key*
