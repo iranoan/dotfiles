@@ -300,9 +300,9 @@ def Render(s: dict<any>): void
 		if special_c =~# '^\\.'
 			add(special_s, special_c[ 1 : ])
 		elseif special_c =~# '\$$'
-			add(special_s, $'{escape(special_c[ : -2 ], '\.*$~')}$')
+			add(special_s, $'{escape(special_c[ : -2 ], '\.*$[]~')}$')
 		else # !^ も含めて処理できる
-			add(special_s, escape(special_c, '\.*$~'))
+			add(special_s, escape(special_c, '\.*$[]~'))
 		endif
 	endwhile
 	for str in special_s
@@ -320,7 +320,7 @@ def Render(s: dict<any>): void
 		if match_idx == -1
 			break
 		endif
-		add(special_s, remove(prompt, match_idx)->escape('\.*$~'))
+		add(special_s, remove(prompt, match_idx)->escape('\.*$[]~'))
 	endwhile
 	while true # '
 		match_idx = match(prompt, '^''')
@@ -329,9 +329,9 @@ def Render(s: dict<any>): void
 		endif
 		special_c = remove(prompt, match_idx)
 		if special_c =~# '''$'
-			add(special_s, $'\<{special_c[1 : -2]->escape('^\.*$~')}\>')
+			add(special_s, $'\<{special_c[1 : -2]->escape('^\.*$[]~')}\>')
 		else
-			add(special_s, special_c[1 : ]->escape('^\.*$~'))
+			add(special_s, special_c[1 : ]->escape('^\.*$[]~'))
 		endif
 	endwhile
 	while true # \
@@ -346,7 +346,7 @@ def Render(s: dict<any>): void
 		if match_idx == -1
 			break
 		endif
-		add(special_s, remove(prompt, match_idx)->escape('^\.*~'))
+		add(special_s, remove(prompt, match_idx)->escape('^\.*[]~'))
 	endwhile
 	for str in special_s
 		try
