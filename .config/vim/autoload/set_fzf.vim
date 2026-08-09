@@ -135,8 +135,8 @@ function set_fzf#vim(cmd) abort
 	call pack_manage#SetMAP('fzf.vim', a:cmd, [
 				\ #{mode: 'n', key: '<silent><Leader>fc', method: 1, cmd: 'Commands'},
 				\ #{mode: 'x', key: '<silent><Leader>fc', method: 1, cmd: 'Commands'},
-				\ #{mode: 'n', key: '<silent><Leader>fg', method: 1, cmd: 'GFiles?'},
-				\ #{mode: 'x', key: '<silent><Leader>fg', method: 1, cmd: 'GFiles?'},
+				\ #{mode: 'n', key: '<silent><Leader>fg', method: 1, cmd: 'GFiles ?'},
+				\ #{mode: 'x', key: '<silent><Leader>fg', method: 1, cmd: 'GFiles ?'},
 				\ #{mode: 'n', key: '<silent><Leader>fh', method: 1, cmd: 'HISTORY'},
 				\ #{mode: 'x', key: '<silent><Leader>fh', method: 1, cmd: 'HISTORY'},
 				\ #{mode: 'n', key: '<silent><Leader>fl', method: 1, cmd: 'BLines'},

@@ -419,8 +419,8 @@ xnoremap <Leader>hH <Cmd>call set_transform#main('Kata2hira')<CR>
 # xnoremap <silent><Leader>fb <Cmd>call set_fzf#vim('Buffers')<CR>
 nnoremap <silent><Leader>fc <Cmd>call set_fzf#vim('Commands')<CR>
 xnoremap <silent><Leader>fc <Cmd>call set_fzf#vim('Commands')<CR>
-nnoremap <silent><Leader>fg <Cmd>call set_fzf#vim('GFiles?')<CR>
-xnoremap <silent><Leader>fg <Cmd>call set_fzf#vim('GFiles?')<CR>
+nnoremap <silent><Leader>fg <Cmd>call set_fzf#vim('GFiles ?')<CR>
+xnoremap <silent><Leader>fg <Cmd>call set_fzf#vim('GFiles ?')<CR>
 nnoremap <silent><Leader>fh <Cmd>call set_fzf#vim('HISTORY')<CR>
 xnoremap <silent><Leader>fh <Cmd>call set_fzf#vim('HISTORY')<CR>
 nnoremap <silent><Leader>fl <Cmd>call set_fzf#vim('BLines')<CR>
