@@ -1,10 +1,10 @@
 vim9script
 scriptencoding utf-8
 
-if exists('b:did_ftplugin_user')
+if exists('b:did_ftplugin_plugin')
 	finish
 endif
-b:did_ftplugin_user = 1
+b:did_ftplugin_plugin = 1
 
 if !get(g:fuzzy_file_finder, 'ftplugin', false)
 	g:fuzzy_file_finder.ftplugin = true

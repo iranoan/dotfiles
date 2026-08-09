@@ -78,7 +78,7 @@ $~
 トークンが先頭のときのみ意味があり、Vim の検索に従って絞り込む
   Ex. \\.\(htm\|html\)$
     末尾が .htm もしくは .html のみに絞り込む
-  * 設定に関係なく 'ignorecase', 'magic' は ON、'smartcase'が OFF を基本として
+  * 設定に関係なく 'ignorecase', 'magic' は On、'smartcase'が Off を基本として
     検索する
     * 変更したいときは |\C|, |\M|, |\v| |\V| を使う
                                           *fuzzy-file-finder-special-character!*
@@ -300,6 +300,14 @@ fff#Bridge({cmd})~
 			ファイルの選択/選択解除
 		- TogglePreview
 			プレビュー On/Off
+		- ToggleListWrap
+			ファイル一覧の折返し On/Off (デフォルト・マップなし)
+		- TogglePreviewWrap
+			プレビューの折返し On/Off (デフォルト・マップなし)
+		- PreviewPageDown
+			プレビューのページ・ダウン(デフォルト・マップなし)
+		- PreviewPageUp
+			プレビューのページ・アップ(デフォルト・マップなし)
 	* {cmd} に大/小文字の区別なし
 
 vim:tw=78:ts=2:ft=help:norl:noet:fen:

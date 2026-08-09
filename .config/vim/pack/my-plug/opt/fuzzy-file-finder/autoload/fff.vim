@@ -521,6 +521,14 @@ export def Bridge(cmd: string): void
 		endif
 	elseif cmd ==? 'TogglePreview'
 		TogglePreview(b:fuzzy_state)
+	elseif cmd ==? 'ToggleListWrap'
+		ToggleWrap(b:fuzzy_state.list_winid, false)
+	elseif cmd ==? 'TogglePreviewWrap'
+		ToggleWrap(b:fuzzy_state.preview_winid, true)
+	elseif cmd ==? 'PreviewPageDown'
+		MovePreview(b:fuzzy_state.preview_winid, true)
+	elseif cmd ==? 'PreviewPageUp'
+		MovePreview(b:fuzzy_state.preview_winid, false)
 	else
 		echohl ErrorMsg
 		echo 'No command!'
@@ -774,4 +782,28 @@ def TogglePreview(s: dict<any>): void
 		s.preview_on = true
 	endif
 	ChangePopupSize(true)
+enddef
+
+def ToggleWrap(id: number, preview_flag: bool): void
+	var wrap: bool = get(popup_getoptions(id), 'wrap', true)
+	popup_setoptions(id, {wrap: !wrap})
+	echo $'{preview_flag ? 'Preview' : 'File List'}: {wrap ? 'nowrap' : 'wrap'}'
+	redraw!
+enddef
+
+def MovePreview(id: number, down_flag: bool): void
+	var max_idx = len(getbufline(winbufnr(id), 1, '$'))
+	var new_idx: number = getcurpos(id)[1]
+	var s: dict<any> = popup_getoptions(id)
+	var h: number = popup_getoptions(id).maxheight
+
+	if down_flag
+		new_idx += h
+	else
+		new_idx -= h
+	endif
+	new_idx = max([0, min([new_idx, max_idx - 1])])
+	if new_idx >= 0 && new_idx < max_idx
+		popup_setoptions(id, {firstline: new_idx})
+	endif
 enddef
