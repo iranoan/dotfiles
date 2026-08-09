@@ -4,7 +4,6 @@ Author:  Iranoan <iranoan+vim@gmail.com>
 Repository: https://github.com/iranoan/fuzzy-file-finder
 License: GPL Ver.3.
 
-
 ==============================================================================
                                                     *fuzzy-file-finder-contents*
 目次~
@@ -130,12 +129,48 @@ k          ファイル一覧で次を選択
 
 ==============================================================================
                                                       *fuzzy-file-finder-custom*
-設定/オプション~
+設定~
+
+------------------------------------------------------------------------------
+                                               *fuzzy-file-finder-custom-keymap*
+キー・マッピング~
+
+関数 (|fuzzy-file-finder-function|) を用いて次のように設定する
+全体の設定では ~/.config/vim/vimr 等で >vim
+	nnoremap <silent><leader>fffh  <Cmd>call fff#Open('$HOME')<CR>
+	nnoremap <silent><leader>fffv  <Cmd>call fff#Open('$MYVIMDIR')<CR>
+	nnoremap <silent><leader>fff.  <Cmd>call fff#Open()<CR>
+<
+ファイル形式別の設定で ~/.config/vim/after/ftplugin/fuzzy-file-finder.vim 等で >vim
+	nnoremap <buffer><silent><Esc>  <Cmd>call fff#Bridge('Cleanup')<CR>
+	nnoremap <buffer><silent><CR>   <Cmd>call fff#Bridge('Confirm')<CR>
+	inoremap <buffer><silent><CR>   <Cmd>call fff#Bridge('Confirm')<CR>
+	nnoremap <buffer><silent><C-j>  <Cmd>call fff#Bridge('MoveDown')<CR>
+	inoremap <buffer><silent><C-j>  <Cmd>call fff#Bridge('MoveDown')<CR>
+	nnoremap <buffer><silent><C-n>  <Cmd>call fff#Bridge('MoveDown')<CR>
+	inoremap <buffer><silent><C-n>  <Cmd>call fff#Bridge('MoveDown')<CR>
+	nnoremap <buffer><silent><Down> <Cmd>call fff#Bridge('MoveDown')<CR>
+	inoremap <buffer><silent><Down> <Cmd>call fff#Bridge('MoveDown')<CR>
+	nnoremap <buffer><silent>j      <Cmd>call fff#Bridge('MoveDown')<CR>
+	nnoremap <buffer><silent><C-k>  <Cmd>call fff#Bridge('MoveUp')<CR>
+	inoremap <buffer><silent><C-k>  <Cmd>call fff#Bridge('MoveUp')<CR>
+	nnoremap <buffer><silent><C-p>  <Cmd>call fff#Bridge('MoveUp')<CR>
+	inoremap <buffer><silent><C-p>  <Cmd>call fff#Bridge('MoveUp')<CR>
+	nnoremap <buffer><silent><Up>   <Cmd>call fff#Bridge('MoveUp')<CR>
+	inoremap <buffer><silent><Up>   <Cmd>call fff#Bridge('MoveUp')<CR>
+	nnoremap <buffer><silent>k      <Cmd>call fff#Bridge('MoveUp')<CR>
+<
+
+------------------------------------------------------------------------------
+                                               *fuzzy-file-finder-custom-option*
+オプション~
+
+nnoremap <buffer> <silent> <Esc>      <Cmd>call fff#Bridge('Cleanup')<CR>
 
 g:fuzzy_file_finder の以下のキーで変更できる
                                                          *fuzzy-file-finder-cmd*
 cmd~
-	Type: |list<string>|
+	Type: |list|<|string|>|
 	Default: `['find', '-L', '.', '-mindepth', '1', '(', '-type', 'd', '-o', '-type', 'f', '-o', '-type', 'l', ')', '-printf', '%P\n']`
 
 	* ファイル一覧を作成するコマンド
@@ -147,33 +182,33 @@ type~
 	  を指定
 
 	ext~
-		Type: |dict<string>|
+		Type: |dict|<|string|>|
 
 		* 拡張子ごとの |'filetype'| を指定
 		  Ex. {vim: 'vim'}
 
 	name~
-		Type: |dict<string>|
+		Type: |dict|<|string|>|
 
 		* ファイル名ごとの |'filetype'| を指定
 		  Ex. {vimrc: 'vim', gvimrc: 'vim'}
 
 	path~
-		Type: |list<dict<string>>|
+		Type: |list|<|dict|<|string|>>|
 
 		* パスごとの |'filetype'| を指定
 		* Ex. {reg: '^\~/.config/fd/[^/]\+$', type: 'gitignore'},
 		  reg キーで正規表現を type で |'filetype'| のペアの辞書
 
 	image~
-	Type: |list<string>|
+	Type: |list|<|string|>|
 
 	* 画像プレビューさせる拡張子のリスト
 	  Ex. ['jpg', 'jpeg', 'png']
 	* 実際に画像表示させるには |popup_image| プラグインが必要
 
 	filter~
-		Type: |dict<list<string>>|
+		Type: |dict|<|list|<|string|>>|
 
 		* 拡張子ごとのプレビュー枠に表示するフィルタープログラム
 		* Ex. {zip: ['unzip', '-l']}
@@ -189,7 +224,7 @@ open~
 	  Ex. open: 'tabedit'
 
 dir~
-	Type: |bool|
+	Type: |boolean|
 	Default: |true|
 
 	* ディレクトリを Vim で開くか?
@@ -197,7 +232,7 @@ dir~
 	  よって変わる
 
 list_border~
-	Type: |list<number>|
+	Type: |list|<|number|>|
 	Default: |[1, 1, 1, 1]|
 
 	* ファイル一覧のボーダーの表示 (1)、非表示 (0)
@@ -206,14 +241,14 @@ list_border~
 	  無しの扱いになる
 
 preview_border~
-	Type: |list<number>|
+	Type: |list|<|number|>|
 	Default: |[1, 1, 1, 1]|
 
 	* プレビュー枠のボーダーの表示 (1)、非表示 (0)
 	  上/右/下/左の順 (|popup_create-arguments| の border 参照)
 
 list_borderchars~
-	Type: |list<string>|
+	Type: |list|<|string|>|
 	Default: |['─', '│', '─', '│', '╭', '╮', '╯', '╰']|
 
 	* ファイル一覧のボーダーに用いる記号
@@ -222,11 +257,49 @@ list_borderchars~
 	  無しの扱いになる
 
 preview_borderchars~
-	Type: |list<string>|
+	Type: |list|<|string|>|
 	Default: |['─', '│', '─', '│', '┬', '╮', '╯', '┴'],|
 
 	* プレビュー枠のボーダーに用いる記号
 	  上/右/下/左の順 (|popup_create-arguments| の borderchars~ 参照)
 
+mapping~
+	Type: |boolean|
+	Default: |v:true|
+
+	* 独自にキー・マップをする
+	* デフォルト・キー・マッピング (|fuzzy-file-finder-default-key|) を無効にす
+	る場合は v:false にする
+
+==============================================================================
+                                                    *fuzzy-file-finder-function*
+関数~
+
+fff#Open({dir})~
+	* {dir} のディレクトリ、ファイル一覧を作成
+
+fff#Bridge({cmd})~
+	* {cmd} は次の文字列を指定できる
+		- Confirm
+			選択/カーソル位置のファイルを開く
+		- Cleanup
+			終了
+		- MoveDown
+			ファイル一覧で次を選択
+		- MoveUp
+			ファイル一覧で次を選択
+		- MoveTop
+			ファイル一覧先頭に移動
+		- MoveLast
+			ファイル一覧最後に移動
+		- MovePageDown
+			ファイル一覧のページ・アップ
+		- MovePageUp
+			ファイル一覧のページ・ダウン
+		- ToggleMark
+			ファイルの選択/選択解除
+		- TogglePreview
+			プレビュー On/Off
+	* {cmd} に大/小文字の区別なし
 
 vim:tw=78:ts=2:ft=help:norl:noet:fen:

@@ -491,35 +491,35 @@ enddef
 export def Bridge(cmd: string): void
 	if cmd ==# 'Confirm'
 		Confirm(b:fuzzy_state)
-	elseif cmd ==# 'MoveUp'
+	elseif cmd ==? 'MoveUp'
 		MoveSelection(b:fuzzy_state, -1)
-	elseif cmd ==# 'MoveDown'
+	elseif cmd ==? 'MoveDown'
 		MoveSelection(b:fuzzy_state, 1)
-	elseif cmd ==# 'MoveTop'
+	elseif cmd ==? 'MoveTop'
 		MoveSelection(b:fuzzy_state, 0)
-	elseif cmd ==# 'MoveLast'
+	elseif cmd ==? 'MoveLast'
 		MoveSelection(b:fuzzy_state, '$')
-	elseif cmd ==# 'MovePageDown'
+	elseif cmd ==? 'MovePageDown'
 		MoveSelection(b:fuzzy_state, 'PageDown')
-	elseif cmd ==# 'MovePageUp'
+	elseif cmd ==? 'MovePageUp'
 		MoveSelection(b:fuzzy_state, 'PageUp')
-	elseif cmd ==# 'ToggleMark'
+	elseif cmd ==? 'ToggleMark'
 		ToggleMark(b:fuzzy_state)
-	elseif cmd ==# 'Cleanup'
+	elseif cmd ==? 'Cleanup'
 		Cleanup(b:fuzzy_state)
-	elseif cmd ==# 'Render'
+	elseif cmd ==? 'Render'
 		RequestRender(b:fuzzy_state)
-	elseif cmd ==# 'VimResized'
+	elseif cmd ==? 'VimResized'
 		ChangePopupSize(true)
-	elseif cmd ==# 'CmdwinLeave'
+	elseif cmd ==? 'CmdwinLeave'
 		if CheckFuzzyFileFinderWin()
 			ChangePopupSize(false)
 		endif
-	elseif cmd ==# 'CmdwinEnter'
+	elseif cmd ==? 'CmdwinEnter'
 		if CheckFuzzyFileFinderWin()
 			ChangePopupSize(true)
 		endif
-	elseif cmd ==# 'TogglePreview'
+	elseif cmd ==? 'TogglePreview'
 		TogglePreview(b:fuzzy_state)
 	else
 		echohl ErrorMsg
