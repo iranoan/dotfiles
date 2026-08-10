@@ -171,6 +171,13 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 		w_h = systemlist(['gs', '-dQUIET', '-dBATCH', '-dNOPAUSE', '-sDEVICE=bbox', p])
 			->matchlist('^%%BoundingBox: \+\zs\(\d\+\.\?\d*\) \(\d\+\.\?\d*\) \(\d\+\.\?\d*\) \(\d\+\.\?\d*\)')[1 : ]
 			->map((_, v) => float2nr(round(str2float(v) * resolution / 72)))
+		if len(w_h) < 4
+			AddErrorMessage(id, [
+				'Not Get BoundingBox',
+				$'file path: {p}',
+			])
+			return false
+		endif
 		[w, h] = ScaleImage(w_h[2] - w_h[0], w_h[3] - w_h[1])
 			img_data = SystemBlob(['sh', '-c', $'gs -q -dNOPAUSE -dBATCH -dEPSCrop -sDEVICE=ppmraw -r600 -dFirstPage=1 -dLastPage=1 -sOutputFile=- {shellescape(p)} | ffmpeg -v error -i - -vf scale={w}:{h} -f rawvideo -pix_fmt rgb24 -'])
 	else
@@ -196,6 +203,7 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 	if len(img_data) != w * h * 3
 		AddErrorMessage(id, [
 			'''data size'' is not eqal ''width x height x 3''',
+			$'file path:          {p}',
 			$'data size:          {len(img_data)}',
 			$'width:              {w}',
 			$'height:             {h}',
