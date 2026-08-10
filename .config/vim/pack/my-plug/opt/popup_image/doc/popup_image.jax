@@ -73,7 +73,8 @@ License: GPL Ver.3.
   実際には設定 (|popup_image_options-pt2px|)に依存し、収まりきらないときは縮小
   表示する
 * 小さすぎるものは拡大 (→|popup_image_options-min_size|)
-* 変換の成否を得たいときは、次のようにする >vim
+* 変換の成否を得たいときは、次のようにする
+  次の例では、変換できないとき、その理由を表示する        *popup_image-warning* >vim
 		popup_image#Preview(id, 'sample.jpg', (v) => {
 		    if !v
 		        popup_image#WarningMsg(id)
@@ -86,8 +87,7 @@ License: GPL Ver.3.
 
 g:popup_image_options の以下のキーで変更できる
 
-全体のデフォルトは
->vim
+全体のデフォルトは >vim
 	g:popup_image_options = {pt2px: {x: 96, y: 96}, min_size: {x: 5, y: 5}}
 <
                                                      *popup_image_options-pt2px*
@@ -105,5 +105,27 @@ min_size~
 	Default: `{x: 5, y: 5}`
 
 	画像の最小表示サイズ
+
+==============================================================================
+                                                          *popup_image-function*
+関数~
+
+Preview({|winid|}, {path}, [{func}])~
+	* {|windi|} 画像表示する |popup| の |window-ID|
+	* {path} プレビューする画像ファイルのパス
+	* {func} 関数の成功/失敗時の処理関数 (|popup_image-warning| 参照)
+
+WarningMsg({|winid|})~
+	* w:popup_image.err_msg に蓄えられている Preview() にエラー内容を、後ろから表
+	  示し、|remove()| する
+
+Clear({|winid|})~
+	* |popup| の表示画像削除し、表示によって変更されたオプション
+	  |popup_create-arguments| を元に戻す
+
+ResetPreview({|winid|}, {path})~
+	* 表示画像を |popup| のウィンドウサイズに合わせ直す
+	* {|windi|} 画像表示する |popup| の |window-ID|
+	* {path} プレビューする画像ファイルのパス
 
 vim:tw=78:ts=2:ft=help:norl:noet:fen:

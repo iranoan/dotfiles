@@ -59,6 +59,7 @@ if !executable('mimetype')
 		])
 		return false
 	enddef
+
 	export def ResetPreview(id: number, f: string): void
 		return
 	enddef
