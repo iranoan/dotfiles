@@ -22,6 +22,8 @@ else:
             datetime.strptime(s.find_all('td', class_='datetime')[0].text.strip(),
                               "%Y年%m月%d日 %H時%M分頃").strftime("%m/%dT%H:%M"),
             s.find_all('td', class_='magnitude')[0].text.strip(),
-            s.find_all('td', class_='max-level')[0].find('img').get('alt'),
+            s.find_all('td', class_='max-level')[0].find('img').get('alt')
+            if s.find_all('td', class_='max-level')[0].find('img')
+            else s.find_all('td', class_='max-level')[0].text.strip(),
             s.find_all('td', class_='center')[0].text.strip()
         ))
