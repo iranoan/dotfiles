@@ -273,9 +273,11 @@ def RegErrMsg(e: list<dict<any>>): void
 		border: [1, 1, 1, 1,],
 		borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
 		padding: [0, 1, 0, 1],
-		filter: (id, _) => {
-			popup_close(id)
-			return
+		filter: (id, key) => {
+			if key !~? '^<.*mouse' && key !~? '^<.*scroll' # マウス操作でない
+				popup_close(id)
+			endif
+			return false
 		}
 	})
 enddef
