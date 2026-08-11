@@ -6,26 +6,28 @@ set lines=999 columns=168           # columns width of the display
 # 	# →そのため :gui を使うと、そのまま guibg が NONE で配色がおかしくなる
 # 	highlight Normal guifg=#eee8d5 guibg=#002b36
 # endif
-if has('unix')            # 使用フォント(最初に見つかったフォントを使う)
-	if has('GUI_GTK') # GTK GUI では不正な名前でもエラーにならない→:help gui-font
-		var fc: list<string> = systemlist('fc-list :lang=ja:style=Regular')
-			->map((_, v) => substitute(v, '^[^:]\+: \([^:]\+\):style=.\+', '\1', ''))
-		for f in ['UDEV Gothic NF', 'Noto Mono', 'Monospace']
-			if count(fc, f) != 0
-				&guifont = f .. ' Regular 13'
-				break
-			endif
-		endfor
-	else
-		set guifont=UDEV\ Gothic\ NF\ Regular\ 13,Noto\ Mono\ 13,Monospace\ 12
-	endif
-else
-	set guifont=UDEV\ Gothic\ NF\ Regular:h13,MS_Gothic:h13,Monaco:h10
-	if has('osx')
-		set antialias         # アンチエイリアス
-	endif
-endif
 
+var fonts: list<string>
+var size: string = ':h13'
+if has('mac')
+	fonts = systemlist("system_profiler SPFontsDataType | grep '^[[:space:]]*Family:'")
+		->map((_, v) => substitute(v, '^[[:space:]]*Family:[[:space:]]*', '', ''))
+elseif has('unix')
+	fonts = systemlist(['fc-list', ':style=Regular'])
+		->map((_, v) => substitute(v, '^[^:]\+: \([^:]\+\):style=.\+', '\1', ''))
+	size = '\ 13'
+elseif has('win32')
+	fonts = systemlist('powershell -NoProfile -Command "Get-ItemProperty ''HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts'' | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name"')
+		->map((_, v) => substitute(v, '\s*([^)]*)$', '', ''))
+		->map((_, v) => split(v, '\s*&\s*'))
+		->flattennew()
+endif
+for f in ['UDEV Gothic NF', 'Noto Mono', 'BIZ UDGothic', 'Menlo', 'Cascadia Mono', 'Monaco', 'Consolas', 'Courier', 'MS Gothic', 'Monospace']
+	if count(fonts, f) != 0
+		execute ($'set guifont={escape(f, ' ')}\ Regular{size}')
+		break
+	endif
+endfor
 # set linespace=-1         # 縦罫線がつながるが問題が出る可能性もあるとの事なので止めておく
 set guioptions-=T guioptions-=m guioptions-=r guioptions-=L guioptions+=ck # ツール・バー/メニュー/スクロール・バー表示を OFF、ポップアップ・ダイアログではなくコンソールを使う lines, columns を維持
 # if $GVIM_ENABLE_WAYLAND !=# '1' # ←winpos 等が効かなくなる (Ubuntu 24.10で改善され、無くても描画は乱れないので指定することはない)
