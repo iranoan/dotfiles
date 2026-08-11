@@ -1,11 +1,5 @@
 vim9script
 scriptencoding utf-8
-set lines=999 columns=168           # columns width of the display
-# if g:colors_name ==# 'solarized8' && &background ==# 'dark'
-# 	# solarized8 を使っている時は、配色の違いから set termguicolors としているので、ctermbg=NONE 同様 guibg=NONE を使っている
-# 	# →そのため :gui を使うと、そのまま guibg が NONE で配色がおかしくなる
-# 	highlight Normal guifg=#eee8d5 guibg=#002b36
-# endif
 
 var fonts: list<string>
 var size: string = ':h13' # OS によってフォント名とサイズの区切りが違うので、UNIX 系でサイズを変えたい場合は、下記の該当箇所
@@ -38,10 +32,8 @@ augroup GVIMRC
 	# 画面左上に表示 (help に有る通り autocmd を使わないと環境によって gvimrc の記載では無効+Wayland では無効)
 	if !has('unix') || $XDG_SESSION_TYPE ==# 'x11' || $GDK_BACKEND ==# 'x11'
 		autocmd GUIEnter * winpos 0 0
-		# ↓GTK でズレが生じるため再設定 https://github.com/vim-jp/issues/issues/1374 と関係が有る?
-		autocmd GUIEnter * set lines=999 # lines number of lines in the display←何時からか autocmd でない箇所で 999 を指定すると Wayland の環境で横幅まで最大にされることが多くなる
 	else
-		autocmd GUIEnter * set lines=47 # lines number of lines in the display←何時からか autocmd でない箇所で 999 を指定すると Wayland の環境で横幅まで最大にされることが多くなる
+		autocmd GUIEnter * set lines=999 columns=168 # lines number of lines in the display←何時からか autocmd でない箇所で 999 を指定すると Wayland の環境で横幅まで最大にされることが多くなる
 	endif
 	autocmd GUIEnter   * autocmd_delete([{group: 'GVIMRC'}])
 augroup END
