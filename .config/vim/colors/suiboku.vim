@@ -45,12 +45,10 @@ if &background ==# 'dark'
 	endif
 	if italic
 		hi Comment term=italic cterm=italic ctermfg=14 ctermbg=NONE ctermul=NONE gui=italic guifg=#8c8a7d guibg=NONE guisp=NONE
-		hi ErrorMsg term=italic,reverse,bold cterm=reverse ctermfg=1 ctermbg=15 ctermul=NONE gui=reverse guifg=#dc322f guibg=#f7f2e1 guisp=NONE
 		hi Folded term=italic,reverse,underline cterm=bold ctermfg=14 ctermbg=8 ctermul=NONE gui=bold guifg=#8c8a7d guibg=#29302b guisp=NONE
 		hi TabLine term=italic cterm=italic ctermfg=14 ctermbg=8 ctermul=NONE gui=italic guifg=#8c8a7d guibg=#29302b guisp=NONE
 	else
 		hi Comment term=NONE cterm=NONE ctermfg=14 ctermbg=NONE ctermul=NONE gui=NONE guifg=#8c8a7d guibg=NONE guisp=NONE
-		hi ErrorMsg term=reverse,bold cterm=reverse ctermfg=1 ctermbg=15 ctermul=NONE gui=reverse guifg=#dc322f guibg=#f7f2e1 guisp=NONE
 		hi Folded term=reverse,underline cterm=bold ctermfg=14 ctermbg=8 ctermul=NONE gui=bold guifg=#8c8a7d guibg=#29302b guisp=NONE
 		hi TabLine term=NONE cterm=NONE ctermfg=14 ctermbg=8 ctermul=NONE gui=NONE guifg=#8c8a7d guibg=#29302b guisp=NONE
 	endif
@@ -63,7 +61,6 @@ if &background ==# 'dark'
 	hi DiffChange term=underline,reverse cterm=NONE ctermfg=3 ctermbg=8 ctermul=3 gui=NONE guifg=#b48000 guibg=#29302b guisp=#b48000
 	hi DiffDelete term=underline,reverse cterm=bold ctermfg=1 ctermbg=8 ctermul=NONE gui=bold guifg=#dc322f guibg=#29302b guisp=NONE
 	hi DiffText term=bold,underline,reverse cterm=NONE ctermfg=4 ctermbg=8 ctermul=4 gui=bold guifg=#0080bd guibg=#29302b guisp=#0080bd
-	hi Error term=bold cterm=reverse,bold ctermfg=1 ctermbg=15 ctermul=NONE gui=reverse,bold guifg=#dc322f guibg=#f7f2e1 guisp=NONE
 	hi FoldColumn term=reverse cterm=NONE ctermfg=14 ctermbg=8 ctermul=NONE gui=NONE guifg=#8c8a7d guibg=#29302b guisp=NONE
 	hi LineNr term=reverse cterm=NONE ctermfg=12 ctermbg=8 ctermul=NONE gui=NONE guifg=#6d736d guibg=#29302b guisp=NONE
 	hi NonText term=NONE cterm=NONE ctermfg=12 ctermbg=NONE ctermul=NONE gui=NONE guifg=#6d736d guibg=NONE guisp=NONE
@@ -110,12 +107,10 @@ else # light
 	endif
 	if italic
 		hi Comment term=italic cterm=italic ctermfg=12 ctermbg=NONE ctermul=NONE gui=italic guifg=#6d736d guibg=NONE guisp=NONE
-		hi ErrorMsg term=italic,reverse,bold cterm=reverse ctermfg=1 ctermbg=0 ctermul=NONE gui=reverse guifg=#dc322f guibg=#1d221f guisp=NONE
 		hi Folded term=italic,underline,reverse cterm=bold ctermfg=12 ctermbg=7 ctermul=NONE gui=bold guifg=#6d736d guibg=#e6e1d1 guisp=NONE
 		hi TabLine term=italic cterm=italic ctermfg=12 ctermbg=7 ctermul=NONE gui=italic guifg=#6d736d guibg=#e6e1d1 guisp=NONE
 	else
 		hi Comment term=NONE cterm=NONE ctermfg=12 ctermbg=NONE ctermul=NONE gui=NONE guifg=#6d736d guibg=NONE guisp=NONE
-		hi ErrorMsg term=reverse,bold cterm=reverse ctermfg=1 ctermbg=0 ctermul=NONE gui=reverse guifg=#dc322f guibg=#1d221f guisp=NONE
 		hi Folded term=underline,reverse cterm=bold ctermfg=12 ctermbg=7 ctermul=NONE gui=bold guifg=#6d736d guibg=#e6e1d1 guisp=NONE
 		hi TabLine term=NONE cterm=NONE ctermfg=12 ctermbg=7 ctermul=NONE gui=NONE guifg=#6d736d guibg=#e6e1d1 guisp=NONE
 	endif
@@ -128,7 +123,6 @@ else # light
 	hi DiffChange term=underline,reverse cterm=NONE ctermfg=3 ctermbg=7 ctermul=3 gui=NONE guifg=#b48000 guibg=#e6e1d1 guisp=#b48000
 	hi DiffDelete term=underline,reverse cterm=bold ctermfg=1 ctermbg=7 ctermul=NONE gui=bold guifg=#dc322f guibg=#e6e1d1 guisp=NONE
 	hi DiffText term=bold,underline,reverse cterm=NONE ctermfg=4 ctermbg=7 ctermul=4 gui=bold guifg=#0080bd guibg=#e6e1d1 guisp=#0080bd
-	hi Error term=bold cterm=reverse,bold ctermfg=1 ctermbg=0 ctermul=NONE gui=reverse,bold guifg=#dc322f guibg=#1d221f guisp=NONE
 	hi FoldColumn term=reverse cterm=NONE ctermfg=12 ctermbg=7 ctermul=NONE gui=NONE guifg=#6d736d guibg=#e6e1d1 guisp=NONE
 	hi LineNr term=reverse cterm=NONE ctermfg=14 ctermbg=7 ctermul=NONE gui=NONE guifg=#8c8a7d guibg=#e6e1d1 guisp=NONE
 	hi NonText term=NONE cterm=NONE ctermfg=12 ctermbg=NONE ctermul=NONE gui=NONE guifg=#8c8a7d guibg=NONE guisp=NONE
@@ -167,6 +161,7 @@ if italic
 	hi Constant term=italic,bold cterm=NONE ctermfg=10 ctermbg=NONE ctermul=NONE gui=NONE guifg=#00886a guibg=NONE guisp=NONE
 	hi Boolean term=italic,bold cterm=NONE ctermfg=6 ctermbg=NONE ctermul=NONE gui=NONE guifg=#4f5fff guibg=NONE guisp=NONE
 	hi CursorLineNr term=bold,italic,reverse,underline cterm=bold ctermfg=3 ctermbg=NONE ctermul=NONE gui=bold guifg=#b48000 guibg=NONE guisp=NONE
+	hi ErrorMsg term=italic,reverse,bold cterm=reverse ctermfg=1 ctermbg=15 ctermul=NONE gui=reverse guifg=#dc322f guibg=#f7f2e1 guisp=NONE
 	hi Identifier term=italic cterm=NONE ctermfg=13 ctermbg=NONE ctermul=NONE gui=NONE guifg=#966fe1 guibg=NONE guisp=NONE
 	hi Function term=italic cterm=NONE ctermfg=4 ctermbg=NONE ctermul=NONE gui=NONE guifg=#0080bd guibg=NONE guisp=NONE
 	hi IncSearch term=italic,standout cterm=standout ctermfg=11 ctermbg=NONE ctermul=NONE gui=standout guifg=#e65310 guibg=NONE guisp=NONE
@@ -185,6 +180,7 @@ else
 	hi Constant term=bold cterm=NONE ctermfg=10 ctermbg=NONE ctermul=NONE gui=NONE guifg=#00886a guibg=NONE guisp=NONE
 	hi Boolean term=bold cterm=NONE ctermfg=6 ctermbg=NONE ctermul=NONE gui=NONE guifg=#4f5fff guibg=NONE guisp=NONE
 	hi CursorLineNr term=bold,reverse,underline cterm=bold ctermfg=3 ctermbg=NONE ctermul=NONE gui=bold guifg=#b48000 guibg=NONE guisp=NONE
+	hi ErrorMsg term=reverse,bold cterm=reverse ctermfg=1 ctermbg=15 ctermul=NONE gui=reverse guifg=#dc322f guibg=#f7f2e1 guisp=NONE
 	hi Identifier term=NONE cterm=NONE ctermfg=13 ctermbg=NONE ctermul=NONE gui=NONE guifg=#966fe1 guibg=NONE guisp=NONE
 	hi Function term=NONE cterm=NONE ctermfg=4 ctermbg=NONE ctermul=NONE gui=NONE guifg=#0080bd guibg=NONE guisp=NONE
 	hi IncSearch term=standout cterm=standout ctermfg=11 ctermbg=NONE ctermul=NONE gui=standout guifg=#e65310 guibg=NONE guisp=NONE
@@ -205,6 +201,7 @@ hi BoldItalic term=bold,italic cterm=bold,italic ctermul=NONE gui=bold,italic gu
 hi ComplMatchIns term=NONE cterm=NONE ctermfg=NONE ctermbg=NONE ctermul=NONE gui=NONE guifg=NONE guibg=NONE guisp=NONE
 hi Conceal term=NONE cterm=NONE ctermfg=4 ctermbg=NONE ctermul=NONE gui=NONE guifg=#0080bd guibg=NONE guisp=NONE
 hi CursorIM term=NONE cterm=NONE ctermfg=NONE ctermbg=NONE ctermul=NONE gui=NONE guifg=NONE guibg=NONE guisp=NONE
+hi Error term=bold cterm=reverse,bold ctermfg=1 ctermbg=15 ctermul=NONE gui=reverse,bold guifg=#dc322f guibg=#f7f2e1 guisp=NONE
 hi Directory term=NONE cterm=NONE ctermfg=4 ctermbg=NONE ctermul=NONE gui=NONE guifg=#0080bd guibg=NONE guisp=NONE
 hi Ignore term=NONE cterm=NONE ctermfg=NONE ctermbg=NONE ctermul=NONE gui=NONE guifg=NONE guibg=NONE guisp=NONE
 hi Italic term=italic cterm=italic ctermul=NONE gui=italic guisp=NONE
