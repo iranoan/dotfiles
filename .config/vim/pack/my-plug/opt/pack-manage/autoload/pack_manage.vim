@@ -218,7 +218,7 @@ def Get_pack_ls(): dict<any> # プラグインの名称、リポジトリ、イ�
 			for i in glob(file, false, true, true)
 				lines = readfile(resolve(i))
 				for j in lines
-						->matchstrlist('^["#\t ]\+.*\zs\(https://github\.com/[a-z0-9._/-]\+\|\$MYVIMDIR/pack/[a-z0-9._/-]\+\)/\([a-z0-9._-]\+\)\ze/\? *{{{[0-9]*', {submatches: true})
+						->matchstrlist('^["#\t ]\+.*\zs\(https://github\.com/[A-Za-z0-9._/-]\+\|\$MYVIMDIR/pack/[A-Za-z0-9._/-]\+\)/\([A-Za-z0-9._-]\+\)\ze/\? *{{{[0-9]*', {submatches: true})
 					d = {
 						file: i,
 						line: j.idx + 1,
@@ -227,7 +227,7 @@ def Get_pack_ls(): dict<any> # プラグインの名称、リポジトリ、イ�
 						setup: []
 					}
 					for k in lines[j.idx + 1 : ]
-						if k !~# '^[\t ]*["#]'
+						if k !~# '^[\t ]*["#]' || k =~? '^["#\t ]\+.*\(https://github\.com/[A-Za-z0-9._/-]\+\|\$MYVIMDIR/pack/[A-Za-z0-9._/-]\+\)/\([A-Za-z0-9._-]\+\)/\? *{{{[0-9]*'
 							break
 						elseif k =~# '^["#\t ]\+[\t ]*do-setup:'
 							add(d.setup, substitute(k,  '^["#\t ]\+\<do-setup:[\t ]*', '', ''))
@@ -413,24 +413,26 @@ def Make(ls: list<dict<any>>): void # make や別途インストールが必要�
 	var wd: string = getcwd()
 	var d: string
 	for l in ls
+		echohl DiffAdd | echomsg $'Seup: {l.dir}' | echohl None
 		d = l.dir
 		if !Isdirectory(d)
-			echohl WarningMsg | echomsg 'do not exist ' .. d | echohl None
+			echohl WarningMsg | echomsg $'do not exist {d}' | echohl None
 			continue
 		endif
 		chdir(d)
 		for c in l.setup
 			if c =~# '^:'
-				packadd split(d, '/')[-1]
+				execute($'packadd {split(d, '/')[-1]}')
+				echohl MatchParen | echo $'{c}' | echohl None
 				execute(c[1 : ])
-			elseif !Executable(c)
-				echohl WarningMsg | echomsg 'do not run ' .. c | echohl None
-				continue
+			elseif Executable(c)
+				# execute('terminal ++shell ' .. c)
+				# execute 'silent file! run: ' .. c
+				echohl MatchParen | echo c | echohl None
+				echo system(c)
+			else
+				echohl WarningMsg | echomsg $'do not run {c}' | echohl None
 			endif
-			# execute('terminal ++shell ' .. c)
-			# execute 'silent file! run: ' .. c
-			echohl MatchParen | echo c | echohl None
-			echo system(c)
 		endfor
 	endfor
 	chdir(wd)
