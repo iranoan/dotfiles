@@ -610,7 +610,7 @@ enddef
 var ListBorder = (v: list<number>): list<number> => # 右側のプレビュー枠左側に罫線があれば、左側のリスト枠右側は強制的に無しにする (重ねたように見せつつ余分な領域をなくす)
 	g:fuzzy_file_finder.preview_border[3] == 1 ? [v[0], 0] + v[2 : ] : v
 
-export def Open(dir: string = ''): void
+export def FFFiles(dir: string = ''): void
 	var target_dir: string = $'{fnamemodify(dir ==# '' ? getcwd() : expand(dir, true), ':p')->resolve()}'
 	var target_len: number
 	var list_width: number

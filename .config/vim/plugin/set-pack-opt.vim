@@ -455,30 +455,30 @@ nnoremap <Leader>fb <Cmd>call set_fzf#tabs()<CR>
 nnoremap <Leader>fw <Cmd>call set_fzf#tabs()<CR>
 
 # GVim なら環境に関係なく画像プレピュー可能な fuzzy file finder $MYVIMDIR/pack/my-plug/opt/fuzzy-file-finder/ {{{2
-nnoremap <silent><Leader>fr <Cmd>call set_fff#main('call fff#Open("~")')<CR>
-xnoremap <silent><Leader>fr <Cmd>call set_fff#main('call fff#Open("~")')<CR>
-nnoremap <silent><Leader>ff <Cmd>call set_fff#main('call fff#Open()')<CR>
-xnoremap <silent><Leader>ff <Cmd>call set_fff#main('call fff#Open()')<CR>
-nnoremap <silent><Leader>fu <Cmd>call set_fff#main('call fff#Open("..")')<CR>
-xnoremap <silent><Leader>fu <Cmd>call set_fff#main('call fff#Open("..")')<CR>
-nnoremap <silent><Leader>f. <Cmd>call set_fff#main('call fff#Open("~/dotfiles")')<CR>
-xnoremap <silent><Leader>f. <Cmd>call set_fff#main('call fff#Open("~/dotfiles")')<CR>
-nnoremap <silent><Leader>fv <Cmd>call set_fff#main('call fff#Open("$MYVIMDIR")')<CR>
-xnoremap <silent><Leader>fv <Cmd>call set_fff#main('call fff#Open("$MYVIMDIR")')<CR>
-nnoremap <silent><Leader>fs <Cmd>call set_fff#main('call fff#Open("~/src")')<CR>
-xnoremap <silent><Leader>fs <Cmd>call set_fff#main('call fff#Open("~/src")')<CR>
-nnoremap <silent><Leader>fx <Cmd>call set_fff#main('call fff#Open("~/bin")')<CR>
-xnoremap <silent><Leader>fx <Cmd>call set_fff#main('call fff#Open("~/bin")')<CR>
-nnoremap <silent><Leader>fe <Cmd>call set_fff#main('call fff#Open("~/book/epub")')<CR>
-xnoremap <silent><Leader>fe <Cmd>call set_fff#main('call fff#Open("~/book/epub")')<CR>
-nnoremap <silent><Leader>fd <Cmd>call set_fff#main('call fff#Open("~/downloads")')<CR>
-xnoremap <silent><Leader>fd <Cmd>call set_fff#main('call fff#Open("~/downloads")')<CR>
-nnoremap <silent><Leader>fD <Cmd>call set_fff#main('call fff#Open("~/Document")')<CR>
-xnoremap <silent><Leader>fD <Cmd>call set_fff#main('call fff#Open("~/Document")')<CR>
-nnoremap <silent><Leader>fp <Cmd>call set_fff#main('call fff#Open("~/public_html/iranoan")')<CR>
-xnoremap <silent><Leader>fp <Cmd>call set_fff#main('call fff#Open("~/public_html/iranoan")')<CR>
-nnoremap <silent><Leader>fi <Cmd>call set_fff#main('call fff#Open("~/Information/slide")')<CR>
-xnoremap <silent><Leader>fi <Cmd>call set_fff#main('call fff#Open("~/Information/slide")')<CR>
+nnoremap <silent><Leader>fr <Cmd>call set_fff#main('call fff#FFFiles("~")')<CR>
+xnoremap <silent><Leader>fr <Cmd>call set_fff#main('call fff#FFFiles("~")')<CR>
+nnoremap <silent><Leader>ff <Cmd>call set_fff#main('call fff#FFFiles()')<CR>
+xnoremap <silent><Leader>ff <Cmd>call set_fff#main('call fff#FFFiles()')<CR>
+nnoremap <silent><Leader>fu <Cmd>call set_fff#main('call fff#FFFiles("..")')<CR>
+xnoremap <silent><Leader>fu <Cmd>call set_fff#main('call fff#FFFiles("..")')<CR>
+nnoremap <silent><Leader>f. <Cmd>call set_fff#main('call fff#FFFiles("~/dotfiles")')<CR>
+xnoremap <silent><Leader>f. <Cmd>call set_fff#main('call fff#FFFiles("~/dotfiles")')<CR>
+nnoremap <silent><Leader>fv <Cmd>call set_fff#main('call fff#FFFiles("$MYVIMDIR")')<CR>
+xnoremap <silent><Leader>fv <Cmd>call set_fff#main('call fff#FFFiles("$MYVIMDIR")')<CR>
+nnoremap <silent><Leader>fs <Cmd>call set_fff#main('call fff#FFFiles("~/src")')<CR>
+xnoremap <silent><Leader>fs <Cmd>call set_fff#main('call fff#FFFiles("~/src")')<CR>
+nnoremap <silent><Leader>fx <Cmd>call set_fff#main('call fff#FFFiles("~/bin")')<CR>
+xnoremap <silent><Leader>fx <Cmd>call set_fff#main('call fff#FFFiles("~/bin")')<CR>
+nnoremap <silent><Leader>fe <Cmd>call set_fff#main('call fff#FFFiles("~/book/epub")')<CR>
+xnoremap <silent><Leader>fe <Cmd>call set_fff#main('call fff#FFFiles("~/book/epub")')<CR>
+nnoremap <silent><Leader>fd <Cmd>call set_fff#main('call fff#FFFiles("~/downloads")')<CR>
+xnoremap <silent><Leader>fd <Cmd>call set_fff#main('call fff#FFFiles("~/downloads")')<CR>
+nnoremap <silent><Leader>fD <Cmd>call set_fff#main('call fff#FFFiles("~/Document")')<CR>
+xnoremap <silent><Leader>fD <Cmd>call set_fff#main('call fff#FFFiles("~/Document")')<CR>
+nnoremap <silent><Leader>fp <Cmd>call set_fff#main('call fff#FFFiles("~/public_html/iranoan")')<CR>
+xnoremap <silent><Leader>fp <Cmd>call set_fff#main('call fff#FFFiles("~/public_html/iranoan")')<CR>
+nnoremap <silent><Leader>fi <Cmd>call set_fff#main('call fff#FFFiles("~/Information/slide")')<CR>
+xnoremap <silent><Leader>fi <Cmd>call set_fff#main('call fff#FFFiles("~/Information/slide")')<CR>
 # augroup Fuzzy_File_Finder
 # 	autocmd!
 # 	autocmd FuncUndefined fff#* set_fff#main()

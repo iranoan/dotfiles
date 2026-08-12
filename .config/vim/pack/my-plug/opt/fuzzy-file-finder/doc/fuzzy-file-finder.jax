@@ -31,11 +31,11 @@ License: GPL Ver.3.
 使用方法~
 
 >vim
-	call fff#Open('~/')
+	call fff#FFFiles('~/')
 <
 
-fff#Open({dir}) の {dir} が未指定や空文字の場合は、カレント・ディレクトリをそ
-うでなければ、指定された {dir} 配下のファイルを検索し、入力文字により絞り込む
+fff#FFFiles({dir}) の {dir} が未指定や空文字の場合は、カレント・ディレクトリを
+そうでなければ、指定された {dir} 配下のファイルを検索し、入力文字により絞り込む
 
 実行すると新たにタブ・ページを開き、次の配置にする
 
@@ -137,9 +137,9 @@ k          ファイル一覧で次を選択
 
 関数 (|fuzzy-file-finder-function|) を用いて次のように設定する
 全体の設定では ~/.config/vim/vimr 等で >vim
-	nnoremap <silent><leader>fffh  <Cmd>call fff#Open('$HOME')<CR>
-	nnoremap <silent><leader>fffv  <Cmd>call fff#Open('$MYVIMDIR')<CR>
-	nnoremap <silent><leader>fff.  <Cmd>call fff#Open()<CR>
+	nnoremap <silent><leader>fffh  <Cmd>call fff#FFFiles('$HOME')<CR>
+	nnoremap <silent><leader>fffv  <Cmd>call fff#FFFiles('$MYVIMDIR')<CR>
+	nnoremap <silent><leader>fff.  <Cmd>call fff#FFFiles()<CR>
 <
 ファイル形式別の設定で ~/.config/vim/after/ftplugin/fuzzy-file-finder.vim 等で >vim
 	nnoremap <buffer><silent><Esc>  <Cmd>call fff#Bridge('Cleanup')<CR>
@@ -174,7 +174,7 @@ cmd~
 	Default: `['find', '-L', '.', '-mindepth', '1', '(', '-type', 'd', '-o', '-type', 'f', '-o', '-type', 'l', ')', '-printf', '%P\n']`
 
 	* ファイル一覧を作成するコマンド
-	* '.' が fff#Open({dir}) の {dir} 部分に置き換わる
+	* '.' が fff#FFFiles({dir}) の {dir} 部分に置き換わる
 	  '.' が無ければ、末尾に {dir} が追加される
 
 type~
@@ -275,7 +275,7 @@ mapping~
                                                     *fuzzy-file-finder-function*
 関数~
 
-fff#Open({dir})~
+fff#FFFiles({dir})~
 	* {dir} のディレクトリ、ファイル一覧を作成
 
 fff#Bridge({cmd})~
