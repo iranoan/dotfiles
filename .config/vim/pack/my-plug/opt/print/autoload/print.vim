@@ -18,7 +18,7 @@ export def Main(first: number, last: number): void
 		set termguicolors
 	endif
 	execute($':{first},{last}hardcopy')
-	call hlset(linenr)
+	hlset(linenr)
 	# execute($'setlocal columns={widht} background={bg}')
 	execute($'setlocal background={bg}')
 	if !has('gui_running') && !termguicolors
