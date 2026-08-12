@@ -2,8 +2,12 @@ scriptencoding utf-8
 
 function set_fff#main(cmd) abort
 	let g:popup_image_options = #{pt2px: #{x: 131, y: 154}}
+	" 画像などのプレビュー $MYVIMDIR/pack/my-plug/opt/popup_image/ {{{2
 	packadd popup_image
+	" 2}}}"
+	" 辞書データの子要素も含めてマージ $MYVIMDIR/pack/my-plug/opt/extend-merge/ {{{2
 	packadd extend-merge
+	" 2}}}"
 	let g:fuzzy_file_finder = #{
 				\ cmd: ['fdfind.sh'],
 				\ open: 'TabEdit',
