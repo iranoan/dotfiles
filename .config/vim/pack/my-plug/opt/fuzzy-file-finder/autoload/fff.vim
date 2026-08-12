@@ -581,6 +581,7 @@ def GetWindowSize(prev_on: bool, cmdwin: bool): list<number>
 	var pv_border_c: list<string> = g:fuzzy_file_finder.preview_borderchars
 	var slide: number
 
+	sleep 1m # gvim --clientserver socket で起動している時に、これが無いとサイズ変更がうまく行かない
 	ls_border = ls_border == [] ? [1, 1, 1, 1] : ls_border
 	if cmdwin
 			&& gettabinfo(tabpagenr())[0].windows->map((_, v) => win_gettype(v))->index('command') != -1 # コマンド・ライン・ウィンドウがある
