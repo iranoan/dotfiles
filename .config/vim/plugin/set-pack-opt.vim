@@ -1,6 +1,16 @@
 vim9script
 scriptencoding utf-8
 
+# $MYVIMDIR/pack/*/{stat,opt}/* でプラグインを管理する上で、便利な関数 $MYVIMDIR/pack/my-plug/start/pack-manage {{{2
+# 最初に書かないと、これより下の処理でエラーになった時に、再セットアップすらできない
+augroup loadPackManage
+	autocmd!
+	autocmd FuncUndefined pack_manage#* packadd pack-manage
+		| autocmd_delete([{group: 'loadPackManage'}])
+	autocmd CmdlineEnter : packadd pack-manage
+		| autocmd_delete([{group: 'loadPackManage'}])
+augroup END
+
 # コマンドを使うなどの理由で $MYVIMDIR/pack/*/opt においているが、起動時に packadd しているために遅延にならない分 {{{1
 # 2019-03-31 14:51 などの日付や時刻もうまい具合に Ctrl-a/x で加算減算する https://github.com/tpope/vim-speeddating {{{2
 # 日時フォーマットを追加したいので、start に置かない
@@ -114,7 +124,7 @@ if executable('git') # git がないときに起動時にエラーになるた�
 endif
 
 # autocmd 削除を纏められないにタイプ {{{1
-# 括弧や引用符をペアで入力/削除 $MYVIMDIR/pack/my-plug/start/pair_bracket/ {{{2
+# 括弧や引用符をペアで入力/削除 $MYVIMDIR/pack/my-plug/opt/pair_bracket/ {{{2
 # ドット・リピートは考慮していない
 augroup SetPairBracket
 	autocmd!
@@ -142,16 +152,6 @@ augroup END
 # *.vim で再設定されてしまう分は $MYVIMDIR/after/ftplugin/vim.vim
 nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
 # nnoremap <silent>gf :TabEdit <cfile><CR> " ← 存在しなくても開く <C-R><C-F> と同じ
-
-
-# $MYVIMDIR/pack/*/{stat,opt}/* でプラグインを管理する上で、便利な関数 $MYVIMDIR/pack/my-plug/start/pack-manage {{{2
-augroup loadPackManage
-	autocmd!
-	autocmd FuncUndefined pack_manage#* packadd pack-manage
-		| autocmd_delete([{group: 'loadPackManage'}])
-	autocmd CmdlineEnter : packadd pack-manage
-		| autocmd_delete([{group: 'loadPackManage'}])
-augroup END
 
 # grep で幾つかのオプションをデフォルトで付けたり、補完を可能にする $MYVIMDIR/pack/my-plug/opt/gnu-grep/ {{{2
 # statusline  w:quickfix_title 変更は $MYVIMDIR/ftplugin/qf.vim
