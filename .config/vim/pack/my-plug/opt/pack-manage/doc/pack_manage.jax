@@ -16,7 +16,7 @@ License: GPL Ver.3.
 ~/.vim/ftplugin/*.vim, ~/.vim/after/ftplugin/*.vim に >vim
 	" [comment] http://github.com/author/plugin {{{
 	" do-setup: make
-<や >vim
+<や >vim9
 	# [comment] http://github.com/author/plugin {{{ # Vim9Script
 	# do-setup: ./install
 <の様なフォールド・マーカー直前に記載のリポジトリのプラグインを管理対象にする
@@ -89,7 +89,7 @@ setup                                                    *pack_manage-sub_setup*
 	* これに続く連続するコメント行頭に                      *pack_manage-do-setup*  >vim
 		" do-setup: make
 		" do-setup: :InstallPlugin
-<		や >vim
+<		や >vim9
 		# do-setup: ./install
 <		の様な do-setup: の記載が有れば、それより後ろの部分の
 		- 先頭が「:」の場合は Vim のコマンドとして実行
