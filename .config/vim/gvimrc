@@ -32,9 +32,8 @@ augroup GVIMRC
 	# 画面左上に表示 (help に有る通り autocmd を使わないと環境によって gvimrc の記載では無効+Wayland では無効)
 	if !has('unix') || $XDG_SESSION_TYPE ==# 'x11' || $GDK_BACKEND ==# 'x11'
 		autocmd GUIEnter * winpos 0 0
-	else
-		autocmd GUIEnter * set lines=999 columns=168 # lines number of lines in the display←何時からか autocmd でない箇所で 999 を指定すると Wayland の環境で横幅まで最大にされることが多くなる
 	endif
+	autocmd GUIEnter * set lines=47 columns=168 # lines number of lines in the display←何時からか autocmd でない箇所で 999 を指定すると Wayland の環境で横幅まで最大にされることが多くなる
 	autocmd GUIEnter   * autocmd_delete([{group: 'GVIMRC'}])
 augroup END
 # endif
