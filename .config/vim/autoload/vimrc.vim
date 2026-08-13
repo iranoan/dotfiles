@@ -567,3 +567,12 @@ export def UpdateAll(): void
 	bufdo update
 	execute 'buffer ' .. c_buf_nr
 enddef
+
+export def DeleteOldUndoFile(day: number = 31): void
+	var t: number = localtime() - day * 24 * 60 * 60
+
+	for f in glob('$MYVIMDIR/undo/*', true, true)
+		->filter((_, v) => getftime(v) < t )
+		delete(f)
+	endfor
+enddef

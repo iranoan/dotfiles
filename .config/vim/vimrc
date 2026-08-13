@@ -344,6 +344,7 @@ augroup VIMRC
 	autocmd BufNewFile *.vim        vimrc#InsertTemplate('vim.vim')
 	autocmd CmdwinLeave,CmdlineLeave,TabLeave,WinLeave,InsertEnter * vimrc#ChangeScrolloff()
 	autocmd VimLeave * vimrc#BackupViminfo()
+	autocmd VimLeave * vimrc#DeleteOldUndoFile(31) # 31 日以上前のアンドゥ・ファイルを削除
 augroup END
 # 日本語の表示/編集、文字幅に関わる設定 {{{1
 if exists('&ambiwidth')                        # □とか○の文字があってもカーソル位置がずれないようにする
