@@ -58,13 +58,17 @@ def Calculate(bufnr: number): dict<any>
 		var no_match: number
 		var match_b: number
 		var s: string
+		var syn_id: number
 		while true
 			[s, match_b, i] = matchstrpos(cur_line, '[][{}()]', i)
 			if i == -1
 				break
 			endif
-			if index(['Comment', 'Constant', 'vimMapLhs', 'vimMapRhs', 'vimNormalArg', 'vimCommentString'], synIDattr(synIDtrans(synID(lnum, i, 1)), 'name')) != -1
-			# if index(['Delimitere', 'vimParenSep', 'vimSep', 'vimOperParen', 'vimDefBody'], synIDattr(synIDtrans(synID(lnum, i, 1)), 'name')) != -1
+			syn_id = synID(lnum, i, 1)
+			if index(['vimNotation'], synIDattr(syn_id, 'name')) != -1
+				continue
+			elseif index(['Comment', 'Constant', 'vimMapLhs', 'vimMapRhs', 'vimNormalArg', 'vimCommentString', 'vimNotation'], synIDattr(synIDtrans(syn_id), 'name')) != -1
+			# if index(['Delimitere', 'vimParenSep', 'vimSep', 'vimOperParen', 'vimDefBody'], synIDattr(synIDtrans(syn_id), 'name')) != -1
 				continue
 			elseif index(['{', '[', '('], s) != -1
 				no_match += 1
