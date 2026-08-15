@@ -610,6 +610,49 @@ enddef
 var ListBorder = (v: list<number>): list<number> => # 右側のプレビュー枠左側に罫線があれば、左側のリスト枠右側は強制的に無しにする (重ねたように見せつつ余分な領域をなくす)
 	g:fuzzy_file_finder.preview_border[3] == 1 ? [v[0], 0] + v[2 : ] : v
 
+def SetFilterBuffer(dir: string): void
+	setlocal filetype=fuzzy-file-finder nonumber signcolumn=no foldcolumn=0 buftype=nofile bufhidden=wipe
+	autocmd FuzzyFileFinder TextChangedI,TextChangedP,TextChanged <buffer> fff#Bridge('Render')
+	# execute($'file! fuzzy-file-finder:://{dir}')
+	if get(g:fuzzy_file_finder, 'mapping', true)
+		# Normal モード
+		nnoremap <buffer><silent><Esc>      <Cmd>call fff#Bridge('Cleanup')<CR>
+		nnoremap <buffer><silent>gg         <Cmd>call fff#Bridge('MoveTop')<CR>
+		nnoremap <buffer><silent>G          <Cmd>call fff#Bridge('MoveLast')<CR>
+		nnoremap <buffer><silent>O          I
+		nnoremap <buffer><silent>o          A
+		# Insert / Normal モード双方からの操作
+		nnoremap <buffer><silent><CR>       <Cmd>call fff#Bridge('Confirm')<CR>
+		inoremap <buffer><silent><CR>       <Cmd>call fff#Bridge('Confirm')<CR>
+		nnoremap <buffer><silent><C-j>      <Cmd>call fff#Bridge('MoveDown')<CR>
+		inoremap <buffer><silent><C-j>      <Cmd>call fff#Bridge('MoveDown')<CR>
+		nnoremap <buffer><silent><C-n>      <Cmd>call fff#Bridge('MoveDown')<CR>
+		inoremap <buffer><silent><C-n>      <Cmd>call fff#Bridge('MoveDown')<CR>
+		nnoremap <buffer><silent><Down>     <Cmd>call fff#Bridge('MoveDown')<CR>
+		inoremap <buffer><silent><Down>     <Cmd>call fff#Bridge('MoveDown')<CR>
+		nnoremap <buffer><silent>j          <Cmd>call fff#Bridge('MoveDown')<CR>
+		nnoremap <buffer><silent><C-k>      <Cmd>call fff#Bridge('MoveUp')<CR>
+		inoremap <buffer><silent><C-k>      <Cmd>call fff#Bridge('MoveUp')<CR>
+		nnoremap <buffer><silent><C-p>      <Cmd>call fff#Bridge('MoveUp')<CR>
+		inoremap <buffer><silent><C-p>      <Cmd>call fff#Bridge('MoveUp')<CR>
+		nnoremap <buffer><silent><Up>       <Cmd>call fff#Bridge('MoveUp')<CR>
+		inoremap <buffer><silent><Up>       <Cmd>call fff#Bridge('MoveUp')<CR>
+		nnoremap <buffer><silent>k          <Cmd>call fff#Bridge('MoveUp')<CR>
+		nnoremap <buffer><silent><Tab>      <Cmd>call fff#Bridge('ToggleMark')<CR>
+		inoremap <buffer><silent><Tab>      <Cmd>call fff#Bridge('ToggleMark')<CR>
+		nnoremap <buffer><silent><PageDown> <Cmd>call fff#Bridge('MovePageDown')<CR>
+		inoremap <buffer><silent><PageDown> <Cmd>call fff#Bridge('MovePageDown')<CR>
+		nnoremap <buffer><silent><C-f>      <Cmd>call fff#Bridge('MovePageDown')<CR>
+		inoremap <buffer><silent><C-f>      <Cmd>call fff#Bridge('MovePageDown')<CR>
+		nnoremap <buffer><silent><PageUp>   <Cmd>call fff#Bridge('MovePageUp')<CR>
+		inoremap <buffer><silent><PageUp>   <Cmd>call fff#Bridge('MovePageUp')<CR>
+		nnoremap <buffer><silent><C-b>      <Cmd>call fff#Bridge('MovePageUp')<CR>
+		inoremap <buffer><silent><C-b>      <Cmd>call fff#Bridge('MovePageUp')<CR>
+		nnoremap <buffer><silent><C-]>      <Cmd>call fff#Bridge('TogglePreview')<CR>
+		inoremap <buffer><silent><C-]>      <Cmd>call fff#Bridge('TogglePreview')<CR>
+	endif
+enddef
+
 export def FFFiles(dir: string = ''): void
 	var target_dir: string = $'{fnamemodify(dir ==# '' ? getcwd() : expand(dir, true), ':p')->resolve()}'
 	var target_len: number
@@ -654,16 +697,13 @@ export def FFFiles(dir: string = ''): void
 		is_dirty: false,
 		job: null_job
 	}
-	setbufvar(s.filter_buf, '&filetype', 'fuzzy-file-finder')
 	bufload(s.list_buf)
-	setbufvar(s.list_buf, '&buftype', 'nofile')
-	setbufvar(s.list_buf, '&bufhidden', 'wipe')
 	# setbufvar(s.list_buf, '&breakindent', 1)
 	# setbufvar(s.list_buf, '&breakindentopt', 'list:-1')
 	# setbufvar(s.list_buf, '&formatlistpat', '^[[] >*]\+')
 	bufload(s.preview_buf)
-	setbufvar(s.preview_buf, '&buftype', 'nofile')
-	setbufvar(s.preview_buf, '&bufhidden', 'wipe')
+	SetFilterBuffer(target_dir)
+	setlocal buftype=nofile bufhidden=wipe
 	s.list_winid = popup_create(s.list_buf, {
 		title: $' [{s.target}] 0/0 ',
 		line: 2,

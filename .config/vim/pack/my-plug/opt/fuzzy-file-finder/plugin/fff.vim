@@ -1,6 +1,13 @@
 vim9script
 scriptencoding utf-8
 
+augroup FuzzyFileFinder
+	autocmd!
+	autocmd VimResized * fff#Bridge('VimResized')
+	autocmd CmdwinEnter * fff#Bridge('CmdwinEnter')
+	autocmd CmdwinLeave * fff#Bridge('CmdwinLeave')
+augroup END
+
 try
 	g:fuzzy_file_finder = extend_merge#ExtendNew({
 		cmd: ['find', '-L', '.', '-mindepth', '1', '(', '-type', 'd', '-o', '-type', 'f', '-o', '-type', 'l', ')', '-printf', '%P\n'],
