@@ -25,16 +25,19 @@ for f in ['UDEV Gothic NF', 'Noto Mono', 'BIZ UDGothic', 'Menlo', 'Cascadia Mono
 	endif
 endfor
 set guioptions-=T guioptions-=m guioptions-=r guioptions-=L guioptions+=ck # ツール・バー/メニュー/スクロール・バー表示を OFF、ポップアップ・ダイアログではなくコンソールを使う lines, columns を維持
-# if $GVIM_ENABLE_WAYLAND !=# '1' # ←winpos 等が効かなくなる (Ubuntu 24.10で改善され、無くても描画は乱れないので指定することはない)
-if !has('unix') || $XDG_SESSION_TYPE ==# 'x11' || $GDK_BACKEND ==# 'x11'
-	augroup GVIMRC
-		autocmd!
+augroup GVIMRC
+	autocmd!
+	if !has('unix') || $XDG_SESSION_TYPE ==# 'x11' || $GDK_BACKEND ==# 'x11'
 		# 画面左上に表示 (help に有る通り autocmd を使わないと環境によって gvimrc の記載では無効+Wayland では無効)
 		autocmd GUIEnter * winpos 0 0
-		autocmd GUIEnter * autocmd_delete([{group: 'GVIMRC'}])
-	augroup END
-endif
-set lines=47 columns=168 # Wayland 環境では lines=999 を指定する横幅も最大に、また gtk4 では広くなりすぎ、ウィンドウ下部の描画もうまくされない (autocmd を使っても同じ)
+	else
+		autocmd GUIEnter * gvimrc#GnomeTopLeft()
+	endif
+	autocmd   BufEnter * gvimrc#GnomeActive()
+	autocmd   GUIEnter * autocmd_delete([{group: 'GVIMRC', event: 'GUIEnter'}])
+	# autocmd GUIEnter * autocmd_delete([{group: 'GVIMRC'}])
+augroup END
+set lines=999 columns=168 # GTK3 環境では lines=999 を指定するウィンドウが最大化されるときがある (GTK4 では問題ない)→https://github.com/vim-jp/issues/issues/1462
 # endif
 # ホイール・スクロールは [Shift] 押しながらと逆にする {{{
 nnoremap <ScrollWheelUp>     <S-ScrollWheelUp>
