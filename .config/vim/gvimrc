@@ -2,22 +2,22 @@ vim9script
 scriptencoding utf-8
 
 var fonts: list<string>
-var size: string = ':h13' # OS によってフォント名とサイズの区切りが違うので、UNIX 系でサイズを変えたい場合は、下記の該当箇所
-# 	size = '\ 13'
-# も合わせて変える必要がある
+var size: any = 13
 if has('mac')
 	fonts = systemlist(['system_profiler', 'SPFontsDataType'])
 		->filter((_, v) => v =~ '^\s*Family:')
 		->map((_, v) => substitute(v, '^[[:space:]]*Family:[[:space:]]*', '', ''))
+	size = $':h{size}'
 elseif has('unix')
 	fonts = systemlist(['fc-list', ':style=Regular'])
 		->map((_, v) => substitute(v, '^[^:]\+: \([^:]\+\):style=.\+', '\1', ''))
-	size = '\ 13'
+	size = $'\ {size}'
 elseif has('win32')
 	fonts = systemlist('powershell -NoProfile -Command "Get-ItemProperty ''HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts'' | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name"')
 		->map((_, v) => substitute(v, '\s*([^)]*)$', '', ''))
 		->map((_, v) => split(v, '\s*&\s*'))
 		->flattennew()
+	size = $':h{size}'
 endif
 for f in ['UDEV Gothic NF', 'Noto Mono', 'BIZ UDGothic', 'Menlo', 'Cascadia Mono', 'Monaco', 'Consolas', 'Courier', 'MS Gothic', 'Monospace']
 	if count(fonts, f) != 0
