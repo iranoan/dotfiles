@@ -6,7 +6,8 @@ var size: string = ':h13' # OS によってフォント名とサイズの区切�
 # 	size = '\ 13'
 # も合わせて変える必要がある
 if has('mac')
-	fonts = systemlist("system_profiler SPFontsDataType | grep '^[[:space:]]*Family:'")
+	fonts = systemlist(['system_profiler', 'SPFontsDataType'])
+		->filter((_, v) => v =~ '^\s*Family:')
 		->map((_, v) => substitute(v, '^[[:space:]]*Family:[[:space:]]*', '', ''))
 elseif has('unix')
 	fonts = systemlist(['fc-list', ':style=Regular'])
