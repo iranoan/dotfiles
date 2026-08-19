@@ -11,7 +11,7 @@ if has('mac')
 elseif has('unix')
 	fonts = systemlist(['fc-list', ':style=Regular'])
 		->map((_, v) => substitute(v, '^[^:]\+: \([^:]\+\):style=.\+', '\1', ''))
-	size = $'\ {size}'
+	size = $' {size}'
 elseif has('win32')
 	fonts = systemlist('powershell -NoProfile -Command "Get-ItemProperty ''HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Fonts'' | Get-Member -MemberType NoteProperty | Select-Object -ExpandProperty Name"')
 		->map((_, v) => substitute(v, '\s*([^)]*)$', '', ''))
@@ -20,8 +20,8 @@ elseif has('win32')
 	size = $':h{size}'
 endif
 for f in ['UDEV Gothic NF', 'Noto Mono', 'BIZ UDGothic', 'Menlo', 'Cascadia Mono', 'Monaco', 'Consolas', 'Courier', 'MS Gothic', 'Monospace']
-	if count(fonts, f) != 0
-		execute ($'set guifont={escape(f, ' ')}\ Regular{size}')
+	if index(fonts, f) != -1
+		&guifont = $'{f} Regular{size}'
 		break
 	endif
 endfor
