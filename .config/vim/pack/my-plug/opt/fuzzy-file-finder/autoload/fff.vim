@@ -607,8 +607,9 @@ def GetWindowSize(prev_on: bool, cmdwin: bool): list<number>
 	return [list_width, preview_width, line_height, slide]
 enddef
 
-var ListBorder = (v: list<number>): list<number> => # 右側のプレビュー枠左側に罫線があれば、左側のリスト枠右側は強制的に無しにする (重ねたように見せつつ余分な領域をなくす)
-	g:fuzzy_file_finder.preview_border[3] == 1 ? [v[0], 0] + v[2 : ] : v
+def ListBorder(v: list<number>): list<number> # 右側のプレビュー枠左側に罫線があれば、左側のリスト枠右側は強制的に無しにする (重ねたように見せつつ余分な領域をなくす)
+	return g:fuzzy_file_finder.preview_border[3] == 1 ? [v[0], 0] + v[2 : ] : v
+enddef
 
 def SetFilterBuffer(dir: string): void
 	setlocal filetype=fuzzy-file-finder nonumber signcolumn=no foldcolumn=0 buftype=nofile bufhidden=wipe
