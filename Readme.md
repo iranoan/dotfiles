@@ -93,7 +93,6 @@ install.sh
   * [.config/pip/](.config/pip/)
 * ranger
   * [.config/ranger/](.config/ranger/)
-
 * nsxiv
   * font, color setting → [.Xresources](.Xresources)
   * other → [.config/nsxiv/](.config/nsxiv/)
