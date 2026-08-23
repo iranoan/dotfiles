@@ -3,14 +3,25 @@
 Author:  Iranoan <iranoan+vim@gmail.com>
 License: GPL Ver.3.
 
+==============================================================================
+                                                           *pack_manage-content*
+目次~
+
+* 概要                                                |pack_manage-introduction|
+* 設定                                                |pack_manage-configration|
+* コマンド                                                |pack_manage-commands|
+* 関数                                                   |pack_manage-functions|
 
 ==============================================================================
                                                       *pack_manage-introduction*
+概要~
+
 ~/.vim/pack や ~/.config/vim/pack (以下 ~/.vim/pack とだけ記す) のプラグイン管
 理を少しだけ便利にする関数・コマンド群
 
+==============================================================================
                                                       *pack_manage-configration*
-概要~
+設定~
 
 ~/.vim/vimrc, ~/.vim/gvimrc, ~/.vim/plugin/*.vim, ~/.vim/autoload/*.vim,
 ~/.vim/ftplugin/*.vim, ~/.vim/after/ftplugin/*.vim に >vim
@@ -22,8 +33,7 @@ License: GPL Ver.3.
 <の様なフォールド・マーカー直前に記載のリポジトリのプラグインを管理対象にする
 ここで
 	* [comment] 部分は簡単な説明が書かれていることを想定
-	* どちらも 2 行目は追加処理なので (参照: |pack_manage-do-setup|)
-無くても良い
+	* どちらも 2 行目は追加処理なので (参照: |pack_manage-do-setup|) 無くても良い
 
 さらに、この管理対象の内 >vim
 	packadd plugin
@@ -34,18 +44,20 @@ License: GPL Ver.3.
 				\ ] )
 <といった記載が有るものは遅延読み込みにする (|pack_manage#SetMAP()| は後術)
 
+==============================================================================
                                                           *pack_manage-commands*
 コマンド~
-
-PackManage {args}                                       *pack_manage-PackManage*
+                                                        *pack_manage-PackManage*
+PackManage {args}~
 	* {args} で指定された次のサブコマンドを実行する
-                                                        *pack_manage-subcommands*
+------------------------------------------------------------------------------
+                                                       *pack_manage-subcommands*
 サブコマンド~
-
-help                                                      *pack_manage-sub_help*
+                                                          *pack_manage-sub_help*
+help~
 	* このヘルプ表示する
-
-list                                                      *pack_manage-sub_list*
+                                                          *pack_manage-sub_list*
+list~
 	* 概要 (|pack_manage-configration|) 記載された書式の一覧を表示する
 		- |+popupwin| だとポップアップ表示し
 			* c, q, x, <Esc> で閉じる
@@ -59,27 +71,27 @@ list                                                      *pack_manage-sub_list*
 		- 続いて /opt/ にインストールされるなら O
 		- その後ろにプラグイン名、その後に入手先や ~/.vim/pack からの相対パス複数
 			有る場合は、最初に見つかった入手先を一覧に表示し |Quickfix| も表示する
-
-reintsll {args}                                      *pack_manage-sub_reinstall*
+                                                     *pack_manage-sub_reinstall*
+reintsll {args}~
 	* {args} で指定したプラグラインを強制的に再インストールする
 	* 概要 (|pack_manage-configration|) 記載の書式で導入元の Github のリポジトリが
 		書かれている必要がある
 	* 記載が複数あれば |Quickfix| にも表示し、入手先に食い違いがあれば、インストー
 		ルしない
-
-tags [{flag}]                                             *pack_manage-sub_tags*
+                                                          *pack_manage-sub_tags*
+tags [{flag}]~
 	* ~/.vim/pack に有るヘルプのタグを纏めて |packadd| 使用前でもヘルプを引けるよう
 		に ~/.vim/doc/tags, ~/.vim/doc/tags-?? に出力する
 	* {flag} が 0 以外だと必ずタグ・ファイルを再作成する
 	* {flag} がなかったり、0 を与えた場合は、タグ・ファイルより新しいヘルプ・ファ
 		イルがあった時のみ再作成する
 
-	使用法: >
+	使用法: >vim
 		:PackManage tags
 		:PackManage tags 0
 		:PackManage tags 1
-<
-setup                                                    *pack_manage-sub_setup*
+<                                                         *pack_manage-sub_setup*
+setup~
 	* プラグインを導入/削除する
 		- 要 Git
 	* 概要 (|pack_manage-configration|) 記載の書式で導入元の Github のリポジトリが
@@ -107,13 +119,15 @@ setup                                                    *pack_manage-sub_setup*
 	* そうでなければ ~/.vim/pack/github/start/ に入れる
 	* start, opt の配置が記載と違いが有れば移動する
 	* 記載のないものは ~/.vim/pack/github/ から削除する
-	* ~/.vim/pack/github/ に入れる分は >
+	* ~/.vim/pack/github/ に入れる分は >sh
 		git submodule update --init --recursive
 <		を実行する
-                                                         *pack_manage-functions*
-関数 ~
 
-GetPackLs()                                             *pack_manage#GetPackLs()*
+==============================================================================
+                                                         *pack_manage-functions*
+関数~
+                                                       *pack_manage#GetPackLs()*
+GetPackLs()~
 	* インストールされているプラグインの名称をキーとするその情報の |Dictionaries|
 		- dir:  保存場所
 		- info: 次のインストール元や記載箇所を要素とする辞書リスト
@@ -126,8 +140,8 @@ GetPackLs()                                             *pack_manage#GetPackLs()
 	使用法: >vim
 		let packinfo = pack_manage#GetPackLs()
 		if has_key(pack_manage#GetPackLs(), 'plugin') | echo 'intstalled' | endif
-
-IsInstalled({plugin})                                 *pack_manage#IsInstalled()*
+<                                                     *pack_manage#IsInstalled()*
+IsInstalled({plugin})~
 	* {plugin} が既に |runtimepath| に加わっているか確認する
 	* ~/.vim/pack/github/opt に保存され、|packadd| されていないプラグインでは
 	  |v:false| を返す
@@ -138,8 +152,8 @@ IsInstalled({plugin})                                 *pack_manage#IsInstalled()
 		if !pack_manage#IsInstalled('plugin')
 			packadd plugin
 		endif
-
-SetMAP({plugin}, {cmd}, {map})                             *pack_manage#SetMAP()*
+<                                                          *pack_manage#SetMAP()*
+SetMAP({plugin}, {cmd}, {map})~
 	* nmap k <Plug>... の要領で <Plug> にマッピングするプラグインの遅延読み込みを
 	  実現させる
 
@@ -165,5 +179,5 @@ SetMAP({plugin}, {cmd}, {map})                             *pack_manage#SetMAP()
 				\ {'mode': 'x', 'key': 'lhs',  'cmd': 'Commad', 'method': 1}
 				\ {'mode': 'v', 'key': 'lhs',  'cmd': 'Commad', 'method': 2}
 				\ ] )
-
+<
 vim:tw=78:ts=2:ft=help:norl:noet:fen:
