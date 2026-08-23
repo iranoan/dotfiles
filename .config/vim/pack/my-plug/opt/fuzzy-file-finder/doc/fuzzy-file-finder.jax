@@ -1,7 +1,6 @@
 *fuzzy-file-finder* ファイルをあいまい検索して開く
 
 Author:  Iranoan <iranoan+vim@gmail.com>
-Repository: https://github.com/iranoan/fuzzy-file-finder
 License: GPL Ver.3.
 
 ==============================================================================
@@ -45,7 +44,7 @@ License: GPL Ver.3.
 * 左下:   フィルター文字にマッチするファイル一覧
           フィルター文字列が空の場合は、{dirs} 配下の全ファイル一覧
           デフォルト検索方法は (|fuzzy-file-finder-cmd|) >sh
-          fdfind --hidden --follow --type file --type symlink --type directory --search-path
+          find -L . -mindepth 1 \( -type d -o -type f -o -type l \) -printf "%P\n"
 <* 右下:   ファイル一覧のカーソル行のプレビュー
 
 左右下部分は、実際にはポップアップ・ウィンドウ
