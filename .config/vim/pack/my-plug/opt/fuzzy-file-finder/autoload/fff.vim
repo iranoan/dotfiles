@@ -429,7 +429,7 @@ def RequestRenderThrottle(s: dict<any>): void
 enddef
 
 def MoveSelection(s: dict<any>, delta: any): void
-	var max_idx = len(s.matches)
+	var max_idx: number = len(s.matches)
 	var new_idx: number
 	var f: string
 	var h: number = popup_getoptions(s.list_winid).maxheight
@@ -680,7 +680,7 @@ def GetCommonPath(dirs: list<string>): string
 		return $'{dirs[0]}/'
 	endif
 
-	var common_parts = split(dirs[0], '/', true)
+	var common_parts: list<string> = split(dirs[0], '/', true)
 	var parts: list<string>
 	var min_len: number
 	var new_common: list<string>
@@ -947,7 +947,7 @@ def ToggleWrap(id: number, preview_flag: bool): void
 enddef
 
 def MovePreview(id: number, down_flag: bool): void
-	var max_idx = len(getbufline(winbufnr(id), 1, '$'))
+	var max_idx: number = len(getbufline(winbufnr(id), 1, '$'))
 	var new_idx: number = getcurpos(id)[1]
 	var s: dict<any> = popup_getoptions(id)
 	var h: number = popup_getoptions(id).maxheight
