@@ -22,6 +22,8 @@ export def IsTextFile(f: string): bool
 		source $VIMRUNTIME/plugin/tarPlugin.vim
 		source $VIMRUNTIME/plugin/gzip.vim
 		return true
+	elseif mime ==# 'application/x-pie-executable'
+		return false
 	endif
 	# 関連付けで判定
 	var app: list<string> = systemlist('xdg-mime query default ' .. mime)
