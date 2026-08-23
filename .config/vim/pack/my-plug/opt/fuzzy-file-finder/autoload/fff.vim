@@ -1,7 +1,8 @@
 vim9script
 scriptencoding utf-8
 
-def Cleanup(s: dict<any>): void
+def Cleanup(s: dict<any>, cancel: bool): void
+	var ch: channel
 	if s.render_timer != 0
 		timer_stop(s.render_timer)
 		s.render_timer = 0
@@ -34,6 +35,9 @@ def Cleanup(s: dict<any>): void
 	endif
 	if bufexists(s.preview_buf)
 		execute $'silent! wbipeout! {s.preview_buf}'
+	endif
+	if cancel
+		win_gotoid(s.current_winid)
 	endif
 	stopinsert
 enddef
@@ -471,7 +475,7 @@ def Confirm(s: dict<any>): void
 		add(files_to_open, s.matches[s.selected_idx])
 	endif
 	map(files_to_open, (_, v) => fnamemodify(v, ':p'))
-	Cleanup(s) # これでカレント・ディレクトリが変わることがあるので、この後でフル・パス変換はダメ
+	Cleanup(s, false) # これでカレント・ディレクトリが変わることがあるので、この後でフル・パス変換はダメ
 	if !empty(files_to_open)
 		for f in files_to_open
 			if isdirectory(f) && netrw
@@ -508,7 +512,7 @@ export def Bridge(cmd: string): void
 	elseif cmd ==? 'ToggleMark'
 		ToggleMark(b:fuzzy_state)
 	elseif cmd ==? 'Cleanup'
-		Cleanup(b:fuzzy_state)
+		Cleanup(b:fuzzy_state, true)
 	elseif cmd ==? 'Render'
 		RequestRender(b:fuzzy_state)
 	elseif cmd ==? 'VimResized'
@@ -661,6 +665,7 @@ export def FFFiles(dir: string = ''): void
 	var preview_width: number
 	var line_height: number
 	var slide: number
+	var current_winid: number = win_getid()
 	var cmd_place_folder: number = index(g:fuzzy_file_finder.cmd, '.')
 	var cmd: list<string> = cmd_place_folder == -1 ? g:fuzzy_file_finder.cmd + [target_dir] :
 		cmd_place_folder == len(g:fuzzy_file_finder.cmd) ? g:fuzzy_file_finder.cmd[ : - 2 ] + [target_dir] :
@@ -679,6 +684,7 @@ export def FFFiles(dir: string = ''): void
 	execute $'lcd {target_dir}'
 	[list_width, preview_width, line_height, slide] = GetWindowSize(true, true)
 	var s = {
+		current_winid: current_winid,
 		display_image: getscriptinfo({name: '/plugin/popup_image.vim'}) != [],
 		tabnr: tabpagenr(),
 		filter_buf: bufnr('%'),
