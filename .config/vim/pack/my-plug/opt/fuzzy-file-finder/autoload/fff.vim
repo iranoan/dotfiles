@@ -779,7 +779,7 @@ export def FFFiles(dirs: list<string> = []): void
 		return
 	endif
 	tabnew
-	execute $'lcd {common_path}'
+	execute($'silent lcd {common_path}')
 	[list_width, preview_width, line_height, slide] = GetWindowSize(true, true)
 	var s = {
 		current_winid: current_winid,
