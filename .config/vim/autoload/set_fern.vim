@@ -20,9 +20,12 @@ function set_fern#main() abort
 	packadd fern-preview.vim
 	let g:fern_preview_window_calculator = #{height: {-> &lines - 2}, left: {-> g:fern#drawer_width + 1}, top: {-> 0}, width: {-> &columns - g:fern#drawer_width - 2}}
 	" }}}
+	if !pack_manage#IsInstalled('fuzzy-file-finder')
+		call set_fff#init()
+	endif
 	" fzf と連携 https://github.com/LumaKernel/fern-mapping-fzf.vim {{{
-	packadd fern-mapping-fzf.vim
-	let g:fern#mapping#fzf#disable_default_mappings = 1
+	" packadd fern-mapping-fzf.vim
+	" let g:fern#mapping#fzf#disable_default_mappings = 1
 	" g:fern#mapping#fzf#fzf_options を指定すると、b:fzf_action, g:fzf_action が無視され開けなくなる
 	" let g:fern#mapping#fzf#fzf_options = {'options': '--multi --no-unicode --margin=0% --padding=0% --preview=''~/bin/fzf-preview.sh {}'' --bind=''ctrl-]:change-preview-window(hidden|)'''}
 	" }}}
@@ -206,8 +209,9 @@ def s:init_fern(): void
 	# }}}
 	# fern-mapping-fzf\.vim {{{
 	# <Plug>(fern-action-fzf-files)
-	nnoremap <buffer><leader>f <Cmd>call call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern-mapping-fzf\.vim/autoload/fern/mapping/fzf\.vim$'})[0].sid .. '_' .. 'map_fzf_files')])<CR>
-	nnoremap <buffer>f     <Cmd>call call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern-mapping-fzf\.vim/autoload/fern/mapping/fzf\.vim$'})[0].sid .. '_' .. 'map_fzf_files')])<CR>
+	# nnoremap <buffer><leader>f <Cmd>call call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern-mapping-fzf\.vim/autoload/fern/mapping/fzf\.vim$'})[0].sid .. '_' .. 'map_fzf_files')])<CR>
+	# nnoremap <buffer>f     <Cmd>call call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern-mapping-fzf\.vim/autoload/fern/mapping/fzf\.vim$'})[0].sid .. '_' .. 'map_fzf_files')])<CR>
+	nnoremap <buffer>f <Cmd>call fern_fff#FFFiles()<CR>
 	# }}}
 	# }}}
 	if exists('b:undo_ftplugin')
@@ -262,9 +266,9 @@ def s:open(): void
 			endif
 		else
 			if executable(node._path)
-				execute 'topleft terminal ' .. node._path
+				execute($'topleft terminal {node._path}')
 			else
-				system('xdg-open ' .. node._path .. ' &')
+				job_start(['xdg-open', node._path])
 			endif
 		endif
 	endif

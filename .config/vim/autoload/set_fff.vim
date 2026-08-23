@@ -1,6 +1,6 @@
 scriptencoding utf-8
 
-function set_fff#main(cmd) abort
+function set_fff#init() abort
 	let g:popup_image_options = #{pt2px: #{x: 131, y: 154}}
 	" 画像などのプレビュー $MYVIMDIR/pack/my-plug/opt/popup_image/ {{{2
 	packadd popup_image
@@ -23,6 +23,14 @@ function set_fff#main(cmd) abort
 				\ 		'docx': ['soffice', '--convert-to', '"txt:Text', '(encoded):UTF8"', '--cat'],
 				\ 	}
 				\}
+	packadd fuzzy-file-finder
+	call timer_start(1, {->execute('delfunction set_fff#init')})
+endfunction
+
+function set_fff#main(cmd) abort
+	if !pack_manage#IsInstalled('fuzzy-file-finder')
+		call set_fff#init()
+	endif
 	call pack_manage#SetMAP('fuzzy-file-finder', a:cmd, [
 				\ #{mode: 'n', key: '<silent><Leader>fr', method: 1, cmd: 'call fff#FFFiles(["~"])'},
 				\ #{mode: 'x', key: '<silent><Leader>fr', method: 1, cmd: 'call fff#FFFiles(["~"])'},
