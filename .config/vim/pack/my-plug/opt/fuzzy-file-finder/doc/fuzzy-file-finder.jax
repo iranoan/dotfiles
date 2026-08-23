@@ -31,17 +31,21 @@ License: GPL Ver.3.
 使用方法~
 
 >vim
-	call fff#FFFiles('~/')
+	call fff#FFFiles(['~/'])
 <
 
-fff#FFFiles({dir}) の {dir} が未指定や空文字の場合は、カレント・ディレクトリを
-そうでなければ、指定された {dir} 配下のファイルを検索し、入力文字により絞り込む
+* fff#FFFiles([{dirs}]) の {dirs} が空リストの場合は、カレント・ディレクトリ
+* ['~/downloads', '~/video'] 等ディレクトリ名のリストなら指定された {dirs} 配下
+* リスト中の文字列が '' (空文字列) の場合カレント・ディレクトリ
+のファイルを検索し、入力文字により絞り込む
+
+指定された文字列がファイル名の場合は、出力リストに追加する
 
 実行すると新たにタブ・ページを開き、次の配置にする
 
 * 先頭行: フィルター文字列の入力
 * 左下:   フィルター文字にマッチするファイル一覧
-          フィルター文字列が空の場合は、{dir} 配下の全ファイル一覧
+          フィルター文字列が空の場合は、{dirs} 配下の全ファイル一覧
           デフォルト検索方法は (|fuzzy-file-finder-cmd|) >sh
           fdfind --hidden --follow --type file --type symlink --type directory --search-path
 <* 右下:   ファイル一覧のカーソル行のプレビュー
@@ -78,7 +82,7 @@ $~
 トークンが先頭のときのみ意味があり、Vim の検索に従って絞り込む
   Ex. \\.\(htm\|html\)$
     末尾が .htm もしくは .html のみに絞り込む
-  * 設定に関係なく 'ignorecase', 'magic' は On、'smartcase'が Off を基本として
+  * 設定に関係なく 'ignorecase', 'magic' は On、'smartcase' が Off を基本として
     検索する
     * 変更したいときは |\C|, |\M|, |\v| |\V| を使う
                                           *fuzzy-file-finder-special-character!*
@@ -137,8 +141,8 @@ k          ファイル一覧で次を選択
 
 関数 (|fuzzy-file-finder-function|) を用いて次のように設定する
 全体の設定では ~/.config/vim/vimr 等で >vim
-	nnoremap <silent><leader>fffh  <Cmd>call fff#FFFiles('$HOME')<CR>
-	nnoremap <silent><leader>fffv  <Cmd>call fff#FFFiles('$MYVIMDIR')<CR>
+	nnoremap <silent><leader>fffh  <Cmd>call fff#FFFiles(['$HOME'])<CR>
+	nnoremap <silent><leader>fffv  <Cmd>call fff#FFFiles(['$MYVIMDIR'])<CR>
 	nnoremap <silent><leader>fff.  <Cmd>call fff#FFFiles()<CR>
 <
 ファイル形式別の設定で ~/.config/vim/after/ftplugin/fuzzy-file-finder.vim 等で >vim
@@ -165,41 +169,39 @@ k          ファイル一覧で次を選択
                                                *fuzzy-file-finder-custom-option*
 オプション~
 
-nnoremap <buffer> <silent> <Esc>      <Cmd>call fff#Bridge('Cleanup')<CR>
-
-g:fuzzy_file_finder の以下のキーで変更できる
-                                                         *fuzzy-file-finder-cmd*
+*g:fuzzy_file_finder* の以下のキーで変更できる
+                               *g:fuzzy_file_finder.cmd* *fuzzy-file-finder-cmd*
 cmd~
 	Type: |list|<|string|>|
 	Default: `['find', '-L', '.', '-mindepth', '1', '(', '-type', 'd', '-o', '-type', 'f', '-o', '-type', 'l', ')', '-printf', '%P\n']`
 
 	* ファイル一覧を作成するコマンド
-	* '.' が fff#FFFiles({dir}) の {dir} 部分に置き換わる
-	  '.' が無ければ、末尾に {dir} が追加される
-
+	* '.' が fff#FFFiles([{dirs}]) の {dirs} 部分に置き換わる
+	  '.' が無ければ、末尾に {dirs} が追加される
+                                                      *g:fuzzy_file_finder.type*
 type~
 	* 次のキーがあり、ファイルの種類の判定やプレビュー時のハイライトと |'filetype'|
 	  を指定
-
+                                                  *g:fuzzy_file_finder.type.ext*
 	ext~
 		Type: |dict|<|string|>|
 
 		* 拡張子ごとの |'filetype'| を指定
 		  Ex. {vim: 'vim'}
-
+                                                 *g:fuzzy_file_finder.type.name*
 	name~
 		Type: |dict|<|string|>|
 
 		* ファイル名ごとの |'filetype'| を指定
 		  Ex. {vimrc: 'vim', gvimrc: 'vim'}
-
+                                                 *g:fuzzy_file_finder.type.path*
 	path~
 		Type: |list|<|dict|<|string|>>|
 
 		* パスごとの |'filetype'| を指定
 		* Ex. {reg: '^\~/.config/fd/[^/]\+$', type: 'gitignore'},
 		  reg キーで正規表現を type で |'filetype'| のペアの辞書
-
+                                                *g:fuzzy_file_finder.type.image*
 	image~
 	Type: |list|<|string|>|
 
@@ -207,6 +209,7 @@ type~
 	  Ex. ['jpg', 'jpeg', 'png']
 	* 実際に画像表示させるには |popup_image| プラグインが必要
 
+                                               *g:fuzzy_file_finder.type.filter*
 	filter~
 		Type: |dict|<|list|<|string|>>|
 
@@ -214,7 +217,7 @@ type~
 		* Ex. {zip: ['unzip', '-l']}
 		  拡張子とフィルター・プログラム (必ず list<string>) のペア指定する
 		* '.' があればそれが操作ファイルに置き換わる
-
+                                                      *g:fuzzy_file_finder.open*
 open~
 	Type: |string|
 	Default: |:edit|
@@ -222,7 +225,7 @@ open~
 	* 上記の image 未登録、ディレクトリ、バイナリ・ファイル以外を Vim で開く時に用
 	  いるコマンド
 	  Ex. open: 'tabedit'
-
+                                                       *g:fuzzy_file_finder.dir*
 dir~
 	Type: |boolean|
 	Default: |true|
@@ -230,7 +233,7 @@ dir~
 	* ディレクトリを Vim で開くか?
 	* 実際に Vim でディレクトリを開く動作がどうなるかは使用しているプラグインに
 	  よって変わる
-
+                                               *g:fuzzy_file_finder.list_border*
 list_border~
 	Type: |list|<|number|>|
 	Default: |[1, 1, 1, 1]|
@@ -239,14 +242,14 @@ list_border~
 	  上/右/下/左の順 (|popup_create-arguments| の border 参照)
 	* プレビュー表示され、更にその左枠線が表示される場合は、この一覧右側の枠線は
 	  無しの扱いになる
-
+                                            *g:fuzzy_file_finder.preview_border*
 preview_border~
 	Type: |list|<|number|>|
 	Default: |[1, 1, 1, 1]|
 
 	* プレビュー枠のボーダーの表示 (1)、非表示 (0)
 	  上/右/下/左の順 (|popup_create-arguments| の border 参照)
-
+                                          *g:fuzzy_file_finder.list_borderchars*
 list_borderchars~
 	Type: |list|<|string|>|
 	Default: |['─', '│', '─', '│', '╭', '╮', '╯', '╰']|
@@ -255,14 +258,14 @@ list_borderchars~
 	  上/右/下/左の順 (|popup_create-arguments| の borderchars~ 参照)
 	* プレビュー表示され、更にその左枠線が表示される場合は、この一覧右側の枠線は
 	  無しの扱いになる
-
+                                       *g:fuzzy_file_finder.preview_borderchars*
 preview_borderchars~
 	Type: |list|<|string|>|
 	Default: |['─', '│', '─', '│', '┬', '╮', '╯', '┴'],|
 
 	* プレビュー枠のボーダーに用いる記号
 	  上/右/下/左の順 (|popup_create-arguments| の borderchars~ 参照)
-
+                                                   *g:fuzzy_file_finder.mapping*
 mapping~
 	Type: |boolean|
 	Default: |v:true|
@@ -275,8 +278,8 @@ mapping~
                                                     *fuzzy-file-finder-function*
 関数~
 
-fff#FFFiles({dir})~
-	* {dir} のディレクトリ、ファイル一覧を作成
+fff#FFFiles([{dirs}])~
+	* {dirs} のディレクトリ、ファイル一覧を作成
 
 fff#Bridge({cmd})~
 	* {cmd} は次の文字列を指定できる

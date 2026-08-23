@@ -7,14 +7,18 @@ def Cleanup(s: dict<any>, cancel: bool): void
 		timer_stop(s.render_timer)
 		s.render_timer = 0
 	endif
-	if has_key(s, 'job') && job_status(s.job) == 'run'
-		s.canceled = true
-		var ch = job_getchannel(s.job)
-		if ch_status(ch) != 'closed'
-			ch_close_in(ch)
-		endif
-		job_stop(s.job, 'kill')
-		s.job = null_job
+	if has_key(s, 'job')
+		for j in s.job
+			if job_status(j) == 'run'
+				s.canceled = true
+				ch = job_getchannel(j)
+				if ch_status(ch) != 'closed'
+					ch_close_in(ch)
+				endif
+				job_stop(j, 'kill')
+				remove(s.job, j)
+			endif
+		endfor
 	endif
 	if s.list_winid > 0
 		popup_close(s.list_winid)
@@ -107,16 +111,17 @@ def GetFileInfo(dir: string): list<dict<any>>
 				link: ''
 			})
 		elseif type ==# 'link'
+			f = resolve(f)
 			add(info, {
 				type: type,
-				permission: 'lrwxrwxrwx',
+				permission: $'l{getfperm(f)}',
 				size: 0,
 				size_s: '0',
 				time: time,
 				time_iso: strftime('%F %T', time),
 				name: p,
 				lower_name: lower_name,
-				link: resolve(f)
+				link: f
 			})
 		else
 			size = getfsize(f)
@@ -256,7 +261,16 @@ enddef
 
 def SetListTitle(s: dict<any>): void
 	var marked_count: number = len(s.marked_files)
-	var status: string = (has_key(s, 'job') && job_status(s.job) == 'run') ? $' [Loading... {len(s.all_files)}]' : ''
+	var status: string
+
+	if has_key(s, 'job')
+		for j in s.job
+			if job_status(j) == 'run'
+				status = $' [Loading... {len(s.all_files)}]'
+				break
+			endif
+		endfor
+	endif
 	popup_setoptions(s.list_winid, {title: $' [{s.target}] {len(s.matches)}/{len(s.all_files)}{status}{marked_count > 0 ? $' ({marked_count} selected)' : ''} '})
 enddef
 
@@ -296,6 +310,7 @@ def Render(s: dict<any>): void
 	var matches: list<string>
 	var reg_err: list<dict<string>>
 
+	sort(s.all_files)->uniq()
 	matches = copy(s.all_files)
 	while true # ! ←これだけ否定マッチ
 		match_idx = match(prompt, '^!')
@@ -553,7 +568,7 @@ def CheckFuzzyFileFinderWin(): bool
 	return false
 enddef
 
-def WarningMsg(s: string): void
+def WarningMsg(s: list<string>): void
 	popup_create(s, {
 		title: ' Fuzzy File Finder Warning ',
 		line: 'cursor+1',
@@ -658,30 +673,113 @@ def SetFilterBuffer(dir: string): void
 	endif
 enddef
 
-export def FFFiles(dir: string = ''): void
-	var target_dir: string = $'{fnamemodify(dir ==# '' ? getcwd() : expand(dir, true), ':p')->resolve()}'
-	var target_len: number
+def GetCommonPath(dirs: list<string>): string
+	if empty(dirs)
+		return ''
+	elseif len(dirs) == 1
+		return $'{dirs[0]}/'
+	endif
+
+	var common_parts = split(dirs[0], '/', true)
+	var parts: list<string>
+	var min_len: number
+	var new_common: list<string>
+
+	for p in dirs[1 :]
+		parts = split(p, '/', true)
+		min_len = min([len(common_parts), len(parts)])
+		new_common = []
+		for i in range(min_len)
+			if common_parts[i] == parts[i]
+				add(new_common, common_parts[i])
+			else
+				break
+			endif
+		endfor
+		common_parts = new_common
+	endfor
+	return $'{join(common_parts, '/')}/'
+enddef
+
+def MakeCmd(dirs: list<string>, target: list<list<string>>, not_dirs: list<string>, files: list<string>): string
+	var cmd_len: number = len(g:fuzzy_file_finder.cmd)
+	var cmd_s: list<string> = g:fuzzy_file_finder.cmd
+	var dirs_uniq: list<string> =
+		dirs == []
+			? [$'{resolve(getcwd())}']
+		: mapnew(dirs, (_, v) => v ==# ''
+			? $'{resolve(getcwd())}'
+			: $'{resolve(fnamemodify(expand(v, true), ':p'))}')
+	var ftype: string
+	var cmd_place_folder: number = index(g:fuzzy_file_finder.cmd, '.')
+	var dirs2: list<string>
+
+	if cmd_place_folder == -1
+		for d in dirs_uniq
+			ftype = getftype(d)
+			if ftype ==# 'file'
+				add(files, d)
+				continue
+			elseif ftype !=# 'dir'
+				add(not_dirs, $'{d}')
+				continue
+			endif
+			add(dirs2, d)
+			add(target, cmd_s + [d])
+		endfor
+	elseif cmd_place_folder == cmd_len
+		for d in dirs_uniq
+			ftype = getftype(d)
+			if ftype ==# 'file'
+				add(files, d)
+				continue
+			elseif ftype !=# 'dir'
+				add(not_dirs, $'{d}')
+				continue
+			endif
+			add(dirs2, d)
+			add(target, cmd_s[ : - 2 ] + [d])
+		endfor
+	else
+		for d in dirs_uniq
+			ftype = getftype(d)
+			if ftype ==# 'file'
+				add(files, d)
+				continue
+			elseif ftype !=# 'dir'
+				add(not_dirs, $'{d}')
+				continue
+			endif
+			add(dirs2, d)
+			add(target, cmd_s[ : cmd_place_folder - 1 ] + [d] + cmd_s[ cmd_place_folder + 1 : ])
+		endfor
+	endif
+	return GetCommonPath(dirs2)
+enddef
+
+export def FFFiles(dirs: list<string> = []): void
+	var cmds: list<list<string>>
+	var files: list<string>
+	var not_dirs: list<string>
+	var common_path: string = MakeCmd(dirs, cmds, not_dirs, files)
+	var common_len: number = len(common_path)
 	var list_width: number
 	var preview_width: number
 	var line_height: number
 	var slide: number
 	var current_winid: number = win_getid()
-	var cmd_place_folder: number = index(g:fuzzy_file_finder.cmd, '.')
-	var cmd: list<string> = cmd_place_folder == -1 ? g:fuzzy_file_finder.cmd + [target_dir] :
-		cmd_place_folder == len(g:fuzzy_file_finder.cmd) ? g:fuzzy_file_finder.cmd[ : - 2 ] + [target_dir] :
-		g:fuzzy_file_finder.cmd[ : cmd_place_folder - 1 ] + [target_dir] + g:fuzzy_file_finder.cmd[ cmd_place_folder + 1 : ]
+	var i: number
 
-	target_dir = target_dir =~# '/$' ? target_dir : $'{target_dir}/'
-	target_len = len(target_dir)
-	if !isdirectory(target_dir)
-		WarningMsg($'Not a directory: {target_dir}')
+	if not_dirs != []
+		WarningMsg(['Not a directory'] + not_dirs)
+	elseif cmds == [] && files == []
 		return
-	elseif !executable(cmd[0])
-		WarningMsg($'Not execute: {cmd[0]}')
+	elseif !executable(g:fuzzy_file_finder.cmd[0])
+		WarningMsg([$'Not execute: {g:fuzzy_file_finder.cmd[0]}'])
 		return
 	endif
 	tabnew
-	execute $'lcd {target_dir}'
+	execute $'lcd {common_path}'
 	[list_width, preview_width, line_height, slide] = GetWindowSize(true, true)
 	var s = {
 		current_winid: current_winid,
@@ -691,25 +789,25 @@ export def FFFiles(dir: string = ''): void
 		list_buf: bufadd(''),
 		preview_buf: bufadd(''),
 		preview_path: '',
-		all_files: [],
+		all_files: mapnew(files, (_, v) => stridx(v, common_path) == 0 ? v[common_len :] : v),
 		matches: [],
 		selected_idx: 0,
 		marked_files: {},
-		target: stridx(target_dir, $'{$HOME}/') == 0 ? '~/' .. target_dir[len($'{$HOME}/') : ] : target_dir,
+		target: stridx(common_path, $'{$HOME}/') == 0 ? '~/' .. common_path[len($'{$HOME}/') : ] : common_path,
 		list_winid: 0,
 		preview_winid: 0,
 		preview_on: true,
 		render_timer: 0,
 		timer_id: 0,
 		is_dirty: false,
-		job: null_job
+		job: []
 	}
 	bufload(s.list_buf)
 	# setbufvar(s.list_buf, '&breakindent', 1)
 	# setbufvar(s.list_buf, '&breakindentopt', 'list:-1')
 	# setbufvar(s.list_buf, '&formatlistpat', '^[[] >*]\+')
 	bufload(s.preview_buf)
-	SetFilterBuffer(target_dir)
+	SetFilterBuffer(common_path)
 	setlocal buftype=nofile bufhidden=wipe
 	s.list_winid = popup_create(s.list_buf, {
 		title: $' [{s.target}] 0/0 ',
@@ -742,21 +840,28 @@ export def FFFiles(dir: string = ''): void
 	})
 	execute $'colorscheme {g:colors_name}' # これがないと画像表示状態で ChangePopupSize() が起きると、テキスト背景が標準色 (黒/白) になる (filetype を変えるため)
 	s.canceled = false
-	s.job = job_start(cmd, {
-		out_cb: (ch, msg) => {
-			if s.canceled # canceled フラグを立てたら、出力を読み飛ばすようにする
-				return
-			endif
-			add(s.all_files, stridx(msg, target_dir) == 0 ? msg[target_len :] : msg)
-			var count_out_cb: number = len(s.all_files)
-			if count_out_cb <= &lines || count_out_cb % 1000 == 0
-				RequestRenderThrottle(s)
-			endif
-		},
-		close_cb: (ch) => {
-			RequestRender(s)
-		}
-	})
+	s.active_jobs = len(cmds)
+	for cmd in cmds
+		s.job[i] = job_start(cmd, {
+			out_cb: (ch, msg) => {
+				if s.canceled # canceled フラグを立てたら、出力を読み飛ばすようにする
+					return
+				endif
+				add(s.all_files, stridx(msg, common_path) == 0 ? msg[common_len :] : msg)
+				var count_out_cb: number = len(s.all_files)
+				if count_out_cb <= &lines || count_out_cb % 1000 == 0
+					RequestRenderThrottle(s)
+				endif
+			},
+			close_cb: (ch) => {
+				s.active_jobs -= 1
+				if s.active_jobs == 0
+					RequestRender(s)
+				endif
+			}
+		})
+		i += 1
+	endfor
 	b:fuzzy_state = s
 	Render(s)
 	startinsert
