@@ -322,7 +322,11 @@ def Render(s: dict<any>): void
 			add(special_s, special_c[ 1 : ])
 		elseif special_c =~# '\$$'
 			add(special_s, $'{escape(special_c[ : -2 ], '\.*$[]~')}$')
-		else # !^ も含めて処理できる
+		elseif special_c =~# '^\^.'
+			special_c = escape(special_c, '\.*$[]~')
+			add(special_s, $'/{escape(special_c[ 1 : ], '\.*$[]~')}')
+		add(special_s, $'\({special_c}\|/{special_c[ 1 : ]}\)')
+		else
 			add(special_s, escape(special_c, '\.*$[]~'))
 		endif
 	endwhile
@@ -341,7 +345,8 @@ def Render(s: dict<any>): void
 		if match_idx == -1
 			break
 		endif
-		add(special_s, remove(prompt, match_idx)->escape('\.*$[]~'))
+		special_c = remove(prompt, match_idx)->escape('\.*$[]~')
+		add(special_s, $'\({special_c}\|/{special_c[ 1 : ]}\)')
 	endwhile
 	while true # '
 		match_idx = match(prompt, '^''')

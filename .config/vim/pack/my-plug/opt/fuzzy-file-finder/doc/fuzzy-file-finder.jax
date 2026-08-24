@@ -79,7 +79,7 @@ $~
     末尾が .vim のディレクトリ、ファイル名のみリストアップする
                                           *fuzzy-file-finder-special-character^*
 ^~
-トークンが先頭のときのみ意味があり、トークンが先頭のパスのみにする
+トークンが先頭のときのみ意味があり、トークンで始まるディレクトリ/ファイルのみにする
   Ex. ^.vim
     先頭が .vim のディレクトリ、ファイル名のみリストアップする
                                           *fuzzy-file-finder-special-character\*
