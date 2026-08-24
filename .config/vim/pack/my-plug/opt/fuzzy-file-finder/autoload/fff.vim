@@ -682,6 +682,9 @@ def GetCommonPath(dirs: list<string>): string
 	if empty(dirs)
 		return ''
 	elseif len(dirs) == 1
+		if dirs[0] =~# '/$'
+			return dirs[0]
+		endif
 		return $'{dirs[0]}/'
 	endif
 
@@ -703,6 +706,9 @@ def GetCommonPath(dirs: list<string>): string
 		endfor
 		common_parts = new_common
 	endfor
+	if common_parts[-1] ==# ''
+		return $'{join(common_parts, '/')}'
+	endif
 	return $'{join(common_parts, '/')}/'
 enddef
 
