@@ -68,7 +68,7 @@ vim-fern (https://github.com/lambdalisue/vim-fern) で次を使えば、選択�
 完全一致で判定される
                                           *fuzzy-file-finder-special-character'*
 '~
-完全一致にする
+トークンが先頭のときのみ意味があり、完全一致にする
   Ex. 'vim
   video/animal はヒットしない
   * 特別な場合として末尾も ' のときは単語検索になる
