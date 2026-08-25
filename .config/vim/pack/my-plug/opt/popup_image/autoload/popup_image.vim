@@ -13,8 +13,12 @@ export def Clear(id: number): void
 		if getwinvar(id, 'popup_image', {}) ==# {}
 			setwinvar(id, 'popup_image', {
 				clear: { # クリアする時に設定するオプション
-					highlight: (opts.highlight ==# '' || opts.highlight ==# 'WarningMsg') ? 'Pmenu' : opts.highlight,
-					highlights: (opts.highlights ==# '' || opts.highlights ==# 'PopupTitle:Pmenu,Popup:WarningMsg') ? '' : opts.highlights,
+					highlight: has_key(opts, 'highlight') ?
+						((opts.highlight ==# '' || opts.highlight ==# 'WarningMsg') ? 'Pmenu' : opts.highlight) :
+						'Pmenu',
+					highlights: has_key(opts, 'highlights') ?
+						((opts.highlights ==# '' || opts.highlights ==# 'PopupTitle:Pmenu,Popup:WarningMsg') ? '' : opts.highlights) :
+						'',
 					image: {}
 				},
 				err_msg: [],

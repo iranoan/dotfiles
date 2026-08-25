@@ -1,6 +1,8 @@
 vim9script
 scriptencoding utf-8
 
+var istalled_popup_preview: bool = getscriptinfo({name: '/plugin/popup_preview.vim'}) != []
+
 def Cleanup(s: dict<any>, cancel: bool): void
 	var ch: channel
 	if s.render_timer != 0
@@ -46,121 +48,6 @@ def Cleanup(s: dict<any>, cancel: bool): void
 	stopinsert
 enddef
 
-def GetFileType(p: string): string
-	var f: string = tolower(p)
-	var t = get(g:fuzzy_file_finder, 'type')
-	var ext: string = fnamemodify(f, ':e')
-	var f_type: string = get(t.ext, ext, get(t.name, fnamemodify(f, ':t'), ''))
-
-	if fnamemodify(f, ':r:e') ==# 'tar' && index(['gz', 'bz2', 'xz', 'z', 'lzma'], ext) != -1
-		ext = $'tar.{ext}'
-	endif
-	if f_type !=# ''
-		return f_type
-	endif
-	for i in t.path
-		if match(p, i.reg) != -1
-			return i.type
-		endif
-	endfor
-	return ext !=# '' ? ext : 'text'
-enddef
-
-
-def GetFileInfo(dir: string): list<dict<any>>
-	var d: string = dir =~# '/$' ? dir : $'{dir}/'
-	var info: list<dict<any>>
-	var size: number
-	var size_s: string
-	var type: string = getfperm(d)
-	var lower_name: string
-	var time: number
-	var time_iso: number
-	var f: string
-
-	if type !~# '^r........$' # 読み取り権限がない→ディクトリ自身の情報のみ返す
-		time = getftime(d)
-		return [{
-			type: 'dir',
-			permission: $'d{type}',
-			size: 0,
-			size_s: 0,
-			time: time,
-			time_iso: strftime('%F %T', time),
-			name: './',
-			lower_name: './',
-			link: ''
-		}]
-	endif
-	for p in readdir(d)
-		f = fnamemodify($'{d}{p}', ':p')
-		f = f =~# '[/\\]$' ? f[ : -2 ] : f # 末尾に / があると、シンボリックリンクでも dir 扱いになる
-		type = getftype(f)
-		lower_name = tolower(p)
-		time = getftime(f)
-		if type ==# 'dir'
-			add(info, {
-				type: type,
-				permission: $'d{getfperm(f)}',
-				size: 0,
-				size_s: '0',
-				time: time,
-				time_iso: strftime('%F %T', time),
-				name: p,
-				lower_name: lower_name,
-				link: ''
-			})
-		elseif type ==# 'link'
-			f = resolve(f)
-			add(info, {
-				type: type,
-				permission: $'l{getfperm(f)}',
-				size: 0,
-				size_s: '0',
-				time: time,
-				time_iso: strftime('%F %T', time),
-				name: p,
-				lower_name: lower_name,
-				link: f
-			})
-		else
-			size = getfsize(f)
-			if size > 1099511627776 # T
-				size_s = printf('%.1fT', size / 1099511627776.0)
-			elseif size > 1073741824 # G
-				size_s = printf('%.1fG', size / 1073741824.0 )
-			elseif size > 1048576 # M
-				size_s = printf('%.1fM', size / 1048576.0 )
-			elseif size > 1024 # K
-				size_s = printf('%.1fK', size / 1024.0 )
-			else
-				size_s = $'{size}'
-			endif
-			add(info, {
-				type: type,
-				permission: $'-{getfperm(f)}',
-				size: size,
-				size_s: size_s,
-				time: time,
-				time_iso: strftime('%F %T', time),
-				name: p,
-				lower_name: lower_name,
-				link: ''
-			})
-		endif
-	endfor
-	return info
-enddef
-
-def IsBinary(path: string): bool
-	for b in readfile(path, 'b', 3)
-		if stridx(b, "\<NL>") != -1
-			return true
-		endif
-	endfor
-	return false
-enddef
-
 def UpdatePreview(s: dict<any>): void
 	var id: number = s.preview_winid
 	if empty(s.matches)
@@ -175,79 +62,13 @@ def UpdatePreview(s: dict<any>): void
 		return
 	endif
 
-	var p: string = s.matches[s.selected_idx]
-	var type: string = GetFileType(p)
-	if s.preview_path ==# p
-		return
-	endif
-	if s.display_image
-		popup_image#Clear(id)
-	endif
-	popup_setoptions(id, {highlight: 'Pmenu', highlights: 'PopupTitle:Pmenu,Popup:Pmenu'})
-	setbufvar(s.preview_buf, '&filetype', '')
-	s.preview_path = p
-	if isdirectory(p)
-		var files: list<dict<any>> = GetFileInfo(p)
-		var max_len: number = max(files->mapnew((_, v) => len(v.size_s)))
-		popup_settext(id, sort(files, (v0, v1) =>
-		                                         v0.time > v1.time ? -1 : v0.time < v1.time ? 1 : # 更新日時降順
-		                                         v0.lower_name < v1.lower_name ? -1 : v0.lower_name > v1.lower_name ? 1 : # ファイル名順 (大小文字区別なし)
-		                                         v0.name < v1.name ? -1 : 1 ) # 大文字先
-		                              ->mapnew((_, v) =>
-		                                        printf($'%s %{max_len}s %s %s%s',
-		                                        	v.permission, v.size_s, v.time_iso, v.name, v.type ==# 'link' ? $' -> {v.link}' : ''))
-		)
-	elseif filereadable(p)
-		if index(g:fuzzy_file_finder.image, tolower(fnamemodify(p, ':e'))) != -1
-			if s.display_image
-				popup_image#Preview(id, p, (v) => {
-					if !v
-						popup_image#WarningMsg(id)
-					endif
-				})
-			else
-				popup_settext(id, [
-					'<Image/Video/PDF/PostScript file>',
-					'',
-					'Need popup_image plugin and Need following tools',
-					'All video/image: ''mimetype'' command',
-					'image:           FFmgeg (ffmpeg/ffprobe command)',
-					'video:           FFmgeg (ffmpeg/ffprobe command)',
-					'PDF/PostScript:  ImageMagick (magick command)',
-				])
-				popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
-			endif
-		elseif index(keys(g:fuzzy_file_finder.filter), type) != -1
-			var filter: list<string> = g:fuzzy_file_finder.filter[type]
-			var filter_place_folder: number = index(filter, '.')
-			filter = filter_place_folder == -1 ? filter + [p] :
-				filter_place_folder == len(filter) ? filter[ : -2 ] + [p] :
-				filter[ : filter_place_folder - 1 ] + [p] + filter[ filter_place_folder + 1 : ]
-			if executable(filter[0])
-				popup_settext(id, systemlist(filter))
-				if v:shell_error != 0
-					popup_settext(id, [ $'<Failed to execute ''{join(filter)}''>'])
-					popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
-				endif
-			else
-				popup_settext(id, [ $'<filter command ''{filter[0]}'' can not executable>'])
-				popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
-			endif
-		elseif IsBinary(p)
-			popup_settext(id, '<Binary file>')
-			popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
-		else
-			popup_settext(id, readfile(p))
-			setbufvar(s.preview_buf, '&filetype', type)
-		endif
-	else
-		popup_settext(id, '<Unreadable file>')
-		popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
-	endif
-	setbufvar(s.preview_buf, '&modified', false)
+	popup_preview#Preview(s.preview_winid, s.matches[s.selected_idx])
 enddef
 
 def SchedulePreview(s: dict<any>, delay: number = 50): void
+	if !istalled_popup_preview
+		return
+	endif
 	if s.timer_id != 0
 		timer_stop(s.timer_id)
 		s.timer_id = 0
@@ -500,7 +321,7 @@ def Confirm(s: dict<any>): void
 		for f in files_to_open
 			if isdirectory(f) && netrw
 				execute $'{open} {fnameescape(f)}'
-			elseif index(img, tolower(fnamemodify(f, ':e'))) != -1 || isdirectory(f) || IsBinary(f)
+			elseif index(img, tolower(fnamemodify(f, ':e'))) != -1 || isdirectory(f) || popup_preview#IsBinary(f)
 				if open_b ==# ''
 					echohl ErrorMsg
 					echo $'Binary file: {f}'
@@ -600,9 +421,9 @@ def GetWindowSize(prev_on: bool, cmdwin: bool): list<number>
 	var preview_width: number
 	var line_height: number
 	var ls_border: list<number> = g:fuzzy_file_finder.list_border
-	var pv_border: list<number> = g:fuzzy_file_finder.preview_border
+	var pv_border: list<number>
 	var ls_border_c: list<string>
-	var pv_border_c: list<string> = g:fuzzy_file_finder.preview_borderchars
+	var pv_border_c: list<string>
 	var slide: number
 
 	sleep 1m # gvim --clientserver socket で起動している時に、これが無いとサイズ変更がうまく行かない
@@ -614,9 +435,13 @@ def GetWindowSize(prev_on: bool, cmdwin: bool): list<number>
 		line_height = &lines - ls_border[2] - (&laststatus != 0 ? 1 : 0) - &cmdheight - 2
 	endif
 	if prev_on
+		pv_border = g:fuzzy_file_finder.list_border
+		pv_border_c = g:fuzzy_file_finder.preview_borderchars
 		ls_border_c = g:fuzzy_file_finder.list_borderchars
 		list_width = &columns * 45 / 100
 	else
+		pv_border = [0, 0, 0, 0]
+		pv_border_c = ['', '', '', '']
 		ls_border_c = g:fuzzy_file_finder.list_borderchars
 		list_width = &columns - ls_border[1] * strdisplaywidth(ls_border_c[1]) - ls_border[3] * strdisplaywidth(ls_border_c[3]) - 2 + ls_border[1] * ls_border[3] # スクロール・バーの分
 	endif
@@ -632,7 +457,7 @@ def GetWindowSize(prev_on: bool, cmdwin: bool): list<number>
 enddef
 
 def ListBorder(v: list<number>): list<number> # 右側のプレビュー枠左側に罫線があれば、左側のリスト枠右側は強制的に無しにする (重ねたように見せつつ余分な領域をなくす)
-	return g:fuzzy_file_finder.preview_border[3] == 1 ? [v[0], 0] + v[2 : ] : v
+	return istalled_popup_preview && g:popup_preview.border[3] == 1 ? [v[0], 0] + v[2 : ] : v
 enddef
 
 def SetFilterBuffer(dir: string): void
@@ -791,7 +616,7 @@ export def FFFiles(dirs: list<string> = []): void
 	endif
 	tabnew
 	execute($'silent lcd {common_path}')
-	[list_width, preview_width, line_height, slide] = GetWindowSize(true, true)
+	[list_width, preview_width, line_height, slide] = GetWindowSize(istalled_popup_preview, true)
 	var s = {
 		current_winid: current_winid,
 		display_image: getscriptinfo({name: '/plugin/popup_image.vim'}) != [],
@@ -807,7 +632,7 @@ export def FFFiles(dirs: list<string> = []): void
 		target: stridx(common_path, $'{$HOME}/') == 0 ? '~/' .. common_path[len($'{$HOME}/') : ] : common_path,
 		list_winid: 0,
 		preview_winid: 0,
-		preview_on: true,
+		preview_on: istalled_popup_preview,
 		render_timer: 0,
 		timer_id: 0,
 		is_dirty: false,
@@ -834,21 +659,23 @@ export def FFFiles(dirs: list<string> = []): void
 		zindex: 50,
 		cursorline: true
 	})
-	s.preview_winid = popup_create(s.preview_buf, {
-		title: ' Preview ',
-		wrap: false,
-		line: 2,
-		col: slide,
-		minwidth: preview_width,
-		maxwidth: preview_width,
-		minheight: line_height,
-		maxheight: line_height,
-		border: g:fuzzy_file_finder.preview_border,
-		borderchars: g:fuzzy_file_finder.preview_borderchars,
-		borderhighlight: ['Pmenu', 'Pmenu', 'Pmenu', 'Pmenu'],
-		zindex: 51,
-		padding: [0, 1, 0, 1],
-	})
+	if istalled_popup_preview
+		s.preview_winid = popup_create(s.preview_buf, {
+			title: ' Preview ',
+			wrap: false,
+			line: 2,
+			col: slide,
+			minwidth: preview_width,
+			maxwidth: preview_width,
+			minheight: line_height,
+			maxheight: line_height,
+			border: g:fuzzy_file_finder.preview_border,
+			borderchars: g:fuzzy_file_finder.preview_borderchars,
+			borderhighlight: ['Pmenu', 'Pmenu', 'Pmenu', 'Pmenu'],
+			zindex: 51,
+			padding: [0, 1, 0, 1],
+		})
+	endif
 	execute $'colorscheme {g:colors_name}' # これがないと画像表示状態で ChangePopupSize() が起きると、テキスト背景が標準色 (黒/白) になる (filetype を変えるため)
 	s.canceled = false
 	s.active_jobs = len(cmds)
@@ -897,7 +724,7 @@ def ChangePopupSize(cmdwin: bool): void # cmdwin 現在の状態でコマンド�
 				opts = popup_getoptions(winid)
 				if opts.maxwidth != preview_width || opts.maxheight != line_height
 					popup_setoptions(winid, {
-						border: g:fuzzy_file_finder.preview_border,
+						border: g:popup_preview.border,
 						col: slide,
 						minwidth: preview_width,
 						maxwidth: preview_width,
@@ -934,6 +761,9 @@ def ChangePopupSize(cmdwin: bool): void # cmdwin 現在の状態でコマンド�
 enddef
 
 def TogglePreview(s: dict<any>): void
+	if !istalled_popup_preview
+		return
+	endif
 	var winid: number = s.preview_winid
 	var opts: dict<any>
 
@@ -951,6 +781,9 @@ def TogglePreview(s: dict<any>): void
 enddef
 
 def ToggleWrap(id: number, preview_flag: bool): void
+	if preview_flag && !istalled_popup_preview
+		return
+	endif
 	var wrap: bool = get(popup_getoptions(id), 'wrap', true)
 	popup_setoptions(id, {wrap: !wrap})
 	echo $'{preview_flag ? 'Preview' : 'File List'}: {wrap ? 'nowrap' : 'wrap'}'
@@ -958,6 +791,9 @@ def ToggleWrap(id: number, preview_flag: bool): void
 enddef
 
 def MovePreview(id: number, down_flag: bool): void
+	if !istalled_popup_preview
+		return
+	endif
 	var max_idx: number = len(getbufline(winbufnr(id), 1, '$'))
 	var new_idx: number = getcurpos(id)[1]
 	var s: dict<any> = popup_getoptions(id)

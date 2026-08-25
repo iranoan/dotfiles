@@ -47,7 +47,9 @@ License: GPL Ver.3.
           find -L . -mindepth 1 \( -type d -o -type f -o -type l \) -printf "%P\n"
 <* 右下:   ファイル一覧のカーソル行のプレビュー
 
-左右下部分は、実際にはポップアップ・ウィンドウ
+* 左右下部分は、実際にはポップアップ・ウィンドウ
+* |popup_preview| がインストールされていなければ、右下のプレビュー枠は無く、下全
+  体がファイル一覧になる
 
 ------------------------------------------------------------------------------
 vim-fern~
@@ -183,45 +185,6 @@ cmd~
 	* ファイル一覧を作成するコマンド
 	* '.' が fff#FFFiles([{dirs}]) の {dirs} 部分に置き換わる
 	  '.' が無ければ、末尾に {dirs} が追加される
-                                                      *g:fuzzy_file_finder.type*
-type~
-	* 次のキーがあり、ファイルの種類の判定やプレビュー時のハイライトと |'filetype'|
-	  を指定
-                                                  *g:fuzzy_file_finder.type.ext*
-	ext~
-		Type: |dict|<|string|>|
-
-		* 拡張子ごとの |'filetype'| を指定
-		  Ex. {vim: 'vim'}
-                                                 *g:fuzzy_file_finder.type.name*
-	name~
-		Type: |dict|<|string|>|
-
-		* ファイル名ごとの |'filetype'| を指定
-		  Ex. {vimrc: 'vim', gvimrc: 'vim'}
-                                                 *g:fuzzy_file_finder.type.path*
-	path~
-		Type: |list|<|dict|<|string|>>|
-
-		* パスごとの |'filetype'| を指定
-		* Ex. {reg: '^\~/.config/fd/[^/]\+$', type: 'gitignore'},
-		  reg キーで正規表現を type で |'filetype'| のペアの辞書
-                                                *g:fuzzy_file_finder.type.image*
-	image~
-	Type: |list|<|string|>|
-
-	* 画像プレビューさせる拡張子のリスト
-	  Ex. ['jpg', 'jpeg', 'png']
-	* 実際に画像表示させるには |popup_image| プラグインが必要
-
-                                               *g:fuzzy_file_finder.type.filter*
-	filter~
-		Type: |dict|<|list|<|string|>>|
-
-		* 拡張子ごとのプレビュー枠に表示するフィルタープログラム
-		* Ex. {zip: ['unzip', '-l']}
-		  拡張子とフィルター・プログラム (必ず list<string>) のペア指定する
-		* '.' があればそれが操作ファイルに置き換わる
                                                       *g:fuzzy_file_finder.open*
 open~
 	Type: |string|
@@ -238,8 +201,8 @@ dir~
 	* ディレクトリを Vim で開くか?
 	* 実際に Vim でディレクトリを開く動作がどうなるかは使用しているプラグインに
 	  よって変わる
-                                               *g:fuzzy_file_finder.list_border*
-list_border~
+                                                    *g:fuzzy_file_finder.border*
+border~
 	Type: |list|<|number|>|
 	Default: |[1, 1, 1, 1]|
 
@@ -247,15 +210,8 @@ list_border~
 	  上/右/下/左の順 (|popup_create-arguments| の border 参照)
 	* プレビュー表示され、更にその左枠線が表示される場合は、この一覧右側の枠線は
 	  無しの扱いになる
-                                            *g:fuzzy_file_finder.preview_border*
-preview_border~
-	Type: |list|<|number|>|
-	Default: |[1, 1, 1, 1]|
-
-	* プレビュー枠のボーダーの表示 (1)、非表示 (0)
-	  上/右/下/左の順 (|popup_create-arguments| の border 参照)
-                                          *g:fuzzy_file_finder.list_borderchars*
-list_borderchars~
+                                               *g:fuzzy_file_finder.borderchars*
+borderchars~
 	Type: |list|<|string|>|
 	Default: |['─', '│', '─', '│', '╭', '╮', '╯', '╰']|
 
@@ -263,13 +219,6 @@ list_borderchars~
 	  上/右/下/左の順 (|popup_create-arguments| の borderchars~ 参照)
 	* プレビュー表示され、更にその左枠線が表示される場合は、この一覧右側の枠線は
 	  無しの扱いになる
-                                       *g:fuzzy_file_finder.preview_borderchars*
-preview_borderchars~
-	Type: |list|<|string|>|
-	Default: |['─', '│', '─', '│', '┬', '╮', '╯', '┴'],|
-
-	* プレビュー枠のボーダーに用いる記号
-	  上/右/下/左の順 (|popup_create-arguments| の borderchars~ 参照)
                                                    *g:fuzzy_file_finder.mapping*
 mapping~
 	Type: |boolean|
@@ -278,6 +227,17 @@ mapping~
 	* 独自にキー・マップをする
 	* デフォルト・キー・マッピング (|fuzzy-file-finder-default-key|) を無効にす
 	る場合は v:false にする
+
+------------------------------------------------------------------------------
+                                            *g:fuzzy_file_finder-preview-border*
+プレビュー枠のボーダー~
+
+* プレビュー枠のボーダーの表示/非表示は |g:popup_preview.border|
+* プレビュー枠のボーダーに用いる記号は |g:popup_preview.borderchars|
+でそれぞれ指定する
+
+* 上/右/下/左の順の指定する
+	|popup_create-arguments| の border、|popup_create-arguments| の borderchars 参照
 
 ==============================================================================
                                                     *fuzzy-file-finder-function*
