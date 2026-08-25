@@ -16,19 +16,16 @@ function set_fern#main() abort
 	packadd fern-git-status.vim
 	call fern_git_status#init()
 	" }}}
-	" プレビュー  https://github.com/yuki-yano/fern-preview.vim {{{
+	" プレビュー https://github.com/yuki-yano/fern-preview.vim {{{
 	packadd fern-preview.vim
 	let g:fern_preview_window_calculator = #{height: {-> &lines - 2}, left: {-> g:fern#drawer_width + 1}, top: {-> 0}, width: {-> &columns - g:fern#drawer_width - 2}}
+	" }}}
+	" プレビュー $MYVIMDIR/pack/my-plug/opt/fern-preview-image {{{
+	" packadd vim-fern-preview-image
 	" }}}
 	if !pack_manage#IsInstalled('fuzzy-file-finder')
 		call set_fff#init()
 	endif
-	" fzf と連携 https://github.com/LumaKernel/fern-mapping-fzf.vim {{{
-	" packadd fern-mapping-fzf.vim
-	" let g:fern#mapping#fzf#disable_default_mappings = 1
-	" g:fern#mapping#fzf#fzf_options を指定すると、b:fzf_action, g:fzf_action が無視され開けなくなる
-	" let g:fern#mapping#fzf#fzf_options = {'options': '--multi --no-unicode --margin=0% --padding=0% --preview=''~/bin/fzf-preview.sh {}'' --bind=''ctrl-]:change-preview-window(hidden|)'''}
-	" }}}
 	" アイコン表示 {{{
 	" https://github.com/lambdalisue/glyph-palette.vim {{{
 	packadd glyph-palette.vim " }}}
