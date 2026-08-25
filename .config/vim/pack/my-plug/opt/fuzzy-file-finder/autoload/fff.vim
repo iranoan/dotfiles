@@ -16,7 +16,7 @@ def Cleanup(s: dict<any>, cancel: bool): void
 					ch_close_in(ch)
 				endif
 				job_stop(j, 'kill')
-				remove(s.job, j)
+				remove(s.job, index(s.job, j))
 			endif
 		endfor
 	endif
