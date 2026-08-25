@@ -1,12 +1,12 @@
 scriptencoding utf-8
 
 function set_fff#init() abort
+	" 辞書データの子要素も含めてマージ $MYVIMDIR/pack/my-plug/opt/extend-merge/ {{{2
+	packadd extend-merge
+	" 2}}}"
 	let g:popup_image_options = #{pt2px: #{x: 131, y: 154}}
 	" 画像などのプレビュー $MYVIMDIR/pack/my-plug/opt/popup_image/ {{{2
 	packadd popup_image
-	" 2}}}"
-	" 辞書データの子要素も含めてマージ $MYVIMDIR/pack/my-plug/opt/extend-merge/ {{{2
-	packadd extend-merge
 	" 2}}}"
 	" 選択パスのプレビュー $MYVIMDIR/pack/my-plug/opt/popup_preview/ {{{2
 	let g:popup_preview = #{
@@ -22,6 +22,9 @@ function set_fff#init() abort
 				\ 	}
 				\}
 	packadd popup_preview
+	" 2}}}"
+	" バイナリ判定 $MYVIMDIR/pack/my-plug/opt/general-function/ {{{2
+	packadd general-function
 	" 2}}}"
 	let g:fuzzy_file_finder = #{
 				\ cmd: ['fdfind.sh'],

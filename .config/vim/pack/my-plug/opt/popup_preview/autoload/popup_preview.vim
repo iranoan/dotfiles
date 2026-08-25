@@ -108,15 +108,6 @@ def GetFileInfo(dir: string): list<dict<any>>
 	return info
 enddef
 
-export def IsBinary(path: string): bool
-	for b in readfile(path, 'b', 3)
-		if stridx(b, "\<NL>") != -1
-			return true
-		endif
-	endfor
-	return false
-enddef
-
 export def Preview(id: number, p: string): void
 	var type: string = GetFileType(p)
 	var bufnr: number = winbufnr(id)
@@ -183,7 +174,7 @@ export def Preview(id: number, p: string): void
 				popup_settext(id, [ $'<filter command ''{filter[0]}'' can not executable>'])
 				popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
 			endif
-		elseif IsBinary(p)
+		elseif general_function#IsBinary(p)
 			popup_settext(id, '<Binary file>')
 			popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
 		else

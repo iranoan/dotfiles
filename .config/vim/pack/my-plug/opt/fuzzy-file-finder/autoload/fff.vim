@@ -321,7 +321,7 @@ def Confirm(s: dict<any>): void
 		for f in files_to_open
 			if isdirectory(f) && netrw
 				execute $'{open} {fnameescape(f)}'
-			elseif index(img, tolower(fnamemodify(f, ':e'))) != -1 || isdirectory(f) || popup_preview#IsBinary(f)
+			elseif index(img, tolower(fnamemodify(f, ':e'))) != -1 || isdirectory(f) || general_function#IsBinary(f)
 				if open_b ==# ''
 					echohl ErrorMsg
 					echo $'Binary file: {f}'
