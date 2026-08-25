@@ -343,8 +343,9 @@ augroup VIMRC
 	autocmd BufNewFile *.css        vimrc#InsertTemplate('CSS.css')
 	autocmd BufNewFile *.vim        vimrc#InsertTemplate('vim.vim')
 	autocmd CmdwinLeave,CmdlineLeave,TabLeave,WinLeave,InsertEnter * vimrc#ChangeScrolloff()
-	autocmd VimLeave * vimrc#BackupViminfo()
-	autocmd VimLeave * vimrc#DeleteOldUndoFile(31) # 31 日以上前のアンドゥ・ファイルを削除
+	autocmd VimLeave   * vimrc#BackupViminfo()
+	autocmd VimLeave   * vimrc#DeleteOldUndoFile(31) # 31 日以上前のアンドゥ・ファイルを削除
+	autocmd BufNewFile * if expand('%:p')->resolve()->simplify() != expand('%:p') | execute($'file {expand('%:p')->resolve()->simplify()}') | endif
 augroup END
 # 日本語の表示/編集、文字幅に関わる設定 {{{1
 if exists('&ambiwidth')                        # □とか○の文字があってもカーソル位置がずれないようにする
