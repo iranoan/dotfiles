@@ -1,0 +1,21 @@
+*general-function* 汎用性のある関数を纏めてある
+
+IsBinary(path: string)~~
+
+path: ディレクトリ・ファイルのパス
+
+返り値: バイナリ・データなら true
+
+ExtendNew(o: any, y: any, over: string = '')~~
+
+|extendnew()| の拡張版
+
+  * データ o に y のデータをマージした結果を返す
+    - o は変化しない
+  * |Number|, |String|, |Float|, |Boolean| は上書き
+  * |List| は完全に同じでなければ結合
+  * |Dictionary| はマージ
+    - 辞書の子孫要素も個別にマージする
+    - ただし over と同じキーは無条件で上書き
+
+vim:tw=78:ts=2:ft=help:norl:noet:fen:

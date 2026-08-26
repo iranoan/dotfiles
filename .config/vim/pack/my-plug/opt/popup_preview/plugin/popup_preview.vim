@@ -2,7 +2,7 @@ vim9script
 scriptencoding utf-8
 
 try
-	g:popup_preview = extend_merge#ExtendNew({
+	g:popup_preview = general_function#ExtendNew({
 		border: [1, 1, 1, 1],
 		borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
 		type: {
@@ -82,7 +82,7 @@ try
 			rar: ['unrar', 'l'],
 			lzma: ['lzma', '-l'],
 		},
-	}, get(g:, 'popup_preview', {}), 'cmd')
+	}, get(g:, 'popup_preview', {}))
 catch /^Vim\%((\S\+)\)\=:E117/
 	g:popup_preview = extendnew({
 		border: [1, 1, 1, 1],

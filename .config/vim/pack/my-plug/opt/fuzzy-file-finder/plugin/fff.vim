@@ -11,7 +11,7 @@ augroup END
 		# borderchars: ['─', '│', '─', '│', '┬', '╮', '╯', '┴'],
 		# border: [1, 1, 1, 1],
 try
-	g:fuzzy_file_finder = extend_merge#ExtendNew({
+	g:fuzzy_file_finder = general_function#ExtendNew({
 		cmd: ['find', '-L', '.', '-mindepth', '1', '(', '-type', 'd', '-o', '-type', 'f', '-o', '-type', 'l', ')', '-printf', '%P\n'],
 		list_border: [1, 1, 1, 1],
 		list_borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
