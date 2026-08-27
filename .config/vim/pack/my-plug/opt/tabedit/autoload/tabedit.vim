@@ -147,7 +147,7 @@ export def Tabedit(...arg: list<string>): void
 	endif
 	for files in map(arg, (_, v) => fnamemodify(v, ':p'))
 		var fs: list<string> = glob(files, true, true, true)
-		if fs ==# [] # 存在しないファイル
+		if fs == [] # 存在しないファイル
 			Open(files)
 		else
 			for f in fs

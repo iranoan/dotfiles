@@ -9,7 +9,7 @@ enddef
 
 def SaveOrignalOption(id: number): dict<any>
 	var opts: dict<any> = popup_getoptions(id)
-	if getwinvar(id, 'popup_image', {}) ==# {}
+	if getwinvar(id, 'popup_image', {}) == {}
 		setwinvar(id, 'popup_image', {
 			clear: { # クリアする時に設定するオプション
 				highlight: has_key(opts, 'highlight') ?
