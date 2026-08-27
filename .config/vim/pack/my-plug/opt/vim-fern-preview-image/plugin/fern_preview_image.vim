@@ -14,10 +14,3 @@ endif
 g:fern_preview_image_loaded = true
 
 g:fern_preview_image = extendnew({}, get(g:, 'fern_preview_image', g:popup_preview), 'force')
-# 下記カスタム可能
-	# col:
-	# line:
-	# border:
-	# borderchars:
-	# width:
-	# height:

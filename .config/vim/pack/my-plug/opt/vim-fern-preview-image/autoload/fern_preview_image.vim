@@ -13,10 +13,15 @@ def InitPopup(): void
 	var height: number = get(options, 'height', &lines - border[2] - (&laststatus != 0 ? 1 : 0) - &cmdheight - 1)
 	var bufnr: number = bufadd('')
 	var id: number
+	var save_ei: string = &eventignore
 	# GetWinIDs(winids, winlayout(), c_winid, row, false)
 
-	setbufvar(bufnr, '&filetype', '')
-	setbufvar(bufnr, '&modified', false)
+	&eventignore = 'BufAdd,BufCreate'
+	try
+		setbufvar(bufnr, '&filetype', '')
+	finally
+		&eventignore = save_ei
+	endtry
 	setbufvar(bufnr, '&bufhidden', 'wipe')
 	setbufvar(bufnr, '&buflisted', false)
 	setbufvar(bufnr, '&buftype', 'nofile')
