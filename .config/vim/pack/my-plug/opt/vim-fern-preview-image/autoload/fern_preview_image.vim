@@ -62,10 +62,10 @@ export def TogglePreview(): void
 		return
 	endif
 
-	if get(b:, 'fern_preview_image', {}) == {} || index(popup_list(), b:fern_preview_image.winid) == -1
+	if !has_key(b:, 'fern_preview_image') || index(popup_list(), b:fern_preview_image.winid) == -1
 		InitPopup()
 		Update()
-	elseif get(b:fern_preview_image, 'on', {on: false})
+	elseif b:fern_preview_image.on
 		b:fern_preview_image.auto = false
 		Hide()
 	else
@@ -113,13 +113,41 @@ def Hide(): void
 	b:fern_preview_image.on = false
 enddef
 
+def Risize(cmdwin: bool): void
+	if !has_key(b:, 'fern_preview_image')
+			|| index(popup_list(), b:fern_preview_image.winid) == -1
+			|| !b:fern_preview_image.on
+		return
+	endif
+
+	var options: dict<any> = g:fern_preview_image
+	var border: list<number> = options.border
+	var borderchars: list<string> = options.borderchars
+	var width: number = get(options, 'width', &columns - g:fern#drawer_width - 4 - border[1] * strdisplaywidth(borderchars[1]) - border[3] * strdisplaywidth(borderchars[3]))
+	var height: number
+
+	if cmdwin
+			&& gettabinfo(tabpagenr())[0].windows->map((_, v) => win_gettype(v))->index('command') != -1 # コマンド・ライン・ウィンドウがある
+		height = get(options, 'height', &lines - border[2] - (&laststatus != 0 ? 1 : 0) - &cmdheight - &cmdwinheight - 1)
+	else
+		height = get(options, 'height', &lines - border[2] - (&laststatus != 0 ? 1 : 0) - &cmdheight - 1)
+	endif
+	popup_setoptions(b:fern_preview_image.winid, {
+		minwidth: width,
+		maxwidth: width,
+		minheight: height,
+		maxheight: height
+	})
+enddef
+
 def DefineAutocmd(): void
 	augroup FernPreviewControlWindow
 		autocmd! * <buffer>
-		autocmd BufEnter           <buffer>          Show()
-		autocmd BufLeave           <buffer>          Hide()
-		autocmd CursorMoved        <buffer> ++nested timer_start(1, CursorMoved)
-		autocmd BufDelete          <buffer>          popup_close(b:fern_preview_image.winid)
+		autocmd VimResized          *                 Risize(true)
+		autocmd BufEnter            <buffer>          Show()
+		autocmd BufLeave            <buffer>          Hide()
+		autocmd CursorMoved         <buffer> ++nested timer_start(1, CursorMoved)
+		autocmd BufDelete           <buffer>          popup_close(b:fern_preview_image.winid)
 		execute($'autocmd BufDelete <buffer={winbufnr(b:fern_preview_image.winid)}> autocmd_delete([{{group: ''FernPreviewControlWindow'', bufnr: {bufnr()}}}])')
 		execute($'autocmd BufDelete <buffer>         silent! bwipeout! {winbufnr(b:fern_preview_image.winid)}')
 		execute($'autocmd BufDelete <buffer>         autocmd_delete([{{group: ''FernPreviewControlWindow'', bufnr: {bufnr()}}}])')
