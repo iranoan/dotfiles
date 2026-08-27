@@ -1,6 +1,11 @@
 vim9script
 scriptencoding utf-8
 
+if exists('g:loaded_poup_preview')
+	finish
+endif
+g:loaded_poup_preview = true
+
 try
 	g:popup_preview = general_function#ExtendNew({
 		border: [1, 1, 1, 1],

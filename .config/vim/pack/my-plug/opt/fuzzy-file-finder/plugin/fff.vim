@@ -1,6 +1,10 @@
 vim9script
 scriptencoding utf-8
 
+if autocmd_get()->filter((_, v) => v.group ==# 'FuzzyFileFinder') != []
+	finish
+endif
+
 augroup FuzzyFileFinder
 	autocmd!
 	autocmd VimResized * fff#Bridge('VimResized')
@@ -8,8 +12,6 @@ augroup FuzzyFileFinder
 	autocmd CmdwinLeave * fff#Bridge('CmdwinLeave')
 augroup END
 
-		# borderchars: ['─', '│', '─', '│', '┬', '╮', '╯', '┴'],
-		# border: [1, 1, 1, 1],
 try
 	g:fuzzy_file_finder = general_function#ExtendNew({
 		cmd: ['find', '-L', '.', '-mindepth', '1', '(', '-type', 'd', '-o', '-type', 'f', '-o', '-type', 'l', ')', '-printf', '%P\n'],
