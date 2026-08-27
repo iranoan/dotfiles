@@ -108,6 +108,17 @@ def GetFileInfo(dir: string): list<dict<any>>
 	return info
 enddef
 
+def SetFileType(n: number, t: string): void
+	var save_ei: string = &eventignore
+
+	&eventignore = 'BufAdd,BufCreate'
+	try
+		setbufvar(n, '&filetype', t)
+	finally
+		&eventignore = save_ei
+	endtry
+enddef
+
 export def Preview(id: number, p: string): void
 	var type: string = GetFileType(p)
 	var bufnr: number = winbufnr(id)
@@ -126,7 +137,6 @@ export def Preview(id: number, p: string): void
 		popup_image#Clear(id)
 	endif
 	popup_setoptions(id, w:popup_preview.options)
-	setbufvar(bufnr, '&filetype', '')
 	if isdirectory(p)
 		var files: list<dict<any>> = GetFileInfo(p)
 		var max_len: number = max(files->mapnew((_, v) => len(v.size_s)))
@@ -138,6 +148,7 @@ export def Preview(id: number, p: string): void
 		                                        printf($'%s %{max_len}s %s %s%s',
 		                                        	v.permission, v.size_s, v.time_iso, v.name, v.type ==# 'link' ? $' -> {v.link}' : ''))
 		)
+		SetFileType(bufnr, 'LsLike')
 	elseif filereadable(p)
 		if index(g:popup_preview.image, tolower(fnamemodify(p, ':e'))) != -1
 			if istalled_popup_image
@@ -158,6 +169,7 @@ export def Preview(id: number, p: string): void
 				])
 				popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
 			endif
+			SetFileType(bufnr, 'Image')
 		elseif index(keys(g:popup_preview.filter), type) != -1
 			var filter: list<string> = g:popup_preview.filter[type]
 			var filter_place_folder: number = index(filter, '.')
@@ -169,21 +181,27 @@ export def Preview(id: number, p: string): void
 				if v:shell_error != 0
 					popup_settext(id, [ $'<Failed to execute ''{join(filter)}''>'])
 					popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
+					SetFileType(bufnr, 'WarningMsg')
+				else
+					SetFileType(bufnr, 'Stdoutput')
 				endif
 			else
 				popup_settext(id, [ $'<filter command ''{filter[0]}'' can not executable>'])
 				popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
+				SetFileType(bufnr, 'WarningMsg')
 			endif
 		elseif general_function#IsBinary(p)
 			popup_settext(id, '<Binary file>')
 			popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
+			SetFileType(bufnr, 'WarningMsg')
 		else
 			popup_settext(id, readfile(p))
-			setbufvar(bufnr, '&filetype', type)
+			SetFileType(bufnr, type)
 		endif
 	else
 		popup_settext(id, '<Unreadable file>')
 		popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
+		SetFileType(bufnr, 'WarningMsg')
 	endif
 	setbufvar(bufnr, '&modified', false)
 enddef
