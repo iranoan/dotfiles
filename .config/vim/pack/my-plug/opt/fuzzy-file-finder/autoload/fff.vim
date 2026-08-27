@@ -40,7 +40,7 @@ def Cleanup(s: dict<any>, cancel: bool): void
 		execute $'silent! bwipeout! {s.list_buf}'
 	endif
 	if bufexists(s.preview_buf)
-		execute $'silent! wbipeout! {s.preview_buf}'
+		execute $'silent! bwipeout! {s.preview_buf}'
 	endif
 	if cancel
 		win_gotoid(s.current_winid)
@@ -373,9 +373,9 @@ export def Bridge(cmd: string): void
 	elseif cmd ==? 'TogglePreviewWrap'
 		ToggleWrap(b:fuzzy_state.preview_winid, true)
 	elseif cmd ==? 'PreviewPageDown'
-		MovePreview(b:fuzzy_state.preview_winid, true)
+		PreviewPageUpDown(b:fuzzy_state.preview_winid, true)
 	elseif cmd ==? 'PreviewPageUp'
-		MovePreview(b:fuzzy_state.preview_winid, false)
+		PreviewPageUpDown(b:fuzzy_state.preview_winid, false)
 	else
 		echohl ErrorMsg
 		echo 'No command!'
@@ -790,22 +790,9 @@ def ToggleWrap(id: number, preview_flag: bool): void
 	redraw!
 enddef
 
-def MovePreview(id: number, down_flag: bool): void
+def PreviewPageUpDown(id: number, down_flag: bool): void
 	if !istalled_popup_preview
 		return
 	endif
-	var max_idx: number = len(getbufline(winbufnr(id), 1, '$'))
-	var new_idx: number = getcurpos(id)[1]
-	var s: dict<any> = popup_getoptions(id)
-	var h: number = popup_getoptions(id).maxheight
-
-	if down_flag
-		new_idx += h
-	else
-		new_idx -= h
-	endif
-	new_idx = max([0, min([new_idx, max_idx - 1])])
-	if new_idx >= 0 && new_idx < max_idx
-		popup_setoptions(id, {firstline: new_idx})
-	endif
+	popup_preview#PageUpDown(id, down_flag)
 enddef

@@ -188,3 +188,20 @@ export def Preview(id: number, p: string): void
 	setbufvar(bufnr, '&modified', false)
 enddef
 
+export def PageUpDown(id: number, down_flag: bool): void
+	var bufnr: number = winbufnr(id)
+	var max_idx: number = len(getbufline(bufnr, 1, '$'))
+	var new_idx: number = getcurpos(id)[1]
+	var s: dict<any> = popup_getoptions(id)
+
+	if down_flag
+		new_idx += popup_getoptions(id).maxheight
+	else
+		new_idx -= popup_getoptions(id).maxheight
+	endif
+	new_idx = max([1, min([new_idx, max_idx - 1])])
+	if new_idx >= 1 && new_idx < max_idx
+		popup_setoptions(id, {firstline: new_idx})
+		win_execute(id, $'setpos(".", [{bufnr}, {new_idx}, 1, 0])')
+	endif
+enddef
