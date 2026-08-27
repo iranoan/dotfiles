@@ -54,8 +54,6 @@ def UpdatePreview(s: dict<any>): void
 		s.preview_path = ''
 		popup_settext(s.preview_winid, '<No selection>')
 		popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
-		setbufvar(s.preview_buf, '&filetype', '')
-		setbufvar(s.preview_buf, '&modified', false)
 		if s.display_image
 			popup_image#Clear(s.preview_winid)
 		endif
@@ -593,6 +591,15 @@ def MakeCmd(dirs: list<string>, target: list<list<string>>, not_dirs: list<strin
 	return GetCommonPath(dirs2)
 enddef
 
+def SetBufVar(n: number): void
+	setbufvar(n, '&bufhidden', 'wipe')
+	setbufvar(n, '&buflisted', false)
+	setbufvar(n, '&buftype', 'nofile')
+	setbufvar(n, '&swapfile', false)
+	setbufvar(n, '&undofile', false)
+	setbufvar(n, '&number', false)
+enddef
+
 export def FFFiles(dirs: list<string> = []): void
 	var cmds: list<list<string>>
 	var files: list<string>
@@ -638,13 +645,12 @@ export def FFFiles(dirs: list<string> = []): void
 		is_dirty: false,
 		job: []
 	}
-	bufload(s.list_buf)
+	SetBufVar(s.list_buf)
 	# setbufvar(s.list_buf, '&breakindent', 1)
 	# setbufvar(s.list_buf, '&breakindentopt', 'list:-1')
 	# setbufvar(s.list_buf, '&formatlistpat', '^[[] >*]\+')
-	bufload(s.preview_buf)
+	SetBufVar(s.preview_buf)
 	SetFilterBuffer(common_path)
-	setlocal buftype=nofile bufhidden=wipe
 	s.list_winid = popup_create(s.list_buf, {
 		title: $' [{s.target}] 0/0 ',
 		line: 2,
