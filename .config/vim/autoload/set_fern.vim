@@ -107,16 +107,13 @@ def set_fern#undo_ftplugin(): void
 enddef
 
 def s:visible_popup(): bool
-	var ls: list<number> = popup_list()
-	if ls == []
-		return false
+	if get(b:, 'fern_preview_image', {}) == {} || index(popup_list(), b:fern_preview_image.winid) == -1
+		return v:false
+	elseif popup_getpos(b:fern_preview_image.winid).visible
+		return v:true
+	else
+		return v:false
 	endif
-	for i in ls
-		if popup_getpos(i).visible
-			return true
-		endif
-	endfor
-	return false
 enddef
 
 def s:help(): void
@@ -196,17 +193,14 @@ def s:init_fern(): void
 	# FZF {{{
 	nnoremap <buffer>/          <Cmd>BLines<CR>
 	# }}}
-	# fern-preview\.vim 用 {{{
-	nnoremap <buffer>p              <Cmd>call fern_preview#toggle_auto_preview()<CR>
-	nnoremap <buffer>q              <Cmd>if <SID>visible_popup() <Bar> call fern_preview#toggle_auto_preview() <Bar> else <Bar> quit! <Bar> endif<CR>
-	nnoremap <buffer><Space>        <Cmd>if <SID>visible_popup() <Bar> call fern_preview#half_down() <Bar> else <Bar> call feedkeys("\<PageDown>") <Bar> endif<CR>
-	nnoremap <buffer><S-Space>      <Cmd>if <SID>visible_popup() <Bar> call fern_preview#half_up() <Bar> else <Bar> call feedkeys("\<PageUp>") <Bar> endif<CR>
-	nnoremap <buffer><BackSpace>    <Cmd>if <SID>visible_popup() <Bar> call fern_preview#half_up() <Bar> else <Bar> call feedkeys("\<PageUp>") <Bar> endif<CR>
+	# vim-fern-preview-image 用 {{{
+	nnoremap <buffer>p              <Cmd>call fern_preview_image#TogglePreview()<CR>
+	nnoremap <buffer>q              <Cmd>if <SID>visible_popup() <Bar> call fern_preview_image#TogglePreview() <Bar> else <Bar> quit! <Bar> endif<CR>
+	nnoremap <buffer><Space>        <Cmd>if <SID>visible_popup() <Bar> call fern_preview_image#PageUpDown(v:true) <Bar> else <Bar> call feedkeys("\<PageDown>") <Bar> endif<CR>
+	nnoremap <buffer><S-Space>      <Cmd>if <SID>visible_popup() <Bar> call fern_preview_image#PageUpDown(v:false) <Bar> else <Bar> call feedkeys("\<PageUp>") <Bar> endif<CR>
+	nnoremap <buffer><BackSpace>    <Cmd>if <SID>visible_popup() <Bar> call fern_preview_image#PageUpDown(v:false) <Bar> else <Bar> call feedkeys("\<PageUp>") <Bar> endif<CR>
 	# }}}
-	# fern-mapping-fzf\.vim {{{
-	# <Plug>(fern-action-fzf-files)
-	# nnoremap <buffer><leader>f <Cmd>call call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern-mapping-fzf\.vim/autoload/fern/mapping/fzf\.vim$'})[0].sid .. '_' .. 'map_fzf_files')])<CR>
-	# nnoremap <buffer>f     <Cmd>call call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo(#{name: '/fern-mapping-fzf\.vim/autoload/fern/mapping/fzf\.vim$'})[0].sid .. '_' .. 'map_fzf_files')])<CR>
+	# fuzzy-file-finder 用 {{{
 	nnoremap <buffer>f <Cmd>call fern_fff#FFFiles()<CR>
 	# }}}
 	# }}}
