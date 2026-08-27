@@ -16,12 +16,11 @@ function set_fern#main() abort
 	packadd fern-git-status.vim
 	call fern_git_status#init()
 	" }}}
-	" プレビュー https://github.com/yuki-yano/fern-preview.vim {{{
-	packadd fern-preview.vim
-	let g:fern_preview_window_calculator = #{height: {-> &lines - 2}, left: {-> g:fern#drawer_width + 1}, top: {-> 0}, width: {-> &columns - g:fern#drawer_width - 2}}
-	" }}}
-	" プレビュー $MYVIMDIR/pack/my-plug/opt/fern-preview-image {{{
-	" packadd vim-fern-preview-image
+	" プレビュー $MYVIMDIR/pack/my-plug/opt/vim-fern-preview-image {{{
+	if !pack_manage#IsInstalled('popup_preview')
+		call set_popup_preview#init()
+	endif
+	packadd vim-fern-preview-image
 	" }}}
 	if !pack_manage#IsInstalled('fuzzy-file-finder')
 		call set_fff#init()
