@@ -195,6 +195,8 @@ def s:init_fern(): void
 	# }}}
 	# vim-fern-preview-image 用 {{{
 	nnoremap <buffer>p              <Cmd>call fern_preview_image#TogglePreview()<CR>
+	nnoremap <buffer>]              <Cmd>call fern_preview_image#ToggleWrap()<CR>
+	nnoremap <buffer><C-]>          <Cmd>call fern_preview_image#ToggleWrap()<CR>
 	nnoremap <buffer>q              <Cmd>if <SID>visible_popup() <Bar> call fern_preview_image#TogglePreview() <Bar> else <Bar> quit! <Bar> endif<CR>
 	nnoremap <buffer><Space>        <Cmd>if <SID>visible_popup() <Bar> call fern_preview_image#PageUpDown(v:true) <Bar> else <Bar> call feedkeys("\<PageDown>") <Bar> endif<CR>
 	nnoremap <buffer><S-Space>      <Cmd>if <SID>visible_popup() <Bar> call fern_preview_image#PageUpDown(v:false) <Bar> else <Bar> call feedkeys("\<PageUp>") <Bar> endif<CR>

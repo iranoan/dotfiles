@@ -75,6 +75,15 @@ export def TogglePreview(): void
 	endif
 enddef
 
+export def ToggleWrap(): void
+	var id: number = b:fern_preview_image.winid
+	var wrap: bool = get(popup_getoptions(id), 'wrap', true)
+
+	popup_setoptions(id, {wrap: !wrap})
+	echo $'Preview: {wrap ? 'nowrap' : 'wrap'}'
+	redraw!
+enddef
+
 export def PageUpDown(down_flag: bool): void
 	if &filetype !=# 'fern'
 		return
