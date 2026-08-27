@@ -7,27 +7,32 @@ def AddErrorMessage(id: number, err_msg: list<string>): void
 	setwinvar(id, 'popup_image', extendnew(var, {err_msg: get(var, 'err_msg', []) + [err_msg]}))
 enddef
 
-export def Clear(id: number): void
+def SaveOrignalOption(id: number): dict<any>
 	var opts: dict<any> = popup_getoptions(id)
+	if getwinvar(id, 'popup_image', {}) ==# {}
+		setwinvar(id, 'popup_image', {
+			clear: { # クリアする時に設定するオプション
+				highlight: has_key(opts, 'highlight') ?
+					((opts.highlight ==# '' || opts.highlight ==# 'WarningMsg') ? 'Pmenu' : opts.highlight) :
+					'Pmenu',
+				highlights: has_key(opts, 'highlights') ?
+					((opts.highlights ==# '' || opts.highlights ==# 'PopupTitle:Pmenu,Popup:WarningMsg') ? '' : opts.highlights) :
+					'',
+				image: {}
+			},
+			err_msg: [],
+			options: { # イメージ表示で変更するオプション
+				border: get(opts, 'border', [0, 0, 0, 0]),
+				opacity: 100
+			}
+		})
+	endif
+	return opts
+enddef
+
+export def Clear(id: number): void
+	var opts: dict<any> = SaveOrignalOption(id)
 	if !has_key(opts, 'image')
-		if getwinvar(id, 'popup_image', {}) ==# {}
-			setwinvar(id, 'popup_image', {
-				clear: { # クリアする時に設定するオプション
-					highlight: has_key(opts, 'highlight') ?
-						((opts.highlight ==# '' || opts.highlight ==# 'WarningMsg') ? 'Pmenu' : opts.highlight) :
-						'Pmenu',
-					highlights: has_key(opts, 'highlights') ?
-						((opts.highlights ==# '' || opts.highlights ==# 'PopupTitle:Pmenu,Popup:WarningMsg') ? '' : opts.highlights) :
-						'',
-					image: {}
-				},
-				err_msg: [],
-				options: { # イメージ表示で変更するオプション
-					border: get(opts, 'border', [0, 0, 0, 0]),
-					opacity: 100
-				}
-			})
-		endif
 		var default_opts: dict<any> = getwinvar(id, 'popup_image', {})
 		extend(default_opts.options, extendnew(opts, default_opts.clear))
 		popup_setoptions(id, default_opts.options)
@@ -39,6 +44,7 @@ export def Clear(id: number): void
 enddef
 
 export def WarningMsg(id: number): void
+	SaveOrignalOption(id)
 	popup_settext(id, remove(getwinvar(id, 'popup_image', {err_msg: []}).err_msg, -1))
 	popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
 enddef
@@ -115,7 +121,7 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 		AddErrorMessage(id, ['Need ''mimetype'' command'])
 		return false
 	endif
-	var opts: dict<any> = popup_getoptions(id)
+	var opts: dict<any> = SaveOrignalOption(id)
 	var opts_win: dict<any> = getwinvar(id, 'popup_image', {options: {}}).options
 	var max_w: number = opts.maxwidth  == 0 ? &columns : opts.maxwidth
 	var max_h: number = opts.maxheight == 0 ? &lines   : opts.maxheight
