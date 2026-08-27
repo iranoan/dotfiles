@@ -122,6 +122,7 @@ enddef
 export def Preview(id: number, p: string): void
 	var type: string = GetFileType(p)
 	var bufnr: number = winbufnr(id)
+	var fsize: float
 
 	if !has_key(w:, 'popup_preview')
 		w:popup_preview = {
@@ -149,59 +150,66 @@ export def Preview(id: number, p: string): void
 		                                        	v.permission, v.size_s, v.time_iso, v.name, v.type ==# 'link' ? $' -> {v.link}' : ''))
 		)
 		SetFileType(bufnr, 'LsLike')
-	elseif filereadable(p)
-		if index(g:popup_preview.image, tolower(fnamemodify(p, ':e'))) != -1
-			if istalled_popup_image
-				popup_image#Preview(id, p, (v) => {
-					if !v
-						popup_image#WarningMsg(id)
-					endif
-				})
-			else
-				popup_settext(id, [
-					'<Image/Video/PDF/PostScript file>',
-					'',
-					'Need popup_image plugin and Need following tools',
-					'All video/image: ''mimetype'' command',
-					'image:           FFmgeg (ffmpeg/ffprobe command)',
-					'video:           FFmgeg (ffmpeg/ffprobe command)',
-					'PDF/PostScript:  ImageMagick (magick command)',
-				])
-				popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
-			endif
-			SetFileType(bufnr, 'Image')
-		elseif index(keys(g:popup_preview.filter), type) != -1
-			var filter: list<string> = g:popup_preview.filter[type]
-			var filter_place_folder: number = index(filter, '.')
-			filter = filter_place_folder == -1 ? filter + [p] :
-				filter_place_folder == len(filter) ? filter[ : -2 ] + [p] :
-				filter[ : filter_place_folder - 1 ] + [p] + filter[ filter_place_folder + 1 : ]
-			if executable(filter[0])
-				popup_settext(id, systemlist(filter))
-				if v:shell_error != 0
-					popup_settext(id, [ $'<Failed to execute ''{join(filter)}''>'])
-					popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
-					SetFileType(bufnr, 'WarningMsg')
-				else
-					SetFileType(bufnr, 'Stdoutput')
-				endif
-			else
-				popup_settext(id, [ $'<filter command ''{filter[0]}'' can not executable>'])
-				popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
-				SetFileType(bufnr, 'WarningMsg')
-			endif
-		elseif general_function#IsBinary(p)
-			popup_settext(id, '<Binary file>')
-			popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
-			SetFileType(bufnr, 'WarningMsg')
-		else
-			popup_settext(id, readfile(p))
-			SetFileType(bufnr, type)
-		endif
-	else
+	elseif !filereadable(p)
 		popup_settext(id, '<Unreadable file>')
 		popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
 		SetFileType(bufnr, 'WarningMsg')
+	elseif index(g:popup_preview.image, tolower(fnamemodify(p, ':e'))) != -1
+		if istalled_popup_image
+			popup_image#Preview(id, p, (v) => {
+				if !v
+					popup_image#WarningMsg(id)
+				endif
+			})
+		else
+			popup_settext(id, [
+				'<Image/Video/PDF/PostScript file>',
+				'',
+				'Need popup_image plugin and Need following tools',
+				'All video/image: ''mimetype'' command',
+				'image:           FFmgeg (ffmpeg/ffprobe command)',
+				'video:           FFmgeg (ffmpeg/ffprobe command)',
+				'PDF/PostScript:  ImageMagick (magick command)',
+			])
+			popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
+		endif
+		SetFileType(bufnr, 'Image')
+	elseif index(keys(g:popup_preview.filter), type) != -1
+		var filter: list<string> = g:popup_preview.filter[type]
+		var filter_place_folder: number = index(filter, '.')
+		filter = filter_place_folder == -1 ? filter + [p] :
+			filter_place_folder == len(filter) ? filter[ : -2 ] + [p] :
+			filter[ : filter_place_folder - 1 ] + [p] + filter[ filter_place_folder + 1 : ]
+		if executable(filter[0])
+			popup_settext(id, systemlist(filter))
+			if v:shell_error != 0
+				popup_settext(id, [ $'<Failed to execute ''{join(filter)}''>'])
+				popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
+				SetFileType(bufnr, 'WarningMsg')
+			else
+				SetFileType(bufnr, 'Stdoutput')
+			endif
+		else
+			popup_settext(id, [ $'<filter command ''{filter[0]}'' can not executable>'])
+			popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
+			SetFileType(bufnr, 'WarningMsg')
+		endif
+	elseif general_function#IsBinary(p)
+		popup_settext(id, '<Binary file>')
+		popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
+		SetFileType(bufnr, 'WarningMsg')
+	elseif getfsize(p) > 104851000 # テキストファイルで 100 MB (100*1024*1024) より大きい
+		fsize = getfsize(p) * 1.0
+		popup_settext(id, ['<Too large file size>', $'path: {p}',
+			fsize > 10 * 1024 * 1024 * 1024 ? printf('size:  %.1fGB', fsize / (1024.0 * 1024 * 1024)) :
+			fsize > 10 * 1024 * 1024 ? printf('size:  %.1fMB', fsize / (1024.0 * 1024)) :
+			fsize > 10 * 1024 ?        printf('size:  %.1fKB', fsize / 1024.0) :
+			$'size:  {fsize}B'
+			])
+		popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
+	else
+		popup_settext(id, readfile(p))
+		SetFileType(bufnr, type)
 	endif
 	setbufvar(bufnr, '&modified', false)
 enddef

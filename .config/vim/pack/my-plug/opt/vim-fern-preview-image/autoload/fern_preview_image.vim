@@ -53,12 +53,6 @@ enddef
 def Update(): void
 	var path: string = fern#helper#new().sync.get_cursor_node()['_path']->resolve()
 
-	if getfsize(path) > 104851000 && !general_function#IsBinary(path) # テキストファイルで 100 MB (100*1024*1024) より大きい
-		popup_settext(b:fern_preview_image.winid, $'Too large filesize: {path}')
-		popup_setoptions(b:fern_preview_image.winid, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
-		return
-	endif
-	popup_setoptions(b:fern_preview_image.winid, {highlight: 'Pmenu', highlights: 'PopupTitle:Pmenu,Popup:Pmenu'})
 	popup_preview#Preview(b:fern_preview_image.winid, path)
 enddef
 
