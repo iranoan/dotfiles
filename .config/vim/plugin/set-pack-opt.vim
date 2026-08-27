@@ -97,6 +97,19 @@ augroup spreadsheet_textobj
 		\ 	},
 		\ })
 augroup END
+# ファイル・ディレクトリ名 {{{3
+textobj#user#plugin('diretoryfilenename', {
+	'value-a': {
+		pattern: '\(/[^/]\+/\|[A-Za-z0-9_.-]\+\)',
+		scan: 'line',
+		select: ['a/'],
+	},
+	'value-i': {
+		pattern: '\(/\zs[^/]\+\ze/\|[A-Za-z0-9_.-]\+\)',
+		scan: 'line',
+		select: ['i/'],
+	},
+})
 
 # テキストオブジェクトで (), {} "", '' を区別せずにカーソル近くで判定して、全て b で扱えるようにする https://github.com/osyo-manga/vim-textobj-multiblock {{{2
 # キーマップしないと ", ' の指定が働かない
