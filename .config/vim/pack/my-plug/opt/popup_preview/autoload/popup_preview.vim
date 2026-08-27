@@ -77,7 +77,7 @@ def GetFileInfo(dir: string): list<dict<any>>
 				time_iso: strftime('%F %T', time),
 				name: p,
 				lower_name: lower_name,
-				link: f
+				link: $'{f}{getftype(f) ==# 'dir' ? '/' : ''}'
 			})
 		else
 			size = getfsize(f)
