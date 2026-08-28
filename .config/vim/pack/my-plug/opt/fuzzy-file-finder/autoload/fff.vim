@@ -738,7 +738,7 @@ def ChangePopupSize(cmdwin: bool): void # cmdwin 現在の状態でコマンド�
 						maxheight: line_height
 					})
 					if get(opts, 'image', {}) != {}
-						popup_image#ResetPreview(winid, v.matches[v.selected_idx])
+						ResetPreview(winid, v.matches[v.selected_idx])
 					endif
 				endif
 			endif
@@ -801,4 +801,16 @@ def PreviewPageUpDown(id: number, down_flag: bool): void
 		return
 	endif
 	popup_preview#PageUpDown(id, down_flag)
+enddef
+
+def ResetPreview(id: number, f: string): void
+	var opts: dict<any> = getwinvar(id, 'popup_image', {options: {}})
+
+	opts.options = extendnew(popup_getoptions(id), {image: {}})
+	popup_setoptions(id, getwinvar(id, 'popup_image', {options: {}}).options)
+	if tabpagenr() == getwininfo(id)[0].tabnr
+		popup_image#Preview(id, f)
+	else
+		execute $'autocmd FuzzyFileFinder TabEnter * ++once if tabpagenr() == {getwininfo(id)[0].tabnr} | call popup_image#Preview({id}, ''{f}'') | endif'
+	endif
 enddef

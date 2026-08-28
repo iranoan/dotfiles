@@ -60,6 +60,7 @@ if !executable('mimetype')
 		'PDF/PostScript:  and GhostScript (gs command)',
 	], {title: 'Need following tools ', highlight: 'ErrorMsg', borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'], padding: [0, 1, 0, 1]})
 	export def Preview(id: number, f: string): bool
+		SaveOrignalOption(id)
 		AddErrorMessage(id, [
 			'Need following tools',
 			'All video/image: ''mimetype'' command',
@@ -117,11 +118,11 @@ export def Preview(id: number, f: string, OnDone: func(bool) = DummyDone): bool
 enddef
 
 def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動画、PDF を表示
+	var opts: dict<any> = SaveOrignalOption(id)
 	if !executable('mimetype')
 		AddErrorMessage(id, ['Need ''mimetype'' command'])
 		return false
 	endif
-	var opts: dict<any> = SaveOrignalOption(id)
 	var opts_win: dict<any> = getwinvar(id, 'popup_image', {options: {}}).options
 	var max_w: number = opts.maxwidth  == 0 ? &columns : opts.maxwidth
 	var max_h: number = opts.maxheight == 0 ? &lines   : opts.maxheight
@@ -232,16 +233,4 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 	popup_settext(id, [])
 	redraw
 	return true
-enddef
-
-export def ResetPreview(id: number, f: string): void
-	var opts: dict<any> = getwinvar(id, 'popup_image', {options: {}})
-
-	opts.options = extendnew(popup_getoptions(id), {image: {}})
-	popup_setoptions(id, getwinvar(id, 'popup_image', {options: {}}).options)
-	if tabpagenr() == getwininfo(id)[0].tabnr
-		Preview(id, f)
-	else
-		execute $'autocmd FuzzyFileFinder TabEnter * ++once if tabpagenr() == {getwininfo(id)[0].tabnr} | call popup_image#Preview({id}, ''{f}'') | endif'
-	endif
 enddef
