@@ -23,11 +23,24 @@ def GetFileType(p: string): string
 	return ext !=# '' ? ext : 'text'
 enddef
 
+def HumanReadableSize(n: number): string
+	if n > 10995116277760 # 10TB より大きい
+		return printf('%.1fTB', n / 1099511627776.0)
+	elseif n > 10737418240
+		return printf('%.1fGB', n / 1073741824.0 )
+	elseif n > 10485760
+		return printf('%.1fMB', n / 1048576.0 )
+	elseif n > 10240
+		return printf('%.1fKB', n / 1024.0 )
+	else
+		return $'{n} B'
+	endif
+enddef
+
 def GetFileInfo(dir: string): list<dict<any>>
 	var d: string = dir =~# '/$' ? dir : $'{dir}/'
 	var info: list<dict<any>>
 	var size: number
-	var size_s: string
 	var type: string = getfperm(d)
 	var lower_name: string
 	var time: number
@@ -96,7 +109,7 @@ def GetFileInfo(dir: string): list<dict<any>>
 				type: type,
 				permission: $'-{getfperm(f)}',
 				size: size,
-				size_s: size_s,
+				size_s: HumanReadableSize(size),
 				time: time,
 				time_iso: strftime('%F %T', time),
 				name: p,
@@ -122,7 +135,6 @@ enddef
 export def Preview(id: number, p: string): void
 	var type: string = GetFileType(p)
 	var bufnr: number = winbufnr(id)
-	var fsize: float
 
 	if !has_key(w:, 'popup_preview')
 		w:popup_preview = {
@@ -199,13 +211,7 @@ export def Preview(id: number, p: string): void
 		popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
 		SetFileType(bufnr, 'WarningMsg')
 	elseif getfsize(p) > 104851000 # テキストファイルで 100 MB (100*1024*1024) より大きい
-		fsize = getfsize(p) * 1.0
-		popup_settext(id, ['<Too large file size>', $'path: {p}',
-			fsize > 10 * 1024 * 1024 * 1024 ? printf('size:  %.1fGB', fsize / (1024.0 * 1024 * 1024)) :
-			fsize > 10 * 1024 * 1024 ? printf('size:  %.1fMB', fsize / (1024.0 * 1024)) :
-			fsize > 10 * 1024 ?        printf('size:  %.1fKB', fsize / 1024.0) :
-			$'size:  {fsize}B'
-			])
+		popup_settext(id, ['<Too large file size>', $'path: {p}', $'size:  {HumanReadableSize(getfsize(p))}'])
 		popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
 	else
 		popup_settext(id, readfile(p))
