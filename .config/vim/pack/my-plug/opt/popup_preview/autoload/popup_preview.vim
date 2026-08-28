@@ -42,78 +42,78 @@ def GetFileInfo(dir: string): list<dict<any>>
 	var info: list<dict<any>>
 	var size: number
 	var type: string = getfperm(d)
-	var lower_name: string
 	var time: number
 	var time_iso: number
 	var f: string
+	var link_type: bool
 
 	if type !~# '^r........$' # 読み取り権限がない→ディクトリ自身の情報のみ返す
 		time = getftime(d)
 		return [{
-			type: 'dir',
+			type: 1,
 			permission: $'d{type}',
 			size: 0,
-			size_s: 0,
+			size_s: '0 B',
 			time: time,
 			time_iso: strftime('%F %T', time),
 			name: './',
-			lower_name: './',
 			link: ''
 		}]
 	endif
-	for p in readdir(d)
+	for p in readdir(d)->sort('l')
 		f = fnamemodify($'{d}{p}', ':p')
 		f = f =~# '[/\\]$' ? f[ : -2 ] : f # 末尾に / があると、シンボリックリンクでも dir 扱いになる
 		type = getftype(f)
-		lower_name = tolower(p)
 		time = getftime(f)
 		if type ==# 'dir'
 			add(info, {
-				type: type,
+				type: 1,
 				permission: $'d{getfperm(f)}',
 				size: 0,
-				size_s: '0',
+				size_s: '0 B',
 				time: time,
 				time_iso: strftime('%F %T', time),
 				name: p,
-				lower_name: lower_name,
 				link: ''
 			})
 		elseif type ==# 'link'
 			f = resolve(f)
-			add(info, {
-				type: type,
-				permission: $'l{getfperm(f)}',
-				size: 0,
-				size_s: '0',
-				time: time,
-				time_iso: strftime('%F %T', time),
-				name: p,
-				lower_name: lower_name,
-				link: $'{f}{getftype(f) ==# 'dir' ? '/' : ''}'
-			})
+			if getftype(f) ==# '' # リンクが切れている
+				add(info, {
+					type: 0,
+					permission: 'l---------',
+					size: 0,
+					size_s: '---',
+					time: localtime(),
+					time_iso: strftime('%F %T'),
+					name: p,
+					link: f
+				})
+			else
+				link_type = getftype(f) ==# 'dir'
+				size = getfsize(f)
+				time = getftime(f)
+				add(info, {
+					type: link_type ? 1 : 2,
+					permission: $'l{getfperm(f)}',
+					size: size,
+					size_s: HumanReadableSize(size),
+					time: time,
+					time_iso: strftime('%F %T', time),
+					name: p,
+					link: $'{f}{link_type ? '/' : ''}'
+				})
+			endif
 		else
 			size = getfsize(f)
-			if size > 1099511627776 # T
-				size_s = printf('%.1fT', size / 1099511627776.0)
-			elseif size > 1073741824 # G
-				size_s = printf('%.1fG', size / 1073741824.0 )
-			elseif size > 1048576 # M
-				size_s = printf('%.1fM', size / 1048576.0 )
-			elseif size > 1024 # K
-				size_s = printf('%.1fK', size / 1024.0 )
-			else
-				size_s = $'{size}'
-			endif
 			add(info, {
-				type: type,
+				type: 2,
 				permission: $'-{getfperm(f)}',
 				size: size,
 				size_s: HumanReadableSize(size),
 				time: time,
 				time_iso: strftime('%F %T', time),
 				name: p,
-				lower_name: lower_name,
 				link: ''
 			})
 		endif
@@ -154,12 +154,13 @@ export def Preview(id: number, p: string): void
 		var files: list<dict<any>> = GetFileInfo(p)
 		var max_len: number = max(files->mapnew((_, v) => len(v.size_s)))
 		popup_settext(id, sort(files, (v0, v1) =>
-		                                         v0.time > v1.time ? -1 : v0.time < v1.time ? 1 : # 更新日時降順
-		                                         v0.lower_name < v1.lower_name ? -1 : v0.lower_name > v1.lower_name ? 1 : # ファイル名順 (大小文字区別なし)
-		                                         v0.name < v1.name ? -1 : 1 ) # 大文字先
-		                              ->mapnew((_, v) =>
-		                                        printf($'%s %{max_len}s %s %s%s',
-		                                        	v.permission, v.size_s, v.time_iso, v.name, v.type ==# 'link' ? $' -> {v.link}' : ''))
+		                               v0.type > v1.type ?  1 : v0.type < v1.type ? -1 : # dir, file の種別
+		                               v0.time > v1.time ? -1 : v0.time < v1.time ?  1 : # 更新日時降順
+		                               0 # 名前順は GetFileInfo() 内で locale でソート済み
+		                       )
+		                       ->mapnew((_, v) =>
+		                                 printf($'%s %{max_len}s %s %s%s',
+		                                 	v.permission, v.size_s, v.time_iso, v.name, v.link !=# '' ? $' -> {v.link}' : ''))
 		)
 		SetFileType(bufnr, 'LsLike')
 	elseif !filereadable(p)
