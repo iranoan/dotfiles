@@ -1,6 +1,10 @@
 vim9script
 scriptencoding utf-8
 
+if !g:popup_image_options.loaded
+	finish
+endif
+
 def AddErrorMessage(id: number, err_msg: list<string>): void
 	var var: dict<any> = getwinvar(id, 'popup_image', {err_msg: []})
 
@@ -48,34 +52,6 @@ export def WarningMsg(id: number): void
 	popup_settext(id, remove(getwinvar(id, 'popup_image', {err_msg: []}).err_msg, -1))
 	popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
 enddef
-
-if !executable('mimetype')
-	|| !executable('ffprobe')
-	|| !executable('ffmpeg')
-	|| !executable('gs')
-	popup_notification([
-		'All video/image: ''mimetype'' command',
-		'image:           FFmgeg (ffmpeg/ffprobe command)',
-		'video:           FFmgeg (ffmpeg/ffprobe command)',
-		'PDF/PostScript:  and GhostScript (gs command)',
-	], {title: 'Need following tools ', highlight: 'ErrorMsg', borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'], padding: [0, 1, 0, 1]})
-	export def Preview(id: number, f: string): bool
-		SaveOrignalOption(id)
-		AddErrorMessage(id, [
-			'Need following tools',
-			'All video/image: ''mimetype'' command',
-			'image:           FFmgeg (ffmpeg/ffprobe command)',
-			'video:           FFmgeg (ffmpeg/ffprobe command)',
-			'PDF/PostScript:  and GhostScript (gs command)',
-		])
-		return false
-	enddef
-
-	export def ResetPreview(id: number, f: string): void
-		return
-	enddef
-	finish
-endif
 
 def SystemBlob(cmd: list<string>): blob
 	var img: blob
