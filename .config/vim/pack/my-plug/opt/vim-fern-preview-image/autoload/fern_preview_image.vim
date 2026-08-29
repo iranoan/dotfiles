@@ -51,9 +51,7 @@ def InitPopup(): void
 enddef
 
 def Update(): void
-	var path: string = fern#helper#new().sync.get_cursor_node()['_path']->resolve()
-
-	popup_preview#Preview(b:fern_preview_image.winid, path)
+	popup_preview#Preview(b:fern_preview_image.winid, fern#helper#new().sync.get_cursor_node()['_path']->resolve())
 enddef
 
 export def TogglePreview(): void
@@ -119,11 +117,13 @@ def Risize(cmdwin: bool): void
 		return
 	endif
 
+	var winid: number = b:fern_preview_image.winid
 	var options: dict<any> = g:fern_preview_image
 	var border: list<number> = options.border
 	var borderchars: list<string> = options.borderchars
 	var width: number = get(options, 'width', &columns - g:fern#drawer_width - 4 - border[1] * strdisplaywidth(borderchars[1]) - border[3] * strdisplaywidth(borderchars[3]))
 	var height: number
+	var opts: dict<any> = popup_getoptions(winid)
 
 	if cmdwin
 			&& gettabinfo(tabpagenr())[0].windows->map((_, v) => win_gettype(v))->index('command') != -1 # コマンド・ライン・ウィンドウがある
@@ -131,12 +131,17 @@ def Risize(cmdwin: bool): void
 	else
 		height = get(options, 'height', &lines - border[2] - (&laststatus != 0 ? 1 : 0) - &cmdheight - 1)
 	endif
-	popup_setoptions(b:fern_preview_image.winid, {
-		minwidth: width,
-		maxwidth: width,
-		minheight: height,
-		maxheight: height
-	})
+	if opts.maxwidth != width || opts.maxheight != height
+		popup_setoptions(winid, {
+			minwidth: width,
+			maxwidth: width,
+			minheight: height,
+			maxheight: height
+		})
+		if get(opts, 'image', {}) != {}
+			popup_image#ResetPreview(winid, fern#helper#new().sync.get_cursor_node()['_path']->resolve())
+		endif
+	endif
 enddef
 
 def DefineAutocmd(): void

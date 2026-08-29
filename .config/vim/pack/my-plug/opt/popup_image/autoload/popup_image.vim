@@ -104,10 +104,12 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 	var max_h: number = opts.maxheight == 0 ? &lines   : opts.maxheight
 
 	def ScaleImage(w: number, h: number): list<number>
-		var scale: float = min([max_w * 5.0 / w * g:popup_image_options.pt2px.x / 72, max_h * 10.0 / h * g:popup_image_options.pt2px.y / 72])
+		var scale: float = min([max_w * 5.0 / w * g:popup_image_options.pt2px.x / 72,
+			max_h * 10.0 / h * g:popup_image_options.pt2px.y / 72])
 
 		if scale > 1
-			scale = max([g:popup_image_options.min_size.x * 5.0 / w * g:popup_image_options.pt2px.x / 72, g:popup_image_options.min_size.y * 10.0 / h * g:popup_image_options.pt2px.y / 72])
+			scale = max([g:popup_image_options.min_size.x * 5.0 / w * g:popup_image_options.pt2px.x / 72,
+				g:popup_image_options.min_size.y * 10.0 / h * g:popup_image_options.pt2px.y / 72])
 			if scale > 1
 				return [float2nr(round(w * scale)), float2nr(round(h * scale))]
 			endif
@@ -209,4 +211,12 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 	popup_settext(id, [])
 	redraw
 	return true
+enddef
+
+export def ResetPreview(id: number, f: string): void
+	var opts: dict<any> = getwinvar(id, 'popup_image', {options: {}})
+
+	opts.options = extendnew(popup_getoptions(id), {image: {}})
+	popup_setoptions(id, getwinvar(id, 'popup_image', {options: {}}).options)
+	popup_image#Preview(id, f)
 enddef
