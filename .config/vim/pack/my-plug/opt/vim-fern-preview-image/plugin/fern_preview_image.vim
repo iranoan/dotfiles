@@ -8,9 +8,8 @@ if get(g:, 'popup_preview', {}) == {}
 	finish
 endif
 
-if exists('g:fern_preview_image_loaded')
+if extendnew(get(g:, 'fern_preview_image_loaded', {loaded: false}), {loaded: false}).loaded
 	finish
 endif
-g:fern_preview_image_loaded = true
 
-g:fern_preview_image = extendnew({}, get(g:, 'fern_preview_image', g:popup_preview), 'force')
+g:fern_preview_image = extendnew({loaded: true}, get(g:, 'fern_preview_image', g:popup_preview), 'force')
