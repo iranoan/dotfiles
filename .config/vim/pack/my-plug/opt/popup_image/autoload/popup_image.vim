@@ -24,14 +24,41 @@ def SaveOrignalOption(id: number): dict<any>
 					'',
 				image: {}
 			},
+			pre_info: { # 直前に表示した情報
+				maxwidth: 0,
+				maxheight: 0,
+				path: ''
+			},
 			err_msg: [],
 			options: { # イメージ表示で変更するオプション
 				border: get(opts, 'border', [0, 0, 0, 0]),
 				opacity: 100
 			}
 		})
+		var tabnr: number = tabpagenr()
+		execute($'augroup PopupImageTabPage{tabnr}')
+		autocmd!
+		execute($'autocmd TabClosed * if index(popup_list(), {id}) == -1 | timer_start(1, (_) => autocmd_delete([{{group: "PopupImageTabPage{tabnr}"}}])) | endif')
+		execute($'autocmd TabEnter * if tabpagenr() == {tabnr} | ReShow({id}) | endif')
+		execute($'autocmd TabLeave * if tabpagenr() == {tabnr} | popup_hide({id}) | endif')
+		execute($'augroup END')
+		sleep 10ms # Clear(id: number) の
+		# 		extend(default_opts.options, extendnew(opts, default_opts.clear))
+		# で options キーがないというエラーが出ることがある
+		# 発生条件が掴めていないの、試しに少し時間を置いてみる
 	endif
 	return opts
+enddef
+
+def ReShow(id: number): void # タブ・ページの切り替えによる再表示
+	var opts: dict<any> = popup_getoptions(id)
+	var pre_opts: dict<any> = getwinvar(id, 'popup_image', {pre_info: {}}).pre_info
+
+	if popup_getpos(id).visible
+			&& (opts.maxwidth != pre_opts.maxwidth || opts.maxheight != pre_opts.maxheight)
+		popup_image#Preview(id, pre_opts.path)
+	endif
+	popup_show(id)
 enddef
 
 export def Clear(id: number): void
@@ -99,9 +126,9 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 		AddErrorMessage(id, ['Need ''mimetype'' command'])
 		return false
 	endif
-	var opts_win: dict<any> = getwinvar(id, 'popup_image', {options: {}}).options
-	var max_w: number = opts.maxwidth  == 0 ? &columns : opts.maxwidth
-	var max_h: number = opts.maxheight == 0 ? &lines   : opts.maxheight
+	var opts_win: dict<any> = popup_getoptions(id)
+	var max_w: number = get(opts, 'maxwidth', 0)
+	var max_h: number = get(opts, 'maxheight', 0)
 
 	def ScaleImage(w: number, h: number): list<number>
 		var scale: float = min([max_w * 5.0 / w * g:popup_image_options.pt2px.x / 72,
@@ -119,6 +146,7 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 	enddef
 
 	var p: string = resolve(expand(f, true))
+	var path: string = p
 	var w: number
 	var h: number
 	var t: list<string>
@@ -128,6 +156,8 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 	var border: number = get(opts, 'border', []) == [] ? 1 : opts.border[0]
 	var padding: list<number> = get(opts, 'padding', [0, 0, 0, 0])
 
+	max_w = max_w  == 0 ? &columns : max_w
+	max_h = max_h == 0  ? &lines   : max_h
 	if has_key(opts, 'image') # 連続して呼び出されたときに、消さないと後ろに残る
 		popup_setoptions(id, {image: {}})
 		redraw
@@ -208,6 +238,9 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 		padding: (border == 0 && get(opts, 'title', '') !=# '') ? [1, padding[1], padding[2], padding[3]] : padding,
 		opacity: 100
 	}))
+	opts = getwinvar(id, 'popup_image', {})
+	extend(opts.pre_info, {maxwidth: max_w, maxheight: max_h, path: path})
+	setwinvar(id, 'popup_image', opts)
 	popup_settext(id, [])
 	redraw
 	return true
@@ -218,5 +251,7 @@ export def ResetPreview(id: number, f: string): void
 
 	opts.options = extendnew(popup_getoptions(id), {image: {}})
 	popup_setoptions(id, getwinvar(id, 'popup_image', {options: {}}).options)
-	popup_image#Preview(id, f)
+	if popup_getpos(id).visible
+		popup_image#Preview(id, f)
+	endif
 enddef
