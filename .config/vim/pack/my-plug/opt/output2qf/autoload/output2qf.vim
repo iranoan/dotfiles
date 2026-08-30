@@ -179,6 +179,9 @@ export def Vim(): void # Vim script のエラー内容を Quickfix に取り込�
 					ChangeQfItem(error_index, text, error_index, nr, (line =~# '^W' ? 'W' : 'E'))
 				elseif output_flag == 0b100 # 直前もエラー内容行
 					# continue # エラー処理もエラー行もないのでエラー箇所を特定できない←大抵同じエラーの繰り返し?
+					if qflist == [] # もしくはスクリプト以外の一般的なエラー
+						continue
+					endif
 					add(qflist, { filename: filename != '' ? filename : qflist[-1].filename, lnum: lnum, nr: str2nr(nr), text: text })
 				elseif and(output_flag, 0b010) == 0b010 # 直前エラー行
 					qflist[-1].text = text
