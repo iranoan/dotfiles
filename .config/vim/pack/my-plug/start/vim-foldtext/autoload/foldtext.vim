@@ -7,14 +7,14 @@ export def Base(...arg: list<any>): string
 	var foldmarkers: list<string> = split(&foldmarker, ',')
 	var comment: string = escape(&commentstring, '.$*~\')->substitute('%s', '\\(.\\{-}\\)', '')
 	var line_width: number
-	var cnt = printf('[%' .. len(line('$')) .. 's] ', (v:foldend - v:foldstart + 1))
+	var cnt = printf($'[%{len(line('$'))}s] ', (v:foldend - v:foldstart + 1))
 	if len(arg) > 0
 		line = arg[0]
 	else
 		line = getline(v:foldstart)
 	endif
 	# remove the marker that caused this fold from the display
-	line = substitute(line, '\V' .. foldmarkers[0] .. '\%(\d\+\)\?', ' ', '')
+	line = substitute(line, $'\V{foldmarkers[0]}\%(\d\+\)\?', ' ', '')
 	if &filetype ==# 'vim'
 		line = substitute(line, '\(^\s*\zs#\|\s\+#\|"\)\s*', ' ', '')
 	elseif comment !=# ''
@@ -31,21 +31,27 @@ export def Base(...arg: list<any>): string
 		line_width -= max([&numberwidth, len(line('$'))])
 	# sing の表示非表示でずれる分の補正
 	elseif &signcolumn ==# 'number'
-		cnt = cnt .. '  '
+		cnt ..= '  '
 	endif
 	if &signcolumn ==# 'auto'
-		cnt = cnt .. '  '
+		cnt ..= '  '
 	endif
 	line_width -= 2 * (&signcolumn ==# 'yes' ? 1 : 0)
 
-	line = strcharpart(printf('%-' .. ( &shiftwidth * (v:foldlevel - 1) + 2) .. 's%s', '▶', line), 0, line_width - len(cnt))
+	if v:foldlevel == 1
+		line = strcharpart($'▶{line}', 0, line_width - len(cnt))
+	elseif v:foldlevel == 2
+		line = strcharpart($'▶ {line}', 0, line_width - len(cnt))
+	else
+		line = strcharpart(printf($'%-{( &shiftwidth * (v:foldlevel - 1) + 1)}s%s', '▶', line), 0, line_width - len(cnt))
+	endif
 	# 全角文字を使っていると、幅でカットすると広すぎる
 	# だからといって strcharpart() の代わりに strpart() を使うと、逆に余分にカットするケースが出てくる
 	# ↓末尾を 1 文字づつカットしていく
 	while strdisplaywidth(line) > line_width - len(cnt)
 		line = slice(line, 0, -1)
 	endwhile
-	return printf('%s%' .. (line_width - strdisplaywidth(line)) .. 'S', line, cnt)
+	return printf($'%s%{(line_width - strdisplaywidth(line))}S', line, cnt)
 enddef
 
 export def LaTeX(): string
@@ -80,23 +86,23 @@ export def LaTeX(): string
 				c10 = strpart(chars, base + 2, 1)
 				digit = i % 10
 				if digit == 1
-					numeral = c1 .. numeral
+					numeral = $'{c1}{numeral}'
 				elseif digit == 2
-					numeral = c1 .. c1 .. numeral
+					numeral = $'{c1}{c1}{numeral}'
 				elseif digit == 3
-					numeral = c1 .. c1 .. c1 .. numeral
+					numeral = $'{c1}{c1}{c1}{numeral}'
 				elseif digit == 4
-					numeral = c1 .. c5 .. numeral
+					numeral = $'{c1}{c5}{numeral}'
 				elseif digit == 5
-					numeral = c5 .. numeral
+					numeral = $'{c5}{numeral}'
 				elseif digit == 6
-					numeral = c5 .. c1 .. numeral
+					numeral = $'{c5}{c1}{numeral}'
 				elseif digit == 7
-					numeral = c5 .. c1 .. c1 .. numeral
+					numeral = $'{c5}{c1}{c1}{numeral}'
 				elseif digit == 8
-					numeral = c5 .. c1 .. c1 .. c1 .. numeral
+					numeral = $'{c5}{c1}{c1}{c1}{numeral}'
 				elseif digit == 9
-					numeral = c1 .. c10 .. numeral
+					numeral = $'{c1}{c10}{numeral}'
 				endif
 				i = i / 10
 				if i == 0
@@ -109,7 +115,7 @@ export def LaTeX(): string
 		if depth == 0
 			return index + 1
 		elseif depth == 1
-			return '(' .. Lower_letter(index + 1) .. ')'
+			return $'({Lower_letter(index + 1)})'
 		elseif depth == 2
 			return Roman_numeral(index + 1)
 		elseif depth == 3
@@ -132,7 +138,7 @@ export def LaTeX(): string
 			endif
 		endwhile
 		if label !=# ''
-			label = ': ' .. label
+			label = $': {label}'
 		endif
 		return label
 	enddef
@@ -145,7 +151,7 @@ export def LaTeX(): string
 		else
 			env = matches[1]
 			if env ==# 'frame'
-				env = '[' .. matches[3] .. ']'
+				env = $'[{matches[3]}]'
 			endif
 		endif
 		return foldtext#Base(env .. GetLabel())
@@ -207,7 +213,7 @@ export def LaTeX(): string
 			endif
 		endfor
 		env = toupper(strpart(env, 0, 1)) .. strpart(env, 1)
-		line = env .. ': ' .. join(item_name, '.')
+		line = $'{env}: {join(item_name, '.')}'
 		return foldtext#Base(line)
 	endif
 	# }}}
@@ -216,11 +222,11 @@ export def LaTeX(): string
 	if !empty(matches)
 		env = matches[1]
 		if env == ''
-			env = '§' .. matches[3]
+			env = $'§{matches[3]}'
 		elseif env == 'sub'
-			env = '§§' .. matches[3]
+			env = $'§§{matches[3]}'
 		elseif env == 'subsub'
-			env = '§§§' .. matches[3]
+			env = $'§§§{matches[3]}'
 		endif
 		return foldtext#Base(env .. GetLabel())
 	endif
@@ -270,23 +276,23 @@ export def Perl(): string # Perl
 
 			# handle 'my $var = shift;' type lines
 			Var = '\%(\$\|@\|%\|\*\)\w\+'
-			shift_line = matchlist(next_line, '\m\cmy\s*\(' .. Var .. '\)\s*=\s*shift\%(\s*||\s*\(.\{-}\)\)\?;')
+			shift_line = matchlist(next_line, $'\m\cmy\s*\({Var}\)\s*=\s*shift\%(\s*||\s*\(.\{{-}}\)\)\?;')
 			if !empty(shift_line)
 				if shift_line[1] ==# '$self' && empty(params)
 					if sub_type ==# 'sub'
 						sub_type = ''
 					endif
-					sub_type .= ' method'
+					sub_type ..= ' method'
 				elseif shift_line[1] ==# '$class' && empty(params)
 					if sub_type ==# 'sub'
 						sub_type = ''
 					endif
-					sub_type .= ' static method'
+					sub_type ..= ' static method'
 				elseif shift_line[1] !=# '$orig'
 					arg = shift_line[1]
 					# also catch default arguments
 					if shift_line[2] !=# ''
-						arg .= ' = ' .. shift_line[2]
+						arg ..= $' = {shift_line[2]}'
 					endif
 					params += [arg]
 				endif
@@ -330,7 +336,7 @@ export def Perl(): string # Perl
 
 		params = filter(params[0 : -2], 'strpart(v:val, 0, 1) !=# "@"') + [params[-1]]
 
-		return foldtext#Base(sub_type .. ' ' .. matches[2] .. '(' .. join(params, ', ') .. ')')
+		return foldtext#Base($'{sub_type} {matches[2]}({join(params, ', ')})')
 	endif
 	# }}}
 	return foldtext#Base(line)
