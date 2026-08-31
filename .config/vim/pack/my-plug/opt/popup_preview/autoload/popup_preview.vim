@@ -136,20 +136,24 @@ export def Preview(id: number, p: string): void
 	var type: string = GetFileType(p)
 	var bufnr: number = winbufnr(id)
 
-	if !has_key(w:, 'popup_preview')
-		w:popup_preview = {
-			path: p,
-			options: {highlight: 'Pmenu', highlights: 'PopupTitle:Pmenu,Popup:Pmenu'}
-		}
-	elseif w:popup_preview.path !=# p
-		w:popup_preview.path = p
-	else
+	if getwinvar(id, 'popup_preview_path', '') !=# p
+		setwinvar(id, 'popup_preview_path', p)
+	elseif !istalled_popup_image # ファイルが同じで popup_image もない→画像表示もない
 		return
+	else # ファイルが同じで popup_image がある→画像表示がある
+		var opts: dict<any> = popup_getoptions(id)
+		var pre_opts: dict<any> = getwinvar(id, 'popup_image', {pre_info: {
+			maxwidth: 0,
+			maxheight: 0
+		}}).pre_info
+		if opts.maxwidth == pre_opts.maxwidth && opts.maxheight == pre_opts.maxheight # サイズ変更なし
+			return
+		endif
 	endif
 	if istalled_popup_image
 		popup_image#Clear(id)
 	endif
-	popup_setoptions(id, w:popup_preview.options)
+	popup_setoptions(id, {highlight: 'Pmenu', highlights: 'PopupTitle:Pmenu,Popup:Pmenu'})
 	if isdirectory(p)
 		var files: list<dict<any>> = GetFileInfo(p)
 		var max_len: number = max(files->mapnew((_, v) => len(v.size_s)))
