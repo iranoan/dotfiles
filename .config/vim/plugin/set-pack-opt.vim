@@ -492,6 +492,8 @@ nnoremap <silent><Leader>fp <Cmd>call set_fff#main('call fff#FFFiles(["~/public_
 xnoremap <silent><Leader>fp <Cmd>call set_fff#main('call fff#FFFiles(["~/public_html/iranoan"])')<CR>
 nnoremap <silent><Leader>fi <Cmd>call set_fff#main('call fff#FFFiles(["~/Information/slide"])')<CR>
 xnoremap <silent><Leader>fi <Cmd>call set_fff#main('call fff#FFFiles(["~/Information/slide"])')<CR>
+nnoremap <silent><Leader>fI <Cmd>call set_fff#main('call fff#FFFiles(["~/img"])')<CR>
+xnoremap <silent><Leader>fI <Cmd>call set_fff#main('call fff#FFFiles(["~/img"])')<CR>
 # augroup Fuzzy_File_Finder
 # 	autocmd!
 # 	autocmd FuncUndefined fff#* set_fff#main()

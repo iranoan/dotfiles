@@ -37,6 +37,8 @@ function set_fff#main(cmd) abort
 				\ #{mode: 'x', key: '<silent><Leader>fp', method: 1, cmd: 'call fff#FFFiles(["~/public_html/iranoan"])'},
 				\ #{mode: 'n', key: '<silent><Leader>fi', method: 1, cmd: 'call fff#FFFiles(["~/Information/slide"])'},
 				\ #{mode: 'x', key: '<silent><Leader>fi', method: 1, cmd: 'call fff#FFFiles(["~/Information/slide"])'},
+				\ #{mode: 'n', key: '<silent><Leader>fI', method: 1, cmd: 'call fff#FFFiles(["~/img"])'},
+				\ #{mode: 'x', key: '<silent><Leader>fI', method: 1, cmd: 'call fff#FFFiles(["~/img"])'},
 				\ ])
 	call timer_start(1, {->execute('delfunction set_fff#main')})
 endfunction
