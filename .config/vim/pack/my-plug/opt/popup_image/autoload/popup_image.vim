@@ -6,9 +6,9 @@ if !g:popup_image_options.loaded
 endif
 
 def AddErrorMessage(id: number, err_msg: list<string>): void
-	var var: dict<any> = getwinvar(id, 'popup_image', {err_msg: []})
+	var opts: dict<any> = getwinvar(id, 'popup_image', {err_msg: []})
 
-	setwinvar(id, 'popup_image', extendnew(var, {err_msg: get(var, 'err_msg', []) + [err_msg]}))
+	setwinvar(id, 'popup_image', extendnew(opts, {err_msg: get(opts, 'err_msg', []) + [err_msg]}))
 enddef
 
 def SaveOrignalOption(id: number): dict<any>
@@ -52,24 +52,27 @@ enddef
 
 def ReShow(id: number): void # タブ・ページの切り替えによる再表示
 	var opts: dict<any> = popup_getoptions(id)
-	var pre_opts: dict<any> = getwinvar(id, 'popup_image', {pre_info: {}}).pre_info
 
-	if popup_getpos(id).visible
-			&& (opts.maxwidth != pre_opts.maxwidth || opts.maxheight != pre_opts.maxheight)
-		popup_image#Preview(id, pre_opts.path)
+	if index(popup_list(), id) != -1
+		if popup_getpos(id).visible
+			popup_show(id)
+		endif
+		if get(popup_getoptions(id), 'image', {}) != {}
+			popup_image#Preview(id, getwinvar(id, 'popup_image', {pre_info: {path: '' }}).pre_info.path)
+		endif
 	endif
-	popup_show(id)
 enddef
 
 export def Clear(id: number): void
-	var opts: dict<any> = SaveOrignalOption(id)
+	var opts: dict<any> = SaveOrignalOption(id)->filter((k, _) => k !~# '^\(max\|min\)\(width\|height\)$')
+	var default_opts: dict<any> = getwinvar(id, 'popup_image', {options: {}, clear: {}})
+
 	if !has_key(opts, 'image')
-		var default_opts: dict<any> = getwinvar(id, 'popup_image', {})
 		extend(default_opts.options, extendnew(opts, default_opts.clear))
 		popup_setoptions(id, default_opts.options)
 		setwinvar(id, 'popup_image', default_opts)
 	else
-		popup_setoptions(id, extendnew(getwinvar(id, 'popup_image', {options: {}}).options, getwinvar(id, 'popup_image', {clear: {}}).clear))
+		popup_setoptions(id, extendnew(default_opts.options, default_opts.clear))
 		redraw!
 	endif
 enddef
@@ -156,7 +159,7 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 	var border: number = get(opts, 'border', []) == [] ? 1 : opts.border[0]
 	var padding: list<number> = get(opts, 'padding', [0, 0, 0, 0])
 
-	max_w = max_w  == 0 ? &columns : max_w
+	max_w = max_w == 0  ? &columns : max_w
 	max_h = max_h == 0  ? &lines   : max_h
 	if has_key(opts, 'image') # 連続して呼び出されたときに、消さないと後ろに残る
 		popup_setoptions(id, {image: {}})
@@ -239,7 +242,7 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 		opacity: 100
 	}))
 	opts = getwinvar(id, 'popup_image', {})
-	extend(opts.pre_info, {maxwidth: max_w, maxheight: max_h, path: path})
+	opts.pre_info = {maxwidth: max_w, maxheight: max_h, path: path}
 	setwinvar(id, 'popup_image', opts)
 	popup_settext(id, [])
 	redraw
@@ -247,10 +250,11 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 enddef
 
 export def ResetPreview(id: number, f: string): void
-	var opts: dict<any> = getwinvar(id, 'popup_image', {options: {}})
+	var opts: dict<any> = deepcopy(getwinvar(id, 'popup_image', {options: {}}).options)
 
-	opts.options = extendnew(popup_getoptions(id), {image: {}})
-	popup_setoptions(id, getwinvar(id, 'popup_image', {options: {}}).options)
+	extend(opts, popup_getoptions(id))
+	filter(opts, (k, _) => k !=# 'image')
+	popup_setoptions(id, opts)
 	if popup_getpos(id).visible
 		popup_image#Preview(id, f)
 	endif
