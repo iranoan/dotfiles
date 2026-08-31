@@ -16,12 +16,8 @@ def SaveOrignalOption(id: number): dict<any>
 	if getwinvar(id, 'popup_image', {}) == {}
 		setwinvar(id, 'popup_image', {
 			clear: { # クリアする時に設定するオプション
-				highlight: has_key(opts, 'highlight') ?
-					((opts.highlight ==# '' || opts.highlight ==# 'WarningMsg') ? 'Pmenu' : opts.highlight) :
-					'Pmenu',
-				highlights: has_key(opts, 'highlights') ?
-					((opts.highlights ==# '' || opts.highlights ==# 'PopupTitle:Pmenu,Popup:WarningMsg') ? '' : opts.highlights) :
-					'',
+				highlight: opts.highlight,
+				highlights: opts.highlights,
 				image: {}
 			},
 			pre_info: { # 直前に表示した情報
@@ -32,6 +28,8 @@ def SaveOrignalOption(id: number): dict<any>
 			tab_leave_close: false, # タブページの切り替えによって閉じられたたか?
 			err_msg: [],
 			options: { # イメージ表示で変更するオプション
+				highlight: opts.highlight,
+				highlights: opts.highlights,
 				border: get(opts, 'border', [0, 0, 0, 0]),
 				opacity: 100
 			}
@@ -135,13 +133,21 @@ export def Preview(id: number, f: string, OnDone: func(bool) = DummyDone): bool
 	return true
 enddef
 
+def DefaultOpts(o: dict<any>, d: dict<any>, key: string): string
+	if has_key(o, key)
+		return o[key]
+	else
+		return d[key]
+	endif
+enddef
+
 def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動画、PDF を表示
 	var opts: dict<any> = SaveOrignalOption(id)
 	if !executable('mimetype')
 		AddErrorMessage(id, ['Need ''mimetype'' command'])
 		return false
 	endif
-	var opts_win: dict<any> = popup_getoptions(id)
+	var win_opts: dict<any> = getwinvar(id, 'popup_image', {highlight: '', highlights: ''})
 	var max_w: number = get(opts, 'maxwidth', 0)
 	var max_h: number = get(opts, 'maxheight', 0)
 
@@ -245,17 +251,18 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 		])
 		return false
 	endif
-	popup_setoptions(id, extendnew(opts_win, {
+	popup_setoptions(id, extendnew(opts, {
 		image: {data: img_data, width: w, height: h},
 		maxwidth: max_w, # 縦横サイズを指定しないと、連続して使われたときに直前に表示された画像サイズに引きずられる
 		maxheight: max_h,
-		border: has_key(opts_win, 'title') && opts_win.title !=# '' ? opts_win.border : [0, 0, 0, 0],
+		highlight:  win_opts.options.highlight,
+		highlights: win_opts.options.highlights,
+		border: has_key(opts, 'title') && opts.title !=# '' ? opts.border : [0, 0, 0, 0],
 		padding: (border == 0 && get(opts, 'title', '') !=# '') ? [1, padding[1], padding[2], padding[3]] : padding,
 		opacity: 100
 	}))
-	opts = getwinvar(id, 'popup_image', {})
-	opts.pre_info = {maxwidth: max_w, maxheight: max_h, path: path}
-	setwinvar(id, 'popup_image', opts)
+	win_opts.pre_info = {maxwidth: max_w, maxheight: max_h, path: path}
+	setwinvar(id, 'popup_image', win_opts)
 	popup_settext(id, [])
 	redraw
 	return true
