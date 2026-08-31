@@ -29,6 +29,7 @@ def SaveOrignalOption(id: number): dict<any>
 				maxheight: 0,
 				path: ''
 			},
+			tab_leave_close: false, # タブページの切り替えによって閉じられたたか?
 			err_msg: [],
 			options: { # イメージ表示で変更するオプション
 				border: get(opts, 'border', [0, 0, 0, 0]),
@@ -40,7 +41,7 @@ def SaveOrignalOption(id: number): dict<any>
 		autocmd!
 		execute($'autocmd TabClosed * if index(popup_list(), {id}) == -1 | timer_start(1, (_) => autocmd_delete([{{group: "PopupImageTabPage{tabnr}"}}])) | endif')
 		execute($'autocmd TabEnter * if tabpagenr() == {tabnr} | ReShow({id}) | endif')
-		execute($'autocmd TabLeave * if tabpagenr() == {tabnr} | popup_hide({id}) | endif')
+		execute($'autocmd TabLeave * if tabpagenr() == {tabnr} | Hide({id}) | endif')
 		execute($'augroup END')
 		sleep 10ms # Clear(id: number) の
 		# 		extend(default_opts.options, extendnew(opts, default_opts.clear))
@@ -52,19 +53,30 @@ enddef
 
 def ReShow(id: number): void # タブ・ページの切り替えによる再表示
 	var opts: dict<any> = popup_getoptions(id)
+	var win_opts: dict<any> = getwinvar(id, 'popup_image', {tab_leave_close: false})
 
 	if index(popup_list(), id) != -1
-		if popup_getpos(id).visible
+		if win_opts.tab_leave_close
 			popup_show(id)
 		endif
 		if get(popup_getoptions(id), 'image', {}) != {}
-			popup_image#Preview(id, getwinvar(id, 'popup_image', {pre_info: {path: '' }}).pre_info.path)
+			GenerateAndSetImage(id, getwinvar(id, 'popup_image', {pre_info: {path: '' }}).pre_info.path)
 		endif
+		win_opts.tab_leave_close = false
+	endif
+enddef
+
+def Hide(id: number): void
+	var win_opts: dict<any> = getwinvar(id, 'popup_image', {tab_leave_close: false})
+
+	if index(popup_list(), id) != -1 && popup_getpos(id).visible && popup_getoptions(id).tabpage != -1
+		win_opts.tab_leave_close = true
+		popup_hide(id)
 	endif
 enddef
 
 export def Clear(id: number): void
-	var opts: dict<any> = SaveOrignalOption(id)->filter((k, _) => k !~# '^\(max\|min\)\(width\|height\)$')
+	var opts: dict<any> = SaveOrignalOption(id)->filter((k, _) => k !~# '^\(\(max\|min\)\(width\|height\)\|col\|line\)$')
 	var default_opts: dict<any> = getwinvar(id, 'popup_image', {options: {}, clear: {}})
 
 	if !has_key(opts, 'image')
@@ -256,6 +268,6 @@ export def ResetPreview(id: number, f: string): void
 	filter(opts, (k, _) => k !=# 'image')
 	popup_setoptions(id, opts)
 	if popup_getpos(id).visible
-		popup_image#Preview(id, f)
+		GenerateAndSetImage(id, f)
 	endif
 enddef
