@@ -37,9 +37,9 @@ def SaveOrignalOption(id: number): dict<any>
 		var tabnr: number = tabpagenr()
 		execute($'augroup PopupImageTabPage{tabnr}')
 		autocmd!
-		execute($'autocmd TabClosed * if index(popup_list(), {id}) == -1 | timer_start(1, (_) => autocmd_delete([{{group: "PopupImageTabPage{tabnr}"}}])) | endif')
-		execute($'autocmd TabEnter * if tabpagenr() == {tabnr} | ReShow({id}) | endif')
-		execute($'autocmd TabLeave * if tabpagenr() == {tabnr} | Hide({id}) | endif')
+		execute($'autocmd TabClosed *             AutocmdDelete({tabnr}, {id})')
+		execute($'autocmd TabEnter *              Show({tabnr}, {id})')
+		execute($'autocmd TabLeave,TerminalOpen * Hide({tabnr}, {id})')
 		execute($'augroup END')
 		sleep 10ms # Clear(id: number) の
 		# 		extend(default_opts.options, extendnew(opts, default_opts.clear))
@@ -49,11 +49,17 @@ def SaveOrignalOption(id: number): dict<any>
 	return opts
 enddef
 
-def ReShow(id: number): void # タブ・ページの切り替えによる再表示
+def AutocmdDelete(tabnr: number, id: number): void
+	if index(popup_list(), id) == -1
+		timer_start(1, (_) => autocmd_delete([{group: $'PopupImageTabPage{tabnr}'}]))
+	endif
+enddef
+
+def Show(tabnr: number, id: number): void # タブ・ページの切り替えによる再表示
 	var opts: dict<any> = popup_getoptions(id)
 	var win_opts: dict<any> = getwinvar(id, 'popup_image', {tab_leave_close: false})
 
-	if index(popup_list(), id) != -1
+	if tabpagenr() == tabnr && index(popup_list(), id) != -1
 		if win_opts.tab_leave_close
 			popup_show(id)
 		endif
@@ -64,10 +70,10 @@ def ReShow(id: number): void # タブ・ページの切り替えによる再表�
 	endif
 enddef
 
-def Hide(id: number): void
+def Hide(tabnr: number, id: number): void
 	var win_opts: dict<any> = getwinvar(id, 'popup_image', {tab_leave_close: false})
 
-	if index(popup_list(), id) != -1 && popup_getpos(id).visible && popup_getoptions(id).tabpage != -1
+	if tabpagenr() == tabnr && index(popup_list(), id) != -1 && popup_getpos(id).visible && popup_getoptions(id).tabpage != -1
 		win_opts.tab_leave_close = true
 		popup_hide(id)
 	endif
@@ -176,6 +182,7 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 	var w_h: list<number>
 	var border: number = get(opts, 'border', []) == [] ? 1 : opts.border[0]
 	var padding: list<number> = get(opts, 'padding', [0, 0, 0, 0])
+	var not_empty_title: bool = get(opts, 'title', '') !=# ''
 
 	max_w = max_w == 0  ? &columns : max_w
 	max_h = max_h == 0  ? &lines   : max_h
@@ -257,8 +264,8 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 		maxheight: max_h,
 		highlight:  win_opts.options.highlight,
 		highlights: win_opts.options.highlights,
-		border: has_key(opts, 'title') && opts.title !=# '' ? opts.border : [0, 0, 0, 0],
-		padding: (border == 0 && get(opts, 'title', '') !=# '') ? [1, padding[1], padding[2], padding[3]] : padding,
+		border: not_empty_title ? opts.border : [0, 0, 0, 0],
+		padding: border == 0 && not_empty_title ? [1, padding[1], padding[2], padding[3]] : padding,
 		opacity: 100
 	}))
 	win_opts.pre_info = {maxwidth: max_w, maxheight: max_h, path: path}
