@@ -38,7 +38,6 @@ popup_preview, popup_image プラグインが必要
 >vim
 	call fern_preview_image#TogglePreview()
 <
-
 プレピューの配置位置とサイズは、デフォルトでは |g:fern#drawer_width| 分だけ右
 で残りの領域を埋め尽くす大きさ
 
@@ -46,12 +45,24 @@ popup_preview, popup_image プラグインが必要
 >vim
 	call fern_preview_image#ToggleWrap()
 <
-プレビューPageUp/PageDown~
 
+プレビュー PageUp/PageDown~
 >vim
 	call fern_preview_image#PageUpDown(v:true)  " PageDown
 	call fern_preview_image#PageUpDown(v:false) " PageUp
 <
+
+デモ動画~
+
+../vim-fern-preview-image.mp4
+
+操作内容
+  1.プレビュー表示
+  2.プレビュー PageDown
+  3.折り返し On/Off
+  4.プレビュー PageUp
+  5.プレビュー・ファイル/ディレクトリ変更
+
 ==============================================================================
                                                  *vim-fern-preview-image-custom*
 設定~
