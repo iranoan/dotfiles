@@ -52,11 +52,11 @@ def UpdatePreview(s: dict<any>): void
 	var id: number = s.preview_winid
 	if empty(s.matches)
 		s.preview_path = ''
-		popup_settext(s.preview_winid, '<No selection>')
-		popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
 		if s.display_image
 			popup_image#Clear(s.preview_winid)
 		endif
+		popup_settext(s.preview_winid, '<No selection>')
+		popup_setoptions(id, {highlight: 'PopupPreviewMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupPreviewMsg'})
 		return
 	endif
 
