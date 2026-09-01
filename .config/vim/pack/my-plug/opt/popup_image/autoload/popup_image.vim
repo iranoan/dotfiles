@@ -5,6 +5,40 @@ if !g:popup_image_options.loaded
 	finish
 endif
 
+def MakeBackground(n: string, d: dict<any>): dict<string>
+	if has_key(d, 'ctermbg')
+		if has_key(d, 'guibg')
+			return {name: n, ctermbg: d.ctermbg, guibg: d.guibg}
+		else
+			return {name: n, ctermbg: d.ctermbg}
+		endif
+	else
+		if has_key(d, 'guibg')
+			return {name: n, guibg: d.guibg}
+		else
+			return {name: n}
+		endif
+	endif
+enddef
+
+def MakeHighlight(): void
+	var background: dict<string> = hlget('Pmenu', true)[0]->filter((k, _) => k =~# '\<\(cterm\|gui\)bg\>')
+	var WarningMsg: dict<any> = hlget('WarningMsg', true)[0]->filter((k, _) => k !=# '\<\(id\|name\)\>')
+	var MessageWindow: dict<any> = hlget('MessageWindow', true)[0]->filter((k, _) => k !=# '\<\(id\|name\)\>')
+
+	hlset([
+		extendnew(WarningMsg, MakeBackground('PopupImageWarningMsg', background)),
+		extendnew(MessageWindow, MakeBackground('PopupImageMsg', background))
+	])
+enddef
+
+MakeHighlight()
+
+augroup PopupImageHighlightMsg
+	autocmd!
+	autocmd ColorScheme * MakeHighlight()
+augroup END
+
 def AddErrorMessage(id: number, err_msg: list<string>): void
 	var opts: dict<any> = getwinvar(id, 'popup_image', {err_msg: []})
 
@@ -96,7 +130,7 @@ enddef
 export def WarningMsg(id: number): void
 	SaveOrignalOption(id)
 	popup_settext(id, remove(getwinvar(id, 'popup_image', {err_msg: []}).err_msg, -1))
-	popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
+	popup_setoptions(id, {highlight: 'PopupImageWarningMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupImageWarningMsg'})
 enddef
 
 def SystemBlob(cmd: list<string>): blob
@@ -124,8 +158,8 @@ def DummyDone(_: bool)
 enddef
 
 export def Preview(id: number, f: string, OnDone: func(bool) = DummyDone): bool
-	popup_settext(id, ['making image data...'])
-	popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
+	popup_settext(id, ['Making Image Data...'])
+	popup_setoptions(id, {highlight: 'PopupImageMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupImageMsg'})
 	redraw
 
 	timer_start(1, (_) => {
