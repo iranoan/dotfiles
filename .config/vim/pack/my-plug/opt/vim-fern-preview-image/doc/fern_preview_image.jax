@@ -38,8 +38,8 @@ popup_preview, popup_image プラグインが必要
 >vim
 	call fern_preview_image#TogglePreview()
 <
-プレピューの配置位置とサイズは、デフォルトでは |g:fern#drawer_width| 分だけ右
-で残りの領域を埋め尽くす大きさ
+プレピューの配置位置とサイズは、デフォルトでは |g:fern#drawer_width| 分だけ右で
+残りの領域を埋め尽くす大きさ
 
 プレビュー折り返し On/Off~
 >vim
