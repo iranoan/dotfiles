@@ -81,7 +81,7 @@ enddef
 
 export def Clear(id: number): void
 	var opts: dict<any> = SaveOrignalOption(id)->filter((k, _) => k !~# '^\(\(max\|min\)\(width\|height\)\|col\|line\)$')
-	var default_opts: dict<any> = getwinvar(id, 'popup_image', {options: {}, clear: {}})
+	var default_opts: dict<any> = deepcopy(getwinvar(id, 'popup_image', {options: {}, clear: {}}))
 
 	if !has_key(opts, 'image')
 		extend(default_opts.options, extendnew(opts, default_opts.clear))
@@ -258,16 +258,12 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 		])
 		return false
 	endif
-	popup_setoptions(id, extendnew(opts, {
+	popup_setoptions(id, extendnew(opts, extendnew(win_opts.options, {
 		image: {data: img_data, width: w, height: h},
-		maxwidth: max_w, # 縦横サイズを指定しないと、連続して使われたときに直前に表示された画像サイズに引きずられる
-		maxheight: max_h,
-		highlight:  win_opts.options.highlight,
-		highlights: win_opts.options.highlights,
 		border: not_empty_title ? opts.border : [0, 0, 0, 0],
 		padding: border == 0 && not_empty_title ? [1, padding[1], padding[2], padding[3]] : padding,
 		opacity: 100
-	}))
+	})))
 	win_opts.pre_info = {maxwidth: max_w, maxheight: max_h, path: path}
 	setwinvar(id, 'popup_image', win_opts)
 	popup_settext(id, [])
