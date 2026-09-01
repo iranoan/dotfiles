@@ -3,6 +3,40 @@ scriptencoding utf-8
 
 var istalled_popup_image: bool = getscriptinfo({name: '/plugin/popup_image.vim'}) != []
 
+def MakeBackground(n: string, d: dict<any>): dict<string>
+	if has_key(d, 'ctermbg')
+		if has_key(d, 'guibg')
+			return {name: n, ctermbg: d.ctermbg, guibg: d.guibg}
+		else
+			return {name: n, ctermbg: d.ctermbg}
+		endif
+	else
+		if has_key(d, 'guibg')
+			return {name: n, guibg: d.guibg}
+		else
+			return {name: n}
+		endif
+	endif
+enddef
+
+def MakeHighlight(): void
+	var background: dict<string> = hlget('Pmenu', true)[0]->filter((k, _) => k =~# '\<\(cterm\|gui\)bg\>')
+	var WarningMsg: dict<any> = hlget('WarningMsg', true)[0]->filter((k, _) => k !=# '\<\(id\|name\)\>')
+	var MessageWindow: dict<any> = hlget('MessageWindow', true)[0]->filter((k, _) => k !=# '\<\(id\|name\)\>')
+
+	hlset([
+		extendnew(WarningMsg, MakeBackground('PopupPreviewWarningMsg', background)),
+		extendnew(MessageWindow, MakeBackground('PopupPreviewMsg', background))
+	])
+enddef
+
+MakeHighlight()
+
+augroup PopupPreviewHighlightMsg
+	autocmd!
+	autocmd ColorScheme * MakeHighlight()
+augroup END
+
 def GetFileType(p: string): string
 	var f: string = tolower(p)
 	var t = get(g:popup_preview, 'type')
@@ -169,7 +203,7 @@ export def Preview(id: number, p: string): void
 		SetFileType(bufnr, 'LsLike')
 	elseif !filereadable(p)
 		popup_settext(id, '<Unreadable file>')
-		popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
+		popup_setoptions(id, {highlight: 'PopupPreviewWarningMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupPreviewWarningMsg'})
 		SetFileType(bufnr, 'WarningMsg')
 	elseif index(g:popup_preview.image, tolower(fnamemodify(p, ':e'))) != -1
 		if istalled_popup_image
@@ -188,7 +222,7 @@ export def Preview(id: number, p: string): void
 				'video:           FFmgeg (ffmpeg/ffprobe command)',
 				'PDF/PostScript:  ImageMagick (magick command)',
 			])
-			popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
+			popup_setoptions(id, {highlight: 'PopupPreviewWarningMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupPreviewWarningMsg'})
 		endif
 		SetFileType(bufnr, 'Image')
 	elseif index(keys(g:popup_preview.filter), type) != -1
@@ -201,23 +235,23 @@ export def Preview(id: number, p: string): void
 			popup_settext(id, systemlist(filter))
 			if v:shell_error != 0
 				popup_settext(id, [ $'<Failed to execute ''{join(filter)}''>'])
-				popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
+				popup_setoptions(id, {highlight: 'PopupPreviewWarningMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupPreviewWarningMsg'})
 				SetFileType(bufnr, 'WarningMsg')
 			else
 				SetFileType(bufnr, 'Stdoutput')
 			endif
 		else
 			popup_settext(id, [ $'<filter command ''{filter[0]}'' can not executable>'])
-			popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
+			popup_setoptions(id, {highlight: 'PopupPreviewWarningMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupPreviewWarningMsg'})
 			SetFileType(bufnr, 'WarningMsg')
 		endif
 	elseif general_function#IsBinary(p)
 		popup_settext(id, '<Binary file>')
-		popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
+		popup_setoptions(id, {highlight: 'PopupPreviewMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupPreviewMsg'})
 		SetFileType(bufnr, 'WarningMsg')
 	elseif getfsize(p) > 104851000 # テキストファイルで 100 MB (100*1024*1024) より大きい
 		popup_settext(id, ['<Too large file size>', $'path: {p}', $'size:  {HumanReadableSize(getfsize(p))}'])
-		popup_setoptions(id, {highlight: 'WarningMsg', highlights: 'PopupTitle:Pmenu,Popup:WarningMsg'})
+		popup_setoptions(id, {highlight: 'PopupPreviewMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupPreviewMsg'})
 	else
 		popup_settext(id, readfile(p))
 		SetFileType(bufnr, type)
