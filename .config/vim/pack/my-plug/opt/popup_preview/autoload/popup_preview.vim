@@ -153,7 +153,7 @@ export def Preview(id: number, p: string): void
 	if istalled_popup_image
 		popup_image#Clear(id)
 	endif
-	popup_setoptions(id, {highlight: 'Pmenu', highlights: 'PopupTitle:Pmenu,Popup:Pmenu'})
+	popup_setoptions(id, {firstline: 1, highlight: 'Pmenu', highlights: 'PopupTitle:Pmenu,Popup:Pmenu'})
 	if isdirectory(p)
 		var files: list<dict<any>> = GetFileInfo(p)
 		var max_len: number = max(files->mapnew((_, v) => len(v.size_s)))
