@@ -114,17 +114,8 @@ def Hide(tabnr: number, id: number): void
 enddef
 
 export def Clear(id: number): void
-	var opts: dict<any> = SaveOrignalOption(id)->filter((k, _) => k !~# '^\(\(max\|min\)\(width\|height\)\|col\|line\)$')
-	var default_opts: dict<any> = deepcopy(getwinvar(id, 'popup_image', {options: {}, clear: {}}))
-
-	if !has_key(opts, 'image')
-		extend(default_opts.options, extendnew(opts, default_opts.clear))
-		popup_setoptions(id, default_opts.options)
-		setwinvar(id, 'popup_image', default_opts)
-	else
-		popup_setoptions(id, extendnew(default_opts.options, default_opts.clear))
-		redraw!
-	endif
+	SaveOrignalOption(id)
+	popup_setoptions(id, getwinvar(id, 'popup_image', {clear: {}}).clear)
 enddef
 
 export def WarningMsg(id: number): void
@@ -158,10 +149,6 @@ def DummyDone(_: bool)
 enddef
 
 export def Preview(id: number, f: string, OnDone: func(bool) = DummyDone): bool
-	popup_settext(id, ['Making Image Data...'])
-	popup_setoptions(id, {highlight: 'PopupImageMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupImageMsg'})
-	redraw
-
 	timer_start(1, (_) => {
 		var success = GenerateAndSetImage(id, f)
 
@@ -241,6 +228,9 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 	if ft =~# '^video/' # video の最初の一割時点の時刻
 		silent t = ['-ss', $'{str2nr(system([ 'ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', p ])) / 10.0}']
 	endif
+	popup_settext(id, ['Making Image Data...'])
+	popup_setoptions(id, {highlight: 'PopupImageMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupImageMsg'})
+	redraw
 	if ft ==# 'application/pdf' || ft ==# 'image/x-eps' || ft ==# 'image/eps' || ft ==# 'application/postscript'
 		var resolution: number
 		var resolution_s: string
