@@ -57,6 +57,7 @@ def SaveOrignalOption(id: number): dict<any>
 			pre_info: { # 直前に表示した情報
 				maxwidth: 0,
 				maxheight: 0,
+				fit_zoom: true,
 				path: ''
 			},
 			tab_leave_close: false, # タブページの切り替えによって閉じられたたか?
@@ -95,12 +96,12 @@ def Show(tabnr: number, id: number): void # タブ・ページの切り替えに
 	var opts: dict<any> = popup_getoptions(id)
 	var win_opts: dict<any> = getwinvar(id, 'popup_image', {tab_leave_close: false})
 
-	if tabpagenr() == tabnr && index(popup_list(), id) != -1
+	if tabpagenr() == tabnr && index(popup_list(), id) != -1 && popup_getpos(id).visible
 		if win_opts.tab_leave_close
 			popup_show(id)
 		endif
 		if get(popup_getoptions(id), 'image', {}) != {}
-			GenerateAndSetImage(id, getwinvar(id, 'popup_image', {pre_info: {path: '' }}).pre_info.path)
+			GenerateAndSetImage(id, getwinvar(id, 'popup_image', {pre_info: {path: '' }}).pre_info.path, 0)
 		endif
 		win_opts.tab_leave_close = false
 	endif
@@ -150,9 +151,9 @@ enddef
 def DummyDone(_: bool)
 enddef
 
-export def Preview(id: number, f: string, OnDone: func(bool) = DummyDone): bool
+export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = DummyDone): bool
 	timer_start(1, (_) => {
-		var success = GenerateAndSetImage(id, f)
+		var success = GenerateAndSetImage(id, f, z)
 
 		if OnDone != null
 			OnDone(success)
@@ -170,10 +171,11 @@ def DefaultOpts(o: dict<any>, d: dict<any>, key: string): string
 	endif
 enddef
 
-def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動画、PDF を表示
+def GenerateAndSetImage(id: number, f: string, z: number = 0): bool # パス f の画像、動画、PDF を表示
 	var opts: dict<any> = SaveOrignalOption(id)
 	var max_w: number # popup の最大桁数
 	var max_h: number # popup の最大行数
+	var fit_zoom: bool
 	if !executable('mimetype')
 		AddErrorMessage(id, ['Need ''mimetype'' command'])
 		return false
@@ -193,7 +195,7 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 		var cols: number
 		var lines: number
 
-		if scale > 1
+		if fit_zoom && scale > 1
 			scale = max([g:popup_image_options.min_size.x * 5.0 / w * g:popup_image_options.pt2px.x / 72,
 				g:popup_image_options.min_size.y * 10.0 / h * g:popup_image_options.pt2px.y / 72])
 			if scale <= 1
@@ -245,6 +247,15 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 	popup_settext(id, ['Making Image Data...'])
 	popup_setoptions(id, {highlight: 'PopupImageMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupImageMsg'})
 	redraw
+	if z == 0
+		fit_zoom = win_opts.pre_info.fit_zoom
+	elseif z == 1
+		extend(win_opts.pre_info, {fit_zoom: false})
+		fit_zoom = false
+	else # if z == -1
+		extend(win_opts.pre_info, {fit_zoom: true})
+		fit_zoom = true
+	endif
 	if ft ==# 'application/pdf' || ft ==# 'image/x-eps' || ft ==# 'image/eps' || ft ==# 'application/postscript'
 		var resolution: number
 		var resolution_s: string
@@ -310,7 +321,7 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 		padding: border == 0 && not_empty_title ? [1, padding[1], padding[2], padding[3]] : padding,
 		opacity: 100
 	})))
-	win_opts.pre_info = {maxwidth: max_w, maxheight: max_h, path: path}
+	extend(win_opts.pre_info, {maxwidth: max_w, maxheight: max_h, path: path})
 	setwinvar(id, 'popup_image', win_opts)
 	popup_settext(id, [])
 	redraw
@@ -324,6 +335,6 @@ export def ResetPreview(id: number, f: string): void
 	filter(opts, (k, _) => k !=# 'image')
 	popup_setoptions(id, opts)
 	if popup_getpos(id).visible
-		GenerateAndSetImage(id, f)
+		GenerateAndSetImage(id, f, 0)
 	endif
 enddef

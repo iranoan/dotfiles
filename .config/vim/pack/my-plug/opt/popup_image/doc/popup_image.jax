@@ -58,27 +58,26 @@ License: GPL Ver.3.
 	    popup_close(id)
 	    return
 	    }})
-	popup_image#Preview(id, "sample.jpg")
+	popup_image#Preview(id, "sample.jpg", 1)
 <
 
-上記の例では、カレントディレクトリにある sample.jpg を表示し、何らかの入力があ
-れば閉じる
-
-どこにどのような大きさで表示するかは、|popup_create()|, |popup_setoptions()|
-によって制御する
-
-ただし
-* タイトルがなければボーダー非表示がデフォルト
-* 画像表示の最大の大きさは、ウィンドウの幅と高さ
-  実際には設定 (|popup_image_options-pt2px|)に依存し、収まりきらないときは縮小
-  表示する
-* 小さすぎるものは拡大 (→|popup_image_options-min_size|)
-* 変換の成否を得たいときは、次のようにする
-  次の例では、変換できないとき、その理由を表示する        *popup_image-warning* >vim
-		popup_image#Preview(id, 'sample.jpg', (v) => {
-		    if !v
-		        popup_image#WarningMsg(id)
-		    endif
+上記の例では
+* カレントディレクトリにある sample.jpg を表示し、何らかの入力で閉じる
+* 表示方法は |popup_create()|, |popup_setoptions()| によって指定される
+  |popup_create-argument| による
+* ただしタイトルがなければボーダー非表示がデフォルト
+  - 画像表示の最大の大きさは、ウィンドウの幅と高さ
+    実際には設定 (|popup_image_options-pt2px|) に依存し、収まりきらないときは縮
+    小表示する
+  - 小さすぎるものは拡大 (→|popup_image_options-min_size|)
+  - ウィンドウより小さい時に拡大するには後者の例のように第 3 引数に 1 指定
+    (|popup_image-function|)
+  - 次は実行失敗時の Vim9 Script によるその理由の表示例    *popup_image-warning*
+>vim
+		popup_image#Preview(id, 'sample.jpg', 0 (v) => {
+			if !v
+				popup_image#WarningMsg(id)
+			endif
 		})
 <
 ==============================================================================
@@ -110,9 +109,15 @@ min_size~
                                                           *popup_image-function*
 関数~
 
-Preview({|winid|}, {path}, [{func}])~
+Preview({|winid|}, {path}, [{zoom}[, {func}]])~
 	* {|windi|} 画像表示する |popup| の |window-ID|
 	* {path} プレビューする画像ファイルのパス
+	* {zoom} 無指定可能
+	         -1: ウィンドウ・サイズより画像が大きければ縮小する
+	          1: ウィンドウ・サイズに合わせて画像を拡大縮小する
+	          0: デフォルト
+	             以前の状態から変えない
+	             1, -1 の指定がされたことがなければ画像が大きければ縮小する
 	* {func} 関数の成功/失敗時の処理関数 (|popup_image-warning| 参照)
 
 WarningMsg({|winid|})~
