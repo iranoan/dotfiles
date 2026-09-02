@@ -62,6 +62,8 @@ def SaveOrignalOption(id: number): dict<any>
 			tab_leave_close: false, # タブページの切り替えによって閉じられたたか?
 			err_msg: [],
 			options: { # イメージ表示で変更するオプション
+				maxwidth:  opts.maxwidth,
+				maxheight: opts.maxheight,
 				highlight: opts.highlight,
 				highlights: opts.highlights,
 				border: get(opts, 'border', [0, 0, 0, 0]),
@@ -170,27 +172,37 @@ enddef
 
 def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動画、PDF を表示
 	var opts: dict<any> = SaveOrignalOption(id)
+	var max_w: number # popup の最大桁数
+	var max_h: number # popup の最大行数
 	if !executable('mimetype')
 		AddErrorMessage(id, ['Need ''mimetype'' command'])
 		return false
 	endif
 	var win_opts: dict<any> = getwinvar(id, 'popup_image', {highlight: '', highlights: ''})
-	var max_w: number = get(opts, 'maxwidth', 0)
-	var max_h: number = get(opts, 'maxheight', 0)
+	if win_opts.options.maxwidth == 0 || win_opts.options.maxheight == 0 # 呼び出し時にウィンドウサイズの指定がない
+		max_w = &columns
+		max_h = &lines
+	else
+		max_w = get(opts, 'maxwidth', 0)
+		max_h = get(opts, 'maxheight', 0)
+	endif
 
 	def ScaleImage(w: number, h: number): list<number>
 		var scale: float = min([max_w * 5.0 / w * g:popup_image_options.pt2px.x / 72,
 			max_h * 10.0 / h * g:popup_image_options.pt2px.y / 72])
+		var cols: number
+		var lines: number
 
 		if scale > 1
 			scale = max([g:popup_image_options.min_size.x * 5.0 / w * g:popup_image_options.pt2px.x / 72,
 				g:popup_image_options.min_size.y * 10.0 / h * g:popup_image_options.pt2px.y / 72])
-			if scale > 1
-				return [float2nr(round(w * scale)), float2nr(round(h * scale))]
+			if scale <= 1
+				scale = 1.0
 			endif
-			return [w, h]
 		endif
-		return [float2nr(round(w * scale)), float2nr(round(h * scale))]
+		cols =  float2nr(round(scale / 5.0 * w / g:popup_image_options.pt2px.x * 72 + 0.5))
+		lines = float2nr(round(scale / 10.0 * h / g:popup_image_options.pt2px.y * 72 + 0.5))
+		return [float2nr(round(w * scale)), float2nr(round(h * scale)), cols, lines]
 	enddef
 
 	var p: string = resolve(expand(f, true))
@@ -204,6 +216,8 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 	var border: number = get(opts, 'border', []) == [] ? 1 : opts.border[0]
 	var padding: list<number> = get(opts, 'padding', [0, 0, 0, 0])
 	var not_empty_title: bool = get(opts, 'title', '') !=# ''
+	var img_cols: number # 画像の桁数相当サイズ
+	var img_lines: number # 画像の行数相当サイズ
 
 	max_w = max_w == 0  ? &columns : max_w
 	max_h = max_h == 0  ? &lines   : max_h
@@ -249,7 +263,7 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 			])
 			return false
 		endif
-		[w, h] = ScaleImage(w_h[2] - w_h[0], w_h[3] - w_h[1])
+		[w, h, img_cols, img_lines] = ScaleImage(w_h[2] - w_h[0], w_h[3] - w_h[1])
 			img_data = SystemBlob(['sh', '-c', $'gs -q -dNOPAUSE -dBATCH -dEPSCrop -sDEVICE=ppmraw -r600 -dFirstPage=1 -dLastPage=1 -sOutputFile=- {shellescape(p)} | ffmpeg -v error -i - -vf scale={w}:{h} -f rawvideo -pix_fmt rgb24 -'])
 	else
 		var temp: string
@@ -265,7 +279,7 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 		endif
 		silent [w, h] = split(system(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height', '-of', 'csv=p=0', p]), ',')
 			->map((_, v) => str2nr(v))
-		[w, h] = ScaleImage(w, h)
+		[w, h, img_cols, img_lines] = ScaleImage(w, h)
 		img_data = SystemBlob(['ffmpeg'] + t + ['-i', p, '-vf', $'scale={w}:{h}', '-vframes', '1', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'])
 		if temp !=# ''
 			delete(temp)
@@ -282,8 +296,16 @@ def GenerateAndSetImage(id: number, f: string): bool # パス f の画像、動�
 		])
 		return false
 	endif
+	if win_opts.options.maxwidth == 0 || win_opts.options.maxheight == 0 # 呼び出し時にウィンドウサイズの指定がない
+		max_w = img_cols
+		max_h = img_lines
+	endif
 	popup_setoptions(id, extendnew(opts, extendnew(win_opts.options, {
 		image: {data: img_data, width: w, height: h},
+		minwidth: max_w,
+		minheight: max_h,
+		maxwidth: max_w,
+		maxheight: max_h,
 		border: not_empty_title ? opts.border : [0, 0, 0, 0],
 		padding: border == 0 && not_empty_title ? [1, padding[1], padding[2], padding[3]] : padding,
 		opacity: 100
