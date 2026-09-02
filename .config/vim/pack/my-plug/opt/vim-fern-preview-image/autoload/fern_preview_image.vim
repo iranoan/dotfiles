@@ -125,7 +125,7 @@ def Risize(cmdwin: bool): void
 	for v in getbufinfo()
 			->filter((_, v) => has_key(v.variables, 'fern_preview_image'))
 			->map((_, v) => v.variables.fern_preview_image)
-			->filter((_, v) => v.winid != -1)
+			->filter((_, v) => v.winid != -1 && index(popup_list(), v.winid) != -1)
 		winid = v.winid
 		# 表示/非表示に関係なくサイズ変更はしておく必要あり
 		# そうしないと現在別タブページで、元のタブページに戻った時にリサイズされない
