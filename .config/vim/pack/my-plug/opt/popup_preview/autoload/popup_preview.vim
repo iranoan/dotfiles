@@ -166,7 +166,7 @@ def SetFileType(n: number, t: string): void
 	endtry
 enddef
 
-export def Preview(id: number, p: string): void
+export def Preview(id: number, p: string, z: number = 0): void
 	var type: string = GetFileType(p)
 	var bufnr: number = winbufnr(id)
 
@@ -207,7 +207,7 @@ export def Preview(id: number, p: string): void
 		SetFileType(bufnr, 'WarningMsg')
 	elseif index(g:popup_preview.image, tolower(fnamemodify(p, ':e'))) != -1
 		if istalled_popup_image
-			popup_image#Preview(id, p, (v) => {
+			popup_image#Preview(id, p, z, (v) => {
 				if !v
 					popup_image#WarningMsg(id)
 				endif
