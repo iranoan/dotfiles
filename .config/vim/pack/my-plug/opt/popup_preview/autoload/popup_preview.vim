@@ -91,7 +91,8 @@ def GetFileInfo(dir: string): list<dict<any>>
 			time: time,
 			time_iso: strftime('%F %T', time),
 			name: './',
-			link: ''
+			link: '',
+			broken_link: false
 		}]
 	endif
 	for p in readdir(d)->sort('l')
@@ -108,7 +109,8 @@ def GetFileInfo(dir: string): list<dict<any>>
 				time: time,
 				time_iso: strftime('%F %T', time),
 				name: p,
-				link: ''
+				link: '',
+				broken_link: false
 			})
 		elseif type ==# 'link'
 			f = resolve(f)
@@ -121,7 +123,8 @@ def GetFileInfo(dir: string): list<dict<any>>
 					time: localtime(),
 					time_iso: strftime('%F %T'),
 					name: p,
-					link: f
+					link: f,
+					broken_link: true
 				})
 			else
 				link_type = getftype(f) ==# 'dir'
@@ -135,20 +138,22 @@ def GetFileInfo(dir: string): list<dict<any>>
 					time: time,
 					time_iso: strftime('%F %T', time),
 					name: p,
-					link: $'{f}{link_type ? '/' : ''}'
+					link: $'{f}{link_type ? '/' : ''}',
+					broken_link: false
 				})
 			endif
 		else
 			size = getfsize(f)
 			add(info, {
 				type: 2,
-				permission: $'-{getfperm(f)}',
+				permission: $'{type ==# 'file' ? '-' : type ==# 'bdev' ? 'b' : type ==# 'cdev' ? 'c' : type ==# 'socket' ? 's' : 'p'}{getfperm(f)}',
 				size: size,
 				size_s: HumanReadableSize(size),
 				time: time,
 				time_iso: strftime('%F %T', time),
 				name: p,
-				link: ''
+				link: '',
+				broken_link: false
 			})
 		endif
 	endfor
@@ -198,7 +203,7 @@ export def Preview(id: number, p: string, z: number = 0): void
 		                       )
 		                       ->mapnew((_, v) =>
 		                                 printf($'%s %{max_len}s %s %s%s',
-		                                 	v.permission, v.size_s, v.time_iso, v.name, v.link !=# '' ? $' -> {v.link}' : ''))
+		                                 v.permission, v.size_s, v.time_iso, v.name, v.link ==# '' ? '' : $' {v.broken_link ? '!->' : '->'} {v.link}'))
 		)
 		SetFileType(bufnr, 'LsLike')
 	elseif !filereadable(p)
