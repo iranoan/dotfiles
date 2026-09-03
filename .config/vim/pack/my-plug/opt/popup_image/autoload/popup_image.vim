@@ -221,6 +221,14 @@ def GenerateAndSetImage(id: number, f: string, z: number = 0): bool # パス f �
 	var img_cols: number # 画像の桁数相当サイズ
 	var img_lines: number # 画像の行数相当サイズ
 
+	if glob(p, true, true) == []
+		AddErrorMessage(id, [$'Don''t Exist: {p}'])
+		return false
+	endif
+	if !filereadable(p)
+		AddErrorMessage(id, [$'Unreaadable: {p}'])
+		return false
+	endif
 	max_w = max_w == 0  ? &columns : max_w
 	max_h = max_h == 0  ? &lines   : max_h
 	if has_key(opts, 'image') # 連続して呼び出されたときに、消さないと後ろに残る
