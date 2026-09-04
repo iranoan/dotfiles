@@ -32,7 +32,7 @@ nnoremap <buffer><Leader>gcc <Cmd>call personal#Gcc()<CR>
 # --------------------------------
 # その他 {{{2
 # setlocal keywordprg=:terminal\ ++close\ man\ 3 " ヘルプ
-setlocal equalprg=clang-format\ - # clang-format
+# setlocal equalprg=clang-format\ - # clang-format←ファイルの先頭から出ないとインデント量を正しく計算できない
 if filereadable('Makefile')
 	setlocal makeprg=make
 elseif executable('clang')
