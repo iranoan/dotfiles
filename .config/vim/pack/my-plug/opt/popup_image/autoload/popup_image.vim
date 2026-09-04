@@ -152,6 +152,10 @@ def DummyDone(_: bool)
 enddef
 
 export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = DummyDone): bool
+	SaveOrignalOption(id)
+	popup_settext(id, ['Making Image Data...'])
+	popup_setoptions(id, {highlight: 'PopupImageMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupImageMsg'})
+	redraw
 	timer_start(1, (_) => {
 		var success = GenerateAndSetImage(id, f, z)
 
@@ -252,9 +256,6 @@ def GenerateAndSetImage(id: number, f: string, z: number = 0): bool # パス f �
 	if ft =~# '^video/' # video の最初の一割時点の時刻
 		silent t = ['-ss', $'{str2nr(system([ 'ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', p ])) / 10.0}']
 	endif
-	popup_settext(id, ['Making Image Data...'])
-	popup_setoptions(id, {highlight: 'PopupImageMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupImageMsg'})
-	redraw
 	if z == 0
 		fit_zoom = win_opts.pre_info.fit_zoom
 	elseif z == 1
