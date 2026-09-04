@@ -117,11 +117,17 @@ def Hide(tabnr: number, id: number): void
 enddef
 
 export def Clear(id: number): void
+	if index(popup_list(), id) == -1
+		return
+	endif
 	SaveOrignalOption(id)
 	popup_setoptions(id, getwinvar(id, 'popup_image', {clear: {}}).clear)
 enddef
 
 export def WarningMsg(id: number): void
+	if index(popup_list(), id) == -1
+		return
+	endif
 	SaveOrignalOption(id)
 	popup_settext(id, remove(getwinvar(id, 'popup_image', {err_msg: []}).err_msg, -1))
 	popup_setoptions(id, {highlight: 'PopupImageWarningMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupImageWarningMsg'})
@@ -152,6 +158,9 @@ def DummyDone(_: bool)
 enddef
 
 export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = DummyDone): bool
+	if index(popup_list(), id) == -1
+		return true
+	endif
 	SaveOrignalOption(id)
 	popup_settext(id, ['Making Image Data...'])
 	popup_setoptions(id, {highlight: 'PopupImageMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupImageMsg'})
@@ -176,7 +185,8 @@ def DefaultOpts(o: dict<any>, d: dict<any>, key: string): string
 enddef
 
 def GenerateAndSetImage(id: number, f: string, z: number = 0): bool # パス f の画像、動画、PDF を表示
-	var opts: dict<any> = SaveOrignalOption(id)
+	# var opts: dict<any> = SaveOrignalOption(id)
+	var opts: dict<any> = popup_getoptions(id)
 	var max_w: number # popup の最大桁数
 	var max_h: number # popup の最大行数
 	var fit_zoom: bool
@@ -338,6 +348,9 @@ def GenerateAndSetImage(id: number, f: string, z: number = 0): bool # パス f �
 enddef
 
 export def ResetPreview(id: number, f: string): void
+	if index(popup_list(), id) == -1
+		return
+	endif
 	var opts: dict<any> = deepcopy(getwinvar(id, 'popup_image', {options: {}}).options)
 
 	extend(opts, popup_getoptions(id))
