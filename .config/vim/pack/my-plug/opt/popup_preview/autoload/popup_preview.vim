@@ -239,24 +239,24 @@ export def Preview(id: number, p: string, z: number = 0): void
 		if executable(filter[0])
 			popup_settext(id, systemlist(filter))
 			if v:shell_error != 0
-				popup_settext(id, [ $'<Failed to execute ''{join(filter)}''>'])
-				popup_setoptions(id, {highlight: 'PopupPreviewWarningMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupPreviewWarningMsg'})
+				popup_settext(id, ['<Failed to execute>', $"'{join(filter)}'", $'{filter}'])
+				popup_setoptions(id, {wrap: true, highlight: 'PopupPreviewWarningMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupPreviewWarningMsg'})
 				SetFileType(bufnr, 'WarningMsg')
 			else
 				SetFileType(bufnr, 'Stdoutput')
 			endif
 		else
 			popup_settext(id, [ $'<filter command ''{filter[0]}'' can not executable>'])
-			popup_setoptions(id, {highlight: 'PopupPreviewWarningMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupPreviewWarningMsg'})
+			popup_setoptions(id, {wrap: true, highlight: 'PopupPreviewWarningMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupPreviewWarningMsg'})
 			SetFileType(bufnr, 'WarningMsg')
 		endif
 	elseif general_function#IsBinary(p)
 		popup_settext(id, '<Binary file>')
-		popup_setoptions(id, {highlight: 'PopupPreviewMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupPreviewMsg'})
+		popup_setoptions(id, {wrap: true, highlight: 'PopupPreviewMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupPreviewMsg'})
 		SetFileType(bufnr, 'WarningMsg')
 	elseif getfsize(p) > 104851000 # テキストファイルで 100 MB (100*1024*1024) より大きい
 		popup_settext(id, ['<Too large file size>', $'path: {p}', $'size:  {HumanReadableSize(getfsize(p))}'])
-		popup_setoptions(id, {highlight: 'PopupPreviewMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupPreviewMsg'})
+		popup_setoptions(id, {wrap: true, highlight: 'PopupPreviewMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupPreviewMsg'})
 	else
 		popup_settext(id, readfile(p))
 		SetFileType(bufnr, type)
