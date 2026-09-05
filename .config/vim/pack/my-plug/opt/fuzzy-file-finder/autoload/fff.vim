@@ -407,6 +407,7 @@ def WarningMsg(s: list<string>): void
 		borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
 		close: 'click',
 		padding: [0, 1, 0, 1],
+		wrap: true,
 		filter: (id, _) => {
 			popup_close(id)
 			return
