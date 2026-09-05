@@ -92,6 +92,7 @@ function set_asyncomplete#main() abort
 	packadd asyncomplete-spell
 	call asyncomplete#register_source(asyncomplete#sources#spell#get_source_options(#{
 				\ priority: 20,
+				\ blocklist: ['fuzzy-file-finder'],
 				\ allowlist: ['*']
 				\ }))
 	" }}}
