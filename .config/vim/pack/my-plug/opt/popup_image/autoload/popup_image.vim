@@ -62,6 +62,7 @@ def SaveOrignalOption(id: number): dict<any>
 			},
 			tab_leave_close: false, # タブページの切り替えによって閉じられたたか?
 			err_msg: [],
+			job: null_job,
 			options: { # イメージ表示で変更するオプション
 				maxwidth:  opts.maxwidth,
 				maxheight: opts.maxheight,
@@ -101,7 +102,7 @@ def Show(tabnr: number, id: number): void # タブ・ページの切り替えに
 			popup_show(id)
 		endif
 		if get(popup_getoptions(id), 'image', {}) != {}
-			GenerateAndSetImage(id, getwinvar(id, 'popup_image', {pre_info: {path: '' }}).pre_info.path, 0)
+			Preview(id, getwinvar(id, 'popup_image', {pre_info: {path: '' }}).pre_info.path, 0)
 		endif
 		win_opts.tab_leave_close = false
 	endif
@@ -133,68 +134,34 @@ export def WarningMsg(id: number): void
 	popup_setoptions(id, {highlight: 'PopupImageWarningMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupImageWarningMsg'})
 enddef
 
-def SystemBlob(cmd: list<string>): blob
-	var img: blob
-	var b: blob
-	var job: job = job_start(cmd, {
-		out_io: 'pipe',
-		out_mode: 'raw',
-		err_io: 'null',
-	})
-	var ch: channel = job_getchannel(job)
-
-	while ch_status(ch) ==# 'open' || ch_status(ch) ==# 'buffered'
-		b = ch_readblob(ch)
-		if len(b) > 0
-			img += b
-		else
-			sleep 1m  # CPU100%消費の張り付き防止
-		endif
-	endwhile
-	return img
-enddef
-
 def DummyDone(_: bool)
 enddef
 
-export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = DummyDone): bool
+export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = DummyDone): void
 	if index(popup_list(), id) == -1
-		return true
+		AddErrorMessage(id, ['Already close pop-up'])
+		OnDone(false)
+		return
 	endif
-	SaveOrignalOption(id)
+	var opts: dict<any> = SaveOrignalOption(id)
+	var win_opts: dict<any> = getwinvar(id, 'popup_image', {highlight: '', highlights: ''})
 	popup_settext(id, ['Making Image Data...'])
 	popup_setoptions(id, {highlight: 'PopupImageMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupImageMsg'})
-	redraw
-	timer_start(1, (_) => {
-		var success = GenerateAndSetImage(id, f, z)
 
-		if OnDone != null
-			OnDone(success)
-		endif
-	})
-
-	return true
-enddef
-
-def DefaultOpts(o: dict<any>, d: dict<any>, key: string): string
-	if has_key(o, key)
-		return o[key]
-	else
-		return d[key]
+	if win_opts.job != null_job && job_status(win_opts.job) == 'run'
+		job_stop(win_opts.job)
+		extend(win_opts, {job: null_job})
+		# メッセージを表示したいが、この後に続く処理ですぐに書き換わってしまう
 	endif
-enddef
 
-def GenerateAndSetImage(id: number, f: string, z: number = 0): bool # パス f の画像、動画、PDF を表示
-	# var opts: dict<any> = SaveOrignalOption(id)
-	var opts: dict<any> = popup_getoptions(id)
 	var max_w: number # popup の最大桁数
 	var max_h: number # popup の最大行数
 	var fit_zoom: bool
 	if !executable('mimetype')
 		AddErrorMessage(id, ['Need ''mimetype'' command'])
-		return false
+		OnDone(false)
+		return
 	endif
-	var win_opts: dict<any> = getwinvar(id, 'popup_image', {highlight: '', highlights: ''})
 	if win_opts.options.maxwidth == 0 || win_opts.options.maxheight == 0 # 呼び出し時にウィンドウサイズの指定がない
 		max_w = &columns
 		max_h = &lines
@@ -226,8 +193,7 @@ def GenerateAndSetImage(id: number, f: string, z: number = 0): bool # パス f �
 	var w: number
 	var h: number
 	var t: list<string>
-	silent var ft: string = systemlist(['mimetype', '--brief', p])[0]
-	var img_data: blob
+	var ft: string = systemlist(['mimetype', '--brief', p])[0]
 	var w_h: list<number>
 	var border: number = get(opts, 'border', []) == [] ? 1 : opts.border[0]
 	var padding: list<number> = get(opts, 'padding', [0, 0, 0, 0])
@@ -235,13 +201,87 @@ def GenerateAndSetImage(id: number, f: string, z: number = 0): bool # パス f �
 	var img_cols: number # 画像の桁数相当サイズ
 	var img_lines: number # 画像の行数相当サイズ
 
+	def SetImage(img_data: blob): bool
+		if len(img_data) != w * h * 3
+			AddErrorMessage(id, [
+				'''data size'' is not eqal ''width x height x 3''',
+				$'file path:          {p}',
+				$'data size:          {len(img_data)}',
+				$'width:              {w}',
+				$'height:             {h}',
+				$'width x height x 3: {w * h * 3}',
+			])
+			return false
+		endif
+		if win_opts.options.maxwidth == 0 || win_opts.options.maxheight == 0 # 呼び出し時にウィンドウサイズの指定がない
+			max_w = img_cols
+			max_h = img_lines
+		endif
+		popup_setoptions(id, extendnew(opts, extendnew(win_opts.options, {
+			image: {data: img_data, width: w, height: h},
+			minwidth: max_w,
+			minheight: max_h,
+			maxwidth: max_w,
+			maxheight: max_h,
+			border: not_empty_title ? opts.border : [0, 0, 0, 0],
+			padding: border == 0 && not_empty_title ? [1, padding[1], padding[2], padding[3]] : padding,
+			opacity: 100
+		})))
+		extend(win_opts.pre_info, {maxwidth: max_w, maxheight: max_h, path: path})
+		setwinvar(id, 'popup_image', win_opts)
+		popup_settext(id, [])
+		redraw
+		return true
+	enddef
+
+	def SystemBlob(cmd: list<string>, OnComplete: func(bool)): void
+		var img_data: blob
+		var err_line: string
+		extend(win_opts, {job: job_start(cmd, {
+			out_io: 'pipe',
+			err_io: 'pipe',
+			out_mode: 'blob',
+			err_mode: 'nl',
+			out_cb: (_, data: blob) => {
+				img_data += data
+			},
+			err_cb: (_, msg: string) => {
+				err_line ..= msg
+			},
+			exit_cb: (_, status: number) => {
+				extend(win_opts, {job: null_job})
+				if status == 0
+					var success: bool = SetImage(img_data)
+					if OnComplete != null
+						OnComplete(success)
+					endif
+				else
+					var stdout: list<string>
+					if OnComplete != null
+						if type(img_data) == v:t_blob && img_data != null_blob
+							try
+								stdout = blob2str(img_data)
+							catch /^Vim\%((\S\+)\)\=:E1515:/
+							endtry
+						endif
+						AddErrorMessage(id, [$'Convert Error or Cancel Image Data Conversion: {p}'] + stdout + split(err_line, "[\n\r]"))
+						OnComplete(false)
+					endif
+				endif
+			}
+		})})
+		return
+	enddef
+
 	if glob(p, true, true) == []
 		AddErrorMessage(id, [$'Don''t Exist: {p}'])
-		return false
+		OnDone(false)
+		return
 	endif
 	if !filereadable(p)
 		AddErrorMessage(id, [$'Unreaadable: {p}'])
-		return false
+		OnDone(false)
+		return
 	endif
 	max_w = max_w == 0  ? &columns : max_w
 	max_h = max_h == 0  ? &lines   : max_h
@@ -252,16 +292,19 @@ def GenerateAndSetImage(id: number, f: string, z: number = 0): bool # パス f �
 	if ft ==# 'application/pdf' || ft ==# 'image/x-eps' || ft ==# 'image/eps' || ft ==# 'application/postscript' || ft == 'application/epub+zip'
 		if !executable('gs') && !executable('ffmpeg')
 			AddErrorMessage(id, ['Need ''GhostScript'' and ''FFmpeg'' for PDF/eps/postscript'])
-			return false
+			OnDone(false)
+			return
 		endif
 	elseif ft =~# '^video/' || ft =~# '^image/'
 		if !executable('ffprobe') || !executable('ffmpeg')
 			AddErrorMessage(id, ['Need ''FFmpeg'' for image/video'])
-			return false
+			OnDone(false)
+			return
 		endif
 	else
 		AddErrorMessage(id, ['support mimetype', 'video/*', 'image/*', 'application/pdf', 'application/postscript'])
-		return false
+		OnDone(false)
+		return
 	endif
 	if ft =~# '^video/' # video の最初の一割時点の時刻
 		silent t = ['-ss', $'{str2nr(system([ 'ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', p ])) / 10.0}']
@@ -291,10 +334,11 @@ def GenerateAndSetImage(id: number, f: string, z: number = 0): bool # パス f �
 				'Not Get BoundingBox',
 				$'file path: {p}',
 			])
-			return false
+			OnDone(false)
+			return
 		endif
 		[w, h, img_cols, img_lines] = ScaleImage(w_h[2] - w_h[0], w_h[3] - w_h[1])
-			img_data = SystemBlob(['sh', '-c', $'gs -q -dNOPAUSE -dBATCH -dEPSCrop -sDEVICE=ppmraw -r600 -dFirstPage=1 -dLastPage=1 -sOutputFile=- {shellescape(p)} | ffmpeg -v error -i - -vf scale={w}:{h} -f rawvideo -pix_fmt rgb24 -'])
+		SystemBlob(['sh', '-c', $'gs -q -dNOPAUSE -dBATCH -dEPSCrop -sDEVICE=ppmraw -r600 -dFirstPage=1 -dLastPage=1 -sOutputFile=- {shellescape(p)} | ffmpeg -v error -i - -vf scale={w}:{h} -f rawvideo -pix_fmt rgb24 -'], OnDone)
 	else
 		var temp: string
 		if ft ==# 'application/epub+zip' # Epub は隠し対応
@@ -304,47 +348,18 @@ def GenerateAndSetImage(id: number, f: string, z: number = 0): bool # パス f �
 				p = temp
 			else
 				AddErrorMessage(id, ['Epub need ''gnome-epub-thumbnailer'''])
-				return false
+				OnDone(false)
+				return
 			endif
 		endif
 		silent [w, h] = split(system(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height', '-of', 'csv=p=0', p]), ',')
 			->map((_, v) => str2nr(v))
 		[w, h, img_cols, img_lines] = ScaleImage(w, h)
-		img_data = SystemBlob(['ffmpeg'] + t + ['-i', p, '-vf', $'scale={w}:{h}', '-vframes', '1', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'])
+		SystemBlob(['ffmpeg'] + t + ['-i', p, '-vf', $'scale={w}:{h}', '-vframes', '1', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], OnDone)
 		if temp !=# ''
 			delete(temp)
 		endif
 	endif
-	if len(img_data) != w * h * 3
-		AddErrorMessage(id, [
-			'''data size'' is not eqal ''width x height x 3''',
-			$'file path:          {p}',
-			$'data size:          {len(img_data)}',
-			$'width:              {w}',
-			$'height:             {h}',
-			$'width x height x 3: {w * h * 3}',
-		])
-		return false
-	endif
-	if win_opts.options.maxwidth == 0 || win_opts.options.maxheight == 0 # 呼び出し時にウィンドウサイズの指定がない
-		max_w = img_cols
-		max_h = img_lines
-	endif
-	popup_setoptions(id, extendnew(opts, extendnew(win_opts.options, {
-		image: {data: img_data, width: w, height: h},
-		minwidth: max_w,
-		minheight: max_h,
-		maxwidth: max_w,
-		maxheight: max_h,
-		border: not_empty_title ? opts.border : [0, 0, 0, 0],
-		padding: border == 0 && not_empty_title ? [1, padding[1], padding[2], padding[3]] : padding,
-		opacity: 100
-	})))
-	extend(win_opts.pre_info, {maxwidth: max_w, maxheight: max_h, path: path})
-	setwinvar(id, 'popup_image', win_opts)
-	popup_settext(id, [])
-	redraw
-	return true
 enddef
 
 export def ResetPreview(id: number, f: string): void
@@ -357,6 +372,6 @@ export def ResetPreview(id: number, f: string): void
 	filter(opts, (k, _) => k !=# 'image')
 	popup_setoptions(id, opts)
 	if popup_getpos(id).visible
-		GenerateAndSetImage(id, f, 0)
+		Preview(id, f, 0)
 	endif
 enddef
