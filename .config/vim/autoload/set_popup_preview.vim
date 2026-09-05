@@ -18,8 +18,8 @@ function set_popup_preview#init()
 				\ 		odp: ['odp2text.sh'],
 				\ 		xlsx: ['xlsx2table.sh'],
 				\ 		ods: ['xlsx2table.sh'],
-				\ 		odt: ['soffice', '--convert-to', '"txt:Text', '(encoded):UTF8"', '--cat'],
-				\ 		docx: ['soffice', '--convert-to', '"txt:Text', '(encoded):UTF8"', '--cat'],
+				\ 		odt: ['soffice', '--headless', '--convert-to', '"txt:Text (encoded):UTF8"', '--cat'],
+				\ 		docx: ['soffice', '--headless', '--convert-to', '"txt:Text (encoded):UTF8"', '--cat'],
 				\ 	}
 				\}
 	packadd popup_preview
