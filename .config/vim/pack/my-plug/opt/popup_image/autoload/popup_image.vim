@@ -52,6 +52,7 @@ def SaveOrignalOption(id: number): dict<any>
 			clear: { # クリアする時に設定するオプション
 				highlight: opts.highlight,
 				highlights: opts.highlights,
+				wrap: opts.wrap,
 				image: {}
 			},
 			pre_info: { # 直前に表示した情報
@@ -146,7 +147,7 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 	var opts: dict<any> = SaveOrignalOption(id)
 	var win_opts: dict<any> = getwinvar(id, 'popup_image', {highlight: '', highlights: ''})
 	popup_settext(id, ['Making Image Data...'])
-	popup_setoptions(id, {highlight: 'PopupImageMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupImageMsg'})
+	popup_setoptions(id, {wrap: true, highlight: 'PopupImageMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupImageMsg'})
 
 	if win_opts.job != null_job && job_status(win_opts.job) == 'run'
 		job_stop(win_opts.job)
