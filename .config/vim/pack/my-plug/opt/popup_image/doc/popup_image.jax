@@ -136,7 +136,8 @@ Preview({|winid|}, {path}, [{zoom}[, {func}]])~
 	          1: ウィンドウ・サイズに合わせて画像を拡大縮小する
 	          0: デフォルト
 	             以前の状態から変えない
-	             1, -1 の指定がされたことがなければ画像が大きければ縮小する
+	             1, -1 の指定がされたことがなければ画像が大きければ縮小するが拡
+	             大はしない -1 と同じ動作
 	* {func} 関数の成功/失敗時の処理関数 (|popup_image-warning| 参照)
                                                *popup_image-warningmsg-function*
 WarningMsg({|winid|})~
