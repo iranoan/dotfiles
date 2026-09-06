@@ -39,7 +39,8 @@ augroup PopupImageHighlightMsg
 	autocmd ColorScheme * MakeHighlight()
 augroup END
 
-def AddErrorMessage(id: number, err_msg: list<string>): void
+export def AddErrorMessage(id: number, err_msg: list<string>): void
+	SaveOrignalOption(id)
 	var opts: dict<any> = getwinvar(id, 'popup_image', {err_msg: []})
 
 	setwinvar(id, 'popup_image', extendnew(opts, {err_msg: get(opts, 'err_msg', []) + [err_msg]}))
@@ -293,7 +294,7 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 		popup_setoptions(id, {image: {}})
 		redraw
 	endif
-	if ft ==# 'application/pdf' || ft ==# 'image/x-eps' || ft ==# 'image/eps' || ft ==# 'application/postscript' || ft == 'application/epub+zip'
+	if ft ==# 'application/pdf' || ft ==# 'image/x-eps' || ft ==# 'image/eps' || ft ==# 'application/postscript'
 		if !executable('gs') && !executable('ffmpeg')
 			AddErrorMessage(id, ['Need ''GhostScript'' and ''FFmpeg'' for PDF/eps/postscript'])
 			OnDone(false)
@@ -305,10 +306,6 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 			OnDone(false)
 			return
 		endif
-	else
-		AddErrorMessage(id, ['support mimetype', 'video/*', 'image/*', 'application/pdf', 'application/postscript'])
-		OnDone(false)
-		return
 	endif
 	if ft =~# '^video/' # video の最初の一割時点の時刻
 		silent t = ['-ss', $'{str2nr(system([ 'ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', p ])) / 10.0}']
@@ -345,16 +342,14 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 		SystemBlob(['sh', '-c', $'gs -q -dNOPAUSE -dBATCH -dEPSCrop -sDEVICE=ppmraw -r600 -dFirstPage=1 -dLastPage=1 -sOutputFile=- {shellescape(p)} | ffmpeg -v error -i - -vf scale={w}:{h} -f rawvideo -pix_fmt rgb24 -'], '', OnDone)
 	else
 		var temp: string
-		if ft ==# 'application/epub+zip' # Epub は隠し対応
-			if executable('gnome-epub-thumbnailer')
-				temp = $'{tempname()}.png'
-				systemlist(['gnome-epub-thumbnailer', $'{p}', $'{temp}'])
-				p = temp
-			else
-				AddErrorMessage(id, ['Epub need ''gnome-epub-thumbnailer'''])
+		var plugin: string = get(get(g:popup_image_options, 'plugin', {}), ft, '')
+		if plugin !=# ''
+				temp = call(plugin, [id, p])
+			if temp ==# ''
 				OnDone(false)
 				return
 			endif
+			p = temp
 		endif
 		silent [w, h] = split(system(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height', '-of', 'csv=p=0', p]), ',')
 			->map((_, v) => str2nr(v))
