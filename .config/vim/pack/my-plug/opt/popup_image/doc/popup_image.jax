@@ -111,7 +111,8 @@ plugin~
 
 	例: >vim
 		let g:popup_image_options = {plugin: {
-			\ 'application/epub+zip': 'popup_image#epub#SaveCoverImage'
+			\ 	'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'popup_image#pptx#SaveCoverImage',
+			\ 	'application/vnd.oasis.opendocument.presentation': 'popup_image#pptx#SaveCoverImage',
 			\ }}
 <
 	* mimetype をキー、値は mimetyp の時に呼び出す関数を指定する
@@ -121,6 +122,7 @@ plugin~
 	    + 変換に失敗した場合は空文字列を返す
 	  - エラー内容の保存には popup_image#AddErrorMessage() を用いる
 	    |popup_image-adderrormessage-function|
+	  - 上記の設定例の関数がサンプルになっている
 
 ==============================================================================
                                                           *popup_image-function*
