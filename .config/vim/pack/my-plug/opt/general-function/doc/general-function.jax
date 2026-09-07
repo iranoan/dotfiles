@@ -1,11 +1,11 @@
 *general-function* 汎用性のある関数を纏めてある
-
+                                                 *general_function#IsBinary()*
 IsBinary(path: string)~~
 
 path: ディレクトリ・ファイルのパス
 
 返り値: バイナリ・データなら true
-
+                                                *general_function#ExtendNew()*
 ExtendNew(o: any, y: any, over: string = '')~~
 
 |extendnew()| の拡張版
