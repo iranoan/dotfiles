@@ -23,13 +23,12 @@ def GetPath(): string
 	var line: string
 	var last_quote: number
 
-
 	if f !~# '/' # 元々のバッファの記載、もしくは補完候補の文字列がファイル名のみ
 		line = getline('.')[ : col('.') - 2]
 		if line =~# '[[''"(]' # ", ' [], () に挟まれている場合を想定して、カーソル位置より前にその記号があれば、それ以降を取得
 			line = line[ max([strridx(line, "'"), strridx(line, '"'), strridx(line, '['), strridx(line, '(')]) + 1 : ]
 		else # カーソル位置までの英数, _, - と / のみをパスの記述とする
-			line = matchstr(line, '[A-Za-z0-9/_-]\+$')
+			line = matchstr(line, '[A-Za-z0-9/_.-]\+$')
 		endif
 		if line =~# '/'
 			line = fnamemodify(line, ':h')
@@ -86,12 +85,12 @@ export def Change(): void
 		return
 	endif
 	popup_image#Preview(id, p, -2, (v) => {
-			if v
-				SetPosition(event)
-			else
-				popup_image#WarningMsg(id)
-			endif
-		})
+		if v
+			SetPosition(event)
+		else
+			popup_image#WarningMsg(id)
+		endif
+	})
 enddef
 
 def Hide(): void
