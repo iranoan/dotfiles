@@ -1,7 +1,6 @@
 *popup_image* 動画・画像をプレビュー
 
 Author:  Iranoan <iranoan+vim@gmail.com>
-Repository: https://github.com/iranoan/popup_image
 License: GPL Ver.3.
 
 
@@ -29,9 +28,9 @@ License: GPL Ver.3.
                                                        *popup_image-introduction*
 概要~
 
-ポップアップ・ウィンドウに画像・動画などのプレビューを表示する
-|popup-image| を利用しているので、CUI 環境では実際に表示されるかどうかは使用して
-いるターミナルに依存する
+* ポップアップ・ウィンドウに画像・動画などのプレビューを表示する
+* |popup-image| を利用しているので、CUI 環境では実際に表示されるかどうかは使用し
+  ているターミナルに依存する
 
 ==============================================================================
                                                            *popup_image-install*

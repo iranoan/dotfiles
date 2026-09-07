@@ -28,7 +28,10 @@ vim-fern (https://github.com/lambdalisue/vim-fern) のカーソル位置の次�
                                                 *vim-fern-preview-image-require*
 要件~
 
-popup_preview, popup_image プラグインが必要
+* |popup_preview| プラグインが必要
+* |popup-image| がインストールされていれば、画像・動画のプレビューも可能
+  - |popup-image| を利用しているので、CUI 環境では実際に表示されるかどうかは使用
+    しているターミナルに依存する
 
 ==============================================================================
                                                     *vim-fern-preview-image-use*
