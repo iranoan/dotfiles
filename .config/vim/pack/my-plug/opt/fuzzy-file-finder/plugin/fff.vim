@@ -12,24 +12,12 @@ augroup FuzzyFileFinder
 	autocmd CmdwinLeave * fff#Bridge('CmdwinLeave')
 augroup END
 
-try
-	g:fuzzy_file_finder = general_function#ExtendNew({
-		cmd: ['find', '-L', '.', '-mindepth', '1', '(', '-type', 'd', '-o', '-type', 'f', '-o', '-type', 'l', ')', '-printf', '%P\n'],
-		list_border: [1, 1, 1, 1],
-		list_borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
-		preview_border: [1, 1, 1, 1],
-		preview_borderchars: ['─', '│', '─', '│', '┬', '╮', '╯', '┴'],
-		open: 'edit',
-		dir: true,
-	}, get(g:, 'fuzzy_file_finder', {}), 'cmd')
-catch /^Vim\%((\S\+)\)\=:E117/
-	g:fuzzy_file_finder = extendnew({
-		cmd: ['find', '-L', '.', '-mindepth', '1', '(', '-type', 'd', '-o', '-type', 'f', '-o', '-type', 'l', ')', '-printf', '%P\n'],
-		list_border: [1, 1, 1, 1],
-		list_borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
-		preview_border: [1, 1, 1, 1],
-		preview_borderchars: ['─', '│', '─', '│', '┬', '╮', '╯', '┴'],
-		open: 'edit',
-		dir: true,
-	}, get(g:, 'fuzzy_file_finder', {}), 'force')
-endtry
+g:fuzzy_file_finder = general_function#ExtendNew({
+	cmd: ['find', '-L', '.', '-mindepth', '1', '(', '-type', 'd', '-o', '-type', 'f', '-o', '-type', 'l', ')', '-printf', '%P\n'],
+	list_border: [1, 1, 1, 1],
+	list_borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
+	preview_border: [1, 1, 1, 1],
+	preview_borderchars: ['─', '│', '─', '│', '┬', '╮', '╯', '┴'],
+	open: 'edit',
+	dir: true,
+}, get(g:, 'fuzzy_file_finder', {}), 'cmd')

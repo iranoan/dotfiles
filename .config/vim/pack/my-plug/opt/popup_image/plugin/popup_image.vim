@@ -18,4 +18,10 @@ if extendnew(get(g:, 'popup_image_options', {loaded: false}), {loaded: false}).l
 	finish
 endif
 
-g:popup_image_options = extendnew({pt2px: {x: 96, y: 96}, min_size: {x: 5, y: 5}, loaded: true}, get(g:, 'popup_image_options', {}), 'force')
+try
+	g:popup_image_options = general_function#ExtendNew({pt2px: {x: 96, y: 96}, min_size: {x: 5, y: 5}, loaded: true},
+		get(g:, 'popup_image_options', {}), 'force')
+catch /^Vim\%((\S\+)\)\=:E117/
+	g:popup_image_options = extendnew({pt2px: {x: 96, y: 96}, min_size: {x: 5, y: 5}, loaded: true},
+		get(g:, 'popup_image_options', {}), 'force')
+endtry
