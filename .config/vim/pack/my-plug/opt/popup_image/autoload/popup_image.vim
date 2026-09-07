@@ -99,7 +99,7 @@ def Show(tabnr: number, id: number): void # タブ・ページの切り替えに
 	var opts: dict<any> = popup_getoptions(id)
 	var win_opts: dict<any> = getwinvar(id, 'popup_image', {tab_leave_close: false})
 
-	if tabpagenr() == tabnr && index(popup_list(), id) != -1 && popup_getpos(id).visible
+	if tabpagenr() == tabnr && index(popup_list(), id) != -1
 		if win_opts.tab_leave_close
 			popup_show(id)
 		endif
