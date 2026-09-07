@@ -500,6 +500,13 @@ xnoremap <silent><Leader>fI <Cmd>call set_fff#main('call fff#FFFiles(["~/img"])'
 # 		| autocmd_delete([{group: 'Fuzzy_File_Finder'}])
 # augroup END
 
+# 画像ファイルの補完でプレビュー $MYVIMDIR/pack/my-plug/opt/complete-preview-image/ {{{2
+augroup SetcompletePreviewImage
+	autocmd!
+	autocmd InsertEnter * set_complete_popup_image#init()
+		| autocmd_delete([{group: 'SetcompletePreviewImage'}])
+augroup END
+
 # ソースの実行結果を別バッファに表示 https://github.com/thinca/vim-quickrun {{{2
 nnoremap <silent><Leader>qr  <Cmd>call set_quickrun#main()<CR>
 xnoremap <silent><Leader>qr  <Cmd>call set_quickrun#main()<CR>
