@@ -51,7 +51,7 @@ nnoremap <buffer><expr>i                  &buftype ==# 'help' ? '<C-]>' : 'i'
 nnoremap <buffer><expr>p                  &buftype ==# 'help' ? '<C-o>' : 'p'
 nnoremap <buffer><Leader>ch               <Cmd>let &conceallevel = (&conceallevel != 0 ? 0 : 2) <Bar> setlocal list!<CR>
 # タグに移動
-nnoremap <buffer><tab>                    <Cmd>call search('\c\(\|\zs.\{-}\|\\|\*\@<!''[a-z_:]\{2,}''\\|<[-a-z0-9_]\+>\\|\<CTRL-.\\|<[SCMAD]-[^-a-z0-9_]\@!\)', 'w')<CR>:nohlsearch<CR>
-nnoremap <buffer><S-tab>                  <Cmd>call search('\c\(\|\zs.\{-}\|\\|\*\@<!''[a-z_:]\{2,}''\\|<[-a-z0-9_]\+>\\|\<CTRL-.\\|<[SCMAD]-[^-a-z0-9_]\@!\)', 'wb')<CR>:nohlsearch<CR>
+nnoremap <buffer><tab>                    <Cmd>call search('\c\(\|\zs.\{-}\|\\|\*\@<!''[a-z_:]\{2,}''\\|<[-a-z0-9_]\+>\\|\<CTRL-.\\|<[SCMAD]-[^-a-z0-9_]\@!\)', 'w')<Bar>nohlsearch<CR>
+nnoremap <buffer><S-tab>                  <Cmd>call search('\c\(\|\zs.\{-}\|\\|\*\@<!''[a-z_:]\{2,}''\\|<[-a-z0-9_]\+>\\|\<CTRL-.\\|<[SCMAD]-[^-a-z0-9_]\@!\)', 'wb')<Bar>nohlsearch<CR>
 nnoremap <buffer><expr><CR>               &buftype ==# 'help' ? '<CR>'  : ':help ' .. expand('<cword>') .. '<CR>'
 nnoremap <buffer><expr><C-]>              &buftype ==# 'help' ? '<C-]>' : ':help ' .. expand('<cword>') .. '<CR>'
