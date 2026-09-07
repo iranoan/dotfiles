@@ -167,6 +167,9 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 	if win_opts.options.maxwidth == 0 || win_opts.options.maxheight == 0 # 呼び出し時にウィンドウサイズの指定がない
 		max_w = &columns
 		max_h = &lines
+	elseif z == -2
+		max_w = win_opts.options.maxwidth
+		max_h = win_opts.options.maxheight
 	else
 		max_w = get(opts, 'maxwidth', 0)
 		max_h = get(opts, 'maxheight', 0)
@@ -216,6 +219,7 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 			return false
 		endif
 		if win_opts.options.maxwidth == 0 || win_opts.options.maxheight == 0 # 呼び出し時にウィンドウサイズの指定がない
+			 || z == -2 # 若しくは、第3引数で指定
 			max_w = img_cols
 			max_h = img_lines
 		endif
@@ -315,7 +319,7 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 	elseif z == 1
 		extend(win_opts.pre_info, {fit_zoom: false})
 		fit_zoom = false
-	else # if z == -1
+	else # if z == -1 || z == -2
 		extend(win_opts.pre_info, {fit_zoom: true})
 		fit_zoom = true
 	endif
