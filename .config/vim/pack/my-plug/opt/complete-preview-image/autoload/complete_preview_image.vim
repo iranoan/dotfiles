@@ -60,7 +60,7 @@ def SetPosition(event: dict<any>): void
 	if diff > 0 # プレビュー画像下に飛び出る
 		line -= diff
 	endif
-	popup_setoptions(id, {col: col, line: line})
+	popup_setoptions(id, {col: col, line: line, opacity: 0})
 	popup_show(id)
 enddef
 
