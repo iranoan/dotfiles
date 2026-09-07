@@ -3,7 +3,8 @@ vim9script
 def MaxWidthHeight(): dict<number>
 	return {
 		maxheight: max([min([25, &lines]), &lines / 2]),
-		maxwidth: max([min([85, &columns / 2]), &columns / 3])
+		maxwidth: max([min([85, &columns / 2]), &columns / 3]),
+		opacity: 0
 	}
 enddef
 
