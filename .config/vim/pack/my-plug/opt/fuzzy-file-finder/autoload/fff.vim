@@ -55,7 +55,8 @@ def UpdatePreview(s: dict<any>): void
 		if s.display_image
 			popup_image#Clear(s.preview_winid)
 		endif
-		popup_settext(s.preview_winid, '<No selection>')
+		popup_settext(s.preview_winid, '<Not Match>')
+		setwinvar(id, 'popup_preview_path', '')
 		popup_setoptions(id, {highlight: 'PopupPreviewMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupPreviewMsg'})
 		return
 	endif
