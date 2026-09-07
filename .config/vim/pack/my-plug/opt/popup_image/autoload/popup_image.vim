@@ -242,6 +242,7 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 	def SystemBlob(cmd: list<string>, delete: string, OnComplete: func(bool)): void
 		var img_data: blob
 		var err_line: string
+		popup_setoptions(id, {opacity: 100}) # 透明度があると画像変換に失敗するファイルが多くある
 		extend(win_opts, {job: job_start(cmd, {
 			out_io: 'pipe',
 			err_io: 'pipe',
