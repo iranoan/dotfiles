@@ -29,7 +29,7 @@ License: GPL Ver.3.
                                                      *fuzzy-file-finder-require*
 要件~
 
-popup_preview, popup_image プラグインが必要
+general_function, popup_preview, popup_image プラグインが必要
 
 ==============================================================================
                                                          *fuzzy-file-finder-use*
