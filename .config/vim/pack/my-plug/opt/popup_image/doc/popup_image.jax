@@ -74,7 +74,7 @@ License: GPL Ver.3.
     (|popup_image-function|)
   - 次は実行失敗時の Vim9 Script によるその理由の表示例    *popup_image-warning*
 >vim
-		popup_image#Preview(id, 'sample.jpg', 0 (v) => {
+		popup_image#Preview(id, 'sample.jpg', 0, (v) => {
 			if !v
 				popup_image#WarningMsg(id)
 			endif
