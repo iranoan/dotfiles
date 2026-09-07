@@ -49,14 +49,24 @@ def SetPosition(event: dict<any>): void
 	var col: number
 	var line: number = event.row + 1
 	var w_h: dict<any> = popup_getoptions(id)->filter((k, _) => k =~# '^max\(width\|height\)')
-	var diff: number = (line + w_h.maxheight) - &lines
+	var diff: number
 	var curscol: number = screenpos(0, line('.'), col('.')).curscol
 
-	if event.col + event.width + 2 + w_h.maxwidth > &columns # 右に空きスペースが足りない
-		col = max([1, event.col - w_h.maxwidth])
+	if &columns - (event.col + event.width + 2 + w_h.maxwidth) < 0 # 右に空きスペースが足りない
+		col = event.col - w_h.maxwidth
 	else
 		col = event.col + event.width + 2
 	endif
+	if col <= 0 # 左にも余白もないので上の表示を試みる
+		line = event.row - w_h.maxheight
+		if line >= 1 # 上には余白があった (この数値は縦の配置位置そのものなので1以上である必要がある)
+			col = event.col
+		else # 上にも余白がない
+			col = event.col + event.width + 2 # 一部飛び出ても右に表示 (左余白と比べても、結局左に飛び出しはできない)
+			line = event.row + 1
+		endif
+	endif
+	diff = (line + w_h.maxheight) - &lines
 	if diff > 0 # プレビュー画像下に飛び出る
 		line -= diff
 	endif
