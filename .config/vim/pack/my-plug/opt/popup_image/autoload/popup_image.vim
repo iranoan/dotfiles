@@ -71,7 +71,6 @@ def SaveOrignalOption(id: number): dict<any>
 				highlight: opts.highlight,
 				highlights: opts.highlights,
 				border: get(opts, 'border', [0, 0, 0, 0]),
-				opacity: 100
 			}
 		})
 		var tabnr: number = tabpagenr()
@@ -231,7 +230,6 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 			maxheight: max_h,
 			border: not_empty_title ? opts.border : [0, 0, 0, 0],
 			padding: border == 0 && not_empty_title ? [1, padding[1], padding[2], padding[3]] : padding,
-			opacity: 100
 		})))
 		extend(win_opts.pre_info, {maxwidth: max_w, maxheight: max_h, path: path})
 		setwinvar(id, 'popup_image', win_opts)
