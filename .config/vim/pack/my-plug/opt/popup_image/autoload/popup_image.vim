@@ -54,6 +54,7 @@ def SaveOrignalOption(id: number): dict<any>
 				highlight: opts.highlight,
 				highlights: opts.highlights,
 				wrap: opts.wrap,
+				opacity: opts.opacity, # popup_image#WarningMsg() で変更される
 				image: {}
 			},
 			pre_info: { # 直前に表示した情報
@@ -132,7 +133,7 @@ export def WarningMsg(id: number): void
 	endif
 	SaveOrignalOption(id)
 	popup_settext(id, remove(getwinvar(id, 'popup_image', {err_msg: []}).err_msg, -1))
-	popup_setoptions(id, {highlight: 'PopupImageWarningMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupImageWarningMsg'})
+	popup_setoptions(id, {highlight: 'PopupImageWarningMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupImageWarningMsg', opacity: 100})
 enddef
 
 def DummyDone(_: bool)
