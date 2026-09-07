@@ -366,11 +366,10 @@ export def ResetPreview(id: number, f: string): void
 	if index(popup_list(), id) == -1
 		return
 	endif
-	var opts: dict<any> = deepcopy(getwinvar(id, 'popup_image', {options: {}}).options)
+	var opts: dict<any> = getwinvar(id, 'popup_image', {options: {}})
 
-	extend(opts, popup_getoptions(id))
-	filter(opts, (k, _) => k !=# 'image')
-	popup_setoptions(id, opts)
+	extend(opts.options, popup_getoptions(id)->filter((k, _) => k !=# 'image'))
+	popup_setoptions(id, opts.options)
 	if popup_getpos(id).visible
 		Preview(id, f, 0)
 	endif
