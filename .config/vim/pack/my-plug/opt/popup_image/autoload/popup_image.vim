@@ -63,7 +63,7 @@ def SaveOrignalOption(id: number): dict<any>
 				fit_zoom: true,
 				path: ''
 			},
-			tab_leave_close: false, # タブページの切り替えによって閉じられたたか?
+			tab_leave_close: false, # タブページの切り替えやターミナルの出現によって閉じられたたか?
 			err_msg: [],
 			job: null_job,
 			options: { # イメージ表示で変更するオプション
@@ -77,13 +77,12 @@ def SaveOrignalOption(id: number): dict<any>
 		var tabnr: number = tabpagenr()
 		execute($'augroup PopupImageTabPage{tabnr}')
 		autocmd!
-		execute($'autocmd TabClosed *             AutocmdDelete({tabnr}, {id})')
-		execute($'autocmd TabEnter *              Show({tabnr}, {id})')
+		execute($'autocmd TabClosed             * AutocmdDelete({tabnr}, {id})')
+		execute($'autocmd TabEnter              * Show({tabnr}, {id})')
+		execute($'autocmd WinLeave              * if &buftype ==# "terminal" | Show({tabnr}, {id}) | endif')
 		execute($'autocmd TabLeave,TerminalOpen * Hide({tabnr}, {id})')
 		execute($'augroup END')
-		sleep 10ms # Clear(id: number) の
-		# 		extend(default_opts.options, extendnew(opts, default_opts.clear))
-		# で options キーがないというエラーが出ることがある
+		# sleep 10ms # Clear() で options キーがないというエラーが出ることがある
 		# 発生条件が掴めていないの、試しに少し時間を置いてみる
 	endif
 	return opts
