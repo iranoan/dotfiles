@@ -40,7 +40,7 @@ License: GPL Ver.3.
 * fff#FFFiles([{dirs}]) の {dirs} が空リストの場合は、カレント・ディレクトリ
 * ['~/downloads', '~/video'] 等ディレクトリ名のリストなら指定された {dirs} 配下
 * リスト中の文字列が '' (空文字列) の場合カレント・ディレクトリ
-のファイルを検索し、入力文字により絞り込む
+  のファイルを検索し、入力文字により絞り込む
 
 指定された文字列がファイル名の場合は、出力リストに追加する
 
@@ -194,11 +194,11 @@ cmd~
                                                       *g:fuzzy_file_finder.open*
 open~
 	Type: |string|
-	Default: |:edit|
+	Default: |edit|
 
-	* 上記の image 未登録、ディレクトリ、バイナリ・ファイル以外を Vim で開く時に用
-	  いるコマンド
-	  Ex. open: 'tabedit'
+	* ディレクトリ、バイナリ・ファイル以外を Vim で開く時に用いるコマンド
+	  - |g:popup_preview| の image キー (|g:popup_preview.type.image|) に登録されてい
+	    るファイルも除外される
                                                        *g:fuzzy_file_finder.dir*
 dir~
 	Type: |boolean|
@@ -240,7 +240,7 @@ mapping~
 
 * プレビュー枠のボーダーの表示/非表示は |g:popup_preview.border|
 * プレビュー枠のボーダーに用いる記号は |g:popup_preview.borderchars|
-でそれぞれ指定する
+  でそれぞれ指定する
 
 * 上/右/下/左の順の指定する
 	|popup_create-arguments| の border、|popup_create-arguments| の borderchars 参照
@@ -258,18 +258,10 @@ fff#Bridge({cmd})~
 			選択/カーソル位置のファイルを開く
 		- Cleanup
 			終了
-		- MoveDown
-			ファイル一覧で次を選択
-		- MoveUp
-			ファイル一覧で次を選択
-		- MoveTop
-			ファイル一覧先頭に移動
-		- MoveLast
-			ファイル一覧最後に移動
-		- MovePageDown
-			ファイル一覧のページ・アップ
-		- MovePageUp
-			ファイル一覧のページ・ダウン
+		- MoveDown/MoveUp/MoveTop/MoveLast
+			ファイル一覧で次/前/最初/最後を選択
+		- MovePageDown/MovePageUp
+			ファイル一覧のページ・アップ/
 		- ToggleMark
 			ファイルの選択/選択解除
 		- TogglePreview
