@@ -61,7 +61,8 @@ def UpdatePreview(s: dict<any>): void
 		return
 	endif
 
-	popup_preview#Preview(s.preview_winid, s.matches[s.selected_idx])
+	s.preview_path = s.matches[s.selected_idx]
+	popup_preview#Preview(s.preview_winid, s.preview_path)
 enddef
 
 def SchedulePreview(s: dict<any>, delay: number = 50): void
@@ -212,7 +213,6 @@ def Render(s: dict<any>): void
 	preview_idx = index(s.matches, s.preview_path)
 	if preview_idx == -1
 		preview_idx = 0
-	else
 	endif
 	s.selected_idx = preview_idx
 	display_matches = mapnew(s.matches, (i, v) => $'{(i == preview_idx) ? '>' : ' '} {has_key(s.marked_files, v) ? '[*]' : '[ ]'} {v}')
