@@ -1,7 +1,7 @@
 vim9script
 scriptencoding utf-8
 
-if exists("b:current_syntax")
+if exists('b:current_syntax')
 	finish
 endif
 
@@ -18,7 +18,7 @@ syntax match LsDate /\d\{4}-\d\d-\d\d\s\+\d\d:\d\d:\d\d/ contained
 syntax match LsDirectory /\%(^d[-rwx]\{9}\s\+\%([0-9.]\+[KMGT ]B\|---\)\s\+\d\{4}-\d\d-\d\d\s\+\d\d:\d\d:\d\d \)\@<=.\+/ contained
 syntax match Lslink      /\%(^l[-rwx]\{9}\s\+\%([0-9.]\+[KMGT ]B\|---\)\s\+\d\{4}-\d\d-\d\d\s\+\d\d:\d\d:\d\d \)\@<=.\+/ contained contains=LsSymlinkName,LsSymlinkExec,LsBrokenSymlinkName,LsSymlinkArrow,LsSymlinkTargetDir,LsSymlinkTargetFile,LsSymlinkTargetExec,LsBrokenSymlinkTargetFile
 syntax match LsFiles     /\%(^-[-r][-w]-[-rwx]\{6}\s\+\%([0-9.]\+[KMGT ]B\|---\)\s\+\d\{4}-\d\d-\d\d\s\+\d\d:\d\d:\d\d \)\@<=.\+/ contained contains=@LsFile
-syntax match LsExecFiles /\%(^-[-r][-w]x[-rwx]\{6}\s\+\%([0-9.]\+[KMGT ]B\|---\)\s\+\d\{4}-\d\d-\d\d\s\+\d\d:\d\d:\d\d \)\@<=.\+/ contained contains=@LsExecUnix
+syntax match LsExecFiles /\%(^-[-r][-w]x[-rwx]\{6}\s\+\%([0-9.]\+[KMGT ]B\|---\)\s\+\d\{4}-\d\d-\d\d\s\+\d\d:\d\d:\d\d \)\@<=.\+/ contained contains=LsExecUnix
 syntax match LsBlockEtc  /\%(^[bcsp][-rwx]\{9}\s\+\%([0-9.]\+[KMGT ]B\|---\)\s\+\d\{4}-\d\d-\d\d\s\+\d\d:\d\d:\d\d \)\@<=.\+/ contained
 
 syntax match LsSymlinkName /\%(^l[-r][-w]-[-rwx]\{6}\s\+\%([0-9.]\+[KMGT ]B\|---\)\s\+\d\{4}-\d\d-\d\d\s\+\d\d:\d\d:\d\d \)\@<=.\+\%( ->\)\@=/ contained nextgroup=LsSymlinkArrow
@@ -43,6 +43,7 @@ syntax match LsDocument /.*\.\%(doc\|docx\|rtf\|odt\|dot\|dotx\|ott\|xls\|xlsx\|
 syntax match LsArchive /.*\.\%(7z\|apk\|arj\|bin\|bz\|bz2\|cab\|deb\|dmg\|gem\|gz\|iso\|jar\|msi\|rar\|rpm\|tar\|tbz\|tbz2\|tgz\|tx\|war\|xpi\|xz\|z\|Z\|zip\|zst\)$/ contained
 syntax match LsOld /.*\.\%(org_archive\|log\|bak\|BAK\|old\|OLD\|off\|OFF\|dist\|DIST\|orig\|ORIG\|swp\|swo\)$/ contained
 
+highlight def link LsSize Number
 highlight def link LsDirectory Directory
 highlight def link LsSymlinkName Underlined
 highlight def link LsSymlinkExec Underlined
@@ -55,13 +56,13 @@ highlight def link LsExecFile Removed
 highlight def link LsExecFiles Removed
 highlight def link LsExecUnix Removed
 highlight def link LsSymlinkTargetExec Removed
-highlight def link LsSrcFile Statement
+highlight def link LsSrcFile PreProc
 hlset(hlget('Statement')->map((_, v) => extendnew(v, {name: 'LsDocSrc', term: {underline: true}, gui: {underline: true}})))
 highlight def link LsImage helpNote
-highlight def link LsAudio helpNote
-highlight def link LsVideo helpNote
+highlight def link LsAudio Type
+highlight def link LsVideo Special
 highlight def link LsDocument Constant
 hlset(hlget('Underlined')->map((_, v) => extendnew(v, {name: 'LsArchive', term: {underline: false, bold: true}, gui: {underline: false, bold: true}})))
 highlight def link LsOld Comment
 
-b:current_syntax = "LsLike"
+b:current_syntax = 'LsLike'

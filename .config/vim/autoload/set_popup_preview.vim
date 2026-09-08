@@ -9,12 +9,12 @@ function set_popup_preview#init()
 	let g:popup_preview = #{
 				\ image: ['epub', 'odp', 'pptx'],
 				\ filter: #{
-				\ 		mp3: ['ffprobe', '-hide_banner'],
-				\ 		m4a: ['ffprobe', '-hide_banner'],
-				\ 		xlsx: ['xlsx2table.sh'],
-				\ 		ods: ['xlsx2table.sh'],
-				\ 		odt: ['soffice', '--headless', '--convert-to', '"txt:Text (encoded):UTF8"', '--cat'],
-				\ 		docx: ['soffice', '--headless', '--convert-to', '"txt:Text (encoded):UTF8"', '--cat'],
+				\ 		mp3: #{cmd: ['ffprobe', '-hide_banner']},
+				\ 		m4a: #{cmd: ['ffprobe', '-hide_banner']},
+				\ 		xlsx: #{cmd: ['xlsx2table.sh']},
+				\ 		ods: #{cmd: ['xlsx2table.sh']},
+				\ 		odt: #{cmd: ['soffice', '--headless', '--convert-to', '"txt:Text (encoded):UTF8"', '--cat']},
+				\ 		docx: #{cmd: ['soffice', '--headless', '--convert-to', '"txt:Text (encoded):UTF8"', '--cat']},
 				\ 	}
 				\}
 	packadd popup_preview

@@ -160,7 +160,7 @@ def GetFileInfo(dir: string): list<dict<any>>
 	return info
 enddef
 
-def SetFileType(n: number, t: string): void
+def SetFileType(id: number, t: string): void
 	if index(popup_list(), id) == -1
 		return
 	endif
@@ -236,7 +236,7 @@ export def Preview(id: number, p: string, z: number = 0): void
 		endif
 		SetFileType(id, 'Image')
 	elseif index(keys(g:popup_preview.filter), type) != -1
-		var filter: list<string> = g:popup_preview.filter[type][cmd]
+		var filter: list<string> = g:popup_preview.filter[type]['cmd']
 		var filter_place_folder: number = index(filter, '.')
 		filter = filter_place_folder == -1 ? filter + [p] :
 			filter_place_folder == len(filter) ? filter[ : -2 ] + [p] :
@@ -249,7 +249,7 @@ export def Preview(id: number, p: string, z: number = 0): void
 				SetFileType(id, 'WarningMsg')
 			else
 				var filetype: string = get(g:popup_preview.filter[type], 'filetype', '')
-				if syntax ==# ''
+				if filetype ==# ''
 					SetFileType(id, 'Stdoutput')
 				else
 					SetFileType(id, filetype)

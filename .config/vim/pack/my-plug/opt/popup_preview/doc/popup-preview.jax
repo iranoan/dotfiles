@@ -125,12 +125,16 @@ type~
 
                                                    *g:popup_preview.type.filter*
 	filter~
-		Type: |dict|<|list|<|string|>>|
+		Type: |dict|<|dict|<|any|>>|
 
-		* 拡張子ごとのプレビュー枠に表示するフィルタープログラム
-		* Ex. {zip: ['unzip', '-l']}
-		  拡張子とフィルター・プログラム (必ず list<string>) のペア指定する
-		* '.' があればそれが操作ファイルに置き換わる
+		* 拡張子ごとの
+			cmd:      プレビュー枠に表示するフィルタープログラム
+			          必ず list<string>
+			          文字列中に '.' があればそれが操作ファイルに置き換わる
+			filetype: ファイルタイプ
+			          無くても良い
+			          フィルターそれぞれに独自に syntax を可能にするために用意
+		*	Ex. {zip: cmd: ['unzip', '-l'], filetype: 'UnZipOut'}
                                                         *g:popup_preview.border*
 border~
 	Type: |list|<|number|>|
