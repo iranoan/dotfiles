@@ -82,7 +82,7 @@ g:popup_preview = general_function#ExtendNew({
 		gz: {cmd: ['gzip', '-l']},
 		bz2: {cmd: ['bzcat']},
 		xz: {cmd: ['xz', '-lv']},
-		7z: {cmd: ['7z', 'l'], filetype: '7zOut'},
+		7z: {cmd: ['7z', 'l', '-ba', '-bd'], filetype: '7zOut'},
 		rar: {cmd: ['unrar', 'l'], filetype: 'RarOut'},
 		lzma: {cmd: ['lzma', '-l']},
 	},
