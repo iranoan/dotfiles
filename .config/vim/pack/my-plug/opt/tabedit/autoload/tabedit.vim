@@ -145,15 +145,8 @@ export def Tabedit(...arg: list<string>): void
 		tabedit
 		return
 	endif
-	for files in map(arg, (_, v) => fnamemodify(v, ':p'))
-		var fs: list<string> = glob(files, true, true, true)
-		if fs == [] # 存在しないファイル
-			Open(files)
-		else
-			for f in fs
-				Open(f)
-			endfor
-		endif
+	for f in mapnew(arg, (_, v) => expand(v, true, true))->flattennew(1)->map((_, v) => fnamemodify(v, ':p'))
+		Open(f)
 	endfor
 	win_gotoid(win_id)
 	redraw  # これが無いとタグが切り替わったように見えない

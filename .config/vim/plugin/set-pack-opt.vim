@@ -163,7 +163,8 @@ augroup TabEdit # tabedit, fern.vim, fzf.vim サイクリック依存
 		| autocmd_delete([{group: 'TabEdit'}])
 augroup END
 # *.vim で再設定されてしまう分は $MYVIMDIR/after/ftplugin/vim.vim
-nnoremap <silent>gf :TabEdit <C-R><C-P><CR>
+nnoremap <silent>gf <Cmd>TabEdit <C-R><C-P><CR>
+xnoremap <silent>gf <Cmd>call tabedit#Tabedit(expand(getregion(getpos('.'), getpos('v'), {'type': mode()})->join('')))<CR>
 # nnoremap <silent>gf :TabEdit <cfile><CR> " ← 存在しなくても開く <C-R><C-F> と同じ
 
 # grep で幾つかのオプションをデフォルトで付けたり、補完を可能にする $MYVIMDIR/pack/my-plug/opt/gnu-grep/ {{{2
