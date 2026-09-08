@@ -606,3 +606,12 @@ xnoremap <silent><silent><Leader>hq :!perl -M'MIME::QuotedPrint' -e 'while (<STD
 nnoremap <silent><silent><Leader>hb :let b:pos=getpos(".")<CR>:%!base64 -di -w 0 -<CR>
 xnoremap <silent><silent><Leader>hb :!base64 -di -w 0 -<CR>
 # }}}
+# カーソル位置、範囲選択部分を関連付けで開く {{{2
+# gx のままだと、~/,  $MYVIMDIR 等が使えない ($MYVIMDIR などは範囲選択の必要がある) $MYGVIMRC
+# 以前自作プラグインを使っていたのでそのマップを残している
+nnoremap <silent><Leader>x <Cmd>call dist#vim9#Open(expand('<cfile>:p'))<CR>
+nnoremap <2-LeftMouse>     <Cmd>call dist#vim9#Open(expand('<cfile>:p'))<CR>
+nnoremap gx                <Cmd>call dist#vim9#Open(expand('<cfile>:p'))<CR>
+xnoremap <silent><Leader>x <Cmd>call dist#vim9#Open(expand(getregion(getpos('.'), getpos('v'), {'type': mode()})->join('')))<CR>
+xnoremap <silent>gx        <Cmd>call dist#vim9#Open(expand(getregion(getpos('.'), getpos('v'), {'type': mode()})->join('')))<CR>
+# 2}}
