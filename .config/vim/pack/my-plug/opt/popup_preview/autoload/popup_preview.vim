@@ -161,19 +161,24 @@ def GetFileInfo(dir: string): list<dict<any>>
 enddef
 
 def SetFileType(n: number, t: string): void
+	if index(popup_list(), id) == -1
+		return
+	endif
 	var save_ei: string = &eventignore
 
 	&eventignore = 'BufAdd,BufCreate'
 	try
-		setbufvar(n, '&filetype', t)
+		setbufvar(winbufnr(id), '&filetype', t)
 	finally
 		&eventignore = save_ei
 	endtry
 enddef
 
 export def Preview(id: number, p: string, z: number = 0): void
+	if index(popup_list(), id) == -1
+		return
+	endif
 	var type: string = GetFileType(p)
-	var bufnr: number = winbufnr(id)
 
 	if getwinvar(id, 'popup_preview_path', '') !=# p
 		setwinvar(id, 'popup_preview_path', p)
@@ -205,11 +210,11 @@ export def Preview(id: number, p: string, z: number = 0): void
 		                                 printf($'%s %{max_len}s %s %s%s',
 		                                 v.permission, v.size_s, v.time_iso, v.name, v.link ==# '' ? '' : $' {v.broken_link ? '!->' : '->'} {v.link}'))
 		)
-		SetFileType(bufnr, 'LsLike')
+		SetFileType(id, 'LsLike')
 	elseif !filereadable(p)
 		popup_settext(id, '<Unreadable file>')
 		popup_setoptions(id, {highlight: 'PopupPreviewWarningMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupPreviewWarningMsg'})
-		SetFileType(bufnr, 'WarningMsg')
+		SetFileType(id, 'WarningMsg')
 	elseif index(g:popup_preview.image, tolower(fnamemodify(p, ':e'))) != -1
 		if istalled_popup_image
 			popup_image#Preview(id, p, z, (v) => {
@@ -229,9 +234,9 @@ export def Preview(id: number, p: string, z: number = 0): void
 			])
 			popup_setoptions(id, {highlight: 'PopupPreviewWarningMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupPreviewWarningMsg'})
 		endif
-		SetFileType(bufnr, 'Image')
+		SetFileType(id, 'Image')
 	elseif index(keys(g:popup_preview.filter), type) != -1
-		var filter: list<string> = g:popup_preview.filter[type]
+		var filter: list<string> = g:popup_preview.filter[type][cmd]
 		var filter_place_folder: number = index(filter, '.')
 		filter = filter_place_folder == -1 ? filter + [p] :
 			filter_place_folder == len(filter) ? filter[ : -2 ] + [p] :
@@ -241,30 +246,40 @@ export def Preview(id: number, p: string, z: number = 0): void
 			if v:shell_error != 0
 				popup_settext(id, ['<Failed to execute>', $"'{join(filter)}'", $'{filter}'])
 				popup_setoptions(id, {wrap: true, highlight: 'PopupPreviewWarningMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupPreviewWarningMsg'})
-				SetFileType(bufnr, 'WarningMsg')
+				SetFileType(id, 'WarningMsg')
 			else
-				SetFileType(bufnr, 'Stdoutput')
+				var filetype: string = get(g:popup_preview.filter[type], 'filetype', '')
+				if syntax ==# ''
+					SetFileType(id, 'Stdoutput')
+				else
+					SetFileType(id, filetype)
+				endif
 			endif
 		else
 			popup_settext(id, [ $'<filter command ''{filter[0]}'' can not executable>'])
 			popup_setoptions(id, {wrap: true, highlight: 'PopupPreviewWarningMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupPreviewWarningMsg'})
-			SetFileType(bufnr, 'WarningMsg')
+			SetFileType(id, 'WarningMsg')
 		endif
 	elseif general_function#IsBinary(p)
 		popup_settext(id, '<Binary file>')
 		popup_setoptions(id, {wrap: true, highlight: 'PopupPreviewMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupPreviewMsg'})
-		SetFileType(bufnr, 'WarningMsg')
+		SetFileType(id, 'WarningMsg')
 	elseif getfsize(p) > 104851000 # テキストファイルで 100 MB (100*1024*1024) より大きい
 		popup_settext(id, ['<Too large file size>', $'path: {p}', $'size:  {HumanReadableSize(getfsize(p))}'])
 		popup_setoptions(id, {wrap: true, highlight: 'PopupPreviewMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupPreviewMsg'})
 	else
 		popup_settext(id, readfile(p))
-		SetFileType(bufnr, type)
+		SetFileType(id, type)
 	endif
-	setbufvar(bufnr, '&modified', false)
+	if index(popup_list(), id) != -1
+		setbufvar(winbufnr(id), '&modified', false)
+	endif
 enddef
 
 export def PageUpDown(id: number, down_flag: bool): void
+	if index(popup_list(), id) == -1
+		return
+	endif
 	var bufnr: number = winbufnr(id)
 	var max_idx: number = len(getbufline(bufnr, 1, '$'))
 	var new_idx: number = getcurpos(id)[1]
