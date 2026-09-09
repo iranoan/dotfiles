@@ -1,6 +1,9 @@
 scriptencoding utf-8
 
 function! set_tabedit#main() abort
+	if !pack_manage#IsInstalled('general-function')
+		call set_general_function#init()
+	endif
 	packadd tabedit
 	let g:tabedit_dir = ['set_fern#FernSync', v:true]
 	" if !pack_manage#IsInstalled('fern.vim')

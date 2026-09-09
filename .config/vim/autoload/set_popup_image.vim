@@ -1,9 +1,9 @@
 scriptencoding utf-8
 
 function! set_popup_image#init() abort
-	" バイナリ判定+辞書データの子要素も含めてマージ $MYVIMDIR/pack/my-plug/opt/general-function/ {{{2
-	packadd general-function
-	" 2}}}"
+	if !pack_manage#IsInstalled('general-function')
+		call set_general_function#init()
+	endif
 	let g:popup_image_options = #{
 				\ pt2px: #{x: 131, y: 154},
 				\ plugin: {

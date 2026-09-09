@@ -281,23 +281,8 @@ export def Jump(): void
 			break
 		elseif e >= c # && b <= c
 			if s =~# '^\%(\%(\%(\%(https\=\|ftp\|gopher\)://\|\%(mailto\|file\|news\):\)[^'' \t<>"]\+\)[A-Za-z0-9/]\)'
-				if has('unix')
-					system('xdg-open "' .. s .. '" &')
-				elseif has('win32') || has('win32unix')
-					system('start "' .. s .. '"')
-				elseif has('mac')
-					system('open "' .. s .. '" &')
-				endif
-				return
-			endif
-			if s =~# '@'
-				if has('unix')
-					system('xdg-open "mailto:' .. s .. '" &')
-				elseif has('win32') || has('win32unix')
-					system('start "mailto:' .. s .. '"')
-				elseif has('mac')
-					system('open "mailto:' .. s .. '" &')
-				endif
+			|| s =~# '@'
+				dist#vim9#Open(s)
 				return
 			endif
 			s = substitute(s, '\e\[\d\+m', '', 'g')->substitute('\s\+$', '', '')->substitute("'", '', 'g')

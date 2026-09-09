@@ -1,6 +1,9 @@
 scriptencoding utf-8
 
 function set_fern#main() abort
+	if !pack_manage#IsInstalled('general-function')
+		call set_general_function#init()
+	endif
 	let g:fern#disable_default_mappings = 1
 	let g:fern#disable_drawer_smart_quit = 1 " fern のウィンドウだけに成っても Vim を閉じない
 	let g:fern#default_exclude = '^\%\(\(\.git\|node_modules\)\|.\+\(\.o\|\.fls\|\.synctex\.gz\|\.fdb_latexmk\|\.toc\|\.out\|\.dvi\|\.aux\|\.nav\|\.ltjruby\|\.snm\|\.swp\)\)$'
@@ -248,7 +251,13 @@ def s:open(): void
 		# <Plug>(fern-action-collapse)
 		call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo({name: '/fern\.vim/autoload/fern/mapping/node\.vim$'})[0].sid .. '_' .. 'map_collapse')])
 	else
-		if tabedit#IsTextFile(node._path)
+		if general_function#IsBinary(node._path)
+			if executable(node._path)
+				execute($'topleft terminal {node._path}')
+			else
+				dist#vim9#Open(node._path)
+			endif
+		else
 			if len(gettabinfo(tabpagenr())[0].windows) == 1
 				# <Plug>(fern-action-open:right)
 				call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo({name: '/fern\.vim/autoload/fern/mapping/open\.vim$'})[0].sid .. '_' .. 'map_open'), 'rightbelow vsplit'])
@@ -256,19 +265,13 @@ def s:open(): void
 				# <Plug>(fern-action-open:select)
 				call('fern#mapping#call', [funcref('<SNR>' .. getscriptinfo({name: '/fern\.vim/autoload/fern/mapping/open\.vim$'})[0].sid .. '_' .. 'map_open'), 'select'])
 			endif
-		else
-			if executable(node._path)
-				execute($'topleft terminal {node._path}')
-			else
-				job_start(['xdg-open', node._path])
-			endif
 		endif
 	endif
 	return
 enddef
 
 def s:OpenSystem(): void # <Plug>(fern-action-open:system) はアプリを閉じるまで Vim が操作不能になる
-	system('xdg-open ' .. fern#helper#new().sync.get_cursor_node()._path .. ' &')
+	dist#vim9#Open(fern#helper#new().sync.get_cursor_node()._path)
 enddef
 
 def s:fern_fzf(line: list<string>): void
