@@ -2,12 +2,17 @@ vim9script
 scriptencoding utf-8
 
 export def IsBinary(path: string): bool
-	for b in readfile(path, 'b', 3)
-		if stridx(b, "\<NL>") != -1
+	if getfperm(path) ==# ''
+		if isdirectory(path)
 			return true
 		endif
-	endfor
-	return false
+		return false # 存在しないファイル→新規で Vim で開く可能性あり
+	elseif !filereadable(path)
+		return true
+	elseif getfsize(path) == 0
+		return false
+	endif
+	return index(readblob(path, 0, 8192), 0x00) != -1 # 一般的な先頭 8KB で判定方法を使う
 enddef
 
 export def ExtendNew(o: any, y: any, over: string = ''): any # extend() の拡張版
