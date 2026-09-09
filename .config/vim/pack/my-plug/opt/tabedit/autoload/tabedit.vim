@@ -75,7 +75,7 @@ export def Tabedit(...arg: list<string>): void
 					execute cmd[0] .. ' ' .. f
 				endif
 			endif
-		elseif f =~# '^\(https\?\|ftp\|mailto\):\(//\)\?[a-zA-Z0-9._%+-]\+\%(:[0-9]\+\)\?\%(/[a-zA-Z0-9._%+-/?#&=~@!$''()*+,;:]*\)\?$' # URL
+		elseif f =~# '^\%(https\?\|ftp\|mailto\):\%(//\)\?[a-zA-Z0-9._%+-]\+\%(:[0-9]\+\)\?\%(/[a-zA-Z0-9._%+-/?#&=~@!$''()*+,;:]*\)\?$' # URL
 				|| f =~# '^mailto:[-a-zA-Z0-9.!#$%&''*+/=?^_`{|}~]\+@[a-zA-Z0-9]\+\%(-*[a-zA-Z0-9]\)\?\%(\.[a-zA-Z0-9]\+\%(-*[a-zA-Z0-9]\)*\)\+$' # メールアドレス
 			dist#vim9#Open(f)
 		elseif wordcount().bytes == 0 && &modified == false && len(tabpagebuflist()) == 1 # 現在バッファ内容が空
@@ -92,7 +92,7 @@ export def Tabedit(...arg: list<string>): void
 	for f in mapnew(arg, (_, v) => expand(v, true, true))
 			->flattennew(1)
 			->map((_, v) => (
-				v =~# '^\(https\?\|ftp\|mailto\):\(//\)\?[a-zA-Z0-9._%+-]\+\%(:[0-9]\+\)\?\%(/[a-zA-Z0-9._%+-/?#&=~@!$''()*+,;:]*\)\?$' ? v : # URL
+				v =~# '^\%(https\?\|ftp\|mailto\):\%(//\)\?[a-zA-Z0-9._%+-]\+\%(:[0-9]\+\)\?\%(/[a-zA-Z0-9._%+-/?#&=~@!$''()*+,;:]*\)\?$' ? v : # URL
 				v =~# '^mailto:[-a-zA-Z0-9.!#$%&''*+/=?^_`{|}~]\+@[a-zA-Z0-9]\+\%(-*[a-zA-Z0-9]\)\?\%(\.[a-zA-Z0-9]\+\%(-*[a-zA-Z0-9]\)*\)\+$' ? v : # メールアドレス
 				v =~# '^[-a-zA-Z0-9.!#$%&''*+/=?^_`{|}~]\+@[a-zA-Z0-9]\+\%(-*[a-zA-Z0-9]\)\?\%(\.[a-zA-Z0-9]\+\%(-*[a-zA-Z0-9]\)*\)\+$' ? $'mailto:{v}' : # メールアドレス
 				fnamemodify(v, ':p')))
