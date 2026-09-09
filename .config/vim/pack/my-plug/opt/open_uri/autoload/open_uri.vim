@@ -2,76 +2,122 @@ vim9script
 scriptencoding utf-8
 # カーソル行に書かれたフォルダや関連付けられたアプリケーションで開く (URL またはフォルダは最後が/、ファイルは拡張子 (4文字まで) があること)
 
-export def Open(): void
+def WarningMessage(): void
+	popup_create('No URI found in line.', {
+		col: 'cursor',
+		line: 'cursor+1',
+		time: 3000,
+		zindex: 300,
+		highlight: 'WarningMsg',
+		padding: [0, 1, 0, 1],
+		border: [1, 1, 1, 1],
+		borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
+		close: 'click',
+		filter: (id, key) => {
+			if key != ''
+				popup_close(id)
+			endif
+			return true
+		}
+	})
+enddef
+
+# URL/パスを開く共通処理
+def ExecuteOpen(raw_url: string): void
+	var url = raw_url
+	if url =~? '^\~/'
+		url = expand(url)
+	endif
+	if match(url, '^[A-Za-z0-9_.+-]\+@[A-Za-z0-9.-]\+[a-z]\{2,}$') == 0
+		url = $'mailto:{url}'
+	endif
+	dist#vim9#Open(url)
+enddef
+
+export def Open(): bool
 	var line_str: string = getline('.')
 	var m_start: number
 	var m_end: number
-	var urls: list<list<any>>
-	var only_urls: list<string>
+	var urls: list<dict<any>>
 	var url: string
-	var i: number
-	var column: number
-	var item: number
-	var msg: string
+	var count: number
+	var cur_col: number
+	var exact_matches: list<dict<any>>
+	var msg: list<string>
+	var idx: number = 1
 
-	while true
-		[url, m_start, m_end] = matchstrpos(line_str, '\<\%(\%(\%(https\=\|ftp\|gopher\)://\|\%(mailto\|file\|news\):\)[^][{}()'' \t<>"]\+\|\%(www\|web\|w3\)[A-Za-z0-9_-]*\.[A-Za-z0-9._-]\+\.[^][{}()'' \t<>"]\+\)[A-Za-z0-9/]\|\%(\~\=/\)\=\%([-A-Za-z._0-9]\+/\)*[-A-Za-z._0-9]\+\%(\.\a\%([A-Za-z0-9]\{,4}\)\|/\)\=', m_end)
+	while true # 行内のすべての Candidate (URL/メール/パス) を抽出
+		[url, m_start, m_end] = matchstrpos(line_str,
+			'\<\%(\%(\%(https\=\|ftp\|gopher\)://\|\%(mailto\|file\|news\):\)[^][{}()'' \t<>"]\+\|\%(www\|web\|w3\)[A-Za-z0-9_-]*\.[A-Za-z0-9._-]\+\.[^][{}()'' \t<>"]\+\)[A-Za-z0-9/]\|\%(\~\=/\)\=\%([-A-Za-z._0-9]\+/\)*[-A-Za-z._0-9]\+\%(\.\a\%([A-Za-z0-9]\{,4}\)\|/\)\=',
+			m_end
+		)
 		if m_start == -1
 			break
+		elseif m_start == m_end
+			m_end += 1
 		endif
-		if url !~# '^\%(\%(\%(https\=\|ftp\|gopher\)://\|\%(mailto\|file\|news\):\)[^][{}()'' \t<>"]\+\|\%(www\|web\|w3\)[a-z0-9_-]*\.[A-Za-z0-9._-]\+\.[^][{}()'' \t<>"]\+\)[A-Za-z0-9/]'
-			if glob(url) == ''
-				continue
-			endif
+		if url !~# '^\%(\%(\%(https\=\|ftp\|gopher\)://\|\%(mailto\|file\|news\):\)[^][{}()'' \t<>"]\+\|\%(www\|web\|w3\)[a-z0-9_-]*\.[A-Za-z0-9._-]\+\.[^][{}()'' \t<>"]\+\)[A-Za-z0-9/]' # URL でない
+			&& glob(url) == '' # 存在するパスでもない
+			continue
 		elseif url =~# '^\%(www\|web\|w3\)[a-z0-9_-]*\.[A-Za-z0-9._-]\+\.[^][{}()'' \t<>"]\+[A-Za-z0-9/]'
 			url = $'https://{url}'
 		endif
-		if index(only_urls, url) == -1
-			call add(only_urls, url)
-			call add(urls, [url, m_end])
-		endif
+		add(urls, {url: url, start: m_start + 1, end: m_end})
 	endwhile
-	i = len(urls)
-	if i == 0
-		echohl WarningMsg
-		echo 'No URI found in line.'
-		echohl None
-		return
+	sort(urls, (i, j) => i.url <= j.url ? -1 : 1)
+		->uniq((i, j) => i.url ==# j.url ? 0 : 1)
+		->sort((i, j) => i.start - j.start)
+	count = len(urls)
+	if count == 0
+		WarningMessage()
+		return false
+	elseif count == 1 # URL が1つだけならそのまま開く
+		ExecuteOpen(urls[0].url)
+		return true
 	endif
-	column = col('.')
-	if i == 1
-		url = urls[0][0]
-	elseif column != 1 && ( urls[len(urls) - 1][1] > column )
-		# カーソルが先頭ではなく、最後の URL/ファイル名より前に有る
-		# カーソル位置か、すぐ後ろを開く
-		for urls_i in urls
-			if urls_i[1] > column
-				url = urls_i[0]
-				break
+	# カーソル位置 (バイト単位) を取得して、カーソル直下にある URL を検索
+	cur_col = col('.')
+	exact_matches = filter(copy(urls), (_, v) => v.start <= cur_col && cur_col <= v.end)
+	if len(exact_matches) > 0 # カーソル位置に直接重なっている URL があればそれを即座に開く
+		ExecuteOpen(exact_matches[0].url)
+		return true
+	endif
+	for u in urls # 複数ある場合のポップアップ要素を作成
+		add(msg, $'[{idx}]. {u.url}')
+		idx += 1
+	endfor
+	add(msg, $'[<Esc>/<C-c>/c/x] Cancel')
+	popup_create(msg, {
+		title: 'Select Open URL',
+		col: 'cursor',
+		line: 'cursor+1',
+		zindex: 200,
+		wrap: false,
+		cursorline: true,
+		padding: [0, 1, 0, 1],
+		border: [1, 1, 1, 1],
+		borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'],
+		filter: (id, key) => {
+			if key =~? '[qc]'
+				popup_close(id, -1) # キャンセルは -1 を返す
+				return true
+			elseif key =~# '[1-9]' && str2nr(key) <= count
+				popup_close(id, str2nr(key))
+				return true
+			elseif key =~# '0' && str2nr(key) <= count
+				popup_close(id, 10)
+				return true
+			else
+				return popup_filter_menu(id, key)
 			endif
-		endfor
-	else # メニュー表示で選択
-		item = 1
-		msg = ''
-		for urls_i in urls
-			msg = $"{msg}{item}. {urls_i[0]}\n"
-			item += 1
-		endfor
-		item = input($'{msg}Select open URL/File [1-{item - 1}] ')->str2nr()
-		if item == 0
-			return
-		endif
-		url = urls[item - 1][0]
-		redraw
-	endif
-	if url[0 : 1] ==? '~/'
-		url = expand(url)
-	endif
-	if getftype(url) ==# ''
-		if match(url, '^[A-Za-z0-9_.+-]\+@[A-Za-z0-9.-]\+[a-z]\{2,\}$') == 0
-			url = $'mailto:{url}'
-		endif
-	endif
-	dist#vim9#Open(url)
-	return
+		},
+		mapping: false,
+		callback: (id, result) => {
+			if type(result) != v:t_number || result <= 0 || result > count # キャンセル (-1 や Esc/0) の場合は何もしない
+				return
+			endif
+			ExecuteOpen(urls[result - 1].url)
+		}
+	})
+	return true
 enddef
