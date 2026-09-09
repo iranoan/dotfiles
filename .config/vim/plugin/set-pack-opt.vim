@@ -410,6 +410,10 @@ nnoremap <Leader>dx       <Cmd>call set_vimspector#main('call vimspector#Reset( 
 nnoremap <Leader>di       <Cmd>call set_vimspector#main('VimspectorBalloonEval')<CR>
 xnoremap <Leader>di       <Cmd>call set_vimspector#main('VimspectorBalloonEval')<CR>
 
+# カーソル行の URL やファイルを開く $MYVIMDIR/pack/my-plug/opt/open_uri/ {{{2
+nnoremap <silent><Leader>x <Cmd>call set_open_uri#main()<CR>
+nnoremap <2-LeftMouse>     <Cmd>call set_open_uri#main()<CR>
+
 # 文字の変換 $MYVIMDIR/pack/my-plug/opt/transform/ {{{2
 nnoremap <Leader>ha <Cmd>call set_transform#main('Zen2han')<CR>
 xnoremap <Leader>ha <Cmd>call set_transform#main('Zen2han')<CR>
