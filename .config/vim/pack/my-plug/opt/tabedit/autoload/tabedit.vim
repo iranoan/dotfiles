@@ -1,8 +1,8 @@
 vim9script
 
 export def Tabedit(...arg: list<string>): void
-	var win_id: number = 0  # 終了後最初に見つかった/開いたアクティブにする候補の初期値 (有り得ない 0 としておく)
-	def GotoWin(windows: list<number>): bool  # windows[] をアクティブ候補に
+	var win_id: number = 0 # 終了後最初に見つかった/開いたアクティブにする候補の初期値 (有り得ない 0 としておく)
+	def GotoWin(windows: list<number>): bool # windows[] をアクティブ候補に
 		if windows == []
 			return false
 		endif
@@ -23,7 +23,7 @@ export def Tabedit(...arg: list<string>): void
 	enddef
 
 	def Open(f: any): void
-		def OpenFile(subf: string): void  # ファイル subf を開く
+		def OpenFile(subf: string): void # ファイル subf を開く
 			def SubOpenFile(subsubf: string): bool # 既に開いていれば移動、もしくは閉じたバッファを開き直す
 				for v in getbufinfo()
 					if subsubf != v.name
@@ -62,9 +62,9 @@ export def Tabedit(...arg: list<string>): void
 		enddef
 
 		var ftype: string = getftype(f)
-		if ftype ==# 'file' || ftype ==# 'link'  # ファイルが存在するなら無条件で開く
+		if ftype ==# 'file' || ftype ==# 'link' # ファイルが存在するなら無条件で開く
 			OpenFile(f)
-		elseif ftype ==# 'dir'  # ディレクトリなら Fern で開く
+		elseif ftype ==# 'dir' # ディレクトリなら Fern で開く
 			var cmd: list<any> = get(g:, 'tabedit_dir', [])
 			if cmd == []
 				dist#vim9#Open(f)
@@ -99,7 +99,7 @@ export def Tabedit(...arg: list<string>): void
 		Open(f)
 	endfor
 	win_gotoid(win_id)
-	redraw  # これが無いとタグが切り替わったように見えない
+	redraw # これが無いとタグが切り替わったように見えない
 enddef
 
 export def CompFile(arg: string, cmd: string, pos: number): list<string>
