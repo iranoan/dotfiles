@@ -165,7 +165,6 @@ augroup END
 # *.vim で再設定されてしまう分は $MYVIMDIR/after/ftplugin/vim.vim
 nnoremap <silent>gf <Cmd>TabEdit <cfile><CR>
 xnoremap <silent>gf <Cmd>call tabedit#Tabedit(expand(getregion(getpos('.'), getpos('v'), {'type': mode()})->join('')))<CR>
-# nnoremap <silent>gf :TabEdit <cfile><CR> " ← 存在しなくても開く <C-R><C-F> と同じ
 
 # grep で幾つかのオプションをデフォルトで付けたり、補完を可能にする $MYVIMDIR/pack/my-plug/opt/gnu-grep/ {{{2
 # statusline  w:quickfix_title 変更は $MYVIMDIR/ftplugin/qf.vim

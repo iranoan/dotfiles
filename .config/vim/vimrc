@@ -607,8 +607,9 @@ nnoremap <silent><silent><Leader>hb :let b:pos=getpos(".")<CR>:%!base64 -di -w 0
 xnoremap <silent><silent><Leader>hb :!base64 -di -w 0 -<CR>
 # }}}
 # カーソル位置、範囲選択部分を関連付けで開く {{{2
-# gx のままだと、~/,  $MYVIMDIR 等が使えない ($MYVIMDIR などは範囲選択の必要がある) $MYGVIMRC
-# 以前自作プラグインを使っていたのでそのマップを残している
+# gx のままだと、~/,  $MYVIMDIR 等が使えない
+# URL にも対応しているが、メールアドレスは mailto: が前にあり選択しないとだめ
+# 以前自作プラグインを使っていたのでそのマップを残している←<cfile> で取り込めないため
 nnoremap <silent><Leader>x <Cmd>call dist#vim9#Open(expand('<cfile>:p'))<CR>
 nnoremap <2-LeftMouse>     <Cmd>call dist#vim9#Open(expand('<cfile>:p'))<CR>
 nnoremap gx                <Cmd>call dist#vim9#Open(expand('<cfile>:p'))<CR>
