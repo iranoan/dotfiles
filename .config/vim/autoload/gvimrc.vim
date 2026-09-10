@@ -67,9 +67,20 @@ def GnomeGetWinId(): number # Wayland でも Gnome 環境で Windows-ID 取得 (
 	if !EnableGnomeExtension(['window-calls'])
 		return 0
 	endif
-	return systemlist(['gdbus', 'call', '--session', '--dest', 'org.gnome.Shell', '--object-path', '/org/gnome/Shell/Extensions/Windows', '--method', 'org.gnome.Shell.Extensions.Windows.List'])
-			->matchstrlist('{\%([^"{}]\|"\%(\\.\|[^"\\]\)*"\)*}')
-			->map((_, v) => js_decode(v.text))
+	var title_pattern: string = '\%("title":"\%([^"]\|\\"\)\+"\|\\"title\\":\\"\%([^"]\|\\\{3}"\)\+"\)'
+	# 開いているファイルやブラウザでのウェブ検索キーワードによって変化するウィンドウ・タイトル情報を削除
+	# 検索キーワードの最初が通常で、後半が ", ' 両方を含む場合
+	var gdbus_out: string = system(['gdbus', 'call', '--session', '--dest', 'org.gnome.Shell', '--object-path', '/org/gnome/Shell/Extensions/Windows', '--method', 'org.gnome.Shell.Extensions.Windows.List'])
+	                          ->substitute($'\%({title_pattern},\|,{title_pattern}\ze}}\)', '', 'g')
+	#                           検索キーの後半がtitleキーが最後にある場合、前半がそれ以外 (通常ありえない title キーしかない場合は考慮していない)
+
+	if gdbus_out =~# '^("' # 開いているファイルやブラウザでのウェブ検索キーワードに ", ' 両方を含む場合
+		gdbus_out = matchstr(gdbus_out, '^("\zs.*\ze",\s*)\_s*$')
+			           ->substitute('\\"', '"', 'g') # キー自身も \" で挟まれているので " のみにする
+	else
+		gdbus_out = matchstr(gdbus_out, '^(''\zs.*\ze'',\s*)\_s*$')
+	endif
+	return js_decode(gdbus_out)
 			->filter((_, v) => v.wm_class_instance ==# 'gvim')[0].id
 enddef
 
