@@ -45,6 +45,7 @@ export def FontSize(size: number): void # フォント・サイズを増減
 enddef
 
 def EnableGnomeExtension(ls: list<string>): bool # Gnome Extension ls の何れかが使えるか?
+	# 複数の内どれかがあれば呼び場合があるので、list<string> にしている
 	var extensions: list<string> = systemlist(['dconf', 'read', '/org/gnome/shell/enabled-extensions'])
 	->get(0, '[]')
 	->eval()
@@ -72,7 +73,7 @@ def GnomeGetWinId(): number # Wayland でも Gnome 環境で Windows-ID 取得 (
 			->filter((_, v) => v.wm_class_instance ==# 'gvim')[0].id
 enddef
 
-export def GnomeTopLeft(): void # Wayland でも Gnome なら GVim のウィンドウを左上に (Window Calls 拡張機能が必要)
+export def GnomeTopLeft(): void # Wayland でも Gnome なら GVim のウィンドウを左上に (Window Calls に加えて ubuntu-dock/dash-to-dock 何れかの拡張機能が必要)
 	var id: number
 	var x: number
 	var y: number
