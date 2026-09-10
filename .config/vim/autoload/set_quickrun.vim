@@ -4,7 +4,7 @@ function set_quickrun#main() abort
 	" QuickFix 拡張 https://github.com/osyo-manga/shabadou.vim {{{
 	packadd shabadou.vim " }}}
 	" 非同期処理 https://github.com/Shougo/vimproc.vim {{{
-	" do-setup: make
+	" job に変更したから不要→do-setup: make
 	packadd vimproc.vim
 	" }}}
 	" #include<> に応じてコンパイル・オプション -l 追加 https://github.com/mattn/vim-quickrunex {{{
@@ -17,7 +17,7 @@ function set_quickrun#main() abort
 	"ウィンドウは上
 	let g:quickrun_config._ = {
 				\ 'runmode'                         : 'async:remote:vimproc',
-				\ 'runner'                          : 'vimproc',
+				\ 'runner'                          : 'job',
 				\ 'runner/vimproc/updatetime'       : 40,
 				\ 'outputter'                       : 'error',
 				\ 'outputter/quickfix/open_cmd'     : 'topleft copen 8',
