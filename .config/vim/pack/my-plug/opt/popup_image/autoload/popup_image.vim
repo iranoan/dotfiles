@@ -205,43 +205,52 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 	var img_cols: number # 画像の桁数相当サイズ
 	var img_lines: number # 画像の行数相当サイズ
 
-	def SetImage(img_data: blob): bool
-		if len(img_data) != w * h * 3
-			AddErrorMessage(id, [
-				'''data size'' is not eqal ''width x height x 3''',
-				$'file path:          {p}',
-				$'data size:          {len(img_data)}',
-				$'width:              {w}',
-				$'height:             {h}',
-				$'width x height x 3: {w * h * 3}',
-			])
-			return false
-		endif
-		if win_opts.options.maxwidth == 0 || win_opts.options.maxheight == 0 # 呼び出し時にウィンドウサイズの指定がない
-			 || z == -2 # 若しくは、第3引数で指定
-			max_w = img_cols
-			max_h = img_lines
-		endif
-		popup_setoptions(id, extendnew(opts, extendnew(win_opts.options, {
-			image: {data: img_data, width: w, height: h},
-			minwidth: max_w,
-			minheight: max_h,
-			maxwidth: max_w,
-			maxheight: max_h,
-			border: not_empty_title ? opts.border : [0, 0, 0, 0],
-			padding: border == 0 && not_empty_title ? [1, padding[1], padding[2], padding[3]] : padding,
-		})))
-		extend(win_opts.pre_info, {maxwidth: max_w, maxheight: max_h, path: path})
-		setwinvar(id, 'popup_image', win_opts)
-		popup_settext(id, [])
-		redraw
-		return true
-	enddef
-
-	def SystemBlob(cmd: list<string>, delete: string, OnComplete: func(bool)): void
+	def SystemBlob(cmd: list<string>, delete: string): void
 		var img_data: blob
 		var err_line: string
-		popup_setoptions(id, {opacity: 100}) # 透明度があると画像変換に失敗するファイルが多くある
+		var job_exited: bool
+		var channel_closed: bool
+
+		def SetImage(): void
+			if !job_exited || !channel_closed
+				return
+			endif
+			if len(img_data) != w * h * 3
+				AddErrorMessage(id, [
+					'''data size'' is not eqal ''width x height x 3''',
+					$'file path:          {p}',
+					$'data size:          {len(img_data)}',
+					$'width:              {w}',
+					$'height:             {h}',
+					$'width x height x 3: {w * h * 3}',
+				])
+				if OnDone != null
+					OnDone(false)
+				endif
+			endif
+			if win_opts.options.maxwidth == 0 || win_opts.options.maxheight == 0 # 呼び出し時にウィンドウサイズの指定がない
+					|| z == -2 # 若しくは、第3引数で指定
+				max_w = img_cols
+				max_h = img_lines
+			endif
+			popup_setoptions(id, extendnew(opts, extendnew(win_opts.options, {
+				image: {data: img_data, width: w, height: h},
+				minwidth: max_w,
+				minheight: max_h,
+				maxwidth: max_w,
+				maxheight: max_h,
+				border: not_empty_title ? opts.border : [0, 0, 0, 0],
+				padding: border == 0 && not_empty_title ? [1, padding[1], padding[2], padding[3]] : padding,
+			})))
+			extend(win_opts.pre_info, {maxwidth: max_w, maxheight: max_h, path: path})
+			setwinvar(id, 'popup_image', win_opts)
+			popup_settext(id, [])
+			redraw
+			if OnDone != null
+				OnDone(true)
+			endif
+		enddef
+
 		extend(win_opts, {job: job_start(cmd, {
 			out_io: 'pipe',
 			err_io: 'pipe',
@@ -254,18 +263,16 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 				err_line ..= msg
 			},
 			exit_cb: (_, status: number) => {
+				job_exited = true
 				extend(win_opts, {job: null_job})
 				if delete !=# ''
 					delete(p)
 				endif
 				if status == 0
-					var success: bool = SetImage(img_data)
-					if OnComplete != null
-						OnComplete(success)
-					endif
+					SetImage()
 				else
 					var stdout: list<string>
-					if OnComplete != null
+					if OnDone != null
 						if type(img_data) == v:t_blob && img_data != null_blob
 							try
 								stdout = blob2str(img_data)
@@ -273,9 +280,13 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 							endtry
 						endif
 						AddErrorMessage(id, [$'Convert Error or Cancel Image Data Conversion: {p}'] + stdout + split(err_line, "[\n\r]"))
-						OnComplete(false)
+						OnDone(false)
 					endif
 				endif
+			},
+			close_cb: (_) => { # channel が閉じられていることも確認←出力の取りこぼしを防ぐ
+				channel_closed = true
+				SetImage() # 本来は job の終了を確認すべきだが、結果的に呼び出し先で確認している
 			}
 		})})
 		return
@@ -342,7 +353,7 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 			return
 		endif
 		[w, h, img_cols, img_lines] = ScaleImage(w_h[2] - w_h[0], w_h[3] - w_h[1])
-		SystemBlob(['sh', '-c', $'gs -q -dNOPAUSE -dBATCH -dEPSCrop -sDEVICE=ppmraw -r600 -dFirstPage=1 -dLastPage=1 -sOutputFile=- {shellescape(p)} | ffmpeg -hide_banner -v error -i - -vf scale={w}:{h} -f rawvideo -pix_fmt rgb24 -'], '', OnDone)
+		SystemBlob(['sh', '-c', $'gs -q -dNOPAUSE -dBATCH -dEPSCrop -sDEVICE=ppmraw -r600 -dFirstPage=1 -dLastPage=1 -sOutputFile=- {shellescape(p)} | ffmpeg -hide_banner -v error -i - -vf scale={w}:{h} -f rawvideo -pix_fmt rgb24 -'], '')
 	else
 		var temp: string
 		var plugin: string = get(get(g:popup_image_options, 'plugin', {}), ft, '')
@@ -357,7 +368,7 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 		silent [w, h] = split(system(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height', '-of', 'csv=p=0', p]), ',')
 			->map((_, v) => str2nr(v))
 		[w, h, img_cols, img_lines] = ScaleImage(w, h)
-		SystemBlob(['ffmpeg', '-hide_banner'] + t + ['-i', p, '-vf', $'scale={w}:{h}', '-vframes', '1', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], temp, OnDone)
+		SystemBlob(['ffmpeg', '-hide_banner'] + t + ['-i', p, '-vf', $'scale={w}:{h}', '-vframes', '1', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], temp)
 	endif
 enddef
 
