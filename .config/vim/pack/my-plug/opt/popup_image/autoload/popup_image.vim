@@ -210,9 +210,24 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 		var err_line: string
 		var job_exited: bool
 		var channel_closed: bool
+		var job_exit_code: number = -1
 
 		def SetImage(): void
 			if !job_exited || !channel_closed
+				return
+			endif
+			if job_exit_code != 0
+				var stdout: list<string>
+				if OnDone != null
+					if type(img_data) == v:t_blob && img_data != null_blob
+						try
+							stdout = blob2str(img_data)
+						catch /^Vim\%((\S\+)\)\=:E1515:/
+						endtry
+					endif
+					AddErrorMessage(id, [$'Convert Error or Cancel Image Data Conversion: {p}'] + stdout + split(err_line, "[\n\r]"))
+					OnDone(false)
+				endif
 				return
 			endif
 			if len(img_data) != w * h * 3
@@ -268,21 +283,8 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 				if delete !=# ''
 					delete(p)
 				endif
-				if status == 0
-					SetImage()
-				else
-					var stdout: list<string>
-					if OnDone != null
-						if type(img_data) == v:t_blob && img_data != null_blob
-							try
-								stdout = blob2str(img_data)
-							catch /^Vim\%((\S\+)\)\=:E1515:/
-							endtry
-						endif
-						AddErrorMessage(id, [$'Convert Error or Cancel Image Data Conversion: {p}'] + stdout + split(err_line, "[\n\r]"))
-						OnDone(false)
-					endif
-				endif
+				job_exit_code = status
+				SetImage()
 			},
 			close_cb: (_) => { # channel が閉じられていることも確認←出力の取りこぼしを防ぐ
 				channel_closed = true
