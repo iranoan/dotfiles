@@ -148,11 +148,12 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 	var win_opts: dict<any> = getwinvar(id, 'popup_image', {highlight: '', highlights: ''})
 	popup_settext(id, ['Making Image Data...'])
 	popup_setoptions(id, {wrap: true, highlight: 'PopupImageMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupImageMsg'})
+	redraw
+	sleep 1m # 時間のかかるこの後の処理前に上のメッセージを確実に表示する
 
 	if win_opts.job != null_job && job_status(win_opts.job) == 'run'
 		job_stop(win_opts.job)
 		extend(win_opts, {job: null_job})
-		# メッセージを表示したいが、この後に続く処理ですぐに書き換わってしまう
 	endif
 
 	var max_w: number # popup の最大桁数
@@ -396,7 +397,7 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 		var temp: string
 		var plugin: string = get(get(g:popup_image_options, 'plugin', {}), ft, '')
 		if plugin !=# ''
-				temp = call(plugin, [id, p])
+			temp = call(plugin, [id, p])
 			if temp ==# ''
 				OnDone(false)
 				return
