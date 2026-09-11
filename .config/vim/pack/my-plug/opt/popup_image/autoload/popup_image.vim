@@ -205,14 +205,14 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 	var img_cols: number # 画像の桁数相当サイズ
 	var img_lines: number # 画像の行数相当サイズ
 
-	def SystemBlob(cmd: list<string>, delete: string): void
+	def ConvPrevImage(cmd: list<string>, delete: string): void
 		var img_data: blob
 		var err_line: string
 		var job_exited: bool
 		var channel_closed: bool
 		var job_exit_code: number = -1
 
-		def SetImage(): void
+		def SetOutput(): void
 			if !job_exited || !channel_closed
 				return
 			endif
@@ -277,6 +277,10 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 			err_cb: (_, msg: string) => {
 				err_line ..= msg
 			},
+			close_cb: (_) => { # channel が閉じられていることの確認←出力の取りこぼしを防ぐ
+				channel_closed = true
+				SetOutput() # 本来は job の終了を確認すべきだが、結果的に呼び出し先で確認している
+			},
 			exit_cb: (_, status: number) => {
 				job_exited = true
 				extend(win_opts, {job: null_job})
@@ -284,11 +288,7 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 					delete(p)
 				endif
 				job_exit_code = status
-				SetImage()
-			},
-			close_cb: (_) => { # channel が閉じられていることも確認←出力の取りこぼしを防ぐ
-				channel_closed = true
-				SetImage() # 本来は job の終了を確認すべきだが、結果的に呼び出し先で確認している
+				SetOutput()
 			}
 		})})
 		return
@@ -355,7 +355,7 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 			return
 		endif
 		[w, h, img_cols, img_lines] = ScaleImage(w_h[2] - w_h[0], w_h[3] - w_h[1])
-		SystemBlob(['sh', '-c', $'gs -q -dNOPAUSE -dBATCH -dEPSCrop -sDEVICE=ppmraw -r600 -dFirstPage=1 -dLastPage=1 -sOutputFile=- {shellescape(p)} | ffmpeg -hide_banner -v error -i - -vf scale={w}:{h} -f rawvideo -pix_fmt rgb24 -'], '')
+		ConvPrevImage(['sh', '-c', $'gs -q -dNOPAUSE -dBATCH -dEPSCrop -sDEVICE=ppmraw -r600 -dFirstPage=1 -dLastPage=1 -sOutputFile=- {shellescape(p)} | ffmpeg -hide_banner -v error -i - -vf scale={w}:{h} -f rawvideo -pix_fmt rgb24 -'], '')
 	else
 		var temp: string
 		var plugin: string = get(get(g:popup_image_options, 'plugin', {}), ft, '')
@@ -370,7 +370,7 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 		silent [w, h] = split(system(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height', '-of', 'csv=p=0', p]), ',')
 			->map((_, v) => str2nr(v))
 		[w, h, img_cols, img_lines] = ScaleImage(w, h)
-		SystemBlob(['ffmpeg', '-hide_banner'] + t + ['-i', p, '-vf', $'scale={w}:{h}', '-vframes', '1', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], temp)
+		ConvPrevImage(['ffmpeg', '-hide_banner'] + t + ['-i', p, '-vf', $'scale={w}:{h}', '-vframes', '1', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], temp)
 	endif
 enddef
 
