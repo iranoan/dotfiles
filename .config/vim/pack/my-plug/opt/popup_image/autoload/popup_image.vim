@@ -205,36 +205,23 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 	var img_cols: number # 画像の桁数相当サイズ
 	var img_lines: number # 画像の行数相当サイズ
 
-	def ConvPrevImage(cmd: list<string>, delete: string): void
-		var img_data: blob
+	def ConvPrevImage(cmd: list<string>, delete: string, in_data: blob = null_blob): void
+		var out_data: blob
 		var err_line: string
 		var job_exited: bool
 		var channel_closed: bool
+		var job_obj: job
 		var job_exit_code: number = -1
+		var curr_cmd: list<string>
+		var next_cmd: list<string>
+		var pipe_idx: number = index(cmd, '|')
 
-		def SetOutput(): void
-			if !job_exited || !channel_closed
-				return
-			endif
-			if job_exit_code != 0
-				var stdout: list<string>
-				if OnDone != null
-					if type(img_data) == v:t_blob && img_data != null_blob
-						try
-							stdout = blob2str(img_data)
-						catch /^Vim\%((\S\+)\)\=:E1515:/
-						endtry
-					endif
-					AddErrorMessage(id, [$'Convert Error or Cancel Image Data Conversion: {p}'] + stdout + split(err_line, "[\n\r]"))
-					OnDone(false)
-				endif
-				return
-			endif
-			if len(img_data) != w * h * 3
+		def SetImage(): void
+			if len(out_data) != w * h * 3
 				AddErrorMessage(id, [
 					'''data size'' is not eqal ''width x height x 3''',
 					$'file path:          {p}',
-					$'data size:          {len(img_data)}',
+					$'data size:          {len(out_data)}',
 					$'width:              {w}',
 					$'height:             {h}',
 					$'width x height x 3: {w * h * 3}',
@@ -242,6 +229,7 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 				if OnDone != null
 					OnDone(false)
 				endif
+				return
 			endif
 			if win_opts.options.maxwidth == 0 || win_opts.options.maxheight == 0 # 呼び出し時にウィンドウサイズの指定がない
 					|| z == -2 # 若しくは、第3引数で指定
@@ -249,7 +237,7 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 				max_h = img_lines
 			endif
 			popup_setoptions(id, extendnew(opts, extendnew(win_opts.options, {
-				image: {data: img_data, width: w, height: h},
+				image: {data: out_data, width: w, height: h},
 				minwidth: max_w,
 				minheight: max_h,
 				maxwidth: max_w,
@@ -266,20 +254,59 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 			endif
 		enddef
 
-		extend(win_opts, {job: job_start(cmd, {
+		def TryFinish(): void
+			if !job_exited || !channel_closed
+				return
+			endif
+			if job_exit_code < 0 # job_stop() で終了
+				AddErrorMessage(id, [$'Cancel Image Data Conversion: {p}'])
+				OnDone(false)
+				return
+			elseif job_exit_code != 0 # プログラム自体のコマンドエラー
+				var stdout: list<string>
+				if OnDone != null
+					if type(out_data) == v:t_blob && out_data != null_blob
+						try
+							stdout = blob2str(out_data)
+						catch /^Vim\%((\S\+)\)\=:E1515:/
+						endtry
+					endif
+					AddErrorMessage(id, ['Convert Error'] + stdout + split(err_line, "[\n\r]"))
+					OnDone(false)
+				endif
+				return
+			endif
+			if !empty(next_cmd) # 次に実行すべきコマンド群(next_cmd)が残っていれば再帰呼び出し
+				ConvPrevImage(next_cmd, delete, out_data)
+			else # パイプの最後のコマンドまで到達したら画像を表示
+				SetImage()
+				if delete !=# '' && filereadable(delete)
+					delete(delete)
+				endif
+			endif
+		enddef
+
+		if pipe_idx != -1
+			curr_cmd = cmd[0 : pipe_idx - 1]
+			next_cmd = cmd[pipe_idx + 1 : -1]
+		else
+			curr_cmd = cmd
+			next_cmd = []
+		endif
+		job_obj = job_start(curr_cmd, extendnew({ # まず共通部分のオプション
 			out_io: 'pipe',
 			err_io: 'pipe',
 			out_mode: 'blob',
 			err_mode: 'nl',
 			out_cb: (_, data: blob) => {
-				img_data += data
+				out_data += data
 			},
 			err_cb: (_, msg: string) => {
 				err_line ..= msg
 			},
 			close_cb: (_) => { # channel が閉じられていることの確認←出力の取りこぼしを防ぐ
 				channel_closed = true
-				SetOutput() # 本来は job の終了を確認すべきだが、結果的に呼び出し先で確認している
+				TryFinish() # 本来は job の終了を確認すべきだが、結果的に呼び出し先で確認している
 			},
 			exit_cb: (_, status: number) => {
 				job_exited = true
@@ -288,9 +315,18 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 					delete(p)
 				endif
 				job_exit_code = status
-				SetOutput()
+				TryFinish()
 			}
-		})})
+		}, in_data != null_blob ? { # データを標準入力から読み込む場合
+			in_io: 'pipe',
+			in_mode: 'blob'
+		} : {}))
+		extend(win_opts, {job: job_obj})
+		if in_data != null_blob
+			var ch = job_getchannel(job_obj)
+			ch_sendraw(ch, in_data)
+			ch_close_in(ch)
+		endif
 		return
 	enddef
 
@@ -355,7 +391,7 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 			return
 		endif
 		[w, h, img_cols, img_lines] = ScaleImage(w_h[2] - w_h[0], w_h[3] - w_h[1])
-		ConvPrevImage(['sh', '-c', $'gs -q -dNOPAUSE -dBATCH -dEPSCrop -sDEVICE=ppmraw -r600 -dFirstPage=1 -dLastPage=1 -sOutputFile=- {shellescape(p)} | ffmpeg -hide_banner -v error -i - -vf scale={w}:{h} -f rawvideo -pix_fmt rgb24 -'], '')
+		ConvPrevImage(['gs', '-q', '-dNOPAUSE', '-dBATCH', '-dEPSCrop', '-sDEVICE=ppmraw', '-r150', '-dFirstPage=1', '-dLastPage=1', '-sOutputFile=-', p, '|', 'ffmpeg', '-hide_banner', '-v', 'error', '-i', '-', '-vf', $'scale={w}:{h}', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], '')
 	else
 		var temp: string
 		var plugin: string = get(get(g:popup_image_options, 'plugin', {}), ft, '')
@@ -386,3 +422,4 @@ export def ResetPreview(id: number, f: string): void
 		Preview(id, f, 0)
 	endif
 enddef
+defcompile
