@@ -67,6 +67,8 @@ def SaveOrignalOption(id: number): dict<any>
 			err_msg: [],
 			job: null_job,
 			options: { # イメージ表示で変更するオプション
+				minwidth:  opts.minwidth,
+				minheight: opts.minheight,
 				maxwidth:  opts.maxwidth,
 				maxheight: opts.maxheight,
 				highlight: opts.highlight,
@@ -132,7 +134,11 @@ export def WarningMsg(id: number): void
 	endif
 	SaveOrignalOption(id)
 	popup_settext(id, remove(getwinvar(id, 'popup_image', {err_msg: []}).err_msg, -1))
-	popup_setoptions(id, {highlight: 'PopupImageWarningMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupImageWarningMsg', opacity: 100})
+	popup_setoptions(id, extendnew(getwinvar(id, 'popup_image', {options: {}}).options, {
+		highlight: 'PopupImageWarningMsg',
+		highlights: 'PopupTitle:Pmenu,Popup:PopupImageWarningMsg',
+		opacity: 100
+	}))
 enddef
 
 def DummyDone(_: bool)
@@ -147,7 +153,11 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 	var opts: dict<any> = SaveOrignalOption(id)
 	var win_opts: dict<any> = getwinvar(id, 'popup_image', {highlight: '', highlights: ''})
 	popup_settext(id, ['Making Image Data...'])
-	popup_setoptions(id, {wrap: true, highlight: 'PopupImageMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupImageMsg'})
+	popup_setoptions(id, extendnew(win_opts.options, {
+		wrap: true,
+		highlight: 'PopupImageMsg',
+		highlights: 'PopupTitle:Pmenu,Popup:PopupImageMsg'
+	}))
 	redraw
 	sleep 1m # 時間のかかるこの後の処理前に上のメッセージを確実に表示する
 
@@ -423,4 +433,3 @@ export def ResetPreview(id: number, f: string): void
 		Preview(id, f, 0)
 	endif
 enddef
-defcompile
