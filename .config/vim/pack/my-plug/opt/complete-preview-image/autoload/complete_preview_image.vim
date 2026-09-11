@@ -23,6 +23,9 @@ def GetPath(): string
 	var line: string
 	var last_quote: number
 
+	if f ==# ''
+		return ''
+	endif
 	if f !~# '/' # 元々のバッファの記載、もしくは補完候補の文字列がファイル名のみ
 		line = getline('.')[ : col('.') - 2]
 		if line =~# '[[''"(]' # ", ' [], () に挟まれている場合を想定して、カーソル位置より前にその記号があれば、それ以降を取得
