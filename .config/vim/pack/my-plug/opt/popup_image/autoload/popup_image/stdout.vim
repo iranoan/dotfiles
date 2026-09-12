@@ -3,20 +3,16 @@ scriptencoding utf-8
 
 def UnzipText(epub_path: string, inner_path: string): string
 	var lines: list<string> = systemlist(['unzip', '-p', epub_path, inner_path])
-	return v:shell_error == 0 ? join(lines, "\n") : ''
+	return v:shell_error == 0 ? join(lines) : ''
 enddef
 
-export def StdOutImgCmd(id: number, epub: string): list<string>
+export def Epub(id: number, epub: string): list<string>
 	if !executable('unzip')
 		popup_image#AddErrorMessage(id, ['Install unzip'])
 		return []
 	endif
 	var epub_path: string = expand(epub)->fnamemodify(':p')
-	var output_dir: string = $'{$MYVIMDIR}temp/'
 	var container_xml: string = UnzipText(epub_path, 'META-INF/container.xml')
-	if !isdirectory(output_dir)
-		mkdir(output_dir)
-	endif
 	if empty(container_xml)
 		popup_image#AddErrorMessage(id, ["Do not find 'META-INF/container.xml'"])
 		return []

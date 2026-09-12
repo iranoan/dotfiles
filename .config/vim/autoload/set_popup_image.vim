@@ -6,10 +6,10 @@ function! set_popup_image#init() abort
 	endif
 	let g:popup_image_options = #{
 				\ pt2px: #{x: 131, y: 154},
-				\ raw: {'application/epub+zip': 'popup_image#epub#StdOutImgCmd'},
+				\ raw: {'application/epub+zip': 'popup_image#stdout#Epub'},
 				\ plugin: {
-				\ 	'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'popup_image#pptx#SaveCoverImage',
-				\ 	'application/vnd.oasis.opendocument.presentation': 'popup_image#pptx#SaveCoverImage',
+				\ 	'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'popup_image#save#PptxOdp',
+				\ 	'application/vnd.oasis.opendocument.presentation': 'popup_image#save#PptxOdp',
 				\ 	}
 				\ }
 	" 画像などのプレビュー $MYVIMDIR/pack/my-plug/opt/popup_image/ {{{2
