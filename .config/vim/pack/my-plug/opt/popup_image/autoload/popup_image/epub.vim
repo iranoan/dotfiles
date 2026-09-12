@@ -6,35 +6,34 @@ def UnzipText(epub_path: string, inner_path: string): string
 	return v:shell_error == 0 ? join(lines, "\n") : ''
 enddef
 
-export def SaveCoverImage(id: number, epub: string): string
+export def StdOutImgCmd(id: number, epub: string): list<string>
 	if !executable('unzip')
 		popup_image#AddErrorMessage(id, ['Install unzip'])
-		return ''
+		return []
 	endif
 	var epub_path: string = expand(epub)->fnamemodify(':p')
 	var output_dir: string = $'{$MYVIMDIR}temp/'
 	var container_xml: string = UnzipText(epub_path, 'META-INF/container.xml')
-	var cover_id: string
-	var image_href: string
 	if !isdirectory(output_dir)
 		mkdir(output_dir)
 	endif
 	if empty(container_xml)
 		popup_image#AddErrorMessage(id, ["Do not find 'META-INF/container.xml'"])
-		return ''
+		return []
 	endif
 	var opf_relative_path: string = matchstr(container_xml, 'full-path="\zs[^"]\+\ze"')
 	if empty(opf_relative_path)
 		popup_image#AddErrorMessage(id, ['Do not find opf file'])
-		return ''
+		return []
 	endif
 	var opf_xml: string = UnzipText(epub_path, opf_relative_path)
 	if empty(opf_xml)
 		popup_image#AddErrorMessage(id, [$"Do not include opf file: {opf_relative_path}"])
-		return ''
+		return []
 	endif
 	# EPUB3: <item ... properties="...cover-image..." id="ID" ...>
 	var cover_item_match: string = matchstr(opf_xml, '<item\s\+[^>]*properties="[^"]*cover-image[^"]*"[^>]*>')
+	var cover_id: string
 	if !empty(cover_item_match)
 		cover_id = matchstr(cover_item_match, 'id="\zs[^"]\+\ze"')
 	endif
@@ -46,6 +45,7 @@ export def SaveCoverImage(id: number, epub: string): string
 		endif
 	endif
 	# 4. 表紙画像の href (相対パス) を特定
+	var image_href: string
 	if !empty(cover_id)
 		var item_by_id: string = matchstr(opf_xml, $'<item\s\+[^>]*id="{cover_id}"[^>]*>')
 		image_href = matchstr(item_by_id, 'href="\zs[^"]\+\ze"')
@@ -54,18 +54,13 @@ export def SaveCoverImage(id: number, epub: string): string
 	endif
 	if empty(image_href)
 		popup_image#AddErrorMessage(id, [$"Do not include image file: {image_href}"])
-		return ''
+		return []
 	endif
 	var opf_dir: string = fnamemodify(opf_relative_path, ':h')
 	var full_image_path: string = (opf_dir == '.' || empty(opf_dir))
 		? image_href
 		: opf_dir .. '/' .. image_href
 
-	# unzip -j (パス構造を無視) -o (上書き) <epub> <内部画像パス> -d <出力先ディレクトリ>
-	var stdout: list<string> = systemlist($'unzip -j -o {shellescape(epub_path)} {shellescape(full_image_path)} -d {shellescape(output_dir)} 2>&1')
-	if v:shell_error != 0
-		popup_image#AddErrorMessage(id, [$"Can not decompress image file: {image_href}"] + stdout)
-		return ''
-	endif
-	return $'{output_dir}{fnamemodify(full_image_path, ':t')}'
+	# unzip -c (標準出力に書き出す) <epub> <内部画像パス>
+	return ['unzip', '-c', epub_path, full_image_path]
 enddef

@@ -6,8 +6,8 @@ function! set_popup_image#init() abort
 	endif
 	let g:popup_image_options = #{
 				\ pt2px: #{x: 131, y: 154},
+				\ raw: {'application/epub+zip': 'popup_image#epub#StdOutImgCmd'},
 				\ plugin: {
-				\ 	'application/epub+zip': 'popup_image#epub#SaveCoverImage',
 				\ 	'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'popup_image#pptx#SaveCoverImage',
 				\ 	'application/vnd.oasis.opendocument.presentation': 'popup_image#pptx#SaveCoverImage',
 				\ 	}

@@ -108,12 +108,8 @@ min_size~
 plugin~
 	Type: |Dictionary|
 
-	例: >vim
-		let g:popup_image_options = {plugin: {
-			\ 	'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'popup_image#pptx#SaveCoverImage',
-			\ 	'application/vnd.oasis.opendocument.presentation': 'popup_image#pptx#SaveCoverImage',
-			\ }}
-<
+	* 対応してないファイル・タイプを処理するための関数を指定する
+	  - 中間ファイルを出力するタイプ
 	* mimetype をキー、値は mimetyp の時に呼び出す関数を指定する
 	* 呼び出し先の関数は次の仕様にする
 	  - ポップアップの |Window-ID|、変換元のファイルのパスを受け取るようにする
@@ -121,7 +117,30 @@ plugin~
 	    + 変換に失敗した場合は空文字列を返す
 	  - エラー内容の保存には popup_image#AddErrorMessage() を用いる
 	    |popup_image-adderrormessage-function|
-	  - 上記の設定例の関数がサンプルになっている
+	  - 下記の設定例の関数がサンプルになっている
+	例: >vim
+		let g:popup_image_options = {plugin: {
+			\ 	'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'popup_image#pptx#SaveCoverImage',
+			\ 	'application/vnd.oasis.opendocument.presentation': 'popup_image#pptx#SaveCoverImage',
+			\ }}
+<
+                                                       *popup_image_options-raw*
+raw~
+	Type: |Dictionary|
+
+	* 対応してないファイル・タイプを処理するための関数を指定する
+	  - 画像データを標準出力に出力するタイプ
+	* mimetype をキー、値は mimetyp の時に呼び出す関数を指定する
+	* 呼び出し先の関数は次の仕様にする
+	  - ポップアップの |Window-ID|、変換元のファイルのパスを受け取るようにする
+	  - 画像データを標準出力に出す為のコマンドを |list|<|string|>| で返す
+	    + 変換に失敗した場合は [] を返す
+	  - エラー内容の保存には popup_image#AddErrorMessage() を用いる
+	    |popup_image-adderrormessage-function|
+	  - 下記の設定例の関数がサンプルになっている
+	例: >vim
+		let g:popup_image_options = {raw: {'application/epub+zip': 'popup_image#epub#StdOutImgCmd'}}
+<
 
 ==============================================================================
                                                           *popup_image-function*

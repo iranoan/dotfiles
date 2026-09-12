@@ -165,14 +165,14 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 		extend(win_opts, {job: null_job})
 	endif
 
-	var max_w: number # popup の最大桁数
-	var max_h: number # popup の最大行数
-	var fit_zoom: bool
 	if !executable('mimetype')
 		AddErrorMessage(id, ['Need ''mimetype'' command'])
 		OnDone(false)
 		return
 	endif
+	var max_w: number # popup の最大桁数
+	var max_h: number # popup の最大行数
+	var fit_zoom: bool
 	if win_opts.options.maxwidth == 0 || win_opts.options.maxheight == 0 # 呼び出し時にウィンドウサイズの指定がない
 		max_w = &columns
 		max_h = &lines
@@ -206,63 +206,59 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 	var path: string = p
 	var w: number
 	var h: number
-	var t: list<string>
-	var ft: string = systemlist(['mimetype', '--brief', p])[0]
-	var w_h: list<number>
-	var border: number = get(opts, 'border', []) == [] ? 1 : opts.border[0]
-	var padding: list<number> = get(opts, 'padding', [0, 0, 0, 0])
-	var not_empty_title: bool = get(opts, 'title', '') !=# ''
 	var img_cols: number # 画像の桁数相当サイズ
 	var img_lines: number # 画像の行数相当サイズ
 
-	def ConvPrevImage(cmd: list<string>, delete: string, in_data: blob = null_blob): void
+	def SetImage(img: blob): void
+		if len(img) != w * h * 3
+			AddErrorMessage(id, [
+				'''data size'' is not eqal ''width x height x 3''',
+				$'file path:          {p}',
+				$'data size:          {len(img)}',
+				$'width:              {w}',
+				$'height:             {h}',
+				$'width x height x 3: {w * h * 3}',
+			])
+			if OnDone != null
+				OnDone(false)
+			endif
+			return
+		endif
+		if win_opts.options.maxwidth == 0 || win_opts.options.maxheight == 0 # 呼び出し時にウィンドウサイズの指定がない
+				|| z == -2 # 若しくは、第3引数で指定
+			max_w = img_cols
+			max_h = img_lines
+		endif
+		var border: number = get(opts, 'border', []) == [] ? 1 : opts.border[0]
+		var padding: list<number> = get(opts, 'padding', [0, 0, 0, 0])
+		var not_empty_title: bool = get(opts, 'title', '') !=# ''
+		popup_setoptions(id, extendnew(opts, extendnew(win_opts.options, {
+			image: {data: img, width: w, height: h},
+			minwidth: max_w,
+			minheight: max_h,
+			maxwidth: max_w,
+			maxheight: max_h,
+			border: not_empty_title ? opts.border : [0, 0, 0, 0],
+			padding: border == 0 && not_empty_title ? [1, padding[1], padding[2], padding[3]] : padding,
+		})))
+		extend(win_opts.pre_info, {maxwidth: max_w, maxheight: max_h, path: path})
+		setwinvar(id, 'popup_image', win_opts)
+		popup_settext(id, [])
+		redraw
+		if OnDone != null
+			OnDone(true)
+		endif
+	enddef
+
+	def ConvPrevImage(cmd: list<string>, delete: string, FinishFunc: func(blob), in_data: blob = null_blob): void
 		var out_data: blob
 		var err_line: string
 		var job_exited: bool
 		var channel_closed: bool
-		var job_obj: job
 		var job_exit_code: number = -1
 		var curr_cmd: list<string>
 		var next_cmd: list<string>
 		var pipe_idx: number = index(cmd, '|')
-
-		def SetImage(): void
-			if len(out_data) != w * h * 3
-				AddErrorMessage(id, [
-					'''data size'' is not eqal ''width x height x 3''',
-					$'file path:          {p}',
-					$'data size:          {len(out_data)}',
-					$'width:              {w}',
-					$'height:             {h}',
-					$'width x height x 3: {w * h * 3}',
-				])
-				if OnDone != null
-					OnDone(false)
-				endif
-				return
-			endif
-			if win_opts.options.maxwidth == 0 || win_opts.options.maxheight == 0 # 呼び出し時にウィンドウサイズの指定がない
-					|| z == -2 # 若しくは、第3引数で指定
-				max_w = img_cols
-				max_h = img_lines
-			endif
-			popup_setoptions(id, extendnew(opts, extendnew(win_opts.options, {
-				image: {data: out_data, width: w, height: h},
-				minwidth: max_w,
-				minheight: max_h,
-				maxwidth: max_w,
-				maxheight: max_h,
-				border: not_empty_title ? opts.border : [0, 0, 0, 0],
-				padding: border == 0 && not_empty_title ? [1, padding[1], padding[2], padding[3]] : padding,
-			})))
-			extend(win_opts.pre_info, {maxwidth: max_w, maxheight: max_h, path: path})
-			setwinvar(id, 'popup_image', win_opts)
-			popup_settext(id, [])
-			redraw
-			if OnDone != null
-				OnDone(true)
-			endif
-		enddef
 
 		def TryFinish(): void
 			if !job_exited || !channel_closed
@@ -287,9 +283,9 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 				return
 			endif
 			if !empty(next_cmd) # 次に実行すべきコマンド群(next_cmd)が残っていれば再帰呼び出し
-				ConvPrevImage(next_cmd, delete, out_data)
+				ConvPrevImage(next_cmd, delete, FinishFunc, out_data)
 			else # パイプの最後のコマンドまで到達したら画像を表示
-				SetImage()
+				FinishFunc(out_data)
 				if delete !=# '' && filereadable(delete)
 					delete(delete)
 				endif
@@ -303,7 +299,7 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 			curr_cmd = cmd
 			next_cmd = []
 		endif
-		job_obj = job_start(curr_cmd, extendnew({ # まず共通部分のオプション
+		var job_obj: job = job_start(curr_cmd, extendnew({ # まず共通部分のオプション
 			out_io: 'pipe',
 			err_io: 'pipe',
 			out_mode: 'blob',
@@ -333,11 +329,71 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 		} : {}))
 		extend(win_opts, {job: job_obj})
 		if in_data != null_blob
-			var ch = job_getchannel(job_obj)
+			var ch: channel = job_getchannel(job_obj)
 			ch_sendraw(ch, in_data)
 			ch_close_in(ch)
 		endif
 		return
+	enddef
+
+	def ConvImage(img: blob): void
+		var std_out: string
+		var std_err: string
+		var channel_closed: bool
+		var job_exited: bool
+		var job_exit_code: number = -1
+
+		def NextProc(): void
+			if !job_exited || !channel_closed
+				return
+			endif
+			if job_exit_code < 0 # job_stop() で終了
+				AddErrorMessage(id, [$'Cancel Image Data Conversion: {p}'])
+				OnDone(false)
+				return
+			elseif job_exit_code != 0 # プログラム自体のコマンドエラー
+				var stdout: list<string>
+				if OnDone != null
+					AddErrorMessage(id, ['Get Image Size Error'] + split(std_out, "[\n\r]") + split(std_err, "[\n\r]"))
+					OnDone(false)
+				endif
+				return
+			endif
+			silent [w, h] = split(std_out, ',')->map((_, v) => str2nr(v))
+			[w, h, img_cols, img_lines] = ScaleImage(w, h)
+			ConvPrevImage(['ffmpeg', '-hide_banner', '-i', '-', '-vf', $'scale={w}:{h}', '-vframes', '1', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], '', SetImage, img)
+		enddef
+
+		var job_obj: job = job_start(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height', '-of', 'csv=p=0', '-i', '-'], {
+			out_io: 'pipe',
+			err_io: 'pipe',
+			out_mode: 'nl',
+			err_mode: 'nl',
+			in_io: 'pipe',
+			in_mode: 'blob',
+			out_cb: (_, data: string) => {
+				std_out ..= data
+			},
+			err_cb: (_, msg: string) => {
+				std_err ..= msg
+			},
+			close_cb: (_) => { # channel が閉じられていることの確認←出力の取りこぼしを防ぐ
+				channel_closed = true
+				NextProc() # 本来は job の終了を確認すべきだが、結果的に呼び出し先で確認している
+			},
+			exit_cb: (_, status: number) => {
+				job_exited = true
+				extend(win_opts, {job: null_job})
+				job_exit_code = status
+				NextProc()
+			}
+		})
+		extend(win_opts, {job: job_obj})
+		if img != null_blob
+			var ch: channel = job_getchannel(job_obj)
+			ch_sendraw(ch, img)
+			ch_close_in(ch)
+		endif
 	enddef
 
 	if glob(p, true, true) == []
@@ -356,6 +412,7 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 		popup_setoptions(id, {image: {}})
 		redraw
 	endif
+	var ft: string = systemlist(['mimetype', '--brief', p])[0]
 	if ft ==# 'application/pdf' || ft ==# 'image/x-eps' || ft ==# 'image/eps' || ft ==# 'application/postscript'
 		if !executable('gs') && !executable('ffmpeg')
 			AddErrorMessage(id, ['Need ''GhostScript'' and ''FFmpeg'' for PDF/eps/postscript'])
@@ -369,6 +426,7 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 			return
 		endif
 	endif
+	var t: list<string>
 	if ft =~# '^video/' # video の最初の一割時点の時刻
 		silent t = ['-ss', $'{str2nr(system([ 'ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', p ])) / 10.0}']
 	endif
@@ -389,7 +447,7 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 		else
 			resolution = 72
 		endif
-		w_h = systemlist(['gs', '-dQUIET', '-dBATCH', '-dNOPAUSE', '-sDEVICE=bbox', p])
+		var w_h: list<number> = systemlist(['gs', '-dQUIET', '-dBATCH', '-dNOPAUSE', '-sDEVICE=bbox', p])
 			->matchlist('^%%BoundingBox: \+\zs\(\d\+\.\?\d*\) \(\d\+\.\?\d*\) \(\d\+\.\?\d*\) \(\d\+\.\?\d*\)')[1 : ]
 			->map((_, v) => float2nr(round(str2float(v) * resolution / 72)))
 		if len(w_h) < 4
@@ -401,10 +459,16 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 			return
 		endif
 		[w, h, img_cols, img_lines] = ScaleImage(w_h[2] - w_h[0], w_h[3] - w_h[1])
-		ConvPrevImage(['gs', '-q', '-dNOPAUSE', '-dBATCH', '-dEPSCrop', '-sDEVICE=ppmraw', '-r150', '-dFirstPage=1', '-dLastPage=1', '-sOutputFile=-', p, '|', 'ffmpeg', '-hide_banner', '-v', 'error', '-i', '-', '-vf', $'scale={w}:{h}', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], '')
+		ConvPrevImage(['gs', '-q', '-dNOPAUSE', '-dBATCH', '-dEPSCrop', '-sDEVICE=ppmraw', '-r150', '-dFirstPage=1', '-dLastPage=1', '-sOutputFile=-', p, '|', 'ffmpeg', '-hide_banner', '-v', 'error', '-i', '-', '-vf', $'scale={w}:{h}', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], '', SetImage)
 	else
+		var plugin: string = get(get(g:popup_image_options, 'raw', {}), ft, '')
+		if plugin !=# ''
+		var raw: list<string> = call(plugin, [id, p])
+			ConvPrevImage(raw, '', ConvImage)
+			return
+		endif
 		var temp: string
-		var plugin: string = get(get(g:popup_image_options, 'plugin', {}), ft, '')
+		plugin = get(get(g:popup_image_options, 'plugin', {}), ft, '')
 		if plugin !=# ''
 			temp = call(plugin, [id, p])
 			if temp ==# ''
@@ -416,7 +480,7 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 		silent [w, h] = split(system(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height', '-of', 'csv=p=0', p]), ',')
 			->map((_, v) => str2nr(v))
 		[w, h, img_cols, img_lines] = ScaleImage(w, h)
-		ConvPrevImage(['ffmpeg', '-hide_banner'] + t + ['-i', p, '-vf', $'scale={w}:{h}', '-vframes', '1', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], temp)
+		ConvPrevImage(['ffmpeg', '-hide_banner'] + t + ['-i', p, '-vf', $'scale={w}:{h}', '-vframes', '1', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], temp, SetImage)
 	endif
 enddef
 
