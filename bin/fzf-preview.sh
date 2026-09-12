@@ -36,12 +36,12 @@ use_sixel (){ # 表示サイズが大きいと上手くプレビューできな�
 }
 
 sxiv_sixel(){ # 環境によって sxiv と Sixel を使い分ける
-	# if [ "$2" = "wezterm" ] || [ "$2" = "wezterm-gui" ] ; then # fzf が 未対応のようで imgcat が使えない
-	# 	if ! ps --cols 1000 xo pid,comm | grep -E "^ *$( pgrep -P "$1" ) " | grep -q 'tmux: client' ; then
-	# 		wezterm imgcat "$3"
-	# 		return 1
-	# 	fi
-	# fi
+	if [ "$2" = "wezterm" ] || [ "$2" = "wezterm-gui" ] ; then
+		if ! ps --cols 1000 xo pid,comm | grep -E "^ *$( pgrep -P "$1" ) " | grep -q 'tmux: client' ; then
+			wezterm imgcat "$3"
+			return 1
+		fi
+	fi
 	if command -v nsxiv > /dev/null ; then
 		sxiv=nsxiv
 	elif command -v sxiv > /dev/null ; then
