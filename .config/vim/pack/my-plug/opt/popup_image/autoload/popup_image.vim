@@ -79,10 +79,9 @@ def SaveOrignalOption(id: number): dict<any>
 		var tabnr: number = tabpagenr()
 		execute($'augroup PopupImageTabPage{tabnr}')
 		autocmd!
-		execute($'autocmd TabClosed             * AutocmdDelete({tabnr}, {id})')
-		execute($'autocmd TabEnter              * Show({tabnr}, {id})')
-		execute($'autocmd WinLeave              * if &buftype ==# "terminal" | Show({tabnr}, {id}) | endif')
-		execute($'autocmd TabLeave,TerminalOpen * Hide({tabnr}, {id})')
+		execute($'autocmd TabClosed    * AutocmdDelete({tabnr}, {id})')
+		execute($'autocmd WinLeave     * if &buftype ==# "terminal" | Show({tabnr}, {id}) | endif')
+		execute($'autocmd TerminalOpen * Hide({tabnr}, {id})')
 		execute($'augroup END')
 		# sleep 10ms # Clear() で options キーがないというエラーが出ることがある
 		# 発生条件が掴めていないの、試しに少し時間を置いてみる
