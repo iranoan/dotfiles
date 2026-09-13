@@ -286,7 +286,7 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 				ConvPrevImage(next_cmd, delete, FinishFunc, out_data)
 			else # パイプの最後のコマンドまで到達したら画像を表示
 				FinishFunc(out_data)
-				if delete !=# '' && filereadable(delete)
+				if delete !=# ''
 					delete(delete)
 				endif
 			endif
