@@ -15,6 +15,7 @@
 /.config/vim/autoload/personal.vim
 /.config/vim/autoload/set_notmuchpy.vim
 /.config/vim/autoload/uri2filetype.json
+/.config/vim/temp/
 /.config/conky/zipcode.json
 
 # スワップ・ファイルを再度除外
