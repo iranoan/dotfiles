@@ -65,15 +65,12 @@ g:popup_preview = general_function#ExtendNew({
 		'anx', 'asf', 'avi', 'axv', 'flc', 'fli', 'flv', 'gl', 'm2v', 'm4v', 'mkv', 'mov', 'mp4', 'mp4v', 'mpeg', 'mpg',
 		'nuv', 'ogm', 'ogv', 'ogx', 'qt', 'rm', 'rmvb', 'swf', 'vob', 'webm', 'wmv',
 		# Image
-		'avif', 'bmp', 'cgm', 'cr2', 'cur', 'dl', 'dvi', 'emf', 'eps', 'gif', 'ico', 'j2c', 'j2k', 'jp2', 'jpeg', 'jpg',
+		'avif', 'bmp', 'cgm', 'cr2', 'cur', 'dl', 'dvi', 'emf', 'gif', 'ico', 'j2c', 'j2k', 'jp2', 'jpeg', 'jpg',
 		'jpf', 'jpx', 'jxl', 'mng', 'nef', 'pbm', 'pcx', 'pgm', 'png', 'ppm', 'svg', 'svgz', 'tga', 'tiff', 'webp',
 		'xcf', 'xbm', 'xpm', 'xwd', 'yuv',
-		# PDF PostScript
-		'pdf', 'ps',
 	],
 	filter: {
 		zip: {cmd: ['unzip', '-l'], filetype: 'UnZipOut'},
-		cbz: {cmd: ['unzip', '-l'], filetype: 'UnZipOut'},
 		'tar.gz': {cmd: ['tar', '-tvf'], filetype: 'TarOut'}, tgz: {cmd: ['tar', '-tvf'], filetype: 'TarOut'},
 		'tar.bz2': {cmd: ['tar', '-tvf'], filetype: 'TarOut'}, tbz: {cmd: ['tar', '-tvf'], filetype: 'TarOut'}, tbz2: {cmd: ['tar', '-tvf'], filetype: 'TarOut'}, tb2: {cmd: ['tar', '-tvf'], filetype: 'TarOut'},
 		'tar.xz': {cmd: ['tar', '-tvf'], filetype: 'TarOut'}, txz: {cmd: ['tar', '-tvf'], filetype: 'TarOut'},

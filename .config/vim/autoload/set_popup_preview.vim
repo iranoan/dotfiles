@@ -7,7 +7,7 @@ function set_popup_preview#init()
 	" 2}}}"
 	" 選択パスのプレビュー $MYVIMDIR/pack/my-plug/opt/popup_preview/ {{{2
 	let g:popup_preview = #{
-				\ image: ['epub', 'odp', 'pptx'],
+				\ image: ['epub', 'odp', 'pptx', 'pdf', 'eps', 'ps', 'cbz'],
 				\ filter: #{
 				\ 		mp3: #{cmd: ['ffprobe', '-hide_banner']},
 				\ 		m4a: #{cmd: ['ffprobe', '-hide_banner']},
