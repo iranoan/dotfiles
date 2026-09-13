@@ -185,7 +185,7 @@ export def Preview(id: number, p: string, z: number = 0): void
 	elseif !istalled_popup_image # ファイルが同じで popup_image もない→画像表示もない
 		return
 	else # ファイルが同じで popup_image がある→画像表示がある
-		var opts: dict<any> = extendnew(popup_getoptions(id), {maxwidth: 0, maxheight: 0})
+		var opts: dict<any> = extendnew({maxwidth: 0, maxheight: 0}, popup_getoptions(id))
 		var pre_opts: dict<any> = getwinvar(id, 'popup_image', {pre_info: {
 			maxwidth: 0,
 			maxheight: 0
