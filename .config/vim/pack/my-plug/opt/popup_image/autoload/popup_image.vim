@@ -249,6 +249,20 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 		endif
 	enddef
 
+	def ChSendraw(job: job, data: blob): void
+		if data != null_blob
+			var ch: channel = job_getchannel(job)
+			if ch_status(ch) ==# 'open'
+				try
+					ch_sendraw(ch, data)
+					ch_close_in(ch)
+				catch /^Vim\%((\a\+)\)\=:E631/
+					# 送信直前にジョブが停止した場合の保険
+				endtry
+			endif
+		endif
+	enddef
+
 	def ConvPrevImage(cmd: list<string>, delete: string, FinishFunc: func(blob), in_data: blob = null_blob): void
 		if !executable(cmd[0])
 			AddErrorMessage(id, [$'Don''t Executable: {cmd[0]}'])
@@ -331,17 +345,7 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 			in_mode: 'blob'
 		} : {}))
 		extend(win_opts, {job: job_obj})
-		if in_data != null_blob
-			var ch: channel = job_getchannel(job_obj)
-			if ch_status(ch) ==# 'open'
-				try
-					ch_sendraw(ch, in_data)
-					ch_close_in(ch)
-				catch /^Vim\%((\a\+)\)\=:E631/
-					# 送信直前にジョブが停止した場合の保険
-				endtry
-			endif
-		endif
+		ChSendraw(job_obj, in_data)
 		return
 	enddef
 
@@ -399,11 +403,7 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 			}
 		})
 		extend(win_opts, {job: job_obj})
-		if img != null_blob
-			var ch: channel = job_getchannel(job_obj)
-			ch_sendraw(ch, img)
-			ch_close_in(ch)
-		endif
+		ChSendraw(job_obj, img)
 	enddef
 
 	def GetSizeConv(path: string, delete: string): void
@@ -470,7 +470,7 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 		# [w, h, img_cols, img_lines] = ScaleImage(w_h[2] - w_h[0], w_h[3] - w_h[1])
 		# ConvPrevImage(['gs', '-q', '-dNOPAUSE', '-dBATCH', '-dEPSCrop', '-sDEVICE=ppmraw', '-r150', '-dFirstPage=1', '-dLastPage=1', '-sOutputFile=-', p, '|', 'ffmpeg', '-hide_banner', '-v', 'error', '-i', '-', '-vf', $'scale={w}:{h}', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], '', SetImage)
 		# }}}
-		var cmds: list<string> = g:popup_image_options.cmds[ft]
+		var cmds: list<string> = deepcopy(g:popup_image_options.cmds[ft])
 		var dot_idx: number = index(cmds, '.')
 		if dot_idx == -1
 			add(cmds, p)
