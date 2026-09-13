@@ -203,7 +203,6 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 	enddef
 
 	var p: string = resolve(expand(f, true))
-	var path: string = p
 	var w: number
 	var h: number
 	var img_cols: number # 画像の桁数相当サイズ
@@ -241,7 +240,7 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 			border: not_empty_title ? opts.border : [0, 0, 0, 0],
 			padding: border == 0 && not_empty_title ? [1, padding[1], padding[2], padding[3]] : padding,
 		})))
-		extend(win_opts.pre_info, {maxwidth: max_w, maxheight: max_h, path: path})
+		extend(win_opts.pre_info, {maxwidth: max_w, maxheight: max_h, path: p})
 		setwinvar(id, 'popup_image', win_opts)
 		popup_settext(id, [])
 		redraw
@@ -251,6 +250,10 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 	enddef
 
 	def ConvPrevImage(cmd: list<string>, delete: string, FinishFunc: func(blob), in_data: blob = null_blob): void
+		if !executable(cmd[0])
+			AddErrorMessage(id, [$'Don''t Executable: {cmd[0]}'])
+			OnDone(false)
+		endif
 		var out_data: blob
 		var err_line: string
 		var job_exited: bool
@@ -330,12 +333,19 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 		extend(win_opts, {job: job_obj})
 		if in_data != null_blob
 			var ch: channel = job_getchannel(job_obj)
-			ch_sendraw(ch, in_data)
-			ch_close_in(ch)
+			if ch_status(ch) ==# 'open'
+				try
+					ch_sendraw(ch, in_data)
+					ch_close_in(ch)
+				catch /^Vim\%((\a\+)\)\=:E631/
+					# 送信直前にジョブが停止した場合の保険
+				endtry
+			endif
 		endif
 		return
 	enddef
 
+	var ffmpeg_cmd: list<string> = ['ffmpeg', '-hide_banner']
 	def ConvImage(img: blob): void
 		var std_out: string
 		var std_err: string
@@ -396,6 +406,21 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 		endif
 	enddef
 
+	def GetSizeConv(path: string, delete: string): void
+		var w_h: list<number> = system(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height', '-of', 'csv=p=0', '-i', path])
+			->split(',')
+			->map((_, v) => str2nr(v))
+		if v:shell_error != 0 || len(w_h) != 2
+			AddErrorMessage(id, [$'Can''t Get Size: {p}'])
+			OnDone(false)
+			return
+		endif
+		w = w_h[0]
+		h = w_h[1]
+		[w, h, img_cols, img_lines] = ScaleImage(w, h)
+		ConvPrevImage( ffmpeg_cmd + ['-i', path, '-vf', $'scale={w}:{h}', '-vframes', '1', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], delete, SetImage)
+	enddef
+
 	if glob(p, true, true) == []
 		AddErrorMessage(id, [$'Don''t Exist: {p}'])
 		OnDone(false)
@@ -413,23 +438,6 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 		redraw
 	endif
 	var ft: string = systemlist(['mimetype', '--brief', p])[0]
-	if ft ==# 'application/pdf' || ft ==# 'image/x-eps' || ft ==# 'image/eps' || ft ==# 'application/postscript'
-		if !executable('gs') && !executable('ffmpeg')
-			AddErrorMessage(id, ['Need ''GhostScript'' and ''FFmpeg'' for PDF/eps/postscript'])
-			OnDone(false)
-			return
-		endif
-	elseif ft =~# '^video/' || ft =~# '^image/'
-		if !executable('ffprobe') || !executable('ffmpeg')
-			AddErrorMessage(id, ['Need ''FFmpeg'' for image/video'])
-			OnDone(false)
-			return
-		endif
-	endif
-	var t: list<string>
-	if ft =~# '^video/' # video の最初の一割時点の時刻
-		silent t = ['-ss', $'{str2nr(system([ 'ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', p ])) / 10.0}']
-	endif
 	if z == 0
 		fit_zoom = win_opts.pre_info.fit_zoom
 	elseif z == 1
@@ -439,48 +447,56 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 		extend(win_opts.pre_info, {fit_zoom: true})
 		fit_zoom = true
 	endif
-	if ft ==# 'application/pdf' || ft ==# 'image/x-eps' || ft ==# 'image/eps' || ft ==# 'application/postscript'
-		var resolution: number
-		var resolution_s: string
-		if ft ==# 'application/pdf' || ft ==# 'application/postscript'
-			resolution = 600
-		else
-			resolution = 72
+	if has_key(get(g:popup_image_options, 'cmds', {}), ft)
+		# ↓元の PDF/PostScript {{{
+		# var resolution: number
+		# var resolution_s: string
+		# if ft ==# 'application/pdf' || ft ==# 'application/postscript'
+		# 	resolution = 600
+		# else
+		# 	resolution = 72
+		# endif
+		# var w_h: list<number> = systemlist(['gs', '-dQUIET', '-dBATCH', '-dNOPAUSE', '-sDEVICE=bbox', p])
+		# 	->matchlist('^%%BoundingBox: \+\zs\(\d\+\.\?\d*\) \(\d\+\.\?\d*\) \(\d\+\.\?\d*\) \(\d\+\.\?\d*\)')[1 : ]
+		# 	->map((_, v) => float2nr(round(str2float(v) * resolution / 72)))
+		# if len(w_h) < 4
+		# 	AddErrorMessage(id, [
+		# 		'Not Get BoundingBox',
+		# 		$'file path: {p}',
+		# 	])
+		# 	OnDone(false)
+		# 	return
+		# endif
+		# [w, h, img_cols, img_lines] = ScaleImage(w_h[2] - w_h[0], w_h[3] - w_h[1])
+		# ConvPrevImage(['gs', '-q', '-dNOPAUSE', '-dBATCH', '-dEPSCrop', '-sDEVICE=ppmraw', '-r150', '-dFirstPage=1', '-dLastPage=1', '-sOutputFile=-', p, '|', 'ffmpeg', '-hide_banner', '-v', 'error', '-i', '-', '-vf', $'scale={w}:{h}', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], '', SetImage)
+		# }}}
+		var cmds: list<string> = g:popup_image_options.cmds[ft]
+		var dot_idx: number = index(cmds, '.')
+		if dot_idx == -1
+			add(cmds, p)
+		elseif len(cmds) - 1 == dot_idx
+			cmds[-1] = p
+		else # if dot_idx != -1
+			cmds = cmds[ : dot_idx - 1 ] + [p] + cmds[ dot_idx + 1 : ]
 		endif
-		var w_h: list<number> = systemlist(['gs', '-dQUIET', '-dBATCH', '-dNOPAUSE', '-sDEVICE=bbox', p])
-			->matchlist('^%%BoundingBox: \+\zs\(\d\+\.\?\d*\) \(\d\+\.\?\d*\) \(\d\+\.\?\d*\) \(\d\+\.\?\d*\)')[1 : ]
-			->map((_, v) => float2nr(round(str2float(v) * resolution / 72)))
-		if len(w_h) < 4
-			AddErrorMessage(id, [
-				'Not Get BoundingBox',
-				$'file path: {p}',
-			])
+		ConvPrevImage(cmds, '', ConvImage)
+	elseif has_key(get(g:popup_image_options, 'raw', {}), ft)
+		ConvPrevImage(call(g:popup_image_options.raw[ft], [id, p]), '', ConvImage)
+	elseif has_key(get(g:popup_image_options, 'plugin', {}), ft)
+		var temp: string = call(g:popup_image_options.plugin[ft], [id, p])
+		if temp ==# ''
 			OnDone(false)
 			return
 		endif
-		[w, h, img_cols, img_lines] = ScaleImage(w_h[2] - w_h[0], w_h[3] - w_h[1])
-		ConvPrevImage(['gs', '-q', '-dNOPAUSE', '-dBATCH', '-dEPSCrop', '-sDEVICE=ppmraw', '-r150', '-dFirstPage=1', '-dLastPage=1', '-sOutputFile=-', p, '|', 'ffmpeg', '-hide_banner', '-v', 'error', '-i', '-', '-vf', $'scale={w}:{h}', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], '', SetImage)
+		GetSizeConv(temp, temp)
+	elseif ft !=# 'image/x-eps' && ft !=# 'image/eps' && ( ft =~# '^image/' || ft =~# '^video/')
+		if ft =~# '^video/' # video の最初の一割時点の時刻
+			ffmpeg_cmd += ['-ss', $'{str2nr(system(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', p ])) / 10.0}']
+		endif
+		GetSizeConv(p, '')
 	else
-		var plugin: string = get(get(g:popup_image_options, 'raw', {}), ft, '')
-		if plugin !=# ''
-		var raw: list<string> = call(plugin, [id, p])
-			ConvPrevImage(raw, '', ConvImage)
-			return
-		endif
-		var temp: string
-		plugin = get(get(g:popup_image_options, 'plugin', {}), ft, '')
-		if plugin !=# ''
-			temp = call(plugin, [id, p])
-			if temp ==# ''
-				OnDone(false)
-				return
-			endif
-			p = temp
-		endif
-		silent [w, h] = split(system(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height', '-of', 'csv=p=0', p]), ',')
-			->map((_, v) => str2nr(v))
-		[w, h, img_cols, img_lines] = ScaleImage(w, h)
-		ConvPrevImage(['ffmpeg', '-hide_banner'] + t + ['-i', p, '-vf', $'scale={w}:{h}', '-vframes', '1', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], temp, SetImage)
+		AddErrorMessage(id, [$'Don''t Support Filet Type: {p}: {ft}'])
+		OnDone(false)
 	endif
 enddef
 

@@ -15,14 +15,15 @@ License: GPL Ver.3.
 * 設定/オプション                                           |popup_image-custom|
   - pt2px                                            |popup_image_options-pt2px|
   - min_size                                      |popup_image_options-min_size|
+  - 未対応ファイルの対処                         |popup_image_options-unsupport|
 
 ==============================================================================
                                                            *popup_image-require*
 要件~
 
 * 全てのファイルで mimetype コマンド
-* 画像/動画は FFmgeg (ffmpeg/ffprobe コマンド)
-* PDF/PostScript は加えて GhostScript (gs コマンド)
+* 実際の画像/動画変換は FFmgeg (ffmpeg/ffprobe コマンド)
+  - ただし EPS は GhostScript (gs コマンド) をインストールし設定が必要
 
 ==============================================================================
                                                        *popup_image-introduction*
@@ -104,29 +105,32 @@ min_size~
 
 	画像の最小表示サイズ
 
-                                                    *popup_image_options-plugin*
-plugin~
-	Type: |Dictionary|
+                                                 *popup_image_options-unsupport*
+------------------------------------------------------------------------------
+未対応ファイルの対処~
 
-	* 対応してないファイル・タイプを処理するための関数を指定する
-	  - 中間ファイルを出力するタイプ
+次の cmds, raw, plugin キーの優先順位で指定可能
+
+                                                      *popup_image_options-cmds*
+cmds~
+	Type: |Dictionary|<|List|<|String|>|>|
+
+	* 対応してないファイル・タイプを処理するためのコマンドを指定する
+	  - 画像データを標準出力に出力するように指定する必要がある
 	* mimetype をキー、値は mimetyp の時に呼び出す関数を指定する
-	* 呼び出し先の関数は次の仕様にする
-	  - ポップアップの |Window-ID|、変換元のファイルのパスを受け取るようにする
-	  - 変換後の中間ファイルのパスを返す
-	    + 変換に失敗した場合は空文字列を返す
-	  - エラー内容の保存には popup_image#AddErrorMessage() を用いる
-	    |popup_image-adderrormessage-function|
-	  - 下記の設定例の関数がサンプルになっている
-	例: >vim
-		let g:popup_image_options = {plugin: {
-			\ 	'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'popup_image#pptx#SaveCoverImage',
-			\ 	'application/vnd.oasis.opendocument.presentation': 'popup_image#pptx#SaveCoverImage',
-			\ }}
-<
+	* 次は Ghostscript を用いて PDF/PostScript に対応させる方法 >vim
+		let g:popup_image_options = {}
+		let g:popup_image_options.cmds: = {
+			\ 	'application/pdf': ['gs', '-q', '-dNOPAUSE', '-dBATCH', '-dEPSCrop', '-sDEVICE=ppmraw', '-r150', '-dFirstPage=1', '-dLastPage=1', '-sOutputFile=-'],
+			\ 	'image/x-eps': ['gs', '-q', '-dNOPAUSE', '-dBATCH', '-dEPSCrop', '-sDEVICE=ppmraw', '-r150', '-dFirstPage=1', '-dLastPage=1', '-sOutputFile=-'],
+			\ 	'image/eps': ['gs', '-q', '-dNOPAUSE', '-dBATCH', '-dEPSCrop', '-sDEVICE=ppmraw', '-r150', '-dFirstPage=1', '-dLastPage=1', '-sOutputFile=-'],
+			\ 	'application/postscript': ['gs', '-q', '-dNOPAUSE', '-dBATCH', '-dEPSCrop', '-sDEVICE=ppmraw', '-r150', '-dFirstPage=1', '-dLastPage=1', '-sOutputFile=-', '.'],
+			\ }
+< * 変換ファイルは '.' の部分が置き換わる (最後が例)
+	  - '.' がなければ最後につなげる
                                                        *popup_image_options-raw*
 raw~
-	Type: |Dictionary|
+	Type: |Dictionary|<|String|>|
 
 	* 対応してないファイル・タイプを処理するための関数を指定する
 	  - 画像データを標準出力に出力するタイプ
@@ -139,7 +143,32 @@ raw~
 	    |popup_image-adderrormessage-function|
 	  - 下記の設定例の関数がサンプルになっている
 	例: >vim
-		let g:popup_image_options = {raw: {'application/epub+zip': 'popup_image#epub#StdOutImgCmd'}}
+		let g:popup_image_options = {}
+		let g:popup_image_options.raw = {
+			\ 	'application/epub+zip': 'popup_image#stdout#Epub',
+			\ 	'application/vnd.comicbook+zip': 'popup_image#stdout#CBZ'
+			\ }
+<
+                                                    *popup_image_options-plugin*
+plugin~
+	Type: |Dictionary|<|String|>|
+
+	* 対応してないファイル・タイプを処理するための関数を指定する
+	  - 中間ファイルを出力するタイプ
+	* mimetype をキー、値は mimetyp の時に呼び出す関数を指定する
+	* 呼び出し先の関数は次の仕様にする
+	  - ポップアップの |Window-ID|、変換元のファイルのパスを受け取るようにする
+	  - 変換後の中間ファイルのパスを返す
+	    + 変換に失敗した場合は空文字列を返す
+	  - エラー内容の保存には popup_image#AddErrorMessage() を用いる
+	    |popup_image-adderrormessage-function|
+	  - 下記の設定例の関数がサンプルになっている
+	例: >vim
+		let g:popup_image_options = {}
+		let g:popup_image_options.plugin = {
+			\ 	'application/vnd.openxmlformats-officedocument.presentationml.presentation': 'popup_image#pptx#SaveCoverImage',
+			\ 	'application/vnd.oasis.opendocument.presentation': 'popup_image#pptx#SaveCoverImage',
+			\ }
 <
 
 ==============================================================================

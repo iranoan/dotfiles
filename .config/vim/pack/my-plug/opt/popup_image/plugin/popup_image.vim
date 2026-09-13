@@ -4,12 +4,10 @@ scriptencoding utf-8
 if !executable('mimetype')
 	|| !executable('ffprobe')
 	|| !executable('ffmpeg')
-	|| !executable('gs')
 	popup_notification([
-		'All video/image: ''mimetype'' command',
-		'image:           FFmgeg (ffmpeg/ffprobe command)',
-		'video:           FFmgeg (ffmpeg/ffprobe command)',
-		'PDF/PostScript:  and GhostScript (gs command)',
+		'All video/image',
+		'''mimetype'' command',
+		'FFmgeg (ffmpeg/ffprobe command)',
 	], {title: 'Need following tools ', highlight: 'ErrorMsg', borderchars: ['─', '│', '─', '│', '╭', '╮', '╯', '╰'], padding: [0, 1, 0, 1]})
 	finish
 endif
