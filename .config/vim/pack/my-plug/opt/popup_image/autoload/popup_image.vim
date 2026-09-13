@@ -318,7 +318,7 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 				job_exited = true
 				extend(win_opts, {job: null_job})
 				if delete !=# ''
-					delete(p)
+					delete(delete)
 				endif
 				job_exit_code = status
 				TryFinish()
