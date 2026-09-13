@@ -151,14 +151,17 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 	endif
 	var opts: dict<any> = SaveOrignalOption(id)
 	var win_opts: dict<any> = getwinvar(id, 'popup_image', {highlight: '', highlights: ''})
-	popup_settext(id, ['Making Image Data...'])
-	popup_setoptions(id, extendnew(win_opts.options, {
-		wrap: true,
-		highlight: 'PopupImageMsg',
-		highlights: 'PopupTitle:Pmenu,Popup:PopupImageMsg'
-	}))
-	redraw
-	sleep 1m # 時間のかかるこの後の処理前に上のメッセージを確実に表示する
+	if and(z, 0x10) != 0x10
+		popup_settext(id, ['Making Image Data...'])
+		popup_setoptions(id, extendnew(win_opts.options, {
+			image: {},
+			wrap: true,
+			highlight: 'PopupImageMsg',
+			highlights: 'PopupTitle:Pmenu,Popup:PopupImageMsg'
+		}))
+		redraw
+		sleep 1m # 時間のかかるこの後の処理前に上のメッセージを確実に表示する
+	endif
 
 	if win_opts.job != null_job && job_status(win_opts.job) == 'run'
 		job_stop(win_opts.job)
@@ -173,10 +176,11 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 	var max_w: number # popup の最大桁数
 	var max_h: number # popup の最大行数
 	var fit_zoom: bool
+	var zoom: number = and(z, 0x0F)
 	if win_opts.options.maxwidth == 0 || win_opts.options.maxheight == 0 # 呼び出し時にウィンドウサイズの指定がない
 		max_w = &columns
 		max_h = &lines
-	elseif z == -2
+	elseif zoom == 0x03
 		max_w = win_opts.options.maxwidth
 		max_h = win_opts.options.maxheight
 	else
@@ -224,7 +228,7 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 			return
 		endif
 		if win_opts.options.maxwidth == 0 || win_opts.options.maxheight == 0 # 呼び出し時にウィンドウサイズの指定がない
-				|| z == -2 # 若しくは、第3引数で指定
+				|| zoom == 0x02 # 若しくは、第3引数で指定
 			max_w = img_cols
 			max_h = img_lines
 		endif
@@ -433,17 +437,19 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 	endif
 	max_w = max_w == 0  ? &columns : max_w
 	max_h = max_h == 0  ? &lines   : max_h
-	if has_key(opts, 'image') # 連続して呼び出されたときに、消さないと後ろに残る
-		popup_setoptions(id, {image: {}})
-		redraw
+	if and(z, 0x10) != 0x10
+		if has_key(opts, 'image') # 連続して呼び出されたときに、消さないと後ろに残る
+			popup_setoptions(id, {image: {}})
+			redraw
+		endif
 	endif
 	var ft: string = systemlist(['mimetype', '--brief', p])[0]
-	if z == 0
+	if zoom == 0x00
 		fit_zoom = win_opts.pre_info.fit_zoom
-	elseif z == 1
+	elseif zoom == 0x01
 		extend(win_opts.pre_info, {fit_zoom: false})
 		fit_zoom = false
-	else # if z == -1 || z == -2
+	else # if zoom == 0x02 || zoom == 0x03
 		extend(win_opts.pre_info, {fit_zoom: true})
 		fit_zoom = true
 	endif
