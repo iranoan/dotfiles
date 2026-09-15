@@ -268,7 +268,11 @@ export def Preview(id: number, p: string, z: number = 0): void
 		popup_settext(id, ['<Too large file size>', $'path: {p}', $'size:  {HumanReadableSize(getfsize(p))}'])
 		popup_setoptions(id, {wrap: true, highlight: 'PopupPreviewMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupPreviewMsg'})
 	else
-		popup_settext(id, readfile(p))
+		if type ==? 'csv' && executable('nkf') == 1
+			popup_settext(id, systemlist(['nkf', '-Lu', p]))
+		else
+			popup_settext(id, readfile(p))
+		endif
 		SetFileType(id, type)
 	endif
 	if index(popup_list(), id) != -1
