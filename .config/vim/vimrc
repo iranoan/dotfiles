@@ -73,7 +73,7 @@ augroup loadTarArchive
 				| autocmd_delete([{group: 'loadTarArchive'}])
 				# execute 'edit! ' .. expand('%:t') が効かない
 augroup END
-# # }}}
+# }}}
 # netrw {{{ ↓ fern を使う
 g:loaded_netrw = 1
 g:loaded_netrwSettings = 1
@@ -83,11 +83,12 @@ g:loaded_netrwPlugin = 1
 # g:netrw_liststyle = 0                      # ファイル・サイズ/タイム・スタンプも非表示←除外がしにくくなる
 # g:netrw_list_hide = netrw_gitignore#Hide() .. '.*\.swp$' ヘルプに有る関数は遅い
 # g:netrw_list_hide = '.*\.swp$,\.o$,\.fls$,\.synctex\.gz$,\.fdb_latexmk$,\.toc$,\.out$,\.dvi$,\.aux$,\.nav$,\.snm$,\.git/$' # 隠すファイル
-# # g:netrw_sizestyle = 'H'                    # 人間が読める形式 (例: 5K, 4M, 3G) 1024 ベース
+# g:netrw_sizestyle = 'H'                    # 人間が読める形式 (例: 5K, 4M, 3G) 1024 ベース
 # g:netrw_sort_options = 'i'                 # ソートで大/小文字を区別しない
-# # g:netrw_timefmt = '%Y/%m/%d(%a) %H:%M:%S'
+# g:netrw_timefmt = '%Y/%m/%d(%a) %H:%M:%S'
 # g:netrw_sort_by = 'time'                   # 日付で逆順ソート
 # g:netrw_sort_direction = 'reverse'
+# }}}
 # 読み込み明示が必要な分 {{{2
 packadd! editexisting                          # 既に開いていれば、そちらをアクティブに
 packadd! matchit                               # 対応するカッコ移動%を拡張→ファイルタイプ別設定でb:match_words
