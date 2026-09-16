@@ -95,7 +95,7 @@ export def Tabedit(...arg: list<string>): void
 				v =~# '^\%(https\?\|ftp\|mailto\):\%(//\)\?[a-zA-Z0-9._%+-]\+\%(:[0-9]\+\)\?\%(/[a-zA-Z0-9._%+-/?#&=~@!$''()*+,;:]*\)\?$' ? v : # URL
 				v =~# '^mailto:[-a-zA-Z0-9.!#$%&''*+/=?^_`{|}~]\+@[a-zA-Z0-9]\+\%(-*[a-zA-Z0-9]\)\?\%(\.[a-zA-Z0-9]\+\%(-*[a-zA-Z0-9]\)*\)\+$' ? v : # メールアドレス
 				v =~# '^[-a-zA-Z0-9.!#$%&''*+/=?^_`{|}~]\+@[a-zA-Z0-9]\+\%(-*[a-zA-Z0-9]\)\?\%(\.[a-zA-Z0-9]\+\%(-*[a-zA-Z0-9]\)*\)\+$' ? $'mailto:{v}' : # メールアドレス
-				fnamemodify(v, ':p')))
+				fnamemodify(expand(v), ':p'))) # カーソル位置が $HOME/.config/vim/vimrc 等で、<cfile> を使って取り込んだ場合、再度 expand() が必要
 		Open(f)
 	endfor
 	win_gotoid(win_id)
