@@ -259,9 +259,14 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 	enddef
 
 	def ConvPrevImage(cmd: list<string>, delete: string, FinishFunc: func(blob), in_data: blob = null_blob): void
-		if !executable(cmd[0])
+		if cmd == []
+			AddErrorMessage(id, [$'Command Empty'])
+			OnDone(false)
+			return
+		elseif !executable(cmd[0])
 			AddErrorMessage(id, [$'Don''t Executable: {cmd[0]}'])
 			OnDone(false)
+			return
 		endif
 		var out_data: blob
 		var err_line: string
