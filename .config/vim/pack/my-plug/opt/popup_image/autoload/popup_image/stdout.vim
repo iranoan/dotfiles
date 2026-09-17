@@ -69,6 +69,7 @@ export def CBZ(id: number, cbz: string): list<string>
 	var file_list = systemlist(['unzip', '-Z1', cbz])
 		->filter((_, v) => v !~? '__MACOSX' && v !~? '^\.') # macOSの __MACOSX などの不要な隠しフォルダ・ファイルを除外
 	if v:shell_error != 0 || file_list == []
+		popup_image#AddErrorMessage(id, ['Do not include file'])
 		return []
 	endif
 	var cover_entries: list<string>
@@ -102,8 +103,9 @@ export def CBZ(id: number, cbz: string): list<string>
 	# 名前順で先頭になる画像ファイル
 	cover_entries = filter(file_list, (_, v) => v =~? img_ext_pat)
 		->sort()
-	if cover_entries != []
-		return ['unzip', '-p', cbz, cover_entries[0]]
+	if cover_entries == []
+		popup_image#AddErrorMessage(id, ['Do not include file'])
+		return []
 	endif
-	return []
+	return ['unzip', '-p', cbz, cover_entries[0]]
 enddef
