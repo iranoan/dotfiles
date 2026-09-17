@@ -483,7 +483,13 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 		endif
 		ConvPrevImage(cmds, '', ConvImage)
 	elseif has_key(get(g:popup_image_options, 'raw', {}), ft)
-		ConvPrevImage(call(g:popup_image_options.raw[ft], [id, p]), '', ConvImage)
+		var raw: list<string> = call(g:popup_image_options.raw[ft], [id, p])
+		if raw ==# []
+			OnDone(false)
+			return
+		else
+			ConvPrevImage(raw, '', ConvImage)
+		endif
 	elseif has_key(get(g:popup_image_options, 'plugin', {}), ft)
 		var temp: string = call(g:popup_image_options.plugin[ft], [id, p])
 		if temp ==# ''
