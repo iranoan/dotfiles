@@ -217,6 +217,7 @@ export def Preview(id: number, p: string, z: number = 0): void
 		SetFileType(id, 'WarningMsg')
 	elseif index(g:popup_preview.image, tolower(fnamemodify(p, ':e'))) != -1
 		if istalled_popup_image
+			SetFileType(id, 'Image')
 			popup_image#Preview(id, p, z, (v) => {
 				if !v
 					popup_image#WarningMsg(id)
@@ -234,7 +235,6 @@ export def Preview(id: number, p: string, z: number = 0): void
 			])
 			popup_setoptions(id, {highlight: 'PopupPreviewWarningMsg', highlights: 'PopupTitle:Pmenu,Popup:PopupPreviewWarningMsg'})
 		endif
-		SetFileType(id, 'Image')
 	elseif index(keys(g:popup_preview.filter), type) != -1
 		var filter: list<string> = g:popup_preview.filter[type]['cmd']
 		var filter_place_folder: number = index(filter, '.')
