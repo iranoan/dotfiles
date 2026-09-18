@@ -137,8 +137,11 @@ raw~
 	* mimetype をキー、値は mimetyp の時に呼び出す関数を指定する
 	* 呼び出し先の関数は次の仕様にする
 	  - ポップアップの |Window-ID|、変換元のファイルのパスを受け取るようにする
-	  - 画像データを標準出力に出す為のコマンドを |list|<|string|>| で返す
-	    + 変換に失敗した場合は [] を返す
+	  - 次の辞書データを返す
+	    cmd:     画像データを標準出力に出す為のコマンド (|list|<|string|>|)
+	    message: 画像データを取得できない時に表示するメッセージ (|list|<|string|>|)
+	    type:    message を表示するときの |'filetype'|
+	    + message, type は省略可能
 	  - エラー内容の保存には popup_image#AddErrorMessage() を用いる
 	    |popup_image-adderrormessage-function|
 	  - 下記の設定例の関数がサンプルになっている
@@ -158,8 +161,11 @@ plugin~
 	* mimetype をキー、値は mimetyp の時に呼び出す関数を指定する
 	* 呼び出し先の関数は次の仕様にする
 	  - ポップアップの |Window-ID|、変換元のファイルのパスを受け取るようにする
-	  - 変換後の中間ファイルのパスを返す
-	    + 変換に失敗した場合は空文字列を返す
+	  - 次の辞書データを返す
+	    file:    変換後の中間ファイルのパス (|string|)
+	    message: 画像データを取得できない時に表示するメッセージ (|list|<|string|>|)
+	    type:    message を表示するときの |'filetype'|
+	    + message, type は省略可能
 	  - エラー内容の保存には popup_image#AddErrorMessage() を用いる
 	    |popup_image-adderrormessage-function|
 	  - 下記の設定例の関数がサンプルになっている

@@ -421,6 +421,41 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 		ConvPrevImage( ffmpeg_cmd + ['-i', path, '-vf', $'scale={w}:{h}', '-vframes', '1', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], delete, SetImage)
 	enddef
 
+	def CheckPluginReturnValuse(x: any, k: string): bool
+		if type(x) != v:t_dict
+			popup_image#AddErrorMessage(id, ['Plugin return value is not dict<any>.'])
+			return false
+		elseif !has_key(x, k)
+			popup_image#AddErrorMessage(id, [$'Plugin return value do not have {k} key.'])
+			return false
+		elseif empty(x[k])
+			popup_image#AddErrorMessage(id, [$'Return value of the {k} key in the plugin is empty.'])
+			return false
+		endif
+		return true
+	enddef
+
+	def ShowPluginReturnValuse(x: dict<any>): void
+		var mes: list<string> = get(x, 'message', [])
+		if mes == []
+			OnDone(false)
+		else
+			Clear(id)
+			remove(getwinvar(id, 'popup_image', {err_msg: []}).err_msg, -1)
+			popup_settext(id, mes)
+			var t: string = get(x, 'type', '')
+			if t !=# ''
+				var save_ei: string = &eventignore
+				&eventignore = 'BufAdd,BufCreate'
+				try
+					setbufvar(winbufnr(id), '&filetype', t)
+				finally
+					&eventignore = save_ei
+				endtry
+			endif
+		endif
+	enddef
+
 	if glob(p, true, true) == []
 		AddErrorMessage(id, [$'Don''t Exist: {p}'])
 		OnDone(false)
@@ -483,20 +518,19 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 		endif
 		ConvPrevImage(cmds, '', ConvImage)
 	elseif has_key(get(g:popup_image_options, 'raw', {}), ft)
-		var raw: list<string> = call(g:popup_image_options.raw[ft], [id, p])
-		if raw ==# []
-			OnDone(false)
-			return
+		var raw: any = call(g:popup_image_options.raw[ft], [id, p])
+		if CheckPluginReturnValuse(raw, 'cmd')
+			ConvPrevImage(raw.cmd, '', ConvImage)
 		else
-			ConvPrevImage(raw, '', ConvImage)
+			ShowPluginReturnValuse(raw)
 		endif
 	elseif has_key(get(g:popup_image_options, 'plugin', {}), ft)
-		var temp: string = call(g:popup_image_options.plugin[ft], [id, p])
-		if temp ==# ''
-			OnDone(false)
-			return
+		var temp: any = call(g:popup_image_options.plugin[ft], [id, p])
+		if CheckPluginReturnValuse(temp, 'file')
+			GetSizeConv(temp.file, temp.file)
+		else
+			ShowPluginReturnValuse(temp)
 		endif
-		GetSizeConv(temp, temp)
 	elseif ft !=# 'image/x-eps' && ft !=# 'image/eps' && ( ft =~# '^image/' || ft =~# '^video/')
 		if ft =~# '^video/' # video の最初の一割時点の時刻
 			ffmpeg_cmd += ['-ss', $'{str2nr(system(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', p ])) / 10.0}']
