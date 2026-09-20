@@ -96,7 +96,7 @@ export def TabOpen(): void
 	color_str = color_str[ : -2 ]
 	fzf#run({
 				source: sink_ls,
-				sink:    function('BufListSink'),
+				sink:    function(BufListSink),
 				options: ['--delimiter', '\t', '--no-multi', '--prompt', " tab win_id buf  \tfilename > ", '--tabstop', 2] + g:fzf_tabs_options + [color_str],
 				window: get(g:, 'fzf_layout', {window: {width: 0.9, height: 0.6}})->get('window', {width: 0.9, height: 0.6})
 	})
