@@ -70,7 +70,7 @@ export def Tabedit(...arg: list<string>): void
 				dist#vim9#Open(f)
 			else
 				if cmd[1]
-					call(function(cmd[0], [f]), [])
+					function(cmd[0])(f)
 				else
 					execute cmd[0] .. ' ' .. f
 				endif

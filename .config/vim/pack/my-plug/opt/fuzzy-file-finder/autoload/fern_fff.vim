@@ -23,5 +23,5 @@ def Call(helper: dict<any>): dict<any>
 enddef
 
 export def FFFiles(): void
-	call('fern#mapping#call', [Call])
+	fern#mapping#call(Call)
 enddef

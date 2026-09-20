@@ -518,14 +518,14 @@ export def Preview(id: number, f: string, z: number = 0, OnDone: func(bool) = Du
 		endif
 		ConvPrevImage(cmds, '', ConvImage)
 	elseif has_key(get(g:popup_image_options, 'raw', {}), ft)
-		var raw: any = call(g:popup_image_options.raw[ft], [id, p])
+		var raw: any = function(g:popup_image_options.raw[ft])(id, p)
 		if CheckPluginReturnValuse(raw, 'cmd')
 			ConvPrevImage(raw.cmd, '', ConvImage)
 		else
 			ShowPluginReturnValuse(raw)
 		endif
 	elseif has_key(get(g:popup_image_options, 'plugin', {}), ft)
-		var temp: any = call(g:popup_image_options.plugin[ft], [id, p])
+		var temp: any = function(g:popup_image_options.plugin[ft])(id, p)
 		if CheckPluginReturnValuse(temp, 'file')
 			GetSizeConv(temp.file, temp.file)
 		else
