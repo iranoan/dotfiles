@@ -1,0 +1,21 @@
+{
+  "Lua.diagnostics.globals": [
+    "cairo_arc",
+    "cairo_close_path",
+    "cairo_create",
+    "cairo_destroy",
+    "cairo_fill",
+    "cairo_fill_preserve",
+    "cairo_line_to",
+    "cairo_move_to",
+    "cairo_set_line_width",
+    "cairo_set_source_rgb",
+    "cairo_set_source_rgba",
+    "cairo_stroke",
+    "cairo_surface_destroy",
+    "cairo_xlib_surface_create",
+    "cairo_xlib_surface_get_height",
+    "cairo_xlib_surface_get_width",
+    "conky_window"
+  ]
+}
