@@ -51,6 +51,7 @@ local DialColor = {
 	blue = 0
 }
 
+---@diagnostic disable-next-line: lowercase-global
 function conky_analog()
 	local function printDial(cr)
 		cairo_set_source_rgb(cr, background.red, background.green, background.blue)
@@ -204,6 +205,7 @@ function RotatePoint(x, y, angle)
 	}
 end
 
+---@diagnostic disable-next-line: lowercase-global
 function conky_draw_line(x0, y0, x1, y1, r, g, b, w)
 	local cs, cr
 	if conky_window == nil then
