@@ -1,6 +1,59 @@
 scriptencoding utf-8
 scriptversion 4
 
+function s:register_efm() abort
+	call lsp#register_server(#{
+				\ name: 'efm-langserver',
+				\ cmd: {server_info->['efm-langserver']},
+				\ allowlist: ['json', 'jsonc'],
+				\ }) " CSS や HTML は現状+バッファを開いた時にチェックしない+遅い+保存も必要
+				" \ allowlist: ['json', 'markdown', 'html', 'xhtml', 'css', 'tex', 'yaml'],
+	call timer_start(1, {->execute('delfunction s:register_efm')})
+endfunction
+
+function s:register_awk() abort
+	call lsp#register_server(#{
+				\ name: 'awk-language-server',
+				\ cmd: {server_info->['awk-language-server']},
+				\ allowlist: ['awk'],
+				\ })
+	call timer_start(1, {->execute('delfunction s:register_awk')})
+endfunction
+
+function s:get_lua_root_uri() abort
+	let l:buffer_path = lsp#utils#get_buffer_path()
+	" 1. マーカーを探す
+	let l:root_dir = lsp#utils#find_nearest_parent_file_directory(
+				\ l:buffer_path,
+				\ ['.luarc.json', '.git', '.luacheckrc', '.luacov']
+				\ )
+	" 2. 見つからない場合は、開いているファイルの親ディレクトリを使用する
+	if empty(l:root_dir)
+		let l:root_dir = fnamemodify(l:buffer_path, ':h')
+	endif
+	" 3. 万が一それも空なら、Vimのカレントディレクトリを使用する
+	if empty(l:root_dir)
+		let l:root_dir = getcwd()
+	endif
+	call timer_start(1, {->execute('delfunction s:get_lua_root_uri')})
+	return lsp#utils#path_to_uri(l:root_dir)
+endfunction
+
+function s:register_lua() abort
+	call lsp#register_server(#{
+				\ name: 'lua-language-server',
+				\ cmd: {server_info -> [$'{$HOME}/bin/lua-language-server/bin/lua-language-server']},
+				\ allowlist: ['lua'],
+				\ root_uri: {server_info -> s:get_lua_root_uri()},
+				\ initialization_options: #{
+				\ 	diagnostics: {
+				\ 		'globals': ['vim']
+				\ 	}
+				\ }
+				\ })
+	call timer_start(1, {->execute('delfunction s:register_lua')})
+endfunction
+
 function set_vimlsp#main() abort
 	packadd vim-lsp
 	" let g:lsp_diagnostics_enabled = 1      " デフォルト
@@ -25,17 +78,24 @@ function set_vimlsp#main() abort
 	" let g:lsp_document_code_action_signs_hint = {'text': '💡', 'icon': l:icon_dir .. 'hint' .. l:icon_ext}
 	let g:lsp_fold_enabled = 0
 	let g:lsp_text_edit_enabled = 1
-	call lsp#register_server(#{
-				\ name: 'efm-langserver',
-				\ cmd: {server_info->['efm-langserver']},
-				\ allowlist: ['json'],
-				\ }) " CSS や HTML は現状+バッファを開いた時にチェックしない+遅い+保存も必要
-				" \ allowlist: ['json', 'markdown', 'html', 'xhtml', 'css', 'tex', 'yaml'],
-	call lsp#register_server(#{
-				\ name: 'awk-language-server',
-				\ cmd: {server_info->['awk-language-server']},
-				\ allowlist: ['awk'],
-				\ })
+	augroup VimLspRegister
+		autocmd!
+		if index(['json', 'jsonc'], &filetype) == -1
+			autocmd FileType json,jsonc ++once call s:register_efm()
+		else
+			call s:register_efm()
+		endif
+		if &filetype !=# 'awk'
+			autocmd FileType awk ++once call s:register_awk()
+		else
+			call s:register_awk()
+		endif
+		if &filetype !=# 'lua'
+			autocmd FileType lua ++once call s:register_lua()
+		else
+			call s:register_lua()
+		endif
+	augroup END
 	" ↓diagnostics が効かない
 	" call lsp#register_server(#{
 	" 			\ name: 'eslint-language-server',
@@ -59,7 +119,6 @@ function set_vimlsp#main() abort
 	let g:lsp_settings = #{
 				\ bash-language-server: #{allowlist: ['sh', 'bash']},
 				\ digestif: #{disabled: 1},
-				\ efm-langserver: #{allowlist: ['json', 'jsonc']},
 				\ vscode-html-language-server: #{disabled: 1},
 				\ vscode-css-language-server: #{disabled: 1},
 				\ pylsp: #{
