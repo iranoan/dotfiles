@@ -99,19 +99,32 @@ augroup spreadsheet_textobj
 augroup END
 # ファイル・ディレクトリ名 {{{3
 textobj#user#plugin('diretoryfilenename', {
-	'value-a': {
+	value-a: {
 		pattern: '\(/[^/]\+/\|[A-Za-z0-9_.-]\+\)',
 		scan: 'line',
 		select: ['a/'],
 	},
-	'value-i': {
+	value-i: {
 		pattern: '\(/\zs[^/]\+\ze/\|[A-Za-z0-9_.-]\+\)',
 		scan: 'line',
 		select: ['i/'],
 	},
 })
+# : (コロン) 置換の区切りに「/」の代わりとしては「:」を使::うことが多い{{{3
+textobj#user#plugin('colon', {
+	value-a: {
+		pattern: ':[^:]*\%#[^:]*:',
+		scan: 'line',
+		select: ['a:'],
+	},
+	value-i: {
+		pattern: ':\zs[^:]*\%#[^:]*\ze:',
+		scan: 'line',
+		select: ['i:'],
+	},
+})
 
-# テキストオブジェクトで (), {} "", '' を区別せずにカーソル近くで判定して、全て b で扱えるようにする https://github.com/osyo-manga/vim-textobj-multiblock {{{2
+# :テキストオブジェクトで (), {} "", '' を区別せずにカーソル近くで判定して、全て b で扱えるようにする https://github.com/osyo-manga/vim-textobj-multiblock {{{2
 # キーマップしないと ", ' の指定が働かない
 # デフォルト・マップを削除したい→読み込み明示
 packadd vim-textobj-multiblock
