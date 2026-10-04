@@ -79,13 +79,13 @@ open_img(){
 		\) -print 2> /dev/null"
 	fi
 	if [ -d "$1" ]; then # ディレクトリではサブディレクトリまで含めてサムネイル表示
-		dir="$( echo "$1" | sed -e 's/ /\\ /g' -e 's/"/\\"/g' )"
+		dir="$( echo "$1" | sed -e 's/ /\\ /g' -e 's/"/\\"/g' -e 's/(/\\(/g' -e 's/)/\\)/g' )"
 		cmd0="${cmd0}$dir "
 		opt='-t -n'
 		count='1'
 	else
 		opt='-n'
-		dir="$( echo "${1%/*}" | sed -e 's/ /\\ /g' -e 's/"/\\"/g' )"
+		dir="$( echo "${1%/*}" | sed -e 's/ /\\ /g' -e 's/"/\\"/g' -e 's/(/\\(/g' -e 's/)/\\)/g' )"
 		case "$cmd0" in
 			fd*) cmd0="${cmd0} $dir --max-depth 1 " ;;
 			*) cmd0="${cmd0}-maxdepth 1 $dir " ;;
