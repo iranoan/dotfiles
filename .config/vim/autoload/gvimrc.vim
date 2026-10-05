@@ -45,7 +45,7 @@ export def FontSize(size: number): void # フォント・サイズを増減
 enddef
 
 def EnableGnomeExtension(ls: list<string>): bool # Gnome Extension ls の何れかが使えるか?
-	# 複数の内どれかがあれば呼び場合があるので、list<string> にしている
+	# 複数の内どれかがあれば呼べる場合があるので、list<string> にしている
 	var extensions: list<string> = systemlist(['dconf', 'read', '/org/gnome/shell/enabled-extensions'])
 	->get(0, '[]')
 	->eval()
