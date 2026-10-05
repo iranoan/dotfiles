@@ -16,7 +16,7 @@ def GuiOptionM(): void
 enddef
 
 export def Menu()
-	call GuiOptionM()
+	GuiOptionM()
 	if &guioptions =~# 'm'
 		set guioptions-=m
 	else
@@ -25,7 +25,7 @@ export def Menu()
 enddef
 
 export def Toolbar()
-	call GuiOptionM()
+	GuiOptionM()
 	if &guioptions =~# 'T'
 		set guioptions-=T
 	else
